@@ -12,6 +12,19 @@ golem::detach_all_attached()
 golem::document_and_reload(export_all = TRUE)
 
 # Run the application
-withr::with_options(new = list("shiny.testmode" = TRUE), {
-  run_app(data_path = app_sys("app/www/raw_data.rds"), database_path = app_sys("app/www", "user_database.db"), test_mode = TRUE)
-})
+load_and_run_app <- function(){
+  # withr call here does not work since the tempfile gets deleted during app initialization. 
+  # different option below, using onStop() within the run_app() function to clean up.
+  temp_folder <- tempdir()
+  db_path <- file.path(temp_folder, "testdb.sqlite")
+  
+  run_app(
+    meta = metadata, 
+    data = clinsightful_data,
+    user_db = db_path, 
+    test_mode = TRUE, 
+    onStart = \(){onStop(\(){unlink(temp_folder, recursive = TRUE)})}
+  )
+} 
+
+load_and_run_app()
