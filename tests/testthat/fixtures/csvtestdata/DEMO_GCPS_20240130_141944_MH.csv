@@ -1,0 +1,34 @@
+Site sequence number,Site code,Subject sequence number,Subject Id,Event sequence number,Event Id,Event name,Event date,Activity Id,Activity name,Form Id,Form name,Form sequence number,Subject form sequence number,Origin Subject form sequence number,Source Subject form sequence number,Item group Id,Item group sequence number,Item Id,Item export label,Design version,Item value,Item code,Edit datetime (UTC),Edit by,Edit reason
+SiteSeq,SiteCode,SubjectSeq,SubjectId,EventSeq,EventId,EventName,EventDate,ActivityId,ActivityName,FormId,FormName,FormSeq,SubjectFormSeq,OriginSubjectFormSeq,SourceSubjectFormSeq,ItemGroupId,ItemGroupSeq,ItemId,ItemExportLabel,DesignVersion,ItemValue,ItemCode,EditDateTime,EditBy,EditReason
+2,9700,10,9700-010,1,COMMON_MH,Medical History,2022-11-25,LOG_MH,NA,MH,Medical History,1,1,1,NA,MHG2,1,MH_MHSPID,No,11.0,1,NA,2022-11-25 14:02,DM1,Function execution
+2,9700,10,9700-010,1,COMMON_MH,Medical History,2022-11-25,LOG_MH,NA,MH,Medical History,1,1,1,NA,MHG2,1,MH_MHTERM,Condition,11.0,too much testing,NA,2022-11-25 14:02,DM2,Initial Data Entry
+2,9700,10,9700-010,1,COMMON_MH,Medical History,2022-11-25,LOG_MH,NA,MH,Medical History,1,1,1,NA,MHG2,1,MH_MHSTDAT,Start Date,11.0,2022-11-01,NA,2022-11-25 14:02,DM3,Initial Data Entry
+2,9700,10,9700-010,1,COMMON_MH,Medical History,2022-11-25,LOG_MH,NA,MH,Medical History,1,1,1,NA,MHG2,1,MH_MHONGO,Ongoing,11.0,Yes,1,2022-11-25 14:02,DM3,Initial Data Entry
+2,9700,10,9700-010,1,COMMON_MH,Medical History,2022-11-25,LOG_MH,NA,MH,Medical History,1,1,1,NA,MHG2,1,MH_TRT1,Treatment - 1,11.0,NA,NA,2022-11-25 14:02,DM2,Initial Data Entry
+2,9700,10,9700-010,1,COMMON_MH,Medical History,2022-11-25,LOG_MH,NA,MH,Medical History,1,1,1,NA,MHG2,1,MH_TRT2,Treatment - 2,11.0,Medication,2,2022-11-25 14:02,NA,Initial Data Entry
+2,9700,10,9700-010,1,COMMON_MH,Medical History,2022-11-25,LOG_MH,NA,MH,Medical History,1,1,1,NA,MHG2,1,MH_TRT3,Treatment - 3,11.0,NA,NA,2022-11-25 14:02,DM1,Initial Data Entry
+2,9700,10,9700-010,1,COMMON_MH,Medical History,2022-11-25,LOG_MH,NA,MH,Medical History,1,1,1,NA,MHG2,1,MH_TRT4,Treatment - 4,11.0,NA,NA,2022-11-25 14:02,DM3,Initial Data Entry
+2,9700,16,9700-016,1,COMMON_MH,Medical History,2022-11-29,LOG_MH,NA,MH,Medical History,1,1,1,NA,MHG2,1,MH_MHSPID,No,11.0,1,NA,2022-11-29 09:38,DM3,Function execution
+2,9700,16,9700-016,1,COMMON_MH,Medical History,2022-11-29,LOG_MH,NA,MH,Medical History,1,1,1,NA,MHG2,1,MH_MHTERM,Condition,11.0,Diabetes,NA,2022-11-29 09:38,DM3,Initial Data Entry
+2,9700,16,9700-016,1,COMMON_MH,Medical History,2022-11-29,LOG_MH,NA,MH,Medical History,1,1,1,NA,MHG2,1,MH_MHSTDAT,Start Date,11.0,2022-11-09,NA,2022-11-29 09:38,NA,Initial Data Entry
+2,9700,16,9700-016,1,COMMON_MH,Medical History,2022-11-29,LOG_MH,NA,MH,Medical History,1,1,1,NA,MHG2,1,MH_MHONGO,Ongoing,11.0,Yes,1,2022-11-29 09:38,DM1,Initial Data Entry
+2,9700,16,9700-016,1,COMMON_MH,Medical History,2022-11-29,LOG_MH,NA,MH,Medical History,1,1,1,NA,MHG2,1,MH_TRT1,Treatment - 1,11.0,NA,NA,2022-11-29 09:38,NA,Initial Data Entry
+2,9700,16,9700-016,1,COMMON_MH,Medical History,2022-11-29,LOG_MH,NA,MH,Medical History,1,1,1,NA,MHG2,1,MH_TRT2,Treatment - 2,11.0,Medication,2,2022-11-29 09:38,DM3,Initial Data Entry
+2,9700,16,9700-016,1,COMMON_MH,Medical History,2022-11-29,LOG_MH,NA,MH,Medical History,1,1,1,NA,MHG2,1,MH_TRT3,Treatment - 3,11.0,NA,NA,2022-11-29 09:38,DM2,Initial Data Entry
+2,9700,16,9700-016,1,COMMON_MH,Medical History,2022-11-29,LOG_MH,NA,MH,Medical History,1,1,1,NA,MHG2,1,MH_TRT4,Treatment - 4,11.0,NA,NA,2022-11-29 09:38,NA,Initial Data Entry
+3,9600,9,9600-009,1,COMMON_MH,Medical History,2023-05-08,LOG_MH,NA,MH,Medical History,1,1,1,NA,MHG2,1,MH_MHSPID,No,56.0,1,NA,2023-05-08 08:41,DM3,Function execution
+3,9600,9,9600-009,1,COMMON_MH,Medical History,2023-05-08,LOG_MH,NA,MH,Medical History,1,1,1,NA,MHG2,1,MH_MHTERM,Condition,56.0,ghdgjghj,NA,2023-05-08 08:41,DM3,Initial Data Entry
+3,9600,9,9600-009,1,COMMON_MH,Medical History,2023-05-08,LOG_MH,NA,MH,Medical History,1,1,1,NA,MHG2,1,MH_MHSTDAT,Start Date,56.0,2022-06-15,NA,2023-05-08 08:41,NA,Initial Data Entry
+3,9600,9,9600-009,1,COMMON_MH,Medical History,2023-05-08,LOG_MH,NA,MH,Medical History,1,1,1,NA,MHG2,1,MH_MHONGO,Ongoing,56.0,Yes,1,2023-05-08 08:41,DM3,Initial Data Entry
+3,9600,9,9600-009,1,COMMON_MH,Medical History,2023-05-08,LOG_MH,NA,MH,Medical History,1,1,1,NA,MHG2,1,MH_TRT1,Treatment - 1,56.0,No treatment,1,2023-05-08 08:41,DM1,Initial Data Entry
+3,9600,9,9600-009,1,COMMON_MH,Medical History,2023-05-08,LOG_MH,NA,MH,Medical History,1,1,1,NA,MHG2,1,MH_TRT2,Treatment - 2,56.0,NA,NA,2023-05-08 08:41,NA,Initial Data Entry
+3,9600,9,9600-009,1,COMMON_MH,Medical History,2023-05-08,LOG_MH,NA,MH,Medical History,1,1,1,NA,MHG2,1,MH_TRT3,Treatment - 3,56.0,NA,NA,2023-05-08 08:41,NA,Initial Data Entry
+3,9600,9,9600-009,1,COMMON_MH,Medical History,2023-05-08,LOG_MH,NA,MH,Medical History,1,1,1,NA,MHG2,1,MH_TRT4,Treatment - 4,56.0,NA,NA,2023-05-08 08:41,DM1,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_MH,Medical History,2023-06-29,LOG_MH,NA,MH,Medical History,1,1,1,NA,MHG2,1,MH_MHSPID,No,66.3,1,NA,2023-06-29 13:40,DM1,Function execution
+3,9600,17,9600-017,1,COMMON_MH,Medical History,2023-06-29,LOG_MH,NA,MH,Medical History,1,1,1,NA,MHG2,1,MH_MHTERM,Condition,66.3,Vitiligo,NA,2023-06-29 13:40,DM2,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_MH,Medical History,2023-06-29,LOG_MH,NA,MH,Medical History,1,1,1,NA,MHG2,1,MH_MHSTDAT,Start Date,66.3,2017-02-NK,NA,2023-06-29 13:40,NA,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_MH,Medical History,2023-06-29,LOG_MH,NA,MH,Medical History,1,1,1,NA,MHG2,1,MH_MHONGO,Ongoing,66.3,Yes,1,2023-06-29 13:40,NA,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_MH,Medical History,2023-06-29,LOG_MH,NA,MH,Medical History,1,1,1,NA,MHG2,1,MH_TRT1,Treatment - 1,66.3,NA,NA,2023-06-29 13:40,DM1,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_MH,Medical History,2023-06-29,LOG_MH,NA,MH,Medical History,1,1,1,NA,MHG2,1,MH_TRT2,Treatment - 2,66.3,Medication,2,2023-06-29 13:40,DM2,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_MH,Medical History,2023-06-29,LOG_MH,NA,MH,Medical History,1,1,1,NA,MHG2,1,MH_TRT3,Treatment - 3,66.3,NA,NA,2023-06-29 13:40,DM3,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_MH,Medical History,2023-06-29,LOG_MH,NA,MH,Medical History,1,1,1,NA,MHG2,1,MH_TRT4,Treatment - 4,66.3,NA,NA,2023-06-29 13:40,DM1,Initial Data Entry

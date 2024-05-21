@@ -1,0 +1,106 @@
+{
+  "output": {
+    "test-status": "lab2",
+    "test-subject_info": {
+      "html": "<div class=\"card bslib-card bslib-mb-spacing html-fill-item html-fill-container bslib-value-box border-0 bg-primary\" data-bslib-card-init data-require-bs-caller=\"card() value_box()\" data-require-bs-version=\"5 5\">\n  <div class=\"card-body bslib-gap-spacing html-fill-item html-fill-container\" style=\"margin-top:auto;margin-bottom:auto;flex:1 1 auto; padding:0;\">\n    <div class=\"bslib-grid bslib-mb-spacing html-fill-item value-box-grid\" data-require-bs-caller=\"layout_column_wrap()\" data-require-bs-version=\"5\" style=\"--bslib-grid-height:auto;--bslib-grid-height-mobile:auto;gap:0px; --bslib-value-box-widths:30% 70%;--bslib-value-box-widths-full-screen:1fr auto;\">\n      <div class=\"bslib-gap-spacing html-fill-container\">\n        <div class=\"value-box-showcase overflow-hidden html-fill-item html-fill-container\" style=\"--bslib-value-box-max-height:100px;--bslib-value-box-max-height-full-screen:67%;\">\n          <i class=\"fas fa-user-slash fa-2x\" role=\"presentation\" aria-label=\"user-slash icon\"><\/i>\n        <\/div>\n      <\/div>\n      <div class=\"bslib-gap-spacing html-fill-container\">\n        <div class=\"value-box-area html-fill-item html-fill-container border-start\">\n          <p>Subj1<\/p>\n          <p>Male, 70yrs.<\/p>\n        <\/div>\n      <\/div>\n    <\/div>\n  <\/div>\n  <script data-bslib-card-init>bslib.Card.initializeAllCards();<\/script>\n<\/div>",
+      "deps": [
+        {
+          "name": "font-awesome",
+          "version": "6.4.2",
+          "src": {
+            "href": "font-awesome-6.4.2"
+          },
+          "meta": null,
+          "script": null,
+          "stylesheet": [
+            "css/all.min.css",
+            "css/v4-shims.min.css"
+          ],
+          "head": null,
+          "attachment": null,
+          "all_files": true
+        },
+        {
+          "name": "htmltools-fill",
+          "version": "0.5.6.1",
+          "src": {
+            "href": "htmltools-fill-0.5.6.1"
+          },
+          "meta": null,
+          "script": null,
+          "stylesheet": "fill.css",
+          "head": null,
+          "attachment": null,
+          "all_files": true
+        },
+        {
+          "name": "bslib-grid-styles",
+          "version": "0.5.1",
+          "src": {
+            "href": "bslib-grid-styles-0.5.1"
+          },
+          "meta": null,
+          "script": null,
+          "stylesheet": "grid.css",
+          "head": null,
+          "attachment": null,
+          "all_files": true
+        },
+        {
+          "name": "bslib-tag-require",
+          "version": "0.5.1",
+          "src": {
+            "href": "bslib-tag-require-0.5.1"
+          },
+          "meta": null,
+          "script": "tag-require.js",
+          "stylesheet": null,
+          "head": null,
+          "attachment": null,
+          "all_files": true
+        },
+        {
+          "name": "bslib-value_box-styles",
+          "version": "0.5.1",
+          "src": {
+            "href": "bslib-value_box-styles-0.5.1"
+          },
+          "meta": null,
+          "script": null,
+          "stylesheet": "value_box.css",
+          "head": null,
+          "attachment": null,
+          "all_files": true
+        },
+        {
+          "name": "bslib-card-js",
+          "version": "0.5.1",
+          "src": {
+            "href": "bslib-card-js-0.5.1"
+          },
+          "meta": null,
+          "script": {
+            "src": "card.min.js"
+          },
+          "stylesheet": null,
+          "head": null,
+          "attachment": null,
+          "all_files": true
+        },
+        {
+          "name": "bslib-card-styles",
+          "version": "0.5.1",
+          "src": {
+            "href": "bslib-card-styles-0.5.1"
+          },
+          "meta": null,
+          "script": null,
+          "stylesheet": "card.css",
+          "head": null,
+          "attachment": null,
+          "all_files": true
+        }
+      ]
+    }
+  }
+}

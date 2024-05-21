@@ -1,0 +1,462 @@
+Site sequence number,Site code,Subject sequence number,Subject Id,Event sequence number,Event Id,Event name,Event date,Activity Id,Activity name,Form Id,Form name,Form sequence number,Subject form sequence number,Origin Subject form sequence number,Source Subject form sequence number,Item group Id,Item group sequence number,Item Id,Item export label,Design version,Item value,Item code,Edit datetime (UTC),Edit by,Edit reason
+SiteSeq,SiteCode,SubjectSeq,SubjectId,EventSeq,EventId,EventName,EventDate,ActivityId,ActivityName,FormId,FormName,FormSeq,SubjectFormSeq,OriginSubjectFormSeq,SourceSubjectFormSeq,ItemGroupId,ItemGroupSeq,ItemId,ItemExportLabel,DesignVersion,ItemValue,ItemCode,EditDateTime,EditBy,EditReason
+2,9700,1,9700-001,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AESPID,Adverse Event No.,2.0,1,NA,2022-11-14 10:44,DM2,Function execution
+2,9700,1,9700-001,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AETERM,Adverse Event Term,2.0,Headache,NA,2022-11-14 12:38,DM2,Initial Data Entry
+2,9700,1,9700-001,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AESI,Is the event of the following Adverse Events of Special Interest (AESI)?,2.0,New malignancy,2,2022-11-14 10:44,NA,Initial Data Entry
+2,9700,1,9700-001,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESTDAT,Adverse Event Start Date,2.0,2022-11-10,NA,2022-11-24 13:47,DM2,Initial Data Entry
+2,9700,1,9700-001,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESTTIM,Adverse Event Start Time,2.0,NA,NA,2022-11-14 10:44,DM2,Initial Data Entry
+2,9700,1,9700-001,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESEV_W_YN,Did the severity of the AE worsen?,2.0,Yes,1,2022-11-24 13:47,DM1,Initial Data Entry
+2,9700,1,9700-001,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESTDAT_W,Date of Worsening,2.0,2022-11-17,NA,2022-11-24 13:47,NA,Initial Data Entry
+2,9700,1,9700-001,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AEONGO,Is the Adverse Event still ongoing?,2.0,Yes,1,2022-11-24 13:47,NA,Initial Data Entry
+2,9700,1,9700-001,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG12,1,AE_AEREL,Relationship to Study Treatment,2.0,Related,5,2022-11-24 13:47,DM1,Initial Data Entry
+2,9700,1,9700-001,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG12,1,AE_AEACN,Action taken with Study Treatment,2.0,Interrupted,2,2022-11-24 13:47,DM3,Initial Data Entry
+2,9700,1,9700-001,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH1,Action taken for Adverse Event - 1,2.0,None,1,2022-11-24 13:47,DM2,Query resolution
+2,9700,1,9700-001,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH2,Action taken for Adverse Event - 2,2.0,NA,NA,2022-11-24 13:47,DM3,Query resolution
+2,9700,1,9700-001,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH3,Action taken for Adverse Event - 3,2.0,NA,NA,2022-11-24 13:47,DM1,Query resolution
+2,9700,1,9700-001,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH4,Action taken for Adverse Event - 4,2.0,NA,NA,2022-11-24 13:47,NA,Query resolution
+2,9700,1,9700-001,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG8,1,AE_AEOUT,Outcome of this Adverse Event,2.0,Recovering/resolving,2,2022-11-24 13:47,DM2,Initial Data Entry
+2,9700,1,9700-001,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER,Is the Adverse Event serious?,2.0,No,2,2022-11-24 13:47,NA,Transcription error
+2,9700,1,9700-001,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG13,1,AE_AEDIS,Caused this (S)AE a Study Discontinuation?,2.0,No,2,2022-11-24 13:47,DM1,Initial Data Entry
+2,9700,2,9700-002,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AESPID,Adverse Event No.,2.0,1,NA,2022-11-16 14:34,DM3,Function execution
+2,9700,2,9700-002,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AETERM,Adverse Event Term,2.0,Test,NA,2022-11-16 14:34,NA,Initial Data Entry
+2,9700,2,9700-002,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AESI,Is the event of the following Adverse Events of Special Interest (AESI)?,2.0,New malignancy,2,2022-11-16 14:34,NA,Initial Data Entry
+2,9700,2,9700-002,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESTDAT,Adverse Event Start Date,2.0,2022-11-08,NA,2022-11-16 14:34,DM3,Initial Data Entry
+2,9700,2,9700-002,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESTTIM,Adverse Event Start Time,2.0,00:00,NA,2022-11-16 14:34,DM3,Initial Data Entry
+2,9700,2,9700-002,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESEV_W_YN,Did the severity of the AE worsen?,2.0,Yes,1,2022-11-16 14:34,DM3,Initial Data Entry
+2,9700,2,9700-002,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESTDAT_W,Date of Worsening,2.0,NA,NA,NA,DM2,NA
+2,9700,2,9700-002,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AEONGO,Is the Adverse Event still ongoing?,2.0,No,2,2022-11-16 14:35,DM1,Initial Data Entry
+2,9700,2,9700-002,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AEENDAT,Adverse Event End Date,2.0,NA,NA,NA,NA,NA
+2,9700,2,9700-002,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG12,1,AE_AEREL,Relationship to Study Treatment,2.0,NA,NA,NA,DM3,NA
+2,9700,2,9700-002,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG12,1,AE_AEACN,Action taken with Study Treatment,2.0,NA,NA,NA,NA,NA
+2,9700,2,9700-002,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH1,Action taken for Adverse Event - 1,2.0,NA,NA,NA,DM1,NA
+2,9700,2,9700-002,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH2,Action taken for Adverse Event - 2,2.0,NA,NA,NA,NA,NA
+2,9700,2,9700-002,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH3,Action taken for Adverse Event - 3,2.0,NA,NA,NA,DM3,NA
+2,9700,2,9700-002,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH4,Action taken for Adverse Event - 4,2.0,NA,NA,NA,DM2,NA
+2,9700,2,9700-002,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG8,1,AE_AEOUT,Outcome of this Adverse Event,2.0,NA,NA,NA,DM3,NA
+2,9700,2,9700-002,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER,Is the Adverse Event serious?,2.0,NA,NA,NA,DM3,NA
+2,9700,2,9700-002,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG13,1,AE_AEDIS,Caused this (S)AE a Study Discontinuation?,2.0,NA,NA,NA,DM3,NA
+2,9700,4,9700-004,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AESPID,Adverse Event No.,2.0,1,NA,2022-11-14 11:50,DM3,Function execution
+2,9700,4,9700-004,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AETERM,Adverse Event Term,2.0,NA,NA,NA,DM3,NA
+2,9700,4,9700-004,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AESI,Is the event of the following Adverse Events of Special Interest (AESI)?,2.0,New malignancy,2,2022-11-14 11:51,DM3,Initial Data Entry
+2,9700,4,9700-004,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESTDAT,Adverse Event Start Date,2.0,NA,NA,NA,NA,NA
+2,9700,4,9700-004,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESTTIM,Adverse Event Start Time,2.0,NA,NA,2022-11-14 11:50,DM1,Initial Data Entry
+2,9700,4,9700-004,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESEV_W_YN,Did the severity of the AE worsen?,2.0,Yes,1,2022-11-14 11:50,DM1,Initial Data Entry
+2,9700,4,9700-004,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESTDAT_W,Date of Worsening,2.0,NA,NA,NA,DM3,NA
+2,9700,4,9700-004,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AEONGO,Is the Adverse Event still ongoing?,2.0,NA,NA,NA,DM3,NA
+2,9700,4,9700-004,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG12,1,AE_AEREL,Relationship to Study Treatment,2.0,NA,NA,NA,DM2,NA
+2,9700,4,9700-004,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG12,1,AE_AEACN,Action taken with Study Treatment,2.0,Dose rate reduced,5,2022-11-14 11:50,DM3,Initial Data Entry
+2,9700,4,9700-004,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH1,Action taken for Adverse Event - 1,2.0,NA,NA,NA,DM2,NA
+2,9700,4,9700-004,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH2,Action taken for Adverse Event - 2,2.0,NA,NA,NA,DM1,NA
+2,9700,4,9700-004,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH3,Action taken for Adverse Event - 3,2.0,NA,NA,NA,DM3,NA
+2,9700,4,9700-004,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH4,Action taken for Adverse Event - 4,2.0,NA,NA,NA,DM2,NA
+2,9700,4,9700-004,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG8,1,AE_AEOUT,Outcome of this Adverse Event,2.0,NA,NA,NA,DM2,NA
+2,9700,4,9700-004,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER,Is the Adverse Event serious?,2.0,Yes,1,2022-11-14 11:50,DM3,Initial Data Entry
+2,9700,4,9700-004,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_DAT_ENTRY,Reported Date of SAE Entry (hidden),2.0,2022-11-14,NA,2022-11-14 11:50,DM2,Function execution
+2,9700,4,9700-004,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_TIM_ENTRY,Reported Time of SAE Entry (hidden),2.0,12:50,NA,2022-11-14 11:51,NA,Function execution
+2,9700,4,9700-004,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_REP,Type of Report,2.0,Follow-Up,2,2022-11-14 11:50,NA,Initial Data Entry
+2,9700,4,9700-004,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_STDAT,SAE Start Date,2.0,NA,NA,NA,DM1,NA
+2,9700,4,9700-004,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_INVDAT,Date of investigator awareness,2.0,NA,NA,NA,NA,NA
+2,9700,4,9700-004,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC1,Seriousness Categories of the SAE - 1,2.0,NA,NA,NA,DM3,NA
+2,9700,4,9700-004,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC2,Seriousness Categories of the SAE - 2,2.0,NA,NA,NA,DM3,NA
+2,9700,4,9700-004,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC3,Seriousness Categories of the SAE - 3,2.0,NA,NA,NA,DM1,NA
+2,9700,4,9700-004,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC4,Seriousness Categories of the SAE - 4,2.0,NA,NA,NA,DM2,NA
+2,9700,4,9700-004,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC5,Seriousness Categories of the SAE - 5,2.0,NA,NA,NA,NA,NA
+2,9700,4,9700-004,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC6,Seriousness Categories of the SAE - 6,2.0,NA,NA,NA,DM2,NA
+2,9700,4,9700-004,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC7,Seriousness Categories of the SAE - 7,2.0,NA,NA,NA,NA,NA
+2,9700,4,9700-004,1,COMMON_AE,Adverse Events,2022-11-14,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG13,1,AE_AEDIS,Caused this (S)AE a Study Discontinuation?,2.0,NA,NA,NA,NA,NA
+2,9700,5,9700-005,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AESPID,Adverse Event No.,2.0,1,NA,2022-11-16 12:49,DM2,Function execution
+2,9700,5,9700-005,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AETERM,Adverse Event Term,2.0,NA,NA,NA,DM1,NA
+2,9700,5,9700-005,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AESI,Is the event of the following Adverse Events of Special Interest (AESI)?,2.0,NA,NA,NA,DM2,NA
+2,9700,5,9700-005,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESTDAT,Adverse Event Start Date,2.0,NA,NA,NA,DM1,NA
+2,9700,5,9700-005,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESTTIM,Adverse Event Start Time,2.0,NA,NA,2022-11-16 12:49,DM2,Initial Data Entry
+2,9700,5,9700-005,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESEV_W_YN,Did the severity of the AE worsen?,2.0,NA,NA,NA,DM2,NA
+2,9700,5,9700-005,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AEONGO,Is the Adverse Event still ongoing?,2.0,NA,NA,NA,DM1,NA
+2,9700,5,9700-005,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG12,1,AE_AEREL,Relationship to Study Treatment,2.0,NA,NA,NA,DM3,NA
+2,9700,5,9700-005,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG12,1,AE_AEACN,Action taken with Study Treatment,2.0,NA,NA,NA,DM3,NA
+2,9700,5,9700-005,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH1,Action taken for Adverse Event - 1,2.0,NA,NA,NA,NA,NA
+2,9700,5,9700-005,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH2,Action taken for Adverse Event - 2,2.0,NA,NA,NA,NA,NA
+2,9700,5,9700-005,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH3,Action taken for Adverse Event - 3,2.0,NA,NA,NA,DM2,NA
+2,9700,5,9700-005,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH4,Action taken for Adverse Event - 4,2.0,NA,NA,NA,DM3,NA
+2,9700,5,9700-005,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG8,1,AE_AEOUT,Outcome of this Adverse Event,2.0,NA,NA,NA,NA,NA
+2,9700,5,9700-005,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER,Is the Adverse Event serious?,2.0,NA,NA,NA,DM2,NA
+2,9700,5,9700-005,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG13,1,AE_AEDIS,Caused this (S)AE a Study Discontinuation?,2.0,NA,NA,NA,DM2,NA
+2,9700,7,9700-007,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AESPID,Adverse Event No.,2.0,1,NA,2022-11-16 09:19,NA,Function execution
+2,9700,7,9700-007,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AETERM,Adverse Event Term,2.0,Test,NA,2022-11-16 09:19,DM1,Initial Data Entry
+2,9700,7,9700-007,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AESI,Is the event of the following Adverse Events of Special Interest (AESI)?,2.0,None,1,2022-11-16 09:19,DM2,Initial Data Entry
+2,9700,7,9700-007,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESTDAT,Adverse Event Start Date,2.0,NA,NA,NA,DM1,NA
+2,9700,7,9700-007,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESTTIM,Adverse Event Start Time,2.0,NA,NA,2022-11-16 09:19,DM3,Initial Data Entry
+2,9700,7,9700-007,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESEV_W_YN,Did the severity of the AE worsen?,2.0,NA,NA,NA,DM2,NA
+2,9700,7,9700-007,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AEONGO,Is the Adverse Event still ongoing?,2.0,NA,NA,NA,NA,NA
+2,9700,7,9700-007,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG12,1,AE_AEREL,Relationship to Study Treatment,2.0,NA,NA,NA,NA,NA
+2,9700,7,9700-007,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG12,1,AE_AEACN,Action taken with Study Treatment,2.0,NA,NA,NA,NA,NA
+2,9700,7,9700-007,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH1,Action taken for Adverse Event - 1,2.0,NA,NA,NA,DM2,NA
+2,9700,7,9700-007,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH2,Action taken for Adverse Event - 2,2.0,NA,NA,NA,DM3,NA
+2,9700,7,9700-007,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH3,Action taken for Adverse Event - 3,2.0,NA,NA,NA,DM1,NA
+2,9700,7,9700-007,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH4,Action taken for Adverse Event - 4,2.0,NA,NA,NA,NA,NA
+2,9700,7,9700-007,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG8,1,AE_AEOUT,Outcome of this Adverse Event,2.0,NA,NA,NA,DM1,NA
+2,9700,7,9700-007,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER,Is the Adverse Event serious?,2.0,Yes,1,2022-11-16 09:19,DM3,Initial Data Entry
+2,9700,7,9700-007,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_DAT_ENTRY,Reported Date of SAE Entry (hidden),2.0,2022-11-16,NA,2022-11-16 09:19,DM2,Function execution
+2,9700,7,9700-007,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_TIM_ENTRY,Reported Time of SAE Entry (hidden),2.0,10:18,NA,2022-11-16 09:19,DM3,Function execution
+2,9700,7,9700-007,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_REP,Type of Report,2.0,NA,NA,NA,DM1,NA
+2,9700,7,9700-007,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_STDAT,SAE Start Date,2.0,NA,NA,NA,DM3,NA
+2,9700,7,9700-007,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_INVDAT,Date of investigator awareness,2.0,NA,NA,NA,DM3,NA
+2,9700,7,9700-007,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC1,Seriousness Categories of the SAE - 1,2.0,Death,1,2022-11-16 09:19,NA,Initial Data Entry
+2,9700,7,9700-007,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC2,Seriousness Categories of the SAE - 2,2.0,NA,NA,2022-11-16 09:19,DM2,Initial Data Entry
+2,9700,7,9700-007,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC3,Seriousness Categories of the SAE - 3,2.0,NA,NA,2022-11-16 09:19,DM2,Initial Data Entry
+2,9700,7,9700-007,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC4,Seriousness Categories of the SAE - 4,2.0,NA,NA,2022-11-16 09:19,NA,Initial Data Entry
+2,9700,7,9700-007,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC5,Seriousness Categories of the SAE - 5,2.0,NA,NA,2022-11-16 09:19,DM2,Initial Data Entry
+2,9700,7,9700-007,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC6,Seriousness Categories of the SAE - 6,2.0,NA,NA,2022-11-16 09:19,NA,Initial Data Entry
+2,9700,7,9700-007,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC7,Seriousness Categories of the SAE - 7,2.0,NA,NA,2022-11-16 09:19,DM1,Initial Data Entry
+2,9700,7,9700-007,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG11,1,AE_DTHDAT,Date of Death,2.0,2022-11-09,NA,2022-11-16 09:19,DM2,Initial Data Entry
+2,9700,7,9700-007,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG11,1,AE_DEATH_REA,Death occured due to reason,2.0,NA,NA,NA,DM1,NA
+2,9700,7,9700-007,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG11,1,AE_DEATH_AUTOP,Autopsy performed?,2.0,No,2,2022-11-16 09:19,DM1,Initial Data Entry
+2,9700,7,9700-007,1,COMMON_AE,Adverse Events,2022-11-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG13,1,AE_AEDIS,Caused this (S)AE a Study Discontinuation?,2.0,Yes,1,2022-11-16 09:19,NA,Initial Data Entry
+2,9700,8,9700-008,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AESPID,Adverse Event No.,65.0,1,NA,2023-06-07 09:47,DM1,Function execution
+2,9700,8,9700-008,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AETERM,Adverse Event Term,65.0,sdf,NA,2023-06-07 09:47,DM1,Initial Data Entry
+2,9700,8,9700-008,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AESI,Is the event one of the following Adverse Events of Special Interest (AESI)?,65.0,None,1,2023-06-14 13:53,DM2,Transcription error
+2,9700,8,9700-008,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESTDAT,Adverse Event Start Date,65.0,2023-06-14,NA,2023-06-14 13:53,DM1,Initial Data Entry
+2,9700,8,9700-008,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESTTIM,Adverse Event Start Time,65.0,NA,NA,2023-06-07 09:47,DM1,Initial Data Entry
+2,9700,8,9700-008,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AETOXGR,Severity grade according to CTCAE v5.0,65.0,Grade 3,3,2023-06-14 13:53,NA,Initial Data Entry
+2,9700,8,9700-008,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESEV_W_YN,Did the severity of the AE worsen?,65.0,No,2,2023-06-14 13:53,DM1,Initial Data Entry
+2,9700,8,9700-008,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AEONGO,Is the Adverse Event still ongoing?,65.0,Yes,1,2023-06-14 13:53,DM1,Initial Data Entry
+2,9700,8,9700-008,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG12,1,AE_AEREL,Relationship to Study Treatment,65.0,Unlikely,2,2023-06-14 13:53,DM3,Initial Data Entry
+2,9700,8,9700-008,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG12,1,AE_AEACN,Action taken with Study Treatment,65.0,Not Applicable,6,2023-06-14 13:53,DM2,Initial Data Entry
+2,9700,8,9700-008,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH1,Action taken for Adverse Event - 1,65.0,None,1,2023-06-14 13:53,DM1,Initial Data Entry
+2,9700,8,9700-008,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH2,Action taken for Adverse Event - 2,65.0,NA,NA,2023-06-14 13:53,DM3,Initial Data Entry
+2,9700,8,9700-008,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH3,Action taken for Adverse Event - 3,65.0,NA,NA,2023-06-14 13:53,DM3,Initial Data Entry
+2,9700,8,9700-008,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH4,Action taken for Adverse Event - 4,65.0,NA,NA,2023-06-14 13:53,NA,Initial Data Entry
+2,9700,8,9700-008,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG8,1,AE_AEOUT,Outcome of this Adverse Event,65.0,Unknown,6,2023-06-14 13:53,DM2,Initial Data Entry
+2,9700,8,9700-008,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER,Is the Adverse Event serious?,65.0,No,2,2023-06-14 13:53,DM1,Initial Data Entry
+2,9700,8,9700-008,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG13,1,AE_AEDIS,Caused this (S)AE a Study Discontinuation?,65.0,No,2,2023-06-14 13:53,DM3,Initial Data Entry
+2,9700,8,9700-008,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG14,1,AE_AECOVAL,Comments,65.0,NA,NA,2023-06-07 09:47,NA,Initial Data Entry
+2,9700,8,9700-008,2,COMMON_AE,Adverse Events,2023-07-10,LOG_AE,NA,AE,AE/SAE,1,2,2,NA,AEG11,1,AE_AESPID,Adverse Event No.,66.3,2,NA,2023-07-10 12:21,DM2,Function execution
+2,9700,8,9700-008,2,COMMON_AE,Adverse Events,2023-07-10,LOG_AE,NA,AE,AE/SAE,1,2,2,NA,AEG11,1,AE_AETERM,Adverse Event Term,66.3,before imp,NA,2023-07-10 12:21,DM2,Initial Data Entry
+2,9700,8,9700-008,2,COMMON_AE,Adverse Events,2023-07-10,LOG_AE,NA,AE,AE/SAE,1,2,2,NA,AEG11,1,AE_AESI,Is the event one of the following Adverse Events of Special Interest (AESI)?,66.3,None,1,2023-07-10 12:21,DM3,Initial Data Entry
+2,9700,8,9700-008,2,COMMON_AE,Adverse Events,2023-07-10,LOG_AE,NA,AE,AE/SAE,1,2,2,NA,AE_SAEG2,1,AE_AESTDAT,Adverse Event Start Date,66.3,2022-08-23,NA,2023-07-10 12:21,DM3,Initial Data Entry
+2,9700,8,9700-008,2,COMMON_AE,Adverse Events,2023-07-10,LOG_AE,NA,AE,AE/SAE,1,2,2,NA,AE_SAEG2,1,AE_AESTTIM,Adverse Event Start Time,66.3,07:10,NA,2023-07-10 12:21,DM1,Initial Data Entry
+2,9700,8,9700-008,2,COMMON_AE,Adverse Events,2023-07-10,LOG_AE,NA,AE,AE/SAE,1,2,2,NA,AE_SAEG2,1,AE_AETOXGR,Severity grade according to CTCAE v5.0,66.3,Grade 4,4,2023-07-10 12:21,DM2,Initial Data Entry
+2,9700,8,9700-008,2,COMMON_AE,Adverse Events,2023-07-10,LOG_AE,NA,AE,AE/SAE,1,2,2,NA,AE_SAEG2,1,AE_AESEV_W_YN,Did the severity of the AE worsen?,66.3,No,2,2023-07-10 12:21,DM3,Initial Data Entry
+2,9700,8,9700-008,2,COMMON_AE,Adverse Events,2023-07-10,LOG_AE,NA,AE,AE/SAE,1,2,2,NA,AE_SAEG2,1,AE_AEONGO,Is the Adverse Event still ongoing?,66.3,Yes,1,2023-07-10 12:21,DM3,Initial Data Entry
+2,9700,8,9700-008,2,COMMON_AE,Adverse Events,2023-07-10,LOG_AE,NA,AE,AE/SAE,1,2,2,NA,AEG12,1,AE_AEREL,Relationship to Study Treatment,66.3,Possible related,3,2023-07-10 12:21,DM3,Initial Data Entry
+2,9700,8,9700-008,2,COMMON_AE,Adverse Events,2023-07-10,LOG_AE,NA,AE,AE/SAE,1,2,2,NA,AEG12,1,AE_AEACN,Action taken with Study Treatment,66.3,Dose reduced,3,2023-07-10 12:21,DM2,Initial Data Entry
+2,9700,8,9700-008,2,COMMON_AE,Adverse Events,2023-07-10,LOG_AE,NA,AE,AE/SAE,1,2,2,NA,AE_SAEG6,1,AE_AEACNOTH1,Action taken for Adverse Event - 1,66.3,NA,NA,2023-07-10 12:21,DM2,Initial Data Entry
+2,9700,8,9700-008,2,COMMON_AE,Adverse Events,2023-07-10,LOG_AE,NA,AE,AE/SAE,1,2,2,NA,AE_SAEG6,1,AE_AEACNOTH2,Action taken for Adverse Event - 2,66.3,NA,NA,2023-07-10 12:21,DM2,Initial Data Entry
+2,9700,8,9700-008,2,COMMON_AE,Adverse Events,2023-07-10,LOG_AE,NA,AE,AE/SAE,1,2,2,NA,AE_SAEG6,1,AE_AEACNOTH3,Action taken for Adverse Event - 3,66.3,NA,NA,2023-07-10 12:21,DM3,Initial Data Entry
+2,9700,8,9700-008,2,COMMON_AE,Adverse Events,2023-07-10,LOG_AE,NA,AE,AE/SAE,1,2,2,NA,AE_SAEG6,1,AE_AEACNOTH4,Action taken for Adverse Event - 4,66.3,Other,99,2023-07-10 12:21,DM2,Initial Data Entry
+2,9700,8,9700-008,2,COMMON_AE,Adverse Events,2023-07-10,LOG_AE,NA,AE,AE/SAE,1,2,2,NA,AE_SAEG6,1,AE_AEACNOTH_OTH,Please specify Other,66.3,seq test,NA,2023-07-10 12:21,DM1,Initial Data Entry
+2,9700,8,9700-008,2,COMMON_AE,Adverse Events,2023-07-10,LOG_AE,NA,AE,AE/SAE,1,2,2,NA,AE_SAEG8,1,AE_AEOUT,Outcome of this Adverse Event,66.3,Recovering/resolving,2,2023-07-10 12:21,DM3,Initial Data Entry
+2,9700,8,9700-008,2,COMMON_AE,Adverse Events,2023-07-10,LOG_AE,NA,AE,AE/SAE,1,2,2,NA,AE_SAEG9,1,AE_AESER,Is the Adverse Event serious?,66.3,No,2,2023-07-10 12:21,DM3,Initial Data Entry
+2,9700,8,9700-008,2,COMMON_AE,Adverse Events,2023-07-10,LOG_AE,NA,AE,AE/SAE,1,2,2,NA,AE_SAEG13,1,AE_AEDIS,Caused this (S)AE a Study Discontinuation?,66.3,No,2,2023-07-10 12:21,DM2,Initial Data Entry
+2,9700,8,9700-008,2,COMMON_AE,Adverse Events,2023-07-10,LOG_AE,NA,AE,AE/SAE,1,2,2,NA,AE_SAEG14,1,AE_AECOVAL,Comments,66.3,NA,NA,2023-07-10 12:21,DM2,Initial Data Entry
+2,9700,8,9700-008,3,COMMON_AE,Adverse Events,2023-07-10,LOG_AE,NA,AE,AE/SAE,1,3,3,NA,AEG11,1,AE_AESPID,Adverse Event No.,66.3,3,NA,2023-07-10 12:22,DM3,Function execution
+2,9700,8,9700-008,3,COMMON_AE,Adverse Events,2023-07-10,LOG_AE,NA,AE,AE/SAE,1,3,3,NA,AEG11,1,AE_AETERM,Adverse Event Term,66.3,same time as imp,NA,2023-07-10 12:22,NA,Initial Data Entry
+2,9700,8,9700-008,3,COMMON_AE,Adverse Events,2023-07-10,LOG_AE,NA,AE,AE/SAE,1,3,3,NA,AEG11,1,AE_AESI,Is the event one of the following Adverse Events of Special Interest (AESI)?,66.3,None,1,2023-07-10 12:22,DM2,Initial Data Entry
+2,9700,8,9700-008,3,COMMON_AE,Adverse Events,2023-07-10,LOG_AE,NA,AE,AE/SAE,1,3,3,NA,AE_SAEG2,1,AE_AESTDAT,Adverse Event Start Date,66.3,2022-09-01,NA,2023-07-10 12:22,DM1,Initial Data Entry
+2,9700,8,9700-008,3,COMMON_AE,Adverse Events,2023-07-10,LOG_AE,NA,AE,AE/SAE,1,3,3,NA,AE_SAEG2,1,AE_AESTTIM,Adverse Event Start Time,66.3,04:00,NA,2023-07-10 12:22,DM2,Initial Data Entry
+2,9700,8,9700-008,3,COMMON_AE,Adverse Events,2023-07-10,LOG_AE,NA,AE,AE/SAE,1,3,3,NA,AE_SAEG2,1,AE_AETOXGR,Severity grade according to CTCAE v5.0,66.3,Grade 2,2,2023-07-10 12:22,DM1,Initial Data Entry
+2,9700,8,9700-008,3,COMMON_AE,Adverse Events,2023-07-10,LOG_AE,NA,AE,AE/SAE,1,3,3,NA,AE_SAEG2,1,AE_AESEV_W_YN,Did the severity of the AE worsen?,66.3,No,2,2023-07-10 12:22,DM3,Initial Data Entry
+2,9700,8,9700-008,3,COMMON_AE,Adverse Events,2023-07-10,LOG_AE,NA,AE,AE/SAE,1,3,3,NA,AE_SAEG2,1,AE_AEONGO,Is the Adverse Event still ongoing?,66.3,Yes,1,2023-07-10 12:22,DM2,Initial Data Entry
+2,9700,8,9700-008,3,COMMON_AE,Adverse Events,2023-07-10,LOG_AE,NA,AE,AE/SAE,1,3,3,NA,AEG12,1,AE_AEREL,Relationship to Study Treatment,66.3,Unlikely,2,2023-07-10 12:22,DM2,Initial Data Entry
+2,9700,8,9700-008,3,COMMON_AE,Adverse Events,2023-07-10,LOG_AE,NA,AE,AE/SAE,1,3,3,NA,AEG12,1,AE_AEACN,Action taken with Study Treatment,66.3,Interrupted,2,2023-07-10 12:22,NA,Initial Data Entry
+2,9700,8,9700-008,3,COMMON_AE,Adverse Events,2023-07-10,LOG_AE,NA,AE,AE/SAE,1,3,3,NA,AE_SAEG6,1,AE_AEACNOTH1,Action taken for Adverse Event - 1,66.3,None,1,2023-07-10 12:22,DM2,Initial Data Entry
+2,9700,8,9700-008,3,COMMON_AE,Adverse Events,2023-07-10,LOG_AE,NA,AE,AE/SAE,1,3,3,NA,AE_SAEG6,1,AE_AEACNOTH2,Action taken for Adverse Event - 2,66.3,NA,NA,2023-07-10 12:22,NA,Initial Data Entry
+2,9700,8,9700-008,3,COMMON_AE,Adverse Events,2023-07-10,LOG_AE,NA,AE,AE/SAE,1,3,3,NA,AE_SAEG6,1,AE_AEACNOTH3,Action taken for Adverse Event - 3,66.3,NA,NA,2023-07-10 12:22,DM2,Initial Data Entry
+2,9700,8,9700-008,3,COMMON_AE,Adverse Events,2023-07-10,LOG_AE,NA,AE,AE/SAE,1,3,3,NA,AE_SAEG6,1,AE_AEACNOTH4,Action taken for Adverse Event - 4,66.3,NA,NA,2023-07-10 12:22,DM3,Initial Data Entry
+2,9700,8,9700-008,3,COMMON_AE,Adverse Events,2023-07-10,LOG_AE,NA,AE,AE/SAE,1,3,3,NA,AE_SAEG8,1,AE_AEOUT,Outcome of this Adverse Event,66.3,Recovering/resolving,2,2023-07-10 12:22,DM1,Initial Data Entry
+2,9700,8,9700-008,3,COMMON_AE,Adverse Events,2023-07-10,LOG_AE,NA,AE,AE/SAE,1,3,3,NA,AE_SAEG9,1,AE_AESER,Is the Adverse Event serious?,66.3,No,2,2023-07-10 12:22,NA,Initial Data Entry
+2,9700,8,9700-008,3,COMMON_AE,Adverse Events,2023-07-10,LOG_AE,NA,AE,AE/SAE,1,3,3,NA,AE_SAEG13,1,AE_AEDIS,Caused this (S)AE a Study Discontinuation?,66.3,No,2,2023-07-10 12:22,NA,Initial Data Entry
+2,9700,8,9700-008,3,COMMON_AE,Adverse Events,2023-07-10,LOG_AE,NA,AE,AE/SAE,1,3,3,NA,AE_SAEG14,1,AE_AECOVAL,Comments,66.3,NA,NA,2023-07-10 12:22,DM1,Initial Data Entry
+2,9700,16,9700-016,1,COMMON_AE,Adverse Events,2022-11-29,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AESPID,Adverse Event No.,11.0,1,NA,2022-11-29 09:40,DM3,Function execution
+2,9700,16,9700-016,1,COMMON_AE,Adverse Events,2022-11-29,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AETERM,Adverse Event Term,11.0,Hospitalization,NA,2022-11-29 09:40,NA,Initial Data Entry
+2,9700,16,9700-016,1,COMMON_AE,Adverse Events,2022-11-29,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AESI,Is the event one of the following Adverse Events of Special Interest (AESI)?,11.0,None,1,2022-11-29 09:40,DM1,Initial Data Entry
+2,9700,16,9700-016,1,COMMON_AE,Adverse Events,2022-11-29,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESTDAT,Adverse Event Start Date,11.0,2022-11-09,NA,2022-11-29 09:40,DM2,Initial Data Entry
+2,9700,16,9700-016,1,COMMON_AE,Adverse Events,2022-11-29,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESTTIM,Adverse Event Start Time,11.0,00:05,NA,2022-11-29 09:40,DM2,Initial Data Entry
+2,9700,16,9700-016,1,COMMON_AE,Adverse Events,2022-11-29,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AETOXGR,Severity grade according to CTCAE v5.0,11.0,Grade 2,2,2022-11-29 09:40,DM3,Initial Data Entry
+2,9700,16,9700-016,1,COMMON_AE,Adverse Events,2022-11-29,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESEV_W_YN,Did the severity of the AE worsen?,11.0,No,2,2022-11-29 09:40,DM1,Initial Data Entry
+2,9700,16,9700-016,1,COMMON_AE,Adverse Events,2022-11-29,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AEONGO,Is the Adverse Event still ongoing?,11.0,No,2,2022-11-29 09:40,DM3,Initial Data Entry
+2,9700,16,9700-016,1,COMMON_AE,Adverse Events,2022-11-29,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AEENDAT,Adverse Event End Date,11.0,2022-11-16,NA,2022-11-29 09:40,DM3,Initial Data Entry
+2,9700,16,9700-016,1,COMMON_AE,Adverse Events,2022-11-29,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG12,1,AE_AEREL,Relationship to Study Treatment,11.0,Unlikely,2,2022-11-29 09:40,DM2,Initial Data Entry
+2,9700,16,9700-016,1,COMMON_AE,Adverse Events,2022-11-29,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG12,1,AE_AEACN,Action taken with Study Treatment,11.0,Interrupted,2,2022-11-29 09:40,NA,Initial Data Entry
+2,9700,16,9700-016,1,COMMON_AE,Adverse Events,2022-11-29,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH1,Action taken for Adverse Event - 1,11.0,None,1,2022-11-29 09:40,DM2,Initial Data Entry
+2,9700,16,9700-016,1,COMMON_AE,Adverse Events,2022-11-29,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH2,Action taken for Adverse Event - 2,11.0,NA,NA,2022-11-29 09:40,DM3,Initial Data Entry
+2,9700,16,9700-016,1,COMMON_AE,Adverse Events,2022-11-29,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH3,Action taken for Adverse Event - 3,11.0,NA,NA,2022-11-29 09:40,NA,Initial Data Entry
+2,9700,16,9700-016,1,COMMON_AE,Adverse Events,2022-11-29,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH4,Action taken for Adverse Event - 4,11.0,NA,NA,2022-11-29 09:40,DM2,Initial Data Entry
+2,9700,16,9700-016,1,COMMON_AE,Adverse Events,2022-11-29,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG8,1,AE_AEOUT,Outcome of this Adverse Event,11.0,Recovered/resolved,1,2022-11-29 09:40,DM2,Initial Data Entry
+2,9700,16,9700-016,1,COMMON_AE,Adverse Events,2022-11-29,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER,Is the Adverse Event serious?,11.0,No,2,2022-11-29 09:40,NA,Initial Data Entry
+2,9700,16,9700-016,1,COMMON_AE,Adverse Events,2022-11-29,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG13,1,AE_AEDIS,Caused this (S)AE a Study Discontinuation?,11.0,No,2,2022-11-29 09:40,NA,Initial Data Entry
+2,9700,16,9700-016,1,COMMON_AE,Adverse Events,2022-11-29,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG14,1,AE_AECOVAL,Comments,11.0,NA,NA,2022-11-29 09:40,DM2,Initial Data Entry
+2,9700,19,9700-019,1,COMMON_AE,Adverse Events,2022-12-13,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AESPID,Adverse Event No.,20.0,1,NA,2022-12-13 06:39,DM1,Function execution
+2,9700,19,9700-019,1,COMMON_AE,Adverse Events,2022-12-13,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AETERM,Adverse Event Term,20.0,Headache,NA,2022-12-13 06:39,DM3,Initial Data Entry
+2,9700,19,9700-019,1,COMMON_AE,Adverse Events,2022-12-13,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AESI,Is the event one of the following Adverse Events of Special Interest (AESI)?,20.0,None,1,2022-12-13 06:39,DM1,Initial Data Entry
+2,9700,19,9700-019,1,COMMON_AE,Adverse Events,2022-12-13,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESTDAT,Adverse Event Start Date,20.0,2022-12-12,NA,2022-12-13 06:39,DM1,Initial Data Entry
+2,9700,19,9700-019,1,COMMON_AE,Adverse Events,2022-12-13,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESTTIM,Adverse Event Start Time,20.0,07:23,NA,2022-12-13 06:39,DM1,Initial Data Entry
+2,9700,19,9700-019,1,COMMON_AE,Adverse Events,2022-12-13,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AETOXGR,Severity grade according to CTCAE v5.0,20.0,Grade 2,2,2022-12-13 06:39,NA,Initial Data Entry
+2,9700,19,9700-019,1,COMMON_AE,Adverse Events,2022-12-13,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESEV_W_YN,Did the severity of the AE worsen?,20.0,No,2,2022-12-13 06:39,DM1,Initial Data Entry
+2,9700,19,9700-019,1,COMMON_AE,Adverse Events,2022-12-13,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AEONGO,Is the Adverse Event still ongoing?,20.0,No,2,2022-12-13 06:39,DM1,Initial Data Entry
+2,9700,19,9700-019,1,COMMON_AE,Adverse Events,2022-12-13,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AEENDAT,Adverse Event End Date,20.0,2022-12-12,NA,2022-12-13 06:39,DM1,Initial Data Entry
+2,9700,19,9700-019,1,COMMON_AE,Adverse Events,2022-12-13,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG12,1,AE_AEREL,Relationship to Study Treatment,20.0,Unlikely,2,2022-12-13 06:39,DM2,Initial Data Entry
+2,9700,19,9700-019,1,COMMON_AE,Adverse Events,2022-12-13,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG12,1,AE_AEACN,Action taken with Study Treatment,20.0,Not Applicable,6,2022-12-13 06:39,DM3,Initial Data Entry
+2,9700,19,9700-019,1,COMMON_AE,Adverse Events,2022-12-13,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH1,Action taken for Adverse Event - 1,20.0,NA,NA,2022-12-13 06:39,DM2,Initial Data Entry
+2,9700,19,9700-019,1,COMMON_AE,Adverse Events,2022-12-13,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH2,Action taken for Adverse Event - 2,20.0,Concomitant therapy/medication,2,2022-12-13 06:39,NA,Initial Data Entry
+2,9700,19,9700-019,1,COMMON_AE,Adverse Events,2022-12-13,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH3,Action taken for Adverse Event - 3,20.0,NA,NA,2022-12-13 06:39,DM2,Initial Data Entry
+2,9700,19,9700-019,1,COMMON_AE,Adverse Events,2022-12-13,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH4,Action taken for Adverse Event - 4,20.0,NA,NA,2022-12-13 06:39,NA,Initial Data Entry
+2,9700,19,9700-019,1,COMMON_AE,Adverse Events,2022-12-13,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG8,1,AE_AEOUT,Outcome of this Adverse Event,20.0,Recovered/resolved,1,2022-12-13 06:39,DM3,Initial Data Entry
+2,9700,19,9700-019,1,COMMON_AE,Adverse Events,2022-12-13,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER,Is the Adverse Event serious?,20.0,Yes,1,2022-12-13 06:39,DM3,Initial Data Entry
+2,9700,19,9700-019,1,COMMON_AE,Adverse Events,2022-12-13,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_DAT_ENTRY,Reported Date of SAE Entry (hidden),20.0,2022-12-13,NA,2022-12-13 06:39,DM1,Function execution
+2,9700,19,9700-019,1,COMMON_AE,Adverse Events,2022-12-13,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_TIM_ENTRY,Reported Time of SAE Entry (hidden),20.0,07:39,NA,2022-12-13 06:39,NA,Function execution
+2,9700,19,9700-019,1,COMMON_AE,Adverse Events,2022-12-13,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_REP,Type of Report,20.0,Initial,1,2022-12-13 06:39,DM2,Initial Data Entry
+2,9700,19,9700-019,1,COMMON_AE,Adverse Events,2022-12-13,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_STDAT,SAE Start Date,20.0,2022-12-12,NA,2022-12-13 06:39,DM1,Initial Data Entry
+2,9700,19,9700-019,1,COMMON_AE,Adverse Events,2022-12-13,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_INVDAT,Date of investigator awareness,20.0,2022-12-13,NA,2022-12-13 06:39,DM1,Initial Data Entry
+2,9700,19,9700-019,1,COMMON_AE,Adverse Events,2022-12-13,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC1,Seriousness Categories of the SAE - 1,20.0,NA,NA,2022-12-13 06:39,DM3,Initial Data Entry
+2,9700,19,9700-019,1,COMMON_AE,Adverse Events,2022-12-13,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC2,Seriousness Categories of the SAE - 2,20.0,NA,NA,2022-12-13 06:39,DM3,Initial Data Entry
+2,9700,19,9700-019,1,COMMON_AE,Adverse Events,2022-12-13,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC3,Seriousness Categories of the SAE - 3,20.0,NA,NA,2022-12-13 06:39,DM2,Initial Data Entry
+2,9700,19,9700-019,1,COMMON_AE,Adverse Events,2022-12-13,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC4,Seriousness Categories of the SAE - 4,20.0,NA,NA,2022-12-13 06:39,NA,Initial Data Entry
+2,9700,19,9700-019,1,COMMON_AE,Adverse Events,2022-12-13,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC5,Seriousness Categories of the SAE - 5,20.0,NA,NA,2022-12-13 06:39,DM1,Initial Data Entry
+2,9700,19,9700-019,1,COMMON_AE,Adverse Events,2022-12-13,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC6,Seriousness Categories of the SAE - 6,20.0,Important medical event,6,2022-12-13 06:39,DM2,Initial Data Entry
+2,9700,19,9700-019,1,COMMON_AE,Adverse Events,2022-12-13,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC7,Seriousness Categories of the SAE - 7,20.0,NA,NA,2022-12-13 06:39,DM2,Initial Data Entry
+2,9700,19,9700-019,1,COMMON_AE,Adverse Events,2022-12-13,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG13,1,AE_AEDIS,Caused this (S)AE a Study Discontinuation?,20.0,No,2,2022-12-13 06:39,NA,Initial Data Entry
+2,9700,19,9700-019,1,COMMON_AE,Adverse Events,2022-12-13,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG14,1,AE_AECOVAL,Comments,20.0,NA,NA,2022-12-13 06:39,DM2,Initial Data Entry
+2,9700,22,9700-022,1,COMMON_AE,Adverse Events,2023-06-06,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AESPID,Adverse Event No.,65.0,1,NA,2023-06-06 06:20,NA,Function execution
+2,9700,22,9700-022,1,COMMON_AE,Adverse Events,2023-06-06,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AETERM,Adverse Event Term,65.0,Transamninase levels increased,NA,2023-06-06 06:20,DM3,Initial Data Entry
+2,9700,22,9700-022,1,COMMON_AE,Adverse Events,2023-06-06,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AESI,Is the event one of the following Adverse Events of Special Interest (AESI)?,65.0,None,1,2023-06-06 06:20,DM1,Initial Data Entry
+2,9700,22,9700-022,1,COMMON_AE,Adverse Events,2023-06-06,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESTDAT,Adverse Event Start Date,65.0,2023-05-11,NA,2023-06-06 06:20,DM3,Initial Data Entry
+2,9700,22,9700-022,1,COMMON_AE,Adverse Events,2023-06-06,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESTTIM,Adverse Event Start Time,65.0,00:00,NA,2023-06-06 06:20,DM3,Initial Data Entry
+2,9700,22,9700-022,1,COMMON_AE,Adverse Events,2023-06-06,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AETOXGR,Severity grade according to CTCAE v5.0,65.0,Grade 3,3,2023-06-06 06:20,DM1,Initial Data Entry
+2,9700,22,9700-022,1,COMMON_AE,Adverse Events,2023-06-06,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESEV_W_YN,Did the severity of the AE worsen?,65.0,No,2,2023-06-06 06:20,NA,Initial Data Entry
+2,9700,22,9700-022,1,COMMON_AE,Adverse Events,2023-06-06,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AEONGO,Is the Adverse Event still ongoing?,65.0,Yes,1,2023-06-06 06:20,DM3,Initial Data Entry
+2,9700,22,9700-022,1,COMMON_AE,Adverse Events,2023-06-06,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG12,1,AE_AEREL,Relationship to Study Treatment,65.0,Not related,1,2023-06-06 06:20,DM3,Initial Data Entry
+2,9700,22,9700-022,1,COMMON_AE,Adverse Events,2023-06-06,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG12,1,AE_AEACN,Action taken with Study Treatment,65.0,Not Applicable,6,2023-06-06 06:20,DM2,Initial Data Entry
+2,9700,22,9700-022,1,COMMON_AE,Adverse Events,2023-06-06,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH1,Action taken for Adverse Event - 1,65.0,None,1,2023-06-06 06:20,NA,Initial Data Entry
+2,9700,22,9700-022,1,COMMON_AE,Adverse Events,2023-06-06,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH2,Action taken for Adverse Event - 2,65.0,NA,NA,2023-06-06 06:20,DM3,Initial Data Entry
+2,9700,22,9700-022,1,COMMON_AE,Adverse Events,2023-06-06,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH3,Action taken for Adverse Event - 3,65.0,NA,NA,2023-06-06 06:20,DM3,Initial Data Entry
+2,9700,22,9700-022,1,COMMON_AE,Adverse Events,2023-06-06,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH4,Action taken for Adverse Event - 4,65.0,NA,NA,2023-06-06 06:20,DM1,Initial Data Entry
+2,9700,22,9700-022,1,COMMON_AE,Adverse Events,2023-06-06,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG8,1,AE_AEOUT,Outcome of this Adverse Event,65.0,Recovering/resolving,2,2023-06-06 06:20,DM2,Initial Data Entry
+2,9700,22,9700-022,1,COMMON_AE,Adverse Events,2023-06-06,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER,Is the Adverse Event serious?,65.0,Yes,1,2023-06-06 06:20,DM1,Initial Data Entry
+2,9700,22,9700-022,1,COMMON_AE,Adverse Events,2023-06-06,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_DAT_ENTRY,Reported Date of SAE Entry (hidden),65.0,2023-06-06,NA,2023-06-06 06:20,NA,Function execution
+2,9700,22,9700-022,1,COMMON_AE,Adverse Events,2023-06-06,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_TIM_ENTRY,Reported Time of SAE Entry (hidden),65.0,08:17,NA,2023-06-06 06:20,NA,Function execution
+2,9700,22,9700-022,1,COMMON_AE,Adverse Events,2023-06-06,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_REP,Type of Report,65.0,Initial,1,2023-06-06 06:20,DM3,Initial Data Entry
+2,9700,22,9700-022,1,COMMON_AE,Adverse Events,2023-06-06,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_STDAT,SAE Start Date,65.0,2023-05-16,NA,2023-06-06 06:20,DM2,Initial Data Entry
+2,9700,22,9700-022,1,COMMON_AE,Adverse Events,2023-06-06,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_INVDAT,Date of investigator awareness,65.0,2023-05-17,NA,2023-06-06 06:20,DM2,Initial Data Entry
+2,9700,22,9700-022,1,COMMON_AE,Adverse Events,2023-06-06,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESERONGO,Is the SAE still ongoing?,65.0,Yes,1,2023-06-06 06:20,DM3,Initial Data Entry
+2,9700,22,9700-022,1,COMMON_AE,Adverse Events,2023-06-06,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC1,Seriousness Categories of the SAE - 1,65.0,NA,NA,2023-06-06 06:20,DM2,Initial Data Entry
+2,9700,22,9700-022,1,COMMON_AE,Adverse Events,2023-06-06,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC2,Seriousness Categories of the SAE - 2,65.0,NA,NA,2023-06-06 06:20,DM1,Initial Data Entry
+2,9700,22,9700-022,1,COMMON_AE,Adverse Events,2023-06-06,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC3,Seriousness Categories of the SAE - 3,65.0,NA,NA,2023-06-06 06:20,NA,Initial Data Entry
+2,9700,22,9700-022,1,COMMON_AE,Adverse Events,2023-06-06,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC4,Seriousness Categories of the SAE - 4,65.0,NA,NA,2023-06-06 06:20,DM3,Initial Data Entry
+2,9700,22,9700-022,1,COMMON_AE,Adverse Events,2023-06-06,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC5,Seriousness Categories of the SAE - 5,65.0,NA,NA,2023-06-06 06:20,DM1,Initial Data Entry
+2,9700,22,9700-022,1,COMMON_AE,Adverse Events,2023-06-06,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC6,Seriousness Categories of the SAE - 6,65.0,Important medical event,6,2023-06-06 06:20,DM1,Initial Data Entry
+2,9700,22,9700-022,1,COMMON_AE,Adverse Events,2023-06-06,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AERSER_SP,Please specify,65.0,transaminase values increased,NA,2023-06-06 06:20,DM3,Initial Data Entry
+2,9700,22,9700-022,1,COMMON_AE,Adverse Events,2023-06-06,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG13,1,AE_AEDIS,Caused this (S)AE a Study Discontinuation?,65.0,No,2,2023-06-06 06:20,DM3,Initial Data Entry
+2,9700,22,9700-022,1,COMMON_AE,Adverse Events,2023-06-06,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG14,1,AE_AECOVAL,Comments,65.0,NA,NA,2023-06-06 06:20,NA,Initial Data Entry
+2,9700,39,9700-039,1,COMMON_AE,Adverse Events,2023-06-09,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AESPID,Adverse Event No.,65.0,1,NA,2023-06-09 14:05,NA,Function execution
+2,9700,39,9700-039,1,COMMON_AE,Adverse Events,2023-06-09,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AETERM,Adverse Event Term,65.0,bloody nose,NA,2023-06-09 14:05,NA,Initial Data Entry
+2,9700,39,9700-039,1,COMMON_AE,Adverse Events,2023-06-09,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AESI,Is the event one of the following Adverse Events of Special Interest (AESI)?,65.0,None,1,2023-06-09 14:05,NA,Initial Data Entry
+2,9700,39,9700-039,1,COMMON_AE,Adverse Events,2023-06-09,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESTDAT,Adverse Event Start Date,65.0,2023-06-09,NA,2023-06-09 14:05,DM2,Initial Data Entry
+2,9700,39,9700-039,1,COMMON_AE,Adverse Events,2023-06-09,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESTTIM,Adverse Event Start Time,65.0,00:20,NA,2023-06-09 14:05,DM2,Initial Data Entry
+2,9700,39,9700-039,1,COMMON_AE,Adverse Events,2023-06-09,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AETOXGR,Severity grade according to CTCAE v5.0,65.0,Grade 4,4,2023-06-09 14:05,NA,Initial Data Entry
+2,9700,39,9700-039,1,COMMON_AE,Adverse Events,2023-06-09,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESEV_W_YN,Did the severity of the AE worsen?,65.0,No,2,2023-06-09 14:05,NA,Initial Data Entry
+2,9700,39,9700-039,1,COMMON_AE,Adverse Events,2023-06-09,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AEONGO,Is the Adverse Event still ongoing?,65.0,Yes,1,2023-06-09 14:05,DM1,Initial Data Entry
+2,9700,39,9700-039,1,COMMON_AE,Adverse Events,2023-06-09,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG12,1,AE_AEREL,Relationship to Study Treatment,65.0,Not related,1,2023-06-09 14:05,NA,Initial Data Entry
+2,9700,39,9700-039,1,COMMON_AE,Adverse Events,2023-06-09,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG12,1,AE_AEACN,Action taken with Study Treatment,65.0,Not Applicable,6,2023-06-09 14:05,DM3,Initial Data Entry
+2,9700,39,9700-039,1,COMMON_AE,Adverse Events,2023-06-09,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH1,Action taken for Adverse Event - 1,65.0,NA,NA,2023-06-09 14:05,NA,Initial Data Entry
+2,9700,39,9700-039,1,COMMON_AE,Adverse Events,2023-06-09,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH2,Action taken for Adverse Event - 2,65.0,NA,NA,2023-06-09 14:05,DM2,Initial Data Entry
+2,9700,39,9700-039,1,COMMON_AE,Adverse Events,2023-06-09,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH3,Action taken for Adverse Event - 3,65.0,Hospitalization/Prolongation of hospitalization,3,2023-06-09 14:05,DM3,Initial Data Entry
+2,9700,39,9700-039,1,COMMON_AE,Adverse Events,2023-06-09,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH4,Action taken for Adverse Event - 4,65.0,NA,NA,2023-06-09 14:05,DM3,Initial Data Entry
+2,9700,39,9700-039,1,COMMON_AE,Adverse Events,2023-06-09,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG8,1,AE_AEOUT,Outcome of this Adverse Event,65.0,Unknown,6,2023-06-09 14:06,DM3,Initial Data Entry
+2,9700,39,9700-039,1,COMMON_AE,Adverse Events,2023-06-09,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER,Is the Adverse Event serious?,65.0,Yes,1,2023-06-09 14:05,NA,Initial Data Entry
+2,9700,39,9700-039,1,COMMON_AE,Adverse Events,2023-06-09,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_DAT_ENTRY,Reported Date of SAE Entry (hidden),65.0,2023-06-09,NA,2023-06-09 14:05,DM2,Function execution
+2,9700,39,9700-039,1,COMMON_AE,Adverse Events,2023-06-09,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_TIM_ENTRY,Reported Time of SAE Entry (hidden),65.0,16:06,NA,2023-06-09 14:06,DM3,Function execution
+2,9700,39,9700-039,1,COMMON_AE,Adverse Events,2023-06-09,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_REP,Type of Report,65.0,Initial,1,2023-06-09 14:05,DM2,Initial Data Entry
+2,9700,39,9700-039,1,COMMON_AE,Adverse Events,2023-06-09,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_STDAT,SAE Start Date,65.0,2023-06-09,NA,2023-06-09 14:05,NA,Initial Data Entry
+2,9700,39,9700-039,1,COMMON_AE,Adverse Events,2023-06-09,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_INVDAT,Date of investigator awareness,65.0,2023-06-09,NA,2023-06-09 14:05,DM2,Initial Data Entry
+2,9700,39,9700-039,1,COMMON_AE,Adverse Events,2023-06-09,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESERONGO,Is the SAE still ongoing?,65.0,Yes,1,2023-06-09 14:05,DM1,Initial Data Entry
+2,9700,39,9700-039,1,COMMON_AE,Adverse Events,2023-06-09,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC1,Seriousness Categories of the SAE - 1,65.0,NA,NA,2023-06-09 14:05,DM2,Initial Data Entry
+2,9700,39,9700-039,1,COMMON_AE,Adverse Events,2023-06-09,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC2,Seriousness Categories of the SAE - 2,65.0,NA,NA,2023-06-09 14:05,DM3,Initial Data Entry
+2,9700,39,9700-039,1,COMMON_AE,Adverse Events,2023-06-09,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC3,Seriousness Categories of the SAE - 3,65.0,Requires inpatient hospitalization or prolongation of existing hospitalization,3,2023-06-09 14:05,DM1,Initial Data Entry
+2,9700,39,9700-039,1,COMMON_AE,Adverse Events,2023-06-09,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC4,Seriousness Categories of the SAE - 4,65.0,NA,NA,2023-06-09 14:05,NA,Initial Data Entry
+2,9700,39,9700-039,1,COMMON_AE,Adverse Events,2023-06-09,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC5,Seriousness Categories of the SAE - 5,65.0,NA,NA,2023-06-09 14:05,DM1,Initial Data Entry
+2,9700,39,9700-039,1,COMMON_AE,Adverse Events,2023-06-09,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC6,Seriousness Categories of the SAE - 6,65.0,NA,NA,2023-06-09 14:05,NA,Initial Data Entry
+2,9700,39,9700-039,1,COMMON_AE,Adverse Events,2023-06-09,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_HOSP_STDAT,Start Date of hospitalization,65.0,2023-06-09,NA,2023-06-09 14:05,NA,Initial Data Entry
+2,9700,39,9700-039,1,COMMON_AE,Adverse Events,2023-06-09,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_HOSP_ENDAT,End Date of hospitalization,65.0,NA,NA,2023-06-09 14:05,DM3,Initial Data Entry
+2,9700,39,9700-039,1,COMMON_AE,Adverse Events,2023-06-09,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG13,1,AE_AEDIS,Caused this (S)AE a Study Discontinuation?,65.0,No,2,2023-06-09 14:05,DM1,Initial Data Entry
+2,9700,39,9700-039,1,COMMON_AE,Adverse Events,2023-06-09,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG14,1,AE_AECOVAL,Comments,65.0,NA,NA,2023-06-09 14:05,NA,Initial Data Entry
+3,9600,6,9600-006,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AESPID,Adverse Event No.,65.0,1,NA,2023-06-07 19:36,NA,Function execution
+3,9600,6,9600-006,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AETERM,Adverse Event Term,65.0,Asthenia,NA,2023-06-07 19:36,NA,Initial Data Entry
+3,9600,6,9600-006,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AESI,Is the event one of the following Adverse Events of Special Interest (AESI)?,65.0,None,1,2023-06-07 19:36,DM3,Initial Data Entry
+3,9600,6,9600-006,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESTDAT,Adverse Event Start Date,65.0,2023-06-07,NA,2023-06-07 19:36,DM1,Initial Data Entry
+3,9600,6,9600-006,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESTTIM,Adverse Event Start Time,65.0,NA,NA,2023-06-07 19:36,NA,Initial Data Entry
+3,9600,6,9600-006,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AETOXGR,Severity grade according to CTCAE v5.0,65.0,Grade 3,3,2023-06-07 19:36,DM3,Initial Data Entry
+3,9600,6,9600-006,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESEV_W_YN,Did the severity of the AE worsen?,65.0,No,2,2023-06-07 19:36,DM2,Initial Data Entry
+3,9600,6,9600-006,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AEONGO,Is the Adverse Event still ongoing?,65.0,Yes,1,2023-06-07 19:36,NA,Initial Data Entry
+3,9600,6,9600-006,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG12,1,AE_AEREL,Relationship to Study Treatment,65.0,Unlikely,2,2023-06-07 19:36,DM3,Initial Data Entry
+3,9600,6,9600-006,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG12,1,AE_AEACN,Action taken with Study Treatment,65.0,Not Applicable,6,2023-06-07 19:37,DM1,Initial Data Entry
+3,9600,6,9600-006,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH1,Action taken for Adverse Event - 1,65.0,NA,NA,2023-06-07 19:36,DM1,Initial Data Entry
+3,9600,6,9600-006,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH2,Action taken for Adverse Event - 2,65.0,NA,NA,2023-06-07 19:36,DM2,Initial Data Entry
+3,9600,6,9600-006,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH3,Action taken for Adverse Event - 3,65.0,Hospitalization/Prolongation of hospitalization,3,2023-06-07 19:36,NA,Initial Data Entry
+3,9600,6,9600-006,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH4,Action taken for Adverse Event - 4,65.0,NA,NA,2023-06-07 19:36,DM2,Initial Data Entry
+3,9600,6,9600-006,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG8,1,AE_AEOUT,Outcome of this Adverse Event,65.0,Recovering/resolving,2,2023-06-07 19:36,DM1,Initial Data Entry
+3,9600,6,9600-006,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER,Is the Adverse Event serious?,65.0,Yes,1,2023-06-07 19:36,DM1,Initial Data Entry
+3,9600,6,9600-006,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_DAT_ENTRY,Reported Date of SAE Entry (hidden),65.0,2023-06-07,NA,2023-06-07 19:36,NA,Function execution
+3,9600,6,9600-006,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_TIM_ENTRY,Reported Time of SAE Entry (hidden),65.0,21:36,NA,2023-06-07 19:37,DM2,Function execution
+3,9600,6,9600-006,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_REP,Type of Report,65.0,Initial,1,2023-06-07 19:36,NA,Initial Data Entry
+3,9600,6,9600-006,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_STDAT,SAE Start Date,65.0,2023-06-07,NA,2023-06-07 19:36,DM2,Initial Data Entry
+3,9600,6,9600-006,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_INVDAT,Date of investigator awareness,65.0,2023-06-07,NA,2023-06-07 19:36,NA,Initial Data Entry
+3,9600,6,9600-006,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESERONGO,Is the SAE still ongoing?,65.0,Yes,1,2023-06-07 19:36,NA,Initial Data Entry
+3,9600,6,9600-006,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC1,Seriousness Categories of the SAE - 1,65.0,NA,NA,2023-06-07 19:36,DM1,Initial Data Entry
+3,9600,6,9600-006,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC2,Seriousness Categories of the SAE - 2,65.0,NA,NA,2023-06-07 19:36,DM2,Initial Data Entry
+3,9600,6,9600-006,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC3,Seriousness Categories of the SAE - 3,65.0,Requires inpatient hospitalization or prolongation of existing hospitalization,3,2023-06-07 19:36,NA,Initial Data Entry
+3,9600,6,9600-006,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC4,Seriousness Categories of the SAE - 4,65.0,NA,NA,2023-06-07 19:36,DM3,Initial Data Entry
+3,9600,6,9600-006,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC5,Seriousness Categories of the SAE - 5,65.0,NA,NA,2023-06-07 19:36,DM1,Initial Data Entry
+3,9600,6,9600-006,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC6,Seriousness Categories of the SAE - 6,65.0,NA,NA,2023-06-07 19:36,DM3,Initial Data Entry
+3,9600,6,9600-006,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_HOSP_STDAT,Start Date of hospitalization,65.0,2023-06-07,NA,2023-06-07 19:36,NA,Initial Data Entry
+3,9600,6,9600-006,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_HOSP_ENDAT,End Date of hospitalization,65.0,NA,NA,2023-06-07 19:36,DM3,Initial Data Entry
+3,9600,6,9600-006,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG13,1,AE_AEDIS,Caused this (S)AE a Study Discontinuation?,65.0,No,2,2023-06-07 19:36,DM1,Initial Data Entry
+3,9600,6,9600-006,1,COMMON_AE,Adverse Events,2023-06-07,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG14,1,AE_AECOVAL,Comments,65.0,NA,NA,2023-06-07 19:36,DM1,Initial Data Entry
+3,9600,9,9600-009,1,COMMON_AE,Adverse Events,2023-05-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AESPID,Adverse Event No.,56.0,1,NA,2023-05-08 08:39,DM3,Function execution
+3,9600,9,9600-009,1,COMMON_AE,Adverse Events,2023-05-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AETERM,Adverse Event Term,56.0,fdjhbslajflaj,NA,2023-05-08 08:39,DM1,Initial Data Entry
+3,9600,9,9600-009,1,COMMON_AE,Adverse Events,2023-05-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AESI,Is the event one of the following Adverse Events of Special Interest (AESI)?,56.0,None,1,2023-05-08 08:39,DM3,Initial Data Entry
+3,9600,9,9600-009,1,COMMON_AE,Adverse Events,2023-05-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESTDAT,Adverse Event Start Date,56.0,2023-05-08,NA,2023-05-08 08:40,DM1,Transcription error
+3,9600,9,9600-009,1,COMMON_AE,Adverse Events,2023-05-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESTTIM,Adverse Event Start Time,56.0,NA,NA,2023-05-08 08:39,NA,Initial Data Entry
+3,9600,9,9600-009,1,COMMON_AE,Adverse Events,2023-05-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AETOXGR,Severity grade according to CTCAE v5.0,56.0,Grade 2,2,2023-05-08 08:39,NA,Initial Data Entry
+3,9600,9,9600-009,1,COMMON_AE,Adverse Events,2023-05-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESEV_W_YN,Did the severity of the AE worsen?,56.0,No,2,2023-05-08 08:39,DM3,Initial Data Entry
+3,9600,9,9600-009,1,COMMON_AE,Adverse Events,2023-05-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AEONGO,Is the Adverse Event still ongoing?,56.0,Yes,1,2023-05-08 08:39,DM1,Initial Data Entry
+3,9600,9,9600-009,1,COMMON_AE,Adverse Events,2023-05-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG12,1,AE_AEREL,Relationship to Study Treatment,56.0,Not related,1,2023-05-08 08:39,NA,Initial Data Entry
+3,9600,9,9600-009,1,COMMON_AE,Adverse Events,2023-05-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG12,1,AE_AEACN,Action taken with Study Treatment,56.0,Interrupted,2,2023-05-08 08:39,DM2,Initial Data Entry
+3,9600,9,9600-009,1,COMMON_AE,Adverse Events,2023-05-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH1,Action taken for Adverse Event - 1,56.0,None,1,2023-05-08 08:39,NA,Initial Data Entry
+3,9600,9,9600-009,1,COMMON_AE,Adverse Events,2023-05-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH2,Action taken for Adverse Event - 2,56.0,NA,NA,2023-05-08 08:39,DM3,Initial Data Entry
+3,9600,9,9600-009,1,COMMON_AE,Adverse Events,2023-05-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH3,Action taken for Adverse Event - 3,56.0,NA,NA,2023-05-08 08:39,DM1,Initial Data Entry
+3,9600,9,9600-009,1,COMMON_AE,Adverse Events,2023-05-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH4,Action taken for Adverse Event - 4,56.0,NA,NA,2023-05-08 08:39,DM3,Initial Data Entry
+3,9600,9,9600-009,1,COMMON_AE,Adverse Events,2023-05-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG8,1,AE_AEOUT,Outcome of this Adverse Event,56.0,Recovering/resolving,2,2023-05-08 08:39,DM1,Initial Data Entry
+3,9600,9,9600-009,1,COMMON_AE,Adverse Events,2023-05-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER,Is the Adverse Event serious?,56.0,No,2,2023-05-08 08:39,DM1,Initial Data Entry
+3,9600,9,9600-009,1,COMMON_AE,Adverse Events,2023-05-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG13,1,AE_AEDIS,Caused this (S)AE a Study Discontinuation?,56.0,No,2,2023-05-08 08:39,DM2,Initial Data Entry
+3,9600,9,9600-009,1,COMMON_AE,Adverse Events,2023-05-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG14,1,AE_AECOVAL,Comments,56.0,ydvkfönb,NA,2023-05-08 08:39,DM2,Initial Data Entry
+3,9600,13,9600-013,1,COMMON_AE,Adverse Events,2023-06-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AESPID,Adverse Event No.,65.0,1,NA,2023-06-08 10:57,DM1,Function execution
+3,9600,13,9600-013,1,COMMON_AE,Adverse Events,2023-06-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AETERM,Adverse Event Term,65.0,Asthenia,NA,2023-06-08 10:57,DM3,Initial Data Entry
+3,9600,13,9600-013,1,COMMON_AE,Adverse Events,2023-06-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AESI,Is the event one of the following Adverse Events of Special Interest (AESI)?,65.0,None,1,2023-06-08 10:57,DM1,Initial Data Entry
+3,9600,13,9600-013,1,COMMON_AE,Adverse Events,2023-06-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESTDAT,Adverse Event Start Date,65.0,2023-06-05,NA,2023-06-08 10:57,DM1,Initial Data Entry
+3,9600,13,9600-013,1,COMMON_AE,Adverse Events,2023-06-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESTTIM,Adverse Event Start Time,65.0,00:00,NA,2023-06-08 10:57,DM2,Initial Data Entry
+3,9600,13,9600-013,1,COMMON_AE,Adverse Events,2023-06-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AETOXGR,Severity grade according to CTCAE v5.0,65.0,Grade 2,2,2023-06-08 10:57,DM2,Initial Data Entry
+3,9600,13,9600-013,1,COMMON_AE,Adverse Events,2023-06-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESEV_W_YN,Did the severity of the AE worsen?,65.0,No,2,2023-06-08 10:57,DM2,Initial Data Entry
+3,9600,13,9600-013,1,COMMON_AE,Adverse Events,2023-06-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AEONGO,Is the Adverse Event still ongoing?,65.0,Yes,1,2023-06-08 10:57,DM3,Initial Data Entry
+3,9600,13,9600-013,1,COMMON_AE,Adverse Events,2023-06-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG12,1,AE_AEREL,Relationship to Study Treatment,65.0,Not related,1,2023-06-08 10:57,NA,Initial Data Entry
+3,9600,13,9600-013,1,COMMON_AE,Adverse Events,2023-06-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG12,1,AE_AEACN,Action taken with Study Treatment,65.0,Not Applicable,6,2023-06-08 10:57,DM3,Initial Data Entry
+3,9600,13,9600-013,1,COMMON_AE,Adverse Events,2023-06-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH1,Action taken for Adverse Event - 1,65.0,None,1,2023-06-08 10:57,NA,Initial Data Entry
+3,9600,13,9600-013,1,COMMON_AE,Adverse Events,2023-06-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH2,Action taken for Adverse Event - 2,65.0,NA,NA,2023-06-08 10:57,NA,Initial Data Entry
+3,9600,13,9600-013,1,COMMON_AE,Adverse Events,2023-06-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH3,Action taken for Adverse Event - 3,65.0,NA,NA,2023-06-08 10:57,DM2,Initial Data Entry
+3,9600,13,9600-013,1,COMMON_AE,Adverse Events,2023-06-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH4,Action taken for Adverse Event - 4,65.0,NA,NA,2023-06-08 10:57,DM3,Initial Data Entry
+3,9600,13,9600-013,1,COMMON_AE,Adverse Events,2023-06-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG8,1,AE_AEOUT,Outcome of this Adverse Event,65.0,Recovering/resolving,2,2023-06-08 10:57,DM1,Initial Data Entry
+3,9600,13,9600-013,1,COMMON_AE,Adverse Events,2023-06-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER,Is the Adverse Event serious?,65.0,Yes,1,2023-06-08 10:57,DM3,Initial Data Entry
+3,9600,13,9600-013,1,COMMON_AE,Adverse Events,2023-06-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_DAT_ENTRY,Reported Date of SAE Entry (hidden),65.0,2023-06-08,NA,2023-06-08 10:57,DM3,Function execution
+3,9600,13,9600-013,1,COMMON_AE,Adverse Events,2023-06-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_TIM_ENTRY,Reported Time of SAE Entry (hidden),65.0,12:56,NA,2023-06-08 10:57,DM2,Function execution
+3,9600,13,9600-013,1,COMMON_AE,Adverse Events,2023-06-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_REP,Type of Report,65.0,Initial,1,2023-06-08 10:57,DM1,Initial Data Entry
+3,9600,13,9600-013,1,COMMON_AE,Adverse Events,2023-06-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_STDAT,SAE Start Date,65.0,2023-06-05,NA,2023-06-08 10:57,DM2,Initial Data Entry
+3,9600,13,9600-013,1,COMMON_AE,Adverse Events,2023-06-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_INVDAT,Date of investigator awareness,65.0,2023-06-07,NA,2023-06-08 10:57,NA,Initial Data Entry
+3,9600,13,9600-013,1,COMMON_AE,Adverse Events,2023-06-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESERONGO,Is the SAE still ongoing?,65.0,Yes,1,2023-06-08 10:57,DM1,Initial Data Entry
+3,9600,13,9600-013,1,COMMON_AE,Adverse Events,2023-06-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC1,Seriousness Categories of the SAE - 1,65.0,NA,NA,2023-06-08 10:57,DM2,Initial Data Entry
+3,9600,13,9600-013,1,COMMON_AE,Adverse Events,2023-06-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC2,Seriousness Categories of the SAE - 2,65.0,NA,NA,2023-06-08 10:57,DM3,Initial Data Entry
+3,9600,13,9600-013,1,COMMON_AE,Adverse Events,2023-06-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC3,Seriousness Categories of the SAE - 3,65.0,Requires inpatient hospitalization or prolongation of existing hospitalization,3,2023-06-08 10:57,NA,Initial Data Entry
+3,9600,13,9600-013,1,COMMON_AE,Adverse Events,2023-06-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC4,Seriousness Categories of the SAE - 4,65.0,NA,NA,2023-06-08 10:57,DM3,Initial Data Entry
+3,9600,13,9600-013,1,COMMON_AE,Adverse Events,2023-06-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC5,Seriousness Categories of the SAE - 5,65.0,NA,NA,2023-06-08 10:57,NA,Initial Data Entry
+3,9600,13,9600-013,1,COMMON_AE,Adverse Events,2023-06-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC6,Seriousness Categories of the SAE - 6,65.0,NA,NA,2023-06-08 10:57,DM1,Initial Data Entry
+3,9600,13,9600-013,1,COMMON_AE,Adverse Events,2023-06-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_HOSP_STDAT,Start Date of hospitalization,65.0,2023-06-05,NA,2023-06-08 10:57,NA,Initial Data Entry
+3,9600,13,9600-013,1,COMMON_AE,Adverse Events,2023-06-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_HOSP_ENDAT,End Date of hospitalization,65.0,2023-06-08,NA,2023-06-08 10:57,DM2,Initial Data Entry
+3,9600,13,9600-013,1,COMMON_AE,Adverse Events,2023-06-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG13,1,AE_AEDIS,Caused this (S)AE a Study Discontinuation?,65.0,No,2,2023-06-08 10:57,NA,Initial Data Entry
+3,9600,13,9600-013,1,COMMON_AE,Adverse Events,2023-06-08,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG14,1,AE_AECOVAL,Comments,65.0,NA,NA,2023-06-08 10:57,NA,Initial Data Entry
+3,9600,14,9600-014,1,COMMON_AE,Adverse Events,2023-06-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AESPID,Adverse Event No.,65.0,1,NA,2023-06-16 08:24,DM2,Function execution
+3,9600,14,9600-014,1,COMMON_AE,Adverse Events,2023-06-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AETERM,Adverse Event Term,65.0,cardiorespiratory arrest,NA,2023-06-16 08:24,DM1,Initial Data Entry
+3,9600,14,9600-014,1,COMMON_AE,Adverse Events,2023-06-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AESI,Is the event one of the following Adverse Events of Special Interest (AESI)?,65.0,None,1,2023-06-16 08:24,DM1,Initial Data Entry
+3,9600,14,9600-014,1,COMMON_AE,Adverse Events,2023-06-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESTDAT,Adverse Event Start Date,65.0,2023-06-16,NA,2023-06-16 08:24,NA,Initial Data Entry
+3,9600,14,9600-014,1,COMMON_AE,Adverse Events,2023-06-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESTTIM,Adverse Event Start Time,65.0,04:00,NA,2023-06-16 08:24,NA,Initial Data Entry
+3,9600,14,9600-014,1,COMMON_AE,Adverse Events,2023-06-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AETOXGR,Severity grade according to CTCAE v5.0,65.0,Grade 3,3,2023-06-16 08:24,DM3,Initial Data Entry
+3,9600,14,9600-014,1,COMMON_AE,Adverse Events,2023-06-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESEV_W_YN,Did the severity of the AE worsen?,65.0,No,2,2023-06-16 08:24,NA,Initial Data Entry
+3,9600,14,9600-014,1,COMMON_AE,Adverse Events,2023-06-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AEONGO,Is the Adverse Event still ongoing?,65.0,Yes,1,2023-06-16 08:24,DM1,Initial Data Entry
+3,9600,14,9600-014,1,COMMON_AE,Adverse Events,2023-06-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG12,1,AE_AEREL,Relationship to Study Treatment,65.0,Unlikely,2,2023-06-16 08:24,DM2,Initial Data Entry
+3,9600,14,9600-014,1,COMMON_AE,Adverse Events,2023-06-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG12,1,AE_AEACN,Action taken with Study Treatment,65.0,Interrupted,2,2023-06-16 08:24,DM2,Initial Data Entry
+3,9600,14,9600-014,1,COMMON_AE,Adverse Events,2023-06-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH1,Action taken for Adverse Event - 1,65.0,NA,NA,2023-06-16 08:24,DM2,Initial Data Entry
+3,9600,14,9600-014,1,COMMON_AE,Adverse Events,2023-06-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH2,Action taken for Adverse Event - 2,65.0,NA,NA,2023-06-16 08:24,DM2,Initial Data Entry
+3,9600,14,9600-014,1,COMMON_AE,Adverse Events,2023-06-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH3,Action taken for Adverse Event - 3,65.0,Hospitalization/Prolongation of hospitalization,3,2023-06-16 08:24,DM3,Initial Data Entry
+3,9600,14,9600-014,1,COMMON_AE,Adverse Events,2023-06-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH4,Action taken for Adverse Event - 4,65.0,NA,NA,2023-06-16 08:24,NA,Initial Data Entry
+3,9600,14,9600-014,1,COMMON_AE,Adverse Events,2023-06-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG8,1,AE_AEOUT,Outcome of this Adverse Event,65.0,Unknown,6,2023-06-16 08:24,DM3,Initial Data Entry
+3,9600,14,9600-014,1,COMMON_AE,Adverse Events,2023-06-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER,Is the Adverse Event serious?,65.0,Yes,1,2023-06-16 08:24,DM1,Initial Data Entry
+3,9600,14,9600-014,1,COMMON_AE,Adverse Events,2023-06-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_DAT_ENTRY,Reported Date of SAE Entry (hidden),65.0,2023-06-16,NA,2023-06-16 08:24,DM3,Function execution
+3,9600,14,9600-014,1,COMMON_AE,Adverse Events,2023-06-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_TIM_ENTRY,Reported Time of SAE Entry (hidden),65.0,10:24,NA,2023-06-16 08:24,NA,Function execution
+3,9600,14,9600-014,1,COMMON_AE,Adverse Events,2023-06-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_REP,Type of Report,65.0,Initial,1,2023-06-16 08:24,NA,Initial Data Entry
+3,9600,14,9600-014,1,COMMON_AE,Adverse Events,2023-06-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_STDAT,SAE Start Date,65.0,2023-06-16,NA,2023-06-16 08:24,NA,Initial Data Entry
+3,9600,14,9600-014,1,COMMON_AE,Adverse Events,2023-06-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_INVDAT,Date of investigator awareness,65.0,2023-06-16,NA,2023-06-16 08:24,DM2,Initial Data Entry
+3,9600,14,9600-014,1,COMMON_AE,Adverse Events,2023-06-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESERONGO,Is the SAE still ongoing?,65.0,Yes,1,2023-06-16 08:24,NA,Initial Data Entry
+3,9600,14,9600-014,1,COMMON_AE,Adverse Events,2023-06-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC1,Seriousness Categories of the SAE - 1,65.0,NA,NA,2023-06-16 08:24,NA,Initial Data Entry
+3,9600,14,9600-014,1,COMMON_AE,Adverse Events,2023-06-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC2,Seriousness Categories of the SAE - 2,65.0,NA,NA,2023-06-16 08:24,NA,Initial Data Entry
+3,9600,14,9600-014,1,COMMON_AE,Adverse Events,2023-06-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC3,Seriousness Categories of the SAE - 3,65.0,Requires inpatient hospitalization or prolongation of existing hospitalization,3,2023-06-16 08:24,DM1,Initial Data Entry
+3,9600,14,9600-014,1,COMMON_AE,Adverse Events,2023-06-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC4,Seriousness Categories of the SAE - 4,65.0,NA,NA,2023-06-16 08:24,DM3,Initial Data Entry
+3,9600,14,9600-014,1,COMMON_AE,Adverse Events,2023-06-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC5,Seriousness Categories of the SAE - 5,65.0,NA,NA,2023-06-16 08:24,NA,Initial Data Entry
+3,9600,14,9600-014,1,COMMON_AE,Adverse Events,2023-06-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC6,Seriousness Categories of the SAE - 6,65.0,NA,NA,2023-06-16 08:24,DM1,Initial Data Entry
+3,9600,14,9600-014,1,COMMON_AE,Adverse Events,2023-06-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_HOSP_STDAT,Start Date of hospitalization,65.0,2023-06-16,NA,2023-06-16 08:24,DM1,Initial Data Entry
+3,9600,14,9600-014,1,COMMON_AE,Adverse Events,2023-06-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_HOSP_ENDAT,End Date of hospitalization,65.0,NA,NA,2023-06-16 08:24,DM2,Initial Data Entry
+3,9600,14,9600-014,1,COMMON_AE,Adverse Events,2023-06-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG13,1,AE_AEDIS,Caused this (S)AE a Study Discontinuation?,65.0,No,2,2023-06-16 08:24,DM1,Initial Data Entry
+3,9600,14,9600-014,1,COMMON_AE,Adverse Events,2023-06-16,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG14,1,AE_AECOVAL,Comments,65.0,NA,NA,2023-06-16 08:24,DM1,Initial Data Entry
+3,9600,15,9600-015,1,COMMON_AE,Adverse Events,2023-08-17,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AESPID,Adverse Event No.,66.3,1,NA,2023-08-17 09:56,DM1,Function execution
+3,9600,15,9600-015,1,COMMON_AE,Adverse Events,2023-08-17,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AETERM,Adverse Event Term,66.3,infection,NA,2023-08-17 09:56,DM3,Initial Data Entry
+3,9600,15,9600-015,1,COMMON_AE,Adverse Events,2023-08-17,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AESI,Is the event one of the following Adverse Events of Special Interest (AESI)?,66.3,None,1,2023-08-17 09:56,DM2,Initial Data Entry
+3,9600,15,9600-015,1,COMMON_AE,Adverse Events,2023-08-17,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESTDAT,Adverse Event Start Date,66.3,2023-08-08,NA,2023-08-17 09:56,DM2,Initial Data Entry
+3,9600,15,9600-015,1,COMMON_AE,Adverse Events,2023-08-17,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESTTIM,Adverse Event Start Time,66.3,10:00,NA,2023-08-17 09:56,DM2,Initial Data Entry
+3,9600,15,9600-015,1,COMMON_AE,Adverse Events,2023-08-17,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AETOXGR,Severity grade according to CTCAE v5.0,66.3,Grade 3,3,2023-08-17 09:56,DM2,Initial Data Entry
+3,9600,15,9600-015,1,COMMON_AE,Adverse Events,2023-08-17,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESEV_W_YN,Did the severity of the AE worsen?,66.3,Yes,1,2023-08-17 09:56,DM3,Initial Data Entry
+3,9600,15,9600-015,1,COMMON_AE,Adverse Events,2023-08-17,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESTDAT_W,Date of Worsening,66.3,2023-08-08,NA,2023-08-17 09:56,NA,Initial Data Entry
+3,9600,15,9600-015,1,COMMON_AE,Adverse Events,2023-08-17,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AETOXGR_W,Severity of Worseningaccording to CTCAE v5.0,66.3,Grade 4,4,2023-08-17 09:56,DM3,Initial Data Entry
+3,9600,15,9600-015,1,COMMON_AE,Adverse Events,2023-08-17,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AEONGO,Is the Adverse Event still ongoing?,66.3,Yes,1,2023-08-17 09:56,DM3,Initial Data Entry
+3,9600,15,9600-015,1,COMMON_AE,Adverse Events,2023-08-17,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG12,1,AE_AEREL,Relationship to Study Treatment,66.3,Possible related,3,2023-08-17 09:56,DM1,Initial Data Entry
+3,9600,15,9600-015,1,COMMON_AE,Adverse Events,2023-08-17,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG12,1,AE_AEACN,Action taken with Study Treatment,66.3,Not Applicable,6,2023-08-17 09:56,NA,Initial Data Entry
+3,9600,15,9600-015,1,COMMON_AE,Adverse Events,2023-08-17,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH1,Action taken for Adverse Event - 1,66.3,NA,NA,2023-08-17 09:56,DM2,Initial Data Entry
+3,9600,15,9600-015,1,COMMON_AE,Adverse Events,2023-08-17,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH2,Action taken for Adverse Event - 2,66.3,Concomitant therapy/medication,2,2023-08-17 09:56,DM3,Initial Data Entry
+3,9600,15,9600-015,1,COMMON_AE,Adverse Events,2023-08-17,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH3,Action taken for Adverse Event - 3,66.3,Hospitalization/Prolongation of hospitalization,3,2023-08-17 09:56,DM3,Initial Data Entry
+3,9600,15,9600-015,1,COMMON_AE,Adverse Events,2023-08-17,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH4,Action taken for Adverse Event - 4,66.3,NA,NA,2023-08-17 09:56,DM2,Initial Data Entry
+3,9600,15,9600-015,1,COMMON_AE,Adverse Events,2023-08-17,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG8,1,AE_AEOUT,Outcome of this Adverse Event,66.3,Unknown,6,2023-08-17 09:56,DM3,Initial Data Entry
+3,9600,15,9600-015,1,COMMON_AE,Adverse Events,2023-08-17,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER,Is the Adverse Event serious?,66.3,Yes,1,2023-08-17 09:56,DM3,Initial Data Entry
+3,9600,15,9600-015,1,COMMON_AE,Adverse Events,2023-08-17,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_DAT_ENTRY,Reported Date of SAE Entry (hidden),66.3,2023-08-17,NA,2023-08-17 09:56,DM3,Function execution
+3,9600,15,9600-015,1,COMMON_AE,Adverse Events,2023-08-17,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_TIM_ENTRY,Reported Time of SAE Entry (hidden),66.3,11:54,NA,2023-08-17 09:56,DM3,Function execution
+3,9600,15,9600-015,1,COMMON_AE,Adverse Events,2023-08-17,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_REP,Type of Report,66.3,Initial,1,2023-08-17 09:56,DM3,Initial Data Entry
+3,9600,15,9600-015,1,COMMON_AE,Adverse Events,2023-08-17,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_STDAT,SAE Start Date,66.3,2023-08-11,NA,2023-08-17 09:56,DM1,Initial Data Entry
+3,9600,15,9600-015,1,COMMON_AE,Adverse Events,2023-08-17,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_INVDAT,Date of investigator awareness,66.3,2023-08-12,NA,2023-08-17 09:56,DM3,Initial Data Entry
+3,9600,15,9600-015,1,COMMON_AE,Adverse Events,2023-08-17,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESERONGO,Is the SAE still ongoing?,66.3,Yes,1,2023-08-17 09:56,DM2,Initial Data Entry
+3,9600,15,9600-015,1,COMMON_AE,Adverse Events,2023-08-17,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC1,Seriousness Categories of the SAE - 1,66.3,NA,NA,2023-08-17 09:56,DM1,Initial Data Entry
+3,9600,15,9600-015,1,COMMON_AE,Adverse Events,2023-08-17,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC2,Seriousness Categories of the SAE - 2,66.3,Is life-threatening,2,2023-08-17 09:56,DM3,Initial Data Entry
+3,9600,15,9600-015,1,COMMON_AE,Adverse Events,2023-08-17,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC3,Seriousness Categories of the SAE - 3,66.3,NA,NA,2023-08-17 09:56,NA,Initial Data Entry
+3,9600,15,9600-015,1,COMMON_AE,Adverse Events,2023-08-17,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC4,Seriousness Categories of the SAE - 4,66.3,NA,NA,2023-08-17 09:56,DM3,Initial Data Entry
+3,9600,15,9600-015,1,COMMON_AE,Adverse Events,2023-08-17,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC5,Seriousness Categories of the SAE - 5,66.3,NA,NA,2023-08-17 09:56,NA,Initial Data Entry
+3,9600,15,9600-015,1,COMMON_AE,Adverse Events,2023-08-17,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC6,Seriousness Categories of the SAE - 6,66.3,NA,NA,2023-08-17 09:56,NA,Initial Data Entry
+3,9600,15,9600-015,1,COMMON_AE,Adverse Events,2023-08-17,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG13,1,AE_AEDIS,Caused this (S)AE a Study Discontinuation?,66.3,No,2,2023-08-17 09:56,DM2,Initial Data Entry
+3,9600,15,9600-015,1,COMMON_AE,Adverse Events,2023-08-17,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG14,1,AE_AECOVAL,Comments,66.3,NA,NA,2023-08-17 09:56,NA,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_AE,Adverse Events,2023-12-18,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AESPID,Adverse Event No.,68.0,1,NA,2023-12-18 15:20,DM1,Function execution
+3,9600,17,9600-017,1,COMMON_AE,Adverse Events,2023-12-18,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AETERM,Adverse Event Term,68.0,FEVER,NA,2023-12-18 15:20,DM3,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_AE,Adverse Events,2023-12-18,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG11,1,AE_AESI,Is the event one of the following Adverse Events of Special Interest (AESI)?,68.0,None,1,2023-12-18 15:20,DM2,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_AE,Adverse Events,2023-12-18,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESTDAT,Adverse Event Start Date,68.0,2023-11-29,NA,2023-12-18 15:20,DM2,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_AE,Adverse Events,2023-12-18,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESTTIM,Adverse Event Start Time,68.0,NA,NA,2023-12-18 15:20,DM3,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_AE,Adverse Events,2023-12-18,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AETOXGR,Severity grade according to CTCAE v5.0,68.0,Grade 3,3,2023-12-18 15:20,DM3,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_AE,Adverse Events,2023-12-18,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AESEV_W_YN,Did the severity of the AE worsen?,68.0,No,2,2023-12-18 15:20,DM1,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_AE,Adverse Events,2023-12-18,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AEONGO,Is the Adverse Event still ongoing?,68.0,No,2,2023-12-18 15:20,NA,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_AE,Adverse Events,2023-12-18,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG2,1,AE_AEENDAT,Adverse Event End Date,68.0,2023-12-09,NA,2023-12-18 15:20,DM2,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_AE,Adverse Events,2023-12-18,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG12,1,AE_AEREL,Relationship to Study Treatment,68.0,Unlikely,2,2023-12-18 15:20,DM1,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_AE,Adverse Events,2023-12-18,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AEG12,1,AE_AEACN,Action taken with Study Treatment,68.0,Not Applicable,6,2023-12-18 15:20,DM3,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_AE,Adverse Events,2023-12-18,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH1,Action taken for Adverse Event - 1,68.0,NA,NA,2023-12-18 15:20,DM3,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_AE,Adverse Events,2023-12-18,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH2,Action taken for Adverse Event - 2,68.0,NA,NA,2023-12-18 15:20,NA,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_AE,Adverse Events,2023-12-18,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH3,Action taken for Adverse Event - 3,68.0,Hospitalization/Prolongation of hospitalization,3,2023-12-18 15:20,DM1,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_AE,Adverse Events,2023-12-18,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG6,1,AE_AEACNOTH4,Action taken for Adverse Event - 4,68.0,NA,NA,2023-12-18 15:20,DM1,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_AE,Adverse Events,2023-12-18,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG8,1,AE_AEOUT,Outcome of this Adverse Event,68.0,Not recovered/not resolved,3,2023-12-18 15:20,DM3,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_AE,Adverse Events,2023-12-18,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER,Is the Adverse Event serious?,68.0,Yes,1,2023-12-18 15:20,NA,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_AE,Adverse Events,2023-12-18,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_DAT_ENTRY,Reported Date of SAE Entry (hidden),68.0,2023-12-18,NA,2023-12-18 15:20,DM3,Function execution
+3,9600,17,9600-017,1,COMMON_AE,Adverse Events,2023-12-18,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_TIM_ENTRY,Reported Time of SAE Entry (hidden),68.0,16:18,NA,2023-12-18 15:20,DM3,Function execution
+3,9600,17,9600-017,1,COMMON_AE,Adverse Events,2023-12-18,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_REP,Type of Report,68.0,Initial,1,2023-12-18 15:21,NA,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_AE,Adverse Events,2023-12-18,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_STDAT,SAE Start Date,68.0,2023-11-29,NA,2023-12-18 15:20,DM2,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_AE,Adverse Events,2023-12-18,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_INVDAT,Date of investigator awareness,68.0,2023-11-29,NA,2023-12-18 15:20,NA,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_AE,Adverse Events,2023-12-18,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESERONGO,Is the SAE still ongoing?,68.0,No,2,2023-12-18 15:20,NA,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_AE,Adverse Events,2023-12-18,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_ENDAT,SAE End Date,68.0,2023-12-02,NA,2023-12-18 15:20,NA,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_AE,Adverse Events,2023-12-18,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG9,1,AE_AESER_AEOUT_YN,Is the outcome of the SAE different than the outcome of this Adverse Event?,68.0,No,2,2023-12-18 15:20,DM1,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_AE,Adverse Events,2023-12-18,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC1,Seriousness Categories of the SAE - 1,68.0,NA,NA,2023-12-18 15:20,DM3,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_AE,Adverse Events,2023-12-18,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC2,Seriousness Categories of the SAE - 2,68.0,NA,NA,2023-12-18 15:20,NA,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_AE,Adverse Events,2023-12-18,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC3,Seriousness Categories of the SAE - 3,68.0,Requires inpatient hospitalization or prolongation of existing hospitalization,3,2023-12-18 15:20,DM1,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_AE,Adverse Events,2023-12-18,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC4,Seriousness Categories of the SAE - 4,68.0,NA,NA,2023-12-18 15:20,DM3,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_AE,Adverse Events,2023-12-18,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC5,Seriousness Categories of the SAE - 5,68.0,NA,NA,2023-12-18 15:20,DM1,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_AE,Adverse Events,2023-12-18,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_SC6,Seriousness Categories of the SAE - 6,68.0,NA,NA,2023-12-18 15:20,DM1,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_AE,Adverse Events,2023-12-18,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_HOSP_STDAT,Start Date of hospitalization,68.0,2023-11-29,NA,2023-12-18 15:20,DM1,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_AE,Adverse Events,2023-12-18,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG10,1,AE_AESER_HOSP_ENDAT,End Date of hospitalization,68.0,2023-12-02,NA,2023-12-18 15:20,NA,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_AE,Adverse Events,2023-12-18,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG13,1,AE_AEDIS,Caused this (S)AE a Study Discontinuation?,68.0,No,2,2023-12-18 15:20,DM3,Initial Data Entry
+3,9600,17,9600-017,1,COMMON_AE,Adverse Events,2023-12-18,LOG_AE,NA,AE,AE/SAE,1,1,1,NA,AE_SAEG14,1,AE_AECOVAL,Comments,68.0,NA,NA,2023-12-18 15:20,DM2,Initial Data Entry

@@ -1,0 +1,13 @@
+Site sequence number,Site code,Subject sequence number,Subject Id,Event sequence number,Event Id,Event name,Event date,Activity Id,Activity name,Form Id,Form name,Form sequence number,Subject form sequence number,Origin Subject form sequence number,Source Subject form sequence number,Item group Id,Item group sequence number,Item Id,Item export label,Design version,Item value,Item code,Edit datetime (UTC),Edit by,Edit reason
+SiteSeq,SiteCode,SubjectSeq,SubjectId,EventSeq,EventId,EventName,EventDate,ActivityId,ActivityName,FormId,FormName,FormSeq,SubjectFormSeq,OriginSubjectFormSeq,SourceSubjectFormSeq,ItemGroupId,ItemGroupSeq,ItemId,ItemExportLabel,DesignVersion,ItemValue,ItemCode,EditDateTime,EditBy,EditReason
+3,9600,2,9600-002,1,SCR,Screening,2022-01-01,SCR_DM,NA,DM,Demographics,1,1,1,NA,DMG1,1,DM_BRTHDAT,Date of birth,50.0,1985-05-12,NA,2023-01-09 08:15,NA,Initial Data Entry
+3,9600,2,9600-002,1,SCR,Screening,2022-01-01,SCR_DM,NA,DM,Demographics,1,1,1,NA,DMG1,1,DM_AGE,Age (years),50.0,36,NA,2023-01-09 08:15,DM2,Function execution
+3,9600,2,9600-002,1,SCR,Screening,2022-01-01,SCR_DM,NA,DM,Demographics,1,1,1,NA,DMG4,1,DM_SEX,Gender,50.0,Female,2,2023-01-09 08:15,DM3,Initial Data Entry
+3,9600,2,9600-002,1,SCR,Screening,2022-01-01,SCR_DM,NA,DM,Demographics,1,1,1,NA,DMG4,1,DM_CHILDPOT_RPORRES,Childbearing potential of the subject,50.0,Yes,1,2023-01-09 08:15,DM1,Initial Data Entry
+3,9600,2,9600-002,1,SCR,Screening,2022-01-01,SCR_DM,NA,DM,Demographics,1,1,1,NA,DMG2,1,DM_RACE1,Race(Please check all that apply) - 1,50.0,Black,1,2023-01-09 08:15,DM2,Initial Data Entry
+3,9600,2,9600-002,1,SCR,Screening,2022-01-01,SCR_DM,NA,DM,Demographics,1,1,1,NA,DMG2,1,DM_RACE2,Race(Please check all that apply) - 2,50.0,American Indian or Alaska Native,2,2023-01-09 08:15,DM2,Initial Data Entry
+3,9600,2,9600-002,1,SCR,Screening,2022-01-01,SCR_DM,NA,DM,Demographics,1,1,1,NA,DMG2,1,DM_RACE3,Race(Please check all that apply) - 3,50.0,NA,NA,2023-01-09 08:15,DM3,Initial Data Entry
+3,9600,2,9600-002,1,SCR,Screening,2022-01-01,SCR_DM,NA,DM,Demographics,1,1,1,NA,DMG2,1,DM_RACE4,Race(Please check all that apply) - 4,50.0,NA,NA,2023-01-09 08:15,DM3,Initial Data Entry
+3,9600,2,9600-002,1,SCR,Screening,2022-01-01,SCR_DM,NA,DM,Demographics,1,1,1,NA,DMG2,1,DM_RACE5,Race(Please check all that apply) - 5,50.0,NA,NA,2023-01-09 08:15,NA,Initial Data Entry
+3,9600,2,9600-002,1,SCR,Screening,2022-01-01,SCR_DM,NA,DM,Demographics,1,1,1,NA,DMG2,1,DM_RACE6,Race(Please check all that apply) - 6,50.0,NA,NA,2023-01-09 08:15,NA,Initial Data Entry
+3,9600,2,9600-002,1,SCR,Screening,2022-01-01,SCR_DM,NA,DM,Demographics,1,1,1,NA,DMG2,1,DM_RACE7,Race(Please check all that apply) - 7,50.0,NA,NA,2023-01-09 08:15,NA,Initial Data Entry

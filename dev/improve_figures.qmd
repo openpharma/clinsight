@@ -1,0 +1,197 @@
+---
+title: "Figures"
+format: html
+self-contained: true
+---
+
+This document contains some scripts meant to improve the figures in the 
+application, for development purposes.
+
+## Initialize data
+
+
+```{r}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(plotly)
+pkgname <- "clinsight"
+library(pkgname, character.only = TRUE)
+merged_data <- merge_meta_with_data(clinsightful_data)
+appdata <- get_appdata(merged_data)
+vars <- get_meta_vars(data = appdata, meta = metadata)
+apptables <- lapply(
+    setNames(names(appdata), names(appdata)), \(x){
+      create_table(appdata[[x]], expected_columns = names(vars$items[[x]]))
+    })
+static_overview_data <- get_static_overview_data(
+  appdata, 
+  expected_general_columns = unique(appdata$General$item_name)
+  )
+timeline_data <- get_timeline_data(appdata, apptables)
+available_data <- get_available_data(appdata, apptables, all_forms = vars$all_forms)
+```
+
+```{r legend, fig.width=2.5, fig.height=1.5}
+#' Create legend
+#' 
+#' Helper function to create a legend, independent of data, based on
+#' predefined legend labels and legend color palette
+#'
+#' @param legend_labels character vector of legend labels
+#' @param colors 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+create_legend <- function(
+    legend_labels = c("within limits", 
+                      "out of limits, clinically insignificant", 
+                      "out of limits, significance unknown", 
+                      "out of limits, clinically significant", 
+                      "limits unknown"),
+    sizes = c("old", "new/updated"),
+    colors = col_palette
+){
+  
+  df <- data.frame(col = factor(legend_labels, levels = legend_labels))
+  fig <- ggplot(df) +
+    scale_fill_manual(values = col_palette) +
+    theme(legend.key = element_rect(fill = "white", colour = NA)) +
+    geom_point(aes(fill = col, x = 1, y = 1), size = 3, shape = 21) + 
+    theme(legend.position = "right", legend.title = element_text(face = "bold")) +
+    guides(fill=guide_legend(title="Legend", override.aes = list(size = 5)))
+  cowplot::ggdraw(cowplot::get_legend(fig))
+}
+
+create_legend()
+```
+
+
+```{r , fig.width=2.5, fig.height=2.75}
+sizes <- c("old", "new/updated")
+df <- data.frame(col = factor(names(col_palette), levels = names(col_palette)))
+df$status <- factor(sample(sizes, nrow(df), replace = TRUE), levels = sizes)
+fig <- ggplot(df) +
+  scale_fill_manual(values = col_palette) +
+  theme(legend.key = element_rect(fill = "white", colour = NA)) +
+  geom_point(aes(fill = col, x = 1, y = 1, size = status), shape = 21) + 
+  labs(legend.title = "Legend") + 
+  theme(legend.position = "right", legend.title = element_text(face = "bold")) +
+  guides(
+    size=guide_legend(title = "Status", override.aes = list(fill = "grey", size = c(2L,6L))),
+    fill=guide_legend(title = "Limits", override.aes = list(size = 6L))
+    )
+suppressWarnings(cowplot::ggdraw(cowplot::get_legend(fig)))
+ggsave("figure_legend.png")
+```
+
+## Nastive Plotly graph
+
+Start attempt to create a native plotly figure with the same/similar appearance as the ggplot figure
+
+```{r}
+df <- appdata[["CBC regular"]] 
+df <- with(df, df[item_name %in% c("Leukocytes", "Erythrocytes", "Platelets", "Neutrophils"), ]) |> 
+  dplyr::mutate(new_status = sample(c(1,10), dplyr::n(), replace = T) , .by = c(subject_id, event_name, item_name))
+
+fig <-   df  |> 
+  group_by(item_name)  |> 
+  do(
+    p = highlight_key(., ~subject_id, group = "cells") |> 
+      plot_ly(showlegend = FALSE) |> 
+      group_by(subject_id) |> 
+      add_lines(
+        x = ~day, y = ~value_scaled, color = I("grey50") 
+      ) |> 
+      add_markers(
+        x = ~day, y = ~value_scaled, text = ~text_label, symbol = I(21), stroke = I("black"), 
+        size = ~new_status, 
+        fillcolor =~significance, sizes = c(10), 
+        hoverinfo = "text"
+      ) |> 
+      add_annotations(
+        text = ~unique(item_name),
+        x = 0.5, y = 1,
+        xref = "paper", yref = "paper",
+        xanchor = "center", yanchor = "bottom",
+        showarrow = FALSE
+      )
+  ) |> 
+  subplot(
+    nrows = 2, margin = 0.05,
+    shareY = FALSE, shareX = TRUE, titleY = FALSE
+  )
+
+fig
+```
+```{r}
+fig <-   df  |> 
+  group_by(item_name)  |> 
+  do(
+    p = highlight_key(., ~subject_id, group = "cells") |> 
+      plot_ly(showlegend = FALSE) |> 
+      group_by(subject_id) |> 
+      add_lines(
+        x = ~day, y = ~value_scaled, color = I("grey50") 
+      ) 
+  ) |> 
+  subplot(
+    nrows = 2, margin = 0.05,
+    shareY = FALSE, shareX = TRUE, titleY = FALSE
+  )
+
+
+fig2 <-  df  |> 
+  group_by(item_name)  |> 
+  do(
+    p = highlight_key(., ~subject_id, group = "cells") |> 
+      plot_ly(showlegend = FALSE) |> 
+      group_by(subject_id) |> 
+        add_markers(
+        x = ~day, y = ~value_scaled, text = ~text_label, symbol = I(21), stroke = I("black"), 
+        size = ~new_status, fillcolor =~significance,
+        hoverinfo = "text"
+      )
+  ) |> 
+  subplot(
+    nrows = 2, margin = 0.05,
+    shareY = FALSE, shareX = TRUE, titleY = FALSE
+  )
+
+  
+```
+
+Idea below is to explore how to create the static figure with only points shown for one particular patient
+
+```{r}
+df |> 
+group_by(item_name) |> 
+  do(
+    p = plot_ly(., showlegend = FALSE) |> 
+      group_by(subject_id) |> 
+      add_lines(
+        x = ~day, y = ~value_scaled, color = I("grey50") 
+      ) |> 
+      add_annotations(
+        text = ~unique(item_name),
+        x = 0.5, y = 1,
+        xref = "paper", yref = "paper",
+        xanchor = "center", yanchor = "bottom",
+        showarrow = FALSE
+      )
+  ) |> 
+  subplot(
+    # add_markers(dplyr::filter(df, subject_id == "IME-DE01-001"),
+    #     x = ~day, y = ~value_scaled, text = ~text_label, symbol = I(21), stroke = I("black"), 
+    #     size = ~new_status, 
+    #     fillcolor =~significance, sizes = c(10), 
+    #     hoverinfo = "text"
+    # ),
+    nrows = 2, margin = 0.05,
+    shareY = FALSE, shareX = TRUE, titleY = FALSE
+  )
+
+```
+

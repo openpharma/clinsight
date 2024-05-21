@@ -1,0 +1,116 @@
+reference:
+- title: Main application
+  desc:  Top-level functions to run the Shiny application
+- contents:
+  - run_app
+  - app_ui
+  - app_server
+- title: Credential management
+  desc: Functions to manage credentials.
+- contents: 
+  - initialize_credentials
+  - authenticate_server 
+  - authenticate_ui 
+- title: Application modules
+  desc: Modules used in the main Shiny application. 
+- contents:
+  - mod_start_page_server 
+  - mod_start_page_ui   
+  - mod_main_sidebar_server
+  - mod_main_sidebar_ui
+  - mod_header_widgets_server
+  - mod_header_widgets_ui
+  - mod_common_forms_server
+  - mod_common_forms_ui
+  - mod_study_forms_server
+  - mod_study_forms_ui
+  - starts_with("mod_")
+- title: Create wide-form tables
+  desc: S3 method for creating wide-form study-specific tables.
+- contents: 
+  - create_table
+  - create_table.default
+  - create_table.adverse_events
+  - create_table.bm_cytology
+  - create_table.conc_procedures
+  - create_table.continuous
+  - create_table.general
+  - create_table.medical_history
+  - create_table.medication
+- title: Data frame functions
+  desc: Create data for use in the application.
+- contents: 
+  - get_raw_data
+  - merge_meta_with_data
+  - apply_study_specific_fixes
+  - get_appdata
+  - get_available_data
+  - get_meta_vars
+  - get_review_data
+  - get_static_overview_data
+  - get_timeline_data
+  - summarize_review_data
+- title: Database functions
+  desc: Create, read or append the app database. 
+- contents:
+  - get_db_connection
+  - db_temp_connect
+  - db_create
+  - db_update
+  - db_save
+  - db_save_review
+  - db_slice_rows 
+  - update_review_data
+  - collect_query_data
+  - db_get_latest_review
+  - db_get_latest_query
+- title: Internal dataset
+  desc: Create or describe internal data. 
+- contents: 
+  - get_metadata
+  - metadata
+  - col_palette
+  - clinsightful_data
+- title: Figure functions
+- contents: 
+  - fig_barplot
+  - fig_boxplots
+  - fig_timeline
+  - fig_timeseries
+  - plotly_figure
+  - fix_multiple_choice_vars
+  - custom_plot_theme
+  - get_ggplot_layer_names
+- title: Report
+  desc: Create Review reports.
+- contents: 
+  - select_report_data
+  - create_report
+- title: Helper functions
+- contents: 
+  - add_missing_columns
+  - adjust_colnames
+  - bind_rows_custom
+  - check_appdata
+  - check_available_data
+  - filter_data
+  - clean_dates
+  - collapse_column_vals
+  - collapse_fct_levels
+  - cols_to_char
+  - create_unique_id
+  - datatable_custom
+  - date_cols_to_char
+  - expand_columns
+  - get_base_value
+  - get_max_time
+  - get_unique_vars
+  - get_test_results
+  - is_date
+  - order_string
+  - remove_boxplot_outliers
+  - simplify_string
+  - time_stamp
+  - title_case
+  - vector_select
+  

@@ -1,0 +1,58 @@
+Site sequence number,Site code,Subject sequence number,Subject Id,Event sequence number,Event Id,Event name,Event date,Activity Id,Activity name,Form Id,Form name,Form sequence number,Subject form sequence number,Origin Subject form sequence number,Source Subject form sequence number,Item group Id,Item group sequence number,Item Id,Item export label,Design version,Item value,Item code,Edit datetime (UTC),Edit by,Edit reason
+SiteSeq,SiteCode,SubjectSeq,SubjectId,EventSeq,EventId,EventName,EventDate,ActivityId,ActivityName,FormId,FormName,FormSeq,SubjectFormSeq,OriginSubjectFormSeq,SourceSubjectFormSeq,ItemGroupId,ItemGroupSeq,ItemId,ItemExportLabel,DesignVersion,ItemValue,ItemCode,EditDateTime,EditBy,EditReason
+2,9700,5,9700-005,1,SCR,Screening,2022-08-01,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G1,1,EG_EGPERF,Was the ECG performed?,2.0,Yes,1,2022-11-15 11:54,DM2,Initial Data Entry
+2,9700,5,9700-005,1,SCR,Screening,2022-08-01,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G1,1,EG_EGDAT,Date of ECG,2.0,2022-08-01,NA,2022-11-15 11:54,DM3,Initial Data Entry
+2,9700,5,9700-005,1,SCR,Screening,2022-08-01,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G1,1,EG_EGTIM,Time of ECG,2.0,11:00,NA,2022-11-15 11:54,DM1,Initial Data Entry
+2,9700,5,9700-005,1,SCR,Screening,2022-08-01,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G2,1,EG_PR_EGORRES,PR Interval (msec),2.0,100,NA,2022-11-15 11:54,DM1,Initial Data Entry
+2,9700,5,9700-005,1,SCR,Screening,2022-08-01,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G2,1,EG_QRS_EGORRES,QRS Interval (msec),2.0,100,NA,2022-11-15 11:54,DM3,Initial Data Entry
+2,9700,5,9700-005,1,SCR,Screening,2022-08-01,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G2,1,EG_QT_EGORRES,QT Interval (msec),2.0,100,NA,2022-11-15 11:54,DM2,Initial Data Entry
+2,9700,5,9700-005,1,SCR,Screening,2022-08-01,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G2,1,EG_QTCF_EGORRES,QTcF Interval (msec),2.0,100,NA,2022-11-15 11:54,DM3,Initial Data Entry
+2,9700,5,9700-005,1,SCR,Screening,2022-08-01,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G2,1,EG_HR_EGORRES,HR (beats/min) result in original units,2.0,100,NA,2022-11-15 11:54,DM1,Initial Data Entry
+2,9700,5,9700-005,1,SCR,Screening,2022-08-01,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G2,1,EG_INTP_EGORRES,Interpretation,2.0,"Abnormal, CS",3,2022-11-15 11:54,NA,Initial Data Entry
+2,9700,8,9700-008,1,SCR,Screening,2022-08-30,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G1,1,EG_EGPERF,Was the ECG performed?,2.0,Yes,1,2022-11-16 09:19,DM2,Initial Data Entry
+2,9700,8,9700-008,1,SCR,Screening,2022-08-30,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G1,1,EG_EGDAT,Date of ECG,2.0,2022-08-30,NA,2022-11-16 09:19,DM1,Initial Data Entry
+2,9700,8,9700-008,1,SCR,Screening,2022-08-30,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G1,1,EG_EGTIM,Time of ECG,2.0,NA,NA,NA,DM2,NA
+2,9700,8,9700-008,1,SCR,Screening,2022-08-30,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G2,1,EG_PR_EGORRES,PR Interval (msec),2.0,123124,NA,2022-11-16 09:19,DM2,Initial Data Entry
+2,9700,8,9700-008,1,SCR,Screening,2022-08-30,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G2,1,EG_QRS_EGORRES,QRS Interval (msec),2.0,123124124,NA,2022-11-16 09:19,DM1,Initial Data Entry
+2,9700,8,9700-008,1,SCR,Screening,2022-08-30,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G2,1,EG_QT_EGORRES,QT Interval (msec),2.0,124124124,NA,2022-11-16 09:19,DM1,Initial Data Entry
+2,9700,8,9700-008,1,SCR,Screening,2022-08-30,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G2,1,EG_QTCF_EGORRES,QTcF Interval (msec),2.0,124124124,NA,2022-11-16 09:19,DM1,Initial Data Entry
+2,9700,8,9700-008,1,SCR,Screening,2022-08-30,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G2,1,EG_HR_EGORRES,HR (beats/min) result in original units,2.0,124124124,NA,2022-11-16 09:19,NA,Initial Data Entry
+2,9700,8,9700-008,1,SCR,Screening,2022-08-30,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G2,1,EG_INTP_EGORRES,Interpretation,2.0,"Abnormal, CS",3,2022-11-16 09:19,NA,Initial Data Entry
+2,9700,10,9700-010,1,SCR,Screening,2022-11-01,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G1,1,EG_EGPERF,Was the ECG performed?,11.0,Yes,1,2022-11-24 13:07,DM1,Initial Data Entry
+2,9700,10,9700-010,1,SCR,Screening,2022-11-01,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G1,1,EG_EGDAT,Date of ECG,11.0,2022-11-01,NA,2022-11-24 13:07,DM1,Initial Data Entry
+2,9700,10,9700-010,1,SCR,Screening,2022-11-01,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G1,1,EG_EGTIM,Time of ECG,11.0,14:07,NA,2022-11-24 13:07,NA,Initial Data Entry
+2,9700,10,9700-010,1,SCR,Screening,2022-11-01,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G2,1,EG_PR_EGORRES,PR Interval (msec),11.0,123,NA,2022-11-24 13:07,DM2,Initial Data Entry
+2,9700,10,9700-010,1,SCR,Screening,2022-11-01,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G2,1,EG_QRS_EGORRES,QRS Interval (msec),11.0,123,NA,2022-11-24 13:07,DM3,Initial Data Entry
+2,9700,10,9700-010,1,SCR,Screening,2022-11-01,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G2,1,EG_QT_EGORRES,QT Interval (msec),11.0,4123,NA,2022-11-24 13:07,NA,Initial Data Entry
+2,9700,10,9700-010,1,SCR,Screening,2022-11-01,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G2,1,EG_QTCF_EGORRES,QTcF Interval (msec),11.0,-666,NA,2022-11-24 13:07,DM3,Initial Data Entry
+2,9700,10,9700-010,1,SCR,Screening,2022-11-01,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G2,1,EG_HR_EGORRES,HR (beats/min) result in original units,11.0,999,NA,2022-11-24 13:07,NA,Initial Data Entry
+2,9700,10,9700-010,1,SCR,Screening,2022-11-01,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G2,1,EG_INTP_EGORRES,Interpretation,11.0,"Abnormal, CS",3,2022-11-24 13:07,DM1,Initial Data Entry
+2,9700,13,9700-013,1,SCR,Screening,2022-11-01,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G1,1,EG_EGPERF,Was the ECG performed?,11.0,Yes,1,2022-11-25 12:44,DM3,Initial Data Entry
+2,9700,13,9700-013,1,SCR,Screening,2022-11-01,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G1,1,EG_EGDAT,Date of ECG,11.0,2022-11-25,NA,2022-11-25 12:44,NA,Initial Data Entry
+2,9700,13,9700-013,1,SCR,Screening,2022-11-01,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G1,1,EG_EGTIM,Time of ECG,11.0,19:00,NA,2022-11-25 12:44,DM2,Initial Data Entry
+2,9700,13,9700-013,1,SCR,Screening,2022-11-01,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G2,1,EG_PR_EGORRES,PR Interval (msec),11.0,100,NA,2022-11-25 12:44,DM1,Initial Data Entry
+2,9700,13,9700-013,1,SCR,Screening,2022-11-01,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G2,1,EG_QRS_EGORRES,QRS Interval (msec),11.0,100,NA,2022-11-25 12:44,DM1,Initial Data Entry
+2,9700,13,9700-013,1,SCR,Screening,2022-11-01,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G2,1,EG_QT_EGORRES,QT Interval (msec),11.0,100,NA,2022-11-25 12:44,NA,Initial Data Entry
+2,9700,13,9700-013,1,SCR,Screening,2022-11-01,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G2,1,EG_QTCF_EGORRES,QTcF Interval (msec),11.0,100,NA,2022-11-25 12:44,DM1,Initial Data Entry
+2,9700,13,9700-013,1,SCR,Screening,2022-11-01,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G2,1,EG_HR_EGORRES,HR (beats/min) result in original units,11.0,100,NA,2022-11-25 12:44,NA,Initial Data Entry
+2,9700,13,9700-013,1,SCR,Screening,2022-11-01,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G2,1,EG_INTP_EGORRES,Interpretation,11.0,"Abnormal, NCS",2,2022-11-25 12:44,NA,Initial Data Entry
+2,9700,16,9700-016,1,SCR,Screening,2022-11-23,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G1,1,EG_EGPERF,Was the ECG performed?,11.0,No,0,2022-11-29 12:04,DM2,Initial Data Entry
+2,9700,16,9700-016,1,SCR,Screening,2022-11-23,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G1,1,EG_EGREASND,Reason not performed,11.0,xx,NA,2022-11-29 12:04,DM3,Initial Data Entry
+3,9600,18,9600-018,1,SCR,Screening,2023-06-01,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G1,1,EG_EGPERF,Was the ECG performed?,66.3,Yes,1,2023-07-25 04:34,DM2,Initial Data Entry
+3,9600,18,9600-018,1,SCR,Screening,2023-06-01,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G1,1,EG_EGDAT,Date of ECG,66.3,2023-06-01,NA,2023-07-25 04:34,DM1,Initial Data Entry
+3,9600,18,9600-018,1,SCR,Screening,2023-06-01,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G1,1,EG_EGTIM,Time of ECG,66.3,17:00,NA,2023-07-25 04:35,DM3,Transcription error
+3,9600,18,9600-018,1,SCR,Screening,2023-06-01,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G2,1,EG_PR_EGORRES,PR Interval (msec),66.3,123,NA,2023-07-25 04:34,DM1,Initial Data Entry
+3,9600,18,9600-018,1,SCR,Screening,2023-06-01,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G2,1,EG_QRS_EGORRES,QRS Interval (msec),66.3,100,NA,2023-07-25 04:34,DM3,Initial Data Entry
+3,9600,18,9600-018,1,SCR,Screening,2023-06-01,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G2,1,EG_QT_EGORRES,QT Interval (msec),66.3,260,NA,2023-07-25 04:34,NA,Initial Data Entry
+3,9600,18,9600-018,1,SCR,Screening,2023-06-01,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G2,1,EG_QTCF_EGORRES,QTcF Interval (msec),66.3,2,NA,2023-07-25 04:34,DM3,Initial Data Entry
+3,9600,18,9600-018,1,SCR,Screening,2023-06-01,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G2,1,EG_HR_EGORRES,HR (beats/min) result in original units,66.3,110,NA,2023-07-25 04:34,DM1,Initial Data Entry
+3,9600,18,9600-018,1,SCR,Screening,2023-06-01,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G2,1,EG_INTP_EGORRES,Interpretation,66.3,Normal,1,2023-07-25 04:34,DM3,Initial Data Entry
+3,9600,19,9600-019,1,SCR,Screening,2023-07-07,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G1,1,EG_EGPERF,Was the ECG performed?,66.3,Yes,1,2023-08-02 11:56,DM3,Initial Data Entry
+3,9600,19,9600-019,1,SCR,Screening,2023-07-07,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G1,1,EG_EGDAT,Date of ECG,66.3,2023-07-07,NA,2023-08-02 11:56,DM1,Initial Data Entry
+3,9600,19,9600-019,1,SCR,Screening,2023-07-07,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G1,1,EG_EGTIM,Time of ECG,66.3,11:00,NA,2023-08-02 11:56,NA,Initial Data Entry
+3,9600,19,9600-019,1,SCR,Screening,2023-07-07,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G2,1,EG_PR_EGORRES,PR Interval (msec),66.3,150,NA,2023-08-02 11:56,DM1,Initial Data Entry
+3,9600,19,9600-019,1,SCR,Screening,2023-07-07,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G2,1,EG_QRS_EGORRES,QRS Interval (msec),66.3,5,NA,2023-08-02 11:56,DM3,Initial Data Entry
+3,9600,19,9600-019,1,SCR,Screening,2023-07-07,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G2,1,EG_QT_EGORRES,QT Interval (msec),66.3,340,NA,2023-08-02 11:56,DM2,Initial Data Entry
+3,9600,19,9600-019,1,SCR,Screening,2023-07-07,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G2,1,EG_QTCF_EGORRES,QTcF Interval (msec),66.3,33,NA,2023-08-02 11:56,DM3,Initial Data Entry
+3,9600,19,9600-019,1,SCR,Screening,2023-07-07,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G2,1,EG_HR_EGORRES,HR (beats/min) result in original units,66.3,87,NA,2023-08-02 11:56,NA,Initial Data Entry
+3,9600,19,9600-019,1,SCR,Screening,2023-07-07,SCR_VIT,NA,EG,Electrocardiogram,1,1,1,NA,EG2G2,1,EG_INTP_EGORRES,Interpretation,66.3,Normal,1,2023-08-02 11:56,NA,Initial Data Entry

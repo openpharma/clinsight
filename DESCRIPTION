@@ -1,0 +1,59 @@
+Package: clinsight
+Title: ClinSight
+Version: 0.0.0.9000
+Authors@R: c(
+    person("Leonard Daniël", "Samson", , "lsamson@gcp-service.com", role = c("cre", "aut")),
+    person("GCP-Service International Ltd.& Co. KG", role = "fnd")
+  )
+Description: Interactive application to monitor patient safety during
+    clinical trials. Goal is to provide an interactive overview of a
+    patients' data, highlighting not yet reviewed data, and to improve
+    assessments of the patients' safety. Secondary goal is to improve data
+    quality by identifying suspicious outliers.
+License: Apache License (>= 2) | file LICENSE
+URL: https://github.com/LDSamson/clinsight
+BugReports: https://github.com/LDSamson/clinsight/issues
+Depends: 
+    R (>= 4.1)
+Imports: 
+    bslib,
+    config,
+    DBI,
+    dbplyr (>= 2.4.0),
+    dplyr,
+    DT,
+    ggplot2,
+    golem,
+    htmltools,
+    plotly,
+    readxl,
+    rlang,
+    rmarkdown,
+    RSQLite,
+    shiny,
+    shinycssloaders,
+    shinyjs,
+    shinymanager,
+    shinyWidgets,
+    stats,
+    tidyr,
+    timevis,
+    tools,
+    vroom,
+    withr
+Suggests: 
+    kableExtra,
+    knitr,
+    purrr,
+    shinytest2,
+    stringr,
+    testthat (>= 3.0.0)
+VignetteBuilder: 
+    knitr
+Config/renv/profiles/dev/dependencies: pkgdown, stringr, kableExtra,
+    usethis, cowplot
+Config/testthat/edition: 3
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3

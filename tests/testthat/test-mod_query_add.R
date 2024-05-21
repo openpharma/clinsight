@@ -1,0 +1,222 @@
+describe(
+  "mod_query_add. Feature 1 | As a user, I want to be able to run the module in 
+  isolation", 
+  {
+    it("Can load the module UI, with functioning internal parameters.", {
+      ui <- mod_query_add_ui(id = "test")
+      golem::expect_shinytaglist(ui)
+      # Check that formals have not been removed
+      fmls <- formals(mod_study_forms_ui)
+      for (i in c("id")){
+        expect_true(i %in% names(fmls))
+      }
+    })
+    
+    it("Can load the module server, with functioning internal parameters.", {
+      testargs <- list(
+        r = reactiveValues(
+          query_data = data.frame(),
+          user_name = reactiveVal(""),
+          subject_id = ""
+        ),
+        active_form = reactiveVal(),
+        db_path = "",
+        available_data = data.frame()
+      ) 
+      testServer(mod_query_add_server, args = testargs , {
+        ns <- session$ns
+        expect_true(inherits(ns, "function"))
+        expect_true(grepl(id, ns("")))
+        expect_true(grepl("test", ns("test")))
+      })
+    })
+  }
+)
+
+describe(
+  "mod_query_add. Feature 2 | As a user, I want to be able to create a query and 
+  save it to the remote database and to the internal data frame. Together with 
+  the  query text, I want to be able to save other mandatory information, namely the name of the 
+  reviewer, a timestamp, the ID of the participant, and the form at which the query is 
+  applicable. Optional other information that I want to be able to save with the 
+  query is the name of the item in question.", 
+  {
+    query_df <- data.frame(
+      "subject_id"     = c("ID1"),
+      "event_label"   = c("Visit 1"),
+      "item_group"    = c("Vital signs", "Adverse events"),
+      "item"          = c("Pulse", "Sepsis"),
+      "timestamp"     = c("2023-01-01 01:01:01 UTC", "2023-11-02 01:01:01 UTC"),
+      "query_id"      = c("ID1-unique_id", "ID2-unique_id"),
+      "n"             = c(1),     
+      "reviewer"      = c("Test author", "Author3"),
+      "query"         = c("Query text test.", "Scoring correct? Please verify"),
+      "resolved"      = c("No"),
+      "resolved_date" = NA_character_,
+      "edit_reason"   = NA_character_
+    )
+    
+    it(
+      "Scenario 1 | The currently active form information is correct. Given 
+        [subject_id] set to 'ID1', 
+        and [active_form] consecutively set to 'Vital signs' and 'Adverse events', 
+        I expect that the data frame [selected_data] shows a data frame with 
+        available data of [subject_id] 'ID1' and [active_form] but filtered on 
+        the [subject_id] and [active_form()]", 
+      {
+        testargs <- list(
+          r = reactiveValues(
+            query_data = query_df,
+            user_name = reactiveVal("Admin test"),
+            subject_id = "ID1"
+          ),
+          active_form = reactiveVal(),
+          db_path = "",
+          available_data = data.frame(
+            subject_id = c("ID1", "ID1", "ID2"),
+            item_name = c("item1", "Sepsis", "Oxycodon"), 
+            item_group = c("Vital signs", "Adverse events", "Medication"),
+            event_name  = c("Visit 1", "Any visit", "Any visit")
+          )
+        ) 
+        
+        testServer(mod_query_add_server, args = testargs, {
+          ns <- session$ns
+          r$subject_id <- "ID1"
+          active_form("Vital signs")
+          session$setInputs(create_query = 1)
+          expect_equal(
+            selected_data(), 
+            with(available_data, available_data[subject_id == "ID1" & item_group == "Vital signs", ])
+          )
+          active_form("Adverse events")
+          session$setInputs(create_query = 2)
+          expect_equal(
+            selected_data(), 
+            with(available_data, available_data[subject_id == "ID1" & item_group == "Adverse events", ])
+          )
+        })
+      }
+    )
+    it(
+      "Scenario 2 | A query can be saved successfully. 
+        Given [subject_id] is set to 'ID1', 
+        and [active_form()] is set to 'Medication',
+        and [query_text] is 'Add a new test query',
+        and [query_select_visit] is set to 'Visit 1',
+        and [query_select_item] is set to 'Oxycodon',
+        and [query_add_input] is set to 1 (indicating a button click),
+        I expect that one new query is saved in [query_data] for patent 'ID1',
+          and that the 'item_group' of the query is 'Medication',
+          and 'item' is 'Oxycodon', 
+          and 'reviewer' is 'Medical Monitor x',
+          and 'query' is 'Add a new test query',
+          and 'resolved' is 'No',
+          and the remote database contains the same query as in [query_data].", 
+      {
+        temp_path <- withr::local_tempfile(fileext = ".sqlite") 
+        con <- get_db_connection(temp_path)
+        DBI::dbWriteTable(con, "query_data", query_df)
+        
+        testargs <- list(
+          r = reactiveValues(
+            query_data = query_df,
+            user_name = reactiveVal("Admin test"),
+            subject_id = "ID1"
+          ),
+          active_form = reactiveVal(),
+          db_path = temp_path,
+          available_data = data.frame(
+            subject_id = c("ID1", "ID1", "ID2"),
+            item_name = c("item1", "Sepsis", "Oxycodon"), 
+            item_group = c("Vital signs", "Adverse events", "Medication"),
+            event_name  = c("Visit 1", "Any visit", "Any visit")
+          )
+        ) 
+        
+        testServer(mod_query_add_server, args = testargs, {
+          ns <- session$ns
+          r$subject_id <- "ID2"
+          r$user_name <- reactiveVal("Medical Monitor x")
+          active_form("Medication")
+          session$setInputs(
+            create_query = 1,
+            query_text = "Add a new test query",
+            query_select_visit = "Visit 1",
+            query_select_item = "Oxycodon",
+            query_add_input = 1
+          )
+          new_query <- dplyr::filter(r$query_data, subject_id == "ID2")
+          expect_equal(nrow(new_query), 1)
+          expect_equal(new_query$item_group, "Medication")
+          expect_equal(new_query$item, "Oxycodon")
+          expect_equal(new_query$reviewer, "Medical Monitor x")
+          expect_equal(new_query$query, "Add a new test query")
+          expect_equal(new_query$resolved, "No")
+          expect_equal(
+            dplyr::as_tibble(r$query_data),
+            dplyr::collect(dplyr::tbl(con, "query_data"))
+          )
+        })
+      }
+    )
+  }
+)
+
+describe(
+  "mod_query_add. Feature 2 | As a user, I want to be able to see an error
+  message if the latest query entry does not match the one in the database
+  after saving a new entry.",
+  {
+    it(
+    "Scenario 1 | Database save function not working. 
+      Given a test data base, 
+      and the function 'db_save' being mocked (temporarily replaced) with a
+      function that does not write to the database,
+      and [user_name] set to 'test user',
+      and [active_form] to 'Adverse events',
+      and [subject_id] to '885',
+      and [query_text] set to 'Test query',
+      and [query_select_visit] to 'Any visit',
+      and [create_query] to 1,
+      and [query_add_input] to 1,
+      I expect that [save_review_error] is TRUE,
+      and that the new query is not saved in memory,
+      and that [query_data] remains the same as the input test query data.", 
+    {
+      temp_path <- withr::local_tempfile(fileext = ".sqlite")
+      file.copy(test_path("fixtures", "review_testdb.sqlite"), temp_path)
+      query_df <- readRDS(test_path("fixtures", "query_testdata.rds"))
+      db_temp_connect(temp_path, DBI::dbWriteTable(con, "query_data", query_df))
+
+      local_mocked_bindings(
+        db_save = function(...) "nothing written to database"
+      )
+      testargs <- list(
+        r = reactiveValues(
+          user_name = reactiveVal("test user"),
+          subject_id = 885,
+          review_data = db_slice_rows(temp_path)
+        ),
+        active_form = reactiveVal("Adverse events"),
+        db_path = temp_path,
+        available_data = data.frame(subject_id = "885",
+                                    item_group = "Adverse events")
+      )
+      testServer(mod_query_add_server, args = testargs, {
+        ns <- session$ns
+        session$setInputs(
+          create_query = 1,
+          query_text = "Test query",
+          query_select_visit = "Any visit",
+          query_add_input = 1
+        )
+        new_query <- dplyr::filter(r$query_data, subject_id == "885", 
+                                   query == "test query")
+        expect_true(query_save_error())
+        expect_equal(nrow(new_query), 0)
+        expect_equal(r$query_data, dplyr::as_tibble(query_df))
+      })
+    })
+  }
+)

@@ -1,0 +1,22 @@
+{
+  "input": {
+    "test-add_comment": false,
+    "test-confirm_review_tabs": "show_checkbox",
+    "test-form_reviewed": false,
+    "test-review_comment": "",
+    "test-save_review": 0
+  },
+  "output": {
+    "test-save_review_error": {
+      "message": "Requires review",
+      "call": "NULL",
+      "type": [
+        "shiny.silent.error",
+        "validation"
+      ]
+    }
+  },
+  "export": {
+
+  }
+}

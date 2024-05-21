@@ -1,0 +1,11 @@
+{
+  "input": {
+
+  },
+  "output": {
+    "test-db_synch_info": "EDC Sync date: <br>Unknown<br><br>EDC latest data: Unknown"
+  },
+  "export": {
+
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "input": {
+    "test-navigate_forms_1-form_next": 0,
+    "test-navigate_forms_1-form_previous": 0,
+    "test-review_config_1-config_review": 0,
+    "test-review_forms_1-add_comment": false,
+    "test-review_forms_1-confirm_review_tabs": "empty_panel",
+    "test-review_forms_1-form_reviewed": false,
+    "test-review_forms_1-review_comment": "",
+    "test-review_forms_1-save_review": 0,
+    "test-show_review_controls": "panel_empty",
+    "test-write_query-create_query": 0
+  },
+  "output": {
+    "test-synch_info-db_synch_info": "EDC Sync date: <br>Unknown<br><br>EDC latest data: Unknown"
+  },
+  "export": {
+
+  }
+}

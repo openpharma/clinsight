@@ -1,0 +1,15 @@
+{
+  "input": {
+    "test-add_comment": false,
+    "test-confirm_review_tabs": "show_checkbox",
+    "test-form_reviewed": true,
+    "test-review_comment": "",
+    "test-save_review": 0
+  },
+  "output": {
+    "test-save_review_error": ""
+  },
+  "export": {
+
+  }
+}

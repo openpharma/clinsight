@@ -1,0 +1,165 @@
+describe(
+  "mod_queries. Feature 1 | As a user, I want to be able to start the module in 
+  isolation", 
+  {
+    query_df <- data.frame(
+      "subject_id"     = c("ID1"),
+      "event_label"   = c("Visit 1"),
+      "item_group"    = c("Vital signs", "Vital signs", "Adverse events"),
+      "item"          = c("Pulse", "Pulse", "Sepsis"),
+      "timestamp"     = c("2023-01-01 01:01:01 UTC", "2023-11-01 01:01:01 UTC", 
+                          "2023-11-02 01:01:01 UTC"),
+      "query_id"      = c("ID1-unique_id", "ID1-unique_id", "ID2-unique_id"),
+      "n"             = c(1, 2, 1),     
+      "reviewer"      = c("Test author", "Author2", "Author3"),
+      "query"         = c("Query text test.", "Query follow-up text", 
+                          "Scoring correct? Please verify"),
+      "resolved"      = c("Yes", "Yes", "No"),
+      "resolved_date" = c("2023-11-01 01:01:01 UTC", "2023-11-01 01:01:01 UTC", ""),
+      "edit_reason"   = c("")
+    )
+    
+    testargs <- list(
+      r = reactiveValues(query_data = query_df, user_name = "Admin test"),
+      navinfo = reactiveValues(),
+      all_forms = data.frame(),
+      db_path = ""
+    ) 
+    
+    it("Can load the module UI, with functioning internal parameters.", {
+      ui <- mod_queries_ui(id = "test")
+      golem::expect_shinytaglist(ui)
+      # Check that formals have not been removed
+      fmls <- formals(mod_study_forms_ui)
+      for (i in c("id")){
+        expect_true(i %in% names(fmls))
+      }
+    })
+    
+    
+    it("Can load the module server, with functioning internal parameters.", {
+      testServer(mod_queries_server, args = testargs , {
+        ns <- session$ns
+        expect_true(inherits(ns, "function"))
+        expect_true(grepl(id, ns("")))
+        expect_true(grepl("test", ns("test")))
+      })
+    })
+  }
+)
+
+describe(
+  "mod_queries. Feature 2 | As a user, I want to be able to view all queries in a table.", {
+    it(
+      "Scenario 1 | Given a data frame [query_df],
+        I expect the initial queries to be shown in initial_queries().", 
+      {
+        query_df <- data.frame(
+          "subject_id"     = c("ID1"),
+          "event_label"   = c("Visit 1"),
+          "item_group"    = c("Vital signs", "Vital signs", "Adverse events"),
+          "item"          = c("Pulse", "Pulse", "Sepsis"),
+          "timestamp"     = c("2023-01-01 01:01:01 UTC", "2023-11-01 01:01:01 UTC", 
+                              "2023-11-02 01:01:01 UTC"),
+          "query_id"      = c("ID1-unique_id", "ID1-unique_id", "ID2-unique_id"),
+          "n"             = c(1, 2, 1),     
+          "reviewer"      = c("Test author", "Author2", "Author3"),
+          "query"         = c("Query text test.", "Query follow-up text", 
+                              "Scoring correct? Please verify"),
+          "resolved"      = c("Yes", "Yes", "No"),
+          "resolved_date" = c("2023-11-01 01:01:01 UTC", "2023-11-01 01:01:01 UTC", ""),
+          "edit_reason"   = c("")
+        )
+        testargs <- list(
+          r = reactiveValues(query_data = query_df, user_name = "Admin test"),
+          navinfo = reactiveValues(),
+          all_forms = data.frame(),
+          db_path = ""
+        ) 
+        testServer(mod_queries_server, args = testargs, {
+          ns <- session$ns
+          expect_equal(initial_queries(), dplyr::arrange(query_df[c(1,3),], resolved) )
+        })
+      }
+    )
+  }
+)
+describe(
+  "mod_queries. Feature 3 | As a user, I want to be able to view all the 
+    follow-up messages that have been written for a selected query. 
+    I want to be able to click follow-up, to write a follow-up message to 
+    the query.", 
+  {
+    query_df <- data.frame(
+      "subject_id"     = c("ID1"),
+      "event_label"   = c("Visit 1"),
+      "item_group"    = c("Vital signs", "Vital signs", "Adverse events"),
+      "item"          = c("Pulse", "Pulse", "Sepsis"),
+      "timestamp"     = c("2023-01-01 01:01:01 UTC", "2023-11-01 01:01:01 UTC", 
+                          "2023-11-02 01:01:01 UTC"),
+      "query_id"      = c("ID1-unique_id", "ID1-unique_id", "ID2-unique_id"),
+      "n"             = c(1, 2, 1),     
+      "reviewer"      = c("Test author", "Author2", "Author3"),
+      "query"         = c("Query text test.", "Query follow-up text", 
+                          "Scoring correct? Please verify"),
+      "resolved"      = c("Yes", "Yes", "No"),
+      "resolved_date" = c("2023-11-01 01:01:01 UTC", "2023-11-01 01:01:01 UTC", ""),
+      "edit_reason"   = c("")
+    )
+  
+    it(
+      "Scenario 2 | Select query with follow-up messages. 
+        Given a data frame with test query data, 
+        and with the selected row [queries_row_selected] set to '2', 
+        I expect [selected_query] to be the selected [query_id] 'ID1-unique_id', 
+        and that the [selected_query_data] data frame shows the query and its 
+        follow-up query, as stored in the test query data, 
+        and the selected query title contains the item name, subject_id, 
+        item_group, and resolved value. ", {
+          testargs <- list(
+            r = reactiveValues(query_data = query_df, user_name = "Admin test"),
+            navinfo = reactiveValues(),
+            all_forms = data.frame(),
+            db_path = ""
+          ) 
+          testServer(mod_queries_server, args = testargs, {
+            ns <- session$ns
+            session$setInputs(queries_rows_selected = 2)
+            expect_equal(selected_query(), "ID1-unique_id")
+            expect_equal(selected_query_data(), query_df[1:2,])
+            expect_equal(
+              output[["selected_query_title"]],
+              "<b><center><h5>ID1</h5><br>Pulse (Vital signs); Visit 1</center><br> resolved: <i>Yes</i></b><line></line>"
+            )
+          })
+        }
+    )
+    it(
+      "Scenario 3 | Selected query that is unresolved. Given a data frame [query_df], 
+       and with the selected row [queries_row_selected] set to '1', 
+          I expect [selected_query] to be the selected query_id 'ID2-unique_id', 
+          and that [selected_query_data] shows the correct query belonging to the 
+          selected query_id, 
+          and that the selected query title contains the item name, subject_id, 
+          item_group, and resolved value.", {
+            testargs <- list(
+              r = reactiveValues(query_data = query_df, user_name = "Admin test"),
+              navinfo = reactiveValues(),
+              all_forms = data.frame(),
+              db_path = ""
+            ) 
+            testServer(mod_queries_server, args = testargs, {
+              ns <- session$ns
+              session$setInputs(queries_rows_selected = 1)
+              expect_equal(selected_query(), "ID2-unique_id")
+              expect_equal(selected_query_data(), query_df[3,])
+              expect_equal(
+                output[["selected_query_title"]],
+                "<b><center><h5>ID1</h5><br>Sepsis (Adverse events); Visit 1</center><br> resolved: <i>No</i></b><line></line>"
+              )
+            })
+          }
+    )
+  }
+)
+

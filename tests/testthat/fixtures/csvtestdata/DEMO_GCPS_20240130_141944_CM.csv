@@ -1,0 +1,87 @@
+Site sequence number,Site code,Subject sequence number,Subject Id,Event sequence number,Event Id,Event name,Event date,Activity Id,Activity name,Form Id,Form name,Form sequence number,Subject form sequence number,Origin Subject form sequence number,Source Subject form sequence number,Item group Id,Item group sequence number,Item Id,Item export label,Design version,Item value,Item code,Edit datetime (UTC),Edit by,Edit reason
+SiteSeq,SiteCode,SubjectSeq,SubjectId,EventSeq,EventId,EventName,EventDate,ActivityId,ActivityName,FormId,FormName,FormSeq,SubjectFormSeq,OriginSubjectFormSeq,SourceSubjectFormSeq,ItemGroupId,ItemGroupSeq,ItemId,ItemExportLabel,DesignVersion,ItemValue,ItemCode,EditDateTime,EditBy,EditReason
+2,9700,2,9700-002,1,COMMON_CM,Concomitant Medications,2022-11-16,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG2,1,CM_CMSPID,N°,2.0,1,NA,2022-11-16 15:00,DM1,Function execution
+2,9700,2,9700-002,1,COMMON_CM,Concomitant Medications,2022-11-16,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG2,1,CM_CMTRT,Trade name,2.0,NA,NA,NA,NA,NA
+2,9700,2,9700-002,1,COMMON_CM,Concomitant Medications,2022-11-16,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG2,1,CM_CMINGRD,Active Ingredient,2.0,NA,NA,NA,DM3,NA
+2,9700,2,9700-002,1,COMMON_CM,Concomitant Medications,2022-11-16,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG2,1,CM_CMINDC,Indication,2.0,NA,NA,NA,DM1,NA
+2,9700,2,9700-002,1,COMMON_CM,Concomitant Medications,2022-11-16,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG2,1,CM_MHREL1,Related Medical History event (if applicable) - 1,2.0,NA,NA,2022-11-16 15:00,DM2,Initial Data Entry
+2,9700,2,9700-002,1,COMMON_CM,Concomitant Medications,2022-11-16,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG2,1,CM_AEREL1,Related Adverse Event (if applicable) - 1,2.0,NA,NA,NA,NA,NA
+2,9700,2,9700-002,1,COMMON_CM,Concomitant Medications,2022-11-16,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG3,1,CM_CMDOSE,Dose,2.0,NA,NA,NA,NA,NA
+2,9700,2,9700-002,1,COMMON_CM,Concomitant Medications,2022-11-16,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG3,1,CM_CMDOSU,Unit,2.0,NA,NA,NA,DM3,NA
+2,9700,2,9700-002,1,COMMON_CM,Concomitant Medications,2022-11-16,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG3,1,CM_CMDOSFRQ,Frequency,2.0,NA,NA,NA,NA,NA
+2,9700,2,9700-002,1,COMMON_CM,Concomitant Medications,2022-11-16,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG3,1,CM_CMDOSFRM,Dose Form,2.0,NA,NA,NA,DM2,NA
+2,9700,2,9700-002,1,COMMON_CM,Concomitant Medications,2022-11-16,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG3,1,CM_CMROUTE,Route,2.0,NA,NA,NA,DM3,NA
+2,9700,2,9700-002,1,COMMON_CM,Concomitant Medications,2022-11-16,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG4,1,CM_CMSTDAT,Start Date,2.0,NA,NA,NA,DM3,NA
+2,9700,2,9700-002,1,COMMON_CM,Concomitant Medications,2022-11-16,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG4,1,CM_CMONGO,Ongoing,2.0,NA,NA,NA,NA,NA
+2,9700,5,9700-005,1,COMMON_CM,Concomitant Medications,2022-11-16,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG2,1,CM_CMSPID,N°,2.0,1,NA,2022-11-16 14:31,DM3,Function execution
+2,9700,5,9700-005,1,COMMON_CM,Concomitant Medications,2022-11-16,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG2,1,CM_CMTRT,Trade name,2.0,NA,NA,NA,NA,NA
+2,9700,5,9700-005,1,COMMON_CM,Concomitant Medications,2022-11-16,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG2,1,CM_CMINGRD,Active Ingredient,2.0,NA,NA,NA,DM1,NA
+2,9700,5,9700-005,1,COMMON_CM,Concomitant Medications,2022-11-16,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG2,1,CM_CMINDC,Indication,2.0,NA,NA,NA,DM3,NA
+2,9700,5,9700-005,1,COMMON_CM,Concomitant Medications,2022-11-16,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG2,1,CM_MHREL1,Related Medical History event (if applicable) - 1,2.0,NA,NA,2022-11-16 14:31,DM1,Initial Data Entry
+2,9700,5,9700-005,1,COMMON_CM,Concomitant Medications,2022-11-16,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG2,1,CM_AEREL1,Related Adverse Event (if applicable) - 1,2.0,NA,NA,NA,NA,NA
+2,9700,5,9700-005,1,COMMON_CM,Concomitant Medications,2022-11-16,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG3,1,CM_CMDOSE,Dose,2.0,NA,NA,NA,DM3,NA
+2,9700,5,9700-005,1,COMMON_CM,Concomitant Medications,2022-11-16,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG3,1,CM_CMDOSU,Unit,2.0,Other,8,2022-11-16 14:31,NA,Initial Data Entry
+2,9700,5,9700-005,1,COMMON_CM,Concomitant Medications,2022-11-16,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG3,1,CM_CMDOSU_OTH,Please specify,2.0,NA,NA,NA,DM2,NA
+2,9700,5,9700-005,1,COMMON_CM,Concomitant Medications,2022-11-16,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG3,1,CM_CMDOSFRQ,Frequency,2.0,Other,9,2022-11-16 14:31,DM2,Initial Data Entry
+2,9700,5,9700-005,1,COMMON_CM,Concomitant Medications,2022-11-16,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG3,1,CM_CMDOSFRQ_OTH,Please specify,2.0,NA,NA,NA,DM2,NA
+2,9700,5,9700-005,1,COMMON_CM,Concomitant Medications,2022-11-16,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG3,1,CM_CMDOSFRM,Dose Form,2.0,Other,14,2022-11-16 14:31,DM1,Initial Data Entry
+2,9700,5,9700-005,1,COMMON_CM,Concomitant Medications,2022-11-16,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG3,1,CM_CMDOSFRM_OTH,Please specify,2.0,NA,NA,NA,DM1,NA
+2,9700,5,9700-005,1,COMMON_CM,Concomitant Medications,2022-11-16,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG3,1,CM_CMROUTE,Route,2.0,Other,12,2022-11-16 14:31,DM3,Initial Data Entry
+2,9700,5,9700-005,1,COMMON_CM,Concomitant Medications,2022-11-16,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG3,1,CM_CMROUTE_OTH,Please specify,2.0,NA,NA,NA,NA,NA
+2,9700,5,9700-005,1,COMMON_CM,Concomitant Medications,2022-11-16,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG4,1,CM_CMSTDAT,Start Date,2.0,2022-11-16,NA,2022-11-16 14:31,DM3,Initial Data Entry
+2,9700,5,9700-005,1,COMMON_CM,Concomitant Medications,2022-11-16,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG4,1,CM_CMONGO,Ongoing,2.0,No,2,2022-11-16 14:31,DM3,Initial Data Entry
+2,9700,5,9700-005,1,COMMON_CM,Concomitant Medications,2022-11-16,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG4,1,CM_CMENDAT,End Date,2.0,NA,NA,NA,DM1,NA
+2,9700,10,9700-010,1,COMMON_CM,Concomitant Medications,2022-11-25,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG2,1,CM_CMSPID,N°,11.0,1,NA,2022-11-25 14:03,NA,Function execution
+2,9700,10,9700-010,1,COMMON_CM,Concomitant Medications,2022-11-25,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG2,1,CM_CMPRESP1,- 1,11.0,NA,NA,2022-11-25 14:03,DM2,Initial Data Entry
+2,9700,10,9700-010,1,COMMON_CM,Concomitant Medications,2022-11-25,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG2,1,CM_CMTRT,Trade name,11.0,testin forte,NA,2022-11-25 14:03,DM3,Initial Data Entry
+2,9700,10,9700-010,1,COMMON_CM,Concomitant Medications,2022-11-25,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG2,1,CM_CMINGRD,Active Ingredient,11.0,testin,NA,2022-11-25 14:03,DM1,Initial Data Entry
+2,9700,10,9700-010,1,COMMON_CM,Concomitant Medications,2022-11-25,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG2,1,CM_CMINDC,Indication,11.0,testing,NA,2022-11-25 14:03,DM1,Initial Data Entry
+2,9700,10,9700-010,1,COMMON_CM,Concomitant Medications,2022-11-25,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG2,1,CM_MHREL1,Related Medical History event (if applicable) - 1,11.0,too much testing - 01 Nov 2022,COMMON_MH-1-LOG_MH-MH-1,2022-11-25 14:03,DM1,Initial Data Entry
+2,9700,10,9700-010,1,COMMON_CM,Concomitant Medications,2022-11-25,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG2,1,CM_AEREL1,Related Adverse Event (if applicable) - 1,11.0,NA,NA,NA,DM2,NA
+2,9700,10,9700-010,1,COMMON_CM,Concomitant Medications,2022-11-25,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG3,1,CM_CMDOSE,Dose,11.0,1,NA,2022-11-25 14:03,NA,Initial Data Entry
+2,9700,10,9700-010,1,COMMON_CM,Concomitant Medications,2022-11-25,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG3,1,CM_CMDOSU,Unit,11.0,Milligram (mg),3,2022-11-25 14:03,DM1,Initial Data Entry
+2,9700,10,9700-010,1,COMMON_CM,Concomitant Medications,2022-11-25,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG3,1,CM_CMDOSFRQ,Frequency,11.0,Per day (QD),1,2022-11-25 14:03,DM1,Initial Data Entry
+2,9700,10,9700-010,1,COMMON_CM,Concomitant Medications,2022-11-25,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG3,1,CM_CMDOSFRM,Dose Form,11.0,Drops,1,2022-11-25 14:03,NA,Initial Data Entry
+2,9700,10,9700-010,1,COMMON_CM,Concomitant Medications,2022-11-25,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG3,1,CM_CMROUTE,Route,11.0,Inhalation (p.i.),1,2022-11-25 14:03,DM1,Initial Data Entry
+2,9700,10,9700-010,1,COMMON_CM,Concomitant Medications,2022-11-25,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG4,1,CM_CMSTDAT,Start Date,11.0,2022-11-01,NA,2022-11-25 14:03,NA,Initial Data Entry
+2,9700,10,9700-010,1,COMMON_CM,Concomitant Medications,2022-11-25,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG4,1,CM_CMONGO,Ongoing,11.0,Yes,1,2022-11-25 14:03,DM3,Initial Data Entry
+2,9700,16,9700-016,1,COMMON_CM,Concomitant Medications,2022-11-29,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG2,1,CM_CMSPID,N°,11.0,1,NA,2022-11-29 11:11,DM2,Function execution
+2,9700,16,9700-016,1,COMMON_CM,Concomitant Medications,2022-11-29,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG2,1,CM_CMTRT,Trade name,11.0,xx,NA,2022-11-29 11:11,NA,Initial Data Entry
+2,9700,16,9700-016,1,COMMON_CM,Concomitant Medications,2022-11-29,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG2,1,CM_CMINGRD,Active Ingredient,11.0,xx,NA,2022-11-29 11:11,DM3,Initial Data Entry
+2,9700,16,9700-016,1,COMMON_CM,Concomitant Medications,2022-11-29,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG2,1,CM_CMINDC,Indication,11.0,xx,NA,2022-11-29 11:11,DM2,Initial Data Entry
+2,9700,16,9700-016,1,COMMON_CM,Concomitant Medications,2022-11-29,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG2,1,CM_MHREL1,Related Medical History event (if applicable) - 1,11.0,NA,NA,2022-11-29 11:11,DM2,Initial Data Entry
+2,9700,16,9700-016,1,COMMON_CM,Concomitant Medications,2022-11-29,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG2,1,CM_AEREL1,Related Adverse Event (if applicable) - 1,11.0,NA,NA,NA,DM2,NA
+2,9700,16,9700-016,1,COMMON_CM,Concomitant Medications,2022-11-29,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG3,1,CM_CMDOSE,Dose,11.0,12,NA,2022-11-29 11:11,DM3,Initial Data Entry
+2,9700,16,9700-016,1,COMMON_CM,Concomitant Medications,2022-11-29,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG3,1,CM_CMDOSU,Unit,11.0,Milligram (mg),3,2022-11-29 11:11,DM2,Initial Data Entry
+2,9700,16,9700-016,1,COMMON_CM,Concomitant Medications,2022-11-29,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG3,1,CM_CMDOSFRQ,Frequency,11.0,Per day (QD),1,2022-11-29 11:11,DM3,Initial Data Entry
+2,9700,16,9700-016,1,COMMON_CM,Concomitant Medications,2022-11-29,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG3,1,CM_CMDOSFRM,Dose Form,11.0,Tablet,2,2022-11-29 11:11,DM1,Initial Data Entry
+2,9700,16,9700-016,1,COMMON_CM,Concomitant Medications,2022-11-29,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG3,1,CM_CMROUTE,Route,11.0,Oral (p.o.),5,2022-11-29 11:11,DM1,Initial Data Entry
+2,9700,16,9700-016,1,COMMON_CM,Concomitant Medications,2022-11-29,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG4,1,CM_CMSTDAT,Start Date,11.0,2022-11-16,NA,2022-11-29 11:11,DM3,Initial Data Entry
+2,9700,16,9700-016,1,COMMON_CM,Concomitant Medications,2022-11-29,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG4,1,CM_CMONGO,Ongoing,11.0,Yes,1,2022-11-29 11:11,DM2,Initial Data Entry
+2,9700,17,9700-017,1,COMMON_CM,Concomitant Medications,2022-11-30,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG2,1,CM_CMSPID,N°,11.0,1,NA,2022-11-30 12:54,DM2,Function execution
+2,9700,17,9700-017,1,COMMON_CM,Concomitant Medications,2022-11-30,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG2,1,CM_CMTRT,Trade name,11.0,NA,NA,NA,DM2,NA
+2,9700,17,9700-017,1,COMMON_CM,Concomitant Medications,2022-11-30,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG2,1,CM_CMINGRD,Active Ingredient,11.0,NA,NA,NA,DM2,NA
+2,9700,17,9700-017,1,COMMON_CM,Concomitant Medications,2022-11-30,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG2,1,CM_CMINDC,Indication,11.0,NA,NA,NA,DM2,NA
+2,9700,17,9700-017,1,COMMON_CM,Concomitant Medications,2022-11-30,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG2,1,CM_MHREL1,Related Medical History event (if applicable) - 1,11.0,NA,NA,2022-11-30 12:54,DM1,Initial Data Entry
+2,9700,17,9700-017,1,COMMON_CM,Concomitant Medications,2022-11-30,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG2,1,CM_AEREL1,Related Adverse Event (if applicable) - 1,11.0,NA,NA,NA,DM2,NA
+2,9700,17,9700-017,1,COMMON_CM,Concomitant Medications,2022-11-30,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG3,1,CM_CMDOSE,Dose,11.0,NA,NA,NA,DM3,NA
+2,9700,17,9700-017,1,COMMON_CM,Concomitant Medications,2022-11-30,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG3,1,CM_CMDOSU,Unit,11.0,NA,NA,NA,DM1,NA
+2,9700,17,9700-017,1,COMMON_CM,Concomitant Medications,2022-11-30,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG3,1,CM_CMDOSFRQ,Frequency,11.0,NA,NA,NA,DM1,NA
+2,9700,17,9700-017,1,COMMON_CM,Concomitant Medications,2022-11-30,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG3,1,CM_CMDOSFRM,Dose Form,11.0,NA,NA,NA,DM3,NA
+2,9700,17,9700-017,1,COMMON_CM,Concomitant Medications,2022-11-30,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG3,1,CM_CMROUTE,Route,11.0,NA,NA,NA,DM1,NA
+2,9700,17,9700-017,1,COMMON_CM,Concomitant Medications,2022-11-30,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG4,1,CM_CMSTDAT,Start Date,11.0,2022-11-01,NA,2022-11-30 12:54,DM2,Initial Data Entry
+2,9700,17,9700-017,1,COMMON_CM,Concomitant Medications,2022-11-30,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG4,1,CM_CMONGO,Ongoing,11.0,No,2,2022-11-30 12:54,NA,Initial Data Entry
+2,9700,17,9700-017,1,COMMON_CM,Concomitant Medications,2022-11-30,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG4,1,CM_CMENDAT,End Date,11.0,NA,NA,NA,NA,NA
+3,9600,9,9600-009,1,COMMON_CM,Concomitant Medications,2023-05-08,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG2,1,CM_CMSPID,N°,56.0,1,NA,2023-05-08 08:41,DM3,Function execution
+3,9600,9,9600-009,1,COMMON_CM,Concomitant Medications,2023-05-08,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG2,1,CM_CMTRT,Trade name,56.0,shsfhs,NA,2023-05-08 08:41,DM3,Initial Data Entry
+3,9600,9,9600-009,1,COMMON_CM,Concomitant Medications,2023-05-08,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG2,1,CM_CMINGRD,Active Ingredient,56.0,sgffh,NA,2023-05-08 08:41,DM1,Initial Data Entry
+3,9600,9,9600-009,1,COMMON_CM,Concomitant Medications,2023-05-08,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG2,1,CM_CMINDC,Indication,56.0,sfggsgf,NA,2023-05-08 08:41,NA,Initial Data Entry
+3,9600,9,9600-009,1,COMMON_CM,Concomitant Medications,2023-05-08,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG2,1,CM_MHREL1,Related Medical History event (if applicable) - 1,56.0,NA,NA,2023-05-08 08:41,NA,Initial Data Entry
+3,9600,9,9600-009,1,COMMON_CM,Concomitant Medications,2023-05-08,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG2,1,CM_AEREL1,Related Adverse Event (if applicable) - 1,56.0,NA,NA,2023-05-08 08:41,DM3,Initial Data Entry
+3,9600,9,9600-009,1,COMMON_CM,Concomitant Medications,2023-05-08,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG3,1,CM_CMDOSE,Dose,56.0,20,NA,2023-05-08 08:41,DM3,Initial Data Entry
+3,9600,9,9600-009,1,COMMON_CM,Concomitant Medications,2023-05-08,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG3,1,CM_CMDOSU,Unit,56.0,Gram (g),1,2023-05-08 08:41,NA,Initial Data Entry
+3,9600,9,9600-009,1,COMMON_CM,Concomitant Medications,2023-05-08,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG3,1,CM_CMDOSFRQ,Frequency,56.0,Per day (QD),1,2023-05-08 08:41,DM3,Initial Data Entry
+3,9600,9,9600-009,1,COMMON_CM,Concomitant Medications,2023-05-08,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG3,1,CM_CMDOSFRM,Dose Form,56.0,Drops,1,2023-05-08 08:41,NA,Initial Data Entry
+3,9600,9,9600-009,1,COMMON_CM,Concomitant Medications,2023-05-08,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG3,1,CM_CMROUTE,Route,56.0,Inhalation (p.i.),1,2023-05-08 08:41,DM3,Initial Data Entry
+3,9600,9,9600-009,1,COMMON_CM,Concomitant Medications,2023-05-08,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG4,1,CM_CMSTDAT,Start Date,56.0,2023-05-01,NA,2023-05-08 08:41,DM1,Initial Data Entry
+3,9600,9,9600-009,1,COMMON_CM,Concomitant Medications,2023-05-08,LOG_CM,NA,CM,Concomitant Medications,1,1,1,NA,CONMEDG4,1,CM_CMONGO,Ongoing,56.0,Yes,1,2023-05-08 08:41,NA,Initial Data Entry

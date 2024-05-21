@@ -1,0 +1,57 @@
+---
+title: "Trial Safety Review Report"
+date: "`r Sys.Date()`"
+date-format: "DD MMM YYYY"
+author: "`r params$author`"
+output: pdf_document
+params:
+  sites: NA
+  author: NA
+  review_table: NA
+  queries_table: NA
+---
+
+
+Author: `r params$author` 
+
+Study sites reviewed: `r paste0(params$sites, collapse = ", ")`. 
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Data reviewed
+
+Overview of data reviewed by the monitor. 
+
+
+\footnotesize
+
+
+```{r data-reviewed}
+knitr::kable(params$review_table)
+```
+
+\normalsize
+
+
+## Queries raised
+
+Overview of raised queries.
+
+```{r queries-raised, results='asis'}
+df <- params$queries_table
+invisible(
+  unlist(lapply(unique(df$query_id), \(x){
+    df <- dplyr::filter(df, query_id == x)
+    id_x <- unique(df$ID); form_x <- unique(df$Form); event_x <- unique(df$Event)
+    df <- df |> 
+      dplyr::select(-ID, -query_id, -Form, -Item, -Event)
+    print(knitr::kable(df, caption = paste0("Query for: ", id_x, ", Form: ", form_x, ", Event: ", event_x)))
+  }))
+)
+```
+
+

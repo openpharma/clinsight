@@ -1,0 +1,16 @@
+^renv$
+^renv\.lock$
+^data-raw$
+^.*\.Rproj$
+^\.Rproj\.user$
+^LICENSE\.md$
+^codecov\.yml$
+^\.github$
+_\.new\.png$
+^\.\.$
+^deploy$
+^deploy_renv$
+^doc$
+^docs$
+^dev$
+^Meta$

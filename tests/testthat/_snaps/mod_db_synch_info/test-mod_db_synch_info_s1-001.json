@@ -1,0 +1,11 @@
+{
+  "input": {
+
+  },
+  "output": {
+    "test-db_synch_info": "EDC Sync date: <br>2024-01-08<br><br>EDC latest data: 2024-01-01"
+  },
+  "export": {
+
+  }
+}
