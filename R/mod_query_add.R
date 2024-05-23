@@ -105,6 +105,36 @@ mod_query_add_server <- function(
                 width = "100%",
                 placeholder = "add query text here"
               ),
+              bslib::card_body(
+                shinyWidgets::materialSwitch(
+                  inputId = ns("major_query"),
+                  label = "Major query", 
+                  status = "danger",
+                  inline = TRUE, 
+                  right = TRUE
+                ),
+                bslib::popover(
+                  icon("circle-info"),
+                  title = "Major queries",
+                  id = ns("major_query_info"),
+                  markdown(
+                    "
+                    Will be prioritized by the data managers. Can only 
+                    be closed by a medical monitor.
+                    
+                    Only use for issues that:  
+                    
+                    1. affect patient safety.
+                    2. affect primary endpoints. 
+                    3. violate inclusion/exclusion criteria.
+                    4. concern medical implausible data points.
+                    "
+                  )
+                ), 
+                class = "d-flex flex-row", 
+                fillable = FALSE,
+                gap = 0
+              ),
               verbatimTextOutput(ns("reviewer"))
             ),
             verbatimTextOutput(ns("query_error"))
