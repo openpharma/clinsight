@@ -6,6 +6,8 @@
 \alias{clinsight-package}
 \title{clinsight: ClinSight}
 \description{
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
 Interactive application to monitor patient safety during clinical trials. Goal is to provide an interactive overview of a patients' data, highlighting not yet reviewed data, and to improve assessments of the patients' safety. Secondary goal is to improve data quality by identifying suspicious outliers.
 }
 \seealso{
