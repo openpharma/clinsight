@@ -13,8 +13,8 @@ Interactive application to monitor patient safety during clinical trials. Goal i
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/LDSamson/clinsight}
-  \item Report bugs at \url{https://github.com/LDSamson/clinsight/issues}
+  \item \url{https://github.com/openpharma/clinsight}
+  \item Report bugs at \url{https://github.com/openpharma/clinsight/issues}
 }
 
 }

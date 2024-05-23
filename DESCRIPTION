@@ -11,8 +11,8 @@ Description: Interactive application to monitor patient safety during
     assessments of the patients' safety. Secondary goal is to improve data
     quality by identifying suspicious outliers.
 License: Apache License (>= 2) | file LICENSE
-URL: https://github.com/LDSamson/clinsight
-BugReports: https://github.com/LDSamson/clinsight/issues
+URL: https://github.com/openpharma/clinsight
+BugReports: https://github.com/openpharma/clinsight/issues
 Depends: 
     R (>= 4.1)
 Imports: 
