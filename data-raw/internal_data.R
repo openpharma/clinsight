@@ -12,7 +12,8 @@ names(col_palette) <- c("within limits",
 # Empty data frame used to reset query data frame if needed.
 query_data_skeleton <- dplyr::tibble(
   "query_id"      = character(),
-  "subject_id"     = character(),
+  "major"         = character(),
+  "subject_id"    = character(),
   "event_label"   = character(),
   "item_group"    = character(),
   "item"          = character(),

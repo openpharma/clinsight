@@ -170,7 +170,8 @@ mod_query_add_server <- function(
       golem::cat_dev("Query text to add: ", input$query_text, "\n")
       new_query <- dplyr::tibble(
         "query_id"      = paste0(r$subject_id, create_unique_id(5)), 
-        "subject_id"     = r$subject_id,
+        "major"         = as.character(input$major_query),
+        "subject_id"    = r$subject_id,
         "event_label"   = input$query_select_visit, 
         "item_group"    = active_form(), 
         "item"          = input$query_select_item, 
