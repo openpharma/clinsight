@@ -73,7 +73,7 @@ mod_query_add_server <- function(
         bslib::card(
           bslib::layout_sidebar(
             sidebar = bslib::sidebar(
-              id = ns("query.sidebar"),
+              id = ns("query_sidebar"),
               open = "always",
               HTML(paste0("<b>", unique(sel_data$item_group), "</b>")),
               shiny::selectizeInput(
@@ -107,7 +107,7 @@ mod_query_add_server <- function(
               ),
               verbatimTextOutput(ns("reviewer"))
             ),
-            shiny::verbatimTextOutput(ns("query_error"))
+            verbatimTextOutput(ns("query_error"))
           ),
           min_height = "500px"
         ),
@@ -217,12 +217,12 @@ mod_query_add_server <- function(
       cat("Author:", r$user_name(), "\n")
     })
     
-
+    
   })
 }
-    
+
 ## To be copied in the UI
 # mod_write_queries_ui("write_queries_1")
-    
+
 ## To be copied in the server
 # mod_write_queries_server("write_queries_1")
