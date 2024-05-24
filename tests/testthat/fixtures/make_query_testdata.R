@@ -5,7 +5,8 @@
 make_query_testdata <- function(){
   data.frame(
     "query_id"      = c("ID1-unique_id", "ID2-unique_id"),
-    "subject_id"     = c("ID1"),
+    "type"          = c("Normal"),
+    "subject_id"    = c("ID1"),
     "event_label"   = c("Visit 1"),
     "item_group"    = c("Vital signs", "Adverse events"),
     "item"          = c("Pulse", "Sepsis"),

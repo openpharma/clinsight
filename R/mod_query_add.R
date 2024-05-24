@@ -107,7 +107,7 @@ mod_query_add_server <- function(
               ),
               bslib::card_body(
                 shinyWidgets::materialSwitch(
-                  inputId = ns("major_query"),
+                  inputId = ns("query_major"),
                   label = "Major query", 
                   status = "danger",
                   inline = TRUE, 
@@ -116,7 +116,7 @@ mod_query_add_server <- function(
                 bslib::popover(
                   icon("circle-info"),
                   title = "Major queries",
-                  id = ns("major_query_info"),
+                  id = ns("query_major_info"),
                   markdown(
                     "
                     Will be prioritized by the data managers. Can only 
@@ -170,7 +170,7 @@ mod_query_add_server <- function(
       golem::cat_dev("Query text to add: ", input$query_text, "\n")
       new_query <- dplyr::tibble(
         "query_id"      = paste0(r$subject_id, create_unique_id(5)), 
-        "type"          = ifelse(input$major_query, "Major", "Normal"),
+        "type"          = ifelse(input$query_major, "Major", "Normal"),
         "subject_id"    = r$subject_id,
         "event_label"   = input$query_select_visit, 
         "item_group"    = active_form(), 

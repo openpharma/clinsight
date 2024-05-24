@@ -56,6 +56,7 @@ describe(
       {
         query_df <- data.frame(
           "subject_id"     = c("ID1"),
+          "type"          = c("Normal"),
           "event_label"   = c("Visit 1"),
           "item_group"    = c("Vital signs", "Vital signs", "Adverse events"),
           "item"          = c("Pulse", "Pulse", "Sepsis"),
@@ -78,6 +79,7 @@ describe(
         ) 
         testServer(mod_queries_server, args = testargs, {
           ns <- session$ns
+          session$setInputs(show_resolved = TRUE)
           expect_equal(initial_queries(), dplyr::arrange(query_df[c(1,3),], resolved) )
         })
       }
@@ -91,7 +93,8 @@ describe(
     the query.", 
   {
     query_df <- data.frame(
-      "subject_id"     = c("ID1"),
+      "subject_id"    = c("ID1"),
+      "type"          = c("Normal"),
       "event_label"   = c("Visit 1"),
       "item_group"    = c("Vital signs", "Vital signs", "Adverse events"),
       "item"          = c("Pulse", "Pulse", "Sepsis"),
@@ -111,6 +114,7 @@ describe(
       "Scenario 2 | Select query with follow-up messages. 
         Given a data frame with test query data, 
         and with the selected row [queries_row_selected] set to '2', 
+        and show_resolved set to 'TRUE',
         I expect [selected_query] to be the selected [query_id] 'ID1-unique_id', 
         and that the [selected_query_data] data frame shows the query and its 
         follow-up query, as stored in the test query data, 
@@ -124,7 +128,10 @@ describe(
           ) 
           testServer(mod_queries_server, args = testargs, {
             ns <- session$ns
-            session$setInputs(queries_rows_selected = 2)
+            session$setInputs(
+              queries_rows_selected = 2,
+              show_resolved = TRUE
+              )
             expect_equal(selected_query(), "ID1-unique_id")
             expect_equal(selected_query_data(), query_df[1:2,])
             expect_equal(
@@ -137,6 +144,7 @@ describe(
     it(
       "Scenario 3 | Selected query that is unresolved. Given a data frame [query_df], 
        and with the selected row [queries_row_selected] set to '1', 
+       and show_resolved set to 'TRUE',
           I expect [selected_query] to be the selected query_id 'ID2-unique_id', 
           and that [selected_query_data] shows the correct query belonging to the 
           selected query_id, 
@@ -150,7 +158,7 @@ describe(
             ) 
             testServer(mod_queries_server, args = testargs, {
               ns <- session$ns
-              session$setInputs(queries_rows_selected = 1)
+              session$setInputs(queries_rows_selected = 1, show_resolved = TRUE)
               expect_equal(selected_query(), "ID2-unique_id")
               expect_equal(selected_query_data(), query_df[3,])
               expect_equal(

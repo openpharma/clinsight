@@ -42,7 +42,8 @@ describe(
   query is the name of the item in question.", 
   {
     query_df <- data.frame(
-      "subject_id"     = c("ID1"),
+      "subject_id"    = c("ID1"),
+      "type"          = "Normal",
       "event_label"   = c("Visit 1"),
       "item_group"    = c("Vital signs", "Adverse events"),
       "item"          = c("Pulse", "Sepsis"),
@@ -105,6 +106,7 @@ describe(
         and [query_text] is 'Add a new test query',
         and [query_select_visit] is set to 'Visit 1',
         and [query_select_item] is set to 'Oxycodon',
+        and [query_major] is set to 'FALSE',
         and [query_add_input] is set to 1 (indicating a button click),
         I expect that one new query is saved in [query_data] for patent 'ID1',
           and that the 'item_group' of the query is 'Medication',
@@ -144,7 +146,8 @@ describe(
             query_text = "Add a new test query",
             query_select_visit = "Visit 1",
             query_select_item = "Oxycodon",
-            query_add_input = 1
+            query_add_input = 1,
+            query_major = FALSE
           )
           new_query <- dplyr::filter(r$query_data, subject_id == "ID2")
           expect_equal(nrow(new_query), 1)
@@ -209,7 +212,8 @@ describe(
           create_query = 1,
           query_text = "Test query",
           query_select_visit = "Any visit",
-          query_add_input = 1
+          query_add_input = 1,
+          query_major = FALSE
         )
         new_query <- dplyr::filter(r$query_data, subject_id == "885", 
                                    query == "test query")
