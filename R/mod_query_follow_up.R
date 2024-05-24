@@ -55,11 +55,9 @@ mod_query_follow_up_server <- function(id, r, selected_query, db_path){
       golem::cat_dev("Query FU text to add: ", input$query_follow_up_text, "\n")
       ts <- time_stamp()
       
-      updated_query <- r$query_data |> 
-        dplyr::as_tibble() |> 
-        dplyr::filter(query_id == selected_query()) |>
-        dplyr::distinct(query_id, subject_id, item_group, item, event_label, n) |> 
-        dplyr::slice_max(n, with_ties = FALSE)
+      updated_query <- db_get_query(db_path, selected_query()) |> 
+        db_slice_rows(slice_vars = "timestamp", group_vars = "query_id") |> 
+        dplyr::distinct(query_id, type, subject_id, item_group, item, event_label, n)
       updated_query <- updated_query |> 
         dplyr::mutate(
           "timestamp"     = ts, 
