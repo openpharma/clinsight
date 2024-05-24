@@ -47,6 +47,25 @@ mod_query_follow_up_server <- function(id, r, selected_query, db_path){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     
+    observeEvent(selected_query(), {
+      is_resolved <- any(
+        with(r$query_data, resolved[query_id == selected_query()]) == "Yes" 
+      )
+      shiny::updateCheckboxInput(inputId = "resolved", value = is_resolved)
+      shiny::updateTextAreaInput(
+        inputId = "query_follow_up_text", 
+        placeholder = ifelse(
+          is_resolved, 
+          "query is resolved", 
+          "add response here"
+        )
+      )
+      if(is_resolved){
+        shinyjs::disable("query_follow_up") 
+      } else{
+        shinyjs::enable("query_follow_up") 
+      }
+    })
     query_save_error <- reactiveVal(FALSE)
     observeEvent(input$query_add_follow_up, {
       req(input$query_follow_up_text, r$user_name(), selected_query())
