@@ -75,7 +75,7 @@ mod_query_follow_up_server <- function(id, r, selected_query, db_path){
       # Update queries and selected queries data:
       db_save(data = updated_query, db_path = db_path, db_table = "query_data")
       #verify if query update was successful:
-      query_in_db <- db_get_latest_query(
+      query_in_db <- db_get_query(
         db_path, query_id = updated_query$query_id, n = updated_query$n
       )
       query_in_db <- unique(query_in_db[names(updated_query)])
@@ -96,7 +96,7 @@ mod_query_follow_up_server <- function(id, r, selected_query, db_path){
         !identical(updated_query, query_in_db),
         !identical(query_in_db, query_in_memory)
       ))
-
+      
       if(query_save_error()){
         return({
           showNotification(
@@ -111,7 +111,7 @@ mod_query_follow_up_server <- function(id, r, selected_query, db_path){
           r$query_data <- collect_query_data(db_path)
         })
       }
-
+      
       updateTextInput(inputId = "query_follow_up_text", value = "")
       
       shiny::updateCheckboxInput(

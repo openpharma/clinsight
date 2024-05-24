@@ -251,6 +251,7 @@ describe(
     it("can save a query", {
       new_query <- data.frame(
         query_id = "ID124234", 
+        type = "Normal",
         subject_id = "ID1",
         event_label = "Visit 1",
         item_group = "Vital signs",
@@ -273,35 +274,40 @@ describe(
 )
 
 
-describe("db_get_latest_query can collect latest query data from a database", {
+describe("db_get_query can collect latest query data from a database", {
   temp_path <- withr::local_tempfile(fileext = ".sqlite") 
   con <- get_db_connection(temp_path)
   
   new_query <- dplyr::tibble(
     query_id = "ID124234", 
     subject_id = "ID1",
-    n = 1,
-    timestamp = "2024-02-05 01:01:01",
+    n = 1:2,
+    timestamp = c("2024-02-05 01:01:01", "2024-04-01 01:01:01"),
     other_info = "testinfo"
     ) 
   DBI::dbWriteTable(con, "query_data", new_query)
   
   it("Can collect the desired data.", {
-    query_output <- db_get_latest_query(temp_path, query_id = "ID124234", n = 1)
-    expect_equal(query_output, new_query)
+    query_output <- db_get_query(temp_path, query_id = "ID124234", n = 1)
+    expect_equal(query_output, new_query[1, ])
   })
   
   it("Collects an empty data frame if query_id or n are not found", {
-    query_output <- db_get_latest_query(temp_path, query_id = "non-existent", n = 1)
+    query_output <- db_get_query(temp_path, query_id = "non-existent", n = 1)
     expect_equal(query_output, new_query[0,])
-    query_output <- db_get_latest_query(temp_path, query_id = "ID124234", n = 6)
+    query_output <- db_get_query(temp_path, query_id = "ID124234", n = 6)
     expect_equal(query_output, new_query[0,])
+  })
+  
+  it("Collects all rows with the same query ID if n is set to NULL", {
+    query_output <- db_get_query(temp_path, query_id = "ID124234", n = NULL)
+    expect_equal(query_output, new_query)
   })
   
 })
 
 
-describe("db_get_latest_review can collect latest review data from a database", {
+describe("db_get_review can collect latest review data from a database", {
   temp_path <- withr::local_tempfile(fileext = ".sqlite") 
   con <- get_db_connection(temp_path)
  
@@ -318,15 +324,15 @@ describe("db_get_latest_review can collect latest review data from a database", 
   DBI::dbWriteTable(con, "all_review_data", review_data)
 
   it("Can collect the desired data.", {
-    output <- db_get_latest_review(temp_path, subject = "Test_name", form = "Test_group")
+    output <- db_get_review(temp_path, subject = "Test_name", form = "Test_group")
     expect_equal(output, review_data)
   })
   
   it("Collects an empty data frame if the requested subject or form are not found", {
-    output <- db_get_latest_review(temp_path, subject = "Non-existent", 
+    output <- db_get_review(temp_path, subject = "Non-existent", 
                                          form = "Test_group")
     expect_equal(output, review_data[0,])
-    output <- db_get_latest_review(temp_path, subject = "Test_name", 
+    output <- db_get_review(temp_path, subject = "Test_name", 
                                         form = "Non-existent")
     expect_equal(output, review_data[0,])
   })

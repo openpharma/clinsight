@@ -186,7 +186,7 @@ mod_query_add_server <- function(
       golem::print_dev(new_query)
       
       db_save(data = new_query, db_path = db_path, db_table = "query_data")
-      query_in_db <- db_get_latest_query(
+      query_in_db <- db_get_query(
         db_path, query_id = new_query$query_id, n = new_query$n
       )
       query_in_db <- unique(query_in_db[names(new_query)])
