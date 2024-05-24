@@ -117,19 +117,8 @@ mod_query_add_server <- function(
                   icon("circle-info"),
                   title = "Major queries",
                   id = ns("query_major_info"),
-                  markdown(
-                    "
-                    Will be prioritized by the data managers. Can only 
-                    be closed by a medical monitor.
-                    
-                    Only use for issues that:  
-                    
-                    1. affect patient safety.
-                    2. affect primary endpoints. 
-                    3. violate inclusion/exclusion criteria.
-                    4. concern medical implausible data points.
-                    "
-                  )
+                  markdown("Only use for issues that could have a major impact 
+                  on either the patient safety or the study outcomes.")
                 ), 
                 class = "d-flex flex-row", 
                 fillable = FALSE,
