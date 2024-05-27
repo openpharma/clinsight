@@ -113,7 +113,7 @@ describe(
           input = vector_select(
             input_names, 
             exclude = c("plotly_relayout", "shinyjs-navigate_participants_1", 
-                        "timeline_window")
+                        "timeline_window", "timeline_data")
           ), 
           output = vector_select(output_names, exclude = "visit_figure")
         )
