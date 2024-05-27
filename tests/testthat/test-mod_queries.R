@@ -93,7 +93,7 @@ describe(
           session$setInputs(show_resolved = FALSE)
           session$flushReact()
           expected_results <- query_df[query_df$resolved == "No", ] |> 
-            dplyr::arrange(type ) 
+            dplyr::arrange(type) 
           rownames(expected_results) <- as.integer(1:2)
           expect_equal(initial_queries(),  expected_results)
         })
