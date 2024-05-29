@@ -62,8 +62,8 @@ reference:
   - db_slice_rows 
   - update_review_data
   - collect_query_data
-  - db_get_latest_review
-  - db_get_latest_query
+  - db_get_review
+  - db_get_query
 - title: Internal dataset
   desc: Create or describe internal data. 
 - contents: 

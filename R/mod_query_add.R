@@ -73,7 +73,7 @@ mod_query_add_server <- function(
         bslib::card(
           bslib::layout_sidebar(
             sidebar = bslib::sidebar(
-              id = ns("query.sidebar"),
+              id = ns("query_sidebar"),
               open = "always",
               HTML(paste0("<b>", unique(sel_data$item_group), "</b>")),
               shiny::selectizeInput(
@@ -105,9 +105,28 @@ mod_query_add_server <- function(
                 width = "100%",
                 placeholder = "add query text here"
               ),
+              bslib::card_body(
+                shinyWidgets::materialSwitch(
+                  inputId = ns("query_major"),
+                  label = "Major query", 
+                  status = "danger",
+                  inline = TRUE, 
+                  right = TRUE
+                ),
+                bslib::popover(
+                  icon("circle-info"),
+                  title = "Major queries",
+                  id = ns("query_major_info"),
+                  markdown("Only use for issues that could have a major impact 
+                  on either the patient safety or the study outcomes.")
+                ), 
+                class = "d-flex flex-row", 
+                fillable = FALSE,
+                gap = 0
+              ),
               verbatimTextOutput(ns("reviewer"))
             ),
-            shiny::verbatimTextOutput(ns("query_error"))
+            verbatimTextOutput(ns("query_error"))
           ),
           min_height = "500px"
         ),
@@ -140,7 +159,8 @@ mod_query_add_server <- function(
       golem::cat_dev("Query text to add: ", input$query_text, "\n")
       new_query <- dplyr::tibble(
         "query_id"      = paste0(r$subject_id, create_unique_id(5)), 
-        "subject_id"     = r$subject_id,
+        "type"          = ifelse(input$query_major, "Major", "Normal"),
+        "subject_id"    = r$subject_id,
         "event_label"   = input$query_select_visit, 
         "item_group"    = active_form(), 
         "item"          = input$query_select_item, 
@@ -155,7 +175,7 @@ mod_query_add_server <- function(
       golem::print_dev(new_query)
       
       db_save(data = new_query, db_path = db_path, db_table = "query_data")
-      query_in_db <- db_get_latest_query(
+      query_in_db <- db_get_query(
         db_path, query_id = new_query$query_id, n = new_query$n
       )
       query_in_db <- unique(query_in_db[names(new_query)])
@@ -217,12 +237,12 @@ mod_query_add_server <- function(
       cat("Author:", r$user_name(), "\n")
     })
     
-
+    
   })
 }
-    
+
 ## To be copied in the UI
 # mod_write_queries_ui("write_queries_1")
-    
+
 ## To be copied in the server
 # mod_write_queries_server("write_queries_1")

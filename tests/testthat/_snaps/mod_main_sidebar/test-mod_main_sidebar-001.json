@@ -10,10 +10,12 @@
     "test-review_forms_1-save_review": 0,
     "test-show_review_controls": "panel_controls",
     "test-write_query-create_query": 1,
-    "test-write_query-query.sidebar": false,
     "test-write_query-query_add_input": 0,
+    "test-write_query-query_major": false,
+    "test-write_query-query_major_info": false,
     "test-write_query-query_select_item": "",
     "test-write_query-query_select_visit": "Any visit",
+    "test-write_query-query_sidebar": false,
     "test-write_query-query_text": ""
   },
   "output": {

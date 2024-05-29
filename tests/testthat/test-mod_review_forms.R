@@ -308,7 +308,7 @@ describe(
         app$expect_values()
         
         # review status and reviewer is saved as expected
-        saved_review_row <- db_get_latest_review(
+        saved_review_row <- db_get_review(
           temp_path, subject = "885", form = "Adverse events"
         )
         expect_equal(saved_review_row$status, "new")
