@@ -14,7 +14,313 @@
 
       ]
     },
+    "cf_adverse_events-SAE_table_cell_clicked": {
+
+    },
+    "cf_adverse_events-SAE_table_cells_selected": [
+
+    ],
+    "cf_adverse_events-SAE_table_columns_selected": null,
+    "cf_adverse_events-SAE_table_rows_all": null,
+    "cf_adverse_events-SAE_table_rows_current": null,
+    "cf_adverse_events-SAE_table_rows_selected": null,
+    "cf_adverse_events-SAE_table_search": "",
+    "cf_adverse_events-SAE_table_state": {
+      "start": 0,
+      "length": 10,
+      "order": [
+
+      ],
+      "search": {
+        "search": "",
+        "smart": true,
+        "regex": false,
+        "caseInsensitive": true
+      },
+      "columns": [
+        {
+          "visible": true,
+          "search": {
+            "search": "",
+            "smart": true,
+            "regex": false,
+            "caseInsensitive": true
+          }
+        },
+        {
+          "visible": true,
+          "search": {
+            "search": "",
+            "smart": true,
+            "regex": false,
+            "caseInsensitive": true
+          }
+        },
+        {
+          "visible": true,
+          "search": {
+            "search": "",
+            "smart": true,
+            "regex": false,
+            "caseInsensitive": true
+          }
+        },
+        {
+          "visible": true,
+          "search": {
+            "search": "",
+            "smart": true,
+            "regex": false,
+            "caseInsensitive": true
+          }
+        },
+        {
+          "visible": true,
+          "search": {
+            "search": "",
+            "smart": true,
+            "regex": false,
+            "caseInsensitive": true
+          }
+        },
+        {
+          "visible": true,
+          "search": {
+            "search": "",
+            "smart": true,
+            "regex": false,
+            "caseInsensitive": true
+          }
+        },
+        {
+          "visible": true,
+          "search": {
+            "search": "",
+            "smart": true,
+            "regex": false,
+            "caseInsensitive": true
+          }
+        },
+        {
+          "visible": true,
+          "search": {
+            "search": "",
+            "smart": true,
+            "regex": false,
+            "caseInsensitive": true
+          }
+        },
+        {
+          "visible": true,
+          "search": {
+            "search": "",
+            "smart": true,
+            "regex": false,
+            "caseInsensitive": true
+          }
+        },
+        {
+          "visible": true,
+          "search": {
+            "search": "",
+            "smart": true,
+            "regex": false,
+            "caseInsensitive": true
+          }
+        },
+        {
+          "visible": true,
+          "search": {
+            "search": "",
+            "smart": true,
+            "regex": false,
+            "caseInsensitive": true
+          }
+        },
+        {
+          "visible": true,
+          "search": {
+            "search": "",
+            "smart": true,
+            "regex": false,
+            "caseInsensitive": true
+          }
+        },
+        {
+          "visible": true,
+          "search": {
+            "search": "",
+            "smart": true,
+            "regex": false,
+            "caseInsensitive": true
+          }
+        }
+      ]
+    },
+    "cf_adverse_events-common_form_table_cell_clicked": {
+
+    },
+    "cf_adverse_events-common_form_table_cells_selected": [
+
+    ],
+    "cf_adverse_events-common_form_table_columns_selected": null,
+    "cf_adverse_events-common_form_table_rows_all": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "cf_adverse_events-common_form_table_rows_current": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "cf_adverse_events-common_form_table_rows_selected": null,
+    "cf_adverse_events-common_form_table_search": "",
+    "cf_adverse_events-common_form_table_state": {
+      "start": 0,
+      "length": 10,
+      "order": [
+
+      ],
+      "search": {
+        "search": "",
+        "smart": true,
+        "regex": false,
+        "caseInsensitive": true
+      },
+      "columns": [
+        {
+          "visible": true,
+          "search": {
+            "search": "",
+            "smart": true,
+            "regex": false,
+            "caseInsensitive": true
+          }
+        },
+        {
+          "visible": true,
+          "search": {
+            "search": "",
+            "smart": true,
+            "regex": false,
+            "caseInsensitive": true
+          }
+        },
+        {
+          "visible": true,
+          "search": {
+            "search": "",
+            "smart": true,
+            "regex": false,
+            "caseInsensitive": true
+          }
+        },
+        {
+          "visible": true,
+          "search": {
+            "search": "",
+            "smart": true,
+            "regex": false,
+            "caseInsensitive": true
+          }
+        },
+        {
+          "visible": true,
+          "search": {
+            "search": "",
+            "smart": true,
+            "regex": false,
+            "caseInsensitive": true
+          }
+        },
+        {
+          "visible": true,
+          "search": {
+            "search": "",
+            "smart": true,
+            "regex": false,
+            "caseInsensitive": true
+          }
+        },
+        {
+          "visible": true,
+          "search": {
+            "search": "",
+            "smart": true,
+            "regex": false,
+            "caseInsensitive": true
+          }
+        },
+        {
+          "visible": true,
+          "search": {
+            "search": "",
+            "smart": true,
+            "regex": false,
+            "caseInsensitive": true
+          }
+        },
+        {
+          "visible": true,
+          "search": {
+            "search": "",
+            "smart": true,
+            "regex": false,
+            "caseInsensitive": true
+          }
+        },
+        {
+          "visible": true,
+          "search": {
+            "search": "",
+            "smart": true,
+            "regex": false,
+            "caseInsensitive": true
+          }
+        }
+      ]
+    },
     "cf_adverse_events-show_all_data": false,
+    "cf_adverse_events-timeline_fig-timeline_ids": [
+      "53",
+      "54",
+      "55",
+      "56",
+      "57",
+      "58",
+      "59",
+      "85",
+      "93",
+      "104",
+      "110",
+      "124",
+      "198",
+      "199",
+      "200"
+    ],
+    "cf_adverse_events-timeline_fig-timeline_selected": null,
+    "cf_adverse_events-timeline_fig-timeline_visible": [
+      "56",
+      "55",
+      "54",
+      "53",
+      "57",
+      "58",
+      "59",
+      "110",
+      "104",
+      "93",
+      "85",
+      "124",
+      "199",
+      "198",
+      "200"
+    ],
     "cf_conc_procedures-show_all_data": false,
     "cf_medical_history-show_all_data": false,
     "cf_medication-show_all_data": false,
@@ -28,15 +334,19 @@
     "main_sidebar_1-review_forms_1-review_comment": "",
     "main_sidebar_1-review_forms_1-save_review": 0,
     "main_sidebar_1-show_review_controls": "panel_controls",
-    "main_sidebar_1-write_query-create_query": 1,
+    "main_sidebar_1-write_query-create_query": 2,
     "main_sidebar_1-write_query-query_add_input": 0,
-    "main_sidebar_1-write_query-query_major": false,
+    "main_sidebar_1-write_query-query_major": true,
     "main_sidebar_1-write_query-query_major_info": false,
-    "main_sidebar_1-write_query-query_select_item": "",
-    "main_sidebar_1-write_query-query_select_visit": "Screening",
+    "main_sidebar_1-write_query-query_select_item": "Tachycardia",
+    "main_sidebar_1-write_query-query_select_visit": "Any visit",
     "main_sidebar_1-write_query-query_sidebar": false,
-    "main_sidebar_1-write_query-query_text": "",
-    "main_tabs": "Study data",
+    "main_sidebar_1-write_query-query_text": "Major test query",
+    "main_tabs": "Common events",
+    "navigate_participants_1-participant_selection": "BEL_04_772",
+    "navigate_participants_1-subj_apply": 1,
+    "navigate_participants_1-subj_next": 0,
+    "navigate_participants_1-subj_previous": 0,
     "plotly_afterplot-click_individuals": "\"sf_vital_signs-figure\"",
     "queries_1-go_to_form-go_to_form": 0,
     "queries_1-query_follow_up_1-query_add_follow_up": 0,
@@ -102,8 +412,480 @@
     "study_data_tabs": "Vital signs"
   },
   "output": {
+    "cf_adverse_events-SAE_table": {
+      "x": {
+        "style": "bootstrap5",
+        "filter": "none",
+        "vertical": false,
+        "caption": "<caption style=\"caption-side: top; text-align: center;\">\n  <h5>\n    <b>Serious Adverse Events<\/b>\n  <\/h5>\n<\/caption>",
+        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Name<\/th>\n      <th>AESI<\/th>\n      <th>Start date<\/th>\n      <th>End date<\/th>\n      <th>CTCAE severity<\/th>\n      <th>Treatment related<\/th>\n      <th>Treatment action<\/th>\n      <th>Other action<\/th>\n      <th>Category<\/th>\n      <th>Awareness date<\/th>\n      <th>Date of death<\/th>\n      <th>Death reason<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
+        "options": {
+          "columnDefs": [
+            {
+              "orderable": false,
+              "targets": 0
+            }
+          ],
+          "order": [
+
+          ],
+          "autoWidth": false,
+          "orderClasses": false,
+          "ajax": {
+            "type": "POST",
+            "data": "function(d) {\nd.search.caseInsensitive = true;\nd.search.smart = true;\nd.escape = false;\nvar encodeAmp = function(x) { x.value = x.value.replace(/&/g, \"%26\"); }\nencodeAmp(d.search);\n$.each(d.columns, function(i, v) {encodeAmp(v.search);});\n}"
+          },
+          "serverSide": true,
+          "processing": true
+        },
+        "selection": {
+          "mode": "single",
+          "selected": null,
+          "target": "row",
+          "selectable": null
+        }
+      },
+      "evals": [
+        "options.ajax.data"
+      ],
+      "jsHooks": [
+
+      ],
+      "deps": [
+        {
+          "name": "jquery",
+          "version": "3.6.0",
+          "src": {
+            "href": "jquery-3.6.0"
+          },
+          "meta": null,
+          "script": "jquery-3.6.0.min.js",
+          "stylesheet": null,
+          "head": null,
+          "attachment": null,
+          "all_files": true
+        },
+        {
+          "name": "dt-core-bootstrap5",
+          "version": "1.13.4",
+          "src": {
+            "href": "dt-core-bootstrap5-1.13.4"
+          },
+          "meta": null,
+          "script": [
+            "js/jquery.dataTables.min.js",
+            "js/dataTables.bootstrap5.min.js"
+          ],
+          "stylesheet": "css/dataTables.bootstrap5.min.css",
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": false
+        },
+        {
+          "name": "bootstrap",
+          "version": "5.2.2",
+          "src": {
+            "href": "bootstrap-5.2.2"
+          },
+          "meta": {
+            "viewport": "width=device-width, initial-scale=1, shrink-to-fit=no"
+          },
+          "script": "bootstrap.bundle.min.js",
+          "stylesheet": "bootstrap.min.css",
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": true
+        },
+        {
+          "name": "bs3compat",
+          "version": "0.5.1",
+          "src": {
+            "href": "bs3compat-0.5.1"
+          },
+          "meta": null,
+          "script": [
+            "transition.js",
+            "tabs.js",
+            "bs3compat.js"
+          ],
+          "stylesheet": null,
+          "head": null,
+          "attachment": null,
+          "all_files": true
+        },
+        {
+          "name": "crosstalk",
+          "version": "1.2.0",
+          "src": {
+            "href": "crosstalk-1.2.0"
+          },
+          "meta": null,
+          "script": "js/crosstalk.min.js",
+          "stylesheet": "css/crosstalk.min.css",
+          "head": null,
+          "attachment": null,
+          "all_files": true
+        }
+      ]
+    },
+    "cf_adverse_events-common_form_table": {
+      "x": {
+        "style": "bootstrap5",
+        "filter": "none",
+        "vertical": false,
+        "caption": "<caption style=\"caption-side: top; text-align: center;\">\n  <h5>\n    <b>Adverse events<\/b>\n  <\/h5>\n<\/caption>",
+        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Name<\/th>\n      <th>AESI<\/th>\n      <th>start date<\/th>\n      <th>end date<\/th>\n      <th>CTCAE severity<\/th>\n      <th>Treatment related<\/th>\n      <th>Treatment action<\/th>\n      <th>Other action<\/th>\n      <th>Serious Adverse Event<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
+        "options": {
+          "columnDefs": [
+            {
+              "orderable": false,
+              "targets": 0
+            }
+          ],
+          "order": [
+
+          ],
+          "autoWidth": false,
+          "orderClasses": false,
+          "ajax": {
+            "type": "POST",
+            "data": "function(d) {\nd.search.caseInsensitive = true;\nd.search.smart = true;\nd.escape = false;\nvar encodeAmp = function(x) { x.value = x.value.replace(/&/g, \"%26\"); }\nencodeAmp(d.search);\n$.each(d.columns, function(i, v) {encodeAmp(v.search);});\n}"
+          },
+          "serverSide": true,
+          "processing": true
+        },
+        "selection": {
+          "mode": "single",
+          "selected": null,
+          "target": "row",
+          "selectable": null
+        }
+      },
+      "evals": [
+        "options.ajax.data"
+      ],
+      "jsHooks": [
+
+      ],
+      "deps": [
+        {
+          "name": "jquery",
+          "version": "3.6.0",
+          "src": {
+            "href": "jquery-3.6.0"
+          },
+          "meta": null,
+          "script": "jquery-3.6.0.min.js",
+          "stylesheet": null,
+          "head": null,
+          "attachment": null,
+          "all_files": true
+        },
+        {
+          "name": "dt-core-bootstrap5",
+          "version": "1.13.4",
+          "src": {
+            "href": "dt-core-bootstrap5-1.13.4"
+          },
+          "meta": null,
+          "script": [
+            "js/jquery.dataTables.min.js",
+            "js/dataTables.bootstrap5.min.js"
+          ],
+          "stylesheet": "css/dataTables.bootstrap5.min.css",
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": false
+        },
+        {
+          "name": "bootstrap",
+          "version": "5.2.2",
+          "src": {
+            "href": "bootstrap-5.2.2"
+          },
+          "meta": {
+            "viewport": "width=device-width, initial-scale=1, shrink-to-fit=no"
+          },
+          "script": "bootstrap.bundle.min.js",
+          "stylesheet": "bootstrap.min.css",
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": true
+        },
+        {
+          "name": "bs3compat",
+          "version": "0.5.1",
+          "src": {
+            "href": "bs3compat-0.5.1"
+          },
+          "meta": null,
+          "script": [
+            "transition.js",
+            "tabs.js",
+            "bs3compat.js"
+          ],
+          "stylesheet": null,
+          "head": null,
+          "attachment": null,
+          "all_files": true
+        },
+        {
+          "name": "crosstalk",
+          "version": "1.2.0",
+          "src": {
+            "href": "crosstalk-1.2.0"
+          },
+          "meta": null,
+          "script": "js/crosstalk.min.js",
+          "stylesheet": "css/crosstalk.min.css",
+          "head": null,
+          "attachment": null,
+          "all_files": true
+        }
+      ]
+    },
+    "cf_adverse_events-timeline_fig-timeline": {
+      "x": {
+        "items": [
+          {
+            "subject_id": "BEL_04_772",
+            "content": "Screening",
+            "start": "2023-06-05",
+            "group": "Visit",
+            "style": "line-height: 0.8; border-radius: 6px;",
+            "id": "53",
+            "order": "4"
+          },
+          {
+            "subject_id": "BEL_04_772",
+            "content": "Visit 1",
+            "start": "2023-07-05",
+            "group": "Visit",
+            "style": "line-height: 0.8; border-radius: 6px;",
+            "id": "54",
+            "order": "4"
+          },
+          {
+            "subject_id": "BEL_04_772",
+            "content": "Visit 2",
+            "start": "2023-07-19",
+            "group": "Visit",
+            "style": "line-height: 0.8; border-radius: 6px;",
+            "id": "55",
+            "order": "4"
+          },
+          {
+            "subject_id": "BEL_04_772",
+            "content": "Visit 3",
+            "start": "2023-08-02",
+            "group": "Visit",
+            "style": "line-height: 0.8; border-radius: 6px;",
+            "id": "56",
+            "order": "4"
+          },
+          {
+            "subject_id": "BEL_04_772",
+            "content": "Visit 4",
+            "start": "2023-08-16",
+            "group": "Visit",
+            "style": "line-height: 0.8; border-radius: 6px;",
+            "id": "57",
+            "order": "4"
+          },
+          {
+            "subject_id": "BEL_04_772",
+            "content": "Visit 5",
+            "start": "2023-08-30",
+            "group": "Visit",
+            "style": "line-height: 0.8; border-radius: 6px;",
+            "id": "58",
+            "order": "4"
+          },
+          {
+            "subject_id": "BEL_04_772",
+            "content": "Visit 6",
+            "start": "2023-09-13",
+            "group": "Visit",
+            "style": "line-height: 0.8; border-radius: 6px;",
+            "id": "59",
+            "order": "4"
+          },
+          {
+            "subject_id": "BEL_04_772",
+            "content": "Hypotension",
+            "form_repeat": "1",
+            "item_group": "Adverse events",
+            "start": "2023-07-07",
+            "group": "Adverse event",
+            "title": "Hypotension",
+            "style": "background-color: #d47500;line-height: 0.8; border-radius: 6px;",
+            "id": "85",
+            "order": "2",
+            "needs_review": true
+          },
+          {
+            "subject_id": "BEL_04_772",
+            "content": "Atrial Fibrillation",
+            "form_repeat": "2",
+            "item_group": "Adverse events",
+            "start": "2023-07-05",
+            "group": "Adverse event",
+            "title": "Atrial Fibrillation",
+            "style": "background-color: #d47500;line-height: 0.8; border-radius: 6px;",
+            "id": "93",
+            "order": "2",
+            "needs_review": true
+          },
+          {
+            "subject_id": "BEL_04_772",
+            "content": "Tachycardia",
+            "form_repeat": "3",
+            "item_group": "Adverse events",
+            "start": "2023-07-05",
+            "group": "Adverse event",
+            "title": "Tachycardia",
+            "style": "background-color: #d47500;line-height: 0.8; border-radius: 6px;",
+            "id": "104",
+            "order": "2",
+            "needs_review": true
+          },
+          {
+            "subject_id": "BEL_04_772",
+            "content": "Urinary Tract Infection",
+            "form_repeat": "4",
+            "item_group": "Adverse events",
+            "start": "2023-07-05",
+            "group": "Adverse event",
+            "title": "Urinary Tract Infection",
+            "style": "background-color: #d47500;line-height: 0.8; border-radius: 6px;",
+            "id": "110",
+            "order": "2",
+            "needs_review": true
+          },
+          {
+            "subject_id": "BEL_04_772",
+            "content": "Atrial Fibrillation",
+            "form_repeat": "5",
+            "item_group": "Adverse events",
+            "start": "2023-08-16",
+            "group": "Adverse event",
+            "title": "Atrial Fibrillation",
+            "style": "background-color: #d47500;line-height: 0.8; border-radius: 6px;",
+            "id": "124",
+            "order": "2",
+            "needs_review": true
+          },
+          {
+            "subject_id": "BEL_04_772",
+            "content": "Treatment",
+            "form_repeat": "1",
+            "item_group": "General",
+            "start": "2023-07-05",
+            "group": "Events",
+            "style": "line-height: 0.8; border-radius: 6px;",
+            "id": "198",
+            "order": "3"
+          },
+          {
+            "subject_id": "BEL_04_772",
+            "content": "Treatment",
+            "form_repeat": "2",
+            "item_group": "General",
+            "start": "2023-08-02",
+            "group": "Events",
+            "style": "line-height: 0.8; border-radius: 6px;",
+            "id": "199",
+            "order": "3"
+          },
+          {
+            "subject_id": "BEL_04_772",
+            "content": "Treatment",
+            "form_repeat": "3",
+            "item_group": "General",
+            "start": "2023-08-30",
+            "group": "Events",
+            "style": "line-height: 0.8; border-radius: 6px;",
+            "id": "200",
+            "order": "3"
+          }
+        ],
+        "groups": [
+          {
+            "id": "Visit",
+            "content": "Visit",
+            "order": "4"
+          },
+          {
+            "id": "Adverse event",
+            "content": "Adverse event",
+            "order": "2"
+          },
+          {
+            "id": "Events",
+            "content": "Events",
+            "order": "3"
+          }
+        ],
+        "showZoom": true,
+        "zoomFactor": 0.5,
+        "fit": true,
+        "options": {
+          "zoomable": false
+        },
+        "height": null,
+        "timezone": null,
+        "api": [
+
+        ]
+      },
+      "evals": [
+
+      ],
+      "jsHooks": [
+
+      ],
+      "deps": [
+        {
+          "name": "jquery",
+          "version": "3.6.0",
+          "src": {
+            "href": "jquery-3.6.0"
+          },
+          "meta": null,
+          "script": "jquery-3.6.0.min.js",
+          "stylesheet": null,
+          "head": null,
+          "attachment": null,
+          "all_files": true
+        },
+        {
+          "name": "bootstrap",
+          "version": "3.3.5",
+          "src": {
+            "href": "bootstrap-3.3.5"
+          },
+          "meta": {
+            "viewport": "width=device-width, initial-scale=1"
+          },
+          "script": [
+            "js/bootstrap.min.js",
+            "shim/html5shiv.min.js",
+            "shim/respond.min.js"
+          ],
+          "stylesheet": "css/bootstrap.min.css",
+          "head": "<style>h1 {font-size: 34px;}\n       h1.title {font-size: 38px;}\n       h2 {font-size: 30px;}\n       h3 {font-size: 24px;}\n       h4 {font-size: 18px;}\n       h5 {font-size: 16px;}\n       h6 {font-size: 12px;}\n       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}\n       pre:not([class]) { background-color: white }<\/style>",
+          "attachment": null,
+          "package": null,
+          "all_files": true
+        }
+      ]
+    },
     "header_widgets_1-ae_box": {
-      "html": "<div class=\"card bslib-card bslib-mb-spacing html-fill-item html-fill-container bslib-value-box border-0 bg-primary\" data-bslib-card-init data-require-bs-caller=\"card() value_box()\" data-require-bs-version=\"5 5\">\n  <div class=\"card-body bslib-gap-spacing html-fill-item html-fill-container\" style=\"margin-top:auto;margin-bottom:auto;flex:1 1 auto; padding:0;\">\n    <div class=\"bslib-grid bslib-mb-spacing html-fill-item value-box-grid\" data-require-bs-caller=\"layout_column_wrap()\" data-require-bs-version=\"5\" style=\"--bslib-grid-height:auto;--bslib-grid-height-mobile:auto;gap:0px; --bslib-value-box-widths:30% 70%;--bslib-value-box-widths-full-screen:1fr auto;\">\n      <div class=\"bslib-gap-spacing html-fill-container\">\n        <div class=\"value-box-showcase overflow-hidden html-fill-item html-fill-container\" style=\"--bslib-value-box-max-height:100px;--bslib-value-box-max-height-full-screen:67%;\">\n          <i class=\"fas fa-house-medical fa-2x\" role=\"presentation\" aria-label=\"house-medical icon\"><\/i>\n        <\/div>\n      <\/div>\n      <div class=\"bslib-gap-spacing html-fill-container\">\n        <div class=\"value-box-area html-fill-item html-fill-container border-start\">\n          <p>SAEs: 0<\/p>\n          <p>AEs: 0<\/p>\n        <\/div>\n      <\/div>\n    <\/div>\n  <\/div>\n  <script data-bslib-card-init>bslib.Card.initializeAllCards();<\/script>\n<\/div>",
+      "html": "<div class=\"card bslib-card bslib-mb-spacing html-fill-item html-fill-container bslib-value-box border-0 bg-warning\" data-bslib-card-init data-require-bs-caller=\"card() value_box()\" data-require-bs-version=\"5 5\">\n  <div class=\"card-body bslib-gap-spacing html-fill-item html-fill-container\" style=\"margin-top:auto;margin-bottom:auto;flex:1 1 auto; padding:0;\">\n    <div class=\"bslib-grid bslib-mb-spacing html-fill-item value-box-grid\" data-require-bs-caller=\"layout_column_wrap()\" data-require-bs-version=\"5\" style=\"--bslib-grid-height:auto;--bslib-grid-height-mobile:auto;gap:0px; --bslib-value-box-widths:30% 70%;--bslib-value-box-widths-full-screen:1fr auto;\">\n      <div class=\"bslib-gap-spacing html-fill-container\">\n        <div class=\"value-box-showcase overflow-hidden html-fill-item html-fill-container\" style=\"--bslib-value-box-max-height:100px;--bslib-value-box-max-height-full-screen:67%;\">\n          <i class=\"fas fa-house-medical fa-2x\" role=\"presentation\" aria-label=\"house-medical icon\"><\/i>\n        <\/div>\n      <\/div>\n      <div class=\"bslib-gap-spacing html-fill-container\">\n        <div class=\"value-box-area html-fill-item html-fill-container border-start\">\n          <p>SAEs: 0<\/p>\n          <p>AEs: 5<\/p>\n        <\/div>\n      <\/div>\n    <\/div>\n  <\/div>\n  <script data-bslib-card-init>bslib.Card.initializeAllCards();<\/script>\n<\/div>",
       "deps": [
         {
           "name": "font-awesome",
@@ -203,7 +985,7 @@
         }
       ]
     },
-    "main_sidebar_1-navigate_forms_1-form_name": "<center><b>Vital signs<\/b><\/center>",
+    "main_sidebar_1-navigate_forms_1-form_name": "<center><b>Adverse events<\/b><\/center>",
     "main_sidebar_1-review_forms_1-save_review_error": {
       "message": "Requires review",
       "call": "NULL",
@@ -222,8 +1004,9 @@
       ]
     },
     "main_sidebar_1-write_query-reviewer": "Author: test user ",
+    "navigate_participants_1-status": "<b>BEL_04_772<\/b><br><b>Sex:<\/b> Male<br><b>Age:<\/b> 78yrs.<br><b>Status:<\/b> Enrolled<br><b>ECOG:<\/b> 0<br><b>Dx:<\/b> Syndrome O",
     "navigate_participants_1-subject_info": {
-      "html": "<div class=\"card bslib-card bslib-mb-spacing html-fill-item html-fill-container bslib-value-box border-0 bg-primary\" data-bslib-card-init data-require-bs-caller=\"card() value_box()\" data-require-bs-version=\"5 5\">\n  <div class=\"card-body bslib-gap-spacing html-fill-item html-fill-container\" style=\"margin-top:auto;margin-bottom:auto;flex:1 1 auto; padding:0;\">\n    <div class=\"bslib-grid bslib-mb-spacing html-fill-item value-box-grid\" data-require-bs-caller=\"layout_column_wrap()\" data-require-bs-version=\"5\" style=\"--bslib-grid-height:auto;--bslib-grid-height-mobile:auto;gap:0px; --bslib-value-box-widths:30% 70%;--bslib-value-box-widths-full-screen:1fr auto;\">\n      <div class=\"bslib-gap-spacing html-fill-container\">\n        <div class=\"value-box-showcase overflow-hidden html-fill-item html-fill-container\" style=\"--bslib-value-box-max-height:100px;--bslib-value-box-max-height-full-screen:67%;\">\n          <i class=\"fas fa-user-slash fa-2x\" role=\"presentation\" aria-label=\"user-slash icon\"><\/i>\n        <\/div>\n      <\/div>\n      <div class=\"bslib-gap-spacing html-fill-container\">\n        <div class=\"value-box-area html-fill-item html-fill-container border-start\">\n          <p>BEL_08_45<\/p>\n          <p>Male, 64yrs.<\/p>\n        <\/div>\n      <\/div>\n    <\/div>\n  <\/div>\n  <script data-bslib-card-init>bslib.Card.initializeAllCards();<\/script>\n<\/div>",
+      "html": "<div class=\"card bslib-card bslib-mb-spacing html-fill-item html-fill-container bslib-value-box border-0 bg-primary\" data-bslib-card-init data-require-bs-caller=\"card() value_box()\" data-require-bs-version=\"5 5\">\n  <div class=\"card-body bslib-gap-spacing html-fill-item html-fill-container\" style=\"margin-top:auto;margin-bottom:auto;flex:1 1 auto; padding:0;\">\n    <div class=\"bslib-grid bslib-mb-spacing html-fill-item value-box-grid\" data-require-bs-caller=\"layout_column_wrap()\" data-require-bs-version=\"5\" style=\"--bslib-grid-height:auto;--bslib-grid-height-mobile:auto;gap:0px; --bslib-value-box-widths:30% 70%;--bslib-value-box-widths-full-screen:1fr auto;\">\n      <div class=\"bslib-gap-spacing html-fill-container\">\n        <div class=\"value-box-showcase overflow-hidden html-fill-item html-fill-container\" style=\"--bslib-value-box-max-height:100px;--bslib-value-box-max-height-full-screen:67%;\">\n          <i class=\"fas fa-user-check fa-2x\" role=\"presentation\" aria-label=\"user-check icon\"><\/i>\n        <\/div>\n      <\/div>\n      <div class=\"bslib-gap-spacing html-fill-container\">\n        <div class=\"value-box-area html-fill-item html-fill-container border-start\">\n          <p>BEL_04_772<\/p>\n          <p>Male, 78yrs.<\/p>\n        <\/div>\n      <\/div>\n    <\/div>\n  <\/div>\n  <script data-bslib-card-init>bslib.Card.initializeAllCards();<\/script>\n<\/div>",
       "deps": [
         {
           "name": "font-awesome",
@@ -323,7 +1106,7 @@
         }
       ]
     },
-    "navigate_review_1-forms_to_review": "7",
+    "navigate_review_1-forms_to_review": "9",
     "sf_vital_signs-figure": {
       "x": {
         "data": [

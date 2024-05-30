@@ -215,7 +215,7 @@ mod_review_forms_server <- function(
         tables = "all_review_data" 
       )
       
-      review_row_db <- db_get_latest_review(
+      review_row_db <- db_get_review(
         db_path, subject = review_row$subject_id, form = review_row$item_group
         )
       review_row_db <- unique(review_row_db[names(review_row)])

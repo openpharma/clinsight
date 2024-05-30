@@ -150,7 +150,7 @@ db_update <- function(
     latest_review_data = data, #get_review_data(merge_meta_with_data(data), common_vars), 
     common_vars = common_vars,
     edit_time_var = edit_time_var
-    )
+  )
   cat("writing updated review data to database...\n")
   DBI::dbWriteTable(con, "all_review_data", updated_review_data, append = TRUE)
   cat("Finished updating review data\n")
@@ -205,12 +205,12 @@ db_save_review <- function(
     dplyr::collect()
   if(nrow(new_review_rows) == 0){return(
     warning("Review state unaltered. No review will be saved.")
-    )}
+  )}
   new_review_rows <- new_review_rows |> 
     db_slice_rows(slice_vars = c("timestamp", "edit_date_time"), group_vars = common_vars) |> 
     dplyr::select(-dplyr::all_of(cols_to_change)) |> 
     # If there are multiple edits, make sure to only select the latest editdatetime for all items:
-   # dplyr::slice_max(edit_date_time, by = dplyr::all_of(common_vars)) |> 
+    # dplyr::slice_max(edit_date_time, by = dplyr::all_of(common_vars)) |> 
     dplyr::bind_cols(rv_row[cols_to_change]) # bind_cols does not work in a db connection.
   cat("write updated review data to database\n")
   lapply(tables, \(x){DBI::dbWriteTable(db_con, x, new_review_rows, append = TRUE)}) |> 
@@ -243,63 +243,73 @@ db_save <- function(data, db_path, db_table = "query_data"){
 }
 
 
-#' Retrieve latest query
+#'Retrieve query from database
 #'
-#' Small helper function to retrieve the latest query with the provided query_id
-#' and query follow-up number (n)
+#'Small helper function to retrieve a query from the database. if no follow-up
+#'number is provided, all messages will be collected.
 #'
-#' @param db_path Character vector. Needs to be a valid path to a database.
-#' @param query_id Character string with the query identifier to extract from
-#'   the database.
-#' @param n Numerical or character string, with the query follow-up number to
-#'   extract
-#' @param db_table Character vector with the name of the table to read from.
+#'@param db_path Character vector. Needs to be a valid path to a database.
+#'@param query_id Character string with the query identifier to extract from the
+#'  database.
+#'@param n (optional) numerical or character string, with the query follow-up
+#'  number to extract
+#'@param db_table Character vector with the name of the table to read from.
 #'
-#' @return A data frame 
-#' @export
-#' @inheritParams db_slice_rows
+#'@return A data frame
+#'@export
+#'@inheritParams db_slice_rows
 #'
-#' @examples 
+#' @examples
 #'local({
-#' temp_path <- withr::local_tempfile(fileext = ".sqlite") 
+#' temp_path <- withr::local_tempfile(fileext = ".sqlite")
 #' con <- get_db_connection(temp_path)
-#' 
+#'
 #' new_query <- dplyr::tibble(
-#'  query_id = "ID124234", 
+#'  query_id = "ID124234",
 #'  subject_id = "ID1",
 #'  n = 1,
 #'  timestamp = "2024-02-05 01:01:01",
 #'  other_info = "testinfo"
-#' ) 
+#' )
 #' DBI::dbWriteTable(con, "query_data", new_query)
-#' db_get_latest_query(temp_path, query_id = "ID124234", n = 1)
+#' db_get_query(temp_path, query_id = "ID124234", n = 1)
 #' })
 #' 
-db_get_latest_query <- function(
+db_get_query <- function(
     db_path, 
-    query_id = new_query$query_id, 
-    n = new_query$n,
+    query_id, 
+    n = NULL,
     db_table = "query_data",
     slice_vars = "timestamp",
     group_vars = c("query_id", "n")
-    ){
+){
   stopifnot(file.exists(db_path))
   stopifnot(is.character(query_id))
   stopifnot(is.character(db_table))
-  stopifnot(is.numeric(n) | is.character(n))
+  stopifnot(is.null(n) | is.numeric(n) | is.character(n))
+  filter_n <- ifelse(is.null(n), "", " AND n=?n")
+  sql <- paste0(
+    "SELECT * FROM ?db_table WHERE query_id = ?query_id", 
+    filter_n, ";"
+  )
   db_temp_connect(db_path, {
-    sql <- "SELECT * FROM ?db_table WHERE query_id = ?query_id AND n = ?n;"
-    query <- DBI::sqlInterpolate(con, sql, db_table = db_table[1], 
-                                 query_id = query_id[1], n = n[1])
+    sql_args <- list(
+      conn = con, 
+      sql = sql, 
+      db_table = db_table[1], 
+      query_id = query_id[1]
+    )
+    sql_args$n <- n[1] #So that this function argument will be conditional.
+    query <- do.call(DBI::sqlInterpolate, sql_args)
     DBI::dbGetQuery(con, query) |> 
       db_slice_rows(slice_vars = slice_vars, group_vars = group_vars) |> 
       dplyr::as_tibble()
   })
 }
 
-#' Retrieve latest review
+#' Retrieve review
 #'
-#' Small helper function to retrieve the latest review data from the database
+#' Small helper function to retrieve the (latest) review data from the database
 #' with the given subject id (`subject`) and `form`.
 #'
 #' @param db_path Character vector. Needs to be a valid path to a database.
@@ -328,10 +338,10 @@ db_get_latest_query <- function(
 #'   ) |>
 #'    dplyr::as_tibble()
 #'   DBI::dbWriteTable(con, "all_review_data", review_data)
-#'   db_get_latest_review(temp_path, subject = "Test_name", form = "Test_group")
+#'   db_get_review(temp_path, subject = "Test_name", form = "Test_group")
 #' })
 #' 
-db_get_latest_review <- function(
+db_get_review <- function(
     db_path, 
     subject = review_row$subject_id, 
     form = review_row$item_group,
@@ -339,13 +349,14 @@ db_get_latest_review <- function(
     slice_vars = c("timestamp", "edit_date_time"),
     group_vars = c("subject_id", "event_name", "item_group",
                    "form_repeat", "item_name")
-    ){
+){
   stopifnot(file.exists(db_path))
   stopifnot(is.character(subject))
   stopifnot(is.character(form))
   db_temp_connect(db_path, {
     sql <- "SELECT * FROM ?db_table WHERE subject_id = ?id AND item_group = ?group;"
-    query <- DBI::sqlInterpolate(con, sql, db_table = db_table[1], id = subject[1], group = form[1])
+    query <- DBI::sqlInterpolate(con, sql, db_table = db_table[1], 
+                                 id = subject[1], group = form[1])
     DBI::dbGetQuery(con, query) |> 
       db_slice_rows(slice_vars = slice_vars, group_vars = group_vars) |> 
       dplyr::as_tibble()

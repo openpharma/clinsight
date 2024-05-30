@@ -47,6 +47,25 @@ mod_query_follow_up_server <- function(id, r, selected_query, db_path){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     
+    observeEvent(selected_query(), {
+      is_resolved <- any(
+        with(r$query_data, resolved[query_id == selected_query()]) == "Yes" 
+      )
+      shiny::updateCheckboxInput(inputId = "resolved", value = is_resolved)
+      shiny::updateTextAreaInput(
+        inputId = "query_follow_up_text", 
+        placeholder = ifelse(
+          is_resolved, 
+          "query is resolved", 
+          "add response here"
+        )
+      )
+      if(is_resolved){
+        shinyjs::disable("query_follow_up") 
+      } else{
+        shinyjs::enable("query_follow_up") 
+      }
+    })
     query_save_error <- reactiveVal(FALSE)
     observeEvent(input$query_add_follow_up, {
       req(input$query_follow_up_text, r$user_name(), selected_query())
@@ -55,11 +74,9 @@ mod_query_follow_up_server <- function(id, r, selected_query, db_path){
       golem::cat_dev("Query FU text to add: ", input$query_follow_up_text, "\n")
       ts <- time_stamp()
       
-      updated_query <- r$query_data |> 
-        dplyr::as_tibble() |> 
-        dplyr::filter(query_id == selected_query()) |>
-        dplyr::distinct(query_id, subject_id, item_group, item, event_label, n) |> 
-        dplyr::slice_max(n, with_ties = FALSE)
+      updated_query <- db_get_query(db_path, selected_query()) |> 
+        db_slice_rows(slice_vars = "timestamp", group_vars = "query_id") |> 
+        dplyr::distinct(query_id, type, subject_id, item_group, item, event_label, n)
       updated_query <- updated_query |> 
         dplyr::mutate(
           "timestamp"     = ts, 
@@ -75,7 +92,7 @@ mod_query_follow_up_server <- function(id, r, selected_query, db_path){
       # Update queries and selected queries data:
       db_save(data = updated_query, db_path = db_path, db_table = "query_data")
       #verify if query update was successful:
-      query_in_db <- db_get_latest_query(
+      query_in_db <- db_get_query(
         db_path, query_id = updated_query$query_id, n = updated_query$n
       )
       query_in_db <- unique(query_in_db[names(updated_query)])
@@ -96,7 +113,7 @@ mod_query_follow_up_server <- function(id, r, selected_query, db_path){
         !identical(updated_query, query_in_db),
         !identical(query_in_db, query_in_memory)
       ))
-
+      
       if(query_save_error()){
         return({
           showNotification(
@@ -111,7 +128,7 @@ mod_query_follow_up_server <- function(id, r, selected_query, db_path){
           r$query_data <- collect_query_data(db_path)
         })
       }
-
+      
       updateTextInput(inputId = "query_follow_up_text", value = "")
       
       shiny::updateCheckboxInput(

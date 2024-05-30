@@ -83,6 +83,7 @@ utils::globalVariables(
     "out_of_lim",
     "n",
     "query",
+    "type",
     "resolved",
     "reviewer",
     "CTCAE severity worsening",

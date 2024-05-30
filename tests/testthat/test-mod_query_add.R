@@ -34,15 +34,16 @@ describe(
 )
 
 describe(
-  "mod_query_add. Feature 2 | As a user, I want to be able to create a query and 
-  save it to the remote database and to the internal data frame. Together with 
-  the  query text, I want to be able to save other mandatory information, namely the name of the 
-  reviewer, a timestamp, the ID of the participant, and the form at which the query is 
-  applicable. Optional other information that I want to be able to save with the 
-  query is the name of the item in question.", 
+  "mod_query_add. Feature 2 | Create and save a query. As a user, I want to be able 
+  to create a query and save it to the remote database and to the internal data frame. 
+  Together with the query text, I want to be able to save other mandatory information, 
+  such as query type, the name of the reviewer, a timestamp, the ID of the participant, and 
+  the form at which the query is applicable. Optional other information that I 
+  want to be able to save with the query is the name of the item in question.", 
   {
     query_df <- data.frame(
-      "subject_id"     = c("ID1"),
+      "subject_id"    = c("ID1"),
+      "type"          = c("Normal", "Major"),
       "event_label"   = c("Visit 1"),
       "item_group"    = c("Vital signs", "Adverse events"),
       "item"          = c("Pulse", "Sepsis"),
@@ -100,11 +101,12 @@ describe(
     )
     it(
       "Scenario 2 | A query can be saved successfully. 
-        Given [subject_id] is set to 'ID1', 
+        Given [subject_id] is set to 'ID2', 
         and [active_form()] is set to 'Medication',
         and [query_text] is 'Add a new test query',
         and [query_select_visit] is set to 'Visit 1',
         and [query_select_item] is set to 'Oxycodon',
+        and [query_major] is set to 'FALSE',
         and [query_add_input] is set to 1 (indicating a button click),
         I expect that one new query is saved in [query_data] for patent 'ID1',
           and that the 'item_group' of the query is 'Medication',
@@ -121,10 +123,10 @@ describe(
         testargs <- list(
           r = reactiveValues(
             query_data = query_df,
-            user_name = reactiveVal("Admin test"),
-            subject_id = "ID1"
+            user_name = reactiveVal("Medical Monitor x"),
+            subject_id = "ID2"
           ),
-          active_form = reactiveVal(),
+          active_form = reactiveVal("Medication"),
           db_path = temp_path,
           available_data = data.frame(
             subject_id = c("ID1", "ID1", "ID2"),
@@ -136,15 +138,13 @@ describe(
         
         testServer(mod_query_add_server, args = testargs, {
           ns <- session$ns
-          r$subject_id <- "ID2"
-          r$user_name <- reactiveVal("Medical Monitor x")
-          active_form("Medication")
           session$setInputs(
             create_query = 1,
             query_text = "Add a new test query",
             query_select_visit = "Visit 1",
             query_select_item = "Oxycodon",
-            query_add_input = 1
+            query_add_input = 1,
+            query_major = FALSE
           )
           new_query <- dplyr::filter(r$query_data, subject_id == "ID2")
           expect_equal(nrow(new_query), 1)
@@ -160,11 +160,74 @@ describe(
         })
       }
     )
+    
+    it(
+      "Scenario 3 | Save a major query. 
+        Given [subject_id] is set to 'ID3', 
+        and [active_form()] is set to 'Adverse events',
+        and [query_text] is 'Major query text.',
+        and [query_select_visit] is set to 'Visit 1',
+        and [query_select_item] is set to 'Pneumothorax',
+        and [query_major] is set to 'TRUE',
+        and [query_add_input] is set to 1 (indicating a button click),
+        I expect that one new query is saved in [query_data] for patent 'ID3',
+          and that the 'item_group' of the query is 'Adverse events',
+          and 'item' is 'Pneumothorax', 
+          and 'reviewer' is 'Medical Monitor x',
+          and 'query' is 'Major query text.',
+          and 'resolved' is 'No',
+          and the remote database contains the same query as in [query_data].", 
+      {
+        temp_path <- withr::local_tempfile(fileext = ".sqlite") 
+        con <- get_db_connection(temp_path)
+        DBI::dbWriteTable(con, "query_data", query_df)
+        
+        testargs <- list(
+          r = reactiveValues(
+            query_data = query_df,
+            user_name = reactiveVal("Medical Monitor x"),
+            subject_id = "ID3"
+          ),
+          active_form = reactiveVal("Adverse events"),
+          db_path = temp_path,
+          available_data = data.frame(
+            subject_id = c("ID1", "ID3", "ID2"),
+            item_name = c("item1", "Pneumothorax", "Oxycodon"), 
+            item_group = c("Vital signs", "Adverse events", "Medication"),
+            event_name  = c("Visit 1", "Any visit", "Any visit")
+          )
+        ) 
+        
+        testServer(mod_query_add_server, args = testargs, {
+          ns <- session$ns
+          session$setInputs(
+            create_query = 1,
+            query_text = "Major query text.",
+            query_select_visit = "Any visit",
+            query_select_item = "Pneumothorax",
+            query_add_input = 1,
+            query_major = TRUE
+          )
+          new_query <- with(r$query_data, r$query_data[
+            subject_id == "ID3" & item == "Pneumothorax", ])
+          expect_equal(nrow(new_query), 1)
+          expect_equal(new_query$item_group, "Adverse events")
+          expect_equal(new_query$item, "Pneumothorax")
+          expect_equal(new_query$reviewer, "Medical Monitor x")
+          expect_equal(new_query$query, "Major query text.")
+          expect_equal(new_query$resolved, "No")
+          expect_equal(
+            dplyr::as_tibble(r$query_data),
+            dplyr::collect(dplyr::tbl(con, "query_data"))
+          )
+        })
+      }
+    )
   }
 )
 
 describe(
-  "mod_query_add. Feature 2 | As a user, I want to be able to see an error
+  "mod_query_add. Feature 3 | As a user, I want to be able to see an error
   message if the latest query entry does not match the one in the database
   after saving a new entry.",
   {
@@ -209,7 +272,8 @@ describe(
           create_query = 1,
           query_text = "Test query",
           query_select_visit = "Any visit",
-          query_add_input = 1
+          query_add_input = 1,
+          query_major = FALSE
         )
         new_query <- dplyr::filter(r$query_data, subject_id == "885", 
                                    query == "test query")

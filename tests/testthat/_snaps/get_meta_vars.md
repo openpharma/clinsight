@@ -166,7 +166,7 @@
                    "query"           "resolved"           "reviewer" 
                     Status              Subject                 Time 
                   "status"         "subject_id"          "timestamp" 
-                        Dx 
-      "WHO.classification" 
+                        Dx                 Type 
+      "WHO.classification"               "type" 
       
 
