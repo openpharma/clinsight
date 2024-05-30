@@ -47,6 +47,7 @@ usethis::use_test("app")
 
 ## Vignette ----
 usethis::use_vignette("testgolem")
+usethis::use_vignette(name = "data_spec", title = "Input Data Specification")
 #devtools::build_vignettes()
 
 ## Code Coverage----

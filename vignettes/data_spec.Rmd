@@ -1,0 +1,21 @@
+---
+title: "Input Data Specification"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Input Data Specification}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+# library(clinsight)
+```
+
+In order to plug your organizations EDC data into the `clinsight` application, 
