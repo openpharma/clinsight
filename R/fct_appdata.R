@@ -104,8 +104,8 @@ get_raw_data <- function(
 #' @export
 #' 
 merge_meta_with_data <- function(
-    data = raw_data,
-    meta = metadata,
+    data,
+    meta,
     expected_columns = c("LBORNR_Lower", "LBORNR_Upper", "LBORRESU", 
                          "LBORRESUOTH", "LBREASND", "unit", 
                          "lower_limit", "upper_limit", "LBCLSIG")

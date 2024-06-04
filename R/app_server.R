@@ -18,11 +18,13 @@ app_server <- function(
     session
 ){
   meta <- golem::get_golem_options("meta")
+  if(is.character(meta)) meta <- readRDS(meta)
   merged_data <- golem::get_golem_options("data")
   user_db <- golem::get_golem_options("user_db")
   credentials_db <- golem::get_golem_options("credentials_db")
   test_mode <- golem::get_golem_options("test_mode")
-  app_data <- get_appdata(merged_data)
+  
+  app_data <- get_appdata(merged_data, meta = meta)
   app_vars <- get_meta_vars(data = app_data, meta = meta)
   app_tables <- lapply(
     setNames(names(app_data), names(app_data)), \(x){
@@ -73,7 +75,7 @@ app_server <- function(
   static_overview_data <- get_static_overview_data(
     data = app_data,
     expected_general_columns = unique(
-      with(metadata$items_expanded, item_name[item_group == "General"])
+      with(meta$items_expanded, item_name[item_group == "General"])
       )
   )
   # think of using the pool package, but functions such as row_update are not yet supported.
@@ -180,13 +182,20 @@ app_server <- function(
 
   lapply(app_vars$groups, \(x){mod_study_forms_server(
     id = paste0("sf_", simplify_string(x)), r = r, form = x,
-    form_items = app_vars$items[[x]], table_names = app_vars$table_names
+    form_items = app_vars$items[[x]], table_names = app_vars$table_names,
+    item_info = meta$groups[meta$groups$item_group == x, ]
   ) }) |>
     unlist(recursive = FALSE)
 
   mod_start_page_server("start_page_1", r, rev_data, navinfo, app_vars$all_forms,
                         app_vars$table_names)
-  mod_header_widgets_server("header_widgets_1", r, rev_data, navinfo)
+  mod_header_widgets_server(
+    id = "header_widgets_1", 
+    r = r, 
+    rev_data = rev_data, 
+    navinfo = navinfo, 
+    events = meta$events
+    )
 
   # Only initiate the sidebar after successful login, because it contains a
   # modal that pops up if data is out of synch. Modals interfere with shinymanager.

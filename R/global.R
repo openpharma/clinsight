@@ -10,7 +10,7 @@ global <- quote({
   if(!file.exists(data_local)){
     warning("No data found. Trying to rebuild raw data from remote source")
     merged_data <- merge_meta_with_data(get_raw_data(
-      data_path = raw_data_remote, column_specs = metadata$column_specs))
+      data_path = raw_data_remote, column_specs = metadata$column_specs), metadata)
     cat("saving raw data locally\n")
     saveRDS(merged_data, data_local)
     if(!file.exists(data_local)) stop("Could not save data set locally.")

@@ -20,7 +20,8 @@ describe(
         r = reactiveValues(),
         form = "Vital signs",
         id_item = "",
-        form_items = ""
+        form_items = "",
+        item_info = data.frame()
       )
       testServer(mod_study_forms_server, args = testargs , {
         ns <- session$ns
@@ -59,7 +60,8 @@ describe(
       form = "Vital signs",
       id_item = c("subject_id", "event_name", "item_group",
                   "form_repeat", "item_name"),
-      form_items = form_items
+      form_items = form_items,
+      item_info = metadata$groups[metadata$groups$item_group == "Vital signs", ]
     )
     it("Scenario 1 | Given subject id is set to NLD_05_561, and form filter set to 'pulse' and
        'bmi', I expect that [fig_data] contains a data frame with only items 'BMI' and 'Pulse',
@@ -153,7 +155,8 @@ describe(
       form = "Vital signs",
       id_item = c("subject_id", "event_name", "item_group", 
                   "form_repeat", "item_name"),
-      form_items = with(metadata$study_forms, item_name[item_group == "Vital signs"])
+      form_items = with(metadata$study_forms, item_name[item_group == "Vital signs"]),
+      item_info = metadata$groups[metadata$groups$item_group == "Vital signs", ]
     ) 
     
     it(
@@ -209,7 +212,8 @@ describe(
             form = "Vital signs",
             id_item = c("subject_id", "event_name", "item_group", 
                         "form_repeat", "item_name"),
-            form_items = form_items
+            form_items = form_items,
+            item_info = metadata$groups[metadata$groups$item_group == "Vital signs", ]
           )
         }
         test_app <- shinyApp(test_ui, test_server)

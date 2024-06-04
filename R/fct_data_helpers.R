@@ -12,6 +12,7 @@
 #'   ignored if the variable `expand_tab_items` is left empty.
 #'
 #' @return A list with data frames.
+#' @export
 #' 
 get_metadata <- function(
     filepath,
@@ -137,7 +138,7 @@ fix_multiple_choice_vars <- function(
 #'
 get_meta_vars <- function(data = appdata, meta = metadata){
   stopifnot(inherits(data, "list"))
-  stopifnot(inherits(metadata, "list"))
+  stopifnot(inherits(meta, "list"))
   if(length(data) == 0) stop("Empty list with data provided")
   vars <- list()
   # add metadata variables:
@@ -148,7 +149,7 @@ get_meta_vars <- function(data = appdata, meta = metadata){
     split(~item_group) |> 
     lapply(\(x){setNames(simplify_string(x$item_name), x$item_name)})
   vars$groups <- meta$groups$item_group
-  common_forms <- c("Adverse events", "Medical History", "Medication", "Conc. Procedures")
+  common_forms <- unique(meta$common_forms$item_group)
   vars$all_forms <- data.frame(
     "main_tab" = c(
       rep("Common events", times = length(common_forms)),
@@ -161,7 +162,7 @@ get_meta_vars <- function(data = appdata, meta = metadata){
   vars$subject_id <- order_string(get_unique_vars(data, "subject_id")[[1]])
   vars$Sites     <- get_unique_vars(data, c("site_code", "region")) |> 
     dplyr::arrange(factor(site_code, levels = order_string(site_code)))
-  vars$table_names <- setNames(metadata$table_names$raw_name, metadata$table_names$table_name) 
+  vars$table_names <- setNames(meta$table_names$raw_name, meta$table_names$table_name) 
   vars
 }
 

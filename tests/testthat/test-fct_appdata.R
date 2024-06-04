@@ -14,17 +14,17 @@ describe(
     raw_data <- suppressWarnings(get_raw_data(data_path))
     
     it("Produces a data frame without errors", {
-      expect_true(is.data.frame(merge_meta_with_data(raw_data)))
-      expect_equal(nrow(merge_meta_with_data(raw_data)), 543)
+      expect_true(is.data.frame(merge_meta_with_data(raw_data, metadata)))
+      expect_equal(nrow(merge_meta_with_data(raw_data, metadata)), 543)
       expect_true(
         all(metadata$raw_column_names$col_new[1:6] %in% 
-          names(merge_meta_with_data(raw_data)))
+          names(merge_meta_with_data(raw_data, metadata)))
         )
     })
     
     it(paste0("Scenario 1. Given a data frame with raw data,", 
               "I expect that the output will be the same as recorded in a snapshot."), {
-                df <- merge_meta_with_data(raw_data)
+                df <- merge_meta_with_data(raw_data, metadata)
                 expect_snapshot(df[c(1, 1000, 2000, 3000, 4000, 5000), ])
                 expect_snapshot(df)
               })

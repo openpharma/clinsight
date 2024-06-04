@@ -34,9 +34,9 @@ mod_header_widgets_ui <- function(id){
 #' timeline figure showing the number of visits that the patient performed. The
 #' value box with adverse events also serves as a link to the adverse events
 #' form. Furthermore, clicking on the box with forms to review will trigger
-#' [mod_navigate_review_server()], opening a modal that shows the forms that need
-#' review and the queries that are open of the active participant, to which you
-#' can directly navigate to.
+#' [mod_navigate_review_server()], opening a modal that shows the forms that
+#' need review and the queries that are open of the active participant, to which
+#' you can directly navigate to.
 #'
 #' @param id Character string, used to connect the module UI with the module
 #'   Server.
@@ -45,12 +45,16 @@ mod_header_widgets_ui <- function(id){
 #' @param navinfo Reactive values created with [shiny::reactiveValues()]. Used
 #'   to send back information about the page change to the server, when clicking
 #'   on the adverse event box.
+#' @param events Data frame containing all events. Used to extract the right
+#'   labels for the visits in the compact timeline in the header_widgets. See
+#'   [fig_timeline()].
 #'
 #' @seealso [mod_header_widgets_ui()]
-mod_header_widgets_server <- function(id, r, rev_data, navinfo){
+mod_header_widgets_server <- function(id, r, rev_data, navinfo, events){
   stopifnot(is.reactivevalues(r))
   stopifnot(is.reactivevalues(navinfo))
   stopifnot(is.reactivevalues(rev_data))
+  stopifnot(is.data.frame(events))
   
   moduleServer( id, function(input, output, session){
     ns <- session$ns
@@ -124,7 +128,7 @@ mod_header_widgets_server <- function(id, r, rev_data, navinfo){
         golem::cat_dev("plot datapoints figure\n")
         fig_timeline(
           data = selected_individual_data(), 
-          meta_data = metadata
+          events = events
         )
       }, 
       height = 60
