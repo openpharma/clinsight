@@ -19,11 +19,9 @@ app_server <- function(
 ){
   meta <- golem::get_golem_options("meta")
   merged_data <- golem::get_golem_options("data")
-  if(is.character(merged_data)) merged_data <- readRDS(merged_data)
   user_db <- golem::get_golem_options("user_db")
   credentials_db <- golem::get_golem_options("credentials_db")
   test_mode <- golem::get_golem_options("test_mode")
-  
   app_data <- get_appdata(merged_data)
   app_vars <- get_meta_vars(data = app_data, meta = meta)
   app_tables <- lapply(
@@ -31,15 +29,6 @@ app_server <- function(
       create_table(app_data[[x]], expected_columns = names(app_vars$items[[x]]))
     })
   check_appdata(app_data, meta)
-  
-  if(!file.exists(user_db)){
-    warning("no database found. New database will be created")
-    db_create(get_review_data(merged_data), db_path = user_db)
-  } else{
-    if(!test_mode){
-      db_update(get_review_data(merged_data), db_path = user_db, data_synched = FALSE) 
-    }
-  }
   
   res_auth <- authenticate_server(
     test_mode = test_mode,
