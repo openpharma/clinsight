@@ -5,8 +5,8 @@
 \title{Correct multiple choice variables}
 \usage{
 fix_multiple_choice_vars(
-  data = raw_data,
-  meta = metadata,
+  data,
+  expected_vars = metadata$items_expanded$var,
   var_column = "var",
   value_column = "item_value",
   suffix = "[[:digit:]]+$",
@@ -15,24 +15,38 @@ fix_multiple_choice_vars(
 )
 }
 \arguments{
-\item{data}{data frame (typically the raw data)}
+\item{data}{A data frame.}
 
-\item{meta}{metadata, list of data frames.}
+\item{expected_vars}{Character vector containing the expected names of the
+variables.}
 
 \item{var_column}{column name in which the variable names are stored}
 
-\item{value_column}{column name in which the values of the variables are stored}
+\item{value_column}{column name in which the values of the variables are
+stored}
 
 \item{suffix}{Multiple choice suffix. Used to define multiple choice values}
 
 \item{common_vars}{variables used for identifying unique rows in the dataset.}
 
-\item{collapse_with}{character value to collapse the multiple choice options with.
-If this value is NULL, the rows will be left as is.}
+\item{collapse_with}{character value to collapse the multiple choice options
+with. If this value is NULL, the rows will be left as is.}
 }
 \value{
 data frame with corrected multiple choice variables
 }
 \description{
-Function to correct multiple choice variables in the data.
+In some EDC systems, if there is a multiple choice variable in which multiple
+answers are possible, the variable will be renamed with a suffix with the
+multiple answers in it. For example var1, var2, for answers 1 and 2. This
+function cleans this specific output so that the variable name remains
+consistent.
+}
+\examples{
+ df <- data.frame(
+  ID = "Subj1",
+  var = c("Age", paste0("MH_TRT", 1:4)),
+  item_value = as.character(c(95, 67, 58, 83, 34))
+ )
+ fix_multiple_choice_vars(df, common_vars = "ID")
 }

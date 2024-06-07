@@ -72,10 +72,6 @@ get_raw_data <- function(
       ),
       .by = subject_id
     ) |> 
-    # Add a fix for MC in raw dataset. 
-    # Otherwise, we have to repeat this calculation multiple times when creating 
-    # other datasets from the raw data
-    fix_multiple_choice_vars() |> 
     dplyr::arrange(
       factor(site_code, levels = order_string(site_code)),
       factor(subject_id, levels = order_string(subject_id))
@@ -110,7 +106,18 @@ merge_meta_with_data <- function(
                          "LBORRESUOTH", "LBREASND", "unit", 
                          "lower_limit", "upper_limit", "LBCLSIG")
 ){
+  stopifnot(is.data.frame(data))
+  stopifnot(inherits(meta, "list"))
+  missing_colnames <- with(meta$column_specs, name_new[!name_new %in% names(data)]) |> 
+    paste0(collapse = ", ")
+  if(nchar(missing_colnames) > 0) stop(
+    paste0("The following columns are defined in the metadata ", 
+           "(column_specs$name_new) but are missing in the study data:\n", 
+           missing_colnames, ".")
+    )
   merged_data <- data |> 
+    # fix MC values before merging:
+    fix_multiple_choice_vars(expected_vars = meta$items_expanded$var) |> 
     dplyr::right_join(meta$items_expanded, by = "var") |> 
     dplyr::filter(!is.na(item_value)) |> 
     dplyr::mutate(

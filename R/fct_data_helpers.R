@@ -7,7 +7,8 @@
 #' @param expand_tab_items Character vector with the names of the tabs of which
 #'   the items need to be expanded. If not empty, a new data frame will be
 #'   created named 'expanded_items', containing all items in the tabs of
-#'   `expand_tab_items`.
+#'   `expand_tab_items`. Will abort if a tab name is provided that does not
+#'   exist in the metadata.
 #' @param expand_cols Column names containing the columns for expansion. Will be
 #'   ignored if the variable `expand_tab_items` is left empty.
 #'
@@ -34,7 +35,6 @@ get_metadata <- function(
     message("'items_expanded' already present. Expanding items aborted.")
     meta
   })
-  
   missing_tab_items <- expand_tab_items[!expand_tab_items %in% names(meta)]
   if(length(missing_tab_items) > 0) {
     stop_message <- paste0(
@@ -64,32 +64,60 @@ get_metadata <- function(
 }
 
 #' Correct multiple choice variables
-#' 
-#' Function to correct multiple choice variables in the data.
 #'
-#' @param data data frame (typically the raw data)
-#' @param meta metadata, list of data frames.
+#' In some EDC systems, if there is a multiple choice variable in which multiple
+#' answers are possible, the variable will be renamed with a suffix with the
+#' multiple answers in it. For example var1, var2, for answers 1 and 2. This
+#' function cleans this specific output so that the variable name remains
+#' consistent.
+#'
+#' @param data A data frame. 
+#' @param expected_vars Character vector containing the expected names of the
+#'   variables.
 #' @param var_column column name in which the variable names are stored
-#' @param value_column column name in which the values of the variables are stored
+#' @param value_column column name in which the values of the variables are
+#'   stored
 #' @param suffix Multiple choice suffix. Used to define multiple choice values
 #' @param common_vars variables used for identifying unique rows in the dataset.
-#' @param collapse_with character value to collapse the multiple choice options with. 
-#' If this value is NULL, the rows will be left as is. 
+#' @param collapse_with character value to collapse the multiple choice options
+#'   with. If this value is NULL, the rows will be left as is.
 #'
 #' @return data frame with corrected multiple choice variables
+#' @examples
+#'  df <- data.frame(
+#'   ID = "Subj1",
+#'   var = c("Age", paste0("MH_TRT", 1:4)),
+#'   item_value = as.character(c(95, 67, 58, 83, 34))
+#'  )
+#'  fix_multiple_choice_vars(df, common_vars = "ID")
 #' @export
+#' 
 fix_multiple_choice_vars <- function(
-    data = raw_data,
-    meta = metadata,
+    data,
+    expected_vars = metadata$items_expanded$var,
     var_column = "var",
     value_column = "item_value",
     suffix = "[[:digit:]]+$",
     common_vars = c("subject_id", "event_repeat", "event_date", "form_repeat"),
     collapse_with = "; "
 ){
+  stopifnot(is.data.frame(data))
+  stopifnot(is.character(expected_vars))
+  stopifnot("var_column should be a vector of length 1" = {
+    is.character(var_column) & length(var_column) == 1
+    })
+  stopifnot("suffix should be a character vector of length 1" = {
+    is.character(suffix) & length(suffix) == 1
+  })
+  stopifnot(is.character(common_vars))
+  if(!is.null(collapse_with)){
+    stopifnot("collapse_with should be a character vector of length 1" = {
+      is.character(collapse_with) & length(collapse_with) == 1
+    })
+  }
   
   all_vars <- unique(data[[var_column]])
-  expected_vars <- meta$items_expanded$var
+  
   missing_vars <- expected_vars[!expected_vars %in% all_vars]
   if(length(missing_vars) == 0) return(data)
   

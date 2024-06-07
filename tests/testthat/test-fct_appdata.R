@@ -37,7 +37,7 @@ describe(
   "get_appdata works", 
   {
     it("produces the expected output", {
-      expect_snapshot(get_appdata(clinsightful_data))  
+      expect_snapshot(get_appdata(clinsightful_data, metadata))  
     })
   }
 )
