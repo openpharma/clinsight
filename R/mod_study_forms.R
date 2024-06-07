@@ -215,7 +215,7 @@ mod_study_forms_server <- function(
       datatable_custom(table_data_active(), table_names, escape = FALSE)
     })
     
-    if(form == "Vital signs"){
+    if(form %in% c("Vital signs", "Vitals adjusted")){
       shiny::exportTestValues(
         table_data = table_data_active(),
         fig_data = fig_data()

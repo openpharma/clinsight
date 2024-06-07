@@ -126,9 +126,9 @@
       $all_forms
               main_tab             form
       1  Common events   Adverse events
-      2  Common events  Medical History
-      3  Common events       Medication
-      4  Common events Conc. Procedures
+      2  Common events       Medication
+      3  Common events Conc. Procedures
+      4  Common events  Medical History
       5     Study data      Vital signs
       6     Study data     Electrolytes
       7     Study data   Renal function
