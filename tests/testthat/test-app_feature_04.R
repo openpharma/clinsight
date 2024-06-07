@@ -3,8 +3,8 @@ library(shinytest2)
 describe(
   paste0("Feature 4 | Load data from raw csv files and with a customized ", 
          "metadata file. As a user, I want to be able ", 
-  "to load data from the raw csv file output from the EDC system and use a ", 
-  "different metadata file to customize the application an"), {
+         "to load data from the raw csv file output from the EDC system and use a ", 
+         "different metadata file to customize the application."), {
     it(
       paste0("Scenario 1 | Load raw data with custom metadata. ", 
       "Given raw CSV data exported from the EDC system from patient [9600-002], ", 
@@ -15,7 +15,7 @@ describe(
       "and (only at screening) [Weight] 70kg, ", 
       "and that I browse to the 'Study data' tab",
       "I expect that I see the Vital signs page of patient [9600-002]', ", 
-      "and that the compact header timeline shows visits V0-V10",
+      "and that the compact header timeline shows visits V0-V10 ",
       "and that I see a figure with the data displayed, ",
       "and that I see a table with the data displayed after clicking on the table view, ", 
       "and that the data for the figure and table in the app is the same as ", 
