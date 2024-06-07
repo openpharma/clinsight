@@ -43,15 +43,6 @@ get_raw_data <- function(
       setNames(column_specs$name_raw, column_specs$name_new)
       ) |> 
     dplyr::mutate(
-      db_update_time = max(edit_date_time, na.rm = T),
-      region = dplyr::case_when(
-        grepl("^AU", site_code)  ~ "AUS",
-        grepl("^DE", site_code)  ~ "GER",
-        grepl("^FR", site_code)  ~ "FRA",
-        TRUE                    ~ NA_character_
-      )
-    ) |> 
-    dplyr::mutate(
       day = event_date - min(event_date, na.rm = TRUE), 
       vis_day = ifelse(event_id %in% c("SCR", "VIS", "VISEXT", "VISVAR", "FU1", "FU2"), day, NA),
       vis_num = as.numeric(factor(vis_day))-1,
@@ -168,7 +159,7 @@ merge_meta_with_data <- function(
 apply_study_specific_fixes <- function(
     data, 
     form_id_vars = c("subject_id", "event_name", "item_group")
-    ){
+){
   ## apply study-specific fixes:
   # fix significance in ECG before proceeding (stored in its own separate variable):
   ECG_significance <- data |> 
@@ -211,7 +202,17 @@ apply_study_specific_fixes <- function(
       ),
       .by = c(subject_id, form_repeat)
     ) 
-  data
+  
+  # Add regions: 
+  data |> 
+    dplyr::mutate(
+      region = dplyr::case_when(
+        grepl("^AU", site_code)  ~ "AUS",
+        grepl("^DE", site_code)  ~ "GER",
+        grepl("^FR", site_code)  ~ "FRA",
+        TRUE                    ~ NA_character_
+      )
+    )
 }
 
 #' Get appdata
