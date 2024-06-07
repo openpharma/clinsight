@@ -1,10 +1,10 @@
 default:
   golem_name: clinsight
-  golem_version: 0.0.0.9001
+  golem_version: 0.0.0.9002
   app_prod: no
   data_folder: test_data
   study_data: !expr clinsight::clinsightful_data
-  meta_data: !expr clinsight::metadata
+  meta_data: clinsight::metadata
   user_db: test_user_db.sqlite
   credentials_db: test_credentials_db.sqlite
 production:
