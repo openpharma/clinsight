@@ -2,39 +2,23 @@
 # use script below for development purposes, to load data global environment
 # with eval(global)
 global <- quote({
-  data_local <- file.path(Sys.getenv("DATA_FOLDER", app_sys()), "merged_data.rds")
+  data_folder <- Sys.getenv("DATA_FOLDER", app_sys())
+  data_local <- file.path(data_folder, "study_data.rds")
   raw_data_remote <- Sys.getenv("RAW_DATA_PATH")
-  db_path <- file.path(Sys.getenv("DATA_FOLDER", app_sys()), "user_db.sqlite")
   data_synched <- FALSE
-  
+  meta_data <- get_metadata(file.path(data_folder, "metadata.xlsx"))
+    
   if(!file.exists(data_local)){
-    warning("No data found. Trying to rebuild raw data from remote source")
-    merged_data <- merge_meta_with_data(get_raw_data(
-      data_path = raw_data_remote, column_specs = metadata$column_specs), metadata)
-    cat("saving raw data locally\n")
-    saveRDS(merged_data, data_local)
+    warning("No data found. Trying to rebuild data from remote source")
+    study_data <- merge_meta_with_data(get_raw_data(
+      data_path = raw_data_remote, column_specs = meta_data$column_specs), meta_data)
+    cat("saving data locally\n")
+    saveRDS(study_data, data_local)
     if(!file.exists(data_local)) stop("Could not save data set locally.")
     data_synched <- TRUE
   }
-  merged_data <- readRDS(data_local)
-  
-  if(!file.exists(db_path)){
-    warning("no database found. New database will be created")
-    # If needed, load older data here and use settings such as below in 
-    # <db_create> for testing purposes:
-    # reviewed = "Yes", reviewer = "Medical Monitor 1", status = "old"
-    db_create(get_review_data(merged_data), db_path = db_path) 
-  } else{
-    db_update(get_review_data(merged_data), db_path, data_synched = data_synched) 
-  }
-  
-  appdata <- get_appdata(merged_data)
-  vars <- get_meta_vars(data = appdata, meta = metadata)
-  apptables <- lapply(
-    setNames(names(appdata), names(appdata)), \(x){
-      create_table(appdata[[x]], expected_columns = names(vars$items[[x]]))
-    })
-  check_appdata(appdata, metadata)
+  Sys.setenv("GOLEM_CONFIG_ACTIVE" = "production")
+  run_app(data_folder = data_folder)
 })
 
 
