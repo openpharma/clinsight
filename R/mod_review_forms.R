@@ -152,6 +152,7 @@ mod_review_forms_server <- function(
     enable_save_review <- reactive({
       req(review_data_active())
       req(!is.null(input$form_reviewed))
+      if(is.null(r$user_name()) || r$user_name() == "") return(FALSE)
       if(nrow(review_data_active()) == 0) return(FALSE)
       any(c(
         unique(review_data_active()$reviewed) == "No"  & input$form_reviewed, 
@@ -187,10 +188,7 @@ mod_review_forms_server <- function(
       req(is.logical(input$form_reviewed), review_data_active())
       req(nrow(review_data_active()) != 0)
       review_save_error(FALSE)
-      
-      if(is.null(r$user_name()) || r$user_name() == "" ) return({
-        showNotification("No user name found. Cannot save review", duration = 1, type = "error") 
-      })
+      req(!(is.null(r$user_name()) || r$user_name() == ""))
       golem::cat_dev("Save review status reviewed:", input$form_reviewed, "\n")
       
       review_row <- review_data_active() |> 
@@ -257,6 +255,10 @@ mod_review_forms_server <- function(
       validate(need(
         nrow(review_data_active()) != 0,
         "Nothing to review"
+      ))
+      validate(need(
+        !(is.null(r$user_name()) || r$user_name() == ""), 
+        "No user name found. Cannot save review"
       ))
       validate(need(
         !review_data_active()$reviewed == "Yes",

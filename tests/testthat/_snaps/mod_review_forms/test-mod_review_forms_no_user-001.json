@@ -7,7 +7,14 @@
     "test-save_review": 1
   },
   "output": {
-    "test-save_review_error": ""
+    "test-save_review_error": {
+      "message": "No user name found. Cannot save review",
+      "call": "NULL",
+      "type": [
+        "shiny.silent.error",
+        "validation"
+      ]
+    }
   },
   "export": {
 
