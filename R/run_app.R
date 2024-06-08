@@ -57,13 +57,10 @@ run_app <- function(
       stop(paste0("Cannot find '", meta_path, "'."))
     }
     if(meta_type == "xlsx" & !file.exists(rds_path)){
-      return({
         cat("Reading metadata and creating a new .rds file\n")
         meta <- get_metadata(meta_path)
         saveRDS(meta, rds_path)
-      })
-    }
-    if(meta_type == "xlsx"){
+    } else if(meta_type == "xlsx"){
       cat("Reading metadata from '", rds_path, "'. Delete this .rds file if '", 
           meta, "' should be used instead.\n", sep = "")
     }
