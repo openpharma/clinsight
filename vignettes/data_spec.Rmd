@@ -6,16 +6,68 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
 ```
-
 ```{r setup}
-# library(clinsight)
+library(clinsight)
+```
+In order to plug your organizations EDC data into the `clinsight` application,
+you'll notice the `run_app()` function in `app.R` collects a `data` argument.
+This vignette is all about the expected format of that `data` object / file.
+
+Depending on the EDC vendor used, the size, shape, and format of their "raw
+data" may vary. We've compiled a few functions that help admin users pre-process
+the data they own. However, before we deep dive into how to use those, let's
+focus on what the final result of those pre-processing steps in order to
+understand what we need to start using the app.
+
+## `Data` Specification
+
+Baked into the `clinsight` package is an internal data set called
+`clinsightful_data`. Here is a preview of that data:
+
+```{r clinsightful_data}
+# data("clinsightful_data") # Run to load the data into an R session. 
+head(clinsight::clinsightful_data)
+# colnames(clinsightful_data)
 ```
 
-In order to plug your organizations EDC data into the `clinsight` application, 
+### Column specs
+
+- `site_code`: 
+- `subject_id`: 
+- `event_repeat`: 
+- `event_id`: 
+- `event_name`: 
+- `event_date`: 
+- `form_id`: 
+- `form_repeat`: 
+- `edit_date_time`: 
+- `db_update_time`: 
+- `region`: 
+- `day`: 
+- `vis_day`: 
+- `vis_num`: 
+- `event_label`: 
+- `item_name`: 
+- `item_type`: 
+- `item_group`: 
+- `item_value`: 
+- `item_unit`: 
+- `lower_lim`: 
+- `upper_lim`: 
+- `significance`: 
+- `reason_notdone`: 
+
+For more information about 
+
+## Pre-processing
+
+### Raw Data
+
+### Metadata
+
