@@ -1,3 +1,6 @@
+template:
+  bootstrap: 5
+  bootswatch: spacelab
 reference:
 - title: Main application
   desc:  Top-level functions to run the Shiny application

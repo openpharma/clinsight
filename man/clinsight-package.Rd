@@ -6,13 +6,15 @@
 \alias{clinsight-package}
 \title{clinsight: ClinSight}
 \description{
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
 Interactive application to monitor patient safety during clinical trials. Goal is to provide an interactive overview of a patients' data, highlighting not yet reviewed data, and to improve assessments of the patients' safety. Secondary goal is to improve data quality by identifying suspicious outliers.
 }
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/LDSamson/clinsight}
-  \item Report bugs at \url{https://github.com/LDSamson/clinsight/issues}
+  \item \url{https://github.com/openpharma/clinsight}
+  \item Report bugs at \url{https://github.com/openpharma/clinsight/issues}
 }
 
 }

@@ -1,0 +1,59 @@
+---
+title: "Contributions"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Contributions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+Thank you for your interest in contributing to this repository! Your contribution is highly valued. Please go through this document for guidance on how to contribute.
+
+## Style guide
+
+In general, we follow the tidyverse style guide. 
+
+## Starting a Pull Request (PR).
+
+* When starting on a new task/issue:
+	* base your branch off `dev` to start. The `master` branch should in general only be used for new package releases and hotfixes.
+	* Name the branch with the GitHub issue id (or multiple ids if applicable) and a short description of the issue, in the following form: <issue_id1_issue_id2>-<short_description>. 
+  * Please create a branch in the repository instead of forking the repository, unless you are not (yet) a team member. 
+
+## PR Checklist
+
+* The version number is incremented appropriately (using `usethis::use_version("dev")` and `golem::set_golem_version()`).
+* Unit tests were added that test new functions/functionality, and test whether a bug was resolved.
+  * Use [BDD style](https://cucumber.io/docs/bdd/) descriptions to test (new) application modules and for integration tests.
+* (if applicable) The NEWS.md file is updated with the PR solution, linking to the GitHub issue when possible.
+* A screenshot is added if it can provide added value. It helps everyone’s comprehension of the problem and shows what you are observing first hand.
+* (if applicable) test data is updated.
+* All documentation is updated (run `run_dev.R` or `devtools::document()`)
+* The PR is based on the correct branch (usually the `dev` branch).
+* The PR description field is filled or refers to a GitHub issue. 
+* All GitHub Actions workflows are passing.
+* There are no merge conflicts.
+* Only if all above are complete: the appropriate reviewer was assigned.
+
+## PR Merging
+
+* For a PR to be eligible for merge, you must have:
+    * At least 1 review approval
+    * All conversations resolved
+    * All GitHub actions workflows passing
+
+## Authorship
+
+* On your second PR that will close out an open issue, add your info to the `DESCRIPTION` file with the role [ctb] which stands for "contributor". You can update your role to [aut] which stands for "author" when you've completed at least two of the following achievements:
+  * Closed 6 open issues with PR's
+  * its been at least 6 months since your first commit & faithfully attend bi-weekly dev meetups
+  * have committed 1,000 lines of code
+

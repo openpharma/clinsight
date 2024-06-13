@@ -14,3 +14,4 @@ _\.new\.png$
 ^docs$
 ^dev$
 ^Meta$
+^pkgdown$
