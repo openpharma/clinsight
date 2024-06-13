@@ -4,7 +4,7 @@ default:
   app_prod: no
   data_folder: test_data
   study_data: !expr clinsight::clinsightful_data
-  meta_data: clinsight::metadata
+  meta_data: !expr clinsight::metadata
   user_db: test_user_db.sqlite
   credentials_db: test_credentials_db.sqlite
 production:
