@@ -18,7 +18,6 @@ app_server <- function(
     session
 ){
   meta <- golem::get_golem_options("meta")
-  if(is.character(meta)) meta <- readRDS(meta)
   merged_data <- golem::get_golem_options("data")
   user_db <- golem::get_golem_options("user_db")
   credentials_db <- golem::get_golem_options("credentials_db")
@@ -36,7 +35,7 @@ app_server <- function(
     test_mode = test_mode,
     sites = app_vars$Sites$site_code,  
     credentials_db = credentials_db,
-    credentials_pwd =  golem::get_golem_options("credentials_pwd")
+    credentials_pwd = golem::get_golem_options("credentials_pwd")
     )
   
   output$user_info <- renderText({
@@ -255,7 +254,6 @@ app_server <- function(
     app_vars$all_forms,
     table_names = app_vars$table_names
   )
-
   shiny::exportTestValues(
     user_db = user_db,
     active_participant = r$subject_id,
