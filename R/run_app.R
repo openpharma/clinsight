@@ -50,12 +50,11 @@ run_app <- function(
   if(is.character(meta)){
     meta_path <- file.path(data_folder, meta)
     meta_type <- tolower(tools::file_ext(meta))
-    stopifnot("For metadata, only .xlsx or .rds format is allowed" = meta_type %in% c("rds", "xlsx"))
-    rds_file <- paste0(tools::file_path_sans_ext(meta), ".rds")
-    rds_path <- file.path(data_folder, rds_file)
+    rds_path <- paste0(tools::file_path_sans_ext(meta_path), ".rds")
     if(!file.exists(meta_path) & !file.exists(rds_path)) {
-      stop(paste0("Cannot find '", meta_path, "'."))
+      stop(paste0("Cannot find metadata file '", meta_path, "'."))
     }
+    stopifnot("For metadata, only .xlsx or .rds format is allowed" = meta_type %in% c("rds", "xlsx"))
     if(meta_type == "xlsx" & !file.exists(rds_path)){
         cat("Reading metadata and creating a new .rds file\n")
         meta <- get_metadata(meta_path)
