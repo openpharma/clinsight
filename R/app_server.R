@@ -32,8 +32,7 @@ app_server <- function(
   check_appdata(app_data, meta)
   
   res_auth <- authenticate_server(
-    test_mode = test_mode,
-    sites = app_vars$Sites$site_code, 
+    all_sites = app_vars$Sites$site_code, 
     credentials_db = credentials_db,
     credentials_pwd = golem::get_golem_options("credentials_pwd"),
     session = session

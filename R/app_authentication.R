@@ -88,34 +88,42 @@ authenticate_ui <- function(){
 #'
 #' Function to authenticate the main server.
 #'
-#' @param test_mode Logical, whether to start the application in test mode.
-#' @param sites Character vector. Study sites that can be allocated to a user.
-#' @param roles Character vector. Roles that can be allocated to a user.
-#' @param credentials_db Character vector. Path to the credentials database.
+#' @param user_identification Character vector showing the user identification.
+#'   Is by default set by the `user_identification` option in the `golem-config`
+#'   file.
+#' @param credentials_db Character vector. Path to the credentials database. By
+#'   default, set by the `data_folder` and `credentials_db` options in the
+#'   `golem-config_file`.
 #' @param credentials_pwd Character vector, containing the database password.
-#' @param session Shiny session. Used to access HTTP headers to read user data,
-#'   in case of login methods alternative to `shinymanager` are used.
+#' @param all_sites Character vector with all sites. Will be passed on to
+#'   shinymanager configuration so that data can be restricted to specific sites
+#'   per user.
+#' @param all_roles Character vector with all roles. Used to show all applicable
+#'   roles in `shinymanager` admin mode.
+#' @param user_id Character vector. Used to retrieve the user ID from the
+#'   session object, if applicable.
+#' @param user_name Character vector. Used to retrieve the user name from the
+#'   session object, if applicable.
+#' @param user_group Used to retrieve the user group from the session object, if
+#'   applicable.
+#' @param session Shiny session. Needed to access user information in case of
+#'   login methods alternative to `shinymanager` are used.
 #' 
 authenticate_server <- function(
-    test_mode = FALSE, 
-    sites = app_vars$Sites$site_code,
-    roles = c("Medical Monitor", "Data Manager", "Administrator", "Investigator"),
-    credentials_db,
+    user_identification = get_golem_config("user_identification"),
+    all_sites = NULL,
+    all_roles = get_golem_config("group_roles"),
+    credentials_db = file.path(
+      get_golem_config("data_folder"), 
+      get_golem_config("credentials_db")
+      ),
     credentials_pwd = Sys.getenv("DB_SECRET"), 
+    user_id = get_golem_config("user_id"),
+    user_name = get_golem_config("user_name"),
+    user_group = get_golem_config("user_group"),
     session
 ){
-  if (test_mode) return({
-    # To skip authentication when testing application:
-    reactiveValues(
-      admin = TRUE,
-      user = "test_user",
-      name = "test user", 
-      role = "Medical monitor",
-      sites = sites
-    )
-  })
-  
-  if(isTRUE(get_golem_config("use_shinymanager"))) return({
+  if(user_identification == "shinymanager") return({
     shinymanager::secure_server(
       check_credentials = shinymanager::check_credentials(
         credentials_db,
@@ -124,20 +132,39 @@ authenticate_server <- function(
       inputs_list = list(
         "role" = list(
           fun = "selectInput", 
-          args = list(choices = roles, multiple = TRUE) 
+          args = list(choices = all_roles, multiple = TRUE) 
         ),
         "sites" = list(
           fun = "selectInput",
-          args = list(label = NULL, choices = sites, selected = sites, multiple = TRUE)
+          args = list(label = NULL, choices = all_sites, selected = all_sites, multiple = TRUE)
         )
       )
     )
   }) 
-  reactiveValues(
-    user = session$request[[get_golem_config("http_user_id")]],
-    name = session$request[[get_golem_config("http_user_name")]],
-    role = session$request[[get_golem_config("http_user_group")]],
-    sites = sites
+  switch(user_identification,
+    test_user = reactiveValues(
+      user = "test_user", 
+      name = "test user", 
+      role = all_roles[1],
+      sites = all_sites
+      ),
+    http_headers = reactiveValues(
+      user = session$request[[user_id]],
+      name = session$request[[user_name]],
+      role = session$request[[user_group]],
+      sites = all_sites
+      ),
+    shiny_session = reactiveValues(
+      user = session[[user_id]],
+      name = session[[user_name]],
+      role = session[[user_group]],
+      sites = all_sites
+    ),
+    reactiveValues(
+      user = "Unknown",
+      name = "Unknown",
+      role = "Unknown",
+      sites = all_sites
+    )
   )
-  
 }
