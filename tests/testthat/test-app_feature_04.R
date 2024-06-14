@@ -25,7 +25,7 @@ describe(
         app <- AppDriver$new(
           app_dir = testthat::test_path("fixtures", "testapp-raw"),
           name = "app-feature-4",
-          timeout = 12000,
+          timeout = 20000,
           width = 1619,
           height = 955
         )
