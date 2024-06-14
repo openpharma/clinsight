@@ -6,6 +6,8 @@ load_and_run_app <- function(){
   # different option below, using onStop() within the run_app() function to clean up.
   temp_folder <- tempfile(tmpdir = tempdir())
   dir.create(temp_folder)
+  old_golem_config <- Sys.getenv("GOLEM_CONFIG_ACTIVE")
+  Sys.setenv("GOLEM_CONFIG_ACTIVE" = "production")
   # Mimic data loading in production version: 
   saveRDS(clinsightful_data, file.path(temp_folder, "study_data.rds"))
   saveRDS(metadata, file.path(temp_folder, "metadata.rds"))  
@@ -16,7 +18,11 @@ load_and_run_app <- function(){
     data_folder = temp_folder,
     credentials_pwd = "1234",
     test_mode = FALSE, 
-    onStart = \(){onStop(\(){unlink(temp_folder, recursive = TRUE)})}
+    onStart = \(){onStop(\(){
+      unlink(temp_folder, recursive = TRUE); 
+      Sys.setenv("GOLEM_CONFIG_ACTIVE" = old_golem_config)
+    })}
   )
 } 
-withr::with_envvar(list("GOLEM_CONFIG_ACTIVE" = "production"), load_and_run_app())
+
+load_and_run_app()
