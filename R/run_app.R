@@ -54,10 +54,12 @@ run_app <- function(
     }
     if(tolower(tools::file_ext(meta)) != "rds") {
       stop("Only metadata files of type '.rds' are allowed.")
-      }
+    }
     meta <- readRDS(meta_path)
   }
   stopifnot("Expecting metadata to be in a list format" = inherits(meta, "list"))
+  
+  use_shinymanager <- (isFALSE(test_mode) && isTRUE(get_golem_config("use_shinymanager")))
   
   ## Verify user database
   if(!file.exists(user_db)){
@@ -70,7 +72,7 @@ run_app <- function(
   }
   
   ## Verify credentials database, if applicable
-  if(!test_mode){
+  if(use_shinymanager){
     stopifnot("Credentials database directory does not exist" = dir.exists(dirname(credentials_db)))
     stopifnot("No valid credentials database pwd provided" = is.character(credentials_pwd))
     if(nchar(credentials_pwd) == 0 ) stop("credentials_pwd cannot be blank it test_mode is FALSE")
@@ -78,18 +80,17 @@ run_app <- function(
       credentials_db = credentials_db,
       credentials_pwd = credentials_pwd
     )
+    shinymanager::set_labels(
+      language = "en",
+      "Please authenticate" = "Login to continue"
+    )
+    options("shinymanager.pwd_validity" = 90) 
+    options("shinymanager.pwd_failure_limit" = 5)
   }
-  
-  shinymanager::set_labels(
-    language = "en",
-    "Please authenticate" = "Login to continue"
-  )
-  options("shinymanager.pwd_validity" = 90) 
-  options("shinymanager.pwd_failure_limit" = 5)
   
   with_golem_options(
     app = shinyApp(
-      ui =  authenticate_ui(test_mode = test_mode),
+      ui =  if(isFALSE(use_shinymanager)) app_ui else authenticate_ui(),
       server = app_server,
       onStart = onStart,
       options = options,

@@ -58,14 +58,10 @@ initialize_credentials <- function(
 
 #' Authenticate UI
 #'
-#' Authentication implementation in the UI.
-#'
-#' @param test_mode Logical. Whether the app should be started in test mode or
-#'   not.
+#' Authentication implementation in the UI, using `shinymanager`.
 #'
 #' 
-authenticate_ui <- function(test_mode = FALSE){
-  if (test_mode) return(app_ui) 
+authenticate_ui <- function(){
   shinymanager::secure_app(
     app_ui, 
     enable_admin = TRUE, 
@@ -95,17 +91,18 @@ authenticate_ui <- function(test_mode = FALSE){
 #' @param test_mode Logical, whether to start the application in test mode.
 #' @param sites Character vector. Study sites that can be allocated to a user.
 #' @param roles Character vector. Roles that can be allocated to a user.
-#' @param credentials_db Character vector. Path to the credentials
-#'   database.
-#' @param credentials_pwd Character vector, containing the database
-#'   password.
+#' @param credentials_db Character vector. Path to the credentials database.
+#' @param credentials_pwd Character vector, containing the database password.
+#' @param session Shiny session. Used to access HTTP headers to read user data,
+#'   in case of login methods alternative to `shinymanager` are used.
 #' 
 authenticate_server <- function(
     test_mode = FALSE, 
     sites = app_vars$Sites$site_code,
     roles = c("Medical Monitor", "Data Manager", "Administrator", "Investigator"),
-    credentials_db = app_sys("app/www/credentials_db.sqlite"),
-    credentials_pwd = Sys.getenv("DB_SECRET")
+    credentials_db,
+    credentials_pwd = Sys.getenv("DB_SECRET"), 
+    session
 ){
   if (test_mode) return({
     # To skip authentication when testing application:
@@ -116,21 +113,31 @@ authenticate_server <- function(
       role = "Medical monitor",
       sites = sites
     )
-  }) 
-  shinymanager::secure_server(
-    check_credentials = shinymanager::check_credentials(
-      credentials_db,
-      passphrase = credentials_pwd
-    ),
-    inputs_list = list(
-      "role" = list(
-        fun = "selectInput", 
-        args = list(choices = roles, multiple = TRUE) 
+  })
+  
+  if(isTRUE(get_golem_config("use_shinymanager"))) return({
+    shinymanager::secure_server(
+      check_credentials = shinymanager::check_credentials(
+        credentials_db,
+        passphrase = credentials_pwd
       ),
-      "sites" = list(
-        fun = "selectInput",
-        args = list(label = NULL, choices = sites, selected = sites, multiple = TRUE)
+      inputs_list = list(
+        "role" = list(
+          fun = "selectInput", 
+          args = list(choices = roles, multiple = TRUE) 
+        ),
+        "sites" = list(
+          fun = "selectInput",
+          args = list(label = NULL, choices = sites, selected = sites, multiple = TRUE)
+        )
       )
     )
-  ) 
+  }) 
+  reactiveValues(
+    user = session$request[[get_golem_config("http_user_id")]],
+    name = session$request[[get_golem_config("http_user_name")]],
+    role = session$request[[get_golem_config("http_user_group")]],
+    sites = sites
+  )
+  
 }

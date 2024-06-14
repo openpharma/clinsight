@@ -33,15 +33,12 @@ app_server <- function(
   
   res_auth <- authenticate_server(
     test_mode = test_mode,
-    sites = app_vars$Sites$site_code,  
+    sites = app_vars$Sites$site_code, 
     credentials_db = credentials_db,
-    credentials_pwd = golem::get_golem_options("credentials_pwd")
+    credentials_pwd = golem::get_golem_options("credentials_pwd"),
+    session = session
     )
   
-  output$user_info <- renderText({
-    res_auth[["name"]]
-  })
-
   # load tabs in UI:
   common_forms <- with(app_vars$all_forms, form[main_tab == "Common events"])
   lapply(common_forms, \(i){
@@ -88,6 +85,10 @@ app_server <- function(
     subject_id        = app_vars$subject_id[1]
   )
 
+  output$user_info <- renderText({
+    req(r$user_name())
+    r$user_name()
+  })
   rev_sites <- reactive({res_auth[["sites"]]})
   observeEvent(rev_sites(), {
     r <- filter_data(r, rev_sites(), subject_ids = app_vars$subject_id,
@@ -195,12 +196,13 @@ app_server <- function(
     navinfo = navinfo, 
     events = meta$events
     )
+  
+  use_shinymanager <- (!test_mode && isTRUE(get_golem_config("use_shinymanager")))
 
   # Only initiate the sidebar after successful login, because it contains a
   # modal that pops up if data is out of synch. Modals interfere with shinymanager.
-  observeEvent(res_auth[["name"]], {
-    req(!is.null(res_auth[["name"]]))
-    if(!test_mode){
+  observeEvent(r$user_name, {
+    if(use_shinymanager){
       pwd_mngt <- shinymanager::read_db_decrypt(
         get_db_connection(credentials_db), 
         name = "pwd_mngt",

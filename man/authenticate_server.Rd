@@ -8,8 +8,9 @@ authenticate_server(
   test_mode = FALSE,
   sites = app_vars$Sites$site_code,
   roles = c("Medical Monitor", "Data Manager", "Administrator", "Investigator"),
-  credentials_db = app_sys("app/www/credentials_db.sqlite"),
-  credentials_pwd = Sys.getenv("DB_SECRET")
+  credentials_db,
+  credentials_pwd = Sys.getenv("DB_SECRET"),
+  session = session
 )
 }
 \arguments{
