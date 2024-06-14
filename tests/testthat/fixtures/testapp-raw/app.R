@@ -8,7 +8,6 @@ meta_path <- "altered_metadata.xlsx"
 # meta_path <- testthat::test_path("fixtures/testapp-raw/altered_metadata.xlsx")
 
 load_and_run_app <- function(){
-  data_folder <- tempdir()
   temp_folder <- tempfile(tmpdir = tempdir())
   dir.create(temp_folder)
   meta <- get_metadata(meta_path)
@@ -19,13 +18,13 @@ load_and_run_app <- function(){
       ), 
     meta = meta
     )
-  saveRDS(merged_data, file.path(data_folder, "study_data.rds"))
-  saveRDS(meta, file.path(data_folder, "metadata.rds"))
+  saveRDS(merged_data, file.path(temp_folder, "study_data.rds"))
+  saveRDS(meta, file.path(temp_folder, "metadata.rds"))
   
   run_app(
-    data_folder = data_folder,
+    data_folder = temp_folder,
     test_mode = TRUE, 
-    onStart = \(){onStop(\(){unlink(data_folder, recursive = TRUE)})}
+    onStart = \(){onStop(\(){unlink(temp_folder, recursive = TRUE)})}
   )
 }
 
