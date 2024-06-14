@@ -49,21 +49,13 @@ run_app <- function(
   ## Verify metadata
   if(is.character(meta)){
     meta_path <- file.path(data_folder, meta)
-    meta_type <- tolower(tools::file_ext(meta))
-    rds_path <- paste0(tools::file_path_sans_ext(meta_path), ".rds")
-    if(!file.exists(meta_path) & !file.exists(rds_path)) {
+    if(!file.exists(meta_path)) {
       stop(paste0("Cannot find metadata file '", meta_path, "'."))
     }
-    stopifnot("For metadata, only .xlsx or .rds format is allowed" = meta_type %in% c("rds", "xlsx"))
-    if(meta_type == "xlsx" & !file.exists(rds_path)){
-        cat("Reading metadata and creating a new .rds file\n")
-        meta <- get_metadata(meta_path)
-        saveRDS(meta, rds_path)
-    } else if(meta_type == "xlsx"){
-      cat("Reading metadata from '", rds_path, "'. Delete this .rds file if '", 
-          meta, "' should be used instead.\n", sep = "")
-    }
-    meta <- readRDS(rds_path)
+    if(tolower(tools::file_ext(meta)) != "rds") {
+      stop("Only metadata files of type '.rds' are allowed.")
+      }
+    meta <- readRDS(meta_path)
   }
   stopifnot("Expecting metadata to be in a list format" = inherits(meta, "list"))
   

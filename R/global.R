@@ -6,7 +6,7 @@ global <- quote({
   data_local <- file.path(data_folder, "study_data.rds")
   raw_data_remote <- Sys.getenv("RAW_DATA_PATH")
   data_synched <- FALSE
-  meta_data <- get_metadata(file.path(data_folder, "metadata.xlsx"))
+  meta_data <- get_metadata(file.path(data_folder, "metadata.rds"))
     
   if(!file.exists(data_local)){
     warning("No data found. Trying to rebuild data from remote source")

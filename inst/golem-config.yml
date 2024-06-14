@@ -11,7 +11,7 @@ production:
   app_prod: yes
   data_folder: study_data
   study_data: study_data.rds
-  meta_data: metadata.xlsx
+  meta_data: metadata.rds
   user_db: user_db.sqlite
   credentials_db: credentials_db.sqlite
 dev:
