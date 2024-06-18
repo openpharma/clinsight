@@ -69,13 +69,21 @@ test_that(
 describe(
   "app launches",
   {
-    it("errors if required data is not available", {
-      expect_error(run_app(data = "unknown_path" ), "Data file does not exist")
-      # provide incorrect existing file: 
-      expect_error(
-        run_app(data = testthat::test_path("fixtures/testdb.sqlite")), 
-        "Invalid data format"
+    it("Errors if required data is not available", {
+      temp_folder <- tempfile(tmpdir = tempdir())
+      dir.create(temp_folder)
+      
+      withr::with_envvar(
+        list("GOLEM_CONFIG_ACTIVE" = "production"), 
+        expect_error(
+        run_app(
+          data_folder = temp_folder, 
+          test_mode = TRUE,
+          onStart = \(){onStop(\(){unlink(temp_folder, recursive = TRUE)})}
+          ), 
+        "Cannot find"
         )
+      )
     })
   }
 )

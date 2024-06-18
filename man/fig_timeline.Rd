@@ -4,12 +4,13 @@
 \alias{fig_timeline}
 \title{Create timeline}
 \usage{
-fig_timeline(data, meta_data = metadata)
+fig_timeline(data, events)
 }
 \arguments{
 \item{data}{Data frame to use.}
 
-\item{meta_data}{Metadata file with all possible time points.}
+\item{events}{Data frame containing information about all events. Used
+to create the right labels in the timeline figure.}
 }
 \value{
 A ggplot2 object.

@@ -48,8 +48,8 @@ db_temp_connect <- function(db_path, code, drv = RSQLite::SQLite()){
 #' Creates application database. To create a database with all data flagged as
 #' 'new', use the default settings of `reviewed`, `reviewer`, and `status`.
 #'
-#' @param data Either a data frame with review data (Usually created with
-#'   [get_review_data()]), or a character path to the raw data files.
+#' @param data A data frame with review data (Usually created with
+#'   [get_review_data()]).
 #' @param db_path A character vector with the path to the database to be
 #'   created.
 #' @param reviewed Character vector. Sets the reviewed tag in the review
@@ -74,11 +74,6 @@ db_create <- function(
   stopifnot(!file.exists(db_path))
   stopifnot(reviewed %in% c("Yes", "No", ""))
   stopifnot(is.data.frame(data) || is.character(data))
-  if(!is.data.frame(data)){
-    data <- get_raw_data(data) |> 
-      merge_meta_with_data() |> 
-      get_review_data() 
-  }
   df <- data |> 
     dplyr::mutate(
       reviewed = reviewed, 
@@ -147,7 +142,7 @@ db_update <- function(
   cat("Start adding new rows to database\n")
   updated_review_data <- update_review_data(
     review_df = review_data,
-    latest_review_data = data, #get_review_data(merge_meta_with_data(data), common_vars), 
+    latest_review_data = data,
     common_vars = common_vars,
     edit_time_var = edit_time_var
   )

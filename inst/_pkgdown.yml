@@ -95,7 +95,6 @@ reference:
   - adjust_colnames
   - bind_rows_custom
   - check_appdata
-  - check_available_data
   - filter_data
   - clean_dates
   - collapse_column_vals
