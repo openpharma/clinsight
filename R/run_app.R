@@ -5,7 +5,6 @@
 #'   path is set in this argument. Useful for testing purposes.
 #' @param credentials_pwd Character string with the credentials' database
 #'   password.
-#' @param test_mode Logical, whether to run the application in test mode.
 #' @param ... arguments to pass to golem_opts. See `?golem::get_golem_options`
 #'   for more details.
 #' @inheritParams shiny::shinyApp
@@ -19,7 +18,6 @@ run_app <- function(
     uiPattern = "/",
     data_folder = NULL,
     credentials_pwd = Sys.getenv("DB_SECRET"),
-    test_mode = FALSE,
     ...
 ) {
   data_folder <- data_folder %||% get_golem_config("data_folder") %||% "."
@@ -102,7 +100,6 @@ run_app <- function(
       user_db = user_db,
       credentials_db = credentials_db,
       credentials_pwd = credentials_pwd,
-      test_mode = test_mode,
       ...
     )
   )

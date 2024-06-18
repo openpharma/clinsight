@@ -78,7 +78,6 @@ describe(
         expect_error(
         run_app(
           data_folder = temp_folder, 
-          test_mode = TRUE,
           onStart = \(){onStop(\(){unlink(temp_folder, recursive = TRUE)})}
           ), 
         "Cannot find"

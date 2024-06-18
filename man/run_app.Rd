@@ -11,7 +11,6 @@ run_app(
   uiPattern = "/",
   data_folder = NULL,
   credentials_pwd = Sys.getenv("DB_SECRET"),
-  test_mode = FALSE,
   ...
 )
 }
@@ -42,8 +41,6 @@ path is set in this argument. Useful for testing purposes.}
 
 \item{credentials_pwd}{Character string with the credentials' database
 password.}
-
-\item{test_mode}{Logical, whether to run the application in test mode.}
 
 \item{...}{arguments to pass to golem_opts. See \code{?golem::get_golem_options}
 for more details.}

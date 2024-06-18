@@ -17,7 +17,6 @@ load_and_run_app <- function(){
   run_app(
     data_folder = temp_folder,
     credentials_pwd = "1234",
-    test_mode = FALSE, 
     onStart = \(){onStop(\(){
       unlink(temp_folder, recursive = TRUE); 
       Sys.setenv("GOLEM_CONFIG_ACTIVE" = old_golem_config)

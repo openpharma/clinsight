@@ -8,8 +8,7 @@ describe(
       app_session$options$golem_options <- list(
         "meta" = metadata,
         "data" = clinsightful_data,
-        "user_db" = db_path,
-        "test_mode" = TRUE
+        "user_db" = db_path
       )
       testServer(app_server, {
         ns <- session$ns
@@ -28,8 +27,7 @@ describe(
          app_session$options$golem_options <- list(
            "meta" = metadata,
            "data" = clinsightful_data,
-           "user_db" = db_path,
-           "test_mode" = TRUE
+           "user_db" = db_path
          )
          
          testServer(app_server, {

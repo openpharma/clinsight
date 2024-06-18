@@ -21,7 +21,6 @@ app_server <- function(
   merged_data <- golem::get_golem_options("data")
   user_db <- golem::get_golem_options("user_db")
   credentials_db <- golem::get_golem_options("credentials_db")
-  test_mode <- golem::get_golem_options("test_mode")
   
   app_data <- get_appdata(merged_data, meta = meta)
   app_vars <- get_meta_vars(data = app_data, meta = meta)
