@@ -36,7 +36,7 @@ test_that(
     expect_true(
       get_golem_config(
         "app_prod",
-        config = "production",
+        config = "prod_shinymanager",
         file = config_file
       )
     )
@@ -74,7 +74,7 @@ describe(
       dir.create(temp_folder)
       
       withr::with_envvar(
-        list("GOLEM_CONFIG_ACTIVE" = "production"), 
+        list("GOLEM_CONFIG_ACTIVE" = "test"), 
         expect_error(
         run_app(
           data_folder = temp_folder, 

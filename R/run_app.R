@@ -44,7 +44,6 @@ run_app <- function(
     data <- readRDS(data_path)
   } 
   stopifnot("Expecting study data to be in data frame format." = is.data.frame(data) )
-  ### TODO: Add tests to check if data is in correct format. Stop if this is not the case.
   
   ## Verify metadata
   if(is.character(meta)){
@@ -59,14 +58,14 @@ run_app <- function(
   }
   stopifnot("Expecting metadata to be in a list format" = inherits(meta, "list"))
   
-  use_shinymanager <- (isFALSE(test_mode) && isTRUE(get_golem_config("use_shinymanager")))
+  use_shinymanager <- isTRUE(get_golem_config("user_identification") == "shinymanager")
   
   ## Verify user database
   if(!file.exists(user_db)){
     warning("No user database found. New database will be created")
     db_create(get_review_data(data), db_path = user_db)
   } else{
-    if(!test_mode){
+    if(golem::app_prod()){
       db_update(get_review_data(data), db_path = user_db, data_synched = FALSE) 
     }
   }
@@ -75,7 +74,7 @@ run_app <- function(
   if(use_shinymanager){
     stopifnot("Credentials database directory does not exist" = dir.exists(dirname(credentials_db)))
     stopifnot("No valid credentials database pwd provided" = is.character(credentials_pwd))
-    if(nchar(credentials_pwd) == 0 ) stop("credentials_pwd cannot be blank it test_mode is FALSE")
+    if(nchar(credentials_pwd) == 0 ) stop("credentials_pwd cannot be blank when using shinymanager")
     initialize_credentials(
       credentials_db = credentials_db,
       credentials_pwd = credentials_pwd
@@ -90,7 +89,7 @@ run_app <- function(
   
   with_golem_options(
     app = shinyApp(
-      ui =  if(isFALSE(use_shinymanager)) app_ui else authenticate_ui(),
+      ui =  if(use_shinymanager) authenticate_ui() else app_ui,
       server = app_server,
       onStart = onStart,
       options = options,

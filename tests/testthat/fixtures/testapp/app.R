@@ -11,7 +11,7 @@ load_and_run_app <- function(){
   temp_folder <- tempfile(tmpdir = tempdir())
   dir.create(temp_folder)
   old_golem_config <- Sys.getenv("GOLEM_CONFIG_ACTIVE")
-  Sys.setenv("GOLEM_CONFIG_ACTIVE" = "production")
+  Sys.setenv("GOLEM_CONFIG_ACTIVE" = "test")
   # Mimic data loading in production version: 
   saveRDS(clinsightful_data, file.path(temp_folder, "study_data.rds"))
   saveRDS(metadata, file.path(temp_folder, "metadata.rds"))  

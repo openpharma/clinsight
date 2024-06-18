@@ -197,12 +197,10 @@ app_server <- function(
     events = meta$events
     )
   
-  use_shinymanager <- (!test_mode && isTRUE(get_golem_config("use_shinymanager")))
-
   # Only initiate the sidebar after successful login, because it contains a
   # modal that pops up if data is out of synch. Modals interfere with shinymanager.
   observeEvent(r$user_name, {
-    if(use_shinymanager){
+    if(isTRUE(get_golem_config("user_identification") == "shinymanager")){
       pwd_mngt <- shinymanager::read_db_decrypt(
         get_db_connection(credentials_db), 
         name = "pwd_mngt",
