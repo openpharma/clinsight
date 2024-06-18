@@ -218,8 +218,7 @@ app_server <- function(
         with(rev_data$summary(), Form[subject_id == r$subject_id])
       }),
       db_path = user_db,
-      available_data = available_data,
-      test_mode = test_mode
+      available_data = available_data
     )
   })
 

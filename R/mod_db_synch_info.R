@@ -31,22 +31,27 @@ mod_db_synch_info_ui <- function(id){
 #' @param db_path Character vector with the path to the app database. Required
 #'   to retrieve the latest database synch date that is stored in the data frame
 #'   "db_synch_time".
-#' @param test_mode Logical. If TRUE, a fixed date (2024-01-10) will be chosen
-#'   as current date, This way, the module can be tested consistently. Can be
-#'   replaced and removed as soon as mocking is available within `shinytest2`.
-#' @param show_warning Logical. Whether to show a pop-up message with a warning
-#'   if database synchronization did not happen on the current day. Useful to
-#'   be able to turn off the message for testing purposes.
+#' @param current_date Current date. Standard `Sys.Date()`. Can be useful to set
+#'   for testing purposes.
+#' @param show_synch_warning Logical. Whether to show a pop-up message with a
+#'   warning if database synchronization did not happen on the current day. Will
+#'   normally be shown if `golem::app_prod()` returns `TRUE`.
 #'
 #' @seealso [mod_db_synch_info_ui()]
-mod_db_synch_info_server <- function(id, app_data, db_path, test_mode, show_warning = TRUE){
+mod_db_synch_info_server <- function(
+    id, 
+    app_data, 
+    db_path, 
+    current_date = Sys.Date(),
+    show_synch_warning = golem::app_prod()
+    ){
   stopifnot(is.list(app_data))
   stopifnot(is.character(db_path))
+  stopifnot(is_date(current_date))
+  stopifnot(is.logical(show_synch_warning))
+  
   moduleServer( id, function(input, output, session){
     ns <- session$ns
-    
-    # below allows consistent snapshot testing with a fixed current date:
-    current_date <- if (test_mode) as.Date("2024-01-10") else Sys.Date()
     
     synch_time <- reactive({
       tryCatch({
@@ -72,7 +77,7 @@ mod_db_synch_info_server <- function(id, app_data, db_path, test_mode, show_warn
     # hack to be able to test the db_synch date:
 
     synch_warning <- reactive({
-      req(synch_time(), show_warning)
+      req(synch_time(), show_synch_warning)
       if(synch_time() == "Unknown") return({
         paste0(
           "The latest database synchronization date is <b>Unknown</b>.<br>",

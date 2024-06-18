@@ -14,8 +14,7 @@ describe(
     # Set up server module parameters here
     testargs <- list(
       app_data = list(),
-      db_path = "",
-      test_mode = TRUE
+      db_path = ""
     ) 
     it("Can load the module server, with functioning internal parameters.", {
       testServer(mod_db_synch_info_server, args = testargs , {
@@ -51,8 +50,9 @@ describe(
 
          testargs <- list(
            app_data = list("Form1" = data.frame("site_code" = "", "edit_date_time" = "2024-01-10")), 
-           db_path = temp_path,
-           test_mode = TRUE
+           db_path = temp_path, 
+           current_date = as.Date("2024-01-10"),
+           show_synch_warning = TRUE
          )
          
          testServer(mod_db_synch_info_server, args = testargs, {
@@ -93,7 +93,8 @@ describe("mod_db_synch_info. Feature 3 | DB out of synch. As a user, I want to g
             id = "test", 
             app_data = list("Form1" = data.frame("site_code" = "", "edit_date_time" = "2024-01-01")), 
             db_path = temp_path,
-            test_mode = TRUE
+            current_date = as.Date("2024-01-10"),
+            show_synch_warning = TRUE
           )
         }
         test_app <- shinyApp(test_ui, test_server)
@@ -128,7 +129,8 @@ describe("mod_db_synch_info. Feature 3 | DB out of synch. As a user, I want to g
             id = "test", 
             app_data = list("Form1" = data.frame("site_code" = "", "edit_date_time" = "")), 
             db_path = temp_path,
-            test_mode = TRUE
+            current_date = as.Date("2024-01-01"), 
+            show_synch_warning = TRUE
           )
         }
         test_app <- shinyApp(test_ui, test_server)

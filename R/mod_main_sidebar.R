@@ -67,7 +67,6 @@ mod_main_sidebar_ui <- function(id){
 #'   created with the function [get_available_data()]. The data frame will be
 #'   passed on to the module [mod_query_add_server()], which requires this data
 #'   frame and is embedded in `mod_main_sidebar_server()`.
-#' @param test_mode Logical. Required for testing [mod_db_synch_info_server()].
 #'
 #' @seealso [mod_main_sidebar_ui()], [mod_query_add_server()]
 #' 
@@ -80,8 +79,7 @@ mod_main_sidebar_server <- function(
     app_vars,
     db_path, 
     forms_to_review,
-    available_data,
-    test_mode
+    available_data
 ){
   stopifnot(is.reactivevalues(r))
   
@@ -138,8 +136,8 @@ mod_main_sidebar_server <- function(
       id = "synch_info",
       app_data = app_data,
       db_path = db_path,
-      test_mode = test_mode,
-      show_warning = !test_mode
+      current_date = Sys.Date(),
+      show_synch_warning = golem::app_prod()
       )
   })
 }

@@ -4,7 +4,13 @@
 \alias{mod_db_synch_info_server}
 \title{Database Synchronization information - Shiny module Server}
 \usage{
-mod_db_synch_info_server(id, app_data, db_path, test_mode, show_warning = TRUE)
+mod_db_synch_info_server(
+  id,
+  app_data,
+  db_path,
+  current_date = Sys.Date(),
+  show_synch_warning = golem::app_prod()
+)
 }
 \arguments{
 \item{id}{Character string, used to connect the module UI with the module
@@ -18,13 +24,12 @@ date.}
 to retrieve the latest database synch date that is stored in the data frame
 "db_synch_time".}
 
-\item{test_mode}{Logical. If TRUE, a fixed date (2024-01-10) will be chosen
-as current date, This way, the module can be tested consistently. Can be
-replaced and removed as soon as mocking is available within \code{shinytest2}.}
+\item{current_date}{Current date. Standard \code{Sys.Date()}. Can be useful to set
+for testing purposes.}
 
-\item{show_warning}{Logical. Whether to show a pop-up message with a warning
-if database synchronization did not happen on the current day. Useful to
-be able to turn off the message for testing purposes.}
+\item{show_synch_warning}{Logical. Whether to show a pop-up message with a
+warning if database synchronization did not happen on the current day. Will
+normally be shown if \code{golem::app_prod()} returns \code{TRUE}.}
 }
 \description{
 A shiny module. Used to display database synchronization information/
