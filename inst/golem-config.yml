@@ -3,11 +3,9 @@ default:
   golem_version: 0.0.0.9003
   app_prod: no
   user_identification: test_user
-  data_folder: test_data
   study_data: !expr clinsight::clinsightful_data
   meta_data: !expr clinsight::metadata
   user_db: user_db.sqlite
-  credentials_db: credentials_db.sqlite
   group_roles:
   - Medical Monitor
   - Data Manager
@@ -21,9 +19,9 @@ test:
 shinymanager:
   app_prod: yes
   user_identification: shinymanager
-  data_folder: study_data
   study_data: study_data.rds
   meta_data: metadata.rds
+  credentials_db: credentials_db.sqlite
 shinyproxy:
   app_prod: yes
   user_identification: http_headers
@@ -36,4 +34,3 @@ shiny_connect:
   study_data: study_data.rds
   meta_data: metadata.rds
   user_db: user_db.sqlite
-  

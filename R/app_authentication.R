@@ -113,10 +113,7 @@ authenticate_server <- function(
     user_identification = get_golem_config("user_identification"),
     all_sites = NULL,
     all_roles = get_golem_config("group_roles"),
-    credentials_db = file.path(
-      get_golem_config("data_folder"), 
-      get_golem_config("credentials_db")
-    ),
+    credentials_db = get_golem_config("credentials_db"),
     credentials_pwd = Sys.getenv("DB_SECRET"), 
     user_id = get_golem_config("user_id"),
     user_name = get_golem_config("user_name"),
