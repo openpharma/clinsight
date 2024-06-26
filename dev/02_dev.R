@@ -11,6 +11,36 @@
 #### CURRENT FILE: DEV SCRIPT #####
 ###################################
 
+# Exploring for insights on data spec
+unique(clinsightful_data[,c("event_id","event_name")])
+unique(clinsightful_data[,c("form_id","form_repeat")])
+unique(clinsightful_data[,c("event_repeat","event_id","event_name")])
+unique(clinsightful_data[,c("event_repeat","event_id","event_name","form_id","form_repeat")])
+
+
+d_1pat <- clinsightful_data |>
+  filter(subject_id == "BEL_04_772") |>
+  filter(event_id == "COMMON_CM")
+
+library(dplyr)
+clinsightful_data |>
+  filter(subject_id == "BEL_04_772") |>
+  group_by(subject_id, event_id, event_repeat, event_date) |>
+  summarize(n = n()) |>
+  # filter(event_repeat != form_repeat) |>
+  print(n = 36)
+
+d_1pat <- clinsightful_data |>
+  filter(subject_id == "BEL_04_772") |>
+  filter(event_id == "COMMON_AE")
+  
+clinsightful_data |>
+  filter(subject_id == "BEL_04_772") |>
+  group_by(subject_id, event_id, event_repeat, event_date, form_repeat) |>
+  summarize(n = n()) |>
+  filter(event_repeat != form_repeat) |>
+  print(n = 36)
+
 # Engineering
 
 ## Dependencies ----

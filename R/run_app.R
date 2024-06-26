@@ -1,8 +1,9 @@
 #' Run the Shiny Application
 #'
-#' @param meta A data frame containing metadata.
+#' @param meta A data frame containing metadata. See `details` below for data
+#'   specification.
 #' @param data Either a data frame or a character string with the path to the
-#'   app data in .rds format.
+#'   app data in .rds format. See `details` below for data.frame specification.
 #' @param user_db Character string. Path to the app database. If not existing,
 #'   will be created based on app data and metadata, with all data labeled as
 #'   'new'/not yet reviewed.
@@ -13,6 +14,48 @@
 #' @param ... arguments to pass to golem_opts. See `?golem::get_golem_options`
 #'   for more details.
 #' @inheritParams shiny::shinyApp
+#' 
+#' @details
+#' Two of the arguments `meta` and `data` are crucial to successful app
+#' deployment. As such, here are comprehensive data specifications for these
+#' objects:
+#' 
+#' Column specs for the `data` object:
+#' - `site_code`: character or integer, identifier for study site; If an integer,
+#'    recommended to add prefix "Site" as this will display more intuitively in
+#'    the application's UI
+#' - `subject_id`: character, unique identifier for a subject
+#' - `event_repeat`: integer, helps keep track of unique `event_id` for a single
+#'    `subjec_id` and `event_date`
+#' - `event_id`: character, names that help classify types of  `event_name`s
+#'    into like-groups, generally characterized by site visits. For example, 
+#'    "SCR" for the screening visit, "VIS" for Visit X (where X is some integer),
+#'    and "EXIT" for when the patient exits the study trial. However, some
+#'    `event_id`s track events that could apply outside of any visit, like AE,
+#'    ConMed, Medical History, etc.
+#' - `event_name`: character, an "event" generally characterizes some sort of
+#'    site visit, whether that be a "Screening", "Visit X" (where X is some
+#'    integer), "Exit", or "Any Visit".
+#' - `event_date`: Date, the date associated with `event_name`
+#' - `form_id`: character, a unique identifier for forms.
+#' - `form_repeat`: integer, 
+#' - `edit_date_time`: datetime (POSIXct), 
+#' - `db_update_time`: datetime (POSIXct), 
+#' - `region`: character, 
+#' - `day`: difftime num???
+#' - `vis_day`: numeric,
+#' - `vis_num`: numeric,
+#' - `event_label`: character, 
+#' - `item_name`:  character, 
+#' - `item_type`:  character, 
+#' - `item_group`:  character, 
+#' - `item_value`:  character, 
+#' - `item_unit`:  character, 
+#' - `lower_lim`: numeric,
+#' - `upper_lim`: numeric, 
+#' - `significance`:  character, 
+#' - `reason_notdone`:  character, 
+#' 
 #'
 #' @export
 #' 

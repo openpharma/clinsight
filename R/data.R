@@ -42,9 +42,31 @@
 #' 
 "col_palette"
 
+
 #' Clinical Trial test data
 #'
-#' A data frame containing randomly created clinical trial data. Used for
-#' testing purposes.
+#' A data.frame containing randomly created clinical trial data. Acceptable for 
+#' for the `data` argument in `run_app()` & used for testing purposes.
+#' 
+#' @format a data.frame with 6,483 rows and 24 variables. 
+#' 
 #' @source Created with `data-raw/create_random_data.R`
 "clinsightful_data"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
