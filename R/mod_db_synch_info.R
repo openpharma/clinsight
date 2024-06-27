@@ -35,7 +35,7 @@ mod_db_synch_info_ui <- function(id){
 #'   for testing purposes.
 #' @param show_synch_warning Logical. Whether to show a pop-up message with a
 #'   warning if database synchronization did not happen on the current day. Will
-#'   normally be shown if `golem::app_prod()` returns `TRUE`.
+#'   normally be shown if in the configuration the app is set to production.
 #'
 #' @seealso [mod_db_synch_info_ui()]
 mod_db_synch_info_server <- function(
@@ -43,7 +43,7 @@ mod_db_synch_info_server <- function(
     app_data, 
     db_path, 
     current_date = Sys.Date(),
-    show_synch_warning = golem::app_prod()
+    show_synch_warning = isTRUE(get_golem_config("app_prod"))
     ){
   stopifnot(is.list(app_data))
   stopifnot(is.character(db_path))

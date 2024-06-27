@@ -63,7 +63,8 @@ run_app <- function(
     warning("No user database found. New database will be created")
     db_create(get_review_data(data), db_path = user_db)
   } else{
-    if(golem::app_prod()){
+    # Skip if not needed for faster testing:
+    if(isTRUE(get_golem_config("app_prod"))){
       db_update(get_review_data(data), db_path = user_db, data_synched = FALSE) 
     }
   }

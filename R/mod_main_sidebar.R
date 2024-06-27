@@ -135,9 +135,7 @@ mod_main_sidebar_server <- function(
     mod_db_synch_info_server(
       id = "synch_info",
       app_data = app_data,
-      db_path = db_path,
-      current_date = Sys.Date(),
-      show_synch_warning = golem::app_prod()
+      db_path = db_path
       )
   })
 }

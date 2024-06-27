@@ -9,7 +9,7 @@ mod_db_synch_info_server(
   app_data,
   db_path,
   current_date = Sys.Date(),
-  show_synch_warning = golem::app_prod()
+  show_synch_warning = isTRUE(get_golem_config("app_prod"))
 )
 }
 \arguments{
@@ -29,7 +29,7 @@ for testing purposes.}
 
 \item{show_synch_warning}{Logical. Whether to show a pop-up message with a
 warning if database synchronization did not happen on the current day. Will
-normally be shown if \code{golem::app_prod()} returns \code{TRUE}.}
+normally be shown if in the configuration the app is set to production.}
 }
 \description{
 A shiny module. Used to display database synchronization information/
