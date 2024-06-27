@@ -2,6 +2,8 @@
 
 ## Changed
 
+- Improved metadata so that external file can be used. 
+- Improved data loading by using a config file.
 - Created two renv profiles, one for development and one for production. Goal is 
 to minimize the package dependencies of the production version.
 - Removed development package dependencies (for example devtools) that were not needed to run the application.  

@@ -43,15 +43,6 @@ get_raw_data <- function(
       setNames(column_specs$name_raw, column_specs$name_new)
       ) |> 
     dplyr::mutate(
-      db_update_time = max(edit_date_time, na.rm = T),
-      region = dplyr::case_when(
-        grepl("^AU", site_code)  ~ "AUS",
-        grepl("^DE", site_code)  ~ "GER",
-        grepl("^FR", site_code)  ~ "FRA",
-        TRUE                    ~ NA_character_
-      )
-    ) |> 
-    dplyr::mutate(
       day = event_date - min(event_date, na.rm = TRUE), 
       vis_day = ifelse(event_id %in% c("SCR", "VIS", "VISEXT", "VISVAR", "FU1", "FU2"), day, NA),
       vis_num = as.numeric(factor(vis_day))-1,
@@ -72,10 +63,6 @@ get_raw_data <- function(
       ),
       .by = subject_id
     ) |> 
-    # Add a fix for MC in raw dataset. 
-    # Otherwise, we have to repeat this calculation multiple times when creating 
-    # other datasets from the raw data
-    fix_multiple_choice_vars() |> 
     dplyr::arrange(
       factor(site_code, levels = order_string(site_code)),
       factor(subject_id, levels = order_string(subject_id))
@@ -104,13 +91,24 @@ get_raw_data <- function(
 #' @export
 #' 
 merge_meta_with_data <- function(
-    data = raw_data,
-    meta = metadata,
+    data,
+    meta,
     expected_columns = c("LBORNR_Lower", "LBORNR_Upper", "LBORRESU", 
                          "LBORRESUOTH", "LBREASND", "unit", 
                          "lower_limit", "upper_limit", "LBCLSIG")
 ){
+  stopifnot(is.data.frame(data))
+  stopifnot(inherits(meta, "list"))
+  missing_colnames <- with(meta$column_specs, name_new[!name_new %in% names(data)]) |> 
+    paste0(collapse = ", ")
+  if(nchar(missing_colnames) > 0) stop(
+    paste0("The following columns are defined in the metadata ", 
+           "(column_specs$name_new) but are missing in the study data:\n", 
+           missing_colnames, ".")
+    )
   merged_data <- data |> 
+    # fix MC values before merging:
+    fix_multiple_choice_vars(expected_vars = meta$items_expanded$var) |> 
     dplyr::right_join(meta$items_expanded, by = "var") |> 
     dplyr::filter(!is.na(item_value)) |> 
     dplyr::mutate(
@@ -161,7 +159,7 @@ merge_meta_with_data <- function(
 apply_study_specific_fixes <- function(
     data, 
     form_id_vars = c("subject_id", "event_name", "item_group")
-    ){
+){
   ## apply study-specific fixes:
   # fix significance in ECG before proceeding (stored in its own separate variable):
   ECG_significance <- data |> 
@@ -204,7 +202,17 @@ apply_study_specific_fixes <- function(
       ),
       .by = c(subject_id, form_repeat)
     ) 
-  data
+  
+  # Add regions: 
+  data |> 
+    dplyr::mutate(
+      region = dplyr::case_when(
+        grepl("^AU", site_code)  ~ "AUS",
+        grepl("^DE", site_code)  ~ "GER",
+        grepl("^FR", site_code)  ~ "FRA",
+        TRUE                    ~ NA_character_
+      )
+    )
 }
 
 #' Get appdata

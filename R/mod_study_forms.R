@@ -104,6 +104,9 @@ mod_study_forms_ui <- function(id, form, form_items){
 #'   interactive tables.
 #' @param id_item Character vector containing the column names of the columns
 #'   that can uniquely identify one item/row.
+#' @param item_info A data frame containing the names of the study forms (in the
+#'   column `item_group`), and the columns `item_scale` `use_unscaled_limits`,
+#'   which are used to customize the way the figures are shown in the page.
 #'
 #' @seealso [mod_study_forms_ui()]
 #' 
@@ -114,12 +117,15 @@ mod_study_forms_server <- function(
     form_items, 
     id_item = c("subject_id", "event_name", "item_group", 
                 "form_repeat", "item_name"),
-    table_names = NULL
+    table_names = NULL,
+    item_info
 ){
   stopifnot(is.reactivevalues(r))
   stopifnot(is.character(form), length(form) == 1)
   stopifnot(is.character(form_items))
   stopifnot(is.character(id_item))
+  stopifnot(is.data.frame(item_info))
+  
   names(form_items) <- names(form_items) %||% form_items
   moduleServer(id, function(input, output, session){
     ns <- session$ns
@@ -141,7 +147,7 @@ mod_study_forms_server <- function(
         paste0("Warning: no data found in the database for the form '", form, "'.")
       ))
       df <- r$filtered_data[[form]] 
-      if(is.null(df)) return(NULL)
+      
       status_df <- r$review_data |> 
         dplyr::filter(item_group == form) |> 
         dplyr::select(dplyr::all_of(c(id_item, "edit_date_time", "status", "reviewed"))) |> 
@@ -179,7 +185,7 @@ mod_study_forms_server <- function(
     ############################### Outputs: ###################################
     dynamic_figure <- reactive({
       req(nrow(fig_data()) > 0)
-      scale_yval <- as.logical(with(metadata$groups, item_scale[item_group == form]))
+      scale_yval <- as.logical(item_info[["item_scale"]][1]) %||% FALSE
       yval <- ifelse(scale_yval, "value_scaled", "item_value")
       validate(need(
         fig_data()[[yval]], 
@@ -195,10 +201,8 @@ mod_study_forms_server <- function(
         id_to_highlight = r$subject_id, 
         point_size = "reviewed",
         height = ceiling(0.5*length(unique(fig_data()$item_name))*125+150),
-        scale = as.logical(with(metadata$groups, item_scale[item_group == form])),
-        use_unscaled_limits = as.logical(
-          with(metadata$groups, use_unscaled_limits[item_group == form])
-        )
+        scale = scale_yval,
+        use_unscaled_limits = as.logical(item_info[["use_unscaled_limits"]][1]) %||% FALSE
       )
     })
     
@@ -211,7 +215,7 @@ mod_study_forms_server <- function(
       datatable_custom(table_data_active(), table_names, escape = FALSE)
     })
     
-    if(form == "Vital signs"){
+    if(form %in% c("Vital signs", "Vitals adjusted")){
       shiny::exportTestValues(
         table_data = table_data_active(),
         fig_data = fig_data()

@@ -4,7 +4,7 @@
 \alias{mod_header_widgets_server}
 \title{Header widgets - Shiny module Server}
 \usage{
-mod_header_widgets_server(id, r, rev_data, navinfo)
+mod_header_widgets_server(id, r, rev_data, navinfo, events)
 }
 \arguments{
 \item{id}{Character string, used to connect the module UI with the module
@@ -17,6 +17,10 @@ Server.}
 \item{navinfo}{Reactive values created with \code{\link[shiny:reactiveValues]{shiny::reactiveValues()}}. Used
 to send back information about the page change to the server, when clicking
 on the adverse event box.}
+
+\item{events}{Data frame containing all events. Used to extract the right
+labels for the visits in the compact timeline in the header_widgets. See
+\code{\link[=fig_timeline]{fig_timeline()}}.}
 }
 \description{
 A shiny module. Used to show user information of the active user in value
@@ -30,9 +34,9 @@ updated data is available), the number of forms that need a review, and a
 timeline figure showing the number of visits that the patient performed. The
 value box with adverse events also serves as a link to the adverse events
 form. Furthermore, clicking on the box with forms to review will trigger
-\code{\link[=mod_navigate_review_server]{mod_navigate_review_server()}}, opening a modal that shows the forms that need
-review and the queries that are open of the active participant, to which you
-can directly navigate to.
+\code{\link[=mod_navigate_review_server]{mod_navigate_review_server()}}, opening a modal that shows the forms that
+need review and the queries that are open of the active participant, to which
+you can directly navigate to.
 }
 \seealso{
 \code{\link[=mod_header_widgets_ui]{mod_header_widgets_ui()}}

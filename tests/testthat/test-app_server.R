@@ -3,6 +3,7 @@ describe(
   {
     it("Can load the server without errors", {
       db_path <- withr::local_tempfile(fileext = ".sqlite")
+      file.copy(testthat::test_path("fixtures/testdb.sqlite"), db_path)
       app_session <- MockShinySession$new()
       app_session$options$golem_options <- list(
         "meta" = metadata,
@@ -21,6 +22,7 @@ describe(
     it("Can change main tabs by clicking on the tab, and will save 
        the result in an internal reactive value.", {
          db_path <- withr::local_tempfile(fileext = ".sqlite")
+         file.copy(testthat::test_path("fixtures/testdb.sqlite"), db_path)
 
          app_session <- MockShinySession$new()
          app_session$options$golem_options <- list(

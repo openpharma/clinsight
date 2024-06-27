@@ -706,7 +706,8 @@ results_grouped <- test_results |>
     )
   ) |> 
   dplyr::select(-c(name, value)) |> 
-  collapse_column_vals("Result", group_by = c("file", "context", "Test"))
+  collapse_column_vals("Result", group_by = c("file", "context", "Test")) |> 
+  dplyr::distinct()
 
 results_nested <- results_grouped |> 
   tidyr::nest( .by = c(file, context), .key = "Results") |> 
