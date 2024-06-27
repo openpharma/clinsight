@@ -36,7 +36,7 @@ test_that(
     expect_true(
       get_golem_config(
         "app_prod",
-        config = "prod_shinymanager",
+        config = "shinymanager",
         file = config_file
       )
     )

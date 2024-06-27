@@ -18,11 +18,7 @@ dev:
 test:
   study_data: study_data.rds
   meta_data: metadata.rds
-test_shinymanager:
-  user_identification: shinymanager
-  study_data: study_data.rds
-  meta_data: metadata.rds
-prod_shinymanager:
+shinymanager:
   app_prod: yes
   user_identification: shinymanager
   data_folder: study_data
