@@ -26,7 +26,7 @@
 #'    the application's UI
 #' - `subject_id`: character, unique identifier for a subject
 #' - `event_repeat`: integer, helps keep track of unique `event_id` for a single
-#'    `subjec_id` and `event_date`
+#'    `subject_id` and `event_date`
 #' - `event_id`: character, names that help classify types of  `event_name`s
 #'    into like-groups, generally characterized by site visits. For example, 
 #'    "SCR" for the screening visit, "VIS" for Visit X (where X is some integer),
@@ -37,24 +37,51 @@
 #'    site visit, whether that be a "Screening", "Visit X" (where X is some
 #'    integer), "Exit", or "Any Visit".
 #' - `event_date`: Date, the date associated with `event_name`
-#' - `form_id`: character, a unique identifier for forms.
-#' - `form_repeat`: integer, 
-#' - `edit_date_time`: datetime (POSIXct), 
-#' - `db_update_time`: datetime (POSIXct), 
-#' - `region`: character, 
-#' - `day`: difftime num???
-#' - `vis_day`: numeric,
-#' - `vis_num`: numeric,
-#' - `event_label`: character, 
-#' - `item_name`:  character, 
-#' - `item_type`:  character, 
-#' - `item_group`:  character, 
-#' - `item_value`:  character, 
-#' - `item_unit`:  character, 
-#' - `lower_lim`: numeric,
-#' - `upper_lim`: numeric, 
-#' - `significance`:  character, 
-#' - `reason_notdone`:  character, 
+#' - `form_id`: character, a unique identifier for the form the `item_name` metric
+#'    and `item_value` were pulled from. Note: when `item_type` is continuous,
+#'    `form_id` can contain several different `item_group`s. However, when
+#'    `item_type` is 'other', `item_group` can be made up of several `form_id`
+#'    values.
+#' - `form_repeat`: integer, helps keep track of unique `item_name`s collected
+#'    from a specific `form_id` for a given `subject_id`. `form_repeat` is
+#'    particularly helpful when conslidating data like Adverse Events into this
+#'    data format. Specifically, if more than one AE is collected on a patient,
+#'    they'll have more than one `form_repeat`
+#' - `edit_date_time`: datetime (POSIXct), the last time this record was edited
+#' - `db_update_time`: datetime (POSIXct), the last time the database storing this
+#'    record was updated.
+#' - `region`: character, describing the region code that `site_code` falls under
+#' - `day`: a difftime number, meaning it contains both a number and unit of 
+#'    time. It measures the number of days each visit is from screening
+#' - `vis_day`: numeric, a numeric representation of `day`
+#' - `vis_num`: numeric, a numeric representation of `event_name`
+#' - `event_label`: character, an abbreviation of `event_name`
+#' - `item_name`:  character, describes a metric or parameter of interest.
+#' - `item_type`:  character, classifies `item_name`s into either 'continuous' 
+#'    or 'other', where continuous types are those generally associated with the
+#'    CDISC "basic data structure" (BDS). That is, each `item_name` metric is
+#'    collected over time at a patient visit (`event_name`). The 'other' type
+#'    represents all non-time dependent measures, like demographic info, adverse
+#'    events, Medications, medical history, etc.
+#' - `item_group`:  character, provides is a high level category that groups 
+#'    like-`item_name`s together. For example, and `item_group` = 'Vital Signs'
+#'    will group together pertinent `item_name` metrics like BMI, Pulse, Blood
+#'    pressure, etc.
+#' - `item_value`:  character, the measurement collected for a given `item_name`.
+#'    The value collected may be a number like 150 (when collecting a patient's
+#'    weight) or a word (such as 'white' for the subject's race).
+#' - `item_unit`:  character, tracking the unit of measurement for `item_name` 
+#'    and `item_value`.
+#' - `lower_lim`: numeric, some `item_name`s (particularly the 'continuous' type)
+#'    have a pre-defined range of values that are considered normal. This is the
+#'    lower limit to that range.
+#' - `upper_lim`: numeric, some `item_name`s (particularly the 'continuous' type)
+#'    have a pre-defined range of values that are considered normal. This is the
+#'    upper limit to that range.
+#' - `significance`:  character, either 'CS' which means 'Clinically Significant'
+#'    or 'NCS' which means 'Not Clinically Significant'
+#' - `reason_notdone`:  character, an effort to describe why the `item_value`
+#'    field is `NA` / missing.
 #' 
 #'
 #' @export

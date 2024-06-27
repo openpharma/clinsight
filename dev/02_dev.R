@@ -12,16 +12,57 @@
 ###################################
 
 # Exploring for insights on data spec
+unique(clinsightful_data[,c("site_code","region")]) |> arrange(site_code)
 unique(clinsightful_data[,c("event_id","event_name")])
 unique(clinsightful_data[,c("form_id","form_repeat")])
 unique(clinsightful_data[,c("event_repeat","event_id","event_name")])
 unique(clinsightful_data[,c("event_repeat","event_id","event_name","form_id","form_repeat")])
+unique(clinsightful_data[,c("event_repeat","event_id","event_name", "day")])
+unique(clinsightful_data[,c("event_repeat","event_id","event_name", "event_label")])
 
+# form exploration
+unique(clinsightful_data[,c("form_id")])
+unique(clinsightful_data[,c("form_id","item_group", "item_type")])
+
+# other
+unique(clinsightful_data[,c("item_group","item_type")])
+other <- clinsightful_data |>
+  filter(item_type == "other")
+unique(other[,c("item_group","item_type","item_name")]) |>
+  print(n=40)
+
+# bds
+unique(clinsightful_data[,c("item_group","item_type")])
+bds <- clinsightful_data |>
+  filter(item_type != "other")
+unique(bds[,c("item_group","item_type","item_name")]) |>
+  print(n=40)
+
+
+unique(clinsightful_data[,c("item_group","item_type")])
+other <- clinsightful_data |>
+  filter(item_group == "Vital signs")
+unique(other[,c("item_group","item_type","item_name")]) |>
+  print(n=40)
+
+# dirty?
+library(clinsight)
+data("clinsightful_data")
+dirty <- clinsightful_data |>
+  filter(item_value %in% c("µg/h","µg/ml"))
+
+str(clinsightful_data$item_value)
+
+# day
+class(clinsightful_data$day)
+
+# exploring events
 data("clinsightful_data")
 d_1pat <- clinsightful_data |>
   filter(subject_id == "BEL_04_772") |>
   filter(event_id == "COMMON_CM")
 
+# exploring event_repeat & event_date
 library(dplyr)
 clinsightful_data |>
   filter(subject_id == "BEL_04_772") |>

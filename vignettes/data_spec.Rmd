@@ -46,6 +46,8 @@ head(clinsight::clinsightful_data)
 
 ### Column specs
 
+Refer to `run_app()` documentation by running `?clinsight::run_app`.
+
 - `site_code`: 
 - `subject_id`: 
 - `event_repeat`: 
@@ -74,6 +76,7 @@ head(clinsight::clinsightful_data)
 For more information about 
 
 ## Pre-processing
+Place holder for helper functions
 
 ### Raw Data
 

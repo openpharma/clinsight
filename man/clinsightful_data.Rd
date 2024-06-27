@@ -5,7 +5,7 @@
 \alias{clinsightful_data}
 \title{Clinical Trial test data}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 6483 rows and 24 columns.
+a data.frame with 6,483 rows and 24 variables.
 }
 \source{
 Created with \code{data-raw/create_random_data.R}
@@ -14,7 +14,7 @@ Created with \code{data-raw/create_random_data.R}
 clinsightful_data
 }
 \description{
-A data frame containing randomly created clinical trial data. Used for
-testing purposes.
+A data.frame containing randomly created clinical trial data. Acceptable for
+for the \code{data} argument in \code{run_app()} & used for testing purposes.
 }
 \keyword{datasets}

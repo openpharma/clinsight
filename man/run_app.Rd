@@ -39,10 +39,11 @@ request to determine whether the \code{ui} should be used to handle the
 request. Note that the entire request path must match the regular
 expression in order for the match to be considered successful.}
 
-\item{meta}{A data frame containing metadata.}
+\item{meta}{A data frame containing metadata. See \code{details} below for data
+specification.}
 
 \item{data}{Either a data frame or a character string with the path to the
-app data in .rds format.}
+app data in .rds format. See \code{details} below for data.frame specification.}
 
 \item{user_db}{Character string. Path to the app database. If not existing,
 will be created based on app data and metadata, with all data labeled as
@@ -60,4 +61,74 @@ for more details.}
 }
 \description{
 Run the Shiny Application
+}
+\details{
+Two of the arguments \code{meta} and \code{data} are crucial to successful app
+deployment. As such, here are comprehensive data specifications for these
+objects:
+
+Column specs for the \code{data} object:
+\itemize{
+\item \code{site_code}: character or integer, identifier for study site; If an integer,
+recommended to add prefix "Site" as this will display more intuitively in
+the application's UI
+\item \code{subject_id}: character, unique identifier for a subject
+\item \code{event_repeat}: integer, helps keep track of unique \code{event_id} for a single
+\code{subject_id} and \code{event_date}
+\item \code{event_id}: character, names that help classify types of  \code{event_name}s
+into like-groups, generally characterized by site visits. For example,
+"SCR" for the screening visit, "VIS" for Visit X (where X is some integer),
+and "EXIT" for when the patient exits the study trial. However, some
+\code{event_id}s track events that could apply outside of any visit, like AE,
+ConMed, Medical History, etc.
+\item \code{event_name}: character, an "event" generally characterizes some sort of
+site visit, whether that be a "Screening", "Visit X" (where X is some
+integer), "Exit", or "Any Visit".
+\item \code{event_date}: Date, the date associated with \code{event_name}
+\item \code{form_id}: character, a unique identifier for the form the \code{item_name} metric
+and \code{item_value} were pulled from. Note: when \code{item_type} is continuous,
+\code{form_id} can contain several different \code{item_group}s. However, when
+\code{item_type} is 'other', \code{item_group} can be made up of several \code{form_id}
+values.
+\item \code{form_repeat}: integer, helps keep track of unique \code{item_name}s collected
+from a specific \code{form_id} for a given \code{subject_id}. \code{form_repeat} is
+particularly helpful when conslidating data like Adverse Events into this
+data format. Specifically, if more than one AE is collected on a patient,
+they'll have more than one \code{form_repeat}
+\item \code{edit_date_time}: datetime (POSIXct), the last time this record was edited
+\item \code{db_update_time}: datetime (POSIXct), the last time the database storing this
+record was updated.
+\item \code{region}: character, describing the region code that \code{site_code} falls under
+\item \code{day}: a difftime number, meaning it contains both a number and unit of
+time. It measures the number of days each visit is from screening
+\item \code{vis_day}: numeric, a numeric representation of \code{day}
+\item \code{vis_num}: numeric, a numeric representation of \code{event_name}
+\item \code{event_label}: character, an abbreviation of \code{event_name}
+\item \code{item_name}:  character, describes a metric or parameter of interest.
+\item \code{item_type}:  character, classifies \code{item_name}s into either 'continuous'
+or 'other', where continuous types are those generally associated with the
+CDISC "basic data structure" (BDS). That is, each \code{item_name} metric is
+collected over time at a patient visit (\code{event_name}). The 'other' type
+represents all non-time dependent measures, like demographic info, adverse
+events, Medications, medical history, etc.
+\item \code{item_group}:  character, provides is a high level category that groups
+like-\code{item_name}s together. For example, and \code{item_group} = 'Vital Signs'
+will group together pertinent \code{item_name} metrics like BMI, Pulse, Blood
+pressure, etc.
+\item \code{item_value}:  character, the measurement collected for a given \code{item_name}.
+The value collected may be a number like 150 (when collecting a patient's
+weight) or a word (such as 'white' for the subject's race).
+\item \code{item_unit}:  character, tracking the unit of measurement for \code{item_name}
+and \code{item_value}.
+\item \code{lower_lim}: numeric, some \code{item_name}s (particularly the 'continuous' type)
+have a pre-defined range of values that are considered normal. This is the
+lower limit to that range.
+\item \code{upper_lim}: numeric, some \code{item_name}s (particularly the 'continuous' type)
+have a pre-defined range of values that are considered normal. This is the
+upper limit to that range.
+\item \code{significance}:  character, either 'CS' which means 'Clinically Significant'
+or 'NCS' which means 'Not Clinically Significant'
+\item \code{reason_notdone}:  character, an effort to describe why the \code{item_value}
+field is \code{NA} / missing.
+}
 }
