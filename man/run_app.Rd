@@ -47,28 +47,26 @@ password.}
 
 \item{...}{arguments to pass to golem_opts. See \code{?golem::get_golem_options}
 for more details.}
-
-\item{meta}{A data frame containing metadata. See \code{details} below for data
-specification.}
-
-\item{data}{Either a data frame or a character string with the path to the
-app data in .rds format. See \code{details} below for data.frame specification.}
-
-\item{user_db}{Character string. Path to the app database. If not existing,
-will be created based on app data and metadata, with all data labeled as
-'new'/not yet reviewed.}
-
-\item{credentials_db}{Character string. Path to the credentials database.}
 }
 \description{
 Run the Shiny Application
 }
 \details{
-Two of the arguments \code{meta} and \code{data} are crucial to successful app
-deployment. As such, here are comprehensive data specifications for these
-objects:
+There are several elements defined in \code{golem-config.yml} that require
+configuration before launching the application for the first time. To name a
+few:
+\itemize{
+\item \code{user_db} a Character string providing the path to the app database's.
+If it does not exist, one will be created based on app data and metadata,
+with all data labeled as new'/not yet reviewed.
+\item \code{credentials_db} Character string. Path to the credentials database.
+}
 
-Column specs for the \code{data} object:
+The other two are \code{meta_data} and \code{study_data}, which file paths to RDS files
+pertinent to successful app deployment. As such, here are comprehensive data
+specifications for these objects:
+
+Column specs for the \code{study_data} RDS object:
 \itemize{
 \item \code{site_code}: character or integer, identifier for study site; If an integer,
 recommended to add prefix "Site" as this will display more intuitively in
@@ -133,7 +131,7 @@ or 'NCS' which means 'Not Clinically Significant'
 field is \code{NA} / missing.
 }
 
-Specifications for list items that may be included in the \code{meta} object:
+Specifications for list items that may be included in the \code{meta_data} RDS:
 
 \code{column_specs} a data.frame
 

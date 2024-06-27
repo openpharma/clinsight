@@ -1,16 +1,8 @@
 #' Run the Shiny Application
 #' 
-#' @param meta A data frame containing metadata. See `details` below for data
-#'   specification.
-#' @param data Either a data frame or a character string with the path to the
-#'   app data in .rds format. See `details` below for data.frame specification.
 #' @param data_folder Character string. The folder in which all data resides is
 #'   usually set in the config.yml file. However, this can be overwritten if a
 #'   path is set in this argument. Useful for testing purposes.
-#' @param user_db Character string. Path to the app database. If not existing,
-#'   will be created based on app data and metadata, with all data labeled as
-#'   'new'/not yet reviewed.
-#' @param credentials_db Character string. Path to the credentials database.
 #' @param credentials_pwd Character string with the credentials' database
 #'   password.
 #' @param test_mode Logical, whether to run the application in test mode.
@@ -19,11 +11,20 @@
 #' @inheritParams shiny::shinyApp
 #' 
 #' @details
-#' Two of the arguments `meta` and `data` are crucial to successful app
-#' deployment. As such, here are comprehensive data specifications for these
-#' objects:
+#' There are several elements defined in `golem-config.yml` that require
+#' configuration before launching the application for the first time. To name a
+#' few:
 #' 
-#' Column specs for the `data` object:
+#' - `user_db` a Character string providing the path to the app database's.
+#'   If it does not exist, one will be created based on app data and metadata,
+#'   with all data labeled as new'/not yet reviewed.
+#' - `credentials_db` Character string. Path to the credentials database.
+#' 
+#' The other two are `meta_data` and `study_data`, which file paths to RDS files
+#' pertinent to successful app deployment. As such, here are comprehensive data
+#' specifications for these objects:
+#' 
+#' Column specs for the `study_data` RDS object:
 #' - `site_code`: character or integer, identifier for study site; If an integer,
 #'    recommended to add prefix "Site" as this will display more intuitively in
 #'    the application's UI
@@ -87,7 +88,7 @@
 #'    field is `NA` / missing.
 #' 
 #' 
-#' Specifications for list items that may be included in the `meta` object:
+#' Specifications for list items that may be included in the `meta_data` RDS:
 #' 
 #' `column_specs` a data.frame
 #' 
