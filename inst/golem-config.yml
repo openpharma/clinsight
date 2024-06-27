@@ -37,7 +37,7 @@ shinyproxy:
   user_id: HTTP_X_SP_USERID
   user_name: HTTP_X_SP_USERNAME
   user_group: HTTP_X_SP_USERGROUPS
-posit_connect:
+shiny_connect:
   app_prod: yes
   user_identification: shiny_session
   data_folder: study_data
