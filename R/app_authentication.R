@@ -14,10 +14,10 @@ initialize_credentials <- function(
 ){
   if(file.exists(credentials_db)) return(
     cat("Using existing credentials database.\n")
-    )
+  )
   
   cat("No credentials database found. Initializing new database.\n", 
-          "Login with Username 'admin' and Password '1234'.")
+      "Login with Username 'admin' and Password '1234'.")
   con <- get_db_connection(credentials_db)
   initial_credentials <- data.frame(
     "user"     = "admin", 
@@ -116,15 +116,16 @@ authenticate_server <- function(
     credentials_db = file.path(
       get_golem_config("data_folder"), 
       get_golem_config("credentials_db")
-      ),
+    ),
     credentials_pwd = Sys.getenv("DB_SECRET"), 
     user_id = get_golem_config("user_id"),
     user_name = get_golem_config("user_name"),
     user_group = get_golem_config("user_group"),
     session
 ){
-  if(user_identification == "shinymanager") return({
-    shinymanager::secure_server(
+  switch(
+    user_identification,
+    shinymanager = shinymanager::secure_server(
       check_credentials = shinymanager::check_credentials(
         credentials_db,
         passphrase = credentials_pwd
@@ -136,24 +137,27 @@ authenticate_server <- function(
         ),
         "sites" = list(
           fun = "selectInput",
-          args = list(label = NULL, choices = all_sites, selected = all_sites, multiple = TRUE)
+          args = list(
+            label = NULL, 
+            choices = all_sites, 
+            selected = all_sites, 
+            multiple = TRUE
+          )
         )
       )
-    )
-  }) 
-  switch(user_identification,
+    ),
     test_user = reactiveValues(
       user = "test_user", 
       name = "test user", 
       role = all_roles[1],
       sites = all_sites
-      ),
+    ),
     http_headers = reactiveValues(
       user = session$request[[user_id]],
       name = session$request[[user_name]],
       role = session$request[[user_group]],
       sites = all_sites
-      ),
+    ),
     shiny_session = reactiveValues(
       user = session[[user_id]],
       name = session[[user_name]],
