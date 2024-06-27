@@ -9,7 +9,7 @@ describe(
     it("errors with incorrect input", {
       expect_error(get_meta_vars(mtcars, metadata))
       expect_error(get_meta_vars(appdata, mtcars))
-      expect_error(get_meta_vars(list(), mtcars), 
+      expect_error(get_meta_vars(list(), metadata), 
                    "Empty list with data provided")
     })
   }

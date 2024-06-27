@@ -5,8 +5,8 @@
 \title{Merge metadata with raw data}
 \usage{
 merge_meta_with_data(
-  data = raw_data,
-  meta = metadata,
+  data,
+  meta,
   expected_columns = c("LBORNR_Lower", "LBORNR_Upper", "LBORRESU", "LBORRESUOTH",
     "LBREASND", "unit", "lower_limit", "upper_limit", "LBCLSIG")
 )

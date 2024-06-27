@@ -9,10 +9,7 @@ run_app(
   options = list(),
   enableBookmarking = NULL,
   uiPattern = "/",
-  meta = metadata,
-  data = clinsightful_data,
-  user_db = "user_db.sqlite",
-  credentials_db = "credentials_db.sqlite",
+  data_folder = NULL,
   credentials_pwd = Sys.getenv("DB_SECRET"),
   test_mode = FALSE,
   ...

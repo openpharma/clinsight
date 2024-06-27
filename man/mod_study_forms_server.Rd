@@ -10,7 +10,8 @@ mod_study_forms_server(
   form,
   form_items,
   id_item = c("subject_id", "event_name", "item_group", "form_repeat", "item_name"),
-  table_names = NULL
+  table_names = NULL,
+  item_info
 )
 }
 \arguments{
@@ -42,6 +43,10 @@ that can uniquely identify one item/row.}
 \item{table_names}{An optional character vector. If provided, will be used
 within \code{\link[=datatable_custom]{datatable_custom()}}, to improve the column names in the final
 interactive tables.}
+
+\item{item_info}{A data frame containing the names of the study forms (in the
+column \code{item_group}), and the columns \code{item_scale} \code{use_unscaled_limits},
+which are used to customize the way the figures are shown in the page.}
 }
 \description{
 A shiny module. Used to display figures and tables of a study-specific form

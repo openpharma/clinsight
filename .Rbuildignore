@@ -15,3 +15,4 @@ _\.new\.png$
 ^dev$
 ^Meta$
 ^pkgdown$
+^test_data$

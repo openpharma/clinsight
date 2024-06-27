@@ -91,32 +91,59 @@ run_app <- function(
     options = list(),
     enableBookmarking = NULL,
     uiPattern = "/",
-    meta = metadata, 
-    data = clinsightful_data,
-    user_db = "user_db.sqlite",
-    credentials_db = "credentials_db.sqlite",
+    data_folder = NULL,
     credentials_pwd = Sys.getenv("DB_SECRET"),
     test_mode = FALSE,
     ...
 ) {
+  data_folder <- data_folder %||% get_golem_config("data_folder") %||% "."
+  if(!dir.exists(data_folder)){ dir.create(data_folder) }
+  
+  data <- get_golem_config("study_data")
+  meta <- get_golem_config("meta_data")
+  user_db <- file.path(data_folder, get_golem_config("user_db"))
+  credentials_db <- file.path(data_folder, get_golem_config("credentials_db"))
+  
+  ## Verify study data
   if(is.character(data)){
-    stopifnot("Data file does not exist." = file.exists(data))
+    if(!dir.exists(data_folder)){
+      stop("Folder '", data_folder, "' does not exist.\n")
+    }
+    data_path <- file.path(data_folder, data)
+    if(!file.exists(data_path)) stop(paste0("Cannot find '", data_path, "'."))
     stopifnot(
-      "Invalid data format. Expecting a file .rds format" = grepl("rds$", tolower(basename(data)))
+      "Invalid data format. Expecting a file .rds format" =  
+        tolower(tools::file_ext(data)) == "rds"
     )
-  } else{
-    stopifnot("Invalid data format. Expecting a data frame." = is.data.frame(data) )
+    data <- readRDS(data_path)
+  } 
+  stopifnot("Expecting study data to be in data frame format." = is.data.frame(data) )
+  ### TODO: Add tests to check if data is in correct format. Stop if this is not the case.
+  
+  ## Verify metadata
+  if(is.character(meta)){
+    meta_path <- file.path(data_folder, meta)
+    if(!file.exists(meta_path)) {
+      stop(paste0("Cannot find metadata file '", meta_path, "'."))
+    }
+    if(tolower(tools::file_ext(meta)) != "rds") {
+      stop("Only metadata files of type '.rds' are allowed.")
+      }
+    meta <- readRDS(meta_path)
   }
-  stopifnot("User database directory does not exist" = dir.exists(dirname(user_db)))
-  stopifnot("metadata should be provided in list format" = inherits(meta, "list"))
+  stopifnot("Expecting metadata to be in a list format" = inherits(meta, "list"))
   
-  shinymanager::set_labels(
-    language = "en",
-    "Please authenticate" = "Login to continue"
-  )
-  options("shinymanager.pwd_validity" = 90) 
-  options("shinymanager.pwd_failure_limit" = 5)
+  ## Verify user database
+  if(!file.exists(user_db)){
+    warning("No user database found. New database will be created")
+    db_create(get_review_data(data), db_path = user_db)
+  } else{
+    if(!test_mode){
+      db_update(get_review_data(data), db_path = user_db, data_synched = FALSE) 
+    }
+  }
   
+  ## Verify credentials database, if applicable
   if(!test_mode){
     stopifnot("Credentials database directory does not exist" = dir.exists(dirname(credentials_db)))
     stopifnot("No valid credentials database pwd provided" = is.character(credentials_pwd))
@@ -126,6 +153,13 @@ run_app <- function(
       credentials_pwd = credentials_pwd
     )
   }
+  
+  shinymanager::set_labels(
+    language = "en",
+    "Please authenticate" = "Login to continue"
+  )
+  options("shinymanager.pwd_validity" = 90) 
+  options("shinymanager.pwd_failure_limit" = 5)
   
   with_golem_options(
     app = shinyApp(
@@ -140,7 +174,7 @@ run_app <- function(
       meta = meta,
       data = data,
       user_db = user_db,
-      credentials_db = credentials_db, 
+      credentials_db = credentials_db,
       credentials_pwd = credentials_pwd,
       test_mode = test_mode,
       ...

@@ -16,7 +16,8 @@ get_metadata(
 \item{expand_tab_items}{Character vector with the names of the tabs of which
 the items need to be expanded. If not empty, a new data frame will be
 created named 'expanded_items', containing all items in the tabs of
-\code{expand_tab_items}.}
+\code{expand_tab_items}. Will abort if a tab name is provided that does not
+exist in the metadata.}
 
 \item{expand_cols}{Column names containing the columns for expansion. Will be
 ignored if the variable \code{expand_tab_items} is left empty.}

@@ -17,7 +17,7 @@ library(ggplot2)
 library(plotly)
 pkgname <- "clinsight"
 library(pkgname, character.only = TRUE)
-merged_data <- merge_meta_with_data(clinsightful_data)
+merged_data <- merge_meta_with_data(clinsightful_data, metadata)
 appdata <- get_appdata(merged_data)
 vars <- get_meta_vars(data = appdata, meta = metadata)
 apptables <- lapply(

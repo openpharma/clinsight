@@ -6,6 +6,15 @@ rev_data <- get_review_data(clinsightful_data)
 db_path <- file.path(data_folder, "testdb.sqlite")
 db_create(rev_data, db_path)
 # fixed synch time needed for snapshots:
-DBI::dbWriteTable(get_db_connection(db_path), "db_synch_time",
-                  data.frame("synch_time" = "2024-01-10"), overwrite = TRUE)
+db_temp_connect(db_path, {
+  DBI::dbWriteTable(
+    con, 
+    "db_synch_time",
+    data.frame("synch_time" = "2024-01-10"), 
+    overwrite = TRUE
+  )
+})
 
+# To inspect the table, you can run something like this:
+# all_tables <- db_temp_connect(db_path, DBI::dbListTables(con))
+# db_temp_connect(db_path, lapply(all_tables, \(x){dplyr::tbl(con, x)}))

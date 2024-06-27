@@ -53,33 +53,3 @@ check_appdata <- function(
   cat("data check completed.\n")
 }
 
-
-#' Check available data
-#' 
-#' Checks if data is loaded in memory and if not, provides an informative error 
-#' message.
-#'
-#' @param required_data A character vector with objects that are required.
-#' @param env The environment to check in. 
-#'
-#' @return Nothing if the checks are passed. If not, will throw an error.
-#' @export 
-#'
-#' @examples
-#' # check_available_data("missing_data_frame")
-#' # Error in check_available_data("missing_data_frame") : 
-#' # The following data objects are required to run the app properly, 
-#' # but are missing: missing_data_frame
-#' 
-check_available_data <- function(
-    required_data = c("appdata", "apptables", "vars", "db_path"), 
-    env = globalenv()
-){
-  stopifnot(is.character(required_data))
-  missing_dfs <- required_data[!required_data %in% ls(envir = env)]
-  if(!length(missing_dfs) == 0) stop(
-    "The following data objects are required to run the app properly, but are missing: ", 
-    paste0(missing_dfs, collapse = ", ")
-  )
-}
-
