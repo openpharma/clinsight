@@ -17,7 +17,7 @@ unique(clinsightful_data[,c("form_id","form_repeat")])
 unique(clinsightful_data[,c("event_repeat","event_id","event_name")])
 unique(clinsightful_data[,c("event_repeat","event_id","event_name","form_id","form_repeat")])
 
-
+data("clinsightful_data")
 d_1pat <- clinsightful_data |>
   filter(subject_id == "BEL_04_772") |>
   filter(event_id == "COMMON_CM")

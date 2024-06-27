@@ -1,5 +1,5 @@
 ---
-title: "Input Data Specification"
+title: "Input Data Specifications"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Input Data Specification}
@@ -15,6 +15,14 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(clinsight)
 ```
+Note: this page is "under construction" until the `clinsight` package developers
+create helper functions that transform at least one other EDC data source into 
+the desired format. In the meantime, this page provides useful documentation to 
+the existing data spec. Eventually, it will also share guidelines about how to
+combine your input data with metadata sources, etc.
+
+## Intro
+
 In order to plug your organizations EDC data into the `clinsight` application,
 you'll notice the `run_app()` function in `app.R` collects a `data` argument.
 This vignette is all about the expected format of that `data` object / file.
