@@ -131,4 +131,22 @@ or 'NCS' which means 'Not Clinically Significant'
 \item \code{reason_notdone}:  character, an effort to describe why the \code{item_value}
 field is \code{NA} / missing.
 }
+
+Specifications for list items that may be included in the \code{meta} object:
+
+\code{column_specs} a data.frame
+
+\code{events} a data.frame
+
+\code{common_forms} a data.frame
+
+\code{study_forms} a data.frame
+
+\code{general} a data.frame
+
+\code{groups} a data.frame
+
+\code{table_names} a data.frame
+
+\code{items_expanded} a data.frame
 }

@@ -83,6 +83,25 @@
 #' - `reason_notdone`:  character, an effort to describe why the `item_value`
 #'    field is `NA` / missing.
 #' 
+#' 
+#' Specifications for list items that may be included in the `meta` object:
+#' 
+#' `column_specs` a data.frame
+#' 
+#' `events` a data.frame
+#' 
+#' `common_forms` a data.frame
+#' 
+#' `study_forms` a data.frame
+#' 
+#' `general` a data.frame
+#' 
+#' `groups` a data.frame
+#' 
+#' `table_names` a data.frame
+#' 
+#' `items_expanded` a data.frame
+#' 
 #'
 #' @export
 #' 
