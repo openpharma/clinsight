@@ -15,14 +15,14 @@
 #' configuration before launching the application for the first time. To name a
 #' few:
 #' 
-#' - `user_db` a Character string providing the path to the app database's.
+#' - `user_db` a Character string providing the path to the app databases.
 #'   If it does not exist, one will be created based on app data and metadata,
 #'   with all data labeled as new'/not yet reviewed.
 #' - `credentials_db` Character string. Path to the credentials database.
 #' 
-#' The other two are `meta_data` and `study_data`, which file paths to RDS files
-#' pertinent to successful app deployment. As such, here are comprehensive data
-#' specifications for these objects:
+#' The other two are `meta_data` and `study_data`, file paths to the app's primary
+#' source of data, stored as RDS files pertinent to successful app deployment.
+#' As such, here are comprehensive data specifications for these objects:
 #' 
 #' Column specs for the `study_data` RDS object:
 #' - `site_code`: character or integer, identifier for study site; If an integer,
