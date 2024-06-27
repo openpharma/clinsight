@@ -1,9 +1,12 @@
 #' Run the Shiny Application
-#'
+#' 
 #' @param meta A data frame containing metadata. See `details` below for data
 #'   specification.
 #' @param data Either a data frame or a character string with the path to the
 #'   app data in .rds format. See `details` below for data.frame specification.
+#' @param data_folder Character string. The folder in which all data resides is
+#'   usually set in the config.yml file. However, this can be overwritten if a
+#'   path is set in this argument. Useful for testing purposes.
 #' @param user_db Character string. Path to the app database. If not existing,
 #'   will be created based on app data and metadata, with all data labeled as
 #'   'new'/not yet reviewed.

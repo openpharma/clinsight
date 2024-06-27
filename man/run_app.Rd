@@ -36,6 +36,18 @@ request to determine whether the \code{ui} should be used to handle the
 request. Note that the entire request path must match the regular
 expression in order for the match to be considered successful.}
 
+\item{data_folder}{Character string. The folder in which all data resides is
+usually set in the config.yml file. However, this can be overwritten if a
+path is set in this argument. Useful for testing purposes.}
+
+\item{credentials_pwd}{Character string with the credentials' database
+password.}
+
+\item{test_mode}{Logical, whether to run the application in test mode.}
+
+\item{...}{arguments to pass to golem_opts. See \code{?golem::get_golem_options}
+for more details.}
+
 \item{meta}{A data frame containing metadata. See \code{details} below for data
 specification.}
 
@@ -47,14 +59,6 @@ will be created based on app data and metadata, with all data labeled as
 'new'/not yet reviewed.}
 
 \item{credentials_db}{Character string. Path to the credentials database.}
-
-\item{credentials_pwd}{Character string with the credentials' database
-password.}
-
-\item{test_mode}{Logical, whether to run the application in test mode.}
-
-\item{...}{arguments to pass to golem_opts. See \code{?golem::get_golem_options}
-for more details.}
 }
 \description{
 Run the Shiny Application
