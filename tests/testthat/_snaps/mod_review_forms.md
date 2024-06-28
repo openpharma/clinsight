@@ -26,5 +26,5 @@
         event_date edit_date_time      reviewed comment       reviewer    status
         <chr>      <chr>               <chr>    <chr>         <chr>       <chr> 
       1 2023-07-01 2023-08-30 01:01:01 No       ""            ""          new   
-      2 2023-08-15 2023-09-30 01:01:01 Yes      "test review" "test_name" old   
+      2 2023-08-15 2023-09-30 01:01:01 No       "test review" "test_name" new   
 

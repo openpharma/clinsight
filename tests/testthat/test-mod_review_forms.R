@@ -83,19 +83,23 @@ describe(
             # It would still work since it defaults to select the last row of the database, 
             # but it might give a warning. 
             
-            # It saves a review a second time properly,
+            # It saves a review a second time properly if the review state is changed, 
             # only showing the latest review data in the app but storing all review
             # data, including the previous one, in the database
             # ! if add_comment != logical (1 for example), the test below will fail.
             # two rows with the same editdateetime will be written to the database.
-            session$setInputs(add_comment = TRUE, review_comment = "test review")
-            session$setInputs(save_review = 2)
+            session$setInputs(
+              form_reviewed = FALSE, 
+              add_comment = TRUE, 
+              review_comment = "test review",
+              save_review = 2
+              )
             db_reviewdata <- db_temp_connect(db_path, {
               dplyr::tbl(con, "all_review_data") |> 
                 dplyr::collect()
             })
             expect_equal(with(db_reviewdata, comment[subject_id == "885"]), c("", "", "test review"))
-            expect_equal(with(db_reviewdata, reviewed[subject_id == "885"]), c("No", "Yes", "Yes"))
+            expect_equal(with(db_reviewdata, reviewed[subject_id == "885"]), c("No", "Yes", "No"))
             expect_equal(r$review_data, db_slice_rows(db_path))
             expect_snapshot(print(dplyr::select(r$review_data, -timestamp), width = Inf))
           })
@@ -109,8 +113,8 @@ describe(
         and [active_form] set to 'Adverse events',
         and first (1) No input is given, then (2) the value [form_review] is set to 'TRUE',
         and then (3) the [save_review] button is clicked,
-        I expect that, after each action, the save review button will be
-        (1) disabled, (2) enabled, and (3) disabled,
+        I expect that, after each action, the save review button and the option 
+        to add a comment will be (1) disabled, (2) enabled, and (3) disabled,
         and that, after the aforementioned input actions, the review status of the active form and
         active subject in the database is set to 'old' (reviewed),
         and the reviewer is set to 'test_name'.",
@@ -145,17 +149,25 @@ describe(
           height = 955
         )
         withr::defer(app$stop())
-        app$wait_for_idle(2000)
-        # save button should not be available:
+        app$wait_for_idle(2500)
+        
+        # save button and comment option should not be available:
         app$expect_values()
+        expect_true(app$get_js("document.getElementById('test-save_review').disabled;"))
+        expect_true(app$get_js("document.getElementById('test-add_comment').disabled;"))
         
         app$click("test-form_reviewed")
-        # now the save button is available:
+        # now the save button and comment option is available:
         app$expect_values()
+        expect_false(app$get_js("document.getElementById('test-save_review').disabled;"))
+        expect_false(app$get_js("document.getElementById('test-add_comment').disabled;"))
+        
         app$click("test-save_review")
         app$wait_for_idle()
-        # save button should not be available anymore:
+        # save button and comment option should not be available anymore:
         app$expect_values()
+        expect_true(app$get_js("document.getElementById('test-save_review').disabled;"))
+        expect_true(app$get_js("document.getElementById('test-add_comment').disabled;"))
         
         # review status and reviewer is saved as expected
         saved_review_row <- db_slice_rows(temp_path) |>
@@ -212,7 +224,43 @@ describe(
       }
     )
     it(
-      "Scenario 2 | No data to review. Given [active_form] set to a 
+      "Scenario 2 | Saving with unchanged review status. Given the same 
+      conditions as in Scenario 1, and setting comment to 'test comment',
+      and attempting to save a review 'save review',
+      I expect that [enable_save_review()] is set to 'FALSE',
+      and that the review database remains unchanged.",
+      {
+        temp_path <- withr::local_tempfile(fileext = ".sqlite")
+        file.copy(test_path("fixtures", "review_testdb.sqlite"), temp_path) 
+        old_review_table <- db_temp_connect(temp_path, {
+          DBI::dbGetQuery(con, "SELECT * FROM all_review_data")
+        })
+        testargs <- list(
+          r = reactiveValues(
+            user_name = reactiveVal("test_name"),
+            subject_id = "885",
+            review_data = db_slice_rows(temp_path)
+          ),
+          active_form = reactiveVal("Adverse events"),
+          active_tab = reactiveVal("Common forms"),
+          db_path = temp_path
+        )
+        
+        testServer(mod_review_forms_server, args = testargs, {
+          ns <- session$ns
+          session$setInputs(form_reviewed = FALSE, add_comment = "test comment")
+          expect_false(enable_save_review())
+          session$setInputs(save_review = 1)
+          new_review_table <- db_temp_connect(db_path, {
+            DBI::dbGetQuery(con, "SELECT * FROM all_review_data")
+          })
+          expect_error(output[["save_review_error"]], "Requires review")
+          expect_equal(old_review_table, new_review_table)
+        })
+      }
+    )
+    it(
+      "Scenario 3 | No data to review. Given [active_form] set to a 
         non-existing form named [non-existent],
         and that I try to save a review by setting [save_review] to 2,
         I expect that a warning message will be displayed with the text [Nothing to review],
