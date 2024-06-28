@@ -20,11 +20,14 @@
 #'   with all data labeled as new'/not yet reviewed.
 #' - `credentials_db` Character string. Path to the credentials database.
 #' 
-#' The other two are `meta_data` and `study_data`, file paths to the app's primary
-#' source of data, stored as RDS files pertinent to successful app deployment.
-#' As such, here are comprehensive data specifications for these objects:
+#' The other two elements are `meta_data` and `study_data`, accepting file paths
+#' to the app's primary source of data, stored as RDS files. As such, below are
+#' comprehensive data specifications for these objects.
 #' 
-#' Column specs for the `study_data` RDS object:
+#' ### `study_data`
+#' The RDS file ported to the `study_data` element is a data.frame containing the
+#' following required columns:
+#' 
 #' - `site_code`: character or integer, identifier for study site; If an integer,
 #'    recommended to add prefix "Site" as this will display more intuitively in
 #'    the application's UI
@@ -87,24 +90,75 @@
 #' - `reason_notdone`:  character, an effort to describe why the `item_value`
 #'    field is `NA` / missing.
 #' 
+#' ### `meta_data`
 #' 
-#' Specifications for list items that may be included in the `meta_data` RDS:
+#' The RDS file ported to the `meta_data` configuration is a list of data.frames
+#' which (not surprisingly) contains metadata used for the application. Prior to
+#' launching the application, the metadata will be merged with the `study_data`.
+#' to dictate which variables will be included in the application, and in which 
+#' tab the variables will be displayed. The goal is that most, if not all 
+#' study-specific data will be captured in the metadata, leaving the scripts to 
+#' run the application largely unaltered between studies.
 #' 
-#' `column_specs` a data.frame
-#' 
-#' `events` a data.frame
-#' 
-#' `common_forms` a data.frame
-#' 
-#' `study_forms` a data.frame
-#' 
-#' `general` a data.frame
-#' 
-#' `groups` a data.frame
-#' 
-#' `table_names` a data.frame
-#' 
-#' `items_expanded` a data.frame
+#' Specifications for the list of data.frames include:
+#' :
+#'  - `events`: Used to create a simple timeline in the application, with
+#'  predefined number of planned visits, N. It contains the following columns:
+#'      - `event_number`: integer. Example: 0, 1, 2, ..., N
+#'      - `event_name`: character. Example: "Screening", "Visit 1", "Visit 2", 
+#'      ..., "Visit N"
+#'      - `event_label`: character. Example: "V0", "V1", "V2", ..., "VN"
+#'   
+#'  - `common_forms`: Used to select and rename the variables of interest in 
+#'  the raw data when transformed into the desired `study_data` format. Note: 
+#'  creating the `study_data` data.frame should use `merge_meta_with_data()` 
+#'  where (not surprisingly), the metadata is merged with the raw study data.
+#'  `common_forms` contains the columns below:
+#'      - `var`: character, the variable name to display in the table, mapped 
+#'      from a known `item_name` provided in `study_data`. Example: 
+#'      `item_name = "AE Name"` will be replaced by "AE_AETERM" when 
+#'      `var = "AE_AETERM"`.
+#'      - `suffix`: Usually blank in this data.frame. This column is more 
+#'      commonly used in the `study_forms` data.frame
+#'      - `item_name`: character, known `item_name`s found in `study_data`. There
+#'      are certain `item_name`s that are required, even if missing in 
+#'      `study_data`, including: "AE Name", "AE start date", "AE end date", "AE 
+#'      date of worsening", "AE CTCAE severity", "AE CTCAE severity worsening", 
+#'      "Serious Adverse Event", and "SAE Start date".
+#'      - `item_type`: character, known `item_type` corresponding to those found
+#'       for `item_name`s in `study_data`.
+#'      - `item_group`: character, known `item_group` corresponding to those found
+#'       for `item_name`s in `study_data`.
+#'   
+#'  - `study_forms`: Contains the same columns as the data.frame `common_forms`,
+#'   and in addition the columns `unit`, `lower_limit`, `upper_limit`. Used to
+#'   select and rename the raw data variables of interest. In addition, the
+#'   `suffix` column is used more regularly in this "study" context. This is because,
+#'   these variable names may have a consistent trunk / stem, with
+#'   varying suffixes to describe a similar style measurement. So instead of creating a 
+#'   new row for these variables in the `meta_data` data.frame, we allow for inclusion of several
+#'   suffixes. For example, VS_PULSE measures beats/min. Typically, these measures
+#'   are collected using VS_PULSE_VSORRES & VS_PULSE_VSREAND, but in this format,
+#'   we can list the stem "VS_PULSE" as the `var` and `"VSORRES, VSREAND"` in the suffix field.
+#'   As for the new columns, they are defined as follows:
+#'       - `unit`: character, unit of measure
+#'       - `lower_limit`: numeric, the lower limit of what's considered clinically significant
+#'       - `upper_limit`: numeric, the upper limit of what's considered clinically significant
+#'       
+#'   
+#'  - `general`: Contains the same columns as `common_forms` and is used in the 
+#'  same way. That is, it's used to select and rename the raw data when 
+#'  transformed into the desired `study_data` format. Note: 
+#'  creating the `study_data` data.frame should use `merge_meta_with_data()` 
+#'  where (not surprisingly), the metadata is merged with the raw study data. 
+#'  Please refer to the `common_forms` spec above. However,
+#'  I will note that there are certain `item_name`s that are required, even if 
+#'  missing in `study_data`, including: "Age", "Sex", "ECOG", "Eligible",
+#'  "WHO.classification", "DiscontinuationReason", "DrugAdminDate", and
+#'  "DrugAdminDose".
+#'  
+#'  - `groups`: Contains the columns `item_group`, `item_type`, `item_scale`,
+#'   `use_unscaled_limits`.
 #' 
 #'
 #' @export

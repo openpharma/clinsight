@@ -56,17 +56,19 @@ There are several elements defined in \code{golem-config.yml} that require
 configuration before launching the application for the first time. To name a
 few:
 \itemize{
-\item \code{user_db} a Character string providing the path to the app database's.
+\item \code{user_db} a Character string providing the path to the app databases.
 If it does not exist, one will be created based on app data and metadata,
 with all data labeled as new'/not yet reviewed.
 \item \code{credentials_db} Character string. Path to the credentials database.
 }
 
-The other two are \code{meta_data} and \code{study_data}, which file paths to RDS files
-pertinent to successful app deployment. As such, here are comprehensive data
-specifications for these objects:
+The other two elements are \code{meta_data} and \code{study_data}, accepting file paths
+to the app's primary source of data, stored as RDS files. As such, below are
+comprehensive data specifications for these objects.
+\subsection{\code{study_data}}{
 
-Column specs for the \code{study_data} RDS object:
+The RDS file ported to the \code{study_data} element is a data.frame containing the
+following required columns:
 \itemize{
 \item \code{site_code}: character or integer, identifier for study site; If an integer,
 recommended to add prefix "Site" as this will display more intuitively in
@@ -130,22 +132,79 @@ or 'NCS' which means 'Not Clinically Significant'
 \item \code{reason_notdone}:  character, an effort to describe why the \code{item_value}
 field is \code{NA} / missing.
 }
+}
 
-Specifications for list items that may be included in the \code{meta_data} RDS:
+\subsection{\code{meta_data}}{
 
-\code{column_specs} a data.frame
+The RDS file ported to the \code{meta_data} configuration is a list of data.frames
+which (not surprisingly) contains metadata used for the application. Prior to
+launching the application, the metadata will be merged with the \code{study_data}.
+to dictate which variables will be included in the application, and in which
+tab the variables will be displayed. The goal is that most, if not all
+study-specific data will be captured in the metadata, leaving the scripts to
+run the application largely unaltered between studies.
 
-\code{events} a data.frame
-
-\code{common_forms} a data.frame
-
-\code{study_forms} a data.frame
-
-\code{general} a data.frame
-
-\code{groups} a data.frame
-
-\code{table_names} a data.frame
-
-\code{items_expanded} a data.frame
+Specifications for the list of data.frames include:
+:
+\itemize{
+\item \code{events}: Used to create a simple timeline in the application, with
+predefined number of planned visits, N. It contains the following columns:
+\itemize{
+\item \code{event_number}: integer. Example: 0, 1, 2, ..., N
+\item \code{event_name}: character. Example: "Screening", "Visit 1", "Visit 2",
+..., "Visit N"
+\item \code{event_label}: character. Example: "V0", "V1", "V2", ..., "VN"
+}
+\item \code{common_forms}: Used to select and rename the variables of interest in
+the raw data when transformed into the desired \code{study_data} format. Note:
+creating the \code{study_data} data.frame should use \code{merge_meta_with_data()}
+where (not surprisingly), the metadata is merged with the raw study data.
+\code{common_forms} contains the columns below:
+\itemize{
+\item \code{var}: character, the variable name to display in the table, mapped
+from a known \code{item_name} provided in \code{study_data}. Example:
+\code{item_name = "AE Name"} will be replaced by "AE_AETERM" when
+\code{var = "AE_AETERM"}.
+\item \code{suffix}: Usually blank in this data.frame. This column is more
+commonly used in the \code{study_forms} data.frame
+\item \code{item_name}: character, known \code{item_name}s found in \code{study_data}. There
+are certain \code{item_name}s that are required, even if missing in
+\code{study_data}, including: "AE Name", "AE start date", "AE end date", "AE
+date of worsening", "AE CTCAE severity", "AE CTCAE severity worsening",
+"Serious Adverse Event", and "SAE Start date".
+\item \code{item_type}: character, known \code{item_type} corresponding to those found
+for \code{item_name}s in \code{study_data}.
+\item \code{item_group}: character, known \code{item_group} corresponding to those found
+for \code{item_name}s in \code{study_data}.
+}
+\item \code{study_forms}: Contains the same columns as the data.frame \code{common_forms},
+and in addition the columns \code{unit}, \code{lower_limit}, \code{upper_limit}. Used to
+select and rename the raw data variables of interest. In addition, the
+\code{suffix} column is used more regularly in this "study" context. This is because,
+these variable names may have a consistent trunk / stem, with
+varying suffixes to describe a similar style measurement. So instead of creating a
+new row for these variables in the \code{meta_data} data.frame, we allow for inclusion of several
+suffixes. For example, VS_PULSE measures beats/min. Typically, these measures
+are collected using VS_PULSE_VSORRES & VS_PULSE_VSREAND, but in this format,
+we can list the stem "VS_PULSE" as the \code{var} and \code{"VSORRES, VSREAND"} in the suffix field.
+As for the new columns, they are defined as follows:
+\itemize{
+\item \code{unit}: character, unit of measure
+\item \code{lower_limit}: numeric, the lower limit of what's considered clinically significant
+\item \code{upper_limit}: numeric, the upper limit of what's considered clinically significant
+}
+\item \code{general}: Contains the same columns as \code{common_forms} and is used in the
+same way. That is, it's used to select and rename the raw data when
+transformed into the desired \code{study_data} format. Note:
+creating the \code{study_data} data.frame should use \code{merge_meta_with_data()}
+where (not surprisingly), the metadata is merged with the raw study data.
+Please refer to the \code{common_forms} spec above. However,
+I will note that there are certain \code{item_name}s that are required, even if
+missing in \code{study_data}, including: "Age", "Sex", "ECOG", "Eligible",
+"WHO.classification", "DiscontinuationReason", "DrugAdminDate", and
+"DrugAdminDose".
+\item \code{groups}: Contains the columns \code{item_group}, \code{item_type}, \code{item_scale},
+\code{use_unscaled_limits}.
+}
+}
 }
