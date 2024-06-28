@@ -153,15 +153,15 @@ authenticate_server <- function(
       sites = all_sites
     ),
     http_headers = reactiveValues(
-      user = session$request[[user_id]],
-      name = session$request[[user_name]],
-      role = session$request[[user_group]],
+      user = session$request$HTTP_X_SP_USERID,
+      name = session$request$HTTP_X_SP_USERNAME,
+      role = session$request$HTTP_X_SP_USERGROUPS,
       sites = all_sites
     ),
     shiny_session = reactiveValues(
-      user = session[[user_id]],
-      name = session[[user_name]],
-      role = session[[user_group]],
+      user = session$user,
+      name = session$user,
+      role = session$groups,
       sites = all_sites
     ),
     reactiveValues(

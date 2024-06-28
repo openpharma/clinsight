@@ -27,18 +27,13 @@ shinymanager:
 shinyproxy:
   app_prod: yes
   user_identification: http_headers
-  data_folder: study_data
-  study_data: study_data.rds
-  meta_data: metadata.rds
-  user_id: HTTP_X_SP_USERID
-  user_name: HTTP_X_SP_USERNAME
-  user_group: HTTP_X_SP_USERGROUPS
+  study_data: study_data/study_data.rds
+  meta_data: study_data/metadata.rds
+  user_db: study_data/user_db.sqlite
 shiny_connect:
   app_prod: yes
   user_identification: shiny_session
-  data_folder: study_data
   study_data: study_data.rds
   meta_data: metadata.rds
-  user_id: user
-  user_name: user
-  user_group: groups
+  user_db: user_db.sqlite
+  
