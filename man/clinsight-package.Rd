@@ -19,7 +19,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Leonard Daniël Samson \email{lsamson@gcp-service.com}
+\strong{Maintainer}: Leonard Dani<U+00EB>l Samson \email{lsamson@gcp-service.com}
 
 Other contributors:
 \itemize{
