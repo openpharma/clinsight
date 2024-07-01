@@ -15,12 +15,16 @@ golem::document_and_reload(export_all = TRUE)
 load_and_run_app <- function(){
   temp_folder <- tempfile(tmpdir = tempdir())
   dir.create(temp_folder)
+  old_golem_config <- Sys.getenv("GOLEM_CONFIG_ACTIVE")
+  Sys.setenv("GOLEM_CONFIG_ACTIVE" = "dev")
   
   run_app(
     data_folder = temp_folder,
-    test_mode = TRUE, 
-    onStart = \(){onStop(\(){unlink(temp_folder, recursive = TRUE)})}
+    onStart = \(){onStop(\(){
+      unlink(temp_folder, recursive = TRUE); 
+      Sys.setenv("GOLEM_CONFIG_ACTIVE" = old_golem_config)
+    })}
   )
 } 
 
-withr::with_envvar(list("GOLEM_CONFIG_ACTIVE" = "dev"), load_and_run_app())
+load_and_run_app()

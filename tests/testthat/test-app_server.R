@@ -2,14 +2,14 @@ describe(
   "app_server(). Feature 1 | As a user, I want to be able to start the application", 
   {
     it("Can load the server without errors", {
+      withr::local_envvar("GOLEM_CONFIG_ACTIVE" = "default")
       db_path <- withr::local_tempfile(fileext = ".sqlite")
       file.copy(testthat::test_path("fixtures/testdb.sqlite"), db_path)
       app_session <- MockShinySession$new()
       app_session$options$golem_options <- list(
         "meta" = metadata,
         "data" = clinsightful_data,
-        "user_db" = db_path,
-        "test_mode" = TRUE
+        "user_db" = db_path
       )
       testServer(app_server, {
         ns <- session$ns
@@ -21,6 +21,7 @@ describe(
     
     it("Can change main tabs by clicking on the tab, and will save 
        the result in an internal reactive value.", {
+         withr::local_envvar("GOLEM_CONFIG_ACTIVE" = "default")
          db_path <- withr::local_tempfile(fileext = ".sqlite")
          file.copy(testthat::test_path("fixtures/testdb.sqlite"), db_path)
 
@@ -28,8 +29,7 @@ describe(
          app_session$options$golem_options <- list(
            "meta" = metadata,
            "data" = clinsightful_data,
-           "user_db" = db_path,
-           "test_mode" = TRUE
+           "user_db" = db_path
          )
          
          testServer(app_server, {

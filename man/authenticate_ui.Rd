@@ -4,12 +4,8 @@
 \alias{authenticate_ui}
 \title{Authenticate UI}
 \usage{
-authenticate_ui(test_mode = FALSE)
-}
-\arguments{
-\item{test_mode}{Logical. Whether the app should be started in test mode or
-not.}
+authenticate_ui()
 }
 \description{
-Authentication implementation in the UI.
+Authentication implementation in the UI, using \code{shinymanager}.
 }
