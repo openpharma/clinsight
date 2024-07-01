@@ -20,8 +20,7 @@ describe(
       ),
       db_path = "",
       forms_to_review = reactiveVal(),
-      available_data = data.frame(),
-      test_mode = TRUE
+      available_data = data.frame()
     )
     
     it("Can load the module UI, with functioning internal parameters.", {
@@ -83,8 +82,7 @@ describe(
           ),
           db_path = "",
           forms_to_review = reactiveVal(),
-          available_data = available_data,
-          test_mode = TRUE
+          available_data = available_data
         )
       }
       
@@ -133,8 +131,7 @@ describe(
                 ),
                 db_path = "",
                 forms_to_review = reactiveVal(),
-                available_data = data.frame(),
-                test_mode = TRUE
+                available_data = data.frame()
               )
             }
             test_app <- shinyApp(test_ui, test_server)

@@ -5,7 +5,6 @@
 #'   path is set in this argument. Useful for testing purposes.
 #' @param credentials_pwd Character string with the credentials' database
 #'   password.
-#' @param test_mode Logical, whether to run the application in test mode.
 #' @param ... arguments to pass to golem_opts. See `?golem::get_golem_options`
 #'   for more details.
 #' @inheritParams shiny::shinyApp
@@ -19,7 +18,6 @@ run_app <- function(
     uiPattern = "/",
     data_folder = NULL,
     credentials_pwd = Sys.getenv("DB_SECRET"),
-    test_mode = FALSE,
     ...
 ) {
   data_folder <- data_folder %||% get_golem_config("data_folder") %||% "."
@@ -44,7 +42,6 @@ run_app <- function(
     data <- readRDS(data_path)
   } 
   stopifnot("Expecting study data to be in data frame format." = is.data.frame(data) )
-  ### TODO: Add tests to check if data is in correct format. Stop if this is not the case.
   
   ## Verify metadata
   if(is.character(meta)){
@@ -54,42 +51,44 @@ run_app <- function(
     }
     if(tolower(tools::file_ext(meta)) != "rds") {
       stop("Only metadata files of type '.rds' are allowed.")
-      }
+    }
     meta <- readRDS(meta_path)
   }
   stopifnot("Expecting metadata to be in a list format" = inherits(meta, "list"))
+  
+  use_shinymanager <- isTRUE(get_golem_config("user_identification") == "shinymanager")
   
   ## Verify user database
   if(!file.exists(user_db)){
     warning("No user database found. New database will be created")
     db_create(get_review_data(data), db_path = user_db)
   } else{
-    if(!test_mode){
+    # Skip if not needed for faster testing:
+    if(isTRUE(get_golem_config("app_prod"))){
       db_update(get_review_data(data), db_path = user_db, data_synched = FALSE) 
     }
   }
   
   ## Verify credentials database, if applicable
-  if(!test_mode){
+  if(use_shinymanager){
     stopifnot("Credentials database directory does not exist" = dir.exists(dirname(credentials_db)))
     stopifnot("No valid credentials database pwd provided" = is.character(credentials_pwd))
-    if(nchar(credentials_pwd) == 0 ) stop("credentials_pwd cannot be blank it test_mode is FALSE")
+    if(nchar(credentials_pwd) == 0 ) stop("credentials_pwd cannot be blank when using shinymanager")
     initialize_credentials(
       credentials_db = credentials_db,
       credentials_pwd = credentials_pwd
     )
+    shinymanager::set_labels(
+      language = "en",
+      "Please authenticate" = "Login to continue"
+    )
+    options("shinymanager.pwd_validity" = 90) 
+    options("shinymanager.pwd_failure_limit" = 5)
   }
-  
-  shinymanager::set_labels(
-    language = "en",
-    "Please authenticate" = "Login to continue"
-  )
-  options("shinymanager.pwd_validity" = 90) 
-  options("shinymanager.pwd_failure_limit" = 5)
   
   with_golem_options(
     app = shinyApp(
-      ui =  authenticate_ui(test_mode = test_mode),
+      ui =  if(use_shinymanager) authenticate_ui() else app_ui,
       server = app_server,
       onStart = onStart,
       options = options,
@@ -102,7 +101,6 @@ run_app <- function(
       user_db = user_db,
       credentials_db = credentials_db,
       credentials_pwd = credentials_pwd,
-      test_mode = test_mode,
       ...
     )
   )

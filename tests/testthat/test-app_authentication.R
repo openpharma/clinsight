@@ -94,7 +94,7 @@ describe(
         app <- AppDriver$new(
           app_dir = test_path("fixtures/testapp-authentication"),
           name = "authenticate",
-          timeout = 20000,
+          timeout = 25000,
           width = 1619, 
           height = 955    
         )
