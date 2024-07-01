@@ -1,5 +1,5 @@
 ---
-title: "Input Data Specifications"
+title: "App Configuration & Input Data Specifications"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Input Data Specification}
@@ -12,11 +12,12 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
+
 Note: this page is "under construction" until the `clinsight` package developers create helper functions that transform at least one other EDC data source into the desired format. In the meantime, this page provides useful documentation to the existing data spec. Eventually, it will also share guidelines about how to combine your input data with metadata sources, etc.
 
 ## Intro
 
-In order to plug your organizations EDC data into the `clinsight` application, please notice this app is outfitted with a `./inst/golem-config.yml` file to control several elements of deployment. Below is a typical configuration file:
+In order to get started and plug your organizations EDC data into the `clinsight` application, please notice this app is outfitted with a `./inst/golem-config.yml` file to configure several elements of deployment. Below is a typical configuration file:
 
 ```yml
 default:
@@ -39,17 +40,19 @@ dev:
   golem_wd: !expr golem::pkg_path()
 ```
 
-First and foremost, note that the configurations can be developed for many use cases. For example, the above file is designed to run by default with a 
+First and foremost, notice that the configuration can vary depending on deployment use case. For example, the above file is designed to run by default with test data built into the app. Only once in `production` mode, does the app actually leverage data you've gathered from your EDC system, as RDS files.
 
 Depending on the EDC vendor used, the size, shape, and format of their "raw data" may vary. We've compiled a few functions that help admin users pre-process the data they own. However, before we deep dive into how to use those, let's focus on what the final result of those pre-processing steps in order to understand what we need to start using the app.
 
-## `Data` Specification
+## Data Specifications
 
-Baked into the `clinsight` package is an internal data set called `clinsightful_data`. Here is a preview of that data:
+Baked into the `clinsight` package is an internal data.frame called `clinsightful_data`, which is comprised of randomly generated test data for this application. Here is a preview of that data:
 
 ```{r clinsightful_data}
-# library(clinsight)
-# data("clinsightful_data") # Run to load the data into an R session. 
+# Run to load the data into an R session. 
+# pkg_name <- "clinsight"
+# library(pkg_name, character.only = TRUE)
+# data("clinsightful_data") 
 
 head(clinsight::clinsightful_data)
 # colnames(clinsightful_data)
@@ -60,35 +63,12 @@ There are several elements defined in `golem-config.yml` that require configurat
 - `user_db` a Character string providing the path to the app databases. If it does not exist, one will be created based on app data and metadata, with all data labeled as new'/not yet reviewed.
 - `credentials_db` Character string. Path to the credentials database.
 
-The other two elements are `meta_data` and `study_data`, accepting file paths to the app's primary source of data, stored as RDS files. As such, below are comprehensive data specifications for these objects.
+The other two elements are `meta_data` and `study_data`, accepting file paths to the app's primary source of data, stored as RDS files. As such, below are comprehensive data specifications for these objects. Note that the `study_data` object should be created with the pre-processing helper function called `merge_meta_with_data()` which accepts your raw data sources and merges them with the `meta_data` object defined in this article.
 
-### `study_data`
-The RDS file ported to the `study_data` element is a data.frame containing the following required columns:
+### Raw Data
 
-- `site_code`: character or integer, identifier for study site; If an integer, recommended to add prefix "Site" as this will display more intuitively in the application's UI
-- `subject_id`: character, unique identifier for a subject
-- `event_repeat`: integer, helps keep track of unique `event_id` for a single `subject_id` and `event_date`
-- `event_id`: character, names that help classify types of  `event_name`s into like-groups, generally characterized by site visits. For example,  "SCR" for the screening visit, "VIS" for Visit X (where X is some integer), and "EXIT" for when the patient exits the study trial. However, some `event_id`s track events that could apply outside of any visit, like AE, ConMed, Medical History, etc.
-- `event_name`: character, an "event" generally characterizes some sort of site visit, whether that be a "Screening", "Visit X" (where X is some integer), "Exit", or "Any Visit".
-- `event_date`: Date, the date associated with `event_name`
-- `form_id`: character, a unique identifier for the form the `item_name` metric and `item_value` were pulled from. Note: when `item_type` is continuous, `form_id` can contain several different `item_group`s. However, when `item_type` is 'other', `item_group` can be made up of several `form_id` values.
-- `form_repeat`: integer, helps keep track of unique `item_name`s collected from a specific `form_id` for a given `subject_id`. `form_repeat` is particularly helpful when consolidating data like Adverse Events into this data format. Specifically, if more than one AE is collected on a patient, they'll have more than one `form_repeat`
-- `edit_date_time`: datetime (POSIXct), the last time this record was edited
-- `db_update_time`: datetime (POSIXct), the last time the database storing this record was updated.
-- `region`: character, describing the region code that `site_code` falls under
-- `day`: a difftime number, meaning it contains both a number and unit of time. It measures the number of days each visit is from screening
-- `vis_day`: numeric, a numeric representation of `day`
-- `vis_num`: numeric, a numeric representation of `event_name`
-- `event_label`: character, an abbreviation of `event_name`
-- `item_name`:  character, describes a metric or parameter of interest.
-- `item_type`:  character, classifies `item_name`s into either 'continuous' or 'other', where continuous types are those generally associated with the CDISC "basic data structure" (BDS). That is, each `item_name` metric is collected over time at a patient visit (`event_name`). The 'other' type represents all non-time dependent measures, like demographic info, adverse events, Medications, medical history, etc.
-- `item_group`:  character, provides is a high level category that groups like-`item_name`s together. For example, and `item_group` = 'Vital Signs' will group together pertinent `item_name` metrics like BMI, Pulse, Blood pressure, etc.
-- `item_value`:  character, the measurement collected for a given `item_name`. The value collected may be a number like 150 (when collecting a patient's weight) or a word (such as 'white' for the subject's race).
-- `item_unit`:  character, tracking the unit of measurement for `item_name` and `item_value`.
-- `lower_lim`: numeric, some `item_name`s (particularly the 'continuous' type) have a pre-defined range of values that are considered normal. This is the lower limit to that range.
-- `upper_lim`: numeric, some `item_name`s (particularly the 'continuous' type) have a pre-defined range of values that are considered normal. This is the upper limit to that range.
-- `significance`:  character, either 'CS' which means 'Clinically Significant' or 'NCS' which means 'Not Clinically Significant'
-- `reason_notdone`:  character, an effort to describe why the `item_value` field is `NA` / missing.
+Insert Raw data specs
+
 
 ### `meta_data`
 
@@ -117,12 +97,41 @@ Specifications for the list of data.frames include:
  
  - `groups`: Contains the columns `item_group`, `item_type`, `item_scale`,`use_unscaled_limits`.
 
-For more information about 
 
-## Pre-processing
-Place holder for helper functions
+### The end product: `study_data`
+The RDS file (or data.frame) ported to the `study_data` element contains the following required columns below. 
 
-### Raw Data
+- `site_code`: character or integer, identifier for study site; If an integer, recommended to add prefix "Site" as this will display more intuitively in the application's UI
+- `subject_id`: character, unique identifier for a subject
+- `event_repeat`: integer, helps keep track of unique `event_id` for a single `subject_id` and `event_date`
+- `event_id`: character, names that help classify types of  `event_name`s into like-groups, generally characterized by site visits. For example,  "SCR" for the screening visit, "VIS" for Visit X (where X is some integer), and "EXIT" for when the patient exits the study trial. However, some `event_id`s track events that could apply outside of any visit, like AE, ConMed, Medical History, etc.
+- `event_name`: character, an "event" generally characterizes some sort of site visit, whether that be a "Screening", "Visit X" (where X is some integer), "Exit", or "Any Visit".
+- `event_date`: Date, the date associated with `event_name`
+- `form_id`: character, a unique identifier for the form the `item_name` metric and `item_value` were pulled from. Note: when `item_type` is continuous, `form_id` can contain several different `item_group`s. However, when `item_type` is 'other', `item_group` can be made up of several `form_id` values.
+- `form_repeat`: integer, helps keep track of unique `item_name`s collected from a specific `form_id` for a given `subject_id`. `form_repeat` is particularly helpful when consolidating data like Adverse Events into this data format. Specifically, if more than one AE is collected on a patient, they'll have more than one `form_repeat`
+- `edit_date_time`: datetime (POSIXct), the last time this record was edited
+- `db_update_time`: datetime (POSIXct), the last time the database storing this record was updated.
+- `region`: character, describing the region code that `site_code` falls under
+- `day`: a difftime number, meaning it contains both a number and unit of time. It measures the number of days each visit is from screening
+- `vis_day`: numeric, a numeric representation of `day`
+- `vis_num`: numeric, a numeric representation of `event_name`
+- `event_label`: character, an abbreviation of `event_name`
+- `item_name`:  character, describes a metric or parameter of interest.
+- `item_type`:  character, classifies `item_name`s into either 'continuous' or 'other', where continuous types are those generally associated with the CDISC "basic data structure" (BDS). That is, each `item_name` metric is collected over time at a patient visit (`event_name`). The 'other' type represents all non-time dependent measures, like demographic info, adverse events, Medications, medical history, etc.
+- `item_group`:  character, provides is a high level category that groups like-`item_name`s together. For example, and `item_group` = 'Vital Signs' will group together pertinent `item_name` metrics like BMI, Pulse, Blood pressure, etc.
+- `item_value`:  character, the measurement collected for a given `item_name`. The value collected may be a number like 150 (when collecting a patient's weight) or a word (such as 'white' for the subject's race).
+- `item_unit`:  character, tracking the unit of measurement for `item_name` and `item_value`.
+- `lower_lim`: numeric, some `item_name`s (particularly the 'continuous' type) have a pre-defined range of values that are considered normal. This is the lower limit to that range.
+- `upper_lim`: numeric, some `item_name`s (particularly the 'continuous' type) have a pre-defined range of values that are considered normal. This is the upper limit to that range.
+- `significance`:  character, either 'CS' which means 'Clinically Significant' or 'NCS' which means 'Not Clinically Significant'
+- `reason_notdone`:  character, an effort to describe why the `item_value` field is `NA` / missing.
 
-### Metadata
+
+
+
+
+
+
+
+
 
