@@ -17,7 +17,15 @@ initialize_credentials <- function(
   )
   
   cat("No credentials database found. Initializing new database.\n", 
-      "Login with Username 'admin' and Password '1234'.")
+      "Login with Username 'admin' and Password '1234'.\n")
+  cred_directory <- dirname(credentials_db)
+  if(tools::file_ext(credentials_db) == "sqlite" && !dir.exists(cred_directory)) {
+    cat("Folder to store credentials database does not exist. ", 
+        "Creating new directory named '", cred_directory, "'.\n", sep = "")
+    dir_created <- dir.create(cred_directory)
+    if(!dir_created) stop("Could not create directory for user database")
+  }
+  
   con <- get_db_connection(credentials_db)
   initial_credentials <- data.frame(
     "user"     = "admin", 
@@ -113,10 +121,7 @@ authenticate_server <- function(
     user_identification = get_golem_config("user_identification"),
     all_sites = NULL,
     all_roles = get_golem_config("group_roles"),
-    credentials_db = file.path(
-      get_golem_config("data_folder"), 
-      get_golem_config("credentials_db")
-    ),
+    credentials_db = get_golem_config("credentials_db"),
     credentials_pwd = Sys.getenv("DB_SECRET"), 
     user_id = get_golem_config("user_id"),
     user_name = get_golem_config("user_name"),

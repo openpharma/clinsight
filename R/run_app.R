@@ -20,45 +20,47 @@ run_app <- function(
     credentials_pwd = Sys.getenv("DB_SECRET"),
     ...
 ) {
-  data_folder <- data_folder %||% get_golem_config("data_folder") %||% "."
-  if(!dir.exists(data_folder)){ dir.create(data_folder) }
   
   data <- get_golem_config("study_data")
   meta <- get_golem_config("meta_data")
-  user_db <- file.path(data_folder, get_golem_config("user_db"))
-  credentials_db <- file.path(data_folder, get_golem_config("credentials_db"))
+  user_db <- get_golem_config("user_db")
+  use_shinymanager <- isTRUE(get_golem_config("user_identification") == "shinymanager")
+  credentials_db <- get_golem_config("credentials_db")
+  
+  if(!is.null(data_folder)){
+    if(!dir.exists(data_folder)) dir.create(data_folder) 
+    if(!dir.exists(data_folder)){
+      stop("Folder path '", data_folder, "' specified but cannot be created\n")
+    }
+    if(is.character(data)) data <- file.path(data_folder, data)
+    if(is.character(meta)) meta <- file.path(data_folder, meta)
+    user_db <-  file.path(data_folder, user_db)
+    credentials_db <- file.path(data_folder, credentials_db)
+  }
   
   ## Verify study data
   if(is.character(data)){
-    if(!dir.exists(data_folder)){
-      stop("Folder '", data_folder, "' does not exist.\n")
+    if(!file.exists(data)) stop(paste0("Cannot find '", data, "'."))
+    if(tolower(tools::file_ext(data)) != "rds"){
+      stop("Invalid data format. Expecting a file .rds format")
     }
-    data_path <- file.path(data_folder, data)
-    if(!file.exists(data_path)) stop(paste0("Cannot find '", data_path, "'."))
-    stopifnot(
-      "Invalid data format. Expecting a file .rds format" =  
-        tolower(tools::file_ext(data)) == "rds"
-    )
-    data <- readRDS(data_path)
+    data <- readRDS(data)
   } 
-  stopifnot("Expecting study data to be in data frame format." = is.data.frame(data) )
+  stopifnot("Expecting study data to be in data frame format." = is.data.frame(data))
   
   ## Verify metadata
   if(is.character(meta)){
-    meta_path <- file.path(data_folder, meta)
-    if(!file.exists(meta_path)) {
-      stop(paste0("Cannot find metadata file '", meta_path, "'."))
-    }
+    if(!file.exists(meta)) stop(paste0("Cannot find metadata ('", meta, "')."))
     if(tolower(tools::file_ext(meta)) != "rds") {
       stop("Only metadata files of type '.rds' are allowed.")
     }
-    meta <- readRDS(meta_path)
+    meta <- readRDS(meta)
   }
   stopifnot("Expecting metadata to be in a list format" = inherits(meta, "list"))
   
-  use_shinymanager <- isTRUE(get_golem_config("user_identification") == "shinymanager")
-  
   ## Verify user database
+  stopifnot("user_db should be a character vector with a file path" = 
+              is.character(user_db))
   if(!file.exists(user_db)){
     warning("No user database found. New database will be created")
     db_create(get_review_data(data), db_path = user_db)
@@ -71,7 +73,8 @@ run_app <- function(
   
   ## Verify credentials database, if applicable
   if(use_shinymanager){
-    stopifnot("Credentials database directory does not exist" = dir.exists(dirname(credentials_db)))
+    stopifnot("credentials_db should be a character vector with a file path" = 
+                is.character(credentials_db))
     stopifnot("No valid credentials database pwd provided" = is.character(credentials_pwd))
     if(nchar(credentials_pwd) == 0 ) stop("credentials_pwd cannot be blank when using shinymanager")
     initialize_credentials(

@@ -48,6 +48,28 @@ describe(
         dplyr::as_tibble(query_data_skeleton)
       )
     })
+    it("Can create a .sqlite app database if the database folder does not exist, 
+       with the required tables named [all_review_data], db_synch_time, and query_data", {
+      rev_data <- data.frame(
+        subject_id = "Test_name",
+        event_name = "Visit 1",
+        item_group = "Test_group",
+        form_repeat = 1,
+        item_name = "Test_item",
+        event_date = "2023-11-01",
+        edit_date_time = "2023-11-05 01:26:00"
+      )
+      temp_path <- file.path(withr::local_tempdir(), "non_existing_folder/db.sqlite")
+      
+      db_create(rev_data, temp_path)
+      
+      expect_true(file.exists(temp_path))
+      con <- get_db_connection(temp_path)
+      expect_equal(
+        DBI::dbListTables(con), 
+        c("all_review_data", "db_synch_time", "query_data")
+      )
+    })
   }
 )
 
