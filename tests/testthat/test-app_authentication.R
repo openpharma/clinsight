@@ -39,7 +39,7 @@ describe(
         from the initialization password ('1234'),
         and that the value (password) [must_change] is set to TRUE.", 
       {
-        db_name <- file.path(withr::local_tempdir(), "credentials.db")
+        db_name <- file.path(withr::local_tempdir(), "credentials.sqlite")
         initialize_credentials(
           credentials_db = db_name,
           credentials_pwd = "test_password"
@@ -68,6 +68,21 @@ describe(
           with(password_management_table, must_change[user == "admin"]),
           "TRUE"
         )
+      }
+    )
+    it(
+      "Scenario 3 | Create a new credentials database in a non-existent folder. 
+        Given that [credentials_db] leads to a non-existing .sqlite database in 
+        a nont-existent folder, 
+        and [credentials_pwd] is set to 'test_password', 
+        I expect that a new credentials database will be created in the specified folder.", 
+      {
+        db_name <- file.path(withr::local_tempdir(), "non_existing_folder/credentials.sqlite")
+        initialize_credentials(
+            credentials_db = db_name,
+            credentials_pwd = "test_password"
+          )
+        expect_true(file.exists(db_name))
       }
     )
   }

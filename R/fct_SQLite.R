@@ -74,6 +74,13 @@ db_create <- function(
   stopifnot(!file.exists(db_path))
   stopifnot(reviewed %in% c("Yes", "No", ""))
   stopifnot(is.data.frame(data) || is.character(data))
+  db_directory <- dirname(db_path)
+  if(tools::file_ext(db_path) == "sqlite" && !dir.exists(db_directory)) {
+    cat("Directory to store user database does not exist. ", 
+        "Creating new directory named '", db_directory, "'.\n", sep = "")
+    dir_created <- dir.create(db_directory)
+    if(!dir_created) stop("Could not create directory for user database")
+  }
   df <- data |> 
     dplyr::mutate(
       reviewed = reviewed, 
