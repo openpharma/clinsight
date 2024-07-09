@@ -82,6 +82,11 @@ clinsightful_data |>
   filter(event_repeat != form_repeat) |>
   print(n = 36)
 
+
+# metadata
+
+clinsight::metadata$column_specs$col_type |> unique()
+
 # Engineering
 
 ## Dependencies ----
