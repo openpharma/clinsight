@@ -153,18 +153,26 @@ Specifications for the list of data.frames include:
 
 #### `get_metadata()` & `items_expanded`
 
-So, lastly, you may notice that there is a 7th data.frame called `items_expanded`. This data.frame is actually derived after the user runs a helper function called `get_metadata()` which takes an XLSX file containing the first 6 data.frames (one per tab) and expands the tabs of your choosing with the column of your choosing. In other words, `get_metadata()` helps us get create something a bit more polished, like the `clinsight::metadata`. As you'll see later, this is a crucial step that's relied on heavily in `merge_meta_with_data()`. So, after you've compiled your metadata XLSX spreadsheet with the first 6 data.frames (tabs) mentioned above, you're ready to run code that looks like the following:
+So, lastly, you may notice that there is a 7th data.frame called `items_expanded`. This data.frame is actually derived after the user runs a helper function called `get_metadata()` which takes an XLSX file containing the first 6 data.frames (one per tab) and expands the tabs of your choosing with the column of your choosing. In other words, `get_metadata()` makes sure your existing metadata is in the correct format and helps us get create something a bit more polished & digestible, like `items_expanded` for `clinsight::metadata`. As you'll see later, performing this step is crucial for `merge_meta_with_data()` which comes next. So, after you've compiled your metadata XLSX spreadsheet with the first 6 data.frames (tabs) mentioned above, you're ready to run code that looks like the following:
 
 ```{r get_metadata(), eval = FALSE}
 # usethis::edit_r_environ()
-data_path <- Sys.getenv("METADATA_PATH")
-meta_data <- get_metadata(data_path,
+meta_path <- Sys.getenv("METADATA_PATH")
+meta_data <- get_metadata(file.path(meta_path, "my_metadata.xlsx"),
                           expand_tab_items = c("common_forms", "study_forms", "general"),
                           expand_cols = "suffix")
 
 ```
 
 In summary, `get_metadata` will initiate the `meta_data` object with the first 6 data.frames directly from the Excel file, and then `items_expanded` will be created by expanding `common_forms`, `study_forms`, and `general` data.frames by the values stored in the `suffix` column. The result will be appended onto the `meta_data` object as the 7th data.frame in the list.
+
+Once complete, save your metadata to an .RDS file:
+
+```{r save_metadata, eval = FALSE}
+
+saveRDS(meta_data, file.path(Sys.getenv("METADATA_PATH"), "meta_data.rds"))
+
+```
 
 
 ### Read in your study data with `get_raw_data()`
@@ -173,7 +181,7 @@ Now that we have an understanding of our `meta_data` specs, we can discuss how t
 
 ```{r get_raw_data(), eval = FALSE}
 # usethis::edit_r_environ()
-data_path <- Sys.getenv("RAW_DATA_PATH")
+data_path <- Sys.getenv("DATA_PATH")
 raw_data <- get_raw_data(data_path, column_specs = metadata$column_specs)
 
 ```
@@ -198,5 +206,37 @@ This function uses the rest of the metadata data.frames to further organize your
 - applying any study specific fixes using a function called `apply_study_specfific_fixes()`. #TODO
 
 
+Once complete, save your metadata to an .RDS file:
+
+```{r save_metadata, eval = FALSE}
+
+saveRDS(study_data, file.path(Sys.getenv("DATA_PATH"), "study_data.rds"))
+
+```
+
+## Launch the app
+
+Circling back to the configuration file we shared at the beginning of this vignette, you're now ready to launch this application.
+
+```yml
+default:
+  golem_name: clinsight
+  golem_version: 0.0.0.9003
+  app_prod: no
+  data_folder: test_data
+  study_data: !expr clinsight::clinsightful_data
+  meta_data: !expr clinsight::metadata
+  user_db: test_user_db.sqlite
+  credentials_db: test_credentials_db.sqlite
+production:
+  app_prod: yes
+  data_folder: study_data
+  study_data: study_data.rds
+  meta_data: metadata.rds
+  user_db: user_db.sqlite
+  credentials_db: credentials_db.sqlite
+dev:
+  golem_wd: !expr golem::pkg_path()
+```
 
 
