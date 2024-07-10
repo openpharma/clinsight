@@ -14,10 +14,18 @@ initialize_credentials <- function(
 ){
   if(file.exists(credentials_db)) return(
     cat("Using existing credentials database.\n")
-    )
+  )
   
   cat("No credentials database found. Initializing new database.\n", 
-          "Login with Username 'admin' and Password '1234'.")
+      "Login with Username 'admin' and Password '1234'.\n")
+  cred_directory <- dirname(credentials_db)
+  if(tools::file_ext(credentials_db) == "sqlite" && !dir.exists(cred_directory)) {
+    cat("Folder to store credentials database does not exist. ", 
+        "Creating new directory named '", cred_directory, "'.\n", sep = "")
+    dir_created <- dir.create(cred_directory)
+    if(!dir_created) stop("Could not create directory for user database")
+  }
+  
   con <- get_db_connection(credentials_db)
   initial_credentials <- data.frame(
     "user"     = "admin", 
@@ -58,14 +66,10 @@ initialize_credentials <- function(
 
 #' Authenticate UI
 #'
-#' Authentication implementation in the UI.
-#'
-#' @param test_mode Logical. Whether the app should be started in test mode or
-#'   not.
+#' Authentication implementation in the UI, using `shinymanager`.
 #'
 #' 
-authenticate_ui <- function(test_mode = FALSE){
-  if (test_mode) return(app_ui) 
+authenticate_ui <- function(){
   shinymanager::secure_app(
     app_ui, 
     enable_admin = TRUE, 
@@ -92,45 +96,84 @@ authenticate_ui <- function(test_mode = FALSE){
 #'
 #' Function to authenticate the main server.
 #'
-#' @param test_mode Logical, whether to start the application in test mode.
-#' @param sites Character vector. Study sites that can be allocated to a user.
-#' @param roles Character vector. Roles that can be allocated to a user.
-#' @param credentials_db Character vector. Path to the credentials
-#'   database.
-#' @param credentials_pwd Character vector, containing the database
-#'   password.
+#' @param user_identification Character vector showing the user identification.
+#'   Is by default set by the `user_identification` option in the `golem-config`
+#'   file.
+#' @param credentials_db Character vector. Path to the credentials database. By
+#'   default, set by the `data_folder` and `credentials_db` options in the
+#'   `golem-config_file`.
+#' @param credentials_pwd Character vector, containing the database password.
+#' @param all_sites Character vector with all sites. Will be passed on to
+#'   shinymanager configuration so that data can be restricted to specific sites
+#'   per user.
+#' @param all_roles Character vector with all roles. Used to show all applicable
+#'   roles in `shinymanager` admin mode.
+#' @param user_id Character vector. Used to retrieve the user ID from the
+#'   session object, if applicable.
+#' @param user_name Character vector. Used to retrieve the user name from the
+#'   session object, if applicable.
+#' @param user_group Used to retrieve the user group from the session object, if
+#'   applicable.
+#' @param session Shiny session. Needed to access user information in case of
+#'   login methods alternative to `shinymanager` are used.
 #' 
 authenticate_server <- function(
-    test_mode = FALSE, 
-    sites = app_vars$Sites$site_code,
-    roles = c("Medical Monitor", "Data Manager", "Administrator", "Investigator"),
-    credentials_db = app_sys("app/www/credentials_db.sqlite"),
-    credentials_pwd = Sys.getenv("DB_SECRET")
+    user_identification = get_golem_config("user_identification"),
+    all_sites = NULL,
+    all_roles = get_golem_config("group_roles"),
+    credentials_db = get_golem_config("credentials_db"),
+    credentials_pwd = Sys.getenv("DB_SECRET"), 
+    user_id = get_golem_config("user_id"),
+    user_name = get_golem_config("user_name"),
+    user_group = get_golem_config("user_group"),
+    session
 ){
-  if (test_mode) return({
-    # To skip authentication when testing application:
-    reactiveValues(
-      admin = TRUE,
-      user = "test_user",
-      name = "test user", 
-      role = "Medical monitor",
-      sites = sites
-    )
-  }) 
-  shinymanager::secure_server(
-    check_credentials = shinymanager::check_credentials(
-      credentials_db,
-      passphrase = credentials_pwd
-    ),
-    inputs_list = list(
-      "role" = list(
-        fun = "selectInput", 
-        args = list(choices = roles, multiple = TRUE) 
+  switch(
+    user_identification,
+    shinymanager = shinymanager::secure_server(
+      check_credentials = shinymanager::check_credentials(
+        credentials_db,
+        passphrase = credentials_pwd
       ),
-      "sites" = list(
-        fun = "selectInput",
-        args = list(label = NULL, choices = sites, selected = sites, multiple = TRUE)
+      inputs_list = list(
+        "role" = list(
+          fun = "selectInput", 
+          args = list(choices = all_roles, multiple = TRUE) 
+        ),
+        "sites" = list(
+          fun = "selectInput",
+          args = list(
+            label = NULL, 
+            choices = all_sites, 
+            selected = all_sites, 
+            multiple = TRUE
+          )
+        )
       )
+    ),
+    test_user = reactiveValues(
+      user = "test_user", 
+      name = "test user", 
+      role = all_roles[1],
+      sites = all_sites
+    ),
+    http_headers = reactiveValues(
+      user = session$request$HTTP_X_SP_USERID,
+      name = session$request$HTTP_X_SP_USERNAME,
+      role = session$request$HTTP_X_SP_USERGROUPS,
+      sites = all_sites
+    ),
+    shiny_session = reactiveValues(
+      user = session$user,
+      name = session$user,
+      role = session$groups,
+      sites = all_sites
+    ),
+    reactiveValues(
+      user = "Unknown",
+      name = "Unknown",
+      role = "Unknown",
+      sites = all_sites
     )
-  ) 
+  )
 }

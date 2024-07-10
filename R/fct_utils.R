@@ -579,7 +579,7 @@ get_test_results <- function(
     "session" = utils::sessionInfo()
   )
   if(is.null(outfile)) return(test_results)
-  cat("Finished unit testing. Results: \n")
+  cat("\n\n----------------------------\n\nFinished unit testing. Results: \n")
   # Summary is nice to have but should not give a fatal error: 
   tryCatch({
     # TODO: maybe import testthat:::as.data.frame.testthat_results?
@@ -594,5 +594,6 @@ get_test_results <- function(
   if(file.exists(outfile)){
     cat("Output created successfully in ", outfile, "\n") 
   }
+  cat("\n----------------------------\n\n")
 }
 
