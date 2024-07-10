@@ -43,7 +43,7 @@ reference:
 - title: Data frame functions
   desc: Create data for use in the application.
 - contents: 
-  - get_raw_data
+  - get_raw_csv_data
   - merge_meta_with_data
   - apply_study_specific_fixes
   - get_appdata

@@ -3,7 +3,7 @@ library(dplyr)
 #library(clinsight)
 set.seed(2023)
 
-raw_data <- get_raw_data(data_path, column_specs = metadata$column_specs)
+raw_data <- get_raw_csv_data(data_path, column_specs = metadata$column_specs)
 
 length(unique(raw_data$subject_id))
 

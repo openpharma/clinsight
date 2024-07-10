@@ -28,7 +28,7 @@ query_data_skeleton <- dplyr::tibble(
 
 # columns names that are required for the application to function. 
 # Used to test whether these are all available in the column_specs when reading 
-# in data with get_raw_data().
+# in data with get_raw_csv_data().
 required_col_names <- c(
   "site_code", 
   "subject_id", 

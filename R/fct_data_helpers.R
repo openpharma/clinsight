@@ -63,6 +63,106 @@ get_metadata <- function(
   })
 }
 
+#' Rename raw data
+#'
+#' Helper function to rename raw data
+#'
+#' @param data A data frame with raw study data.
+#' @param column_specs A data frame with column specifications. Should have at
+#'   least the columns `name_raw`, containing the current column names, and
+#'   `name_new`, containing the new column names. `name_new` should contain all
+#'   names that are available in the vector [required_col_names], which contains
+#'   the names of the column that ClinSight minimally expects.
+#'
+#' @return A data frame
+#'
+#' @examples 
+#'  specs <- metadata$column_specs
+#'  specs$name_raw <- names(mtcars)
+#'  rename_raw_data(mtcars, column_specs = specs))
+#' 
+rename_raw_data <- function(
+    data, 
+    column_specs = metadata$column_specs
+){
+  stopifnot("[data] should be a data frame" = is.data.frame(data))
+  stopifnot("[column_specs] should be a data frame" = is.data.frame(column_specs))
+  if(!all(c("name_raw", "name_new") %in% names(column_specs))){
+    stop("Expecting the columns 'name_raw' and 'name_new' in [column_specs]")
+  }
+  missing_colnames <- with(column_specs, name_raw[!name_raw %in% names(data)]) |> 
+    paste0(collapse = ", ")
+  if(nchar(missing_colnames) > 0) stop(
+    paste0("The following columns are missing in the raw data while they are ", 
+           "defined in 'name_raw' of column_specs:\n", 
+           missing_colnames, ".")
+  )
+  missing_new_cols <- required_col_names[!required_col_names %in% column_specs$name_new] |> 
+    paste0(collapse = ", ")
+  if(nchar(missing_new_cols) > 0) stop(
+    paste0("The following columns are missing in 'name_new' of column_specs while they ", 
+           "are required for ClinSight to run:\n", 
+           missing_new_cols, ".")
+  )
+  data[column_specs$name_raw] |> 
+    setNames(column_specs$name_new)
+}
+
+#' Add time vars to raw data
+#'
+#' @param data A data frame
+#' @param required_col_names Required column names.
+#'
+#' @return A data frame, with derivative time and event variables, needed for
+#'   ClinSight to function properly.
+#' @export
+#'
+add_timevars_to_data <- function(
+    data,
+    required_col_names = required_col_names
+){
+  stopifnot("[data] should be a data frame" = is.data.frame(data))
+  if(!is.null(required_col_names)){
+    stopifnot("required_col_names should be a character vector" = is.character(required_col_names)) 
+    stopifnot("Some of the required column names are missing" = all(required_col_names %in% names(data))) 
+  }
+  
+  df <- data |> 
+    dplyr::mutate(
+      edit_date_time = as.POSIXct(edit_date_time),
+      event_date = as.Date(event_date),
+      day = event_date - min(event_date, na.rm = TRUE), 
+      vis_day = ifelse(event_id %in% c("SCR", "VIS", "VISEXT", "VISVAR", "FU1", "FU2"), day, NA),
+      vis_num = as.numeric(factor(vis_day))-1,
+      event_name = dplyr::case_when(
+        event_id == "SCR"    ~ "Screening",
+        event_id %in% c("VIS", "VISEXT", "VISVAR")    ~ paste0("Visit ", vis_num),
+        grepl("^FU[[:digit:]]+", event_id)  ~ paste0("Visit ", vis_num, "(FU)"),
+        event_id == "UN"     ~ paste0("Unscheduled visit ", event_repeat),
+        event_id == "EOT"    ~ "EoT",
+        event_id == "EXIT"   ~ "Exit",
+        form_id %in% c("AE", "CM", "CP", "MH", "MH", "MHTR", "PR", "ST", "CMTR", "CMHMA") ~ "Any visit",
+        TRUE                ~ paste0("Other (", event_name, ")")
+      ),
+      event_label = dplyr::case_when(
+        !is.na(vis_num)   ~ paste0("V", vis_num),
+        event_id == "UN"   ~ paste0("UV", event_repeat),
+        TRUE              ~ event_name
+      ),
+      .by = subject_id
+    ) |> 
+    dplyr::arrange(
+      factor(site_code, levels = order_string(site_code)),
+      factor(subject_id, levels = order_string(subject_id))
+    )
+  if(any(grepl("^Other ", df$event_name))) warning(
+    "Undefined Events detected. Please verify data before proceeding."
+  )
+  df
+}
+
+
+
 #' Correct multiple choice variables
 #'
 #' In some EDC systems, if there is a multiple choice variable in which multiple
