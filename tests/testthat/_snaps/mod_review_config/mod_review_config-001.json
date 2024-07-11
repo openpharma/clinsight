@@ -20,6 +20,13 @@
     ]
   },
   "output": {
-
+    "test-review_config_feedback": {
+      "message": "",
+      "call": "NULL",
+      "type": [
+        "shiny.silent.error",
+        "validation"
+      ]
+    }
   }
 }
