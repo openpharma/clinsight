@@ -113,7 +113,6 @@ mod_review_config_server <- function(
     observeEvent(input$config_review, showModal(review_modal()))
     
     observeEvent(input$region_selection, {
-      req(input$region_selection, input$site_selection)
       selected_sites <- with(sites, site_code[region %in% input$region_selection])
       golem::cat_dev("update region selection to ", selected_sites, "\n")
       shinyWidgets::updatePickerInput(
@@ -122,7 +121,7 @@ mod_review_config_server <- function(
         choices  = selected_sites,
         selected = selected_sites
       )
-    })
+    }, ignoreNULL = FALSE, ignoreInit = TRUE)
     
     observeEvent(input$save_review_config, {
       golem::cat_dev("\nStart applying global configuration\n")
