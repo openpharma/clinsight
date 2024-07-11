@@ -17,3 +17,4 @@ to minimize the package dependencies of the production version.
 ## Bug fixes
 
 - Fixed error of creating adverse events table with empty data frame input. 
+- Properly handled zero regions selected in review configuration and provided user feedback.
