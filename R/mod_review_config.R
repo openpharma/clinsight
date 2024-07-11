@@ -123,6 +123,11 @@ mod_review_config_server <- function(
       )
     }, ignoreNULL = FALSE, ignoreInit = TRUE)
     
+    output$review_config_feedback <- renderText({
+      req(!isTruthy(input$region_selection) | !isTruthy(input$site_selection))
+      "You must select at least one site/region to review."
+    })
+    
     observeEvent(input$save_review_config, {
       golem::cat_dev("\nStart applying global configuration\n")
       req(input$site_selection)
