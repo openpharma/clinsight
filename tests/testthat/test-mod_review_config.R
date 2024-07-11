@@ -146,6 +146,8 @@ describe(
         withr::defer(app$stop())
         app$click("test-config_review")
         app$expect_values(input = TRUE, output = TRUE)
+        app$set_inputs(`test-region_selection` = "")
+        app$expect_values(input = TRUE, output = TRUE)
         app$set_inputs(`test-region_selection` = "DEU")
         app$expect_values(input = TRUE, output = TRUE)
         app$click("test-save_review_config")

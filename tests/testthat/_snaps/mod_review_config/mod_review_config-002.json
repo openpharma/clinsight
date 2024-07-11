@@ -1,0 +1,11 @@
+{
+  "input": {
+    "test-config_review": 1,
+    "test-region_selection": null,
+    "test-save_review_config": 0,
+    "test-site_selection": null
+  },
+  "output": {
+    "test-review_config_feedback": "You must select at least one site/region to review."
+  }
+}
