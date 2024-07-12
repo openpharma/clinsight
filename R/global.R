@@ -17,7 +17,7 @@ global <- quote({
     if(!file.exists(data_local)) stop("Could not save data set locally.")
     data_synched <- TRUE
   }
-  Sys.setenv("GOLEM_CONFIG_ACTIVE" = "production")
+  Sys.setenv("GOLEM_CONFIG_ACTIVE" = "shinymanager")
   run_app(data_folder = data_folder)
 })
 

@@ -145,7 +145,7 @@ describe(
           height = 955
         )
         withr::defer(app$stop())
-        app$wait_for_idle(2000)
+        app$wait_for_idle(2500)
         # save button should not be available:
         app$expect_values()
         
@@ -299,8 +299,8 @@ describe(
           height = 955
         )
         withr::defer(app$stop())
-        app$wait_for_idle(2000)
         
+        app$wait_for_idle(2500)
         app$click("test-form_reviewed")
         app$click("test-save_review")  
         

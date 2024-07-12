@@ -13,8 +13,7 @@ mod_main_sidebar_server(
   app_vars,
   db_path,
   forms_to_review,
-  available_data,
-  test_mode
+  available_data
 )
 }
 \arguments{
@@ -56,8 +55,6 @@ the forms that need review of the active participant.}
 created with the function \code{\link[=get_available_data]{get_available_data()}}. The data frame will be
 passed on to the module \code{\link[=mod_query_add_server]{mod_query_add_server()}}, which requires this data
 frame and is embedded in \code{mod_main_sidebar_server()}.}
-
-\item{test_mode}{Logical. Required for testing \code{\link[=mod_db_synch_info_server]{mod_db_synch_info_server()}}.}
 }
 \description{
 A shiny module. Used to create the sidebar in the main application.

@@ -10,6 +10,8 @@ meta_path <- "altered_metadata.xlsx"
 load_and_run_app <- function(){
   temp_folder <- tempfile(tmpdir = tempdir())
   dir.create(temp_folder)
+  old_golem_config <- Sys.getenv("GOLEM_CONFIG_ACTIVE")
+  Sys.setenv("GOLEM_CONFIG_ACTIVE" = "test")
   meta <- get_metadata(meta_path)
   merged_data <- merge_meta_with_data(
     get_raw_data(
@@ -23,9 +25,11 @@ load_and_run_app <- function(){
   
   run_app(
     data_folder = temp_folder,
-    test_mode = TRUE, 
-    onStart = \(){onStop(\(){unlink(temp_folder, recursive = TRUE)})}
+    onStart = \(){onStop(\(){
+      unlink(temp_folder, recursive = TRUE); 
+      Sys.setenv("GOLEM_CONFIG_ACTIVE" = old_golem_config)
+    })}
   )
-}
+} 
 
-withr::with_envvar(list("GOLEM_CONFIG_ACTIVE" = "production"), load_and_run_app())
+load_and_run_app()

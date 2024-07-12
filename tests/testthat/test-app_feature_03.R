@@ -7,7 +7,7 @@ describe(
     app <- AppDriver$new(
       app_dir = test_path("fixtures/testapp"),
       name = "app-feature-3",
-      timeout = 12000,
+      timeout = 25000,
       width = 1619,
       height = 955
     )

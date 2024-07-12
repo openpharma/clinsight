@@ -1,18 +1,36 @@
 default:
   golem_name: clinsight
-  golem_version: 0.0.0.9003
+  golem_version: 0.0.0.9004
   app_prod: no
-  data_folder: test_data
+  user_identification: test_user
   study_data: !expr clinsight::clinsightful_data
   meta_data: !expr clinsight::metadata
-  user_db: test_user_db.sqlite
-  credentials_db: test_credentials_db.sqlite
-production:
+  user_db: user_db.sqlite
+  group_roles:
+  - Medical Monitor
+  - Data Manager
+  - Administrator
+  - Investigator
+dev:
+  golem_wd: !expr golem::pkg_path()
+test:
+  study_data: study_data.rds
+  meta_data: metadata.rds
+shinymanager:
   app_prod: yes
-  data_folder: study_data
+  user_identification: shinymanager
+  study_data: study_data.rds
+  meta_data: metadata.rds
+  credentials_db: credentials_db.sqlite
+shinyproxy:
+  app_prod: yes
+  user_identification: http_headers
+  study_data: study_data/study_data.rds
+  meta_data: study_data/metadata.rds
+  user_db: study_data/user_db.sqlite
+shiny_connect:
+  app_prod: yes
+  user_identification: shiny_session
   study_data: study_data.rds
   meta_data: metadata.rds
   user_db: user_db.sqlite
-  credentials_db: credentials_db.sqlite
-dev:
-  golem_wd: !expr golem::pkg_path()
