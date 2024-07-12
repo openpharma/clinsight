@@ -1,5 +1,5 @@
 describe(
-  "mode_review_config. Feature 1 | As a user, I want to be able to select my user 
+  "mod_review_config. Feature 1 | As a user, I want to be able to select my user 
   configuration before I start to perform a review. I want to be able to 
   configure the regions and the sites that I will review. After selecting these, 
   the data should be filtered so that only data from the filtered regions/sites 
