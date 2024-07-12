@@ -42,9 +42,19 @@
 #' 
 "col_palette"
 
+
 #' Clinical Trial test data
 #'
-#' A data frame containing randomly created clinical trial data. Used for
-#' testing purposes.
+#' A data.frame containing randomly created clinical trial data. Used for
+#' testing purposes. It will also be used to run the app with example data when
+#' executing `run_app()` with the default configuration settings, or when
+#' running `golem::run_dev()`.
+#'
+#' @format a data.frame with 6,483 rows and 24 variables.
+#'
 #' @source Created with `data-raw/create_random_data.R`
 "clinsightful_data"
+
+
+
+
