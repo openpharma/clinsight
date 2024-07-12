@@ -22,22 +22,23 @@ In order to get started and plug your organizations EDC data into the `clinsight
 ```yml
 default:
   golem_name: clinsight
-  golem_version: 0.0.0.9003
+  golem_version: 0.0.0.9004
   app_prod: no
-  data_folder: test_data
+  user_identification: test_user
   study_data: !expr clinsight::clinsightful_data
   meta_data: !expr clinsight::metadata
-  user_db: test_user_db.sqlite
-  credentials_db: test_credentials_db.sqlite
-production:
+  user_db: user_db.sqlite
+  group_roles:
+  - Medical Monitor
+  - Data Manager
+  - Administrator
+  - Investigator
+shinymanager:
   app_prod: yes
-  data_folder: study_data
+  user_identification: shinymanager
   study_data: study_data.rds
   meta_data: metadata.rds
-  user_db: user_db.sqlite
   credentials_db: credentials_db.sqlite
-dev:
-  golem_wd: !expr golem::pkg_path()
 ```
 
 First and foremost, notice that the configuration can vary depending on deployment use case. For example, the above file is designed to run (by default) with test data built into the app. Only once in `production` mode, does the app actually leverage data you've gathered from your EDC system, as RDS files. As seen above, there are several other elements defined in `golem-config.yml` that can be configured before launching the application for the first time. To name a few:
@@ -221,22 +222,23 @@ Circling back to the configuration file we shared at the beginning of this vigne
 ```yml
 default:
   golem_name: clinsight
-  golem_version: 0.0.0.9003
+  golem_version: 0.0.0.9004
   app_prod: no
-  data_folder: test_data
+  user_identification: test_user
   study_data: !expr clinsight::clinsightful_data
   meta_data: !expr clinsight::metadata
-  user_db: test_user_db.sqlite
-  credentials_db: test_credentials_db.sqlite
-production:
+  user_db: user_db.sqlite
+  group_roles:
+  - Medical Monitor
+  - Data Manager
+  - Administrator
+  - Investigator
+shinymanager:
   app_prod: yes
-  data_folder: study_data
+  user_identification: shinymanager
   study_data: study_data.rds
   meta_data: metadata.rds
-  user_db: user_db.sqlite
   credentials_db: credentials_db.sqlite
-dev:
-  golem_wd: !expr golem::pkg_path()
 ```
 
 
