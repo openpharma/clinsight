@@ -120,7 +120,7 @@ describe(
             shinyjs::useShinyjs(),
             bslib::page(
               bslib::card(
-                clinsight:::mod_review_config_ui("test")
+                mod_review_config_ui("test")
               )
             )
           )
@@ -133,7 +133,7 @@ describe(
             filtered_subjects = vars$subject_id
           )
           
-          clinsight:::mod_review_config_server(
+          mod_review_config_server(
             "test", r, app_data = appdata, 
             app_tables = apptables, sites = vars$Sites, subject_ids = vars$subject_id
           )
