@@ -71,15 +71,15 @@ get_metadata <- function(
 #' @param column_specs A data frame with column specifications. Should have at
 #'   least the columns `name_raw`, containing the current column names, and
 #'   `name_new`, containing the new column names. `name_new` should contain all
-#'   names that are available in the vector [required_col_names], which contains
-#'   the names of the column that ClinSight minimally expects.
+#'   names that are required for ClinSight to function properly
+#'   (`required_col_names`).
 #'
 #' @return A data frame
 #'
-#' @examples 
+#' @examples
 #'  specs <- metadata$column_specs
 #'  specs$name_raw <- names(mtcars)
-#'  rename_raw_data(mtcars, column_specs = specs))
+#'  rename_raw_data(mtcars, column_specs = specs)
 #' 
 rename_raw_data <- function(
     data, 

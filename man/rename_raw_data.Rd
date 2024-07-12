@@ -12,8 +12,8 @@ rename_raw_data(data, column_specs = metadata$column_specs)
 \item{column_specs}{A data frame with column specifications. Should have at
 least the columns \code{name_raw}, containing the current column names, and
 \code{name_new}, containing the new column names. \code{name_new} should contain all
-names that are available in the vector \link{required_col_names}, which contains
-the names of the column that ClinSight minimally expects.}
+names that are required for ClinSight to function properly
+(\code{required_col_names}).}
 }
 \value{
 A data frame
@@ -24,6 +24,6 @@ Helper function to rename raw data
 \examples{
  specs <- metadata$column_specs
  specs$name_raw <- names(mtcars)
- rename_raw_data(mtcars, column_specs = specs))
+ rename_raw_data(mtcars, column_specs = specs)
 
 }

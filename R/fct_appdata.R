@@ -5,9 +5,6 @@
 #' @param exclude character vector with regex that identify csv files that
 #'   should not be merged in study data. For example, readme files included in
 #'   the export.
-#' @param column_specs A data frame containing at least the columns 'name_raw',
-#'   'name_new', and 'col_type'. Used to set the column specifications, and to
-#'   set the column names to the names expected for the application to function.
 #' @param delim Delimiter to use to read in files.
 #' @param skip Number of rows to skip when reading in files.
 #'
