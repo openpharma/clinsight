@@ -151,7 +151,8 @@ db_update <- function(
     review_df = review_data,
     latest_review_data = data,
     common_vars = common_vars,
-    edit_time_var = edit_time_var
+    edit_time_var = edit_time_var,
+    update_time = ifelse(identical(data_synch_time, ""), time_stamp(), data_synch_time)
   )
   cat("writing updated review data to database...\n")
   DBI::dbWriteTable(con, "all_review_data", updated_review_data, append = TRUE)

@@ -49,6 +49,8 @@ get_review_data <- function(
 #' @param common_vars A character vector containing the common key variables.
 #' @param edit_time_var A character vector with the column name of the edit-time
 #'   variable.
+#' @param update_time Time stamp given to rows with new rows that are added.
+#'   Defaults to [time_stamp()].
 #'
 #' @return A data frame containing only the rows with updated review data.
 #' @export
@@ -58,14 +60,13 @@ update_review_data <- function(
     latest_review_data,
     common_vars = c("subject_id", "event_name", "item_group", 
                     "form_repeat", "item_name"),
-    edit_time_var = "edit_date_time"
+    edit_time_var = "edit_date_time",
+    update_time = time_stamp()
 ){
   stopifnot(is.data.frame(latest_review_data), nrow(latest_review_data) > 0 )
   stopifnot(is.data.frame(review_df), nrow(review_df) > 0 )
   stopifnot(is.character(common_vars))
   stopifnot(is.character(edit_time_var))
-  
-  ts <- time_stamp()
   
   deleted_data <- dplyr::anti_join(review_df, latest_review_data, by = common_vars)
   n_deleted <- nrow(deleted_data)
@@ -95,7 +96,7 @@ update_review_data <- function(
     add_missing_columns(c("timestamp", "reviewed", "comment", "status"))
   
   df <- df |> 
-    tidyr::replace_na(list(timestamp = ts, reviewed = "No", comment = "")) |> 
+    tidyr::replace_na(list(timestamp = update_time, reviewed = "No", comment = "")) |> 
     # now add status labels to the new rows:
     dplyr::mutate(
       status = ifelse(
@@ -109,7 +110,7 @@ update_review_data <- function(
       .by = dplyr::all_of(c(common_vars))
     )
   updated_data <- dplyr::anti_join(df, review_df, 
-                                   by = c(common_vars, "edit_date_time"))
+                                   by = c(common_vars, edit_time_var))
   
   if(nrow(updated_data) == 0){
     warning("No new data in the updated dataset. Returning empty data frame.")
