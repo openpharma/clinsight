@@ -87,7 +87,6 @@ merge_meta_with_data <- function(
       LBORRESU     = ifelse(LBORRESU == "Other", LBORRESUOTH, LBORRESU),
       LBORRESU     = ifelse(is.na(LBORRESU), "(unit missing)", LBORRESU)
     ) |> 
-    dplyr::mutate(day = event_date - min(event_date, na.rm = TRUE), .by = subject_id) |> 
     dplyr::select(-c(lower_limit, upper_limit, unit, LBORRESUOTH)) |> 
     dplyr::rename(
       "lower_lim" = LBORNR_Lower,
