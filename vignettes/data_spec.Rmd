@@ -2,7 +2,7 @@
 title: "App Configuration & Input Data Specifications"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Input Data Specification}
+  %\VignetteIndexEntry{App Configuration & Input Data Specifications}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -208,7 +208,7 @@ This function uses the rest of the metadata data.frames to further organize your
 
 Once complete, save your metadata to an .RDS file:
 
-```{r save_metadata, eval = FALSE}
+```{r save_study_data, eval = FALSE}
 
 saveRDS(study_data, file.path(Sys.getenv("DATA_PATH"), "study_data.rds"))
 
