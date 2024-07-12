@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-Note: this page is "under construction" until the `clinsight` package developers create helper functions that transform at least one other EDC data source into the desired format. In the meantime, this page provides useful documentation to the existing data spec. Eventually, it will also share guidelines about how to combine your input data with metadata sources, etc.
+Note: this page is "under construction" until the `clinsight` package developers create helper functions that transform at least one other EDC data source into the desired format. In the meantime, this page provides useful documentation to the existing data specifications. Eventually, it will also share guidelines about how to combine your input data with metadata sources, etc.
 
 ## Intro
 
@@ -41,15 +41,16 @@ shinymanager:
   credentials_db: credentials_db.sqlite
 ```
 
-First and foremost, notice that the configuration can vary depending on deployment use case. For example, the above file is designed to run (by default) with test data built into the app. Only once in `production` mode, does the app actually leverage data you've gathered from your EDC system, as RDS files. As seen above, there are several other elements defined in `golem-config.yml` that can be configured before launching the application for the first time. To name a few:
+First and foremost, notice that the configuration can vary depending on deployment use case. For example, the above file is designed to run (by default) with test data built into the app. Only once in `production` mode, does the app actually leverage data you've gathered from your EDC system, as RDS files. As seen above, there are several other elements defined in `golem-config.yml` that can be configured before launching the application for the first time. 
 
-- `user_db` a Character string providing the path to the app's review database. If it does not exist, one will be created based on app data and metadata, with all data labeled as new'/not yet reviewed.
-- `credentials_db` Character string. Path to the credentials database.
+The main two elements are `meta_data` and `study_data`, accepting file paths to the app's primary data sources, stored as RDS files. The `study_data` object should be created with the pre-processing helper function called `merge_meta_with_data()` which accepts raw data sources and merges them with the `meta_data` object defined in this article.
 
-The other two elements are `meta_data` and `study_data`, accepting file paths to the app's primary data sources, stored as RDS files. The `study_data` object should be created with the pre-processing helper function called `merge_meta_with_data()` which accepts raw data sources and merges them with the `meta_data` object defined in this article.
+Other elements are:
+
+- `user_db` a Character string providing the path to the app's review database. If it does not exist, one will be created based on the `study_data` and `meta_data`, with all data labeled as new/not yet reviewed.
+- `credentials_db` Character string. Path to the credentials database. Only needed when using `shinymanager` for user identification. The database will be created automatically if needed. 
 
 Depending on the EDC vendor used, the size, shape, and format of their "raw data" may vary. We've compiled a few functions that help admin users pre-process the data they own. However, before we deep dive into how to use those, let's focus on what the final result of those pre-processing steps to understand what's being fed to the app.
-
 
 
 ## Data Specifications
@@ -101,15 +102,15 @@ The RDS file (or data.frame) ported to the `study_data` element contains the fol
 
 ### Processing your Raw Data
 
-So, the next logical question is "How do I get my EDC's data into the `study_data` format?" Well, this package currently offers a pre-processing helper function called `merge_meta_with_data()` which accepts raw data sources from the [Vedoc] EDC vendor and merges them with the `meta_data` object (defined below) to create a viable `study_data` object. As such, we'll spend some time covering what this helper function expects of your raw data and `meta_data` object and how it transforms it into the `study_data` object we need for app launch.
+So, the next logical question is "How do I get my EDC's data into the `study_data` format?" Well, this package currently offers a pre-processing helper function called `merge_meta_with_data()` which accepts raw data sources from the [Viedoc] EDC vendor and merges them with the `meta_data` object (defined below) to create a viable `study_data` object. As such, we'll spend some time covering what this helper function expects of your raw data and `meta_data` object and how it transforms it into the `study_data` object we need for app launch.
 
 First, let's discuss the app's metadata needs!
 
-### The `meta_data`
+### `meta_data`
 
-The RDS file ported to the `meta_data` configuration above is a list of data.frames which (not surprisingly) contains metadata information for the application. However, it is also the same object used in `merge_meta_with_data()` to produce our `study_data` object!
+The `meta_data` object is a list of data.frames which (not surprisingly) contains metadata information for the application. It will provide study-specific settings, and controls where study data in the application will be visible. It can be created in the right format by changing the Excel template in the `data-raw/metadata.xlsx`, and then create a metadata object with the function`get_metadata` (e.g. `meta <- clinsight::get_metadata("path-to-custom-metadata.xlsx")`). The `meta_data` object should be saved as a `.rds` file so that `clinsight` can use it (e.g. `saveRDS(meta, "data_folder/metadata.rds")`).
 
-That is, the metadata will be merged with the raw data to dictate which variables will be included in the `study_data`, and in which tab the variables will be displayed. The goal is that most, if not all study-specific data will be captured in the metadata, leaving the scripts to run the application largely unaltered between studies.
+As stated previously, the metadata should also be used to shape the raw `study_data` in the right format, and to dictate which variables will be included in the `study_data`. This can be done by using the function `merge_meta_with_data()`, and will be described in detail in the next section. The goal is that most, if not all study-specific data will be captured in the metadata, leaving the scripts to run the application largely unaltered between studies.
 
 Just like for `study_data`, this package also bundles a built-in metadata object called `metadata`. To view an example metadata file, run the following chunk of code:
 
@@ -147,7 +148,7 @@ Specifications for the list of data.frames include:
  
  - `groups`: Contains the columns `item_group`, `item_type`, `item_scale`,`use_unscaled_limits`.
 
- - `table_names`: Used for ... #TODO
+ - `table_names`: Used for renaming table column names into a more readable format. It is not required to name all column names; if the column names are not defined here, the raw name will be used instead.
      - `table_name`: character, 
      - `raw_name`: character,
 
