@@ -81,6 +81,8 @@ db_create <- function(
     dir_created <- dir.create(db_directory)
     if(!dir_created) stop("Could not create directory for user database")
   }
+  data_synch_time <- attr(data, "synch_time") %||% ""
+  
   df <- data |> 
     dplyr::mutate(
       reviewed = reviewed, 
@@ -93,7 +95,7 @@ db_create <- function(
   new_data <- list(
     "all_review_data" = df,
     "query_data"      = query_data_skeleton,
-    "db_synch_time"   = data.frame(synch_time = "")
+    "db_synch_time"   = data.frame(synch_time = data_synch_time)
   )
   con <- get_db_connection(db_path)
   for(i in names(new_data)){
@@ -130,22 +132,20 @@ db_update <- function(
 ){
   stopifnot(file.exists(db_path))
   con <- get_db_connection(db_path)
-  # check if review_data is still up to date and if not, expand review_data
-  review_data <- con |> 
-    dplyr::tbl("all_review_data") |> 
-    dplyr::collect() 
-  
-  edit_time_raw <- get_max_time(data, edit_time_var) 
-  edit_time_review <- get_max_time(review_data, edit_time_var) 
-  # update db synch time: 
-  if(data_synched){
-    cat("Raw data renewed. Updating synch date \n")
-    DBI::dbWriteTable(con, "db_synch_time", data.frame("synch_time" =   time_stamp()), overwrite = TRUE)
+  data_synch_time <- attr(data, "synch_time") %||% ""
+  db_synch_time <- DBI::dbGetQuery(con, "SELECT synch_time FROM db_synch_time") |> 
+    unlist(use.names = FALSE)
+  if(!identical(data_synch_time, "") && identical(data_synch_time, db_synch_time)){
+    return("Database up to date. No update needed") 
   }
-  # update review_data DB if needed:
-  if(edit_time_raw == edit_time_review){
-    return("Database up to date. No update needed")
+  if(!identical(data_synch_time, "") && db_synch_time > data_synch_time){
+    return({
+      warning("DB synch time is more recent than data synch time. ", 
+              "Aborting synchronization.")
+      })
   }
+  # Continue in the case data_synch_time is missing and if data_synch_time is 
+  # more recent than db_synch_time
   cat("Start adding new rows to database\n")
   updated_review_data <- update_review_data(
     review_df = review_data,
@@ -155,6 +155,12 @@ db_update <- function(
   )
   cat("writing updated review data to database...\n")
   DBI::dbWriteTable(con, "all_review_data", updated_review_data, append = TRUE)
+  DBI::dbWriteTable(
+    con, 
+    "db_synch_time", 
+    data.frame("synch_time" = data_synch_time), 
+    overwrite = TRUE
+  )
   cat("Finished updating review data\n")
 }
 

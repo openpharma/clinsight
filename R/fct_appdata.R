@@ -57,6 +57,8 @@ merge_meta_with_data <- function(
   stopifnot(is.data.frame(data))
   stopifnot(inherits(meta, "list"))
   stopifnot(is.character(expected_columns))
+  # Preserve synch time manually since pivot functions do not preserve attributes
+  synch_time <- attr(data, "synch_time")
   merged_data <- data |> 
     rename_raw_data(column_names = meta$column_names) |> 
     readr::type_convert(clinsight_col_specs) |> 
@@ -95,8 +97,10 @@ merge_meta_with_data <- function(
       "significance" = LBCLSIG,
       "item_value" = VAL,
       "reason_notdone" = LBREASND
-    )
-  apply_study_specific_fixes(merged_data) 
+    ) |> 
+    apply_study_specific_fixes() 
+  attr(merged_data, "synch_time") <- synch_time
+  merged_data
 }
 
 
