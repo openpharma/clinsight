@@ -115,9 +115,6 @@ db_create <- function(
 #' @param common_vars A character vector containing the common key variables.
 #' @param edit_time_var A character vector with the column name of the edit-time
 #'   variable.
-#' @param data_synched Logical. Whether the database was synched or not. If
-#'   TRUE, the synchronization date stored in the database will be updated to
-#'   the current day.
 #'
 #' @return Nothing will be returned.
 #' @export
@@ -127,14 +124,15 @@ db_update <- function(
     db_path,
     common_vars = c("subject_id", "event_name", "item_group", 
                     "form_repeat", "item_name"), 
-    edit_time_var = "edit_date_time",
-    data_synched = FALSE
+    edit_time_var = "edit_date_time"
 ){
   stopifnot(file.exists(db_path))
   con <- get_db_connection(db_path)
   data_synch_time <- attr(data, "synch_time") %||% ""
-  db_synch_time <- DBI::dbGetQuery(con, "SELECT synch_time FROM db_synch_time") |> 
-    unlist(use.names = FALSE)
+  
+  db_synch_time <- tryCatch({
+    DBI::dbGetQuery(con, "SELECT synch_time FROM db_synch_time") |> 
+    unlist(use.names = FALSE)}, error = \(e){""})
   if(!identical(data_synch_time, "") && identical(data_synch_time, db_synch_time)){
     return("Database up to date. No update needed") 
   }
@@ -146,6 +144,7 @@ db_update <- function(
   }
   # Continue in the case data_synch_time is missing and if data_synch_time is 
   # more recent than db_synch_time
+  review_data <- DBI::dbGetQuery(con, "SELECT * FROM all_review_data")
   cat("Start adding new rows to database\n")
   updated_review_data <- update_review_data(
     review_df = review_data,
