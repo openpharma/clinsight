@@ -14,7 +14,9 @@ Created with \code{data-raw/create_random_data.R}
 clinsightful_data
 }
 \description{
-A data.frame containing randomly created clinical trial data. Acceptable for
-for the \code{data} argument in \code{run_app()} & used for testing purposes.
+A data.frame containing randomly created clinical trial data. Used for
+testing purposes. It will also be used to run the app with example data when
+executing \code{run_app()} with the default configuration settings, or when
+running \code{golem::run_dev()}.
 }
 \keyword{datasets}
