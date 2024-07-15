@@ -2,9 +2,9 @@
 #'
 #' @param data_path Path to the folder that contains the CSV files with the
 #'   application data.
-#' @param exclude character vector with regex that identify csv files that
-#'   should not be merged in study data. For example, readme files included in
-#'   the export.
+#' @param exclude character vector with regular expressions that identify csv
+#'   files that should be excluded from the study data. Useful to exclude files
+#'   with different data structures, or files with metadata.
 #' @param delim Delimiter to use to read in files.
 #' @param skip Number of rows to skip when reading in files.
 #'

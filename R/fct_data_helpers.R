@@ -75,6 +75,7 @@ get_metadata <- function(
 #'   (`required_col_names`).
 #'
 #' @return A data frame
+#' @export
 #'
 #' @examples
 #'  specs <- metadata$column_specs
