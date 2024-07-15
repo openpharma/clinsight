@@ -106,8 +106,11 @@ describe(
         and sites 'Site 01' and 'Site 02' belonging to region 'DEU',
         and clicking on [settings],
         I expect to see the modal to select regions and sites to review,
-        and given that I deselect regions 'NLD' and 'BEL',
-        I expect that only the sites 'Site 01' and 'Site 02' are still selected,
+        and given that I deselect all regions and click on [Save],
+        I expect that I will get the message 'You must select at least one site/region to review.',
+        and that the data within the app will not be updated with the empty selection,
+        and given that I select region 'DEU',
+        I expect that only the sites 'Site 01' and 'Site 02' will be selected,
         and given that I click on [Save],
         I expect that a confirmation will be shown with the text 'Review configuration applied successfully',
         and that the data within the app only contains data of 'Site 01' and 'Site 02'. ", 
@@ -146,6 +149,17 @@ describe(
         withr::defer(app$stop())
         app$click("test-config_review")
         app$expect_values(input = TRUE, output = TRUE)
+        app$set_inputs(`test-region_selection` = "")
+        app$expect_values(input = TRUE, output = TRUE)
+        app$click("test-save_review_config")
+        filtered_data <- app$get_value(export = "filtered_data")
+        all_sites <- lapply(filtered_data, \(x){x[["site_code"]]}) |> 
+          unlist() |> 
+          unique()
+        expect_equal(
+          all_sites[order(all_sites)], 
+          sort(vars$Sites$site_code)
+        )
         app$set_inputs(`test-region_selection` = "DEU")
         app$expect_values(input = TRUE, output = TRUE)
         app$click("test-save_review_config")
@@ -162,4 +176,3 @@ describe(
     )
   }
 )
-

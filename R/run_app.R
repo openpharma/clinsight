@@ -1,5 +1,5 @@
 #' Run the Shiny Application
-#'
+#' 
 #' @param data_folder Character string. The folder in which all data resides is
 #'   usually set in the config.yml file. However, this can be overwritten if a
 #'   path is set in this argument. Useful for testing purposes.
@@ -8,6 +8,8 @@
 #' @param ... arguments to pass to golem_opts. See `?golem::get_golem_options`
 #'   for more details.
 #' @inheritParams shiny::shinyApp
+#' 
+#' 
 #'
 #' @export
 #' 
