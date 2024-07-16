@@ -163,9 +163,11 @@ mod_review_forms_server <- function(
       if(enable_save_review()){
         shinyjs::enable("save_review")
         shinyjs::enable("add_comment")
+        shinyjs::enable("review_comment")
       } else { 
         shinyjs::disable("save_review")
         shinyjs::disable("add_comment")
+        shinyjs::disable("review_comment")
       }
     })
     
