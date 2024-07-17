@@ -111,7 +111,8 @@ describe(
         and [user_name] set to 'test_name',
         and [subject_id]  set to '885',
         and [active_form] set to 'Adverse events',
-        and first (1) No input is given, then (2) the value [form_review] is set to 'TRUE',
+        and first (1) No input is given, then (2) the [form_reviewed] tick box 
+        is ticked and the comment field enabled,
         and then (3) the [save_review] button is clicked,
         I expect that, after each action, the save review button and the option 
         to add a comment will be (1) disabled, (2) enabled, and (3) disabled,
@@ -150,17 +151,19 @@ describe(
         )
         withr::defer(app$stop())
         app$wait_for_idle(2500)
-        
         # save button and comment option should not be available:
         app$expect_values()
         expect_true(app$get_js("document.getElementById('test-save_review').disabled;"))
         expect_true(app$get_js("document.getElementById('test-add_comment').disabled;"))
+        expect_true(app$get_js("document.getElementById('test-review_comment').disabled;"))
         
         app$click("test-form_reviewed")
+        app$click("test-add_comment")
         # now the save button and comment option is available:
         app$expect_values()
         expect_false(app$get_js("document.getElementById('test-save_review').disabled;"))
         expect_false(app$get_js("document.getElementById('test-add_comment').disabled;"))
+        expect_false(app$get_js("document.getElementById('test-review_comment').disabled;"))
         
         app$click("test-save_review")
         app$wait_for_idle()
@@ -168,6 +171,7 @@ describe(
         app$expect_values()
         expect_true(app$get_js("document.getElementById('test-save_review').disabled;"))
         expect_true(app$get_js("document.getElementById('test-add_comment').disabled;"))
+        expect_true(app$get_js("document.getElementById('test-review_comment').disabled;"))
         
         # review status and reviewer is saved as expected
         saved_review_row <- db_slice_rows(temp_path) |>
