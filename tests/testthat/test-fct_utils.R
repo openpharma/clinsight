@@ -458,3 +458,162 @@ describe(
     })
   }
 )
+
+describe("format_test_results() works", {
+  it("errors with incorrect input", {
+    expect_error(
+      format_test_results(data.frame()),
+      "Expecting an object of class 'testthat_results'"
+    )
+  })
+  it("returns a list with expected output and informs that all tests passed", {
+    res <- list(
+      list(
+        file = c("test-file1.R"),
+        context = "",
+        test = c("Test description"),
+        user = 0.1234,
+        system = 0,
+        real = 0.145,
+        results = list(
+          expectation("success", "success message"), 
+          expectation("success", "second success message"), 
+          expectation("success", "third success message")
+        )
+      )
+    )
+    class(res) <- "testthat_results"
+    # this approach instead of snapshot prevents the message being printed 
+    # when running all tests, which might be confusing:
+    temp.sink <- withr::local_tempfile(fileext = ".txt")
+    sink(file = temp.sink)
+    output <- format_test_results(res)
+    sink()
+    expect_equal(
+      readLines(temp.sink),
+      c(
+        " failed skipped   error warning  passed ",
+        "      0       0       0       0       3 ",
+        "All tests passed successfully"
+      )
+    )
+    expect_true(inherits(output, "list"))
+    expect_true(inherits(output$results, "testthat_results"))
+    expect_equal(
+      names(output), 
+      c("results", "time", "session", "sum_results", "test_outcome")
+    )
+  })
+  
+  
+  it("returns a list with expected output, and prints a warning if there are failures", {
+    res <- list(
+      list(
+        file = c("test-file1.R"),
+        context = "",
+        test = c("Test description"),
+        user = 0.1234,
+        system = 0,
+        real = 0.145,
+        results = list(
+          expectation("success", "success message"), 
+          expectation("failure", "first failure message"), 
+          expectation("failure", "second failure message")
+        )
+      )
+    )
+    class(res) <- "testthat_results"
+    temp.sink <- withr::local_tempfile(fileext = ".txt")
+    sink(file = temp.sink)
+    output <- suppressWarnings(format_test_results(res))
+    sink()
+    expect_equal(
+      readLines(temp.sink),
+      c(
+        " failed skipped   error warning  passed ",
+        "      2       0       0       0       1 ",
+        "There was a failure in the following tests: ",
+        "test-file1.R",
+        "Failure messages: ",
+        "",
+        "first failure message",
+        "",
+        "second failure message"
+      )
+    )
+    expect_true(inherits(output, "list"))
+    expect_true(inherits(output$results, "testthat_results"))
+    expect_equal(
+      names(output), 
+      c("results", "time", "session", "sum_results", "test_outcome")
+    )
+  })
+})
+
+describe("all_tests_passed() provides expected output", {
+  it("returns TRUE when all pass", {
+    res <- list(
+      "sum_results" = c("failed" = 0, "skipped" = 0, "error" = 0, "warning" = 0, "passed" = 10)
+    )
+    expect_true(all_tests_passed(res))
+  })
+  it("returns TRUE with a skipped test and [include_skipped] is FALSE", {
+    res <- list(
+      "sum_results" = c("failed" = 0, "skipped" = 1, "error" = 0, "warning" = 0, "passed" = 10)
+    )
+    expect_true(all_tests_passed(res, include_skipped = FALSE))
+  })
+  it("returns FALSE with a failure", {
+    res <- list(
+      "sum_results" = c("failed" = 1, "skipped" = 0, "error" = 0, "warning" = 0, "passed" = 10)
+    )
+    expect_false(all_tests_passed(res))
+  })
+  it("returns FALSE with a skipped test and [include_skipped] is TRUE", {
+    res <- list(
+      "sum_results" = c("failed" = 0, "skipped" = 1, "error" = 0, "warning" = 0, "passed" = 10)
+    )
+    expect_false(all_tests_passed(res))
+  })
+  it("returns FALSE with an error", {
+    res <- list(
+      "sum_results" = c("failed" = 0, "skipped" = 0, "error" = 1, "warning" = 0, "passed" = 10)
+    )
+    expect_false(all_tests_passed(res))
+  })
+  it("returns FALSE with a warning", {
+    res <- list(
+      "sum_results" = c("failed" = 0, "skipped" = 0, "error" = 0, "warning" = 1, "passed" = 10)
+    )
+    expect_false(all_tests_passed(res))
+  })
+  it("returns FALSE with no tests available", {
+    res <- list(
+      "sum_results" = c("failed" = 0, "skipped" = 0, "error" = 0, "warning" = 0, "passed" = 0)
+    )
+    expect_false(all_tests_passed(res))
+  })
+  it("returns NA with a warning if [var] does not exist in the results list", {
+    res <- list("sum_results" = c())
+    expect_warning(all_tests_passed(res, var = "non_existing_var"))
+    expect_equal(
+      suppressWarnings(all_tests_passed(res, var = "non_existing_var")), 
+      NA
+    )
+  })
+})
+
+describe("expectation_type() works", {
+  it("outputs TRUE if expectation type matches the provided type and FALSE when not", {
+    types <- c("success", "failure", "warning", "error")
+    lapply(types, \(x){
+      expect_true(expectation_type(expectation(x, "foo"), x))
+    })
+    expect_false(expectation_type(expectation("success", "s"), "failure"))
+    expect_false(expectation_type(expectation("failure", "f"), "success"))
+  })
+  it("errors with incorrect input", {
+    expect_error(expectation_type(data.frame), "is.expectation")
+    expect_error(expectation_type(expectation("failure", "f"), "non-existing expectation"))
+  })
+})
