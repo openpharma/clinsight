@@ -150,22 +150,24 @@ mod_review_forms_server <- function(
     })
     
     enable_save_review <- reactive({
-      req(review_data_active())
-      req(!is.null(input$form_reviewed))
+      req(is.logical(input$form_reviewed), review_data_active())
       if(is.null(r$user_name()) || r$user_name() == "") return(FALSE)
       if(nrow(review_data_active()) == 0) return(FALSE)
       any(c(
         unique(review_data_active()$reviewed) == "No"  & input$form_reviewed, 
-        unique(review_data_active()$reviewed) == "Yes" & !input$form_reviewed, 
-        input$review_comment != unique(review_data_active()$comment)
+        unique(review_data_active()$reviewed) == "Yes" & !input$form_reviewed
       ))
     })
     
     observeEvent(enable_save_review(), {
       if(enable_save_review()){
         shinyjs::enable("save_review")
+        shinyjs::enable("add_comment")
+        shinyjs::enable("review_comment")
       } else { 
-        shinyjs::disable(id = "save_review")
+        shinyjs::disable("save_review")
+        shinyjs::disable("add_comment")
+        shinyjs::disable("review_comment")
       }
     })
     
@@ -186,9 +188,8 @@ mod_review_forms_server <- function(
     review_save_error <- reactiveVal(FALSE)
     observeEvent(input$save_review, {
       req(is.logical(input$form_reviewed), review_data_active())
-      req(nrow(review_data_active()) != 0)
+      req(enable_save_review())
       review_save_error(FALSE)
-      req(!(is.null(r$user_name()) || r$user_name() == ""))
       golem::cat_dev("Save review status reviewed:", input$form_reviewed, "\n")
       
       review_row <- review_data_active() |> 

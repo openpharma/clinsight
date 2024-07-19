@@ -1,6 +1,6 @@
 {
   "input": {
-    "test-add_comment": false,
+    "test-add_comment": true,
     "test-confirm_review_tabs": "show_checkbox",
     "test-form_reviewed": true,
     "test-review_comment": "",
