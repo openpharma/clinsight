@@ -14,7 +14,7 @@ load_and_run_app <- function(){
   Sys.setenv("GOLEM_CONFIG_ACTIVE" = "test")
   meta <- get_metadata(meta_path)
   merged_data <- raw_data_folder |> 
-    get_raw_csv_data(synch_time = "2024-01-01 00:00:00") |> 
+    get_raw_csv_data() |> 
     merge_meta_with_data(meta = meta)
   saveRDS(merged_data, file.path(temp_folder, "study_data.rds"))
   saveRDS(meta, file.path(temp_folder, "metadata.rds"))
