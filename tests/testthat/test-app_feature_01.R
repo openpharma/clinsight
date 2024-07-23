@@ -37,7 +37,7 @@ describe(
          # from snaps, since they cannot be serialized to JSON and produce a 
          # flaky hash https://rstudio.github.io/shinytest2/articles/robust.html
          app$run_js("$('#navigate_participants_1-subject_info').click()")
-         app$wait_for_idle(1000)
+         app$wait_for_idle(1500)
          app$set_inputs("navigate_participants_1-participant_selection" = "BEL_04_772")
          app$wait_for_idle(1000)
          app$click("navigate_participants_1-subj_apply")
