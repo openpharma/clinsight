@@ -13,6 +13,7 @@ to minimize the package dependencies of the production version.
 - Improved reading of data files within clinsight::run_app()
 - Improved creating test result report.
 - Added data specification to `run_app()` documentation
+- Improved function `get_test_results()`.
 
 ## Bug fixes
 
