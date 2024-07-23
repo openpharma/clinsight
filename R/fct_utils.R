@@ -23,9 +23,9 @@ time_stamp <- function(
   # propagate errors from internal base R as.Date() function to check for valid 
   # function options:
   check_valid_date_format <- try(as.Date(ts), silent = TRUE)
-       if(inherits(check_valid_date_format, "try-error")){
-         stop(check_valid_date_format)
-       }
+  if(inherits(check_valid_date_format, "try-error")){
+    stop(check_valid_date_format)
+  }
   ts
 }
 
@@ -175,7 +175,7 @@ title_case <- function(x) {
       toupper(substring(x, 1, 1)), 
       tolower(substring(x, 2)),
       collapse = " "
-      ) }) |> 
+    ) }) |> 
     unlist()
 }
 
@@ -410,7 +410,7 @@ is_date <- function(x) {
   stopifnot(is.atomic(x))
   inherits(x, c("Date", "POSIXt"))
 }
-  
+
 #' Convert non-numeric columns to character
 #'
 #' @param data A data frame with columns that need to be converted.
@@ -453,7 +453,7 @@ date_cols_to_char <- function(data){
   list_data <- lapply(data, \(x){ 
     if(is_date(x)) as.character(x) else x 
   })  
-    dplyr::bind_rows(list_data)
+  dplyr::bind_rows(list_data)
 }
 
 
@@ -481,14 +481,14 @@ clean_dates <- function(
     x,
     unknown_pattern = "NK",
     unknown_replacement = "01"
-    ){
+){
   stopifnot(is.character(x) | is_date(x))
   if(is_date(x)) return(x)
   gsub(
     paste0("-", unknown_pattern[1]), 
     paste0("-", unknown_replacement[1]), 
     x
-    ) |> 
+  ) |> 
     as.Date()
 }
 

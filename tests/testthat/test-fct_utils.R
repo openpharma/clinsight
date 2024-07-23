@@ -115,11 +115,11 @@ describe(
     })
     it("works on character vectors and returns NA if a 
        value in the vector is missing", {
-      expect_equal(
-        title_case(c("convert me", "convert me too", NA)), 
-        c("Convert Me", "Convert Me Too", NA_character_)
-      )
-    })
+         expect_equal(
+           title_case(c("convert me", "convert me too", NA)), 
+           c("Convert Me", "Convert Me Too", NA_character_)
+         )
+       })
   }
 )
 
@@ -200,24 +200,24 @@ describe(
     )
     it("gets all unique variables, outputs a data frame, and returns the 
        expected results", {
-      expect_true(is.data.frame(get_unique_vars(test_case, "ID")))
-      expect_true(is.data.frame(get_unique_vars(test_case, c("Sites", "ID"))))
-      expect_equal(get_unique_vars(test_case, c("Sites", "ID")), expected_results)
-    })
+         expect_true(is.data.frame(get_unique_vars(test_case, "ID")))
+         expect_true(is.data.frame(get_unique_vars(test_case, c("Sites", "ID"))))
+         expect_equal(get_unique_vars(test_case, c("Sites", "ID")), expected_results)
+       })
     it("returns a data frame with with the requested variables but with missing values 
        if the variables are not available in the dataset", {
-      expect_equal(
-        get_unique_vars(test_case, "missing_var"),
-        data.frame(missing_var = NA_character_)
-        )
-      outcome <- get_unique_vars(test_case, c("Sites", "missing_var"))
-      rownames(outcome) <- NULL
-      outcome_expected <- data.frame(
-        Sites =  c("site_1", "site_3", "site_4", "site_9"),
-        missing_var = rep(NA_character_, times = 4)
-      )
-      expect_equal(outcome, outcome_expected)
-    })
+         expect_equal(
+           get_unique_vars(test_case, "missing_var"),
+           data.frame(missing_var = NA_character_)
+         )
+         outcome <- get_unique_vars(test_case, c("Sites", "missing_var"))
+         rownames(outcome) <- NULL
+         outcome_expected <- data.frame(
+           Sites =  c("site_1", "site_3", "site_4", "site_9"),
+           missing_var = rep(NA_character_, times = 4)
+         )
+         expect_equal(outcome, outcome_expected)
+       })
     it("works with a data frame as input", {
       test_df <- dplyr::bind_rows(test_case)
       expect_equal(
@@ -297,17 +297,17 @@ describe(
     it("does not error with if the column to be converted does not exist in one 
        of the data frames. Instead the column will be added for that data frame 
        with missing character values.", {
-      test_case <- list(
-        data.frame("ID" = "subj_x"),
-        data.frame("ID" = "subj_7", "values" = 10)
-      )
-      expected_results <- data.frame(
-        ID = c("subj_x", "subj_7"),
-        values = c(NA_character_, "10")
-      )
-      expect_true(is.data.frame(bind_rows_custom(test_case, "values")))
-      expect_equal(bind_rows_custom(test_case, "values"), expected_results)
-    })
+         test_case <- list(
+           data.frame("ID" = "subj_x"),
+           data.frame("ID" = "subj_7", "values" = 10)
+         )
+         expected_results <- data.frame(
+           ID = c("subj_x", "subj_7"),
+           values = c(NA_character_, "10")
+         )
+         expect_true(is.data.frame(bind_rows_custom(test_case, "values")))
+         expect_equal(bind_rows_custom(test_case, "values"), expected_results)
+       })
   }
 )
 
@@ -336,11 +336,11 @@ describe(
     })
     it("returns an empty factor with new_levels as levels if a 
        vector with only missing values is provided", {
-      expect_equal(
-        collapse_fct_levels(factor(NA_character_), new_levels = list("A-C" = "") ),
-        factor(NA_character_, levels = "A-C")
-      )
-    })
+         expect_equal(
+           collapse_fct_levels(factor(NA_character_), new_levels = list("A-C" = "") ),
+           factor(NA_character_, levels = "A-C")
+         )
+       })
   }
 )
 
@@ -364,13 +364,13 @@ describe(
   "cols_to_char() works", 
   {
     it("converts non-numeric columns (for example factors) to character", {
-         expect_true(is.character(cols_to_char(iris)$Species))
-       })
+      expect_true(is.character(cols_to_char(iris)$Species))
+    })
     it("errors with non-data.frame input", {
       expect_error(cols_to_char(list(iris, mtcars)))
       expect_error(cols_to_char(iris$Species))
     })
-
+    
   }
 )
 
@@ -442,7 +442,7 @@ describe(
     it("04 | Can use multiple include and exclude statements simultaneously", {
       expect_equal(
         vector_select(names(iris), include = c("Sepal", "Species"), 
-                        exclude = c("Length", "Width")),
+                      exclude = c("Length", "Width")),
         "Species"
       )
     })
@@ -454,7 +454,7 @@ describe(
       expect_equal(
         vector_select(names(iris), include = NULL, exclude = NULL),
         names(iris)
-        )
+      )
     })
   }
 )
