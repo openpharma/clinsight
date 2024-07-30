@@ -190,7 +190,8 @@ apply_study_specific_fixes <- function(
       item_unit = "%",
     ) |> 
     dplyr::select(-base_weight)
-  data <- dplyr::bind_rows(data, weight_change_data)
+  # bind rows, making sure data types are the same if weight_change_data is empty
+  data <- dplyr::bind_rows(data, purrr::map2_df(weight_change_data, purrr::map(data, class), ~{class(.x) <- .y;.x}))
   
   # Rename dichotomic value that is only in the database if the answer is 'Yes'.
   data <- data |> 

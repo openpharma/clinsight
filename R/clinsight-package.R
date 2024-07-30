@@ -10,6 +10,7 @@
 #' @importFrom stats na.omit setNames
 #' @importFrom golem with_golem_options
 #' @importFrom golem add_resource_path activate_js favicon bundle_resources
+#' @importFrom purrr map2_df map
 ## usethis namespace: end
 NULL
 
