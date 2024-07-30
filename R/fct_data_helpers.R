@@ -28,7 +28,7 @@ get_metadata <- function(
   sheets <- readxl::excel_sheets(filepath)
   sheets <- setNames(sheets, sheets)
   meta <- lapply(sheets, function(x){
-    readxl::read_excel(filepath, sheet = x)
+    readxl::read_excel(filepath, sheet = x, col_types = "text")
   })
   if(length(expand_tab_items[nchar(expand_tab_items) > 0 ] ) == 0) return(meta)
   if("items_expanded" %in% names(meta)) return({
