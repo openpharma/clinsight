@@ -25,6 +25,7 @@ Imports:
     ggplot2,
     golem,
     htmltools,
+    pkgload,
     plotly,
     readxl,
     rlang,
