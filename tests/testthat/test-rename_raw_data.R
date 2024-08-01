@@ -4,8 +4,7 @@ describe("rename_raw_data() renames raw study data and throws informative errors
     specs <- metadata$column_specs
     specs$name_raw <- names(mtcars)
     
-    expect_no_error(rename_raw_data(mtcars, column_specs = specs))
-    outcome <- rename_raw_data(mtcars, column_specs = specs)
+    expect_no_error(outcome <- rename_raw_data(mtcars, column_specs = specs))
     expect_true(is.data.frame(outcome))
     expect_equal(names(outcome), specs$name_new)
   })
