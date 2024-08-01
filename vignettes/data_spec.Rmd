@@ -177,14 +177,14 @@ saveRDS(meta_data, file.path(Sys.getenv("METADATA_PATH"), "meta_data.rds"))
 ```
 
 
-### Read in your study data with `get_raw_data()`
+### Read in your study data with `get_raw_csv_data()`
 
-Now that we have an understanding of our `meta_data` specs, we can discuss how they interact with your raw data. The rest of this vignette will feel more like an R script as we discuss how this happens. First, we need to read in our raw data. There is yet another helper function bundled in this package called `get_raw_data()` to help us do that. It's a pretty simple wrapper function that basically reads in raw data files stored as CSVs from a designated folder. As such, your function call should look something like the following code chunk. Notice, you can either set your raw data path explicitly, or in your `.Renviron` file.
+Now that we have an understanding of our `meta_data` specs, we can discuss how they interact with your raw data. The rest of this vignette will feel more like an R script as we discuss how this happens. First, we need to read in our raw data. There is yet another helper function bundled in this package called `get_raw_csv_data()` to help us do that. It's a pretty simple wrapper function that basically reads in raw data files stored as CSVs from a designated folder. As such, your function call should look something like the following code chunk. Notice, you can either set your raw data path explicitly, or in your `.Renviron` file.
 
 ```{r get_raw_data(), eval = FALSE}
 # usethis::edit_r_environ()
 data_path <- Sys.getenv("DATA_PATH")
-raw_data <- get_raw_data(data_path, column_specs = metadata$column_specs)
+raw_data <- get_raw_csv_data(data_path)
 
 ```
 

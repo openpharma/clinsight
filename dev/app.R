@@ -7,9 +7,8 @@ devtools::load_all()
 # datapath <- "data1pt"
 datapath <- app_sys("tests/testthat/fixtures/csvtestdata") # For interactive use
 
-metadata <- get_metadata(filepath = here::here("data-raw/metadata.xlsx"))
-usethis::use_data(metadata, overwrite = TRUE) # do I need this?
-my_raw_data <- get_raw_data(data_path = datapath, column_specs = metadata$column_specs)
+metadata <- get_metadata(filepath = app_sys("data-raw/metadata.xlsx"))
+my_raw_data <- get_raw_csv_data(data_path = datapath)
   # fix_multiple_choice_vars() - metadata not found
   
 merged_data <- merge_meta_with_data(
@@ -36,6 +35,5 @@ db_create(get_review_data(merged_data),
 run_app(
   data = data_path, #merged_data, # or db_path works too
   # user_db = db_path, # defaults to "user_db.sqlite"
-  test_mode = FALSE#, 
   # onStart = \(){onStop(\(){unlink(data_folder, recursive = TRUE)})} # be careful here
 )
