@@ -26,7 +26,6 @@ Imports:
     golem,
     htmltools,
     plotly,
-    purrr,
     readxl,
     rlang,
     rmarkdown,
