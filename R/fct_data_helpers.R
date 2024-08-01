@@ -75,7 +75,6 @@ get_metadata <- function(
 #'   (`required_col_names`).
 #'
 #' @return A data frame
-#' @export
 #'
 #' @examples
 #'  specs <- metadata$column_specs
@@ -116,7 +115,6 @@ rename_raw_data <- function(
 #'
 #' @return A data frame, with derivative time and event variables, needed for
 #'   ClinSight to function properly.
-#' @export
 #'
 add_timevars_to_data <- function(
     data,
