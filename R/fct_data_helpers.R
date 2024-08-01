@@ -76,11 +76,6 @@ get_metadata <- function(
 #'
 #' @return A data frame
 #'
-#' @examples
-#'  specs <- metadata$column_specs
-#'  specs$name_raw <- names(mtcars)
-#'  rename_raw_data(mtcars, column_specs = specs)
-#' 
 rename_raw_data <- function(
     data, 
     column_specs = metadata$column_specs
