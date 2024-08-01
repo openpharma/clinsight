@@ -4,12 +4,10 @@
 \alias{add_timevars_to_data}
 \title{Add time vars to raw data}
 \usage{
-add_timevars_to_data(data, required_col_names = required_col_names)
+add_timevars_to_data(data)
 }
 \arguments{
 \item{data}{A data frame}
-
-\item{required_col_names}{Required column names.}
 }
 \value{
 A data frame, with derivative time and event variables, needed for

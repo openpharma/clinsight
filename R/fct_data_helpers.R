@@ -110,21 +110,21 @@ rename_raw_data <- function(
 
 #' Add time vars to raw data
 #'
-#' @param data A data frame
-#' @param required_col_names Required column names.
+#' @param data A data frame 
 #'
 #' @return A data frame, with derivative time and event variables, needed for
 #'   ClinSight to function properly.
 #'
 add_timevars_to_data <- function(
-    data,
-    required_col_names = required_col_names
+    data
 ){
   stopifnot("[data] should be a data frame" = is.data.frame(data))
-  if(!is.null(required_col_names)){
-    stopifnot("required_col_names should be a character vector" = is.character(required_col_names)) 
-    stopifnot("Some of the required column names are missing" = all(required_col_names %in% names(data))) 
-  }
+  missing_new_cols <- required_col_names[!required_col_names %in% names(data)] |> 
+    paste0(collapse = ", ")
+  if(nchar(missing_new_cols) > 0) stop(
+    paste0("The following columns are missing while they are required:\n", 
+           missing_new_cols, ".")
+  )
   
   df <- data |> 
     dplyr::mutate(
