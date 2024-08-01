@@ -61,7 +61,7 @@ merge_meta_with_data <- function(
   stopifnot(is.character(expected_columns))
   merged_data <- data |> 
     rename_raw_data(column_specs = meta$column_specs) |> 
-    add_timevars_to_data(required_col_names = meta$column_specs$name_new) |> 
+    add_timevars_to_data() |> 
     # fix MC values before merging:
     fix_multiple_choice_vars(expected_vars = meta$items_expanded$var) |> 
     dplyr::right_join(meta$items_expanded, by = "var") |> 
