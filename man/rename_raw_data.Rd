@@ -21,9 +21,3 @@ A data frame
 \description{
 Helper function to rename raw data
 }
-\examples{
- specs <- metadata$column_specs
- specs$name_raw <- names(mtcars)
- rename_raw_data(mtcars, column_specs = specs)
-
-}
