@@ -40,7 +40,6 @@ Imports:
     tidyr,
     timevis,
     tools,
-    vroom,
     withr
 Suggests: 
     kableExtra,

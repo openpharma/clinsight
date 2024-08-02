@@ -21,15 +21,13 @@ get_raw_csv_data <- function(
   exclude_regex <- paste0(exclude, collapse = "|")
   all_files <- all_files[!grepl(exclude_regex, all_files)]
   
-  raw_data <- vroom::vroom(
+  readr::read_delim(
     file.path(data_path, all_files),  
     delim = delim, 
     skip = skip, 
-    col_types = vroom::cols(.default = vroom::col_character()), 
+    col_types = readr::cols(.default = readr::col_character()), 
     show_col_types = FALSE
   )
-  
-  raw_data
 }
 
 #' Merge metadata with raw data
