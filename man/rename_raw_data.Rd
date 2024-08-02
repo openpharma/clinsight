@@ -4,12 +4,12 @@
 \alias{rename_raw_data}
 \title{Rename raw data}
 \usage{
-rename_raw_data(data, column_specs = metadata$column_specs)
+rename_raw_data(data, column_names = metadata$column_names)
 }
 \arguments{
 \item{data}{A data frame with raw study data.}
 
-\item{column_specs}{A data frame with column specifications. Should have at
+\item{column_names}{A data frame with column names. Should have at
 least the columns \code{name_raw}, containing the current column names, and
 \code{name_new}, containing the new column names. \code{name_new} should contain all
 names that are required for ClinSight to function properly

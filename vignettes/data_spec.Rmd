@@ -123,10 +123,9 @@ lapply(meta_data, head)
 
 Specifications for the list of data.frames include:
 
- - `column_specs`: Used to map raw data variable names over to new names, and assign a column type.
+ - `column_names`: Used to map raw data variable names over to new names.
      - `name_raw`: character, variable name in the raw data source
      - `name_new`: character, desired variable name to use in `study_data` and in the application
-     - `col_type`: character, either "C", "D", "T", or "i" which stands for "character", "date", "time", and "integer" respectively.
  - `events`: Used to create a simple timeline in the application, with predefined number of planned visits, N. It contains the following columns:
      - `event_number`: integer. Example: 0, 1, 2, ..., N
      - `event_name`: character. Example: "Screening", "Visit 1", "Visit 2", ..., "Visit N"
@@ -188,7 +187,7 @@ raw_data <- get_raw_csv_data(data_path)
 
 ```
 
-After the data is read in R, it uses the `column_specs` you provided to rename the variables into the desired naming conventions. Notice that all of these variables are required, so it's extremely important that you identify which variables from your EDC mirror them. `get_raw_data()` will also perform some lite derivations upon load. Specifically, it standardizing a `vis_day` and `vis_num` variables based on `event_id` and `day`. Similarly, `event_name` & `event_label` have some clean up performed on it's values to standardize them for presentation in the app. Last, the data is ordered by `site_code` and `subject_id` before it's returned to the user. Last, notice that everything bound up & returned into a single data.frame for the user to take to the next step.
+After the data is read in R, it uses the `column_names` you provided to rename the variables into the desired naming conventions. Notice that all of these variables are required, so it's extremely important that you identify which variables from your EDC mirror them. `get_raw_data()` will also perform some lite derivations upon load. Specifically, it standardizing a `vis_day` and `vis_num` variables based on `event_id` and `day`. Similarly, `event_name` & `event_label` have some clean up performed on it's values to standardize them for presentation in the app. Last, the data is ordered by `site_code` and `subject_id` before it's returned to the user. Last, notice that everything bound up & returned into a single data.frame for the user to take to the next step.
 
 
 ### Finish the job with `merge_meta_with_data()`

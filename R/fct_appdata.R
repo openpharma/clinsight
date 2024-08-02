@@ -60,7 +60,7 @@ merge_meta_with_data <- function(
   stopifnot(inherits(meta, "list"))
   stopifnot(is.character(expected_columns))
   merged_data <- data |> 
-    rename_raw_data(column_specs = meta$column_specs) |> 
+    rename_raw_data(column_names = meta$column_names) |> 
     add_timevars_to_data() |> 
     # fix MC values before merging:
     fix_multiple_choice_vars(expected_vars = meta$items_expanded$var) |> 

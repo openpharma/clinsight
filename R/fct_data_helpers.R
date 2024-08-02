@@ -68,7 +68,7 @@ get_metadata <- function(
 #' Helper function to rename raw data
 #'
 #' @param data A data frame with raw study data.
-#' @param column_specs A data frame with column specifications. Should have at
+#' @param column_names A data frame with column names. Should have at
 #'   least the columns `name_raw`, containing the current column names, and
 #'   `name_new`, containing the new column names. `name_new` should contain all
 #'   names that are required for ClinSight to function properly
@@ -78,29 +78,29 @@ get_metadata <- function(
 #'
 rename_raw_data <- function(
     data, 
-    column_specs = metadata$column_specs
+    column_names = metadata$column_names
 ){
   stopifnot("[data] should be a data frame" = is.data.frame(data))
-  stopifnot("[column_specs] should be a data frame" = is.data.frame(column_specs))
-  if(!all(c("name_raw", "name_new") %in% names(column_specs))){
-    stop("Expecting the columns 'name_raw' and 'name_new' in [column_specs]")
+  stopifnot("[column_names] should be a data frame" = is.data.frame(column_names))
+  if(!all(c("name_raw", "name_new") %in% names(column_names))){
+    stop("Expecting the columns 'name_raw' and 'name_new' in [column_names]")
   }
-  missing_colnames <- with(column_specs, name_raw[!name_raw %in% names(data)]) |> 
+  missing_colnames <- with(column_names, name_raw[!name_raw %in% names(data)]) |> 
     paste0(collapse = ", ")
   if(nchar(missing_colnames) > 0) stop(
     paste0("The following columns are missing in the raw data while they are ", 
-           "defined in 'name_raw' of column_specs:\n", 
+           "defined in 'name_raw' of column_names:\n", 
            missing_colnames, ".")
   )
-  missing_new_cols <- required_col_names[!required_col_names %in% column_specs$name_new] |> 
+  missing_new_cols <- required_col_names[!required_col_names %in% column_names$name_new] |> 
     paste0(collapse = ", ")
   if(nchar(missing_new_cols) > 0) stop(
-    paste0("The following columns are missing in 'name_new' of column_specs while they ", 
+    paste0("The following columns are missing in 'name_new' of column_names while they ", 
            "are required for ClinSight to run:\n", 
            missing_new_cols, ".")
   )
-  data[column_specs$name_raw] |> 
-    setNames(column_specs$name_new)
+  data[column_names$name_raw] |> 
+    setNames(column_names$name_new)
 }
 
 #' Add time vars to raw data

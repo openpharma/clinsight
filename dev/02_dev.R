@@ -85,7 +85,6 @@ clinsightful_data |>
 
 # metadata
 
-clinsight::metadata$column_specs$col_type |> unique()
 
 # Engineering
 
