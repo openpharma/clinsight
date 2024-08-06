@@ -5,17 +5,16 @@ global <- quote({
   data_folder <- Sys.getenv("DATA_FOLDER", app_sys())
   data_local <- file.path(data_folder, "study_data.rds")
   raw_data_remote <- Sys.getenv("RAW_DATA_PATH")
-  data_synched <- FALSE
-  meta_data <- get_metadata(file.path(data_folder, "metadata.rds"))
+  meta_data <- get_metadata(file.path(data_folder, "metadata.xlsx"))
     
   if(!file.exists(data_local)){
     warning("No data found. Trying to rebuild data from remote source")
-    study_data <- merge_meta_with_data(get_raw_data(
-      data_path = raw_data_remote, column_specs = meta_data$column_specs), meta_data)
+    study_data <- raw_data_remote |> 
+      get_raw_csv_data() |> 
+      merge_meta_with_data(meta = meta_data)
     cat("saving data locally\n")
     saveRDS(study_data, data_local)
     if(!file.exists(data_local)) stop("Could not save data set locally.")
-    data_synched <- TRUE
   }
   Sys.setenv("GOLEM_CONFIG_ACTIVE" = "shinymanager")
   run_app(data_folder = data_folder)

@@ -63,6 +63,100 @@ get_metadata <- function(
   })
 }
 
+#' Rename raw data
+#'
+#' Helper function to rename raw data
+#'
+#' @param data A data frame with raw study data.
+#' @param column_names A data frame with column names. Should have at
+#'   least the columns `name_raw`, containing the current column names, and
+#'   `name_new`, containing the new column names. `name_new` should contain all
+#'   names that are required for ClinSight to function properly
+#'   (`required_col_names`).
+#'
+#' @return A data frame
+#'
+rename_raw_data <- function(
+    data, 
+    column_names = metadata$column_names
+){
+  stopifnot("[data] should be a data frame" = is.data.frame(data))
+  stopifnot("[column_names] should be a data frame" = is.data.frame(column_names))
+  if(!all(c("name_raw", "name_new") %in% names(column_names))){
+    stop("Expecting the columns 'name_raw' and 'name_new' in [column_names]")
+  }
+  missing_colnames <- with(column_names, name_raw[!name_raw %in% names(data)]) |> 
+    paste0(collapse = ", ")
+  if(nchar(missing_colnames) > 0) stop(
+    paste0("The following columns are missing in the raw data while they are ", 
+           "defined in 'name_raw' of column_names:\n", 
+           missing_colnames, ".")
+  )
+  missing_new_cols <- required_col_names[!required_col_names %in% column_names$name_new] |> 
+    paste0(collapse = ", ")
+  if(nchar(missing_new_cols) > 0) stop(
+    paste0("The following columns are missing in 'name_new' of column_names while they ", 
+           "are required for ClinSight to run:\n", 
+           missing_new_cols, ".")
+  )
+  data[column_names$name_raw] |> 
+    setNames(column_names$name_new)
+}
+
+#' Add time vars to raw data
+#'
+#' @param data A data frame 
+#'
+#' @return A data frame, with derivative time and event variables, needed for
+#'   ClinSight to function properly.
+#'
+add_timevars_to_data <- function(
+    data
+){
+  stopifnot("[data] should be a data frame" = is.data.frame(data))
+  missing_new_cols <- required_col_names[!required_col_names %in% names(data)] |> 
+    paste0(collapse = ", ")
+  if(nchar(missing_new_cols) > 0) stop(
+    paste0("The following columns are missing while they are required:\n", 
+           missing_new_cols, ".")
+  )
+  
+  df <- data |> 
+    dplyr::mutate(
+      edit_date_time = as.POSIXct(edit_date_time, tz = "UTC"),
+      event_date = as.Date(event_date),
+      day = event_date - min(event_date, na.rm = TRUE), 
+      vis_day = ifelse(event_id %in% c("SCR", "VIS", "VISEXT", "VISVAR", "FU1", "FU2"), day, NA),
+      vis_num = as.numeric(factor(vis_day))-1,
+      event_name = dplyr::case_when(
+        event_id == "SCR"    ~ "Screening",
+        event_id %in% c("VIS", "VISEXT", "VISVAR")    ~ paste0("Visit ", vis_num),
+        grepl("^FU[[:digit:]]+", event_id)  ~ paste0("Visit ", vis_num, "(FU)"),
+        event_id == "UN"     ~ paste0("Unscheduled visit ", event_repeat),
+        event_id == "EOT"    ~ "EoT",
+        event_id == "EXIT"   ~ "Exit",
+        form_id %in% c("AE", "CM", "CP", "MH", "MH", "MHTR", "PR", "ST", "CMTR", "CMHMA") ~ "Any visit",
+        TRUE                ~ paste0("Other (", event_name, ")")
+      ),
+      event_label = dplyr::case_when(
+        !is.na(vis_num)   ~ paste0("V", vis_num),
+        event_id == "UN"   ~ paste0("UV", event_repeat),
+        TRUE              ~ event_name
+      ),
+      .by = subject_id
+    ) |> 
+    dplyr::arrange(
+      factor(site_code, levels = order_string(site_code)),
+      factor(subject_id, levels = order_string(subject_id))
+    )
+  if(any(grepl("^Other ", df$event_name))) warning(
+    "Undefined Events detected. Please verify data before proceeding."
+  )
+  df
+}
+
+
+
 #' Correct multiple choice variables
 #'
 #' In some EDC systems, if there is a multiple choice variable in which multiple

@@ -123,10 +123,9 @@ lapply(meta_data, head)
 
 Specifications for the list of data.frames include:
 
- - `column_specs`: Used to map raw data variable names over to new names, and assign a column type.
+ - `column_names`: Used to map raw data variable names over to new names.
      - `name_raw`: character, variable name in the raw data source
      - `name_new`: character, desired variable name to use in `study_data` and in the application
-     - `col_type`: character, either "C", "D", "T", or "i" which stands for "character", "date", "time", and "integer" respectively.
  - `events`: Used to create a simple timeline in the application, with predefined number of planned visits, N. It contains the following columns:
      - `event_number`: integer. Example: 0, 1, 2, ..., N
      - `event_name`: character. Example: "Screening", "Visit 1", "Visit 2", ..., "Visit N"
@@ -177,19 +176,16 @@ saveRDS(meta_data, file.path(Sys.getenv("METADATA_PATH"), "meta_data.rds"))
 ```
 
 
-### Read in your study data with `get_raw_data()`
+### Read in your study data with `get_raw_csv_data()`
 
-Now that we have an understanding of our `meta_data` specs, we can discuss how they interact with your raw data. The rest of this vignette will feel more like an R script as we discuss how this happens. First, we need to read in our raw data. There is yet another helper function bundled in this package called `get_raw_data()` to help us do that. It's a pretty simple wrapper function that basically reads in raw data files stored as CSVs from a designated folder. As such, your function call should look something like the following code chunk. Notice, you can either set your raw data path explicitly, or in your `.Renviron` file.
+Now that we have an understanding of our `meta_data` specs, we can discuss how they interact with your raw data. The rest of this vignette will feel more like an R script as we discuss how this happens. First, we need to read in our raw data. There is yet another helper function bundled in this package called `get_raw_csv_data()` to help us do that. It's a pretty simple wrapper function that basically reads in raw data files stored as CSVs from a designated folder. As such, your function call should look something like the following code chunk. Notice, you can either set your raw data path explicitly, or in your `.Renviron` file.
 
-```{r get_raw_data(), eval = FALSE}
+```{r get_raw_csv_data(), eval = FALSE}
 # usethis::edit_r_environ()
 data_path <- Sys.getenv("DATA_PATH")
-raw_data <- get_raw_data(data_path, column_specs = metadata$column_specs)
+raw_data <- get_raw_csv_data(data_path)
 
 ```
-
-After the data is read in R, it uses the `column_specs` you provided to rename the variables into the desired naming conventions. Notice that all of these variables are required, so it's extremely important that you identify which variables from your EDC mirror them. `get_raw_data()` will also perform some lite derivations upon load. Specifically, it standardizing a `vis_day` and `vis_num` variables based on `event_id` and `day`. Similarly, `event_name` & `event_label` have some clean up performed on it's values to standardize them for presentation in the app. Last, the data is ordered by `site_code` and `subject_id` before it's returned to the user. Last, notice that everything bound up & returned into a single data.frame for the user to take to the next step.
-
 
 ### Finish the job with `merge_meta_with_data()`
 
@@ -203,8 +199,15 @@ study_data <- merge_meta_with_data(data = raw_data, meta = meta_data)
 
 This function uses the rest of the metadata data.frames to further organize your raw data into something usable by the app, including but not limited to the following:
 
+- renaming columns to the required column names needed in the application
+  - it will use the column provided in the metadata tab `column_names`, and will verify if the new names still match with the expected/required names. Notice that all of these variables are required, so it's important that you identify which variables from your EDC mirror them. 
+- converting columns to the required column type (e.g. dates, character, integer)
 - fixing multiple choice variables using a function called `fix_multiple_choice_vars()`
+- adding derivative values and columns such as:
+  - `vis_day` and `vis_num`, `day` (variables based on `event_id` and `event_date`). 
+- `event_name` & `event_label` have some clean up performed on it's values to standardize them for presentation in the app. Last, the data is ordered by `site_code` and `subject_id`
 - merging the raw data with `meta_data$items_expanded`
+- 
 - applying any study specific fixes using a function called `apply_study_specfific_fixes()`. #TODO
 
 
