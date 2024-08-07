@@ -58,7 +58,7 @@ merge_meta_with_data <- function(
   stopifnot(inherits(meta, "list"))
   stopifnot(is.character(expected_columns))
   # Preserve synch time manually since pivot functions do not preserve attributes
-  synch_time <- attr(data, "synch_time")
+  synch_time <- attr(data, "synch_time") %||% ""
   merged_data <- data |> 
     rename_raw_data(column_names = meta$column_names) |> 
     readr::type_convert(clinsight_col_specs) |> 
