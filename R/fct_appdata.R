@@ -2,6 +2,10 @@
 #'
 #' @param data_path Path to the folder that contains the CSV files with the
 #'   application data.
+#' @param synch_time Time at which the data was extracted from the EDC system.
+#'   Defaults to the current date time. Important to set this correctly, since
+#'   it will be shown in the application. By default, a warning will be given in
+#'   the application if the synchronization time is more than one day old.
 #' @param exclude character vector with regular expressions that identify csv
 #'   files that should be excluded from the study data. Useful to exclude files
 #'   with different data structures, or files with metadata.
@@ -12,22 +16,32 @@
 #' @export
 get_raw_csv_data <- function(
     data_path = Sys.getenv("RAW_DATA_PATH"),
+    synch_time = time_stamp(),
     exclude = c("README.csv$", "Pending_forms.csv$", "MEDRA.csv$", "WHODrug.csv$", "_Queries.csv$"),
     delim = ",",
     skip = 1
 ){
   all_files <- list.files(data_path, pattern = ".csv")
   if(length(all_files) == 0) stop("No files found. Verify whether the path is correct.")
+  synch_time <- synch_time %||% ""
+  stopifnot(is.character(exclude))
+  stopifnot(is.character(synch_time), length(synch_time) == 1)
+  
   exclude_regex <- paste0(exclude, collapse = "|")
   all_files <- all_files[!grepl(exclude_regex, all_files)]
   
-  readr::read_delim(
+  raw_data <- readr::read_delim(
     file.path(data_path, all_files),  
     delim = delim, 
     skip = skip, 
     col_types = readr::cols(.default = readr::col_character()), 
     show_col_types = FALSE
   )
+  if(identical(synch_time, "")){warning("No synch time provided")}
+  cat("Adding synch time '", synch_time, "' as the attribute 'synch_time'",
+      "to the data set.\n")
+  attr(raw_data, "synch_time") <- "synch_time"
+  raw_data
 }
 
 #' Merge metadata with raw data

@@ -8,7 +8,7 @@ devtools::load_all()
 datapath <- app_sys("tests/testthat/fixtures/csvtestdata") # For interactive use
 
 metadata <- get_metadata(filepath = app_sys("data-raw/metadata.xlsx"))
-my_raw_data <- get_raw_csv_data(data_path = datapath)
+my_raw_data <- get_raw_csv_data(data_path = datapath, synch_time = "2024-01-01 00:00:00 UTC")
   # fix_multiple_choice_vars() - metadata not found
   
 merged_data <- merge_meta_with_data(
