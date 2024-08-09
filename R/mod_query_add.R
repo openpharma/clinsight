@@ -83,7 +83,7 @@ mod_query_add_server <- function(
                 options = list(
                   placeholder = 'Select a visit',
                   onInitialize = if(length(unique(sel_data$event_name)) == 1) NULL else {
-                    I('function() { this.setValue(""); }')
+                      I('function() { this.setValue(""); }')
                   }
                 )
               ),
@@ -166,7 +166,7 @@ mod_query_add_server <- function(
         "item"          = input$query_select_item, 
         "timestamp"     = time_stamp(),
         "n"             = 1,
-        "reviewer"      = r$user_name,
+        "reviewer"      = paste0(r$user_name," (", r$user_role, ")"),
         "query"         = input$query_text,
         "resolved"      = "No",
         "resolved_date" = NA_character_,
@@ -216,7 +216,7 @@ mod_query_add_server <- function(
             "Form: ", htmlEscape(query_in_db$item_group), "<br>",
             "Item: ", htmlEscape(query_in_db$item), "<br>",
             "Query: ", htmlEscape(query_in_db$event_label), "<br>",
-            "Author: ", htmlEscape(query_in_db$reviewer), "<br>"
+            "Author: ", htmlEscape(query_in_db$reviewer)
           )),
           footer = modalButton("Close")
         )
@@ -234,9 +234,8 @@ mod_query_add_server <- function(
     
     output[["reviewer"]] <- renderPrint({
       req(r$user_name)
-      cat("Author:", r$user_name, "\n")
+      cat("Author: ", r$user_name, " (", r$user_role, ")\n", sep = "")
     })
-    
     
   })
 }

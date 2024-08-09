@@ -50,7 +50,7 @@ describe(
       "timestamp"     = c("2023-01-01 01:01:01 UTC", "2023-11-02 01:01:01 UTC"),
       "query_id"      = c("ID1-unique_id", "ID2-unique_id"),
       "n"             = c(1),     
-      "reviewer"      = c("Test author", "Author3"),
+      "reviewer"      = c("Test author (Medical Monitor)", "Author3 (Medical MOnitor)"),
       "query"         = c("Query text test.", "Scoring correct? Please verify"),
       "resolved"      = c("No"),
       "resolved_date" = NA_character_,
@@ -111,7 +111,7 @@ describe(
         I expect that one new query is saved in [query_data] for patent 'ID1',
           and that the 'item_group' of the query is 'Medication',
           and 'item' is 'Oxycodon', 
-          and 'reviewer' is 'Medical Monitor x',
+          and 'reviewer' is 'User 1' with the role 'Medical Monitor',
           and 'query' is 'Add a new test query',
           and 'resolved' is 'No',
           and the remote database contains the same query as in [query_data].", 
@@ -123,7 +123,8 @@ describe(
         testargs <- list(
           r = reactiveValues(
             query_data = query_df,
-            user_name = "Medical Monitor x",
+            user_name = "User 1",
+            user_role = "Medical Monitor",
             subject_id = "ID2"
           ),
           active_form = reactiveVal("Medication"),
@@ -150,7 +151,7 @@ describe(
           expect_equal(nrow(new_query), 1)
           expect_equal(new_query$item_group, "Medication")
           expect_equal(new_query$item, "Oxycodon")
-          expect_equal(new_query$reviewer, "Medical Monitor x")
+          expect_equal(new_query$reviewer, "User 1 (Medical Monitor)")
           expect_equal(new_query$query, "Add a new test query")
           expect_equal(new_query$resolved, "No")
           expect_equal(
@@ -173,7 +174,7 @@ describe(
         I expect that one new query is saved in [query_data] for patent 'ID3',
           and that the 'item_group' of the query is 'Adverse events',
           and 'item' is 'Pneumothorax', 
-          and 'reviewer' is 'Medical Monitor x',
+          and 'reviewer' is 'User 1' with the role 'Medical Monitor',
           and 'query' is 'Major query text.',
           and 'resolved' is 'No',
           and the remote database contains the same query as in [query_data].", 
@@ -185,7 +186,8 @@ describe(
         testargs <- list(
           r = reactiveValues(
             query_data = query_df,
-            user_name = "Medical Monitor x",
+            user_name = "User 1",
+            user_role = "Medical Monitor",
             subject_id = "ID3"
           ),
           active_form = reactiveVal("Adverse events"),
@@ -213,7 +215,7 @@ describe(
           expect_equal(nrow(new_query), 1)
           expect_equal(new_query$item_group, "Adverse events")
           expect_equal(new_query$item, "Pneumothorax")
-          expect_equal(new_query$reviewer, "Medical Monitor x")
+          expect_equal(new_query$reviewer, "User 1 (Medical Monitor)")
           expect_equal(new_query$query, "Major query text.")
           expect_equal(new_query$resolved, "No")
           expect_equal(
@@ -258,6 +260,7 @@ describe(
       testargs <- list(
         r = reactiveValues(
           user_name = "test user",
+          user_role = "Medical Monitor",
           subject_id = 885,
           review_data = db_slice_rows(temp_path)
         ),
