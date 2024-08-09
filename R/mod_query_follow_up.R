@@ -81,7 +81,7 @@ mod_query_follow_up_server <- function(id, r, selected_query, db_path){
         dplyr::mutate(
           "timestamp"     = ts, 
           "n"             = n + 1,
-          "reviewer"      = r$user_name,
+          "reviewer"      = paste0(r$user_name," (", r$user_role, ")"),
           "query"         = input$query_follow_up_text,
           "resolved"      = ifelse(input$resolved, "Yes", "No"),
           `resolved_date` = if(input$resolved) ts else NA_character_,

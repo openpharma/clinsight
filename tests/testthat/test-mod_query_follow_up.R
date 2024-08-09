@@ -40,7 +40,7 @@ describe(
           set to 'ID1-unique_id',  
           and [selected_query] set to 'ID1-unique_id',
           and the input [query_follow_up_text] set to 'Test Follow-up message',
-          and [user_name] set to 'Admin test',
+          and [user_name] set to 'Admin test' and [user_role] to 'Medical Monitor',
           and the input value [resolved] set to 'FALSE',
           and the input [query_add_follow_up] incremented to 1 to save the query,
           I expect that the follow-up message will be written in the remote and 
@@ -54,6 +54,7 @@ describe(
           r = reactiveValues(
             query_data = query_df,
             user_name = "Admin test",
+            user_role = "Medical Monitor",
             subject_id = "ID1"
           ),
           selected_query = reactiveVal(),
@@ -90,7 +91,7 @@ describe(
           and [query_id] set to 'ID1-unique_id',  
           and [selected_query] set to 'ID1-unique_id',
           and the input [query_follow_up_text] set to 'Test Follow-up message',
-          and [user_name] set to 'Admin test',
+          and [user_name] set to 'Admin test' and [user_role] to 'Medical Monitor',
           and the input value [resolved] set to 'TRUE',
           and the input [query_add_follow_up] incremented to 1 to save the query,
           I expect that the value [query] with query_id 'ID1-unique_id' 
@@ -99,7 +100,8 @@ describe(
           and that the [resolved] value is 'Yes',
           and that a valid date is written in the [resolved_date],
           and that the in-memory [query_data] data frame contains the same query timestamp, 
-          and the same query text, and the same query reviewer name as the query database,  
+          and the same query text, and the same query reviewer name and reviewer 
+          role as in the query database,  
           and that the database [resolved] values are 'No' for the row with the 
           initial query and 'Yes' for the follow-up query.", 
       {
@@ -111,6 +113,7 @@ describe(
           r = reactiveValues(
             query_data = query_df,
             user_name = "Admin test",
+            user_role = "Medical Monitor",
             subject_id = "ID1"
           ),
           selected_query = reactiveVal(),
@@ -154,7 +157,7 @@ describe(
       containing a row with [query] set to 'Query text test.' 
       and [query_id] set to 'ID1-unique_id',  
       and [selected_query] set to 'ID1-unique_id', 
-      and [user_name] set to 'Admin test',
+      and [user_name] set to 'Admin test' and [user_role] to 'Medical Monitor',
       and the input [query_follow_up_text] set to 'FU message 1',  
       and [resolved] set to 'FALSE', 
       and the input [query_add_follow_up] incremented to 1 to save the query,
@@ -167,7 +170,7 @@ describe(
       and that a valid date is written in the [resolved_date],
       and that both the in-memory [query_data] data frame and the query database 
       contain the same query timestamp, 
-      and the same query text, and the same query reviewer name,  
+      and the same query text, and the same query reviewer name and reviewer role,
       and that the database [resolved] values are 'No' for the first two rose 
       and 'Yes' for the final follow-up query.", 
       {
@@ -179,6 +182,7 @@ describe(
           r = reactiveValues(
             query_data = query_df,
             user_name = "Admin test",
+            user_role = "Medical Monitor",
             subject_id = "ID1"
           ),
           selected_query = reactiveVal("ID1-unique_id"),
@@ -239,6 +243,7 @@ describe(
           r = reactiveValues(
             query_data = query_df,
             user_name = "Admin test",
+            user_role = "Medical Monitor",
             subject_id = "ID1"
           ),
           selected_query = reactiveVal(),
@@ -278,6 +283,7 @@ describe(
           r = reactiveValues(
             query_data = query_df,
             user_name = "Admin test",
+            user_role = "Medical Monitor",
             subject_id = "ID1"
           ),
           selected_query = reactiveVal(),
@@ -332,6 +338,7 @@ describe(
           r = reactiveValues(
             query_data = query_df,
             user_name = "Admin test",
+            user_role = "Medical Monitor",
             subject_id = "ID1"
           ),
           selected_query = reactiveVal(),
