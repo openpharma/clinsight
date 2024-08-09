@@ -7,12 +7,9 @@
 authenticate_server(
   user_identification = get_golem_config("user_identification"),
   all_sites = NULL,
-  all_roles = get_golem_config("group_roles"),
+  all_roles = get_all_valid_roles(),
   credentials_db = get_golem_config("credentials_db"),
   credentials_pwd = Sys.getenv("DB_SECRET"),
-  user_id = get_golem_config("user_id"),
-  user_name = get_golem_config("user_name"),
-  user_group = get_golem_config("user_group"),
   session
 )
 }
@@ -25,23 +22,15 @@ file.}
 shinymanager configuration so that data can be restricted to specific sites
 per user.}
 
-\item{all_roles}{Character vector with all roles. Used to show all applicable
-roles in \code{shinymanager} admin mode.}
+\item{all_roles}{Named character vector. Used to show all roles that are
+valid to use in the application. Also used to show all applicable roles
+in \code{shinymanager} admin mode.}
 
 \item{credentials_db}{Character vector. Path to the credentials database. By
 default, set by the \code{data_folder} and \code{credentials_db} options in the
 \code{golem-config_file}.}
 
 \item{credentials_pwd}{Character vector, containing the database password.}
-
-\item{user_id}{Character vector. Used to retrieve the user ID from the
-session object, if applicable.}
-
-\item{user_name}{Character vector. Used to retrieve the user name from the
-session object, if applicable.}
-
-\item{user_group}{Used to retrieve the user group from the session object, if
-applicable.}
 
 \item{session}{Shiny session. Needed to access user information in case of
 login methods alternative to \code{shinymanager} are used.}

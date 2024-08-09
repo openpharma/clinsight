@@ -34,7 +34,7 @@ initialize_credentials <- function(
     "admin"    = TRUE,
     "name"     = "Admin",
     "mail"     = "", 
-    "role"     = "", 
+    "roles"    = names(get_all_valid_roles())[1], 
     "sites"    = "",
     stringsAsFactors = FALSE, 
     check.names = FALSE
@@ -106,26 +106,18 @@ authenticate_ui <- function(){
 #' @param all_sites Character vector with all sites. Will be passed on to
 #'   shinymanager configuration so that data can be restricted to specific sites
 #'   per user.
-#' @param all_roles Character vector with all roles. Used to show all applicable
-#'   roles in `shinymanager` admin mode.
-#' @param user_id Character vector. Used to retrieve the user ID from the
-#'   session object, if applicable.
-#' @param user_name Character vector. Used to retrieve the user name from the
-#'   session object, if applicable.
-#' @param user_group Used to retrieve the user group from the session object, if
-#'   applicable.
+#' @param all_roles Named character vector. Used to show all roles that are
+#'   valid to use in the application. Also used to show all applicable roles
+#'   in `shinymanager` admin mode.
 #' @param session Shiny session. Needed to access user information in case of
 #'   login methods alternative to `shinymanager` are used.
 #' 
 authenticate_server <- function(
     user_identification = get_golem_config("user_identification"),
     all_sites = NULL,
-    all_roles = get_golem_config("group_roles"),
+    all_roles = get_all_valid_roles(),
     credentials_db = get_golem_config("credentials_db"),
-    credentials_pwd = Sys.getenv("DB_SECRET"), 
-    user_id = get_golem_config("user_id"),
-    user_name = get_golem_config("user_name"),
-    user_group = get_golem_config("user_group"),
+    credentials_pwd = Sys.getenv("DB_SECRET"),
     session
 ){
   switch(
@@ -136,9 +128,9 @@ authenticate_server <- function(
         passphrase = credentials_pwd
       ),
       inputs_list = list(
-        "role" = list(
+        "roles" = list(
           fun = "selectInput", 
-          args = list(choices = all_roles, multiple = TRUE) 
+          args = list(choices = names(all_roles), multiple = TRUE) 
         ),
         "sites" = list(
           fun = "selectInput",
@@ -154,26 +146,44 @@ authenticate_server <- function(
     test_user = reactiveValues(
       user = "test_user", 
       name = "test user", 
-      role = all_roles[1],
+      roles = all_roles[1:3],
       sites = all_sites
     ),
     http_headers = reactiveValues(
       user = session$request$HTTP_X_SP_USERID,
       name = session$request$HTTP_X_SP_USERNAME,
-      role = session$request$HTTP_X_SP_USERGROUPS,
+      roles = all_roles[sort(match(session$request$HTTP_X_SP_USERGROUPS, all_roles))],
       sites = all_sites
     ),
     shiny_session = reactiveValues(
       user = session$user,
       name = session$user,
-      role = session$groups,
+      roles = all_roles[sort(match(session$groups, all_roles))],
       sites = all_sites
     ),
     reactiveValues(
       user = "Unknown",
       name = "Unknown",
-      role = "Unknown",
+      roles = "",
       sites = all_sites
     )
   )
+}
+
+#' Get all valid roles
+#'
+#' Helper function to retrieve all valid roles from the config file.
+#'
+#' @param config_roles Character string with the name of the config argument to
+#'   read from.
+#'
+#' @return A named character vector.
+#' @noRd
+get_all_valid_roles <- function(
+    config_roles = "user_roles"
+){
+  stopifnot(is.character(config_roles))
+  all_roles <- unlist(get_golem_config(config_roles))
+  names(all_roles) <- names(all_roles) %||% all_roles
+  all_roles
 }
