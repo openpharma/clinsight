@@ -1,7 +1,7 @@
 #' Filter app data
 #'
-#' @param data A `Reactivevalues` object. filtered data will be written into this
-#'   object.
+#' @param data A `Reactivevalues` object. filtered data will be written into
+#'   this object.
 #' @param sites Character vector with sites to filter on.
 #' @param subject_ids Character vector with all subject IDs. Used to keep the
 #'   correct order of subject IDs.
@@ -17,8 +17,7 @@ filter_data <- function(
     sites, 
     subject_ids, 
     appdata, 
-    apptables,
-    user_role
+    apptables
     ){
   stopifnot(is.reactivevalues(data))
   
@@ -33,9 +32,32 @@ filter_data <- function(
     with(x, x[subject_id %in% data$filtered_subjects, ] )
   })
   data$subject_id <- data$filtered_subjects[1]
-  if(!identical(data$user_role(), user_role)){
-    data$user_role <- reactive({user_role}) 
-  }
   golem::cat_dev("Finished applying review configuration\n\n")
+  data
+}
+
+#' Set user role
+#'
+#' Sets user role in a `reactiveValues()` object. Designed to be used within
+#' [mod_review_config_server()].
+#'
+#' @param user_role Character vector with the selected user role.
+#'
+#' @inheritParams filter_data
+#' 
+set_user_role <- function(
+    data,
+    user_role
+){
+  stopifnot(is.reactivevalues(data))
+  user_role <- user_role %||% ""
+  stopifnot(is.character(user_role))
+  if(!isTruthy(isolate(data$user_role))){
+    data$user_role <- reactive("")  
+  }
+  if(!identical(isolate(data$user_role()), user_role)){
+    data$user_role <- reactive({user_role}) 
+    golem::cat_dev("Finished applying review configuration\n\n")  
+  }
   data
 }

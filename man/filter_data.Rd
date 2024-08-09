@@ -4,11 +4,11 @@
 \alias{filter_data}
 \title{Filter app data}
 \usage{
-filter_data(data, sites, subject_ids, appdata, apptables, user_role)
+filter_data(data, sites, subject_ids, appdata, apptables)
 }
 \arguments{
-\item{data}{A \code{Reactivevalues} object. filtered data will be written into this
-object.}
+\item{data}{A \code{Reactivevalues} object. filtered data will be written into
+this object.}
 
 \item{sites}{Character vector with sites to filter on.}
 

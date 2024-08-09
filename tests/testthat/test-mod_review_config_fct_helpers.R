@@ -56,3 +56,22 @@ describe(
     })
   }
 )
+
+describe(
+  "set_user_role() works", 
+  {
+    it("sets the role as expected, even if user_role is initially missing", {
+      rvs <- reactiveValues("user_role" = reactive("old role"))
+      rvs <- set_user_role(rvs, "new role")
+      expect_equal(isolate(rvs$user_role()), "new role")
+      
+      rvs <- reactiveValues()
+      rvs <- set_user_role(rvs, "new role")
+      expect_equal(isolate(rvs$user_role()), "new role")
+    })
+    it("errors with incorrect input", {
+      expect_error(set_user_role(data.frame(), "new role"))
+      expect_error(set_user_role(reactiveValues(), data.frame()))
+    })
+  }
+)

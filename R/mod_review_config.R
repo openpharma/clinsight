@@ -152,10 +152,9 @@ mod_review_config_server <- function(
       modvars$site_selection   <- input$site_selection
       
       golem::cat_dev("Selected sites:", modvars$site_selection, "\n")
-      
       r <- filter_data(r, sites = input$site_selection, subject_ids = subject_ids, 
-                       appdata = app_data, apptables = app_tables, 
-                       user_role = input$active_role)
+                       appdata = app_data, apptables = app_tables) |> 
+        set_user_role(user_role = input$active_role)
       
       shiny::showModal(
         modalDialog(
@@ -170,8 +169,3 @@ mod_review_config_server <- function(
   })
 }
 
-## To be copied in the UI
-# mod_review_config_ui("review_config_1")
-
-## To be copied in the server
-# mod_review_config_server("review_config_1", r)

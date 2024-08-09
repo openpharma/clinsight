@@ -91,9 +91,9 @@ app_server <- function(
   })
   rev_sites <- reactive({res_auth[["sites"]]})
   observeEvent(rev_sites(), {
+    req(!all(rev_sites() %in% app_vars$Sites$site_code))
     r <- filter_data(r, rev_sites(), subject_ids = app_vars$subject_id,
-                     appdata = app_data, apptables = app_tables, 
-                     user_role = r$user_role())
+                     appdata = app_data, apptables = app_tables)
   })
 
   navinfo <- reactiveValues(
