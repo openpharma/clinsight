@@ -11,14 +11,14 @@
 #'   List contains data frames named per form.
 #'
 #' @return A `reactivevalues` object.
-#' @export
 #' 
 filter_data <- function(
     data, 
     sites, 
     subject_ids, 
     appdata, 
-    apptables
+    apptables,
+    user_role
     ){
   stopifnot(is.reactivevalues(data))
   
@@ -33,6 +33,9 @@ filter_data <- function(
     with(x, x[subject_id %in% data$filtered_subjects, ] )
   })
   data$subject_id <- data$filtered_subjects[1]
+  if(!identical(data$user_role(), user_role)){
+    data$user_role <- reactive({user_role}) 
+  }
   golem::cat_dev("Finished applying review configuration\n\n")
   data
 }

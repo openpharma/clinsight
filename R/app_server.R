@@ -75,6 +75,8 @@ app_server <- function(
   # think of using the pool package, but functions such as row_update are not yet supported.
   r <- reactiveValues(
     user_name         = reactive({ res_auth[["name"]] %||% res_auth[["user"]] }),
+    user_roles        = reactive({ names(res_auth[["roles"]]) %||% ""}),
+    user_role         = reactive({ names(res_auth[["roles"]])[1] %||% ""}),
     review_data       = db_slice_rows(user_db, db_table = "all_review_data"),
     query_data        = collect_query_data(user_db),
     filtered_subjects = app_vars$subject_id,
@@ -90,7 +92,8 @@ app_server <- function(
   rev_sites <- reactive({res_auth[["sites"]]})
   observeEvent(rev_sites(), {
     r <- filter_data(r, rev_sites(), subject_ids = app_vars$subject_id,
-                     appdata = app_data, apptables = app_tables)
+                     appdata = app_data, apptables = app_tables, 
+                     user_role = r$user_role())
   })
 
   navinfo <- reactiveValues(

@@ -4,7 +4,7 @@
 \alias{filter_data}
 \title{Filter app data}
 \usage{
-filter_data(data, sites, subject_ids, appdata, apptables)
+filter_data(data, sites, subject_ids, appdata, apptables, user_role)
 }
 \arguments{
 \item{data}{A \code{Reactivevalues} object. filtered data will be written into this
