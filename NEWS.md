@@ -14,6 +14,7 @@ to minimize the package dependencies of the production version.
 - Improved creating test result report.
 - Added data specification to `run_app()` documentation
 - Improved function `get_test_results()`.
+- Merged data now has an attribute 'synch_time' which will be used to update the synchronization information in the side bar.
 
 ## Bug fixes
 

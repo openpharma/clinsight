@@ -212,7 +212,7 @@
         "validation"
       ]
     },
-    "main_sidebar_1-synch_info-db_synch_info": "EDC Sync date: <br>2024-01-10<br><br>EDC latest data: 2023-09-14 15:17:00",
+    "main_sidebar_1-synch_info-db_synch_info": "EDC Sync date: <br>2023-09-15 10:10:00 UTC<br><br>EDC latest data: 2023-09-14 15:17:00",
     "main_sidebar_1-write_query-query_error": {
       "message": "",
       "call": "NULL",

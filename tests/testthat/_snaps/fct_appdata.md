@@ -1,8 +1,9 @@
 # get_raw_csv_data works: Produces the expected output.
 
     Code
-      get_raw_csv_data(data_path)
+      get_raw_csv_data(data_path, synch_time = "2024-01-01 00:00:00")
     Output
+      Adding synch time ' 2024-01-01 00:00:00 ' as the attribute 'synch_time' to the data set.
       # A tibble: 3,267 x 26
          SiteSeq SiteCode SubjectSeq SubjectId EventSeq EventId   EventName  EventDate
          <chr>   <chr>    <chr>      <chr>     <chr>    <chr>     <chr>      <chr>    

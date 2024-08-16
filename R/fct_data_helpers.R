@@ -99,8 +99,11 @@ rename_raw_data <- function(
            "are required for ClinSight to run:\n", 
            missing_new_cols, ".")
   )
-  data[column_names$name_raw] |> 
+  # Remove unneeded colums, and rename them:
+  df <- data[column_names$name_raw] |> 
     setNames(column_names$name_new)
+  # Remove rows without subject_id and return results:
+  df[!is.na(df$subject_id), ]
 }
 
 #' Add time vars to raw data
@@ -121,7 +124,7 @@ add_timevars_to_data <- function(
            missing_new_cols, ".")
   )
   
-  df <- data |> 
+  df <- data |>
     dplyr::mutate(
       edit_date_time = as.POSIXct(edit_date_time, tz = "UTC"),
       event_date = as.Date(event_date),
