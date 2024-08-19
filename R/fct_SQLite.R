@@ -55,7 +55,6 @@ db_temp_connect <- function(db_path, code, drv = RSQLite::SQLite()){
 #' @param reviewed Character vector. Sets the reviewed tag in the review
 #'   database.
 #' @param reviewer Character vector. Sets the reviewer in the review database.
-#'   Defaults to `Admin`.
 #' @param status Character vector. Sets the status in the review database.
 #'   Defaults to `new`.
 #'
