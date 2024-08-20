@@ -10,11 +10,13 @@ db_temp_connect(db_path, {
   DBI::dbWriteTable(
     con, 
     "db_synch_time",
-    data.frame("synch_time" = "2023-09-15 08:08:08 UTC"), 
+    data.frame("synch_time" = "2023-09-15 10:10:00 UTC"), 
     overwrite = TRUE
   )
 })
 
 # To inspect the table, you can run something like this:
 # all_tables <- db_temp_connect(db_path, DBI::dbListTables(con))
-# db_temp_connect(db_path, lapply(all_tables, \(x){dplyr::tbl(con, x)}))
+# db_temp_connect(db_path, lapply(setNames(nm = all_tables), \(x){
+#   dplyr::tbl(con, x) |> dplyr::collect()
+#   }))
