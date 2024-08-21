@@ -6,7 +6,7 @@ describe("get_roles_from_config() works", {
       "Administrator" = "admin", 
       "Medical Monitor" = "medical_monitor", 
       "Data Manager" = "data_manager"
-      )
+    )
     expect_equal(
       get_roles_from_config(),
       expected_output
@@ -28,9 +28,18 @@ describe("get_valid_roles() works", {
       )
     }
   )
+  it("allows list-type input", {
+    withr::local_envvar("GOLEM_CONFIG_ACTIVE" = "default")
+    expected_output <- get_roles_from_config()[1:2]
+    expect_equal(
+      get_valid_roles(list("medical_monitor", "admin", "other")),
+      expected_output
+    )
+  })
   it("errors with incorrect input", { 
-      expect_error(get_valid_roles(data.frame()))
-    })
+    expect_error(get_valid_roles(as.Date("")))
+    expect_error(get_valid_roles("", data.frame()))
+  })
   it(
     "sanitizes role input by converting everything to lowercase, by 
      splitting up strings when commas are detected, and by removing white 
@@ -40,6 +49,10 @@ describe("get_valid_roles() works", {
       expected_output <- get_roles_from_config()[c(1,3)]
       expect_equal(
         get_valid_roles(c("dATA_Manager,   AdMIN ", "other")),
+        expected_output
+      )
+      expect_equal(
+        get_valid_roles(list("dATA_Manager,   AdMIN ", "other")),
         expected_output
       )
     }
