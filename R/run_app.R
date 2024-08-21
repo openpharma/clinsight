@@ -69,7 +69,7 @@ run_app <- function(
   } else{
     # Skip if not needed for faster testing:
     if(isTRUE(get_golem_config("app_prod"))){
-      db_update(get_review_data(data), db_path = user_db, data_synched = FALSE) 
+      db_update(get_review_data(data), db_path = user_db) 
     }
   }
   

@@ -8,7 +8,8 @@ update_review_data(
   review_df,
   latest_review_data,
   common_vars = c("subject_id", "event_name", "item_group", "form_repeat", "item_name"),
-  edit_time_var = "edit_date_time"
+  edit_time_var = "edit_date_time",
+  update_time = time_stamp()
 )
 }
 \arguments{
@@ -21,6 +22,9 @@ updated.}
 
 \item{edit_time_var}{A character vector with the column name of the edit-time
 variable.}
+
+\item{update_time}{Time stamp given to rows with new rows that are added.
+Defaults to \code{\link[=time_stamp]{time_stamp()}}.}
 }
 \value{
 A data frame containing only the rows with updated review data.

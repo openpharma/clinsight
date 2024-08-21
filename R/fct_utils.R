@@ -686,7 +686,7 @@ expectation_type <- function(
     exp, 
     type = c("failure", "error", "skip", "warning", "success")
 ) {
-  stopifnot(is.expectation(exp))
+  stopifnot(testthat::is.expectation(exp))
   type <- match.arg(type)
   identical(gsub("^expectation_", "", class(exp)[[1]]), type)
 }

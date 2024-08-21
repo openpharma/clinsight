@@ -104,12 +104,16 @@ describe(
       con <- get_db_connection(temp_path)
       
       DBI::dbWriteTable(con, "all_review_data", cbind(old_data, review_cols))
-      df_old <- dplyr::as_tibble(cbind(old_data, review_cols))
+      DBI::dbWriteTable(con, "db_synch_time", data.frame("synch_time" = "2024-01-01 01:01:01 UTC"))
       
-      db_update(rbind(old_data, new_data), db_path = temp_path, 
-                common_vars = comvars)
+      df_old <- cbind(old_data, review_cols)
+      
+      rev_data <- rbind(old_data, new_data)
+      # newer synch_time indicating need for update:
+      attr(rev_data, "synch_time") <- "2024-02-02 01:01:01 UTC" 
+      db_update(rev_data, db_path = temp_path, common_vars = comvars)
       expect_equal(
-        dplyr::collect(dplyr::tbl(con, "all_review_data"))[1, ], 
+        DBI::dbGetQuery(con, "SELECT * FROM all_review_data")[1, ],
         df_old
         )
     })
@@ -117,31 +121,57 @@ describe(
       temp_path <- withr::local_tempfile(fileext = ".sqlite") 
       con <- get_db_connection(temp_path)
       DBI::dbWriteTable(con, "all_review_data", cbind(old_data, review_cols))
+      DBI::dbWriteTable(con, "db_synch_time", data.frame("synch_time" = "2024-01-01 01:01:01 UTC"))
       
-      db_update(rbind(old_data, new_data), db_path = temp_path, 
-                common_vars = comvars)
-      expect_snapshot(dplyr::collect(dplyr::tbl(con, "all_review_data")))
+      rev_data <- rbind(old_data, new_data)
+      attr(rev_data, "synch_time") <- "2024-02-02 01:01:01 UTC" 
+      db_update(rev_data, db_path = temp_path, common_vars = comvars)
+      expect_snapshot(DBI::dbGetQuery(con, "SELECT * FROM all_review_data"))
     })
+    it("Still performs an update if synch_time is not available", {
+      temp_path <- withr::local_tempfile(fileext = ".sqlite") 
+      con <- get_db_connection(temp_path)
+      DBI::dbWriteTable(con, "all_review_data", cbind(old_data, review_cols))
+      
+      rev_data <- rbind(old_data, new_data) # no synch_time attribute added
+      db_update(rev_data, db_path = temp_path, common_vars = comvars)
+      
+      # exclude time stamp since it defaults to current date/time when 
+      # synch_date is not available:
+      check_cols <- paste0(c("key_col1", "item_group", "item_name", "event_date", 
+                       "edit_date_time", "reviewed", "status"), collapse = ", ")
+      query <- paste("SELECT", check_cols, "FROM all_review_data")
+      expect_snapshot(DBI::dbGetQuery(con, query))
+    })
+    
     it("Adds a new row for each data point with a new/updated EditdateTime.", {
       temp_path <- withr::local_tempfile(fileext = ".sqlite") 
       con <- get_db_connection(temp_path)
       DBI::dbWriteTable(con, "all_review_data", cbind(old_data, review_cols))
-      updated_row_data <- old_data |> 
-        dplyr::mutate(edit_date_time = "2023-11-13 01:01:01")
+      DBI::dbWriteTable(con, "db_synch_time", data.frame("synch_time" = "2024-01-01 01:01:01 UTC"))
       
-      db_update(updated_row_data, db_path = temp_path, common_vars = comvars)
-      expect_snapshot(print(dplyr::collect(dplyr::tbl(con, "all_review_data")), 
-                            width = 10))
+      rev_data <- old_data |> 
+        dplyr::mutate(edit_date_time = "2023-11-13 01:01:01")
+      attr(rev_data, "synch_time") <- "2024-02-02 01:01:01 UTC" 
+      
+      db_update(rev_data, db_path = temp_path, common_vars = comvars)
+      expect_snapshot(DBI::dbGetQuery(con, "SELECT * FROM all_review_data"))
     })
-    it("Does not change the database if there are no changes (latest max edit_date_time is the same)", {
+    it("Does not change the database if there are no changes (synch_time is the same)", {
       temp_path <- withr::local_tempfile(fileext = ".sqlite") 
       con <- get_db_connection(temp_path)
-      DBI::dbWriteTable(con, "all_review_data", cbind(old_data, review_cols))
+      
+      synch_time <- "2024-01-01 01:01:01 UTC"
+      rev_data <- cbind(old_data, review_cols)
+      attr(rev_data, "synch_time") <- synch_time
+      DBI::dbWriteTable(con, "all_review_data", rev_data)
+      DBI::dbWriteTable(con, "db_synch_time", data.frame("synch_time" = synch_time))
       
       expect_snapshot({
-        db_update(old_data, db_path = temp_path, common_vars = comvars)
-        dplyr::collect(dplyr::tbl(con, "all_review_data"))
+        db_update(rev_data, db_path = temp_path, common_vars = comvars)
       })
+      attr(rev_data, "synch_time") <- NULL
+      expect_equal(rev_data, DBI::dbGetQuery(con, "SELECT * FROM all_review_data"))
     })
     
   }
