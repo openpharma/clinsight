@@ -57,9 +57,10 @@ create_table.default <- function(
       values_from = {{value_column}}, 
       values_fn = ~paste0(., collapse = "; ")
       ) 
-  if(is.null(expected_columns)) return(df)
+  expected_columns <- na.omit(expected_columns) %||% character(0)
+  if(length(expected_columns) == 0) return(df)
   add_missing_columns(df, expected_columns)[
-    unique(c(keep_vars, na.omit(expected_columns)))
+    unique(c(keep_vars, expected_columns))
     ]
 }
 
@@ -110,7 +111,7 @@ create_table.continuous <- function(
     tidyr::unite(col = "VAL", dplyr::all_of(c(value_column, unit_column)),  sep = " ") 
   create_table.default(data = df, name_column = name_column, 
                         value_column = "VAL", keep_vars = keep_vars, 
-                       expected_columns = na.omit(expected_columns))
+                       expected_columns = expected_columns)
 }
 
 #' Get general data
@@ -128,7 +129,8 @@ create_table.general <- function(
     expected_columns = NULL,
     ...
     ){
-  df_names <- c(keep_vars, name_column, value_column, na.omit(expected_columns))
+  expected_columns <- na.omit(expected_columns) %||% character(0)
+  df_names <- c(keep_vars, name_column, value_column, expected_columns)
   if(is.null(data)) {
     data <-  data.frame(matrix(ncol = length(df_names))) |> 
       setNames(df_names)
@@ -136,7 +138,7 @@ create_table.general <- function(
 
   df <- data |> 
     dplyr::filter(!item_name %in% c("DrugAdminDate", "DrugAdminDose")) |>
-    create_table.default(name_column, value_column, keep_vars, na.omit(expected_columns))
+    create_table.default(name_column, value_column, keep_vars, expected_columns)
   
   df |> 
     dplyr::mutate(
@@ -205,7 +207,7 @@ create_table.adverse_events <- function(
   stopifnot(is.character(name_column))
   stopifnot(is.character(value_column))
   df <- create_table.default(data, name_column, value_column, 
-                             keep_vars, na.omit(expected_columns)) |> 
+                             keep_vars, expected_columns) |> 
     adjust_colnames("^AE ") 
   df[["Number"]] <- NULL
 
@@ -257,7 +259,7 @@ create_table.medication <- function(
     ...
 ){
   df <-  data |> 
-    create_table.default(name_column, value_column, keep_vars, na.omit(expected_columns)) |> 
+    create_table.default(name_column, value_column, keep_vars, expected_columns) |> 
     adjust_colnames("^CM ") 
   df[["Number"]] <- NULL
   df <- df |> 
@@ -300,7 +302,7 @@ create_table.medical_history <- function(
     ...
 ){
   df <- data |> 
-    create_table.default(name_column, value_column, keep_vars, na.omit(expected_columns)) |> 
+    create_table.default(name_column, value_column, keep_vars, expected_columns) |> 
     adjust_colnames("^MH ") 
   df[["Number"]] <- NULL
     
@@ -321,7 +323,7 @@ create_table.conc_procedures <- function(
     ...
 ){
   df <- data |> 
-    create_table.default(name_column, value_column, keep_vars, na.omit(expected_columns)) |> 
+    create_table.default(name_column, value_column, keep_vars, expected_columns) |> 
     adjust_colnames("^CP ")
   df[["Number"]] <- NULL
   df
@@ -339,7 +341,7 @@ create_table.bm_cytology <- function(
     expected_columns = NULL,
     ...
 ){
-  df <- create_table.default(data, name_column, value_column, keep_vars, na.omit(expected_columns))
+  df <- create_table.default(data, name_column, value_column, keep_vars, expected_columns)
   df |> 
     dplyr::mutate(
       `Auer Rods` = ifelse(.data[["Auer Rods detectable?"]] == "No", "None", .data[["Auer Rods"]]),
