@@ -7,7 +7,7 @@
 authenticate_server(
   user_identification = get_golem_config("user_identification"),
   all_sites = NULL,
-  all_roles = get_all_valid_roles(),
+  all_roles = get_roles_from_config(),
   credentials_db = get_golem_config("credentials_db"),
   credentials_pwd = Sys.getenv("DB_SECRET"),
   session
