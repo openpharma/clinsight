@@ -22,15 +22,16 @@ get_roles_from_config <- function(
 #' Helper function to retrieve all roles that are relevant for the application.
 #'
 #' @param roles A character vector. Will be converted to lower case.
+#' @param all_roles A named character vector with all applicable roles.
 #'
 #' @return A named character vector with the roles applicable for the
 #'   application and available for the current user.
 #' 
 get_valid_roles <- function(
-    roles
+    roles,
+    all_roles = get_roles_from_config()
 ){
-  stopifnot(is.character(roles))
-  all_roles <- get_roles_from_config()
+  stopifnot(is.character(roles), is.character(all_roles))
   
   roles <- trimws(unlist(strsplit(tolower(roles), ",")))
   all_roles[sort(match(roles, all_roles))]

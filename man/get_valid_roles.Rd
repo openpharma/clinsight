@@ -4,10 +4,12 @@
 \alias{get_valid_roles}
 \title{Get valid roles}
 \usage{
-get_valid_roles(roles)
+get_valid_roles(roles, all_roles = get_roles_from_config())
 }
 \arguments{
 \item{roles}{A character vector. Will be converted to lower case.}
+
+\item{all_roles}{A named character vector with all applicable roles.}
 }
 \value{
 A named character vector with the roles applicable for the
