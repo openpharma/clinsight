@@ -110,15 +110,17 @@ mod_review_config_server <- function(
         selectizeInput(
           ns("active_role"), 
           label = "Active role:", 
-          choices = r$user_roles(),
-          selected = r$user_role()
+          choices = r$user_roles,
+          selected = r$user_role
         ),
         verbatimTextOutput(ns("review_config_feedback")),
         easyClose = TRUE
       )
     }
     
-    output[["user_name"]] <- reactive({ paste0("Reviewer: ", r$user_name()) })
+    output[["user_name"]] <- shiny::renderText({
+      paste0("Reviewer: ", r$user_name)
+    })
     
     observeEvent(input$config_review, showModal(review_modal()))
     
@@ -153,8 +155,8 @@ mod_review_config_server <- function(
       
       golem::cat_dev("Selected sites:", modvars$site_selection, "\n")
       r <- filter_data(r, sites = input$site_selection, subject_ids = subject_ids, 
-                       appdata = app_data, apptables = app_tables) |> 
-        set_user_role(user_role = input$active_role)
+                       appdata = app_data, apptables = app_tables)
+      r$user_role <- input$active_role
       
       shiny::showModal(
         modalDialog(

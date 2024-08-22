@@ -11,9 +11,9 @@ describe(
     
     testargs <- list(
       r = reactiveValues(subject_id = "DEU_02_866",
-                         user_name = reactive({"test user"}),
-                         user_roles = reactive({"Medical Monitor"}),
-                         user_role = reactive({"Medical Monitor"}),
+                         user_name = "test user",
+                         user_roles = "Medical Monitor",
+                         user_role = "Medical Monitor",
                          filtered_data = appdata, 
                          filtered_tables = apptables, 
                          filtered_subjects = vars$subject_id),
@@ -74,7 +74,7 @@ describe(
               expect_equal(subjects_filtered_initial, subject_ids)
               
               session$setInputs(
-                active_role = r$user_role(),
+                active_role = r$user_role,
                 site_selection = with(sites, site_code[region == "NLD"]),
                 region_selection = "NLD",
                 save_review_config = 1
@@ -132,9 +132,9 @@ describe(
         test_server <- function(input, output, session){
           r = reactiveValues(
             subject_id = "DEU_02_866", 
-            user_name = reactive({"test user"}),
-            user_roles = reactive({"Medical Monitor"}),
-            user_role = reactive({"Medical Monitor"}),
+            user_name = "test user",
+            user_roles = "Medical Monitor",
+            user_role = "Medical Monitor",
             filtered_data = appdata, 
             filtered_tables = apptables, 
             filtered_subjects = vars$subject_id
@@ -201,10 +201,10 @@ describe(
             
             testargs <- list(
               r = reactiveValues(subject_id = "DEU_02_866",
-                                 user_name = reactive({"test user"}),
-                                 user_roles = reactiveVal(c("Administrator", 
-                                                            "Medical Monitor")),
-                                 user_role = reactiveVal("Administrator"),
+                                 user_name = "test user",
+                                 user_roles = c("Administrator", 
+                                                "Medical Monitor"),
+                                 user_role = "Administrator",
                                  filtered_data = appdata, 
                                  filtered_tables = apptables, 
                                  filtered_subjects = vars$subject_id),
@@ -218,8 +218,8 @@ describe(
               ns <- session$ns
               modvars <- reactiveValues()
               
-              expect_equal(r$user_role(), "Administrator")
-              expect_equal(r$user_roles(), c("Administrator", "Medical Monitor"))
+              expect_equal(r$user_role, "Administrator")
+              expect_equal(r$user_roles, c("Administrator", "Medical Monitor"))
               
               session$setInputs(
                 active_role = "Medical Monitor",
@@ -227,7 +227,7 @@ describe(
                 region_selection = vars$subject_id,
                 save_review_config = 1
               )
-              expect_equal(r$user_role(), "Medical Monitor")
+              expect_equal(r$user_role, "Medical Monitor")
             })
           })
   }

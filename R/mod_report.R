@@ -61,7 +61,7 @@ mod_report_server <- function(id, r, rev_data, db_path, table_names){
       )
     }
     
-    report_modal <- function(user_name = r$user_name()){
+    report_modal <- function(user_name = r$user_name){
       modalDialog(
         size = "xl",
         bslib::card(
@@ -121,7 +121,7 @@ mod_report_server <- function(id, r, rev_data, db_path, table_names){
     
     
     output[["user_name"]] <- renderText({
-      paste0("Include activity from:\n ", tags$b(r$user_name()))
+      paste0("Include activity from:\n ", tags$b(r$user_name))
     })
     observeEvent(input$create_report, {
       req(forms_missing_review())
@@ -165,13 +165,13 @@ mod_report_server <- function(id, r, rev_data, db_path, table_names){
       req(review_data())
       req(input$report_type)
       select_report_data(review_data(), "review_data", input$report_type,
-                         r$user_name(), input$include_from_date)
+                         r$user_name, input$include_from_date)
     })
     
     selected_query_data <- reactive({
       req(query_data())
       select_report_data(query_data(), "query_data", input$report_type, 
-                         r$user_name(), input$include_from_date)
+                         r$user_name, input$include_from_date)
     })
     
     
@@ -194,7 +194,7 @@ mod_report_server <- function(id, r, rev_data, db_path, table_names){
       filename = "report.pdf",
       content = function(file){ create_report(
         file, 
-        reviewer = r$user_name(), 
+        reviewer = r$user_name, 
         study_sites = unique(bind_rows_custom(r$filtered_data)$site_code),
         review_df = selected_review_data(),
         query_df = selected_query_data()

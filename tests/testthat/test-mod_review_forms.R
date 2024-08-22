@@ -14,7 +14,7 @@ describe(
     it("Can load the module server, with functioning internal parameters.", {
       testargs <- list(
         r = reactiveValues(
-          user_name = reactiveVal("test_name"),
+          user_name = "test_name",
           subject_id = "885",
           review_data = data.frame()
         ),
@@ -55,7 +55,7 @@ describe(
         
         testargs <- list(
           r = reactiveValues(
-            user_name = reactiveVal("test_name"),
+            user_name = "test_name",
             subject_id = "885",
             review_data = db_slice_rows(temp_path)
           ),
@@ -132,7 +132,7 @@ describe(
           mod_review_forms_server(
             id = "test",
             r = reactiveValues(
-              user_name = reactiveVal("test_name"),
+              user_name = "test_name",
               subject_id = "885",
               review_data = db_slice_rows(temp_path)
             ),
@@ -204,7 +204,7 @@ describe(
         file.copy(test_path("fixtures", "review_testdb.sqlite"), temp_path) 
         testargs <- list(
           r = reactiveValues(
-            user_name = reactiveVal("test_name"),
+            user_name = "test_name",
             subject_id = "885",
             review_data = db_slice_rows(temp_path)
           ),
@@ -241,7 +241,7 @@ describe(
         })
         testargs <- list(
           r = reactiveValues(
-            user_name = reactiveVal("test_name"),
+            user_name = "test_name",
             subject_id = "885",
             review_data = db_slice_rows(temp_path)
           ),
@@ -275,7 +275,7 @@ describe(
         file.copy(test_path("fixtures", "review_testdb.sqlite"), temp_path) 
         testargs <- list(
           r = reactiveValues(
-            user_name = reactiveVal("test_name"),
+            user_name = "test_name",
             subject_id = "885",
             review_data = db_slice_rows(temp_path)
           ),
@@ -333,7 +333,7 @@ describe(
           mod_review_forms_server(
             id = "test", 
             r = reactiveValues(
-              user_name = reactiveVal(NULL), 
+              user_name = NULL, 
               subject_id = "885", 
               review_data = db_slice_rows(temp_path)
             ),
@@ -398,7 +398,7 @@ describe(
         )
         testargs <- list(
           r = reactiveValues(
-            user_name = reactiveVal("test_name"),
+            user_name = "test_name",
             subject_id = "885",
             review_data = rev_data
           ),

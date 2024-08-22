@@ -154,7 +154,7 @@ mod_query_add_server <- function(
     
     query_save_error <- reactiveVal(FALSE)
     observeEvent(input$query_add_input, {
-      req(input$query_select_visit, input$query_text, r$user_name())
+      req(input$query_select_visit, input$query_text, r$user_name)
       query_save_error(FALSE)
       golem::cat_dev("Query text to add: ", input$query_text, "\n")
       new_query <- dplyr::tibble(
@@ -166,7 +166,7 @@ mod_query_add_server <- function(
         "item"          = input$query_select_item, 
         "timestamp"     = time_stamp(),
         "n"             = 1,
-        "reviewer"      = r$user_name(),
+        "reviewer"      = r$user_name,
         "query"         = input$query_text,
         "resolved"      = "No",
         "resolved_date" = NA_character_,
@@ -228,13 +228,13 @@ mod_query_add_server <- function(
       validate(
         need(input$query_select_visit, "Please select a visit"),
         need(input$query_text, "Please add a query message"),
-        need(r$user_name(), "User name missing. Cannot save query anonymously.")
+        need(r$user_name, "User name missing. Cannot save query anonymously.")
       )
     })
     
     output[["reviewer"]] <- renderPrint({
-      req(r$user_name())
-      cat("Author:", r$user_name(), "\n")
+      req(r$user_name)
+      cat("Author:", r$user_name, "\n")
     })
     
     

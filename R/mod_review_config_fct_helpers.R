@@ -35,29 +35,3 @@ filter_data <- function(
   golem::cat_dev("Finished applying review configuration\n\n")
   data
 }
-
-#' Set user role
-#'
-#' Sets user role in a `reactiveValues()` object. Designed to be used within
-#' [mod_review_config_server()].
-#'
-#' @param user_role Character vector with the selected user role.
-#'
-#' @inheritParams filter_data
-#' 
-set_user_role <- function(
-    data,
-    user_role
-){
-  stopifnot(is.reactivevalues(data))
-  user_role <- user_role %||% ""
-  stopifnot(is.character(user_role))
-  if(!isTruthy(isolate(data$user_role))){
-    data$user_role <- reactive("")  
-  }
-  if(!identical(isolate(data$user_role()), user_role)){
-    data$user_role <- reactive({user_role}) 
-    golem::cat_dev("Finished applying review configuration\n\n")  
-  }
-  data
-}

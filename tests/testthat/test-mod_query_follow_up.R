@@ -53,7 +53,7 @@ describe(
         testargs <- list(
           r = reactiveValues(
             query_data = query_df,
-            user_name = reactiveVal("Admin test"),
+            user_name = "Admin test",
             subject_id = "ID1"
           ),
           selected_query = reactiveVal(),
@@ -110,7 +110,7 @@ describe(
         testargs <- list(
           r = reactiveValues(
             query_data = query_df,
-            user_name = reactiveVal("Admin test"),
+            user_name = "Admin test",
             subject_id = "ID1"
           ),
           selected_query = reactiveVal(),
@@ -178,7 +178,7 @@ describe(
         testargs <- list(
           r = reactiveValues(
             query_data = query_df,
-            user_name = reactiveVal("Admin test"),
+            user_name = "Admin test",
             subject_id = "ID1"
           ),
           selected_query = reactiveVal("ID1-unique_id"),
@@ -238,7 +238,7 @@ describe(
         testargs <- list(
           r = reactiveValues(
             query_data = query_df,
-            user_name = reactiveVal("Admin test"),
+            user_name = "Admin test",
             subject_id = "ID1"
           ),
           selected_query = reactiveVal(),
@@ -277,7 +277,7 @@ describe(
         testargs <- list(
           r = reactiveValues(
             query_data = query_df,
-            user_name = reactiveVal("Admin test"),
+            user_name = "Admin test",
             subject_id = "ID1"
           ),
           selected_query = reactiveVal(),
@@ -331,7 +331,7 @@ describe(
         testargs <- list(
           r = reactiveValues(
             query_data = query_df,
-            user_name = reactiveVal("Admin test"),
+            user_name = "Admin test",
             subject_id = "ID1"
           ),
           selected_query = reactiveVal(),
