@@ -287,3 +287,117 @@ describe(
     })
   }
 )
+
+describe(
+  "mod_query_add. Feature 4 | As a user, I want that saving a query is only 
+  possible with a valid user name and role", 
+  {
+    it(
+      "Scenario 1 | Trying to save a query without user name. Given 
+        a data frame and a database with review data with [reviewed] status set 
+        to 'new' (not reviewed yet), 
+        and no [user_name] available,
+        and [subject_id]  set to '885', 
+        and [active_form] set to 'Adverse events', 
+        and no [user_role] set to 'Medical Monitor', 
+        and setting the value [form_review] is to 'TRUE' and clicking on the 
+        [save_review] button, 
+        I expect that a query_error will be shown, 
+        and that no [query_data] in the application and in the database 
+        is unchanged.", 
+      {
+        temp_path <- withr::local_tempfile(fileext = ".sqlite")
+        file.copy(test_path("fixtures", "review_testdb.sqlite"), temp_path)
+        query_df <- readRDS(test_path("fixtures", "query_testdata.rds"))
+        db_temp_connect(temp_path, DBI::dbWriteTable(con, "query_data", query_df))
+        
+        testargs <- list(
+          r = reactiveValues(
+            user_name = "",
+            user_role = "Medical Monitor",
+            subject_id = 885,
+            review_data = db_slice_rows(temp_path)
+          ),
+          active_form = reactiveVal("Adverse events"),
+          db_path = temp_path,
+          available_data = data.frame(subject_id = "885",
+                                      item_group = "Adverse events")
+        )
+        testServer(mod_query_add_server, args = testargs, {
+          ns <- session$ns
+          session$setInputs(
+            create_query = 1,
+            query_text = "Test query",
+            query_select_visit = "Any visit",
+            query_add_input = 1,
+            query_major = FALSE
+          )
+          expect_error(
+            output$query_error, 
+            "User name missing. Cannot save query anonymously"
+          )
+          
+          expect_true(is.null(r$query_data))
+          expect_equal(
+            db_temp_connect(
+              db_path, 
+              DBI::dbGetQuery(con, "SELECT * FROM query_data")
+            ),
+            query_df
+          )
+        })
+      }
+    )
+    it(
+      "Scenario 2 | Trying to save a query without user role. Given 
+        the same conditions as in scenario 1, 
+        but user_name now set to 'test user',
+        and no user role available,
+        and trying to save a review,
+        I expect that a query_error will be shown, 
+        and that no [query_data] in the application and in the database 
+        is unchanged.", 
+      {
+        temp_path <- withr::local_tempfile(fileext = ".sqlite")
+        file.copy(test_path("fixtures", "review_testdb.sqlite"), temp_path)
+        query_df <- readRDS(test_path("fixtures", "query_testdata.rds"))
+        db_temp_connect(temp_path, DBI::dbWriteTable(con, "query_data", query_df))
+        
+        testargs <- list(
+          r = reactiveValues(
+            user_name = "test user",
+            user_role = "",
+            subject_id = 885,
+            review_data = db_slice_rows(temp_path)
+          ),
+          active_form = reactiveVal("Adverse events"),
+          db_path = temp_path,
+          available_data = data.frame(subject_id = "885",
+                                      item_group = "Adverse events")
+        )
+        testServer(mod_query_add_server, args = testargs, {
+          ns <- session$ns
+          session$setInputs(
+            create_query = 1,
+            query_text = "Test query",
+            query_select_visit = "Any visit",
+            query_add_input = 1,
+            query_major = FALSE
+          )
+          expect_error(
+            output$query_error, 
+            "User role missing. Cannot save query without user role"
+          )
+          expect_true(is.null(r$query_data))
+          expect_equal(
+            db_temp_connect(
+              db_path, 
+              DBI::dbGetQuery(con, "SELECT * FROM query_data")
+            ),
+            query_df
+          )
+        })
+      }
+    )
+  }
+)   
