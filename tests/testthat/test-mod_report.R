@@ -68,7 +68,10 @@ describe(
         DBI::dbWriteTable(con, "all_review_data", review_df)
         
         testargs <- list(
-          r = reactiveValues(review_data = review_df),
+          r = reactiveValues(
+            review_data = review_df,
+            user_name = "Admin"
+            ),
           rev_data = reactiveValues(summary = reactive({review_df[0,]})), 
           db_path = temp_path
         ) 
@@ -76,7 +79,6 @@ describe(
         testServer(mod_report_server, args = testargs, {
           ns <- session$ns
           expect_equal(forms_missing_review(), 0)
-          r$user_name <- reactiveVal("Admin")
           session$setInputs(
             create_report = 1, 
             report_type = "session", 

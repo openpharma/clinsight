@@ -16,7 +16,7 @@ describe(
       testargs <- list(
         r = reactiveValues(
           query_data = data.frame(),
-          user_name = reactiveVal(""),
+          user_name = "",
           subject_id = ""
         ),
         active_form = reactiveVal(),
@@ -68,7 +68,7 @@ describe(
         testargs <- list(
           r = reactiveValues(
             query_data = query_df,
-            user_name = reactiveVal("Admin test"),
+            user_name = "Admin test",
             subject_id = "ID1"
           ),
           active_form = reactiveVal(),
@@ -123,7 +123,7 @@ describe(
         testargs <- list(
           r = reactiveValues(
             query_data = query_df,
-            user_name = reactiveVal("Medical Monitor x"),
+            user_name = "Medical Monitor x",
             subject_id = "ID2"
           ),
           active_form = reactiveVal("Medication"),
@@ -185,7 +185,7 @@ describe(
         testargs <- list(
           r = reactiveValues(
             query_data = query_df,
-            user_name = reactiveVal("Medical Monitor x"),
+            user_name = "Medical Monitor x",
             subject_id = "ID3"
           ),
           active_form = reactiveVal("Adverse events"),
@@ -257,7 +257,7 @@ describe(
       )
       testargs <- list(
         r = reactiveValues(
-          user_name = reactiveVal("test user"),
+          user_name = "test user",
           subject_id = 885,
           review_data = db_slice_rows(temp_path)
         ),

@@ -151,7 +151,7 @@ mod_review_forms_server <- function(
     
     enable_save_review <- reactive({
       req(is.logical(input$form_reviewed), review_data_active())
-      if(is.null(r$user_name()) || r$user_name() == "") return(FALSE)
+      if(is.null(r$user_name) || r$user_name == "") return(FALSE)
       if(nrow(review_data_active()) == 0) return(FALSE)
       any(c(
         unique(review_data_active()$reviewed) == "No"  & input$form_reviewed, 
@@ -197,7 +197,7 @@ mod_review_forms_server <- function(
         dplyr::mutate(
           reviewed    = if(input$form_reviewed) "Yes" else "No",
           comment     = ifelse(is.null(input$review_comment), "", input$review_comment),
-          reviewer    = r$user_name(),
+          reviewer    = r$user_name,
           timestamp   = time_stamp(),
           status      = if(input$form_reviewed) "old" else "new"
         ) 
@@ -258,7 +258,7 @@ mod_review_forms_server <- function(
         "Nothing to review"
       ))
       validate(need(
-        !(is.null(r$user_name()) || r$user_name() == ""), 
+        !(is.null(r$user_name) || r$user_name == ""), 
         "No user name found. Cannot save review"
       ))
       validate(need(

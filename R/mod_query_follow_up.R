@@ -68,7 +68,7 @@ mod_query_follow_up_server <- function(id, r, selected_query, db_path){
     })
     query_save_error <- reactiveVal(FALSE)
     observeEvent(input$query_add_follow_up, {
-      req(input$query_follow_up_text, r$user_name(), selected_query())
+      req(input$query_follow_up_text, r$user_name, selected_query())
       req(selected_query() %in% r$query_data$query_id)
       query_save_error(FALSE)
       golem::cat_dev("Query FU text to add: ", input$query_follow_up_text, "\n")
@@ -81,7 +81,7 @@ mod_query_follow_up_server <- function(id, r, selected_query, db_path){
         dplyr::mutate(
           "timestamp"     = ts, 
           "n"             = n + 1,
-          "reviewer"      = r$user_name(),
+          "reviewer"      = r$user_name,
           "query"         = input$query_follow_up_text,
           "resolved"      = ifelse(input$resolved, "Yes", "No"),
           `resolved_date` = if(input$resolved) ts else NA_character_,
@@ -145,7 +145,7 @@ mod_query_follow_up_server <- function(id, r, selected_query, db_path){
         need(selected_query() %in% r$query_data$query_id, 
              "Query ID unknown. Verify the database"),
         need(input$query_follow_up_text, "Follow-up message missing"),
-        need(r$user_name(), "User name missing. Cannot save query anonymously.")
+        need(r$user_name, "User name missing. Cannot save query anonymously.")
       )
     })
   })
