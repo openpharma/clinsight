@@ -149,22 +149,43 @@ mod_review_forms_server <- function(
       )
     })
     
+    user_allowed_to_review <- reactive({
+      isFALSE(is.null(r$user_name) || r$user_name == "")
+    })
+    
+    role_allowed_to_review <- reactive({
+      get_roles_from_config()[r$user_role] %in% get_golem_config("allow_to_review")
+    })
+    
+    enable_any_review <- reactive({
+      all(c(
+        user_allowed_to_review(),
+        role_allowed_to_review(),
+        nrow(review_data_active()) != 0
+      ))
+    })
+    
     enable_save_review <- reactive({
-      req(is.logical(input$form_reviewed), review_data_active())
-      if(is.null(r$user_name) || r$user_name == "") return(FALSE)
-      if(nrow(review_data_active()) == 0) return(FALSE)
+      req(
+        review_data_active(), 
+        is.logical(input$form_reviewed), 
+        is.logical(enable_any_review()),
+        ) 
+      if(!enable_any_review()) return(FALSE)
       any(c(
         unique(review_data_active()$reviewed) == "No"  & input$form_reviewed, 
         unique(review_data_active()$reviewed) == "Yes" & !input$form_reviewed
       ))
     })
     
-    observeEvent(enable_save_review(), {
+    observeEvent(c(enable_any_review(), enable_save_review()), {
+      req(is.logical(enable_any_review()), is.logical(enable_save_review()))
+      shinyjs::toggleState("form_reviewed", enable_any_review())
       if(enable_save_review()){
         shinyjs::enable("save_review")
         shinyjs::enable("add_comment")
         shinyjs::enable("review_comment")
-      } else { 
+      } else{
         shinyjs::disable("save_review")
         shinyjs::disable("add_comment")
         shinyjs::disable("review_comment")
@@ -254,11 +275,15 @@ mod_review_forms_server <- function(
     
     output[["save_review_error"]] <- renderPrint({
       validate(need(
+        role_allowed_to_review(), 
+        paste0("Review not allowed for a '", r$user_role, "'.")
+        ))
+      validate(need(
         nrow(review_data_active()) != 0,
         "Nothing to review"
       ))
       validate(need(
-        !(is.null(r$user_name) || r$user_name == ""), 
+        user_allowed_to_review(), 
         "No user name found. Cannot save review"
       ))
       validate(need(
