@@ -57,7 +57,8 @@ create_table.default <- function(
       values_from = {{value_column}}, 
       values_fn = ~paste0(., collapse = "; ")
       ) 
-  if(is.null(expected_columns)) return(df)
+  expected_columns <- na.omit(expected_columns) %||% character(0)
+  if(length(expected_columns) == 0) return(df)
   add_missing_columns(df, expected_columns)[
     unique(c(keep_vars, expected_columns))
     ]
@@ -128,6 +129,7 @@ create_table.general <- function(
     expected_columns = NULL,
     ...
     ){
+  expected_columns <- na.omit(expected_columns) %||% character(0)
   df_names <- c(keep_vars, name_column, value_column, expected_columns)
   if(is.null(data)) {
     data <-  data.frame(matrix(ncol = length(df_names))) |> 
