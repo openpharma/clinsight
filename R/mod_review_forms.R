@@ -197,7 +197,7 @@ mod_review_forms_server <- function(
         dplyr::mutate(
           reviewed    = if(input$form_reviewed) "Yes" else "No",
           comment     = ifelse(is.null(input$review_comment), "", input$review_comment),
-          reviewer    = r$user_name,
+          reviewer    = paste0(r$user_name, " (", r$user_role, ")"),
           timestamp   = time_stamp(),
           status      = if(input$form_reviewed) "old" else "new"
         ) 

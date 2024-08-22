@@ -15,6 +15,7 @@ describe(
       testargs <- list(
         r = reactiveValues(
           user_name = "test_name",
+          user_role = "Medical Monitor",
           subject_id = "885",
           review_data = data.frame()
         ),
@@ -42,6 +43,7 @@ describe(
     it(
       paste0("Scenario 1 | Save a review. Given test review data with at ",
              "least an 'Adverse event' form with patient '885',",
+             "and [user_name] set to 'test_name' and [user_role] to 'Medical Monitor'",
              "and [active_patient] set to '885', ",
              "and [active_form] set to 'Adverse events', ",
              "and [active_tab] set to 'Common forms', ",
@@ -56,6 +58,7 @@ describe(
         testargs <- list(
           r = reactiveValues(
             user_name = "test_name",
+            user_role = "Medical Monitor",
             subject_id = "885",
             review_data = db_slice_rows(temp_path)
           ),
@@ -108,7 +111,7 @@ describe(
     it(
       "Scenario 2 | Save a review. Given a data frame
       and a database with review data with [reviewed] status set to 'new' (not reviewed yet),
-        and [user_name] set to 'test_name',
+        and [user_name] set to 'test_name' and [user_role] to 'Medical Monitor',
         and [subject_id]  set to '885',
         and [active_form] set to 'Adverse events',
         and first (1) No input is given, then (2) the [form_reviewed] tick box 
@@ -133,6 +136,7 @@ describe(
             id = "test",
             r = reactiveValues(
               user_name = "test_name",
+              user_role = "Medical Monitor",
               subject_id = "885",
               review_data = db_slice_rows(temp_path)
             ),
@@ -177,7 +181,7 @@ describe(
         saved_review_row <- db_slice_rows(temp_path) |>
           dplyr::filter(subject_id == "885")
         expect_equal(saved_review_row$status, "old")
-        expect_equal(saved_review_row$reviewer, "test_name")
+        expect_equal(saved_review_row$reviewer, "test_name (Medical Monitor)")
       }
     )
   }
@@ -205,6 +209,7 @@ describe(
         testargs <- list(
           r = reactiveValues(
             user_name = "test_name",
+            user_role = "Medical Monitor",
             subject_id = "885",
             review_data = db_slice_rows(temp_path)
           ),
@@ -242,6 +247,7 @@ describe(
         testargs <- list(
           r = reactiveValues(
             user_name = "test_name",
+            user_role = "Medical Monitor",
             subject_id = "885",
             review_data = db_slice_rows(temp_path)
           ),
@@ -276,6 +282,7 @@ describe(
         testargs <- list(
           r = reactiveValues(
             user_name = "test_name",
+            user_role = "Medical Monitor",
             subject_id = "885",
             review_data = db_slice_rows(temp_path)
           ),
@@ -333,7 +340,8 @@ describe(
           mod_review_forms_server(
             id = "test", 
             r = reactiveValues(
-              user_name = NULL, 
+              user_name = NULL,
+              user_role = "Medical Monitor",
               subject_id = "885", 
               review_data = db_slice_rows(temp_path)
             ),
@@ -399,6 +407,7 @@ describe(
         testargs <- list(
           r = reactiveValues(
             user_name = "test_name",
+            user_role = "Medical Monitor",
             subject_id = "885",
             review_data = rev_data
           ),
