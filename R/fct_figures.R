@@ -137,7 +137,7 @@ fig_timeline <- function(
     )
   # by showing these layers conditionally, no error will occur when no subject 
  # is yet selected
- if(nrow(data) == 0) fig else {
+ if(nrow(data) == 0 || nrow(completed_events) == 0) fig else {
    fig + 
      ggplot2::geom_segment(
        data = completed_events,
