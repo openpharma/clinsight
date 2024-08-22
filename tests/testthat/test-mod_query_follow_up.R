@@ -308,7 +308,101 @@ describe(
 )
 
 describe(
-  "mod_query_follow_up. Feature 6 | As a user, I want to be able to see an error
+  "mod_query_follow_up. Feature 6 | As a user, I want that no follow-up query 
+  will be written to the database if no valid user name or user role is available.", 
+  {
+    it(
+      "Scenario 1 | No user name available. 
+      follow-up query without selected query id. Given no user name is available, 
+          and [query_follow_up_text] contains a specific follow-up text, 
+          and [selected_query] is set to 'ID1-unique_id',
+          and trying to save a follow-up query by pressing [query_add_follow_up],
+          I expect that [query_error] shows an informative error,
+          and I expect that the query database and internal query data frame 
+          remain the same.", 
+      {
+        query_df <- readRDS(test_path("fixtures", "query_testdata.rds"))
+        temp_path <- withr::local_tempfile(fileext = ".sqlite") 
+        con <- get_db_connection(temp_path)
+        DBI::dbWriteTable(con, "query_data", query_df)
+        testargs <- list(
+          r = reactiveValues(
+            query_data = query_df,
+            user_name = "",
+            user_role = "Medical Monitor",
+            subject_id = "ID1"
+          ),
+          selected_query = reactiveVal("ID1-unique_id"),
+          db_path = temp_path
+        ) 
+        testServer(mod_query_follow_up_server, args = testargs , {
+          ns <- session$ns
+          session$setInputs(
+            query_follow_up_text = "Test Follow-up message",
+            resolved = TRUE,
+            query_add_follow_up = 1
+          )
+          
+          expect_error(
+            output$query_error, 
+            "User name missing. Cannot save query anonymously"
+          )
+          expect_equal(r$query_data, query_df)
+          expect_equal(
+            DBI::dbGetQuery(con, "SELECT * FROM query_data"), 
+            query_df
+          )
+        })
+      }
+    )
+    it(
+      "Scenario 2 | No user role available. Given the same a conditions as in Scenario 1,
+          but now with [user_name] set to 'test user' 
+          and no [user_role] available, 
+          and trying to save a follow-up query by pressing [query_add_follow_up],
+          I expect that no data will be written to the database,
+          and that a warning will be given", 
+      {
+        query_df <- readRDS(test_path("fixtures", "query_testdata.rds"))
+        temp_path <- withr::local_tempfile(fileext = ".sqlite") 
+        con <- get_db_connection(temp_path)
+        DBI::dbWriteTable(con, "query_data", query_df)
+        testargs <- list(
+          r = reactiveValues(
+            query_data = query_df,
+            user_name = "test user",
+            user_role = "",
+            subject_id = "ID1"
+          ),
+          selected_query = reactiveVal("ID1-unique_id"),
+          db_path = temp_path
+        ) 
+        testServer(mod_query_follow_up_server, args = testargs , {
+          ns <- session$ns
+          session$setInputs(
+            query_follow_up_text = "Test Follow-up message",
+            resolved = TRUE,
+            query_add_follow_up = 1
+          )
+          
+          expect_error(
+            output$query_error, 
+            "User role missing. Cannot save query without user role"
+          )
+          expect_equal(r$query_data, query_df)
+          expect_equal(
+            DBI::dbGetQuery(con, "SELECT * FROM query_data"), 
+            query_df
+          )
+        })
+      }
+    )
+  }
+)
+
+
+describe(
+  "mod_query_follow_up. Feature 7 | As a user, I want to be able to see an error
   message if the latest query entry does not match the one in the database
   after saving a new entry.",
   {
