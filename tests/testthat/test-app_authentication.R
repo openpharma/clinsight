@@ -53,7 +53,7 @@ describe(
         expect_equal(
           names(credentials_table),
           c("user", "password", "start", "expire", "admin", "name", 
-            "mail", "role", "sites", "is_hashed_password")
+            "mail", "roles", "sites", "is_hashed_password")
         )
         expect_equal(credentials_table[["user"]], "admin")
         expect_equal(credentials_table[["admin"]], "TRUE")

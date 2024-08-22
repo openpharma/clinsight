@@ -10,7 +10,10 @@ describe(
     apptables <- list("tab1" = data.frame(subject_id = vars$subject_id))
     
     testargs <- list(
-      r = reactiveValues(subject_id = "DEU_02_866", 
+      r = reactiveValues(subject_id = "DEU_02_866",
+                         user_name = "test user",
+                         user_roles = "Medical Monitor",
+                         user_role = "Medical Monitor",
                          filtered_data = appdata, 
                          filtered_tables = apptables, 
                          filtered_subjects = vars$subject_id),
@@ -71,6 +74,7 @@ describe(
               expect_equal(subjects_filtered_initial, subject_ids)
               
               session$setInputs(
+                active_role = r$user_role,
                 site_selection = with(sites, site_code[region == "NLD"]),
                 region_selection = "NLD",
                 save_review_config = 1
@@ -128,6 +132,9 @@ describe(
         test_server <- function(input, output, session){
           r = reactiveValues(
             subject_id = "DEU_02_866", 
+            user_name = "test user",
+            user_roles = "Medical Monitor",
+            user_role = "Medical Monitor",
             filtered_data = appdata, 
             filtered_tables = apptables, 
             filtered_subjects = vars$subject_id
@@ -176,3 +183,53 @@ describe(
     )
   }
 )
+
+describe(
+  "mod_review_config. Feature 2 | As a user, I want to be able to change my role, 
+  if there are multiple roles allocated", 
+  {
+    it("Scenario 1. Change user role. 
+        Given a user named 'test user' with the user_role set to 'Administrator', 
+          and the available roles set to 'Administrator' and 'Medical Monitor', 
+          and a test data set with random data, 
+          and after setting the 'active_role' to 'Medical Monitor' 
+          and clicking 'save changes',
+          I expect that the user role is changed to 'Medical Monitor'.", {
+            appdata <- get_appdata(clinsightful_data)
+            vars <- get_meta_vars(appdata, metadata)
+            apptables <- list("tab1" = data.frame(subject_id = vars$subject_id))
+            
+            testargs <- list(
+              r = reactiveValues(subject_id = "DEU_02_866",
+                                 user_name = "test user",
+                                 user_roles = c("Administrator", 
+                                                "Medical Monitor"),
+                                 user_role = "Administrator",
+                                 filtered_data = appdata, 
+                                 filtered_tables = apptables, 
+                                 filtered_subjects = vars$subject_id),
+              app_data = appdata,
+              app_tables = apptables,
+              sites = vars$Sites,
+              subject_ids = vars$subject_id
+            )
+            
+            testServer(mod_review_config_server, args = testargs, {
+              ns <- session$ns
+              modvars <- reactiveValues()
+              
+              expect_equal(r$user_role, "Administrator")
+              expect_equal(r$user_roles, c("Administrator", "Medical Monitor"))
+              
+              session$setInputs(
+                active_role = "Medical Monitor",
+                site_selection = vars$Sites$site_code,
+                region_selection = vars$subject_id,
+                save_review_config = 1
+              )
+              expect_equal(r$user_role, "Medical Monitor")
+            })
+          })
+  }
+)
+

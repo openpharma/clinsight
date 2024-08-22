@@ -28,11 +28,10 @@ default:
   study_data: !expr clinsight::clinsightful_data
   meta_data: !expr clinsight::metadata
   user_db: user_db.sqlite
-  group_roles:
-  - Medical Monitor
-  - Data Manager
-  - Administrator
-  - Investigator
+  user_roles:
+   Administrator: admin
+   Medical Monitor: medical_monitor
+   Data Manager: data_manager
 shinymanager:
   app_prod: yes
   user_identification: shinymanager
@@ -232,11 +231,10 @@ default:
   study_data: !expr clinsight::clinsightful_data
   meta_data: !expr clinsight::metadata
   user_db: user_db.sqlite
-  group_roles:
-  - Medical Monitor
-  - Data Manager
-  - Administrator
-  - Investigator
+  user_roles:
+   Administrator: admin
+   Medical Monitor: medical_monitor
+   Data Manager: data_manager
 shinymanager:
   app_prod: yes
   user_identification: shinymanager

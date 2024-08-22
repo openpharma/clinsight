@@ -1,16 +1,15 @@
 default:
   golem_name: clinsight
-  golem_version: 0.0.0.9010
+  golem_version: 0.0.0.9012
   app_prod: no
   user_identification: test_user
   study_data: !expr clinsight::clinsightful_data
   meta_data: !expr clinsight::metadata
   user_db: user_db.sqlite
-  group_roles:
-  - Medical Monitor
-  - Data Manager
-  - Administrator
-  - Investigator
+  user_roles:
+   Administrator: admin
+   Medical Monitor: medical_monitor
+   Data Manager: data_manager
 dev:
   golem_wd: !expr golem::pkg_path()
 test:

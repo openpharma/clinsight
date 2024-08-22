@@ -1,5 +1,6 @@
 {
   "input": {
+    "test-active_role": "Medical Monitor",
     "test-config_review": 1,
     "test-region_selection": "DEU",
     "test-save_review_config": 2,
@@ -16,6 +17,7 @@
         "shiny.silent.error",
         "validation"
       ]
-    }
+    },
+    "test-user_name": "Reviewer: test user"
   }
 }

@@ -1,7 +1,7 @@
 #' Filter app data
 #'
-#' @param data A `Reactivevalues` object. filtered data will be written into this
-#'   object.
+#' @param data A `Reactivevalues` object. filtered data will be written into
+#'   this object.
 #' @param sites Character vector with sites to filter on.
 #' @param subject_ids Character vector with all subject IDs. Used to keep the
 #'   correct order of subject IDs.
@@ -11,7 +11,6 @@
 #'   List contains data frames named per form.
 #'
 #' @return A `reactivevalues` object.
-#' @export
 #' 
 filter_data <- function(
     data, 
