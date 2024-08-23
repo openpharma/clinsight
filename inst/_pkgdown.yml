@@ -92,6 +92,10 @@ reference:
 - title: Helper functions
 - contents: 
   - add_missing_columns
+  - add_timevars_to_data
+  - get_valid_roles
+  - rename_raw_data
+  - set_user_role
   - adjust_colnames
   - bind_rows_custom
   - check_appdata
