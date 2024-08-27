@@ -12,7 +12,7 @@ make_query_testdata <- function(){
     "item"          = c("Pulse", "Sepsis"),
     "timestamp"     = c("2023-01-01 01:01:01 UTC", "2023-11-02 01:01:01 UTC"),
     "n"             = c(1),     
-    "reviewer"      = c("Test author", "Author3"),
+    "reviewer"      = c("Test author (Administrator)", "Author3 (Medical Monitor)"),
     "query"         = c("Query text test.", "Scoring correct? Please verify"),
     "resolved"      = c("No"),
     "resolved_date" = NA_character_,
