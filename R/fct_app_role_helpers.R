@@ -31,6 +31,10 @@ get_valid_roles <- function(
     roles,
     all_roles = get_roles_from_config()
 ){
+  if(is.null(roles)){
+    warning("No roles found. Is the active configuration correct?")
+    roles <- ""
+  }
   stopifnot(is.character(roles) || is.list(roles), is.character(all_roles))
   roles <- trimws(unlist(strsplit(tolower(roles), ",")))
   all_roles[sort(match(roles, all_roles))]

@@ -57,4 +57,14 @@ describe("get_valid_roles() works", {
       )
     }
   )
+  it("warns, but does not error, if input is empty", {
+    expect_warning(
+      get_valid_roles(NULL), 
+      "No roles found. Is the active configuration correct?"
+      )
+    expect_equal(
+      suppressWarnings(get_valid_roles(NULL)), 
+      setNames(nm = character(0))
+      )
+  })
 })
