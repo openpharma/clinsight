@@ -135,13 +135,13 @@ mod_review_forms_server <- function(
       
       updateCheckboxInput(
         inputId = "form_reviewed",
-        value = (review_status == "Yes")
+        value = identical(review_status, "Yes")
       )
       
       shinyWidgets::updatePrettySwitch(
         session = session,
         inputId = "add_comment",
-        value = (review_comment != "")
+        value = !identical(review_comment, "")
       )
       updateTextAreaInput(
         inputId = "review_comment",
