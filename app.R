@@ -4,4 +4,14 @@
 
 pkgload::load_all(export_all = FALSE,helpers = FALSE,attach_testthat = FALSE)
 options( "golem.app.prod" = TRUE)
+# update manifest file
+# if absolute path is needed for renv profile
+# Sys.setenv(RENV_PROFILE = "dev")
+# renv::paths$lockfile() # test
+# assignInNamespace(
+#   "renvLockFile",
+#   \(...) renv::paths$lockfile(),
+#   "rsconnect"
+# )
+# rsconnect::writeManifest() # run if needed
 clinsight::run_app() # add parameters here (if any)
