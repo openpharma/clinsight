@@ -25,7 +25,6 @@ Imports:
     ggplot2,
     golem,
     htmltools,
-    pkgload,
     plotly,
     readr,
     readxl,
@@ -45,6 +44,7 @@ Imports:
 Suggests: 
     kableExtra,
     knitr,
+    pkgload,
     purrr,
     shinytest2,
     stringr,
