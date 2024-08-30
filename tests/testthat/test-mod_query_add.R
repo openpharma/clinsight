@@ -16,7 +16,7 @@ describe(
       testargs <- list(
         r = reactiveValues(
           query_data = data.frame(),
-          user_name = reactiveVal(""),
+          user_name = "",
           subject_id = ""
         ),
         active_form = reactiveVal(),
@@ -50,7 +50,7 @@ describe(
       "timestamp"     = c("2023-01-01 01:01:01 UTC", "2023-11-02 01:01:01 UTC"),
       "query_id"      = c("ID1-unique_id", "ID2-unique_id"),
       "n"             = c(1),     
-      "reviewer"      = c("Test author", "Author3"),
+      "reviewer"      = c("Test author (Medical Monitor)", "Author3 (Medical MOnitor)"),
       "query"         = c("Query text test.", "Scoring correct? Please verify"),
       "resolved"      = c("No"),
       "resolved_date" = NA_character_,
@@ -68,7 +68,7 @@ describe(
         testargs <- list(
           r = reactiveValues(
             query_data = query_df,
-            user_name = reactiveVal("Admin test"),
+            user_name = "Admin test",
             subject_id = "ID1"
           ),
           active_form = reactiveVal(),
@@ -111,7 +111,7 @@ describe(
         I expect that one new query is saved in [query_data] for patent 'ID1',
           and that the 'item_group' of the query is 'Medication',
           and 'item' is 'Oxycodon', 
-          and 'reviewer' is 'Medical Monitor x',
+          and 'reviewer' is 'User 1' with the role 'Medical Monitor',
           and 'query' is 'Add a new test query',
           and 'resolved' is 'No',
           and the remote database contains the same query as in [query_data].", 
@@ -123,7 +123,8 @@ describe(
         testargs <- list(
           r = reactiveValues(
             query_data = query_df,
-            user_name = reactiveVal("Medical Monitor x"),
+            user_name = "User 1",
+            user_role = "Medical Monitor",
             subject_id = "ID2"
           ),
           active_form = reactiveVal("Medication"),
@@ -150,7 +151,7 @@ describe(
           expect_equal(nrow(new_query), 1)
           expect_equal(new_query$item_group, "Medication")
           expect_equal(new_query$item, "Oxycodon")
-          expect_equal(new_query$reviewer, "Medical Monitor x")
+          expect_equal(new_query$reviewer, "User 1 (Medical Monitor)")
           expect_equal(new_query$query, "Add a new test query")
           expect_equal(new_query$resolved, "No")
           expect_equal(
@@ -173,7 +174,7 @@ describe(
         I expect that one new query is saved in [query_data] for patent 'ID3',
           and that the 'item_group' of the query is 'Adverse events',
           and 'item' is 'Pneumothorax', 
-          and 'reviewer' is 'Medical Monitor x',
+          and 'reviewer' is 'User 1' with the role 'Medical Monitor',
           and 'query' is 'Major query text.',
           and 'resolved' is 'No',
           and the remote database contains the same query as in [query_data].", 
@@ -185,7 +186,8 @@ describe(
         testargs <- list(
           r = reactiveValues(
             query_data = query_df,
-            user_name = reactiveVal("Medical Monitor x"),
+            user_name = "User 1",
+            user_role = "Medical Monitor",
             subject_id = "ID3"
           ),
           active_form = reactiveVal("Adverse events"),
@@ -213,7 +215,7 @@ describe(
           expect_equal(nrow(new_query), 1)
           expect_equal(new_query$item_group, "Adverse events")
           expect_equal(new_query$item, "Pneumothorax")
-          expect_equal(new_query$reviewer, "Medical Monitor x")
+          expect_equal(new_query$reviewer, "User 1 (Medical Monitor)")
           expect_equal(new_query$query, "Major query text.")
           expect_equal(new_query$resolved, "No")
           expect_equal(
@@ -257,7 +259,8 @@ describe(
       )
       testargs <- list(
         r = reactiveValues(
-          user_name = reactiveVal("test user"),
+          user_name = "test user",
+          user_role = "Medical Monitor",
           subject_id = 885,
           review_data = db_slice_rows(temp_path)
         ),
@@ -284,3 +287,117 @@ describe(
     })
   }
 )
+
+describe(
+  "mod_query_add. Feature 4 | As a user, I want that saving a query is only 
+  possible with a valid user name and role", 
+  {
+    it(
+      "Scenario 1 | Trying to save a query without user name. Given 
+        a data frame and a database with review data with [reviewed] status set 
+        to 'new' (not reviewed yet), 
+        and no [user_name] available,
+        and [subject_id]  set to '885', 
+        and [active_form] set to 'Adverse events', 
+        and no [user_role] set to 'Medical Monitor', 
+        and setting the value [form_review] is to 'TRUE' and clicking on the 
+        [save_review] button, 
+        I expect that a query_error will be shown, 
+        and that no [query_data] in the application and in the database 
+        is unchanged.", 
+      {
+        temp_path <- withr::local_tempfile(fileext = ".sqlite")
+        file.copy(test_path("fixtures", "review_testdb.sqlite"), temp_path)
+        query_df <- readRDS(test_path("fixtures", "query_testdata.rds"))
+        db_temp_connect(temp_path, DBI::dbWriteTable(con, "query_data", query_df))
+        
+        testargs <- list(
+          r = reactiveValues(
+            user_name = "",
+            user_role = "Medical Monitor",
+            subject_id = 885,
+            review_data = db_slice_rows(temp_path)
+          ),
+          active_form = reactiveVal("Adverse events"),
+          db_path = temp_path,
+          available_data = data.frame(subject_id = "885",
+                                      item_group = "Adverse events")
+        )
+        testServer(mod_query_add_server, args = testargs, {
+          ns <- session$ns
+          session$setInputs(
+            create_query = 1,
+            query_text = "Test query",
+            query_select_visit = "Any visit",
+            query_add_input = 1,
+            query_major = FALSE
+          )
+          expect_error(
+            output$query_error, 
+            "User name missing. Cannot save query anonymously"
+          )
+          
+          expect_true(is.null(r$query_data))
+          expect_equal(
+            db_temp_connect(
+              db_path, 
+              DBI::dbGetQuery(con, "SELECT * FROM query_data")
+            ),
+            query_df
+          )
+        })
+      }
+    )
+    it(
+      "Scenario 2 | Trying to save a query without user role. Given 
+        the same conditions as in scenario 1, 
+        but user_name now set to 'test user',
+        and no user role available,
+        and trying to save a review,
+        I expect that a query_error will be shown, 
+        and that no [query_data] in the application and in the database 
+        is unchanged.", 
+      {
+        temp_path <- withr::local_tempfile(fileext = ".sqlite")
+        file.copy(test_path("fixtures", "review_testdb.sqlite"), temp_path)
+        query_df <- readRDS(test_path("fixtures", "query_testdata.rds"))
+        db_temp_connect(temp_path, DBI::dbWriteTable(con, "query_data", query_df))
+        
+        testargs <- list(
+          r = reactiveValues(
+            user_name = "test user",
+            user_role = "",
+            subject_id = 885,
+            review_data = db_slice_rows(temp_path)
+          ),
+          active_form = reactiveVal("Adverse events"),
+          db_path = temp_path,
+          available_data = data.frame(subject_id = "885",
+                                      item_group = "Adverse events")
+        )
+        testServer(mod_query_add_server, args = testargs, {
+          ns <- session$ns
+          session$setInputs(
+            create_query = 1,
+            query_text = "Test query",
+            query_select_visit = "Any visit",
+            query_add_input = 1,
+            query_major = FALSE
+          )
+          expect_error(
+            output$query_error, 
+            "User role missing. Cannot save query without user role"
+          )
+          expect_true(is.null(r$query_data))
+          expect_equal(
+            db_temp_connect(
+              db_path, 
+              DBI::dbGetQuery(con, "SELECT * FROM query_data")
+            ),
+            query_df
+          )
+        })
+      }
+    )
+  }
+)   

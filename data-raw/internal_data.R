@@ -26,23 +26,28 @@ query_data_skeleton <- dplyr::tibble(
   "edit_reason"   = character()
 )
 
-# columns names that are required for the application to function. 
-# Used to test whether these are all available in the column_specs when reading 
-# in data with get_raw_data().
-required_col_names <- c(
-  "site_code", 
-  "subject_id", 
-  "event_id", 
-  "event_date", 
-  "event_name", 
-  "event_repeat", 
-  "form_id", 
-  "form_repeat", 
-  "var", 
-  "item_value", 
-  "edit_date_time"
-  )
+# columns specifications required for the application to function properly. 
+# Used to convert columns to the right format, and to test whether all the required 
+# columns are available when merging raw data with metadata.
+clinsight_col_specs <- c(
+  "site_code" = "c", 
+  "subject_id" = "c", 
+  "event_id" = "c", 
+  "event_date" = "D", 
+  "event_name" = "c", 
+  "event_repeat" = "i", 
+  "form_id" = "c", 
+  "form_repeat" = "i", 
+  "var" = "c", 
+  "item_value" = "c", 
+  "edit_date_time" = "T",
+  ".default" = "c"
+  ) |> 
+  readr::as.col_spec()
+
+# Required columns needed in study data for the application to function.
+required_col_names <- names(clinsight_col_specs$cols)
 
 
-usethis::use_data(col_palette, query_data_skeleton, required_col_names,
-                  overwrite = TRUE, internal = TRUE)
+usethis::use_data(col_palette, query_data_skeleton, required_col_names, 
+                  clinsight_col_specs, overwrite = TRUE, internal = TRUE)

@@ -55,7 +55,6 @@ db_temp_connect <- function(db_path, code, drv = RSQLite::SQLite()){
 #' @param reviewed Character vector. Sets the reviewed tag in the review
 #'   database.
 #' @param reviewer Character vector. Sets the reviewer in the review database.
-#'   Defaults to `Admin`.
 #' @param status Character vector. Sets the status in the review database.
 #'   Defaults to `new`.
 #'
@@ -81,6 +80,8 @@ db_create <- function(
     dir_created <- dir.create(db_directory)
     if(!dir_created) stop("Could not create directory for user database")
   }
+  data_synch_time <- attr(data, "synch_time") %||% ""
+  
   df <- data |> 
     dplyr::mutate(
       reviewed = reviewed, 
@@ -93,7 +94,7 @@ db_create <- function(
   new_data <- list(
     "all_review_data" = df,
     "query_data"      = query_data_skeleton,
-    "db_synch_time"   = data.frame(synch_time = "")
+    "db_synch_time"   = data.frame(synch_time = data_synch_time)
   )
   con <- get_db_connection(db_path)
   for(i in names(new_data)){
@@ -113,9 +114,6 @@ db_create <- function(
 #' @param common_vars A character vector containing the common key variables.
 #' @param edit_time_var A character vector with the column name of the edit-time
 #'   variable.
-#' @param data_synched Logical. Whether the database was synched or not. If
-#'   TRUE, the synchronization date stored in the database will be updated to
-#'   the current day.
 #'
 #' @return Nothing will be returned.
 #' @export
@@ -125,36 +123,43 @@ db_update <- function(
     db_path,
     common_vars = c("subject_id", "event_name", "item_group", 
                     "form_repeat", "item_name"), 
-    edit_time_var = "edit_date_time",
-    data_synched = FALSE
+    edit_time_var = "edit_date_time"
 ){
   stopifnot(file.exists(db_path))
   con <- get_db_connection(db_path)
-  # check if review_data is still up to date and if not, expand review_data
-  review_data <- con |> 
-    dplyr::tbl("all_review_data") |> 
-    dplyr::collect() 
+  data_synch_time <- attr(data, "synch_time") %||% ""
   
-  edit_time_raw <- get_max_time(data, edit_time_var) 
-  edit_time_review <- get_max_time(review_data, edit_time_var) 
-  # update db synch time: 
-  if(data_synched){
-    cat("Raw data renewed. Updating synch date \n")
-    DBI::dbWriteTable(con, "db_synch_time", data.frame("synch_time" =   time_stamp()), overwrite = TRUE)
+  db_synch_time <- tryCatch({
+    DBI::dbGetQuery(con, "SELECT synch_time FROM db_synch_time") |> 
+    unlist(use.names = FALSE)}, error = \(e){""})
+  if(!identical(data_synch_time, "") && identical(data_synch_time, db_synch_time)){
+    return("Database up to date. No update needed") 
   }
-  # update review_data DB if needed:
-  if(edit_time_raw == edit_time_review){
-    return("Database up to date. No update needed")
+  if(!identical(data_synch_time, "") && db_synch_time > data_synch_time){
+    return({
+      warning("DB synch time is more recent than data synch time. ", 
+              "Aborting synchronization.")
+      })
   }
+  # Continue in the case data_synch_time is missing and if data_synch_time is 
+  # more recent than db_synch_time
+  review_data <- DBI::dbGetQuery(con, "SELECT * FROM all_review_data")
   cat("Start adding new rows to database\n")
   updated_review_data <- update_review_data(
     review_df = review_data,
     latest_review_data = data,
     common_vars = common_vars,
-    edit_time_var = edit_time_var
+    edit_time_var = edit_time_var,
+    update_time = data_synch_time
   )
   cat("writing updated review data to database...\n")
   DBI::dbWriteTable(con, "all_review_data", updated_review_data, append = TRUE)
+  DBI::dbWriteTable(
+    con, 
+    "db_synch_time", 
+    data.frame("synch_time" = data_synch_time), 
+    overwrite = TRUE
+  )
   cat("Finished updating review data\n")
 }
 

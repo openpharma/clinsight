@@ -16,8 +16,7 @@ created.}
 \item{reviewed}{Character vector. Sets the reviewed tag in the review
 database.}
 
-\item{reviewer}{Character vector. Sets the reviewer in the review database.
-Defaults to \code{Admin}.}
+\item{reviewer}{Character vector. Sets the reviewer in the review database.}
 
 \item{status}{Character vector. Sets the status in the review database.
 Defaults to \code{new}.}

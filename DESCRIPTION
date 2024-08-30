@@ -1,6 +1,6 @@
 Package: clinsight
 Title: ClinSight
-Version: 0.0.0.9007
+Version: 0.0.0.9013
 Authors@R: c(
     person("Leonard Daniël", "Samson", , "lsamson@gcp-service.com", role = c("cre", "aut")),
     person("GCP-Service International Ltd.& Co. KG", role = "fnd")
@@ -27,6 +27,7 @@ Imports:
     htmltools,
     pkgload,
     plotly,
+    readr,
     readxl,
     rlang,
     rmarkdown,
@@ -40,7 +41,6 @@ Imports:
     tidyr,
     timevis,
     tools,
-    vroom,
     withr
 Suggests: 
     kableExtra,

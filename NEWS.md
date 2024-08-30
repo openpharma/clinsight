@@ -14,8 +14,12 @@ to minimize the package dependencies of the production version.
 - Improved creating test result report.
 - Added data specification to `run_app()` documentation
 - Improved function `get_test_results()`.
+- Merged data now has an attribute 'synch_time' which will be used to update the synchronization information in the side bar.
+- user roles as defined in the config.yml will now be shown at several places in the application and will be documented alongside the user name if needed. 
 
 ## Bug fixes
 
 - Fixed error of creating adverse events table with empty data frame input. 
 - Properly handled zero regions selected in review configuration and provided user feedback.
+- Fixed issue with the timeline figure when a subject had no completed events.
+- Fixed pre-processing bug where `get_metadata()` would error when a metadata.xlsx tab exist, but were empty

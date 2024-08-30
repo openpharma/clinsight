@@ -15,7 +15,7 @@ describe(
     it(
       "Scenario 1 | Save normal query. 
         Given a fixed fixed random test data set with all data marked as not yet reviewed, 
-          and being logged in as test user, 
+          and being logged in as 'test user' with the user role 'Administrator', 
           and patient BEL_08_45 selected as active patient,
           and the 'Vital signs' tab selected as the first tab in the [Study data] tabs,
           and clicking on [Study data] to browse to the 'Vital signs' tab, 
@@ -32,7 +32,7 @@ describe(
             and the form name 'Vital Signs, 
             and the item name 'Weight', 
             and the event label 'Screening, 
-            and the reviewer name 'test user'", 
+            and the reviewer name 'test user (Administrator)'", 
       {
         app$set_inputs(main_tabs = "Study data")
         app$wait_for_idle()
@@ -63,7 +63,7 @@ describe(
         expect_equal(query_database_data$item_group, "Vital signs")
         expect_equal(query_database_data$item, "Weight")
         expect_equal(query_database_data$event_label, "Screening")
-        expect_equal(query_database_data$reviewer, "test user")
+        expect_equal(query_database_data$reviewer, "test user (Administrator)")
         # close modal, so that next scenario can start without it:
         app$wait_for_js("$('#shiny-modal').modal('hide');")
       }
@@ -71,7 +71,7 @@ describe(
     it(
       "Scenario 2 | Browse to patient and save major query. 
         Given a fixed fixed random test data set with all data marked as not yet reviewed, 
-          and being logged in as test user, 
+          and being logged in as 'test user' with the user role 'Administrator', 
           and browsing to patient BEL_04_772 with tab 'Adverse events',
           and clicking on [Create query], 
             I expect that I see a window to write a query,
@@ -86,7 +86,7 @@ describe(
             and the item name 'Tachycardia', 
             and the query type being 'Major',
             and the event label 'Any event', 
-            and the reviewer name 'test user'", 
+            and the reviewer name 'test user (Administrator)'", 
       {
         # scenario 2 is not fully isolated from scenario 1; however, this setup 
         # is faster since only one shinytest2 app needs to be started. 
@@ -132,7 +132,7 @@ describe(
         expect_equal(query_database_data$event_label, "Any visit")
         expect_equal(query_database_data$query, "Major test query")
         expect_equal(query_database_data$type, "Major")
-        expect_equal(query_database_data$reviewer, "test user")
+        expect_equal(query_database_data$reviewer, "test user (Administrator)")
       }
     )
   }

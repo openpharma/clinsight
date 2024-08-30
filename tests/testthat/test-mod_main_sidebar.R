@@ -70,7 +70,8 @@ describe(
             create_query = 0, 
             review_data = rev_data, 
             subject_id = "NLD_06_755",
-            user_name = reactiveVal("Admin")
+            user_name = "Admin",
+            user_role = "Medical Monitor"
           ),
           navinfo = reactiveValues(active_form = "Adverse events", active_tab = "Common events"),
           app_data = list("Form1" = data.frame("site_code" = "")), # used by mod_review_config()
@@ -119,7 +120,8 @@ describe(
                     "status" = ""
                   ), 
                   subject_id = "NLD_06_755",
-                  user_name = reactiveVal("Admin")
+                  user_name = "Admin",
+                  user_role = "Medical Monitor"
                 ),
                 navinfo = reactiveValues(active_form = "Adverse events", active_tab = "Start"),
                 app_data = list("Form1" = data.frame("site_code" = "")), # used by mod_review_config()

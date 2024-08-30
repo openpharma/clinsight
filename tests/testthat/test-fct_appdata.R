@@ -1,7 +1,9 @@
-describe("get_raw_data works", {
+describe("get_raw_csv_data works", {
   it("Produces the expected output.", {
     data_path <- test_path("fixtures", "csvtestdata")
-    expect_snapshot(get_raw_data(data_path, column_specs = metadata$column_specs))
+    expect_snapshot(
+      get_raw_csv_data(data_path, synch_time = "2024-01-01 00:00:00")
+      )
   })
 })
 
@@ -11,7 +13,7 @@ describe(
          "limits and significance values to the standard names used in the app."), 
   {
     data_path <- test_path("fixtures", "csvtestdata")
-    raw_data <- suppressWarnings(get_raw_data(data_path))
+    raw_data <- get_raw_csv_data(data_path, synch_time = "2024-01-01 00:00:00")
     
     it("Produces a data frame without errors", {
       expect_true(is.data.frame(merge_meta_with_data(raw_data, metadata)))
