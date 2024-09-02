@@ -1,4 +1,6 @@
 # Launch the ShinyApp (Do not remove this comment)
+
+# This file and the manifest.json are needed for Posit Connect deployments.
 # To deploy, run: rsconnect::deployApp()
 # Or use the blue button on top of this file
 
