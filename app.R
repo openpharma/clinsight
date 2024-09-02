@@ -8,7 +8,7 @@ pkgload::load_all(export_all = FALSE,helpers = FALSE,attach_testthat = FALSE)
 options( "golem.app.prod" = TRUE)
 # update manifest file
 # if absolute path is needed for renv profile
-# Sys.setenv(RENV_PROFILE = "dev")
+# Sys.setenv(RENV_PROFILE = "full")
 # renv::paths$lockfile() # test
 # assignInNamespace(
 #   "renvLockFile",

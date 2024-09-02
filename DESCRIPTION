@@ -51,7 +51,7 @@ Suggests:
     testthat (>= 3.0.0)
 VignetteBuilder: 
     knitr
-Config/renv/profiles/dev/dependencies: pkgdown, stringr, kableExtra,
+Config/renv/profiles/full/dependencies: pkgdown, stringr, kableExtra,
     usethis, cowplot, covr, devtools
 Config/testthat/edition: 3
 Encoding: UTF-8
