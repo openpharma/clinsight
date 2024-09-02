@@ -13,7 +13,7 @@ jobs:
   test-coverage:
     runs-on: ubuntu-latest
     env:
-      RENV_PROFILE: "dev"
+      RENV_PROFILE: "full"
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       RENV_CONFIG_SANDBOX_ENABLED: false

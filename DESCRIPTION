@@ -1,6 +1,6 @@
 Package: clinsight
 Title: ClinSight
-Version: 0.0.0.9013
+Version: 0.0.0.9014
 Authors@R: c(
     person("Leonard Daniël", "Samson", , "lsamson@gcp-service.com", role = c("cre", "aut")),
     person("GCP-Service International Ltd.& Co. KG", role = "fnd")
@@ -44,13 +44,14 @@ Imports:
 Suggests: 
     kableExtra,
     knitr,
+    pkgload,
     purrr,
     shinytest2,
     stringr,
     testthat (>= 3.0.0)
 VignetteBuilder: 
     knitr
-Config/renv/profiles/dev/dependencies: pkgdown, stringr, kableExtra,
+Config/renv/profiles/full/dependencies: pkgdown, stringr, kableExtra,
     usethis, cowplot, covr, devtools
 Config/testthat/edition: 3
 Encoding: UTF-8
