@@ -16,3 +16,6 @@ _\.new\.png$
 ^Meta$
 ^pkgdown$
 ^test_data$
+^app\.R$
+^rsconnect$
+^manifest.json$

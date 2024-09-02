@@ -12,7 +12,7 @@ jobs:
   R-CMD-check:
     runs-on: ubuntu-latest
     env:
-      RENV_PROFILE: "dev"
+      RENV_PROFILE: "full"
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
     steps:

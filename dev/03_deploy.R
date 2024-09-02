@@ -25,10 +25,11 @@
 ## sent to CRAN, or to a package manager
 #pkgbuild::build()
 
-# ignore certain packages, and only add them for development environment:
+# ignore certain packages in the 'minimal' renv environment:
 renv::settings$ignored.packages(c("pak", "pkgdown", "stringr", "kableExtra", "usethis", "cowplot"))
-renv::activate(profile = "dev")
-renv::activate(profile = "production")
+renv::activate(profile = "full")
+# Use this to create a production-ready Docker image, with minimal number of dependencies:
+renv::activate(profile = "minimal")
 ## RStudio ----
 ## If you want to deploy on RStudio related platforms
 golem::add_rstudioconnect_file()
