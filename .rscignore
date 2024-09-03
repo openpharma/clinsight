@@ -1,0 +1,7 @@
+dev
+vignettes
+tests
+man
+.Rprofile
+data-raw
+.github
