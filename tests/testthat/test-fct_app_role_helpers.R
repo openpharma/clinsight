@@ -57,14 +57,31 @@ describe("get_valid_roles() works", {
       )
     }
   )
-  it("warns, but does not error, if input is empty", {
+  it("warns, but does not error, if input is empty or if no valid roles are 
+  available, and outputs an empty named character vector", {
     expect_warning(
       get_valid_roles(NULL), 
-      "No roles found. Is the active configuration correct?"
+      "No valid roles found. Is the active configuration correct?"
       )
     expect_equal(
       suppressWarnings(get_valid_roles(NULL)), 
-      setNames(nm = character(0))
+      setNames(nm = "")
       )
+    expect_warning(
+      get_valid_roles(character(0)), 
+      "No valid roles found. Is the active configuration correct?"
+    )
+    expect_equal(
+      suppressWarnings(get_valid_roles(character(0))), 
+      setNames(nm = "")
+    )
+    expect_warning(
+      get_valid_roles("non-existing role"), 
+      "No valid roles found. Is the active configuration correct?"
+    )
+    expect_equal(
+      suppressWarnings(get_valid_roles("non-existing role")), 
+      setNames(nm = "")
+    )
   })
 })
