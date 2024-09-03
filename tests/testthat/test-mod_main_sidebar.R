@@ -45,8 +45,8 @@ describe(
       appdata <- get_appdata(clinsightful_data)
       rev_data <- get_review_data(appdata[["Adverse events"]]) |> 
         dplyr::mutate(
-          reviewed = sample(c("Yes", "No"), dplyr::n(), replace = TRUE),
-          status = sample(c("new", "old", "updated"), dplyr::n(), replace = TRUE),
+          reviewed = "No",
+          status = "new",
           comment = ""
         )
       vars <- get_meta_vars(appdata, metadata)

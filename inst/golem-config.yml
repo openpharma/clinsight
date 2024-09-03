@@ -1,6 +1,6 @@
 default:
   golem_name: clinsight
-  golem_version: 0.0.0.9014
+  golem_version: 0.0.0.9015
   app_prod: no
   user_identification: test_user
   study_data: !expr clinsight::clinsightful_data
@@ -10,6 +10,7 @@ default:
    Administrator: admin
    Medical Monitor: medical_monitor
    Data Manager: data_manager
+  allow_to_review: [admin, medical_monitor]
 dev:
   golem_wd: !expr golem::pkg_path()
 test:
@@ -33,3 +34,4 @@ shiny_connect:
   study_data: study_data.rds
   meta_data: metadata.rds
   user_db: user_db.sqlite
+  allow_to_review: [admin, medical_monitor, data_manager]

@@ -15,6 +15,7 @@ describe(
       testargs <- list(
         r = reactiveValues(
           user_name = "test_name",
+          user_role = "Medical Monitor",
           subject_id = "885",
           review_data = data.frame()
         ),
@@ -42,6 +43,7 @@ describe(
     it(
       paste0("Scenario 1 | Save a review. Given test review data with at ",
              "least an 'Adverse event' form with patient '885',",
+             "and [user_name] set to 'test_name' and [user_role] to 'Medical Monitor'",
              "and [active_patient] set to '885', ",
              "and [active_form] set to 'Adverse events', ",
              "and [active_tab] set to 'Common forms', ",
@@ -56,6 +58,7 @@ describe(
         testargs <- list(
           r = reactiveValues(
             user_name = "test_name",
+            user_role = "Medical Monitor",
             subject_id = "885",
             review_data = db_slice_rows(temp_path)
           ),
@@ -108,7 +111,7 @@ describe(
     it(
       "Scenario 2 | Save a review. Given a data frame
       and a database with review data with [reviewed] status set to 'new' (not reviewed yet),
-        and [user_name] set to 'test_name',
+        and [user_name] set to 'test_name' and [user_role] to 'Medical Monitor',
         and [subject_id]  set to '885',
         and [active_form] set to 'Adverse events',
         and first (1) No input is given, then (2) the [form_reviewed] tick box 
@@ -133,6 +136,7 @@ describe(
             id = "test",
             r = reactiveValues(
               user_name = "test_name",
+              user_role = "Medical Monitor",
               subject_id = "885",
               review_data = db_slice_rows(temp_path)
             ),
@@ -177,7 +181,7 @@ describe(
         saved_review_row <- db_slice_rows(temp_path) |>
           dplyr::filter(subject_id == "885")
         expect_equal(saved_review_row$status, "old")
-        expect_equal(saved_review_row$reviewer, "test_name")
+        expect_equal(saved_review_row$reviewer, "test_name (Medical Monitor)")
       }
     )
   }
@@ -205,6 +209,7 @@ describe(
         testargs <- list(
           r = reactiveValues(
             user_name = "test_name",
+            user_role = "Medical Monitor",
             subject_id = "885",
             review_data = db_slice_rows(temp_path)
           ),
@@ -242,6 +247,7 @@ describe(
         testargs <- list(
           r = reactiveValues(
             user_name = "test_name",
+            user_role = "Medical Monitor",
             subject_id = "885",
             review_data = db_slice_rows(temp_path)
           ),
@@ -276,6 +282,7 @@ describe(
         testargs <- list(
           r = reactiveValues(
             user_name = "test_name",
+            user_role = "Medical Monitor",
             subject_id = "885",
             review_data = db_slice_rows(temp_path)
           ),
@@ -333,7 +340,8 @@ describe(
           mod_review_forms_server(
             id = "test", 
             r = reactiveValues(
-              user_name = NULL, 
+              user_name = NULL,
+              user_role = "Medical Monitor",
               subject_id = "885", 
               review_data = db_slice_rows(temp_path)
             ),
@@ -399,6 +407,7 @@ describe(
         testargs <- list(
           r = reactiveValues(
             user_name = "test_name",
+            user_role = "Medical Monitor",
             subject_id = "885",
             review_data = rev_data
           ),
@@ -424,4 +433,63 @@ describe(
   }
 )
 
-
+describe(
+  "mod_review_forms. Feature 6 | As an admin, I want to be able to restrict the 
+  right to review forms to the roles specified in the config file.", 
+  {
+    it(
+      "Scenario 1 | Role without review privileges. 
+        Given the [user_name] 'test_user',
+        and the unprivileged user_role 'restricted_role',
+        I expect that all the review options are disabled,
+        and that in the review_error output a message is shown that review is 
+        not allowed for the user's active role.
+      ", 
+      {
+        temp_path <- withr::local_tempfile(fileext = ".sqlite")
+        file.copy(test_path("fixtures", "review_testdb.sqlite"), temp_path) 
+        test_ui <- function(request){
+          tagList(
+            shinyjs::useShinyjs(),
+            bslib::page_navbar(sidebar = bslib::sidebar(mod_review_forms_ui("test")))
+          )
+        }
+        test_server <- function(input, output, session){
+          mod_review_forms_server(
+            id = "test",
+            r = reactiveValues(
+              user_name = "test_name",
+              user_role = "restricted_role",
+              subject_id = "885",
+              review_data = db_slice_rows(temp_path)
+            ),
+            active_form = reactiveVal("Adverse events"),
+            active_tab = reactiveVal("Common events"),
+            db_path = temp_path
+          )
+        }
+        test_app <- shinyApp(test_ui, test_server)
+        app <- shinytest2::AppDriver$new(
+          app_dir = test_app,
+          name = "test-mod_review_forms",
+          timeout = 8000,
+          width = 1619,
+          height = 955
+        )
+        withr::defer(app$stop())
+        app$wait_for_idle(2500)
+        # save button and comment option should not be available:
+        expect_true(app$get_js("document.getElementById('test-save_review').disabled;"))
+        expect_true(app$get_js("document.getElementById('test-add_comment').disabled;"))
+        expect_true(app$get_js("document.getElementById('test-review_comment').disabled;"))
+        expect_true(app$get_js("document.getElementById('test-form_reviewed').disabled;"))
+        
+        # correct error message is shown in the output:
+        expect_equal(
+          app$get_value(output = "test-save_review_error")$message, 
+          "Review not allowed for a 'restricted_role'."
+        )
+      }
+    )
+  }
+)

@@ -43,7 +43,7 @@ describe(
           "item"          = c("Pulse", "Sepsis"),
           "timestamp"     = c("2023-11-02 01:01:01 UTC", "2023-11-03 01:01:01 UTC"),
           "n"             = c(1),     
-          "reviewer"      = c("Admin", "Author 2"),
+          "reviewer"      = c("Admin (Medical Monitor)", "Author 2 (Administrator)"),
           "query"         = c("Query text test.", "Scoring correct? Please verify"),
           "resolved"      = c("No"),
           "resolved_date" = c(""),
@@ -61,7 +61,7 @@ describe(
           edit_date_time = "2023-11-05 01:26:00",
           reviewed = "Yes",
           comment = "",
-          reviewer = "Admin",
+          reviewer = "Admin (Medical Monitor)",
           timestamp = "2023-11-13 01:01:01",
           status = "old"
         )
@@ -70,7 +70,8 @@ describe(
         testargs <- list(
           r = reactiveValues(
             review_data = review_df,
-            user_name = "Admin"
+            user_name = "Admin",
+            user_role = "Medical Monitor"
             ),
           rev_data = reactiveValues(summary = reactive({review_df[0,]})), 
           db_path = temp_path
