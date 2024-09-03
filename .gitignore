@@ -14,3 +14,4 @@ inst/doc
 *.sqlite
 /pkgdown/
 /test_data/
+*.rds
