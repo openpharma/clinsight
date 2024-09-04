@@ -169,7 +169,7 @@ mod_review_forms_server <- function(
       req(
         review_data_active(), 
         is.logical(input$form_reviewed), 
-        is.logical(enable_any_review()),
+        is.logical(enable_any_review())
         ) 
       if(!enable_any_review()) return(FALSE)
       any(c(
