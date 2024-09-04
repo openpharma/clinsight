@@ -47,7 +47,7 @@ describe(
             item_group == app$get_value(export = "active_form")
           ) 
         expect_equal(unique(active_form_data$reviewed), "Yes")
-        expect_equal(unique(active_form_data$reviewer), "test user")
+        expect_equal(unique(active_form_data$reviewer), "test user (Administrator)")
         expect_equal(unique(active_form_data$comment), "test comment")
       }
     )

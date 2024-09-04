@@ -82,10 +82,36 @@ app_server <- function(
     subject_id        = app_vars$subject_id[1]
   )
   
+  user_error <- reactiveVal()
   observeEvent(res_auth, {
-    r$user_name <- res_auth[["name"]] %||% res_auth[["user"]]
+    r$user_name <- res_auth[["name"]] %||% res_auth[["user"]] %||% ""
     r$user_roles  <- names(res_auth[["roles"]]) %||% ""
     r$user_role   <- names(res_auth[["roles"]])[1] %||% ""
+    user_error(NULL)
+    if(r$user_name == ""){
+      user_error("No valid user name provided. ")
+    } 
+    if(r$user_role == ""){
+      user_error(paste0(user_error(), "No valid user role provided. "))
+    }
+    if(!is.null(user_error())){
+      user_error(
+        paste0(
+          user_error(), 
+          "Functionality is limited. ",
+          "Please contact the administrator to resolve this issue."
+        )
+      )
+    }
+  })
+  
+  observeEvent(user_error(), {
+    showNotification(
+      user_error(), 
+      id = "user_error", 
+      type = "error",  
+      duration = NULL
+    )
   })
   
   output$user_info <- renderText({

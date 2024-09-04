@@ -165,13 +165,15 @@ mod_report_server <- function(id, r, rev_data, db_path, table_names){
       req(review_data())
       req(input$report_type)
       select_report_data(review_data(), "review_data", input$report_type,
-                         r$user_name, input$include_from_date)
+                         paste0(r$user_name,  " (", r$user_role, ")"), 
+                         input$include_from_date)
     })
     
     selected_query_data <- reactive({
       req(query_data())
       select_report_data(query_data(), "query_data", input$report_type, 
-                         r$user_name, input$include_from_date)
+                         paste0(r$user_name,  " (", r$user_role, ")"), 
+                         input$include_from_date)
     })
     
     

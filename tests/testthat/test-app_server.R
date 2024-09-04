@@ -61,5 +61,79 @@ describe(
     #       # expect_true(inherits(output$tbl$html, "html"))
     #     })
     # })
+    
+  }
+)
+
+describe(
+  "app_server(). Feature 2 | As a user, I want to be warned if no user 
+         role or user name is available", 
+  {
+    it("warns if there is no valid user role", {
+      withr::local_envvar("GOLEM_CONFIG_ACTIVE" = "default")
+      db_path <- withr::local_tempfile(fileext = ".sqlite")
+      file.copy(testthat::test_path("fixtures/testdb.sqlite"), db_path)
+      app_session <- MockShinySession$new()
+      app_session$options$golem_options <- list(
+        "meta" = metadata,
+        "data" = clinsightful_data,
+        "user_db" = db_path
+      )
+      local_mocked_bindings(
+        authenticate_server = function(...) {
+          reactiveValues(
+            user = "test_user",
+            name = "Test user",
+            roles = "",
+            sites = data.frame("site_code" = "Site 01", "region" = "DEU")
+          )
+        }
+      )
+      
+      testServer(app_server, {
+        ns <- session$ns
+        session$flushReact()
+        expect_equal(
+          user_error(),
+          paste0("No valid user role provided. Functionality is limited. ",
+                 "Please contact the administrator to resolve this issue.")
+        )
+      }, 
+      session = app_session) |> 
+        suppressWarnings()
+    })
+    it("warns if there is no user name", {
+      withr::local_envvar("GOLEM_CONFIG_ACTIVE" = "default")
+      db_path <- withr::local_tempfile(fileext = ".sqlite")
+      file.copy(testthat::test_path("fixtures/testdb.sqlite"), db_path)
+      app_session <- MockShinySession$new()
+      app_session$options$golem_options <- list(
+        "meta" = metadata,
+        "data" = clinsightful_data,
+        "user_db" = db_path
+      )
+      local_mocked_bindings(
+        authenticate_server = function(...) {
+          reactiveValues(
+            user = "",
+            name = "",
+            roles = get_roles_from_config()[2],
+            sites = data.frame("site_code" = "Site 01", "region" = "DEU")
+          )
+        }
+      )
+      
+      testServer(app_server, {
+        ns <- session$ns
+        session$flushReact()
+        expect_equal(
+          user_error(),
+          paste0("No valid user name provided. Functionality is limited. ",
+                 "Please contact the administrator to resolve this issue.")
+        )
+      }, 
+      session = app_session) |> 
+        suppressWarnings()
+    })
   }
 )
