@@ -23,8 +23,8 @@ run_app <- function(
     ...
 ) {
   
-  data <- get_golem_config("study_data")
-  meta <- get_golem_config("meta_data")
+  data <- get_golem_config("study_data") %||% clinsightful_data 
+  meta <- get_golem_config("meta_data") %||% metadata
   user_db <- get_golem_config("user_db")
   use_shinymanager <- isTRUE(get_golem_config("user_identification") == "shinymanager")
   credentials_db <- get_golem_config("credentials_db")
