@@ -19,3 +19,4 @@ _\.new\.png$
 ^app\.R$
 ^rsconnect$
 ^manifest.json$
+^\.rscignore$
