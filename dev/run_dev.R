@@ -9,7 +9,9 @@ golem::detach_all_attached()
 # rm(list=ls(all.names = TRUE))
 
 # Document and reload your package
-golem::document_and_reload(export_all = TRUE)
+# Using golem::pkg_path() is needed here, see:
+# https://github.com/openpharma/clinsight/issues/69#issue-2504462187
+golem::document_and_reload(pkg = golem::pkg_path(), export_all = TRUE)
 
 # Run the application
 load_and_run_app <- function(){
