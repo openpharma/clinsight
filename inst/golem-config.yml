@@ -3,6 +3,8 @@ default:
   golem_version: 0.0.0.9017
   app_prod: no
   user_identification: test_user
+  study_data: !expr clinsight::clinsightful_data
+  meta_data: !expr clinsight::metadata
   user_db: user_db.sqlite
   user_roles:
    Administrator: admin
