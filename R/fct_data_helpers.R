@@ -289,14 +289,14 @@ get_meta_vars <- function(data = appdata, meta = metadata){
     dplyr::distinct(item_name, item_group) |> 
     split(~item_group) |> 
     lapply(\(x){setNames(simplify_string(x$item_name), x$item_name)})
-  vars$groups <- meta$groups$item_group
+  study_forms <- unique(meta$study_forms$item_group)
   common_forms <- unique(meta$common_forms$item_group)
   vars$all_forms <- data.frame(
     "main_tab" = c(
       rep("Common events", times = length(common_forms)),
-      rep("Study data", times = length(vars$groups))
+      rep("Study data", times = length(study_forms))
       ),
-   "form" = c(common_forms, vars$groups)
+   "form" = c(common_forms, study_forms)
   )
   
   # add variables dependent on dataset:
@@ -304,6 +304,9 @@ get_meta_vars <- function(data = appdata, meta = metadata){
   vars$Sites     <- get_unique_vars(data, c("site_code", "region")) |> 
     dplyr::arrange(factor(site_code, levels = order_string(site_code)))
   vars$table_names <- setNames(meta$table_names$raw_name, meta$table_names$table_name) 
+  # adding form-level data here since it meta vars are already passed through in 
+  # the modules that need this information (e.g. mod_main_sidebar):
+  vars$form_level_data <- meta$form_level_data
   vars
 }
 

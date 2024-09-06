@@ -119,10 +119,6 @@
                                 "bmi"                        "weight" 
       
       
-      $groups
-      [1] "Vital signs"    "Electrolytes"   "Renal function" "Liver function"
-      [5] "CBC regular"    "Response"      
-      
       $all_forms
               main_tab             form
       1  Common events   Adverse events
@@ -168,5 +164,19 @@
                   "status"         "subject_id"          "timestamp" 
                         Dx                 Type 
       "WHO.classification"               "type" 
+      
+      $form_level_data
+               item_group item_scale use_unscaled_limits review_required
+      1    Adverse events         NA                  NA            TRUE
+      2        Medication         NA                  NA            TRUE
+      3  Conc. Procedures         NA                  NA            TRUE
+      4   Medical History         NA                  NA            TRUE
+      5       Vital signs      FALSE                TRUE            TRUE
+      6      Electrolytes       TRUE               FALSE            TRUE
+      7    Renal function       TRUE               FALSE            TRUE
+      8    Liver function       TRUE               FALSE           FALSE
+      9       CBC regular       TRUE               FALSE            TRUE
+      10         Response      FALSE               FALSE            TRUE
+      11          General         NA                  NA            TRUE
       
 
