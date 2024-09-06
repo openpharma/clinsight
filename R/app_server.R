@@ -84,6 +84,8 @@ app_server <- function(
     }
   })
   
+  forms_to_review_data <- app_vars$form_level_data[c("item_group", "review_required")] 
+  
   observeEvent(user_error(), {
     showNotification(
       user_error(), 
@@ -103,18 +105,21 @@ app_server <- function(
     r <- filter_data(r, rev_sites(), subject_ids = app_vars$subject_id,
                      appdata = app_data, apptables = app_tables)
   })
-
+  
   navinfo <- reactiveValues(
     active_form       = app_vars$all_forms$form[1],
     active_tab        = "Start",
     trigger_page_change = 1
   )
-
+  
   rev_data <- reactiveValues(
     summary = reactive({
+      req(forms_to_review_data)
       r$review_data |>
+        dplyr::left_join(forms_to_review_data, by = "item_group") |> 
         dplyr::filter(
           reviewed != "Yes",
+          review_required,
           subject_id %in% r$filtered_subjects
         ) |>
         summarize_review_data() |>
