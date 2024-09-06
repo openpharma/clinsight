@@ -22,12 +22,13 @@ from the Excel format, this table will created and sanitized if needed,
 creating the minimum columns  \code{item_group}, \code{item_scale},
 \code{use_unscaled_limits}, and \code{review_required}. The column \code{item_group}
 contains the name of the forms to which the settings apply. Columns
-\code{item_scale} and \code{use_unscaled_limits} are used in \code{\link[=mod_study_forms]{mod_study_forms()}} to
-specify the scaling of the figures. It is recommended to set the required
-values here; by default, they are both set to FALSE in \code{\link[=mod_study_forms]{mod_study_forms()}}.
-The last column that is expected here is \code{review_required}, which can be
-used to specify whether review is required for a form. Will default to TRUE
-for each form it is unset for a form.
+\code{item_scale} and \code{use_unscaled_limits} are used in
+\code{\link[=mod_study_forms_server]{mod_study_forms_server()}} to specify the scaling of the figures. It is
+recommended to set the required values here; by default, they are both set
+to FALSE in \code{\link[=mod_study_forms_server]{mod_study_forms_server()}}. The last column that is expected
+here is \code{review_required}, which can be used to specify whether review is
+required for a form. Will default to TRUE for each form it is unset for a
+form.
 }
 }
 }

@@ -23,12 +23,13 @@
 #'   creating the minimum columns  `item_group`, `item_scale`,
 #'   `use_unscaled_limits`, and `review_required`. The column `item_group`
 #'   contains the name of the forms to which the settings apply. Columns
-#'   `item_scale` and `use_unscaled_limits` are used in [mod_study_forms()] to
-#'   specify the scaling of the figures. It is recommended to set the required
-#'   values here; by default, they are both set to FALSE in [mod_study_forms()].
-#'   The last column that is expected here is `review_required`, which can be
-#'   used to specify whether review is required for a form. Will default to TRUE
-#'   for each form it is unset for a form.
+#'   `item_scale` and `use_unscaled_limits` are used in
+#'   [mod_study_forms_server()] to specify the scaling of the figures. It is
+#'   recommended to set the required values here; by default, they are both set
+#'   to FALSE in [mod_study_forms_server()]. The last column that is expected
+#'   here is `review_required`, which can be used to specify whether review is
+#'   required for a form. Will default to TRUE for each form it is unset for a
+#'   form.
 #'
 #' @source Can be created with an Excel file. The Excel file format is chosen so
 #'   that the metadata can be changed easily per study. See
