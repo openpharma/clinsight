@@ -456,6 +456,17 @@ datatable_custom <- function(
     data, 
     selection = "single",
     caption = title,
+    options = list(
+      dom = "fti",
+      scrollY = 400,
+      scrollX = TRUE,
+      scroller = TRUE,
+      deferRender = TRUE,
+      scrollResize = TRUE,
+      scrollCollapse = TRUE
+    ),
+    extensions = "Scroller",
+    plugins = "scrollResize",
     ...
   ) 
 }
