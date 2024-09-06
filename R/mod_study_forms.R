@@ -182,10 +182,16 @@ mod_study_forms_server <- function(
         dplyr::select(-dplyr::all_of("subject_id"))
     })
     
+    scaling_data <- reactive({
+      cols <- c("item_scale", "use_unscaled_limits")
+      # Ensure no errors even if cols are missing, with FALSE as default:
+      lapply(add_missing_columns(item_info, cols)[1, cols], isTRUE)
+    })
+    
     ############################### Outputs: ###################################
     dynamic_figure <- reactive({
-      req(nrow(fig_data()) > 0)
-      scale_yval <- as.logical(item_info[["item_scale"]][1]) %||% FALSE
+      req(nrow(fig_data()) > 0, scaling_data())
+      scale_yval <- scaling_data()$item_scale
       yval <- ifelse(scale_yval, "value_scaled", "item_value")
       validate(need(
         fig_data()[[yval]], 
@@ -202,7 +208,7 @@ mod_study_forms_server <- function(
         point_size = "reviewed",
         height = ceiling(0.5*length(unique(fig_data()$item_name))*125+150),
         scale = scale_yval,
-        use_unscaled_limits = as.logical(item_info[["use_unscaled_limits"]][1]) %||% FALSE
+        use_unscaled_limits = scaling_data()$use_unscaled_limits
       )
     })
     

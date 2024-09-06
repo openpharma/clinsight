@@ -35,42 +35,21 @@ app_server <- function(
     credentials_db = credentials_db,
     credentials_pwd = golem::get_golem_options("credentials_pwd"),
     session = session
-    )
+  )
   
-  # load tabs in UI:
-  common_forms <- with(app_vars$all_forms, form[main_tab == "Common events"])
-  lapply(common_forms, \(i){
-    bslib::nav_insert(
-      id = "common_data_tabs",
-      mod_common_forms_ui(id = paste0("cf_", simplify_string(i)), form = i),
-      select = (i == common_forms[1])
-    )
-  })
-
-
-  study_forms <- with(app_vars$all_forms, form[main_tab == "Study data"])
-  lapply(study_forms, \(i){
-    bslib::nav_insert(
-      id = "study_data_tabs",
-      mod_study_forms_ui(paste0("sf_", simplify_string(i)), i,
-                         form_items = app_vars$items[[i]]),
-      select = (i == study_forms[1])
-    )
-  })
-
   # For query item selector drop-down menus:
   available_data <- get_available_data(
     data = app_data,
     tables = app_tables,
     all_forms = app_vars$all_forms
   )
-
+  
   # For summary review data:
   static_overview_data <- get_static_overview_data(
     data = app_data,
     expected_general_columns = unique(
       with(meta$items_expanded, item_name[item_group == "General"])
-      )
+    )
   )
   # think of using the pool package, but functions such as row_update are not yet supported.
   r <- reactiveValues(
@@ -154,7 +133,7 @@ app_server <- function(
     open_modal = 0,
     show_all = FALSE
   )
-
+  
   observeEvent(input$main_tabs, {
     golem::cat_dev("Changed main tab to", input$main_tabs, "\n")
     # This observeEvent should only be triggered by directly clicking on tabs.
@@ -162,7 +141,7 @@ app_server <- function(
     # correctly in the designated change tab modules.
     req(input$main_tabs != navinfo$active_tab)
     navinfo$active_tab <- input$main_tabs
-
+    
     if(input$main_tabs == "Common events"){
       req(input$common_data_tabs)
       navinfo$active_form <- input$common_data_tabs
@@ -179,7 +158,7 @@ app_server <- function(
     navinfo$active_form <- input$common_data_tabs
     cat("Common tab switch --> 'active_form' updated to ", navinfo$active_form, "\n")
   })
-
+  
   observeEvent(input$study_data_tabs, {
     if(input$main_tabs == "Study data"){
       navinfo$active_form <- input$study_data_tabs
@@ -187,7 +166,7 @@ app_server <- function(
                      navinfo$active_form, "\n")
     }
   })
-
+  
   observeEvent(navinfo$trigger_page_change, {
     req(input$common_data_tabs, input$study_data_tabs)
     # trigger_page_change prevents circular dependencies.
@@ -202,21 +181,43 @@ app_server <- function(
                            "Study data"    = "study_data_tabs")
     bslib::nav_select(id = id_to_change, selected = navinfo$active_form)
   })
-
-  lapply(with(app_vars$all_forms, form[main_tab == "Common events"]),
-         \(x){mod_common_forms_server(
-           id = paste0("cf_", simplify_string(x)), r = r, form = x,
-           form_items = app_vars$items[[x]], table_names = app_vars$table_names
-         ) }) |>
+  
+  ###### Load common form tabs in UI and server:
+  common_forms <- with(app_vars$all_forms, form[main_tab == "Common events"])
+  lapply(common_forms, \(i){
+    bslib::nav_insert(
+      id = "common_data_tabs",
+      mod_common_forms_ui(id = paste0("cf_", simplify_string(i)), form = i),
+      select = (i == common_forms[1])
+    )
+  })
+  lapply(common_forms, \(x){
+    mod_common_forms_server(
+      id = paste0("cf_", simplify_string(x)), r = r, form = x,
+      form_items = app_vars$items[[x]], table_names = app_vars$table_names
+    ) 
+  }) |>
     unlist(recursive = FALSE)
-
-  lapply(app_vars$groups, \(x){mod_study_forms_server(
-    id = paste0("sf_", simplify_string(x)), r = r, form = x,
-    form_items = app_vars$items[[x]], table_names = app_vars$table_names,
-    item_info = meta$groups[meta$groups$item_group == x, ]
-  ) }) |>
+  
+  ###### Load study form tabs in UI and server:
+  study_forms <- with(app_vars$all_forms, form[main_tab == "Study data"])
+  lapply(study_forms, \(i){
+    bslib::nav_insert(
+      id = "study_data_tabs",
+      mod_study_forms_ui(paste0("sf_", simplify_string(i)), form = i,
+                         form_items = app_vars$items[[i]]),
+      select = (i == study_forms[1])
+    )
+  })
+  lapply(study_forms, \(x){
+    mod_study_forms_server(
+      id = paste0("sf_", simplify_string(x)), r = r, form = x,
+      form_items = app_vars$items[[x]], table_names = app_vars$table_names,
+      item_info = app_vars$form_level_data[app_vars$form_level_data$item_group == x, ]
+    ) 
+  }) |>
     unlist(recursive = FALSE)
-
+  
   mod_start_page_server("start_page_1", r, rev_data, navinfo, app_vars$all_forms,
                         app_vars$table_names)
   mod_header_widgets_server(
@@ -225,7 +226,8 @@ app_server <- function(
     rev_data = rev_data, 
     navinfo = navinfo, 
     events = meta$events
-    )
+  )
+  
   
   # Only initiate the sidebar after successful login, because it contains a
   # modal that pops up if data is out of synch. Modals interfere with shinymanager.
@@ -238,6 +240,7 @@ app_server <- function(
       )
       req(with(pwd_mngt, must_change[user == res_auth[["user"]]]) == "FALSE") 
     }
+    
     mod_main_sidebar_server(
       id = "main_sidebar_1",
       r = r,
@@ -252,7 +255,7 @@ app_server <- function(
       available_data = available_data
     )
   })
-
+  
   mod_review_config_server(
     "review_config_1",
     r = r,
@@ -261,7 +264,7 @@ app_server <- function(
     sites = app_vars$Sites,
     subject_ids = app_vars$subject_id
   )
-
+  
   mod_queries_server(
     "queries_1",
     r = r,
@@ -272,9 +275,9 @@ app_server <- function(
   )
   mod_report_server("report_1", r = r, rev_data, db_path = user_db,
                     table_names = app_vars$table_names)
-
+  
   mod_navigate_participants_server("navigate_participants_1", r)
-
+  
   mod_navigate_review_server(
     "navigate_review_1",
     r,
