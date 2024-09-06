@@ -70,8 +70,8 @@ mod_review_forms_ui <- function(id){
 #'   updated since the last review session. In addition, if a page contains new
 #'   data, the user can mark all data in the form as being reviewed and can
 #'   (optionally) add a comment to this review action. The data will be saved in
-#'   a database. All review activity is stored with an audit-trail, with date/time 
-#'   stamps and with the reviewer's name. 
+#'   a database. All review activity is stored with an audit-trail, with
+#'   date/time stamps and with the reviewer's name.
 #'
 #' @param id Character string, used to connect the module UI with the module
 #'   Server.
@@ -83,6 +83,9 @@ mod_review_forms_ui <- function(id){
 #' @param active_tab Reactive value containing the active tab. Needed to hide
 #'   the review controls if non-relevant tabs are selected (tabs that do not
 #'   contain common forms or study forms).
+#' @param review_required_data a data frame with information about whether
+#'   review is mandatory for each form. Should contain the columns `item_group`
+#'   and `review_required`.
 #' @param db_path Character string with the file path to the database.
 #'
 #' @seealso [mod_review_forms_ui()]
@@ -92,11 +95,17 @@ mod_review_forms_server <- function(
     r, 
     active_form, 
     active_tab, 
+    review_required_data,
     db_path
 ){
   stopifnot(is.reactivevalues(r))
   stopifnot(is.reactive(active_form))
   stopifnot(is.reactive(active_tab))
+  stopifnot(is.data.frame(review_required_data))
+  if(!all(c("item_group", "review_required") %in% names(review_required_data))){
+    stop("Either the 'study_forms or 'review_required' column is missing ", 
+         "from the review_required data frame")
+  }
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     
@@ -157,8 +166,17 @@ mod_review_forms_server <- function(
       get_roles_from_config()[r$user_role] %in% get_golem_config("allow_to_review")
     })
     
+    review_required <- reactive({
+      req(active_form(), review_required_data)
+      with(
+        review_required_data, 
+        review_required[item_group == active_form()]
+      ) %||% TRUE
+    })
+    
     enable_any_review <- reactive({
       all(c(
+        review_required(),
         user_allowed_to_review(),
         role_allowed_to_review(),
         nrow(review_data_active()) != 0
@@ -278,6 +296,10 @@ mod_review_forms_server <- function(
         role_allowed_to_review(), 
         paste0("Review not allowed for a '", r$user_role, "'.")
         ))
+      validate(need(
+        review_required(), 
+        "Review not required"
+      ))
       validate(need(
         nrow(review_data_active()) != 0,
         "Nothing to review"

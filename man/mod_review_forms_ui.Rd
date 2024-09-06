@@ -20,8 +20,8 @@ displayed in the application has any values that are newly entered or
 updated since the last review session. In addition, if a page contains new
 data, the user can mark all data in the form as being reviewed and can
 (optionally) add a comment to this review action. The data will be saved in
-a database. All review activity is stored with an audit-trail, with date/time
-stamps and with the reviewer's name.
+a database. All review activity is stored with an audit-trail, with
+date/time stamps and with the reviewer's name.
 }
 \seealso{
 \code{\link[=mod_review_forms_server]{mod_review_forms_server()}}

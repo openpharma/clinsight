@@ -112,6 +112,7 @@ mod_main_sidebar_server <- function(
     mod_review_forms_server(
       id = "review_forms_1", 
       r = r, 
+      review_required_data = app_vars$form_level_data[c("item_group", "review_required")],
       active_form = reactive(navinfo$active_form), 
       active_tab = reactive(navinfo$active_tab), 
       db_path = db_path

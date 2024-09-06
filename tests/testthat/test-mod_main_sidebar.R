@@ -16,7 +16,8 @@ describe(
       app_vars = list(
         all_forms = data.frame(),
         Sites = data.frame(),
-        subject_id = ""
+        subject_id = "",
+        form_level_data = data.frame("item_group" = "", "review_required" = TRUE)
       ),
       db_path = "",
       forms_to_review = reactiveVal(),
@@ -79,14 +80,14 @@ describe(
           app_vars = list(
             all_forms = data.frame(),
             Sites = data.frame(),
-            subject_id = ""
+            subject_id = "",
+            form_level_data = data.frame("item_group" = "Adverse events", "review_required" = TRUE)
           ),
           db_path = "",
           forms_to_review = reactiveVal(),
           available_data = available_data
         )
       }
-      
       test_app <- shinyApp(test_ui, test_server)
       app <- shinytest2::AppDriver$new(
         app_dir = test_app, 
@@ -129,7 +130,8 @@ describe(
                 app_vars = list(
                   all_forms = data.frame(),
                   Sites = data.frame(),
-                  subject_id = ""
+                  subject_id = "",
+                  form_level_data = data.frame("item_group" = "Adverse events", "review_required" = TRUE)
                 ),
                 db_path = "",
                 forms_to_review = reactiveVal(),
