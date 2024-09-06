@@ -19,21 +19,19 @@ get_metadata <- function(
     filepath,
     expand_tab_items = c("common_forms", "study_forms", "general"),
     expand_cols = "suffix"
-    
 ){
   stopifnot(is.character(filepath))
   if(!grepl(".xlsx$", filepath)) stop(
     "currently only .xlsx files are supported as metadata input"
-    )
+  )
   sheets <- readxl::excel_sheets(filepath)
   sheets <- setNames(sheets, sheets)
   meta <- lapply(sheets, function(x){
     readxl::read_excel(filepath, sheet = x, col_types = "text")
   })
   if(length(expand_tab_items[nchar(expand_tab_items) > 0 ] ) == 0) return(meta)
-  if("items_expanded" %in% names(meta)) return({
-    message("'items_expanded' already present. Expanding items aborted.")
-    meta
+  if("items_expanded" %in% names(meta)) warning({
+    "Table 'items_expanded' already present. The old table will be overwritten."
   })
   missing_tab_items <- expand_tab_items[!expand_tab_items %in% names(meta)]
   if(length(missing_tab_items) > 0) {
@@ -53,9 +51,27 @@ get_metadata <- function(
       separator = ",",
       unite_with = "var",
       remove_cols = FALSE
-    )
+    ) 
   
-  lapply(setNames(names(meta), names(meta)), \(x){
+  # Verify and clean form-level data:
+  meta[["form_level_data"]] <- get_form_level_data(
+    meta[["form_level_data"]], 
+    all_forms = unique(meta$items_expanded$item_group)
+  )
+  
+  # verify if all required columns are available and if not create them:
+  missing_cols <- required_meta_cols[!required_meta_cols %in% names(meta$items_expanded)]
+  if(length(missing_cols) != 0){
+    warning(
+      sprintf(
+        "Required column '%s' will be created since it is missing in the metadata\n", 
+        missing_cols
+      )
+    )
+    meta$items_expanded <- add_missing_columns(meta$items_expanded, missing_cols)
+  }
+  
+  lapply(setNames(nm = names(meta)), \(x){
     if(!x %in% expand_tab_items) return(meta[[x]])
     meta[[x]] |> 
       dplyr::select(-var, -suffix) |> 
