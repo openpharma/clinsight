@@ -291,6 +291,67 @@ get_meta_vars <- function(data = appdata, meta = metadata){
   vars
 }
 
+#' Get form-level data.
+#'
+#' Internal function to clean form-level data and return a data frame with all
+#' forms that should be specified, and include form-level data for all of them.
+#' Will also set default values (as defined in the package) if the value is not
+#' set and/or is missing.
+#'
+#' @param data A data frame with form-level data. Should at least contain the
+#'   `form_column`.
+#' @param all_forms A character vector containing the names of all forms for
+#'   which form-level data should be specified.
+#' @param form_column Character string with the column in which the form names
+#'   are stored in `data`.
+#'
+#' @return A cleaned data frame with form-level data.
+#' 
+get_form_level_data <- function(
+    data,
+    all_forms,
+    form_column = "item_group"
+){
+  stopifnot(is.character(form_column))
+  stopifnot(is.character(all_forms))
+  all_forms_df <- setNames(data.frame(all_forms), form_column)
+  default_data <- data.frame(all_forms_df, form_level_defaults)
+
+  if(is.null(data) || !is.data.frame(data) ){
+    warning("No valid update table found. Falling back to defaults.")
+    return(default_data)
+  }
+  
+  if(!form_column %in% names(data)){
+    stop(sprintf("'%s' missing in 'form_level_data' table.", form_column))
+  }
+  
+  missing_forms <- data[!data[[form_column]] %in% all_forms, ][[form_column]]
+  if(length(missing_forms) != 0){
+    warning(
+      "Ignoring vars defined in 'form_level_data' but not in metadata:\n",
+      sprintf("'%s' ", missing_forms)
+      )
+    data <- data[!data[[form_column]] %in% missing_forms, ]
+  }
+  
+  if(nrow(data) == 0){
+    warning("No forms with form-level data found. Returning defaults.")
+    return(default_data)
+  }
+  # Return data in two steps to preserve the order as in `all_forms`
+  
+  # Add missing columns
+  data <- data |> 
+    add_missing_columns(names(form_level_defaults)) |> 
+    readr::type_convert(col_types = form_level_default_specs)
+  
+  # Use default only if value is missing after type conversion:
+  all_forms_df |> 
+    dplyr::left_join(data, by = form_column) |>
+    tidyr::replace_na(as.list(form_level_defaults))
+}
+
 #' Get base value
 #' 
 #' Adds base value to a long-format data frame.
