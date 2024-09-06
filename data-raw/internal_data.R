@@ -48,6 +48,33 @@ clinsight_col_specs <- c(
 # Required columns needed in study data for the application to function.
 required_col_names <- names(clinsight_col_specs$cols)
 
+required_meta_cols <- c(
+  "var", 
+  "suffix", 
+  "item_name", 
+  "item_group", 
+  "unit", 
+  "lower_limit", 
+  "upper_limit", 
+  "item_type"
+  )
+
+# Used in get_form_level_data(). Set a default if ClinSight needs the columns 
+# to function properly. 
+# Choosing NA for vars like item_scale, because setting these variables by 
+# default for forms like 'Adverse events' does not make so much sense. 
+form_level_defaults <- data.frame(
+  "item_scale" = as.logical(NA),
+  "use_unscaled_limits" = as.logical(NA), 
+  "review_required" = TRUE
+)
+
+# Converting column types, and do not guess default: 
+form_level_default_specs <- c(form_level_defaults, ".default" = "c") |> 
+  sapply(class) |> 
+  readr::as.col_spec()
 
 usethis::use_data(col_palette, query_data_skeleton, required_col_names, 
-                  clinsight_col_specs, overwrite = TRUE, internal = TRUE)
+                  required_meta_cols, clinsight_col_specs, 
+                  form_level_defaults, form_level_default_specs, 
+                  overwrite = TRUE, internal = TRUE)
