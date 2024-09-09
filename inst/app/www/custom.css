@@ -13,17 +13,14 @@
 }
 
 .bslib-value-box .value-box-showcase {
-  padding: 0.1rem 1rem
+  padding: 0.1rem 1rem;
+  font-size: 1rem;
 }
 
-/* padding of main application
-.bslib-sidebar-layout > .main {
-    padding-top: 1rem;
-    padding-right: 4rem;
-    padding-bottom: 1.5rem;
-    padding-left: 4rem;
+.bslib-value-box .value-box-showcase .fas {
+  font-size: 2rem;
 }
-*/
+
 
 /* Remove unneeded padding around the timeline figure */
 .timeline-fig-basic > .card-body {
