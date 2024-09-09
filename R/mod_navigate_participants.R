@@ -157,7 +157,7 @@ mod_navigate_participants_server <- function(id, r){
         value = subject_info()$pt_info,
         showcase = subject_info()$status_icon, 
         max_height = "100px",
-        theme_color = "primary"
+        theme = "primary"
       )
     }) 
     

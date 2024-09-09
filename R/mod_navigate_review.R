@@ -11,7 +11,7 @@ mod_navigate_review_ui <- function(id){
     bslib::value_box(
       id = ns("review_value_box"),
       title = "To review:",
-      theme_color = "primary",
+      theme = "primary",
       value = uiOutput(ns("forms_to_review")),
       showcase = icon("clipboard-list", class = 'fa-2x')
     )

@@ -122,7 +122,7 @@ mod_header_widgets_server <- function(id, r, rev_data, navinfo, events){
         title = paste0("SAEs: ", SAEvalue.individual()), 
         value = paste0("AEs: ", AEvalue.individual()),
         showcase = icon("house-medical", class = 'fa-2x'),
-        theme_color = if(all_AEs_reviewed()) "primary" else "warning" 
+        theme = if(all_AEs_reviewed()) "primary" else "warning" 
       )
     })
     output[["visit_figure"]] <- renderPlot(
