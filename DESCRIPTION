@@ -16,7 +16,7 @@ BugReports: https://github.com/openpharma/clinsight/issues
 Depends: 
     R (>= 4.1)
 Imports: 
-    bslib,
+    bslib (>= 0.6.2),
     config,
     DBI,
     dbplyr (>= 2.4.0),
