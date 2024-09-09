@@ -1,7 +1,7 @@
 {
   "output": {
     "header_widgets_1-ae_box": {
-      "html": "<div class=\"card bslib-card bslib-mb-spacing html-fill-item html-fill-container bslib-value-box border-0 bg-primary\" data-bslib-card-init data-require-bs-caller=\"card() value_box()\" data-require-bs-version=\"5 5\">\n  <div class=\"card-body bslib-gap-spacing html-fill-item html-fill-container\" style=\"margin-top:auto;margin-bottom:auto;flex:1 1 auto; padding:0;\">\n    <div class=\"bslib-grid bslib-mb-spacing html-fill-item value-box-grid\" data-require-bs-caller=\"layout_column_wrap()\" data-require-bs-version=\"5\" style=\"--bslib-grid-height:auto;--bslib-grid-height-mobile:auto;gap:0px; --bslib-value-box-widths:30% 70%;--bslib-value-box-widths-full-screen:1fr auto;\">\n      <div class=\"bslib-gap-spacing html-fill-container\">\n        <div class=\"value-box-showcase overflow-hidden html-fill-item html-fill-container\" style=\"--bslib-value-box-max-height:100px;--bslib-value-box-max-height-full-screen:67%;\">\n          <i class=\"fas fa-house-medical fa-2x\" role=\"presentation\" aria-label=\"house-medical icon\"><\/i>\n        <\/div>\n      <\/div>\n      <div class=\"bslib-gap-spacing html-fill-container\">\n        <div class=\"value-box-area html-fill-item html-fill-container border-start\">\n          <p>SAEs: 0<\/p>\n          <p>AEs: 0<\/p>\n        <\/div>\n      <\/div>\n    <\/div>\n  <\/div>\n  <script data-bslib-card-init>bslib.Card.initializeAllCards();<\/script>\n<\/div>",
+      "html": "<div class=\"card bslib-card bslib-mb-spacing html-fill-item html-fill-container bslib-value-box bg-primary showcase-left-center\" data-bslib-card-init data-require-bs-caller=\"card() value_box()\" data-require-bs-version=\"5 5\">\n  <div class=\"card-body bslib-gap-spacing html-fill-item html-fill-container\" style=\"margin-top:auto;margin-bottom:auto;flex:1 1 auto; padding:0;\">\n    <div class=\"value-box-grid html-fill-item\" style=\"--bslib-grid-height:auto;--bslib-grid-height-mobile:auto;---bslib-value-box-showcase-w:30%;---bslib-value-box-showcase-w-fs:1fr;---bslib-value-box-showcase-max-h:100px;---bslib-value-box-showcase-max-h-fs:67%;\">\n      <div class=\"value-box-showcase html-fill-item html-fill-container\">\n        <i class=\"fas fa-house-medical fa-2x\" role=\"presentation\" aria-label=\"house-medical icon\"><\/i>\n      <\/div>\n      <div class=\"value-box-area html-fill-item html-fill-container\">\n        <p class=\"value-box-title\">SAEs: 0<\/p>\n        <p class=\"value-box-value\">AEs: 0<\/p>\n      <\/div>\n    <\/div>\n  <\/div>\n  <script data-bslib-card-init>bslib.Card.initializeAllCards();<\/script>\n<\/div>",
       "deps": [
         {
           "name": "font-awesome",
@@ -21,9 +21,9 @@
         },
         {
           "name": "htmltools-fill",
-          "version": "0.5.6.1",
+          "version": "0.5.8.1",
           "src": {
-            "href": "htmltools-fill-0.5.6.1"
+            "href": "htmltools-fill-0.5.8.1"
           },
           "meta": null,
           "script": null,
@@ -33,68 +33,48 @@
           "all_files": true
         },
         {
-          "name": "bslib-grid-styles",
-          "version": "0.5.1",
+          "name": "bslib-component-js",
+          "version": "0.8.0",
           "src": {
-            "href": "bslib-grid-styles-0.5.1"
+            "href": "bslib-component-js-0.8.0"
+          },
+          "meta": null,
+          "script": [
+            {
+              "src": "components.min.js"
+            },
+            {
+              "src": "web-components.min.js",
+              "type": "module"
+            }
+          ],
+          "stylesheet": null,
+          "head": null,
+          "attachment": null,
+          "all_files": true
+        },
+        {
+          "name": "bslib-component-css",
+          "version": "0.8.0",
+          "src": {
+            "href": "bslib-component-css-0.8.0"
           },
           "meta": null,
           "script": null,
-          "stylesheet": "grid.css",
+          "stylesheet": "components.css",
           "head": null,
           "attachment": null,
           "all_files": true
         },
         {
           "name": "bslib-tag-require",
-          "version": "0.5.1",
+          "version": "0.8.0",
           "src": {
-            "href": "bslib-tag-require-0.5.1"
+            "href": "bslib-tag-require-0.8.0"
           },
           "meta": null,
           "script": "tag-require.js",
           "stylesheet": null,
-          "head": null,
-          "attachment": null,
-          "all_files": true
-        },
-        {
-          "name": "bslib-value_box-styles",
-          "version": "0.5.1",
-          "src": {
-            "href": "bslib-value_box-styles-0.5.1"
-          },
-          "meta": null,
-          "script": null,
-          "stylesheet": "value_box.css",
-          "head": null,
-          "attachment": null,
-          "all_files": true
-        },
-        {
-          "name": "bslib-card-js",
-          "version": "0.5.1",
-          "src": {
-            "href": "bslib-card-js-0.5.1"
-          },
-          "meta": null,
-          "script": {
-            "src": "card.min.js"
-          },
-          "stylesheet": null,
-          "head": null,
-          "attachment": null,
-          "all_files": true
-        },
-        {
-          "name": "bslib-card-styles",
-          "version": "0.5.1",
-          "src": {
-            "href": "bslib-card-styles-0.5.1"
-          },
-          "meta": null,
-          "script": null,
-          "stylesheet": "card.css",
           "head": null,
           "attachment": null,
           "all_files": true
@@ -104,7 +84,7 @@
     "main_sidebar_1-synch_info-db_synch_info": "EDC Sync date: <br>2023-09-15 10:10:00 UTC<br><br>EDC latest data: 2023-09-14 15:17:00",
     "navigate_participants_1-status": "<b>BEL_04_772<\/b><br><b>Sex:<\/b> Male<br><b>Age:<\/b> 78yrs.<br><b>Status:<\/b> Enrolled<br><b>ECOG:<\/b> 0<br><b>Dx:<\/b> Syndrome O",
     "navigate_participants_1-subject_info": {
-      "html": "<div class=\"card bslib-card bslib-mb-spacing html-fill-item html-fill-container bslib-value-box border-0 bg-primary\" data-bslib-card-init data-require-bs-caller=\"card() value_box()\" data-require-bs-version=\"5 5\">\n  <div class=\"card-body bslib-gap-spacing html-fill-item html-fill-container\" style=\"margin-top:auto;margin-bottom:auto;flex:1 1 auto; padding:0;\">\n    <div class=\"bslib-grid bslib-mb-spacing html-fill-item value-box-grid\" data-require-bs-caller=\"layout_column_wrap()\" data-require-bs-version=\"5\" style=\"--bslib-grid-height:auto;--bslib-grid-height-mobile:auto;gap:0px; --bslib-value-box-widths:30% 70%;--bslib-value-box-widths-full-screen:1fr auto;\">\n      <div class=\"bslib-gap-spacing html-fill-container\">\n        <div class=\"value-box-showcase overflow-hidden html-fill-item html-fill-container\" style=\"--bslib-value-box-max-height:100px;--bslib-value-box-max-height-full-screen:67%;\">\n          <i class=\"fas fa-user-slash fa-2x\" role=\"presentation\" aria-label=\"user-slash icon\"><\/i>\n        <\/div>\n      <\/div>\n      <div class=\"bslib-gap-spacing html-fill-container\">\n        <div class=\"value-box-area html-fill-item html-fill-container border-start\">\n          <p>BEL_08_45<\/p>\n          <p>Male, 64yrs.<\/p>\n        <\/div>\n      <\/div>\n    <\/div>\n  <\/div>\n  <script data-bslib-card-init>bslib.Card.initializeAllCards();<\/script>\n<\/div>",
+      "html": "<div class=\"card bslib-card bslib-mb-spacing html-fill-item html-fill-container bslib-value-box bg-primary showcase-left-center\" data-bslib-card-init data-require-bs-caller=\"card() value_box()\" data-require-bs-version=\"5 5\" style=\"max-height:100px;\">\n  <div class=\"card-body bslib-gap-spacing html-fill-item html-fill-container\" style=\"margin-top:auto;margin-bottom:auto;flex:1 1 auto; padding:0;\">\n    <div class=\"value-box-grid html-fill-item\" style=\"--bslib-grid-height:auto;--bslib-grid-height-mobile:auto;---bslib-value-box-showcase-w:30%;---bslib-value-box-showcase-w-fs:1fr;---bslib-value-box-showcase-max-h:100px;---bslib-value-box-showcase-max-h-fs:67%;\">\n      <div class=\"value-box-showcase html-fill-item html-fill-container\">\n        <i class=\"fas fa-user-slash fa-2x\" role=\"presentation\" aria-label=\"user-slash icon\"><\/i>\n      <\/div>\n      <div class=\"value-box-area html-fill-item html-fill-container\">\n        <p class=\"value-box-title\">BEL_08_45<\/p>\n        <p class=\"value-box-value\">Male, 64yrs.<\/p>\n      <\/div>\n    <\/div>\n  <\/div>\n  <script data-bslib-card-init>bslib.Card.initializeAllCards();<\/script>\n<\/div>",
       "deps": [
         {
           "name": "font-awesome",
@@ -124,9 +104,9 @@
         },
         {
           "name": "htmltools-fill",
-          "version": "0.5.6.1",
+          "version": "0.5.8.1",
           "src": {
-            "href": "htmltools-fill-0.5.6.1"
+            "href": "htmltools-fill-0.5.8.1"
           },
           "meta": null,
           "script": null,
@@ -136,68 +116,48 @@
           "all_files": true
         },
         {
-          "name": "bslib-grid-styles",
-          "version": "0.5.1",
+          "name": "bslib-component-js",
+          "version": "0.8.0",
           "src": {
-            "href": "bslib-grid-styles-0.5.1"
+            "href": "bslib-component-js-0.8.0"
+          },
+          "meta": null,
+          "script": [
+            {
+              "src": "components.min.js"
+            },
+            {
+              "src": "web-components.min.js",
+              "type": "module"
+            }
+          ],
+          "stylesheet": null,
+          "head": null,
+          "attachment": null,
+          "all_files": true
+        },
+        {
+          "name": "bslib-component-css",
+          "version": "0.8.0",
+          "src": {
+            "href": "bslib-component-css-0.8.0"
           },
           "meta": null,
           "script": null,
-          "stylesheet": "grid.css",
+          "stylesheet": "components.css",
           "head": null,
           "attachment": null,
           "all_files": true
         },
         {
           "name": "bslib-tag-require",
-          "version": "0.5.1",
+          "version": "0.8.0",
           "src": {
-            "href": "bslib-tag-require-0.5.1"
+            "href": "bslib-tag-require-0.8.0"
           },
           "meta": null,
           "script": "tag-require.js",
           "stylesheet": null,
-          "head": null,
-          "attachment": null,
-          "all_files": true
-        },
-        {
-          "name": "bslib-value_box-styles",
-          "version": "0.5.1",
-          "src": {
-            "href": "bslib-value_box-styles-0.5.1"
-          },
-          "meta": null,
-          "script": null,
-          "stylesheet": "value_box.css",
-          "head": null,
-          "attachment": null,
-          "all_files": true
-        },
-        {
-          "name": "bslib-card-js",
-          "version": "0.5.1",
-          "src": {
-            "href": "bslib-card-js-0.5.1"
-          },
-          "meta": null,
-          "script": {
-            "src": "card.min.js"
-          },
-          "stylesheet": null,
-          "head": null,
-          "attachment": null,
-          "all_files": true
-        },
-        {
-          "name": "bslib-card-styles",
-          "version": "0.5.1",
-          "src": {
-            "href": "bslib-card-styles-0.5.1"
-          },
-          "meta": null,
-          "script": null,
-          "stylesheet": "card.css",
           "head": null,
           "attachment": null,
           "all_files": true
@@ -216,6 +176,34 @@
             {
               "orderable": false,
               "targets": 0
+            },
+            {
+              "name": " ",
+              "targets": 0
+            },
+            {
+              "name": "Subject",
+              "targets": 1
+            },
+            {
+              "name": "Status",
+              "targets": 2
+            },
+            {
+              "name": "Dx",
+              "targets": 3
+            },
+            {
+              "name": "Age",
+              "targets": 4
+            },
+            {
+              "name": "Sex",
+              "targets": 5
+            },
+            {
+              "name": "Event",
+              "targets": 6
             }
           ],
           "order": [
@@ -261,9 +249,9 @@
         },
         {
           "name": "dt-core-bootstrap5",
-          "version": "1.13.4",
+          "version": "1.13.6",
           "src": {
-            "href": "dt-core-bootstrap5-1.13.4"
+            "href": "dt-core-bootstrap5-1.13.6"
           },
           "meta": null,
           "script": [
@@ -278,9 +266,9 @@
         },
         {
           "name": "bootstrap",
-          "version": "5.2.2",
+          "version": "5.3.1",
           "src": {
-            "href": "bootstrap-5.2.2"
+            "href": "bootstrap-5.3.1"
           },
           "meta": {
             "viewport": "width=device-width, initial-scale=1, shrink-to-fit=no"
@@ -294,9 +282,9 @@
         },
         {
           "name": "bs3compat",
-          "version": "0.5.1",
+          "version": "0.8.0",
           "src": {
-            "href": "bs3compat-0.5.1"
+            "href": "bs3compat-0.8.0"
           },
           "meta": null,
           "script": [
@@ -311,9 +299,9 @@
         },
         {
           "name": "crosstalk",
-          "version": "1.2.0",
+          "version": "1.2.1",
           "src": {
-            "href": "crosstalk-1.2.0"
+            "href": "crosstalk-1.2.1"
           },
           "meta": null,
           "script": "js/crosstalk.min.js",
