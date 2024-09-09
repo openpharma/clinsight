@@ -445,19 +445,16 @@ datatable_custom <- function(
     stopifnot(is.character(rename_vars))
     data <- dplyr::rename(data, dplyr::any_of(rename_vars))
   }
-  if(!is.null(title)){
-    stopifnot(is.character(title))
-    title <- tags$caption(
-      style = 'caption-side: top; text-align: center;',
-      tags$h5(tags$b(title))
-    )
-  }
+  stopifnot(is.null(title) | is.character(title))
   DT::datatable(
     data, 
     selection = "single",
-    caption = title,
     options = list(
-      dom = "fti",
+      initComplete = DT::JS(
+        "function() {",
+        paste0("$(this.api().table().container()).find('.header').html('", title, "')"),
+        "}"),
+      dom = 'f<"header h5">ti',
       scrollY = 400,
       scrollX = TRUE,
       scroller = TRUE,
