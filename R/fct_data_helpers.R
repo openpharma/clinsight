@@ -452,7 +452,7 @@ datatable_custom <- function(
     options = list(
       initComplete = DT::JS(
         "function() {",
-        paste0("$(this.api().table().container()).find('.header').html('", title, "')"),
+        paste0("$(this.api().table().container()).find('.header').html(", htmltools::htmlEscape(deparse(title)), ")"),
         "}"),
       dom = 'f<"header h5">ti',
       scrollY = 400,
