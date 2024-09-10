@@ -25,3 +25,4 @@ to minimize the package dependencies of the production version.
 - Fixed issue with the timeline figure when a subject had no completed events.
 - Fixed pre-processing bug where `get_metadata()` would error when a metadata.xlsx tab exist, but were empty
 - Fixed error when running `golem::run_dev()` when `clinsight` was not installed.
+- Fixed error that the app did not recognize the user roles when using `shinymanager`. 
