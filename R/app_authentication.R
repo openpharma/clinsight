@@ -34,7 +34,7 @@ initialize_credentials <- function(
     "admin"    = TRUE,
     "name"     = "Admin",
     "mail"     = "", 
-    "roles"    = names(get_roles_from_config())[1], 
+    "roles"    = get_roles_from_config()[1], 
     "sites"    = "",
     stringsAsFactors = FALSE, 
     check.names = FALSE
@@ -130,7 +130,7 @@ authenticate_server <- function(
       inputs_list = list(
         "roles" = list(
           fun = "selectInput", 
-          args = list(choices = names(all_roles), multiple = TRUE) 
+          args = list(choices = all_roles, multiple = TRUE)
         ),
         "sites" = list(
           fun = "selectInput",
