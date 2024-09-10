@@ -289,6 +289,7 @@ app_server <- function(
   shiny::exportTestValues(
     user_db = user_db,
     active_participant = r$subject_id,
-    active_form = navinfo$active_form
+    active_form = navinfo$active_form,
+    user_error = user_error()
   )
 }
