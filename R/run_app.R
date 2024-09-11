@@ -75,6 +75,10 @@ run_app <- function(
   
   ## Verify credentials database, if applicable
   if(use_shinymanager){
+    rlang::check_installed(
+      "shinymanager", 
+      reason = "to use it for authentication management in ClinSight."
+      )
     stopifnot("credentials_db should be a character vector with a file path" = 
                 is.character(credentials_db))
     stopifnot("No valid credentials database pwd provided" = is.character(credentials_pwd))
