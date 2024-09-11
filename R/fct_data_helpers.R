@@ -438,6 +438,10 @@ datatable_custom <- function(
     rename_vars = NULL, 
     title = NULL, 
     selection = "single",
+    extensions = "Scroller",
+    plugins = "scrollResize",
+    dom = "fti",
+    options = list(),
     ...
     ){
   stopifnot(is.data.frame(data))
@@ -446,24 +450,28 @@ datatable_custom <- function(
     data <- dplyr::rename(data, dplyr::any_of(rename_vars))
   }
   stopifnot(is.null(title) | is.character(title))
-  DT::datatable(
-    data, 
-    selection = selection,
-    options = list(
+  stopifnot(grepl("t", dom, fixed = TRUE))
+  stopifnot(is.list(options))
+  
+  domain <- gsub(pattern = "(t)", replacement = '<"header h5">\\1', dom)
+  opts <- modifyList(
+    list(scrollY = 400, scrollX = TRUE, scroller = TRUE, deferRender = TRUE, 
+         scrollResize = TRUE, scrollCollapse = TRUE), 
+    options) |> 
+    modifyList(list(
       initComplete = DT::JS(
         "function() {",
         paste0("$(this.api().table().container()).find('.header').html(", htmltools::htmlEscape(deparse(title)), ")"),
         "}"),
-      dom = 'f<"header h5">ti',
-      scrollY = 400,
-      scrollX = TRUE,
-      scroller = TRUE,
-      deferRender = TRUE,
-      scrollResize = TRUE,
-      scrollCollapse = TRUE
-    ),
-    extensions = "Scroller",
-    plugins = "scrollResize",
+      dom = domain
+    ))
+  
+  DT::datatable(
+    data, 
+    selection = selection,
+    options = opts,
+    extensions = extensions,
+    plugins = plugins,
     ...
   ) 
 }
