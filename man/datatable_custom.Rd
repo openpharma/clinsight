@@ -30,7 +30,9 @@ rename any column names found in this vector to the provided name.}
 
 \item{plugins}{See \code{\link[DT:datatable]{DT::datatable()}}. Default set to 'scrollResize'.}
 
-\item{dom}{See \url{https://datatables.net/reference/option/dom}. A div element will be inserted before the table for the table title. Default set to 'fti' resulting in 'f<"header h5">ti'.}
+\item{dom}{See \url{https://datatables.net/reference/option/dom}. A div
+element will be inserted before the table for the table title. Default set
+to 'fti' resulting in 'f<"header h5">ti'.}
 
 \item{options}{See \code{\link[DT:datatable]{DT::datatable()}}. Must be a list.
 \itemize{
@@ -50,7 +52,7 @@ rename any column names found in this vector to the provided name.}
 }
 }}
 
-\item{...}{Other optional arguments that will be parsed to \code{\link[DT:datatable]{DT::datatable()}}.}
+\item{...}{Other optional arguments that will be passed to \code{\link[DT:datatable]{DT::datatable()}}.}
 }
 \value{
 A \code{DT::datatable} object.
