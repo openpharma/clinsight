@@ -139,14 +139,12 @@ fig_timeline <- function(
  # is yet selected
  if(nrow(data) == 0 || nrow(completed_events) == 0) fig else {
    fig + 
-     ggplot2::geom_segment(
-       data = completed_events,
-       ggplot2::aes(
-         x = dplyr::first(event_label), 
-         xend = dplyr::last(event_label),
-         y = 1, 
-         yend = 1
-       )
+     ggplot2::annotate(
+       geom = "segment",
+       x = dplyr::first(completed_events$event_label), 
+       xend = dplyr::last(completed_events$event_label),
+       y = 1, 
+       yend = 1
      ) +
      ggplot2::geom_point(
        data = completed_events, 
