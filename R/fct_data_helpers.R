@@ -448,7 +448,7 @@ datatable_custom <- function(
   stopifnot(is.null(title) | is.character(title))
   DT::datatable(
     data, 
-    selection = "single",
+    selection = selection,
     options = list(
       initComplete = DT::JS(
         "function() {",
