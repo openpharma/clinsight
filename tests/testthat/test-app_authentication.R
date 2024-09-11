@@ -124,6 +124,7 @@ describe(
         app$click("auth-go_auth")
         app$wait_for_idle()
         app$expect_values(input = TRUE, output = TRUE)
+        expect_null(app$get_value(export = "user_error"))
         
         # After login, connection with the shiny app is lost in shinytest2, and 
         # therefore further automated tests dont work. Dont know how to solve this at the moment. 

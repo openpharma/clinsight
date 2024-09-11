@@ -101,12 +101,12 @@ mod_queries_server <- function(id, r, navinfo, all_forms, db_path, table_names){
     
     initial_queries <- reactive({
       df <- with(r$query_data, r$query_data[n == 1, ] )
-      if(nrow(df) == 0) return(df) 
+      if(identical(nrow(df),0)) return(df) 
       df <- df |>
         dplyr::slice_min(timestamp, by = c(subject_id, event_label, query_id)) |>
         dplyr::arrange(.data[["resolved"]], .data[["type"]])
       
-      if(input$show_resolved) return(df)
+      if(isTRUE(input$show_resolved)) return(df)
       with(df, df[resolved == "No", ] )
     })
     
