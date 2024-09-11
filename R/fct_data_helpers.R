@@ -427,7 +427,23 @@ add_missing_columns <- function(
 #'   rename any column names found in this vector to the provided name.
 #' @param title Optional. Character string with the title of the table.
 #' @param selection See [DT::datatable()]. Default set to 'single'. 
-#' @param ... Other optional arguments that will be parsed to [DT::datatable()].
+#' @param extensions See [DT::datatable()]. Default set to 'Scroller'.
+#' @param plugins See [DT::datatable()]. Default set to 'scrollResize'.
+#' @param dom See \url{https://datatables.net/reference/option/dom}. A div
+#'   element will be inserted before the table for the table title. Default set
+#'   to 'fti' resulting in 'f<"header h5">ti'.
+#' @param options See [DT::datatable()]. Must be a list.
+#'   * Modifiable defaults:
+#'     * `scrollY = '400px'`
+#'     * `scrollX = TRUE`
+#'     * `scroller = TRUE`
+#'     * `deferREnder = TRUE`
+#'     * `scrollResize = TRUE`
+#'     * `scrollCollapse = TRUE`
+#'   * Non-modifiable defaults:
+#'     * `dom`: Defined by the `dom` parameter.
+#'     * `initComplete`: Defaults to a function to insert table title into dataTable container.
+#' @param ... Other optional arguments that will be passed to [DT::datatable()].
 #'
 #' @return A `DT::datatable` object.
 #' @export
