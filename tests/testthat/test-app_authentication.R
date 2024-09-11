@@ -14,6 +14,7 @@ describe(
         and that the test data frame within the existing database still exists 
         and is unchaged", 
       {
+        testthat::skip_if_not_installed("shinymanager")
         db_name <- file.path(withr::local_tempdir(), "credentials.db")
         con <- get_db_connection(db_name)
         DBI::dbWriteTable(con, "test", data.frame(test = 1))
@@ -39,6 +40,7 @@ describe(
         from the initialization password ('1234'),
         and that the value (password) [must_change] is set to TRUE.", 
       {
+        testthat::skip_if_not_installed("shinymanager")
         db_name <- file.path(withr::local_tempdir(), "credentials.sqlite")
         initialize_credentials(
           credentials_db = db_name,
@@ -77,6 +79,7 @@ describe(
         and [credentials_pwd] is set to 'test_password', 
         I expect that a new credentials database will be created in the specified folder.", 
       {
+        testthat::skip_if_not_installed("shinymanager")
         db_name <- file.path(withr::local_tempdir(), "non_existing_folder/credentials.sqlite")
         initialize_credentials(
             credentials_db = db_name,
@@ -106,6 +109,7 @@ describe(
         and that, when I try to log in with an incorrect password, I will not be 
         granted access.", 
       {
+        testthat::skip_if_not_installed("shinymanager")
         app <- AppDriver$new(
           app_dir = test_path("fixtures/testapp-authentication"),
           name = "authenticate",
