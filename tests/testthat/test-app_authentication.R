@@ -1,7 +1,8 @@
 library(shinytest2)
 
 describe(
-  "initialize_credentials(). Feature 1 | As a user, I want to be able to create a credentials 
+  "initialize_credentials(). (only applicable for shinymanager deployments). 
+    Feature 1 | As a user, I want to be able to create a credentials 
     database if there is none yet. The database should be accessible by a common admin 
     account and password combination, with the requirement set in the database that 
     the password needs to be changed after first login. ", 
@@ -93,7 +94,8 @@ describe(
 
 
 describe(
-  "authenticate_ui() and authenticate_server(). Feature 1 | As a user, I want to be able to 
+  "authenticate_ui() and authenticate_server(). (only applicable for shinymanager 
+  deployments). Feature 1 | As a user, I want to be able to 
   enter user name and password at the login screen of the application. 
   If the user name and password are incorrect, I want to see an error message, 
   and remain on the login screen.", 
