@@ -9,27 +9,24 @@ mod_study_forms_ui <- function(id, form, form_items){
   bslib::nav_panel(
     title = form,
     bslib::card(
-      full_screen = T,
-      bslib::layout_column_wrap(
-        width = NULL,
-        fixed_width = FALSE, 
-        style = bslib::css(grid_template_columns = "4fr 1fr"),
-        bslib::card_body(
-          conditionalPanel(
-            condition = "input.switch_view === 'graph'",
-            ns = NS(id),
-            shinycssloaders::withSpinner(
-              plotly::plotlyOutput(ns("figure"), height = "100%"),
-              type = 5
-            )
-          ),
-          conditionalPanel(
-            condition = "input.switch_view === 'table'",
-            ns = NS(id),
-            DT::dataTableOutput(ns("table"), width = "auto")
+      full_screen = T, 
+      bslib::layout_sidebar(
+        conditionalPanel(
+          condition = "input.switch_view === 'graph'",
+          ns = NS(id),
+          shinycssloaders::withSpinner(
+            plotly::plotlyOutput(ns("figure"), height = "100%"),
+            type = 5
           )
         ),
-        bslib::card_body(
+        conditionalPanel(
+          condition = "input.switch_view === 'table'",
+          ns = NS(id),
+          DT::dataTableOutput(ns("table"), width = "auto")
+        ),
+        sidebar = bslib::sidebar(
+          position = "right", 
+          bg = "white",
           shinyWidgets::radioGroupButtons(
             inputId = ns("switch_view"),
             choiceNames = list(icon("line-chart"), icon("table-list")),
