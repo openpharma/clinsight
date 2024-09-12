@@ -1,20 +1,19 @@
 
+.bslib-value-box .value-box-area {
+  padding: 0.1rem 0rem 0.1rem 1rem;
+}
+
 .bslib-value-box .value-box-area > :nth-child(2) {
   content: '';
   font-size: 0.9vw;
 }
 
-.bslib-value-box .value-box-area {
-  padding: 0.1rem 1rem 0rem 1rem;
-  font-size: 0.5vw;
-}
 .bslib-value-box .value-box-area > :first-child {
     font-size: 0.9vw;
 }
 
 .bslib-value-box .value-box-showcase {
-  padding: 0.1rem 1rem;
-  font-size: 1rem;
+  padding: 0.5rem 0.5rem 0.5rem 2rem;
 }
 
 .bslib-value-box .value-box-showcase .fas {
