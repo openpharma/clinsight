@@ -162,8 +162,9 @@ mod_queries_server <- function(id, r, navinfo, all_forms, db_path, table_names){
       req(selected_query_data())
       datatable_custom(
         selected_query_data()[c("query", "reviewer", "timestamp")], 
-        table_names, 
-        options = list(dom = 't', ordering = FALSE, pageLength = 100, scrollY = "200px"),
+        table_names,
+        dom = 't',
+        options = list(ordering = FALSE, scrollY = "200px"),
         class = "row-border hover",
         rownames = FALSE,
         selection = "none"
