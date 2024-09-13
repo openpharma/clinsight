@@ -482,7 +482,7 @@ datatable_custom <- function(
       "function() {",
       paste0(
         "$(this.api().table().container()).find('.header').html(", 
-        htmltools::htmlEscape(deparse(title)), 
+        htmltools::htmlEscape(deparse(title %||% "")), 
         ")"
         ),
       "}"
