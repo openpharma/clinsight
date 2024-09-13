@@ -234,6 +234,7 @@ app_server <- function(
   # modal that pops up if data is out of synch. Modals interfere with shinymanager.
   observeEvent(r$user_name, {
     if(isTRUE(get_golem_config("user_identification") == "shinymanager")){
+      req(rlang::is_installed("shinymanager"))
       pwd_mngt <- shinymanager::read_db_decrypt(
         get_db_connection(credentials_db), 
         name = "pwd_mngt",

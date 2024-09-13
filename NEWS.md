@@ -18,6 +18,7 @@ to minimize the package dependencies of the production version.
 - user roles as defined in the config.yml will now be shown at several places in the application and will be documented alongside the user name if needed. 
 - Provided scaffolding for developers who plan to deploy on Posit Connect
 - Improved dataTable outputs
+- Move `shinymanager` to suggests since it is optional to use it.
 
 ## Bug fixes
 

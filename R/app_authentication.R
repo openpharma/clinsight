@@ -76,14 +76,14 @@ authenticate_ui <- function(){
     theme = bslib::bs_theme(bootswatch = "spacelab", version = "5"),
     tags_top = tags$div(
       golem_add_external_resources(),
-      tags$img(src='www/gcp_logo.png', height = '100', width ='450'),
+      tags$img(src='www/logo.png', height = '278', width ='239'),
       HTML("<br><br>")
     ),
     tags_bottom = tags$div(
       tags$p(
         "For any question, please  contact the ",
         tags$a(
-          href = "mailto:lsamson@gcp-service.com?Subject=ClinSight",
+          href = "mailto:example@example.com?Subject=ClinSight",
           target="_top", "administrator"
         )
       )
