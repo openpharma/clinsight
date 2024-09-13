@@ -18,7 +18,7 @@
           "deferRender": true,
           "scrollResize": true,
           "scrollCollapse": true,
-          "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(NULL)\n}",
+          "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"\")\n}",
           "dom": "f<\"header h5\">ti",
           "columnDefs": [
             {
@@ -180,7 +180,7 @@
           "deferRender": true,
           "scrollResize": true,
           "scrollCollapse": true,
-          "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(NULL)\n}",
+          "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"\")\n}",
           "dom": "f<\"header h5\">ti",
           "columnDefs": [
             {
