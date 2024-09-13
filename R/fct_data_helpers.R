@@ -469,18 +469,29 @@ datatable_custom <- function(
   stopifnot(grepl("t", dom, fixed = TRUE))
   stopifnot(is.list(options))
   
-  domain <- gsub(pattern = "(t)", replacement = '<"header h5">\\1', dom)
-  opts <- modifyList(
-    list(scrollY = 400, scrollX = TRUE, scroller = TRUE, deferRender = TRUE, 
-         scrollResize = TRUE, scrollCollapse = TRUE), 
-    options) |> 
-    modifyList(list(
-      initComplete = DT::JS(
-        "function() {",
-        paste0("$(this.api().table().container()).find('.header').html(", htmltools::htmlEscape(deparse(title)), ")"),
-        "}"),
-      dom = domain
-    ))
+  default_opts <- list(
+    scrollY = 400,
+    scrollX = TRUE,
+    scroller = TRUE,
+    deferRender = TRUE,
+    scrollResize = TRUE,
+    scrollCollapse = TRUE
+  )
+  fixed_opts <- list(
+    initComplete = DT::JS(
+      "function() {",
+      paste0(
+        "$(this.api().table().container()).find('.header').html(", 
+        htmltools::htmlEscape(deparse(title)), 
+        ")"
+        ),
+      "}"
+      ),
+    dom = gsub(pattern = "(t)", replacement = '<"header h5">\\1', dom)
+  )
+  opts <- default_opts |>
+    modifyList(options) |>
+    modifyList(fixed_opts)
   
   DT::datatable(
     data, 
