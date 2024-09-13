@@ -13,7 +13,7 @@ describe("datatable_custom() works", {
   it("creates a datatable and can add a title to the table", {
     outcome <- datatable_custom(iris, title = "Test title")
     expect_true(inherits(outcome, "datatables"))
-    expect_true(grepl("Test title", outcome$x$caption))
+    expect_true(grepl("Test title", outcome$x$options$initComplete))
   })
   it("Produces a valid datatable with zero rows if no rows provided in the input table", {
     outcome <- datatable_custom(iris[0,])
