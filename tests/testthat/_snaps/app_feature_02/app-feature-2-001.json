@@ -7417,9 +7417,9 @@
         },
         {
           "name": "dt-ext-scroller-bootstrap5",
-          "version": "1.13.4",
+          "version": "1.13.6",
           "src": {
-            "href": "dt-ext-scroller-bootstrap5-1.13.4"
+            "href": "dt-ext-scroller-bootstrap5-1.13.6"
           },
           "meta": null,
           "script": [
@@ -7434,9 +7434,9 @@
         },
         {
           "name": "dt-plugin-scrollresize",
-          "version": "1.13.4",
+          "version": "1.13.6",
           "src": {
-            "href": "dt-plugin-scrollresize-1.13.4"
+            "href": "dt-plugin-scrollresize-1.13.6"
           },
           "meta": null,
           "script": "source.min.js",
