@@ -76,45 +76,6 @@
       ],
       "Hash": "1920b2f11133b12350024297d8a4ff4a"
     },
-    "R.methodsS3": {
-      "Package": "R.methodsS3",
-      "Version": "1.8.2",
-      "Source": "Repository",
-      "Repository": "RSPM",
-      "Requirements": [
-        "R",
-        "utils"
-      ],
-      "Hash": "278c286fd6e9e75d0c2e8f731ea445c8"
-    },
-    "R.oo": {
-      "Package": "R.oo",
-      "Version": "1.26.0",
-      "Source": "Repository",
-      "Repository": "RSPM",
-      "Requirements": [
-        "R",
-        "R.methodsS3",
-        "methods",
-        "utils"
-      ],
-      "Hash": "4fed809e53ddb5407b3da3d0f572e591"
-    },
-    "R.utils": {
-      "Package": "R.utils",
-      "Version": "2.12.3",
-      "Source": "Repository",
-      "Repository": "RSPM",
-      "Requirements": [
-        "R",
-        "R.methodsS3",
-        "R.oo",
-        "methods",
-        "tools",
-        "utils"
-      ],
-      "Hash": "3dc2829b790254bfba21e60965787651"
-    },
     "R6": {
       "Package": "R6",
       "Version": "2.5.1",
@@ -206,24 +167,6 @@
         "R"
       ],
       "Hash": "543776ae6848fde2f48ff3816d0628bc"
-    },
-    "billboarder": {
-      "Package": "billboarder",
-      "Version": "0.5.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "ggplot2",
-        "htmltools",
-        "htmlwidgets",
-        "jsonlite",
-        "magrittr",
-        "rlang",
-        "scales",
-        "shiny"
-      ],
-      "Hash": "8cfc73709bd06a57f4039fe15083b238"
     },
     "bit": {
       "Package": "bit",
@@ -1166,17 +1109,6 @@
       ],
       "Hash": "c19df082ba346b0ffa6f833e92de34d1"
     },
-    "scrypt": {
-      "Package": "scrypt",
-      "Version": "0.1.6",
-      "Source": "Repository",
-      "Repository": "RSPM",
-      "Requirements": [
-        "R",
-        "Rcpp"
-      ],
-      "Hash": "5669c376aea6546ff938528588101b7a"
-    },
     "shiny": {
       "Package": "shiny",
       "Version": "1.9.1",
@@ -1255,25 +1187,6 @@
         "shiny"
       ],
       "Hash": "802e4786b353a4bb27116957558548d5"
-    },
-    "shinymanager": {
-      "Package": "shinymanager",
-      "Version": "1.0.410",
-      "Source": "Repository",
-      "Repository": "RSPM",
-      "Requirements": [
-        "DBI",
-        "DT",
-        "R.utils",
-        "R6",
-        "RSQLite",
-        "billboarder",
-        "htmltools",
-        "openssl",
-        "scrypt",
-        "shiny"
-      ],
-      "Hash": "7992f5ecc5e8d40200dc8ba4e97d33eb"
     },
     "sourcetools": {
       "Package": "sourcetools",

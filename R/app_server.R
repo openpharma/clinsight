@@ -84,9 +84,12 @@ app_server <- function(
   
   user_error <- reactiveVal()
   observeEvent(res_auth, {
+    if(identical(get_golem_config("user_identification"), "shinymanager")){
+    req(res_auth[["user"]])
+    }
     r$user_name <- res_auth[["name"]] %||% res_auth[["user"]] %||% ""
-    r$user_roles  <- names(res_auth[["roles"]]) %||% ""
-    r$user_role   <- names(res_auth[["roles"]])[1] %||% ""
+    r$user_roles  <- names(get_valid_roles(res_auth[["roles"]])) %||% ""
+    r$user_role   <- r$user_roles[1]
     user_error(NULL)
     if(r$user_name == ""){
       user_error("No valid user name provided. ")
@@ -231,6 +234,7 @@ app_server <- function(
   # modal that pops up if data is out of synch. Modals interfere with shinymanager.
   observeEvent(r$user_name, {
     if(isTRUE(get_golem_config("user_identification") == "shinymanager")){
+      req(rlang::is_installed("shinymanager"))
       pwd_mngt <- shinymanager::read_db_decrypt(
         get_db_connection(credentials_db), 
         name = "pwd_mngt",
@@ -286,6 +290,7 @@ app_server <- function(
   shiny::exportTestValues(
     user_db = user_db,
     active_participant = r$subject_id,
-    active_form = navinfo$active_form
+    active_form = navinfo$active_form,
+    user_error = user_error()
   )
 }

@@ -1,6 +1,6 @@
 Package: clinsight
 Title: ClinSight
-Version: 0.0.0.9017
+Version: 0.0.0.9020
 Authors@R: c(
     person("Leonard Daniël", "Samson", , "lsamson@gcp-service.com", role = c("cre", "aut")),
     person("GCP-Service International Ltd.& Co. KG", role = "fnd")
@@ -34,7 +34,6 @@ Imports:
     shiny,
     shinycssloaders,
     shinyjs,
-    shinymanager,
     shinyWidgets,
     stats,
     tidyr,
@@ -46,13 +45,14 @@ Suggests:
     knitr,
     pkgload,
     purrr,
+    shinymanager,
     shinytest2,
     stringr,
     testthat (>= 3.0.0)
 VignetteBuilder: 
     knitr
 Config/renv/profiles/full/dependencies: pkgdown, stringr, kableExtra,
-    usethis, cowplot, covr, devtools
+    usethis, cowplot, covr, devtools, shinymanager
 Config/testthat/edition: 3
 Encoding: UTF-8
 LazyData: true

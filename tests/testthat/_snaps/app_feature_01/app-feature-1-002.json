@@ -5,9 +5,19 @@
         "style": "bootstrap5",
         "filter": "none",
         "vertical": false,
-        "caption": "<caption style=\"caption-side: top; text-align: center;\">\n  <h5>\n    <b>Serious Adverse Events<\/b>\n  <\/h5>\n<\/caption>",
+        "extensions": [
+          "Scroller"
+        ],
         "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Name<\/th>\n      <th>AESI<\/th>\n      <th>Start date<\/th>\n      <th>End date<\/th>\n      <th>CTCAE severity<\/th>\n      <th>Treatment related<\/th>\n      <th>Treatment action<\/th>\n      <th>Other action<\/th>\n      <th>Category<\/th>\n      <th>Awareness date<\/th>\n      <th>Date of death<\/th>\n      <th>Death reason<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
         "options": {
+          "scrollY": 400,
+          "scrollX": true,
+          "scroller": true,
+          "deferRender": true,
+          "scrollResize": true,
+          "scrollCollapse": true,
+          "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"Serious Adverse Events\")\n}",
+          "dom": "f<\"header h5\">ti",
           "columnDefs": [
             {
               "orderable": false,
@@ -86,6 +96,7 @@
         }
       },
       "evals": [
+        "options.initComplete",
         "options.ajax.data"
       ],
       "jsHooks": [
@@ -156,6 +167,39 @@
           "all_files": true
         },
         {
+          "name": "dt-ext-scroller-bootstrap5",
+          "version": "1.13.4",
+          "src": {
+            "href": "dt-ext-scroller-bootstrap5-1.13.4"
+          },
+          "meta": null,
+          "script": [
+            "js/dataTables.scroller.min.js",
+            "js/scroller.bootstrap5.min.js"
+          ],
+          "stylesheet": "css/scroller.bootstrap5.min.css",
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": false
+        },
+        {
+          "name": "dt-plugin-scrollresize",
+          "version": "1.13.4",
+          "src": {
+            "href": "dt-plugin-scrollresize-1.13.4"
+          },
+          "meta": null,
+          "script": "source.min.js",
+          "stylesheet": [
+
+          ],
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": true
+        },
+        {
           "name": "crosstalk",
           "version": "1.2.1",
           "src": {
@@ -175,9 +219,19 @@
         "style": "bootstrap5",
         "filter": "none",
         "vertical": false,
-        "caption": "<caption style=\"caption-side: top; text-align: center;\">\n  <h5>\n    <b>Adverse events<\/b>\n  <\/h5>\n<\/caption>",
+        "extensions": [
+          "Scroller"
+        ],
         "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Name<\/th>\n      <th>AESI<\/th>\n      <th>start date<\/th>\n      <th>end date<\/th>\n      <th>CTCAE severity<\/th>\n      <th>Treatment related<\/th>\n      <th>Treatment action<\/th>\n      <th>Other action<\/th>\n      <th>Serious Adverse Event<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
         "options": {
+          "scrollY": 400,
+          "scrollX": true,
+          "scroller": true,
+          "deferRender": true,
+          "scrollResize": true,
+          "scrollCollapse": true,
+          "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"Adverse events\")\n}",
+          "dom": "f<\"header h5\">ti",
           "columnDefs": [
             {
               "orderable": false,
@@ -244,6 +298,7 @@
         }
       },
       "evals": [
+        "options.initComplete",
         "options.ajax.data"
       ],
       "jsHooks": [
@@ -311,6 +366,39 @@
           "stylesheet": null,
           "head": null,
           "attachment": null,
+          "all_files": true
+        },
+        {
+          "name": "dt-ext-scroller-bootstrap5",
+          "version": "1.13.4",
+          "src": {
+            "href": "dt-ext-scroller-bootstrap5-1.13.4"
+          },
+          "meta": null,
+          "script": [
+            "js/dataTables.scroller.min.js",
+            "js/scroller.bootstrap5.min.js"
+          ],
+          "stylesheet": "css/scroller.bootstrap5.min.css",
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": false
+        },
+        {
+          "name": "dt-plugin-scrollresize",
+          "version": "1.13.4",
+          "src": {
+            "href": "dt-plugin-scrollresize-1.13.4"
+          },
+          "meta": null,
+          "script": "source.min.js",
+          "stylesheet": [
+
+          ],
+          "head": null,
+          "attachment": null,
+          "package": null,
           "all_files": true
         },
         {
@@ -743,8 +831,19 @@
         "style": "bootstrap5",
         "filter": "none",
         "vertical": false,
+        "extensions": [
+          "Scroller"
+        ],
         "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Subject<\/th>\n      <th>Status<\/th>\n      <th>Dx<\/th>\n      <th>Age<\/th>\n      <th>Sex<\/th>\n      <th>Event<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
         "options": {
+          "scrollY": 400,
+          "scrollX": true,
+          "scroller": true,
+          "deferRender": true,
+          "scrollResize": true,
+          "scrollCollapse": true,
+          "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"\")\n}",
+          "dom": "f<\"header h5\">ti",
           "columnDefs": [
             {
               "orderable": false,
@@ -800,6 +899,7 @@
         }
       },
       "evals": [
+        "options.initComplete",
         "options.rowCallback",
         "options.ajax.data"
       ],
@@ -868,6 +968,39 @@
           "stylesheet": null,
           "head": null,
           "attachment": null,
+          "all_files": true
+        },
+        {
+          "name": "dt-ext-scroller-bootstrap5",
+          "version": "1.13.4",
+          "src": {
+            "href": "dt-ext-scroller-bootstrap5-1.13.4"
+          },
+          "meta": null,
+          "script": [
+            "js/dataTables.scroller.min.js",
+            "js/scroller.bootstrap5.min.js"
+          ],
+          "stylesheet": "css/scroller.bootstrap5.min.css",
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": false
+        },
+        {
+          "name": "dt-plugin-scrollresize",
+          "version": "1.13.4",
+          "src": {
+            "href": "dt-plugin-scrollresize-1.13.4"
+          },
+          "meta": null,
+          "script": "source.min.js",
+          "stylesheet": [
+
+          ],
+          "head": null,
+          "attachment": null,
+          "package": null,
           "all_files": true
         },
         {
