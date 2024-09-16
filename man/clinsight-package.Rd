@@ -23,6 +23,8 @@ Useful links:
 
 Other contributors:
 \itemize{
+  \item Aaron Clark \email{aclark02@arcusbio.com} [contributor]
+  \item Jeff Thompson \email{jthompson@arcusbio.com} (\href{https://orcid.org/0009-0007-3640-1075}{ORCID}) [contributor]
   \item GCP-Service International Ltd.& Co. KG [funder]
 }
 
