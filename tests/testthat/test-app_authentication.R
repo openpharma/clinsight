@@ -1,7 +1,8 @@
 library(shinytest2)
 
 describe(
-  "initialize_credentials(). Feature 1 | As a user, I want to be able to create a credentials 
+  "initialize_credentials(). (only applicable for shinymanager deployments). 
+    Feature 1 | As a user, I want to be able to create a credentials 
     database if there is none yet. The database should be accessible by a common admin 
     account and password combination, with the requirement set in the database that 
     the password needs to be changed after first login. ", 
@@ -14,6 +15,7 @@ describe(
         and that the test data frame within the existing database still exists 
         and is unchaged", 
       {
+        testthat::skip_if_not_installed("shinymanager")
         db_name <- file.path(withr::local_tempdir(), "credentials.db")
         con <- get_db_connection(db_name)
         DBI::dbWriteTable(con, "test", data.frame(test = 1))
@@ -39,6 +41,7 @@ describe(
         from the initialization password ('1234'),
         and that the value (password) [must_change] is set to TRUE.", 
       {
+        testthat::skip_if_not_installed("shinymanager")
         db_name <- file.path(withr::local_tempdir(), "credentials.sqlite")
         initialize_credentials(
           credentials_db = db_name,
@@ -77,6 +80,7 @@ describe(
         and [credentials_pwd] is set to 'test_password', 
         I expect that a new credentials database will be created in the specified folder.", 
       {
+        testthat::skip_if_not_installed("shinymanager")
         db_name <- file.path(withr::local_tempdir(), "non_existing_folder/credentials.sqlite")
         initialize_credentials(
             credentials_db = db_name,
@@ -90,7 +94,8 @@ describe(
 
 
 describe(
-  "authenticate_ui() and authenticate_server(). Feature 1 | As a user, I want to be able to 
+  "authenticate_ui() and authenticate_server(). (only applicable for shinymanager 
+  deployments). Feature 1 | As a user, I want to be able to 
   enter user name and password at the login screen of the application. 
   If the user name and password are incorrect, I want to see an error message, 
   and remain on the login screen.", 
@@ -106,6 +111,7 @@ describe(
         and that, when I try to log in with an incorrect password, I will not be 
         granted access.", 
       {
+        testthat::skip_if_not_installed("shinymanager")
         app <- AppDriver$new(
           app_dir = test_path("fixtures/testapp-authentication"),
           name = "authenticate",
@@ -124,6 +130,7 @@ describe(
         app$click("auth-go_auth")
         app$wait_for_idle()
         app$expect_values(input = TRUE, output = TRUE)
+        expect_null(app$get_value(export = "user_error"))
         
         # After login, connection with the shiny app is lost in shinytest2, and 
         # therefore further automated tests dont work. Dont know how to solve this at the moment. 

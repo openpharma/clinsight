@@ -507,7 +507,23 @@ add_missing_columns <- function(
 #'   rename any column names found in this vector to the provided name.
 #' @param title Optional. Character string with the title of the table.
 #' @param selection See [DT::datatable()]. Default set to 'single'. 
-#' @param ... Other optional arguments that will be parsed to [DT::datatable()].
+#' @param extensions See [DT::datatable()]. Default set to 'Scroller'.
+#' @param plugins See [DT::datatable()]. Default set to 'scrollResize'.
+#' @param dom See \url{https://datatables.net/reference/option/dom}. A div
+#'   element will be inserted before the table for the table title. Default set
+#'   to 'fti' resulting in 'f<"header h5">ti'.
+#' @param options See [DT::datatable()]. Must be a list.
+#'   * Modifiable defaults:
+#'     * `scrollY = '400px'`
+#'     * `scrollX = TRUE`
+#'     * `scroller = TRUE`
+#'     * `deferREnder = TRUE`
+#'     * `scrollResize = TRUE`
+#'     * `scrollCollapse = TRUE`
+#'   * Non-modifiable defaults:
+#'     * `dom`: Defined by the `dom` parameter.
+#'     * `initComplete`: Defaults to a function to insert table title into dataTable container.
+#' @param ... Other optional arguments that will be passed to [DT::datatable()].
 #'
 #' @return A `DT::datatable` object.
 #' @export
@@ -518,6 +534,10 @@ datatable_custom <- function(
     rename_vars = NULL, 
     title = NULL, 
     selection = "single",
+    extensions = "Scroller",
+    plugins = "scrollResize",
+    dom = "fti",
+    options = list(),
     ...
     ){
   stopifnot(is.data.frame(data))
@@ -525,17 +545,40 @@ datatable_custom <- function(
     stopifnot(is.character(rename_vars))
     data <- dplyr::rename(data, dplyr::any_of(rename_vars))
   }
-  if(!is.null(title)){
-    stopifnot(is.character(title))
-    title <- tags$caption(
-      style = 'caption-side: top; text-align: center;',
-      tags$h5(tags$b(title))
-    )
-  }
+  stopifnot(is.null(title) | is.character(title))
+  stopifnot(grepl("t", dom, fixed = TRUE))
+  stopifnot(is.list(options))
+  
+  default_opts <- list(
+    scrollY = 400,
+    scrollX = TRUE,
+    scroller = TRUE,
+    deferRender = TRUE,
+    scrollResize = TRUE,
+    scrollCollapse = TRUE
+  )
+  fixed_opts <- list(
+    initComplete = DT::JS(
+      "function() {",
+      paste0(
+        "$(this.api().table().container()).find('.header').html(", 
+        htmltools::htmlEscape(deparse(title %||% "")), 
+        ")"
+        ),
+      "}"
+      ),
+    dom = gsub(pattern = "(t)", replacement = '<"header h5">\\1', dom)
+  )
+  opts <- default_opts |>
+    modifyList(options) |>
+    modifyList(fixed_opts)
+  
   DT::datatable(
     data, 
-    selection = "single",
-    caption = title,
+    selection = selection,
+    options = opts,
+    extensions = extensions,
+    plugins = plugins,
     ...
   ) 
 }
