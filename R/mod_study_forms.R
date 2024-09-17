@@ -211,7 +211,7 @@ mod_study_forms_server <- function(
         id = "subject_id",
         id_to_highlight = r$subject_id, 
         point_size = "reviewed",
-        height = ceiling(0.5*length(unique(fig_data()$item_name))*125+150),
+        height = ceiling(0.5*length(unique(fig_data()$item_name))*125+175),
         scale = scale_yval,
         use_unscaled_limits = scaling_data()$use_unscaled_limits
       )
