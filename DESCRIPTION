@@ -1,8 +1,13 @@
 Package: clinsight
 Title: ClinSight
-Version: 0.0.0.9020
+Version: 0.0.0.9021
 Authors@R: c(
-    person("Leonard Daniël", "Samson", , "lsamson@gcp-service.com", role = c("cre", "aut")),
+    person("Leonard Daniël", "Samson", , "lsamson@gcp-service.com", role = c("cre", "aut"),
+           comment = c(ORCID = "0000-0002-6252-7639")),
+    person("Aaron", "Clark", , "aclark02@arcusbio.com", role = "ctb",
+           comment = c(ORCID = "0000-0002-0123-0970")),
+    person("Jeff", "Thompson", , "jthompson@arcusbio.com", role = "ctb",
+           comment = c(ORCID = "0009-0007-3640-1075")),
     person("GCP-Service International Ltd.& Co. KG", role = "fnd")
   )
 Description: Interactive application to monitor patient safety during
