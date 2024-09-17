@@ -48,8 +48,11 @@ mod_study_forms_ui <- function(id, form, form_items){
                 style = "btn-outline-primary"
               ),
               multiple = TRUE
-            ),
-            img(src="www/figure_legend.png", width = 200, height = 233)
+            ), 
+            bslib::popover(
+              tags$a("Legend", tags$sup(icon("circle-info")), class =  "link"),
+              bslib::card_body(img(src="www/figure_legend.png"))
+            )
           ),
           conditionalPanel(
             condition = "input.switch_view === 'table'",

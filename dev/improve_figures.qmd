@@ -17,8 +17,7 @@ library(ggplot2)
 library(plotly)
 pkgname <- "clinsight"
 library(pkgname, character.only = TRUE)
-merged_data <- merge_meta_with_data(clinsightful_data, metadata)
-appdata <- get_appdata(merged_data)
+appdata <- get_appdata(clinsightful_data)
 vars <- get_meta_vars(data = appdata, meta = metadata)
 apptables <- lapply(
     setNames(names(appdata), names(appdata)), \(x){
@@ -69,19 +68,36 @@ create_legend()
 ```
 
 
-```{r , fig.width=2.5, fig.height=2.75}
+```{r , fig.width=2.25, fig.height=4.5}
 sizes <- c("old", "new/updated")
-df <- data.frame(col = factor(names(col_palette), levels = names(col_palette)))
-df$status <- factor(sample(sizes, nrow(df), replace = TRUE), levels = sizes)
+lims <- gsub(", ", ",\n", names(col_palette))
+palette <- setNames(col_palette, lims)
+
+df <- data.frame(col = factor(lims, levels = lims))
+df$status <- factor(rep_len(sizes, length.out = nrow(df)), levels = sizes)
 fig <- ggplot(df) +
-  scale_fill_manual(values = col_palette) +
+  scale_fill_manual(values = palette) +
   theme(legend.key = element_rect(fill = "white", colour = NA)) +
   geom_point(aes(fill = col, x = 1, y = 1, size = status), shape = 21) + 
   labs(legend.title = "Legend") + 
-  theme(legend.position = "right", legend.title = element_text(face = "bold")) +
+  theme(
+    legend.position = "right", 
+    legend.title = element_text(face = "bold", size = 16), 
+    legend.text = element_text(size = 14), 
+    legend.key = element_blank(),
+    legend.background = element_blank()
+    ) +
   guides(
-    size=guide_legend(title = "Status", override.aes = list(fill = "grey", size = c(2L,6L))),
-    fill=guide_legend(title = "Limits", override.aes = list(size = 6L))
+    size=guide_legend(
+      title = "Status", 
+      override.aes = list(fill = "grey", size = c(2L,6L)), 
+      keyheight = 1.75
+      ),
+    fill=guide_legend(
+      title = "Limits", 
+      override.aes = list(size = 6L), 
+      keyheight = 2.75
+      )
     )
 suppressWarnings(cowplot::ggdraw(cowplot::get_legend(fig)))
 ggsave("figure_legend.png")
