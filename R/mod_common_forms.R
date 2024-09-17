@@ -23,7 +23,10 @@ mod_common_forms_ui <- function(id, form){
           status = "primary",
           right = TRUE
         ),
-        HTML("<b>Bold*</b>: New/updated data")
+        bslib::card_body(
+          HTML("<b>Bold*:</b> New/updated data"), 
+          fillable = FALSE
+          )
       )
     )
   )
