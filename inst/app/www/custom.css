@@ -29,11 +29,6 @@
    padding-left: 0rem;
 }
 
-.timeline-fig-basic {
-  overflow-x: scroll;
-  min-width: 250px;
-}
-
 /* below is needed for good alignment of the top-widgets */
 .bslib-card {
   height:100%;
