@@ -19,7 +19,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Leonard Daniël Samson \email{lsamson@gcp-service.com}
+\strong{Maintainer}: Leonard Daniël Samson \email{lsamson@gcp-service.com} (\href{https://orcid.org/0000-0002-6252-7639}{ORCID})
 
 Other contributors:
 \itemize{
