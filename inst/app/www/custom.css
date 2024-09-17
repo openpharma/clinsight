@@ -5,11 +5,11 @@
 
 .bslib-value-box .value-box-area > :nth-child(2) {
   content: '';
-  font-size: 0.9vw;
+  font-size: calc(4px + .6vw);
 }
 
 .bslib-value-box .value-box-area > :first-child {
-    font-size: 0.9vw;
+    font-size: calc(4px + .6vw);
 }
 
 .bslib-value-box .value-box-showcase {
