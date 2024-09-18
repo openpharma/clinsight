@@ -19,6 +19,8 @@ to minimize the package dependencies of the production version.
 - Provided scaffolding for developers who plan to deploy on Posit Connect
 - Improved dataTable outputs
 - Move `shinymanager` to suggests since it is optional to use it.
+- Add functionality to mark which forms are required to review and which are not.
+- Improved required column verification of metadata columns when reading metadata using `get_metadata()`.
 
 ## Bug fixes
 

@@ -21,6 +21,10 @@ describe(
         ),
         active_form = reactiveVal("Adverse events"),
         active_tab = reactiveVal("Common forms"),
+        review_required_data = data.frame(
+          "item_group" = "Adverse events", 
+          "review_required" = TRUE
+          ),
         db_path = ""
       )
       testServer(
@@ -64,6 +68,10 @@ describe(
           ),
           active_form = reactiveVal("Adverse events"),
           active_tab = reactiveVal("Common forms"),
+          review_required_data = data.frame(
+            "item_group" = "Adverse events", 
+            "review_required" = TRUE
+          ),
           db_path = temp_path
         )
         testServer(
@@ -74,6 +82,7 @@ describe(
               dplyr::tbl(con, "all_review_data") |> 
                 dplyr::collect()
             })
+            
             expect_equal(r$review_data, db_slice_rows(db_path))
             # it should have two rows in the DB, one with review= 'No' and the other with reviewed = "Yes"
             expect_equal(with(db_reviewdata, reviewed[subject_id == "885"]), c("No", "Yes") )
@@ -142,6 +151,10 @@ describe(
             ),
             active_form = reactiveVal("Adverse events"),
             active_tab = reactiveVal("Common events"),
+            review_required_data = data.frame(
+              "item_group" = "Adverse events", 
+              "review_required" = TRUE
+            ),
             db_path = temp_path
           )
         }
@@ -215,6 +228,10 @@ describe(
           ),
           active_form = reactiveVal("Adverse events"),
           active_tab = reactiveVal("Common forms"),
+          review_required_data = data.frame(
+            "item_group" = "Adverse events", 
+            "review_required" = TRUE
+          ),
           db_path = temp_path
         )
         
@@ -253,6 +270,10 @@ describe(
           ),
           active_form = reactiveVal("Adverse events"),
           active_tab = reactiveVal("Common forms"),
+          review_required_data = data.frame(
+            "item_group" = "Adverse events", 
+            "review_required" = TRUE
+          ),
           db_path = temp_path
         )
         
@@ -271,8 +292,8 @@ describe(
     )
     it(
       "Scenario 3 | No data to review. Given [active_form] set to a 
-        non-existing form named [non-existent],
-        and that I try to save a review by setting [save_review] to 2,
+        form of which no data is available named [no_data_form],
+        and that I try to save a review by setting [save_review] to 1,
         I expect that a warning message will be displayed with the text [Nothing to review],
         and that no new information is saved to the database,
         and that no new information is saved to the app data frame.",
@@ -288,12 +309,16 @@ describe(
           ),
           active_form = reactiveVal("Adverse events"),
           active_tab = reactiveVal("Common forms"),
+          review_required_data = data.frame(
+            "item_group" = c("Adverse events", "no_data_form"),
+            "review_required" = TRUE
+          ),
           db_path = temp_path
         )
         testServer(
           mod_review_forms_server, args = testargs, {
             ns <- session$ns
-            active_form("Non-existing")
+            active_form("no_data_form")
             data_before_save <- r$review_data
             db_before_save <- db_temp_connect(db_path, {
               dplyr::tbl(con, "all_review_data") |> 
@@ -347,6 +372,10 @@ describe(
             ),
             active_form = reactiveVal("Adverse events"),
             active_tab = reactiveVal("Common events"),
+            review_required_data = data.frame(
+              "item_group" = "Adverse events", 
+              "review_required" = TRUE
+            ),
             db_path = temp_path
           )
         }
@@ -413,6 +442,10 @@ describe(
           ),
           active_form = reactiveVal("Adverse events"),
           active_tab = reactiveVal("Common forms"),
+          review_required_data = data.frame(
+            "item_group" = "Adverse events", 
+            "review_required" = TRUE
+          ),
           db_path = temp_path
         )
         testServer(
@@ -465,6 +498,10 @@ describe(
             ),
             active_form = reactiveVal("Adverse events"),
             active_tab = reactiveVal("Common events"),
+            review_required_data = data.frame(
+              "item_group" = "Adverse events", 
+              "review_required" = TRUE
+            ),
             db_path = temp_path
           )
         }
