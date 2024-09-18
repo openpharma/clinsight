@@ -18,12 +18,23 @@
 #'   and in addition the columns `unit`, `lower_limit`, `uppter_limit`. Used to
 #'   select and rename the variables of interest in the common forms.
 #'  - `general`: Contains the same columns as `common_forms`.
-#'  - `groups`: Contains the columns `item_group`, `item_type`, `item_scale`,
-#'   `use_unscaled_limits`.
+#'  - `form_level_data`: For specifying form-level data. When reading in metadata
+#'   from the Excel format, this table will created and sanitized if needed,
+#'   creating the minimum columns  `item_group`, `item_scale`,
+#'   `use_unscaled_limits`, and `review_required`. The column `item_group`
+#'   contains the name of the forms to which the settings apply. Columns
+#'   `item_scale` and `use_unscaled_limits` are used in
+#'   [mod_study_forms_server()] to specify the scaling of the figures. It is
+#'   recommended to set the required values here; by default, they are both set
+#'   to FALSE in [mod_study_forms_server()]. The last column that is expected
+#'   here is `review_required`, which can be used to specify whether review is
+#'   required for a form. Will default to TRUE for each form it is unset for a
+#'   form.
 #'
 #' @source Can be created with an Excel file. The Excel file format is chosen so
 #'   that the metadata can be changed easily per study. See
 #'   `raw-data/metadata.R` for details.
+#' 
 "metadata"
 
 
