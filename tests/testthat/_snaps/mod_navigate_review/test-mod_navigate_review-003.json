@@ -24,6 +24,30 @@
             {
               "orderable": false,
               "targets": 0
+            },
+            {
+              "name": " ",
+              "targets": 0
+            },
+            {
+              "name": "Subject",
+              "targets": 1
+            },
+            {
+              "name": "Form",
+              "targets": 2
+            },
+            {
+              "name": "event_label",
+              "targets": 3
+            },
+            {
+              "name": "query",
+              "targets": 4
+            },
+            {
+              "name": "resolved",
+              "targets": 5
             }
           ],
           "order": [
@@ -68,9 +92,9 @@
         },
         {
           "name": "dt-core-bootstrap5",
-          "version": "1.13.4",
+          "version": "1.13.6",
           "src": {
-            "href": "dt-core-bootstrap5-1.13.4"
+            "href": "dt-core-bootstrap5-1.13.6"
           },
           "meta": null,
           "script": [
@@ -85,9 +109,9 @@
         },
         {
           "name": "bootstrap",
-          "version": "5.2.2",
+          "version": "5.3.1",
           "src": {
-            "href": "bootstrap-5.2.2"
+            "href": "bootstrap-5.3.1"
           },
           "meta": {
             "viewport": "width=device-width, initial-scale=1, shrink-to-fit=no"
@@ -101,9 +125,9 @@
         },
         {
           "name": "bs3compat",
-          "version": "0.5.1",
+          "version": "0.8.0",
           "src": {
-            "href": "bs3compat-0.5.1"
+            "href": "bs3compat-0.8.0"
           },
           "meta": null,
           "script": [
@@ -118,9 +142,9 @@
         },
         {
           "name": "dt-ext-scroller-bootstrap5",
-          "version": "1.13.4",
+          "version": "1.13.6",
           "src": {
-            "href": "dt-ext-scroller-bootstrap5-1.13.4"
+            "href": "dt-ext-scroller-bootstrap5-1.13.6"
           },
           "meta": null,
           "script": [
@@ -135,9 +159,9 @@
         },
         {
           "name": "dt-plugin-scrollresize",
-          "version": "1.13.4",
+          "version": "1.13.6",
           "src": {
-            "href": "dt-plugin-scrollresize-1.13.4"
+            "href": "dt-plugin-scrollresize-1.13.6"
           },
           "meta": null,
           "script": "source.min.js",
@@ -151,9 +175,9 @@
         },
         {
           "name": "crosstalk",
-          "version": "1.2.0",
+          "version": "1.2.1",
           "src": {
-            "href": "crosstalk-1.2.0"
+            "href": "crosstalk-1.2.1"
           },
           "meta": null,
           "script": "js/crosstalk.min.js",
@@ -186,6 +210,22 @@
             {
               "orderable": false,
               "targets": 0
+            },
+            {
+              "name": " ",
+              "targets": 0
+            },
+            {
+              "name": "Subject",
+              "targets": 1
+            },
+            {
+              "name": "Form",
+              "targets": 2
+            },
+            {
+              "name": "summary_col",
+              "targets": 3
             }
           ],
           "order": [
@@ -230,9 +270,9 @@
         },
         {
           "name": "dt-core-bootstrap5",
-          "version": "1.13.4",
+          "version": "1.13.6",
           "src": {
-            "href": "dt-core-bootstrap5-1.13.4"
+            "href": "dt-core-bootstrap5-1.13.6"
           },
           "meta": null,
           "script": [
@@ -247,9 +287,9 @@
         },
         {
           "name": "bootstrap",
-          "version": "5.2.2",
+          "version": "5.3.1",
           "src": {
-            "href": "bootstrap-5.2.2"
+            "href": "bootstrap-5.3.1"
           },
           "meta": {
             "viewport": "width=device-width, initial-scale=1, shrink-to-fit=no"
@@ -263,9 +303,9 @@
         },
         {
           "name": "bs3compat",
-          "version": "0.5.1",
+          "version": "0.8.0",
           "src": {
-            "href": "bs3compat-0.5.1"
+            "href": "bs3compat-0.8.0"
           },
           "meta": null,
           "script": [
@@ -280,9 +320,9 @@
         },
         {
           "name": "dt-ext-scroller-bootstrap5",
-          "version": "1.13.4",
+          "version": "1.13.6",
           "src": {
-            "href": "dt-ext-scroller-bootstrap5-1.13.4"
+            "href": "dt-ext-scroller-bootstrap5-1.13.6"
           },
           "meta": null,
           "script": [
@@ -297,9 +337,9 @@
         },
         {
           "name": "dt-plugin-scrollresize",
-          "version": "1.13.4",
+          "version": "1.13.6",
           "src": {
-            "href": "dt-plugin-scrollresize-1.13.4"
+            "href": "dt-plugin-scrollresize-1.13.6"
           },
           "meta": null,
           "script": "source.min.js",
@@ -313,9 +353,9 @@
         },
         {
           "name": "crosstalk",
-          "version": "1.2.0",
+          "version": "1.2.1",
           "src": {
-            "href": "crosstalk-1.2.0"
+            "href": "crosstalk-1.2.1"
           },
           "meta": null,
           "script": "js/crosstalk.min.js",

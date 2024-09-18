@@ -690,3 +690,19 @@ expectation_type <- function(
   type <- match.arg(type)
   identical(gsub("^expectation_", "", class(exp)[[1]]), type)
 }
+
+
+#' Custom config path
+#'
+#' Note: this is a temporary solution, to circumvent the issue described here:
+#' https://github.com/ThinkR-open/golem/issues/1178#issue-2513219365. It ensures
+#' that a flexible path to the config file can be set by the user. Works with
+#' golem version 0.5.1.
+#'
+#' @return A path to the active config file to use for the application.
+#' @noRd
+#' 
+custom_config_path <- function(
+){
+  Sys.getenv("CONFIG_PATH", app_sys("golem-config.yml")) 
+}

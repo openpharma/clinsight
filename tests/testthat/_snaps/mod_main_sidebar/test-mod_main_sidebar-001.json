@@ -15,7 +15,7 @@
     "test-write_query-query_major_info": false,
     "test-write_query-query_select_item": "",
     "test-write_query-query_select_visit": "Any visit",
-    "test-write_query-query_sidebar": false,
+    "test-write_query-query_sidebar": true,
     "test-write_query-query_text": ""
   },
   "output": {
