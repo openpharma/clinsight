@@ -206,6 +206,7 @@ describe(
           )
         app$click("queries_1-query_follow_up_1-query_add_follow_up")
         app$click("queries_1-show_resolved")
+        app$wait_for_idle(800)
         app$set_inputs(
           "queries_1-queries_rows_selected" = 2, 
           allow_no_input_binding_ = TRUE
