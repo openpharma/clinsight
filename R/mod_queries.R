@@ -154,17 +154,16 @@ mod_queries_server <- function(id, r, navinfo, all_forms, db_path, table_names){
     output[["selected_query_title"]] <- renderText({
       req(selected_query_data())
       df <- selected_query_data()[1,]
-      query_title <-  paste0(
+      paste0(
         "<b>",
         htmlEscape(df$subject_id), ": ",
-        htmlEscape(df$item), "</b><br>", 
+        htmlEscape(df$item), 
+        ifelse(identical(df$type, "Major"), " - <i>Major query</i>", ""),
+        "</b><br>", 
         htmlEscape(df$item_group), ", ", 
-        df$event_label
+        df$event_label,
+        ifelse(identical(df$resolved, "Yes"), " (resolved)", "")
       )
-      if(identical(df$resolved, "Yes")){
-        query_title <- paste0(query_title, " (resolved)")
-      }
-      query_title
     })
     
     output[["selected_query"]] <- DT::renderDT({
