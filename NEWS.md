@@ -21,6 +21,7 @@ to minimize the package dependencies of the production version.
 - Move `shinymanager` to suggests since it is optional to use it.
 - Add functionality to mark which forms are required to review and which are not.
 - Improved required column verification of metadata columns when reading metadata using `get_metadata()`.
+- Improved visibility of queries, especially with longer query text and with smaller screen resolutions. Adds option to view query details in full screen.
 
 ## Bug fixes
 
@@ -30,3 +31,4 @@ to minimize the package dependencies of the production version.
 - Fixed pre-processing bug where `get_metadata()` would error when a metadata.xlsx tab exist, but were empty
 - Fixed error when running `golem::run_dev()` when `clinsight` was not installed.
 - Fixed error that the app did not recognize the user roles when using `shinymanager`. 
+- Fixed an issue in the query system that duplicate item names in the same person and same form could not be distinguished from each other. 
