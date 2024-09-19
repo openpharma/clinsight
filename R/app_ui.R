@@ -20,6 +20,7 @@ app_ui <- function(request){
         ),
       bg = "#43464c",
       title = tags$a(
+        href = "/",
         tags$img(src='www/gcp_logo.png', height = '40', width ='180')
       ), 
       sidebar = bslib::sidebar(mod_main_sidebar_ui("main_sidebar_1")),

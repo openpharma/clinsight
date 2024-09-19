@@ -7,20 +7,26 @@ mod_common_forms_ui <- function(id, form){
   ns <- NS(id)
   bslib::nav_panel(
     title = form, 
-    bslib::card(
-      mod_timeline_ui(ns("timeline_fig")),
-      bslib::layout_columns(
-        col_widths = c(3, 9, 12, 12),
-        fillable = FALSE,
+    mod_timeline_ui(ns("timeline_fig")),
+    bslib::layout_sidebar(
+      fillable = FALSE,
+      if(form == "Adverse events"){
+        DT::dataTableOutput(ns("SAE_table"))
+      },
+      DT::dataTableOutput(ns("common_form_table")), 
+      sidebar = bslib::sidebar(
+        bg = "white", 
+        position = "right",
         shinyWidgets::materialSwitch(
           inputId = ns("show_all_data"),
           label = "Show all participants", 
           status = "primary",
           right = TRUE
         ),
-        HTML("<b>Bold*</b>: New/updated data"),
-        DT::dataTableOutput(ns("SAE_table")),
-        DT::dataTableOutput(ns("common_form_table"))
+        bslib::card_body(
+          HTML("<b>Bold*:</b> New/updated data"), 
+          fillable = FALSE
+          )
       )
     )
   )
@@ -115,9 +121,6 @@ mod_common_forms_server <- function(
     
     mod_timeline_server("timeline_fig", r = r, form = form)
     
-    if(form != "Adverse events"){
-      shinyjs::hide("SAE_table")
-    }
     output[["SAE_table"]] <- DT::renderDT({
       req(form == "Adverse events")
       SAE_data <- data_active() |> 

@@ -9,45 +9,51 @@ mod_study_forms_ui <- function(id, form, form_items){
   bslib::nav_panel(
     title = form,
     bslib::card(
-      full_screen = T,
-      bslib::layout_columns(
-        col_widths = c(2, -4, 2, -4, 12, 12),
-        shinyWidgets::radioGroupButtons(
-          inputId = ns("switch_view"),
-          choiceNames = list(icon("line-chart"), icon("table-list")),
-          choiceValues = list("graph", "table"),
-          selected = "graph"
-        ),
+      full_screen = T, 
+      bslib::layout_sidebar(
         conditionalPanel(
           condition = "input.switch_view === 'graph'",
           ns = NS(id),
-          shinyWidgets::pickerInput(
-            inputId = ns("filter"),
-            label = NULL,
-            choices = form_items,
-            selected = form_items,
-            options = shinyWidgets::pickerOptions(
-              actionsBox = TRUE,
-              size = 10,
-              selectedTextFormat = "count > 3",
-              style = "btn-outline-primary"
-            ),
-            multiple = TRUE
+          shinycssloaders::withSpinner(
+            plotly::plotlyOutput(ns("figure"), height = "100%"),
+            type = 5
           )
         ),
         conditionalPanel(
-          condition = "input.switch_view === 'graph'",
+          condition = "input.switch_view === 'table'",
           ns = NS(id),
-          bslib::layout_columns(
-            col_widths = c(8,4),
-            shinycssloaders::withSpinner(
-              plotly::plotlyOutput(ns("figure"), height = "100%"),
-              type = 5
-            ),
-            img(src="www/figure_legend.png", width = 200, height = 233)
-          )
+          DT::dataTableOutput(ns("table"), width = "auto")
         ),
-        bslib::card_body(
+        sidebar = bslib::sidebar(
+          position = "right", 
+          bg = "white",
+          shinyWidgets::radioGroupButtons(
+            inputId = ns("switch_view"),
+            choiceNames = list(icon("line-chart"), icon("table-list")),
+            choiceValues = list("graph", "table"),
+            selected = "graph"
+          ),
+          conditionalPanel(
+            condition = "input.switch_view === 'graph'",
+            ns = NS(id),
+            shinyWidgets::pickerInput(
+              inputId = ns("filter"),
+              label = NULL,
+              choices = form_items,
+              selected = form_items,
+              options = shinyWidgets::pickerOptions(
+                actionsBox = TRUE,
+                size = 10,
+                selectedTextFormat = "count > 3",
+                style = "btn-outline-primary"
+              ),
+              multiple = TRUE
+            ), 
+            bslib::popover(
+              tags$a("Legend", tags$sup(icon("circle-info")), class =  "link"),
+              bslib::card_body(img(src="www/figure_legend.png"))
+            )
+          ),
           conditionalPanel(
             condition = "input.switch_view === 'table'",
             ns = NS(id),
@@ -56,8 +62,7 @@ mod_study_forms_ui <- function(id, form, form_items){
               label = "Show all participants", 
               status = "primary",
               right = TRUE
-            ),
-            DT::dataTableOutput(ns("table"), width = "auto")
+            )
           )
         )
       )
@@ -206,7 +211,7 @@ mod_study_forms_server <- function(
         id = "subject_id",
         id_to_highlight = r$subject_id, 
         point_size = "reviewed",
-        height = ceiling(0.5*length(unique(fig_data()$item_name))*125+150),
+        height = ceiling(0.5*length(unique(fig_data()$item_name))*125+175),
         scale = scale_yval,
         use_unscaled_limits = scaling_data()$use_unscaled_limits
       )

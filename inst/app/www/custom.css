@@ -5,11 +5,11 @@
 
 .bslib-value-box .value-box-area > :nth-child(2) {
   content: '';
-  font-size: 0.9vw;
+  font-size: calc(4px + .6vw);
 }
 
 .bslib-value-box .value-box-area > :first-child {
-    font-size: 0.9vw;
+    font-size: calc(4px + .6vw);
 }
 
 .bslib-value-box .value-box-showcase {
@@ -27,11 +27,6 @@
    padding-right: 0rem;
    padding-bottom: 0rem;
    padding-left: 0rem;
-}
-
-.timeline-fig-basic {
-  overflow-x: scroll;
-  min-width: 250px;
 }
 
 /* below is needed for good alignment of the top-widgets */
@@ -65,3 +60,4 @@ div.datatables div.header {
   text-align: center;
   font-weight: bold;
 }
+
