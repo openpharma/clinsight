@@ -42,6 +42,8 @@ describe(
         # can be fragile to snapshot.
         input_names <- names(app$get_values(input = TRUE)$input)
         output_names <- names(app$get_values(output = TRUE)$output)
+        
+        ####### snap feature-3-001
         app$expect_values(
           input = vector_select(input_names, exclude = "plotly_relayout"), 
           output = vector_select(output_names, exclude = "visit_figure")
@@ -109,6 +111,8 @@ describe(
         # can be fragile to snapshot.
         input_names <- names(app$get_values(input = TRUE)$input)
         output_names <- names(app$get_values(output = TRUE)$output)
+        
+        ####### snap feature-3-002
         app$expect_values(
           input = vector_select(
             input_names, 
@@ -153,10 +157,10 @@ describe(
           "queries_1-queries_rows_selected" = 1, 
           allow_no_input_binding_ = TRUE
         )
-        input_names <- names(app$get_values(input = TRUE)$input)
         output_names <- names(app$get_values(output = TRUE)$output)
+        
+        ####### snap feature-3-003
         app$expect_values(
-          input = vector_select(input_names, include = "queries_1"), 
           output = vector_select(output_names, include = "queries_1")
         )
         ### Follow-up on first query:
@@ -167,11 +171,11 @@ describe(
           "queries_1-queries_rows_selected" = 1, 
           allow_no_input_binding_ = TRUE
         )
-        input_names <- names(app$get_values(input = TRUE)$input)
-        output_names <- names(app$get_values(output = TRUE)$output)
+        output_names_2 <- names(app$get_values(output = TRUE)$output)
+        
+        ####### snap feature-3-004
         app$expect_values(
-          input = vector_select(input_names, include = "queries_1"), 
-          output = vector_select(output_names, include = "queries_1")
+          output = vector_select(output_names_2, include = "queries_1")
         )
         user_db <- app$get_value(export = "user_db")
         query_database_data <- collect_query_data(user_db)
@@ -179,7 +183,6 @@ describe(
           with(query_database_data, query[subject_id == "BEL_04_772"]),
           c("Major test query", "Text written as response to initial query")
         )
-        
       }
     )
     it(
@@ -207,10 +210,10 @@ describe(
           "queries_1-queries_rows_selected" = 2, 
           allow_no_input_binding_ = TRUE
         )
-        input_names <- names(app$get_values(input = TRUE)$input)
         output_names <- names(app$get_values(output = TRUE)$output)
+        
+        ####### snap feature-3-005
         app$expect_values(
-          input = vector_select(input_names, include = "queries_1"), 
           output = vector_select(output_names, include = "queries_1")
         )
         user_db <- app$get_value(export = "user_db")
