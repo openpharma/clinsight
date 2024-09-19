@@ -156,14 +156,14 @@
       $table_names
                  Edit date                 Date                Event 
           "edit_date_time"         "event_date"        "event_label" 
-                     Event                    N                 Form 
+                     Event                   eN                 Form 
               "event_name"       "event_repeat"         "item_group" 
-                     Query             Resolved               Author 
-                   "query"           "resolved"           "reviewer" 
-                    Status              Subject                 Time 
-                  "status"         "subject_id"          "timestamp" 
-                        Dx                 Type 
-      "WHO.classification"               "type" 
+                         N                Query             Resolved 
+             "form_repeat"              "query"           "resolved" 
+                    Author               Status              Subject 
+                "reviewer"             "status"         "subject_id" 
+                      Time                   Dx                 Type 
+               "timestamp" "WHO.classification"               "type" 
       
       $form_level_data
                item_group item_scale use_unscaled_limits review_required

@@ -22,12 +22,26 @@ describe(
       testdata <- get_available_data(data = appdata, tables = apptables, 
                                      all_forms = all_forms)
       expect_true(is.data.frame(testdata))
-      expect_equal(names(testdata), c("subject_id", "item_name", "item_group", 
-                                      "event_name", "event_label"))
+      expect_equal(names(testdata), c("subject_id", "item_name", "form_repeat", 
+                                      "item_group", "event_name", "event_label"))
     })
     it("Creates the expected data frame with given random appdata input", {
       expect_snapshot(
         get_available_data(data = appdata, tables = apptables, all_forms = all_forms)
+      )
+    })
+    it("Adds a form_repeat number to item_name if duplicates occur within an 
+       individual, to ensure item names can be uniquely identified", {
+      df <- get_available_data(
+        data = list(),
+        tables = apptables["Adverse events"],
+        all_forms = all_forms
+        )
+      # ID BEL_08_885 has two adverse events named 'Seizure'; these should show 
+      # up with the correct form_repeat number in the item_name
+      expect_equal(
+        with(df, item_name[subject_id == "BEL_08_885" & grepl("Seizure", item_name)]),
+        c("Seizure (N: 1)", "Seizure (N: 3)")
       )
     })
     it("Scenario 3. Given ... and some forms defined in the metadata but 

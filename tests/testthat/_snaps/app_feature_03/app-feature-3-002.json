@@ -435,7 +435,7 @@
         "extensions": [
           "Scroller"
         ],
-        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Name<\/th>\n      <th>AESI<\/th>\n      <th>Start date<\/th>\n      <th>End date<\/th>\n      <th>CTCAE severity<\/th>\n      <th>Treatment related<\/th>\n      <th>Treatment action<\/th>\n      <th>Other action<\/th>\n      <th>Category<\/th>\n      <th>Awareness date<\/th>\n      <th>Date of death<\/th>\n      <th>Death reason<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
+        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th>N<\/th>\n      <th>Name<\/th>\n      <th>AESI<\/th>\n      <th>Start date<\/th>\n      <th>End date<\/th>\n      <th>CTCAE severity<\/th>\n      <th>Treatment related<\/th>\n      <th>Treatment action<\/th>\n      <th>Other action<\/th>\n      <th>Category<\/th>\n      <th>Awareness date<\/th>\n      <th>Date of death<\/th>\n      <th>Death reason<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
         "options": {
           "scrollY": 400,
           "scrollX": true,
@@ -447,11 +447,11 @@
           "dom": "f<\"header h5\">ti",
           "columnDefs": [
             {
-              "orderable": false,
+              "className": "dt-right",
               "targets": 0
             },
             {
-              "name": " ",
+              "name": "N",
               "targets": 0
             },
             {
@@ -649,7 +649,7 @@
         "extensions": [
           "Scroller"
         ],
-        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Name<\/th>\n      <th>AESI<\/th>\n      <th>start date<\/th>\n      <th>end date<\/th>\n      <th>CTCAE severity<\/th>\n      <th>Treatment related<\/th>\n      <th>Treatment action<\/th>\n      <th>Other action<\/th>\n      <th>Serious Adverse Event<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
+        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th>N<\/th>\n      <th>Name<\/th>\n      <th>AESI<\/th>\n      <th>start date<\/th>\n      <th>end date<\/th>\n      <th>CTCAE severity<\/th>\n      <th>Treatment related<\/th>\n      <th>Treatment action<\/th>\n      <th>Other action<\/th>\n      <th>Serious Adverse Event<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
         "options": {
           "scrollY": 400,
           "scrollX": true,
@@ -661,11 +661,11 @@
           "dom": "f<\"header h5\">ti",
           "columnDefs": [
             {
-              "orderable": false,
+              "className": "dt-right",
               "targets": 0
             },
             {
-              "name": " ",
+              "name": "N",
               "targets": 0
             },
             {
@@ -1140,9 +1140,10 @@
           },
           "meta": null,
           "script": null,
-          "stylesheet": "components.css",
+          "stylesheet": "bslib-component-css.min.css",
           "head": null,
           "attachment": null,
+          "package": null,
           "all_files": true
         },
         {
@@ -1241,9 +1242,10 @@
           },
           "meta": null,
           "script": null,
-          "stylesheet": "components.css",
+          "stylesheet": "bslib-component-css.min.css",
           "head": null,
           "attachment": null,
+          "package": null,
           "all_files": true
         },
         {
