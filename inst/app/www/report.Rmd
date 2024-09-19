@@ -46,10 +46,16 @@ df <- params$queries_table
 invisible(
   unlist(lapply(unique(df$query_id), \(x){
     df <- dplyr::filter(df, query_id == x)
-    id_x <- unique(df$ID); form_x <- unique(df$Form); event_x <- unique(df$Event)
-    df <- df |> 
-      dplyr::select(-ID, -query_id, -Form, -Item, -Event)
-    print(knitr::kable(df, caption = paste0("Query for: ", id_x, ", Form: ", form_x, ", Event: ", event_x)))
+    id_x <- unique(df$ID); form_x <- unique(df$Form); event_x <- unique(df$Event); item_x <- unique(df$Item)
+    header <- sprintf("Query for: %s; %s (%s, %s)", id_x, item_x, form_x, event_x)
+    if(any(df$resolved == "Yes")){
+      header <- paste0(header, "; Resolved")
+    }
+    df |> 
+      dplyr::mutate(Author = paste0(Author, " ", Time)) |> 
+      dplyr::select(Query, Author) |> 
+      knitr::kable(caption = header) |> 
+      print()
   }))
 )
 ```

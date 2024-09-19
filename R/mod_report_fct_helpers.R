@@ -99,6 +99,9 @@ create_report <- function(
     tempReport, overwrite = TRUE
     )
   
+  # Remove line breaks since they cause issues with simple kable() PDF tables: 
+  query_df$Query <- gsub("\n", "  ", query_df$Query)
+  
   # Set up parameters to pass to Rmd document
   params <- list(
     author = reviewer,
