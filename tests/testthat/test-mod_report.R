@@ -37,7 +37,8 @@ describe(
         con <- get_db_connection(temp_path)
         query_df <- data.frame(
           "query_id"      = c("ID1-unique_id", "ID2-unique_id"),
-          "subject_id"     = c("ID1", "ID2"),
+          "subject_id"    = c("ID1", "ID2"),
+          "type"          = c("Major", "Normal"),
           "event_label"   = c("Visit 1"),
           "item_group"    = c("Vital signs", "Adverse events"),
           "item"          = c("Pulse", "Sepsis"),
@@ -106,6 +107,7 @@ describe(
               dplyr::select(
                 query_id, 
                 "ID" = subject_id, 
+                "Type" = type,
                 "Form" = item_group, 
                 "Item" = item, 
                 "Event" = event_label, 
@@ -132,6 +134,7 @@ describe(
         query_df <- data.frame(
           "query_id"      = c("ID1-unique_id", "ID2-unique_id"),
           "subject_id"     = c("ID1", "ID2"),
+          "type"          = c("Major", "Normal"),
           "event_label"   = c("Visit 1"),
           "item_group"    = c("Vital signs", "Adverse events"),
           "item"          = c("Pulse", "Sepsis"),
