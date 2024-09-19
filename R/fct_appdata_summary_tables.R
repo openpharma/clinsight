@@ -138,12 +138,12 @@ get_available_data <- function(data, tables, all_forms){
         df_x <- data[[x]] |> 
           dplyr::select(
             dplyr::all_of(c("subject_id", "event_name", "event_label",  
-                            "item_group", "item_name"))
+                            "item_group", "item_name", "form_repeat"))
             )
       } else {
         if(is.null(tables[[x]])) return(NULL)
         df_x <- tables[[x]] |> 
-          dplyr::select(subject_id, "item_name" = Name) |>
+          dplyr::select(subject_id, "item_name" = Name, form_repeat) |>
           dplyr::mutate(item_group = x, event_name = "Any visit", 
                         event_label = "Any visit") 
       }
@@ -155,7 +155,20 @@ get_available_data <- function(data, tables, all_forms){
           )
     }) |> 
     dplyr::bind_rows()
-  study_event_selectors
+  # To uniquely identify events with the same name (mostly in common_forms):
+  study_event_selectors |> 
+    dplyr::mutate(
+      n = dplyr::n(), 
+      .by = c("subject_id", "item_group", "event_name", "item_name")
+    ) |> 
+    dplyr::mutate(
+      item_name = ifelse(
+        n > 1, 
+        sprintf("%s (N: %s)", item_name, form_repeat), 
+        item_name
+      )
+    ) |> 
+    dplyr::select(-n)
 }
 
 
