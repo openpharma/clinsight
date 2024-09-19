@@ -143,7 +143,17 @@ mod_navigate_review_server <- function(
     })
     
     output[["queries_table"]] <- DT::renderDT({
-      datatable_custom(queries_table_data(), table_names)
+      datatable_custom(
+        queries_table_data(), 
+        rename_vars = table_names,
+        options = list(
+          scrollY = "100%", 
+          scrollX = TRUE,
+          scroller = FALSE
+        ),
+        rownames = FALSE,
+        selection = "none"
+        )
     })
     
     mod_go_to_form_server(

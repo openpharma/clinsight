@@ -14,7 +14,7 @@ mod_query_follow_up_ui <- function(id){
       inputId = ns("query_follow_up_text"),
       label = NULL,
       width = "100%",
-      height = "200px",
+      height = "20%",
       placeholder = "add response here"
     ),
     checkboxInput(
