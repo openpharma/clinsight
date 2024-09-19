@@ -132,7 +132,7 @@ mod_common_forms_server <- function(
         )) |> 
         adjust_colnames("^SAE ")
       if(!input$show_all_data) SAE_data$subject_id <- NULL
-      datatable_custom(SAE_data, rename_vars = table_names,
+      datatable_custom(SAE_data, rename_vars = table_names, rownames= FALSE,
                        title = "Serious Adverse Events", escape = FALSE)
     })
     
@@ -145,7 +145,7 @@ mod_common_forms_server <- function(
           dplyr::select(-dplyr::starts_with("SAE"))
       }
       if(!input$show_all_data) df$subject_id <- NULL
-      datatable_custom(df, rename_vars = table_names,
+      datatable_custom(df, rename_vars = table_names, rownames= FALSE,
                        title = form, escape = FALSE)
     })
     
