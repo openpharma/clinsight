@@ -58,6 +58,7 @@ select_report_data <- function(
       dplyr::select(
         query_id, 
         "ID" = subject_id, 
+        "Type" = type,
         "Form" = item_group, 
         "Item" = item, 
         "Event" = event_label, 
