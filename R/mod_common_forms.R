@@ -112,7 +112,6 @@ mod_common_forms_server <- function(
           )
         ) |> 
         create_table(expected_columns = names(form_items))
-      df[["form_repeat"]] <- NULL
       if(!input$show_all_data){ 
         df <-  with(df, df[subject_id == r$subject_id, ]) 
       }
@@ -126,14 +125,14 @@ mod_common_forms_server <- function(
       SAE_data <- data_active() |> 
         dplyr::filter(grepl("Yes", `Serious Adverse Event`)) |> 
         dplyr::select(dplyr::any_of(
-          c("subject_id", "Name", "AESI",  "SAE Start date", 
+          c("subject_id","form_repeat", "Name", "AESI",  "SAE Start date", 
             "SAE End date", "CTCAE severity", "Treatment related", 
             "Treatment action", "Other action", "SAE Category", 
             "SAE Awareness date", "SAE Date of death", "SAE Death reason")
         )) |> 
         adjust_colnames("^SAE ")
       if(!input$show_all_data) SAE_data$subject_id <- NULL
-      datatable_custom(SAE_data, rename_vars = table_names,
+      datatable_custom(SAE_data, rename_vars = table_names, rownames= FALSE,
                        title = "Serious Adverse Events", escape = FALSE)
     })
     
@@ -146,7 +145,7 @@ mod_common_forms_server <- function(
           dplyr::select(-dplyr::starts_with("SAE"))
       }
       if(!input$show_all_data) df$subject_id <- NULL
-      datatable_custom(df, rename_vars = table_names,
+      datatable_custom(df, rename_vars = table_names, rownames= FALSE,
                        title = form, escape = FALSE)
     })
     

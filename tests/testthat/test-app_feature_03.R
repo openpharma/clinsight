@@ -42,6 +42,8 @@ describe(
         # can be fragile to snapshot.
         input_names <- names(app$get_values(input = TRUE)$input)
         output_names <- names(app$get_values(output = TRUE)$output)
+        
+        ####### snap feature-3-001
         app$expect_values(
           input = vector_select(input_names, exclude = "plotly_relayout"), 
           output = vector_select(output_names, exclude = "visit_figure")
@@ -109,6 +111,8 @@ describe(
         # can be fragile to snapshot.
         input_names <- names(app$get_values(input = TRUE)$input)
         output_names <- names(app$get_values(output = TRUE)$output)
+        
+        ####### snap feature-3-002
         app$expect_values(
           input = vector_select(
             input_names, 
@@ -133,7 +137,98 @@ describe(
         expect_equal(query_database_data$query, "Major test query")
         expect_equal(query_database_data$type, "Major")
         expect_equal(query_database_data$reviewer, "test user (Administrator)")
+        # close modal, so that next scenario can start without it:
+        app$wait_for_js("$('#shiny-modal').modal('hide');")
+      }
+    )
+    it(
+      "Scenario 3 | viewing, and responding to a query. 
+        Given two queries being created as in the previous scenarios,
+        and clicking on the queries tab,
+        I expect that I can see the saved queries. 
+        After clicking on the first query in the table, 
+        I expect that I can see the details of this query,
+        and that I can write a response message which will be saved after clicking 
+        'respond to query'. ", 
+      {
+        ### View first query:
+        app$set_inputs(main_tabs = "Queries")
+        app$set_inputs(
+          "queries_1-queries_rows_selected" = 1, 
+          allow_no_input_binding_ = TRUE
+        )
+        output_names <- names(app$get_values(output = TRUE)$output)
+        
+        ####### snap feature-3-003
+        app$expect_values(
+          output = vector_select(output_names, include = "queries_1")
+        )
+        ### Follow-up on first query:
+        app$set_inputs("queries_1-query_follow_up_1-query_follow_up_text" = 
+                         "Text written as response to initial query")
+        app$click("queries_1-query_follow_up_1-query_add_follow_up")
+        app$set_inputs(
+          "queries_1-queries_rows_selected" = 1, 
+          allow_no_input_binding_ = TRUE
+        )
+        output_names_2 <- names(app$get_values(output = TRUE)$output)
+        
+        ####### snap feature-3-004
+        app$expect_values(
+          output = vector_select(output_names_2, include = "queries_1")
+        )
+        user_db <- app$get_value(export = "user_db")
+        query_database_data <- collect_query_data(user_db)
+        expect_equal(
+          with(query_database_data, query[subject_id == "BEL_04_772"]),
+          c("Major test query", "Text written as response to initial query")
+        )
+      }
+    )
+    it(
+      "Scenario 4 | responding to a query and closing it. 
+       Given two queries being created as in the previous scenarios,
+        and viewing the queries tab,
+        and clicking on the pre-existing query of subject [BEL_08_45],
+        I expect that I can write a response to this query,
+        and that I can mark the query as resolved,
+        and that, after saving the response, the results are stored accurately.", 
+      {
+        ### Follow-up on second query:
+        app$set_inputs(
+          "queries_1-queries_rows_selected" = 2, 
+          allow_no_input_binding_ = TRUE
+        )
+        app$set_inputs(
+          "queries_1-query_follow_up_1-query_follow_up_text" = 
+            "This query will be resolved.",
+          "queries_1-query_follow_up_1-resolved" = TRUE
+          )
+        app$click("queries_1-query_follow_up_1-query_add_follow_up")
+        app$click("queries_1-show_resolved")
+        app$wait_for_idle(800)
+        app$set_inputs(
+          "queries_1-queries_rows_selected" = 2, 
+          allow_no_input_binding_ = TRUE
+        )
+        output_names <- names(app$get_values(output = TRUE)$output)
+        
+        ####### snap feature-3-005
+        app$expect_values(
+          output = vector_select(output_names, include = "queries_1")
+        )
+        user_db <- app$get_value(export = "user_db")
+        query_database_data <- collect_query_data(user_db)
+        expect_equal(
+          with(query_database_data, query[subject_id == "BEL_08_45"])[2],
+          c("This query will be resolved.")
+        )
+        expect_equal(
+          with(query_database_data, resolved[subject_id == "BEL_08_45"]),
+          c("Yes", "Yes")
+        )
       }
     )
   }
 )
+

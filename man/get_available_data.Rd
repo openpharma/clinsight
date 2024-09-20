@@ -4,7 +4,7 @@
 \alias{get_available_data}
 \title{Get available data}
 \usage{
-get_available_data(data, tables, all_forms)
+get_available_data(data, tables, all_forms, form_repeat_name = "N")
 }
 \arguments{
 \item{data}{list of data frames to be used. Will be used for extracting the
@@ -13,17 +13,22 @@ variables of interest from the study-specific forms.}
 \item{tables}{list of tables to be used. Will be used for extracting the
 variables of interest from the common forms.}
 
-\item{all_forms}{A data frame containing all forms.
-Mandatory columns are "form" (containing the form names), and "main_tab"
-(containing the tab name where the form should be located).}
+\item{all_forms}{A data frame containing all forms. Mandatory columns are
+"form" (containing the form names), and "main_tab" (containing the tab name
+where the form should be located).}
+
+\item{form_repeat_name}{A character string with the name of the \code{form_repeat}
+variable. This variable (with this name) will be added to the item name if
+duplicate names exist for each participant.}
 }
 \value{
 A data frame with available data points per form.
 }
 \description{
 Creates a data frame containing info about available data per individual,
-such as visits, adverse events, etc. Will be used in module \code{\link[=mod_queries_server]{mod_queries_server()}},
-to select available items to create a query for per individual and per form.
-Required columns are the ones distinctively identifying an item.
-For now that are site_code, event_name, subject_id, event_label, item_group, item_name.
+such as visits, adverse events, etc. Will be used in module
+\code{\link[=mod_queries_server]{mod_queries_server()}}, to select available items to create a query for per
+individual and per form. Required columns are the ones distinctively
+identifying an item. For now that are site_code, event_name, subject_id,
+event_label, item_group, item_name.
 }

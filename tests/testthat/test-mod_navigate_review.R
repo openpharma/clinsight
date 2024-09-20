@@ -69,11 +69,13 @@ describe(
         queries_df <- summary_df[, 1, drop = FALSE] |>
           dplyr::mutate(
             query = paste0("random query", 1:4),
+            type = "Major",
             timestamp = "2023-11-01 01:01:01",
             query_id = paste0("query_id-", subject_id),
             resolved = "No",
+            item = c("Intoxication", "Sepsis", "Pneumothorax", "Delirium"),
             item_group = "Adverse events",
-            event_label = "Visit 1"
+            event_label = paste0("Visit ", 1:4)
           )
 
         testargs <- list(
@@ -85,16 +87,21 @@ describe(
           navinfo = reactiveValues(),
           all_forms = data.frame()
         )
-        query_table_data <- queries_df |>
-          dplyr::select(subject_id, item_group, event_label, query, resolved)
+        query_table_data <- queries_df |> 
+          dplyr::mutate(
+            ID = paste0(item, " (", item_group, ", ", event_label, ")"),
+            ID = ifelse(type == "Major", paste0(ID, " Major query"), ID)
+          ) |> 
+          dplyr::select(tidyr::all_of(c("subject_id", "ID", "query"))) 
+        
         testServer(mod_navigate_review_server, args = testargs, {
           ns <- session$ns
           session$setInputs(show_all_data = TRUE)
+
           expect_equal(modal_rev_data(), summary_df)
           expect_true(inherits(output[["review_df"]], "json"))
           expect_equal(queries_table_data(), query_table_data)
           expect_true(inherits(output[["queries_table"]], "json"))
-
 
           session$setInputs(show_all_data = FALSE)
           expect_equal(modal_rev_data(), summary_df[1,])
@@ -116,17 +123,10 @@ describe(
           subject_id = "",
           summary_col = ""
         )
-        queries_df <- summary_df[, 1, drop = FALSE] |>
-          dplyr::mutate(
-            subject_id = "",
-            query = "",
-            timestamp = "",
-            query_id = "",
-            resolved = "",
-            item_group = "",
-            event_label = ""
-          )
-
+        
+        queries_df <- summary_df[, 1, drop = FALSE] |> 
+          add_missing_columns(names(query_data_skeleton))
+        
         testargs <- list(
           r = reactiveValues(
             subject_id = "subject01-test",
@@ -138,6 +138,7 @@ describe(
         )
         testServer(mod_navigate_review_server, args = testargs, {
           ns <- session$ns
+          
           session$setInputs(show_all_data = TRUE)
           expect_equal(modal_rev_data(), summary_df[0,])
           expect_true(inherits(output[["review_df"]], "json"))
@@ -163,15 +164,17 @@ describe(
           Form = "Adverse events", 
           summary_col = paste0("summary_info", 1:4)
         )
+        
         queries_df <- summary_df[, 1, drop = FALSE] |> 
           dplyr::mutate(
-            subject_id = "",
-            query = "",
-            timestamp = "",
-            query_id = "",
-            resolved = "",
-            item_group = "",
-            event_label = ""
+            query = paste0("random query", 1:4),
+            type = "Major",
+            timestamp = "2023-11-01 01:01:01",
+            query_id = paste0("query_id-", subject_id),
+            resolved = "No",
+            item = c("Intoxication", "Sepsis", "Pneumothorax", "Delirium"),
+            item_group = "Adverse events",
+            event_label = paste0("Visit ", 1:4)
           )
         
         test_ui <- function(request){
@@ -197,7 +200,7 @@ describe(
             id = "test", 
             r = reactiveValues(
               subject_id = "subject01-test",
-              query_data = queries_df[0,]
+              query_data = queries_df
             ), 
             rev_data = rev_data,  
             navinfo = reactiveValues(active_form = "Adverse events", active_tab = "Common events"),

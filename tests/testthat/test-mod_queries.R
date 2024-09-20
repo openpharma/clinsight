@@ -150,10 +150,12 @@ describe(
               show_resolved = TRUE
               )
             expect_equal(selected_query(), "ID1-unique_id")
-            expect_equal(selected_query_data(), query_df[1:2,])
+            expected_result <- query_df[1:2,] |> 
+              dplyr::mutate(reviewer = paste0(reviewer, " ", timestamp))
+            expect_equal(selected_query_data(), expected_result)
             expect_equal(
               output[["selected_query_title"]],
-              "<b><center><h5>ID1</h5><br>Pulse (Vital signs); Visit 1</center><br> resolved: <i>Yes</i></b><line></line>"
+              "<b>ID1: Pulse</b><br>Vital signs, Visit 1 (resolved)"
             )
           })
         }
@@ -166,7 +168,7 @@ describe(
           and that [selected_query_data] shows the correct query belonging to the 
           selected query_id, 
           and that the selected query title contains the item name, subject_id, 
-          item_group, and resolved value.", {
+          item_group, and will not show that it is resolved.", {
             testargs <- list(
               r = reactiveValues(query_data = query_df, user_name = "Admin test"),
               navinfo = reactiveValues(),
@@ -177,10 +179,12 @@ describe(
               ns <- session$ns
               session$setInputs(queries_rows_selected = 1, show_resolved = TRUE)
               expect_equal(selected_query(), "ID2-unique_id")
-              expect_equal(selected_query_data(), query_df[3,])
+              expected_result <- query_df[3,] |> 
+                dplyr::mutate(reviewer = paste0(reviewer, " ", timestamp))
+              expect_equal(selected_query_data(), expected_result)
               expect_equal(
                 output[["selected_query_title"]],
-                "<b><center><h5>ID1</h5><br>Sepsis (Adverse events); Visit 1</center><br> resolved: <i>No</i></b><line></line>"
+                "<b>ID1: Sepsis</b><br>Adverse events, Visit 1"
               )
             })
           }
