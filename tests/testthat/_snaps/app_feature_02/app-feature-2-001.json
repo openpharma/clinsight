@@ -61,9 +61,10 @@
           },
           "meta": null,
           "script": null,
-          "stylesheet": "components.css",
+          "stylesheet": "bslib-component-css.min.css",
           "head": null,
           "attachment": null,
+          "package": null,
           "all_files": true
         },
         {
@@ -152,9 +153,10 @@
           },
           "meta": null,
           "script": null,
-          "stylesheet": "components.css",
+          "stylesheet": "bslib-component-css.min.css",
           "head": null,
           "attachment": null,
+          "package": null,
           "all_files": true
         },
         {
