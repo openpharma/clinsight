@@ -128,8 +128,14 @@ get_timeline_data <- function(
 #' @return A data frame with available data points per form.
 #' @export
 #'
-get_available_data <- function(data, tables, all_forms){
-  stopifnot(is.list(data), is.list(tables))
+get_available_data <- function(
+    data, 
+    tables, 
+    all_forms,
+    form_repeat_name = "N"
+    ){
+  stopifnot(is.list(data), is.list(tables), is.character(form_repeat_name))
+  if(identical(form_repeat_name, character(0))){form_repeat_name <- "N"}
   study_event_selectors <- lapply(
     all_forms$form, 
     \(x){
@@ -164,7 +170,7 @@ get_available_data <- function(data, tables, all_forms){
     dplyr::mutate(
       item_name = ifelse(
         n > 1, 
-        sprintf("%s (N: %s)", item_name, form_repeat), 
+        sprintf("%s (%s: %s)", item_name, form_repeat_name, form_repeat), 
         item_name
       )
     ) |> 

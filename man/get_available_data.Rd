@@ -4,7 +4,7 @@
 \alias{get_available_data}
 \title{Get available data}
 \usage{
-get_available_data(data, tables, all_forms)
+get_available_data(data, tables, all_forms, form_repeat_name = "N")
 }
 \arguments{
 \item{data}{list of data frames to be used. Will be used for extracting the

@@ -41,7 +41,12 @@ app_server <- function(
   available_data <- get_available_data(
     data = app_data,
     tables = app_tables,
-    all_forms = app_vars$all_forms
+    all_forms = app_vars$all_forms,
+    form_repeat_name = with(
+      meta[["table_names"]], 
+      table_name[raw_name == "form_repeat"]
+      ) |> 
+      tryCatch(error = \(e) "N")
   )
   
   # For summary review data:
