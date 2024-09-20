@@ -146,11 +146,7 @@ mod_navigate_review_server <- function(
       datatable_custom(
         queries_table_data(), 
         rename_vars = table_names,
-        options = list(
-          scrollY = "100%", 
-          scrollX = TRUE,
-          scroller = FALSE
-        ),
+        options = list(scroller = FALSE),
         rownames = FALSE,
         selection = "none"
         )
