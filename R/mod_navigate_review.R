@@ -134,10 +134,16 @@ mod_navigate_review_server <- function(
     
     queries_table_data <- reactive({
       # Select the initial query for every query id with slice_min: 
+      #TODO: try to use the tables of mod_queries instead to remove duplication
       df <- dplyr::slice_min(r$query_data, timestamp, by = query_id) |> 
         dplyr::filter(resolved == "No") |> 
-        dplyr::select(tidyr::all_of(c("subject_id", "item_group", "event_label", "query", "resolved")))
-      if(input$show_all_data) df else { dplyr::filter(df, subject_id == r$subject_id) |> 
+        dplyr::mutate(
+          ID = paste0(item, " (", item_group, ", ", event_label, ")"),
+          ID = ifelse(type == "Major", paste0(ID, " Major query"), ID)
+        ) |> 
+        dplyr::select(tidyr::all_of(c("subject_id", "ID", "query"))) 
+      if(input$show_all_data) df else { 
+        dplyr::filter(df, subject_id == r$subject_id) |> 
           dplyr::select(-subject_id)
       }
     })
