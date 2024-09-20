@@ -112,7 +112,7 @@ mod_queries_server <- function(id, r, navinfo, all_forms, db_path, table_names){
         dplyr::mutate(
           query = ifelse(
             nchar(query)>40, 
-            paste0(substr(query, 1, 40), "..."), 
+            paste0(trimws(substr(query, 1, 40)), "..."), 
             query
           )
         )
