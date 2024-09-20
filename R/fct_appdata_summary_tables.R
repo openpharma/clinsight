@@ -109,25 +109,29 @@ get_timeline_data <- function(
   df
 }
 
-#' Get available data  
-#' 
-#' Creates a data frame containing info about available data per individual, 
-#' such as visits, adverse events, etc. Will be used in module [mod_queries_server()], 
-#' to select available items to create a query for per individual and per form. 
-#' Required columns are the ones distinctively identifying an item. 
-#' For now that are site_code, event_name, subject_id, event_label, item_group, item_name.
-#' 
-#' @param data list of data frames to be used. Will be used for extracting the 
-#' variables of interest from the study-specific forms.
-#' @param tables list of tables to be used. Will be used for extracting the 
-#' variables of interest from the common forms.
-#' @param all_forms A data frame containing all forms. 
-#' Mandatory columns are "form" (containing the form names), and "main_tab" 
-#' (containing the tab name where the form should be located). 
+#' Get available data
+#'
+#' Creates a data frame containing info about available data per individual,
+#' such as visits, adverse events, etc. Will be used in module
+#' [mod_queries_server()], to select available items to create a query for per
+#' individual and per form. Required columns are the ones distinctively
+#' identifying an item. For now that are site_code, event_name, subject_id,
+#' event_label, item_group, item_name.
+#'
+#' @param data list of data frames to be used. Will be used for extracting the
+#'   variables of interest from the study-specific forms.
+#' @param tables list of tables to be used. Will be used for extracting the
+#'   variables of interest from the common forms.
+#' @param all_forms A data frame containing all forms. Mandatory columns are
+#'   "form" (containing the form names), and "main_tab" (containing the tab name
+#'   where the form should be located).
+#' @param form_repeat_name A character string with the name of the `form_repeat`
+#'   variable. This variable (with this name) will be added to the item name if
+#'   duplicate names exist for each participant.
 #'
 #' @return A data frame with available data points per form.
 #' @export
-#'
+#' 
 get_available_data <- function(
     data, 
     tables, 
