@@ -10,9 +10,9 @@
         "extensions": [
           "Scroller"
         ],
-        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th>Subject<\/th>\n      <th>Form<\/th>\n      <th>event_label<\/th>\n      <th>query<\/th>\n      <th>resolved<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
+        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th>Subject<\/th>\n      <th>ID<\/th>\n      <th>query<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
         "options": {
-          "scrollY": "100%",
+          "scrollY": 400,
           "scrollX": true,
           "scroller": false,
           "deferRender": true,
@@ -26,20 +26,12 @@
               "targets": 0
             },
             {
-              "name": "Form",
+              "name": "ID",
               "targets": 1
             },
             {
-              "name": "event_label",
-              "targets": 2
-            },
-            {
               "name": "query",
-              "targets": 3
-            },
-            {
-              "name": "resolved",
-              "targets": 4
+              "targets": 2
             }
           ],
           "order": [

@@ -208,7 +208,7 @@
         ],
         "container": "<table class=\"table table-hover row-border\">\n  <thead>\n    <tr>\n      <th>Query<\/th>\n      <th>Author<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
         "options": {
-          "scrollY": "90%",
+          "scrollY": 400,
           "scrollX": true,
           "scroller": false,
           "deferRender": true,
