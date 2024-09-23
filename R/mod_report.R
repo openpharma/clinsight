@@ -121,7 +121,10 @@ mod_report_server <- function(id, r, rev_data, db_path, table_names){
     
     
     output[["user_name"]] <- renderText({
-      paste0("Include activity from:\n ", tags$b(r$user_name))
+      paste0(
+        "Include activity from:\n ", 
+        tags$b(paste0(r$user_name,  " (", r$user_role, ")"))
+        )
     })
     observeEvent(input$create_report, {
       req(forms_missing_review())

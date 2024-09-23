@@ -58,6 +58,7 @@ select_report_data <- function(
       dplyr::select(
         query_id, 
         "ID" = subject_id, 
+        "Type" = type,
         "Form" = item_group, 
         "Item" = item, 
         "Event" = event_label, 
@@ -98,6 +99,9 @@ create_report <- function(
     app_sys("app/www/report.Rmd"), 
     tempReport, overwrite = TRUE
     )
+  
+  # Remove line breaks since they cause issues with simple kable() PDF tables: 
+  query_df$Query <- gsub("\n", "  ", query_df$Query)
   
   # Set up parameters to pass to Rmd document
   params <- list(
