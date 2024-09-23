@@ -27,8 +27,9 @@ describe(
       })
     })
     it(
-      "Scenario 1. Given data frames [r$query_data] and [r$review_data], 
-          and all values in column 'Reviewed' in [r$review_data] are 'Yes',
+      "Scenario 1 | Report data preparation. 
+          Given data frames [query_data] and [review_data], 
+          and all values in column 'Reviewed' in [review_data] are 'Yes',
           and the get_review_data is set to 1, 
           I expect that the internal data frames are correctly prepared for 
           reporting.", 
@@ -73,7 +74,7 @@ describe(
             review_data = review_df,
             user_name = "Admin",
             user_role = "Medical Monitor"
-            ),
+          ),
           rev_data = reactiveValues(summary = reactive({review_df[0,]})), 
           db_path = temp_path
         ) 
@@ -85,7 +86,7 @@ describe(
             create_report = 1, 
             report_type = "session", 
             include_from_date = "2023-10-01"
-            )
+          )
           expect_equal(
             selected_review_data(), 
             review_df |> 
@@ -122,8 +123,9 @@ describe(
       }
     )
     it(
-      "Scenario 2. Given data frames [r$query_data] and [r$review_data], 
-          and some values in column 'Reviewed' in [r$review_data] are 'No',
+      "Scenario 2 | Warn for missing reviews. 
+          Given data frames [query_data] and [review_data], 
+          and some values in column 'Reviewed' in [review_data] are 'No',
           and the get_review_data is set to 1, 
           and check_missing_data is set to 1,
           I expect that opening the missing data modal is trigggered,
@@ -188,26 +190,99 @@ describe(
     )
     
     it(
-      "Scenario 3. Given data frames [r$query_data] and [r$review_data], 
-          and all values in column 'Reviewed' in [r$review_data] are 'Yes',
+      "Scenario 3 | Download report. 
+          Given data frames [query_data] and [review_data], 
+          and all values in column 'Reviewed' in [review_data] are 'Yes',
           and the get_review_data is set to 1, 
-          I expect that I can successfully download a PDF report
+          and the user is set to 'Test user (Medical Monitor)',
+          I expect that I can successfully download a PDF report 
           containing the review activities.", 
       {
-        #TODO: implement test for PDF report download
+        temp_path <- withr::local_tempfile(fileext = ".sqlite") 
+        con <- get_db_connection(temp_path)
+        query_df <- data.frame(
+          "query_id"      = c("ID1-unique_id", "ID2-unique_id"),
+          "subject_id"     = c("ID1", "ID2"),
+          "event_label"   = c("Visit 1"),
+          "item_group"    = c("Vital signs", "Adverse events"),
+          "item"          = c("Pulse", "Sepsis"),
+          "timestamp"     = c("2023-01-01 01:01:01 UTC", "2023-11-02 01:01:01 UTC"),
+          "n"             = c(1),     
+          "reviewer"  = c("Test user (Medical Monitor)", "Test user (Medical Monitor)"),
+          "query"         = c("Query text test.", "Scoring correct? Please verify"),
+          "resolved"      = c("No", "Yes"),
+          "resolved_date" = c("", "2023-11-15 01:01:01"),
+          "edit_reason"   = c("", "")
+        ) |> 
+          dplyr::as_tibble()
+        DBI::dbWriteTable(con, "query_data", query_df)
+        review_df <- data.frame(
+          subject_id = "Test_name",
+          event_name = "Visit 1",
+          item_group = "Test_group",
+          form_repeat = 1,
+          item_name = "Test_item",
+          event_date = "2023-11-01",
+          edit_date_time = "2023-11-05 01:26:00",
+          reviewed = "Yes",
+          comment = "",
+          reviewer = "Test user (Medical Monitor)",
+          timestamp = "2023-11-13 01:01:01",
+          status = "old"
+        )
+        DBI::dbWriteTable(con, "all_review_data", review_df)
         
-        # testargs <- list(
-        #   r = reactiveValues(review_data = review_df),
-        #   rev_data = reactiveValues(summary = reactive({review_df[0,]})), 
-        #   db_path = ""
-        # ) 
-        # 
-        # testServer(mod_report_server, args = testargs, {
-        #   ns <- session$ns
-        #   session$setInputs()
-        # })
+        test_ui <- function(request){
+          tagList(
+            shinyjs::useShinyjs(),
+            bslib::page(
+              title = "Test report creation", 
+              mod_report_ui(id = "test-report")
+            )
+          )
+        }
+        
+        test_server <- function(input, output, session){
+          mod_report_server(
+            id = "test-report", 
+            r = reactiveValues(
+              review_data = review_df, 
+              user_name = "Test user", 
+              user_role = "Medical Monitor",
+              filtered_data = get_appdata(clinsightful_data)
+            ),
+            rev_data = reactiveValues(summary = reactive({review_df})), 
+            db_path = temp_path, 
+            table_names = setNames(
+              metadata$table_names$raw_name,
+              metadata$table_names$raw_name
+            )
+          )
+        }
+        
+        test_app <- shinyApp(test_ui, test_server)
+        app <- shinytest2::AppDriver$new(
+          app_dir = test_app, 
+          name = "mod_report",
+          width = 1619, 
+          height = 955, 
+          timeout = 10000
+        )
+        withr::defer(app$stop())
+        
+        app$click("test-report-create_report")
+        app$wait_for_idle()
+        app$click("test-report-get_incomplete_report")
+        app$wait_for_idle()
+        app$set_inputs("test-report-include_from_date" = "2023-01-01")
+        app$expect_values()
+        
+        pdf_report_path <- app$get_download("test-report-report")
+        # expect that a pdf file is downloaded:
+        expect_equal(basename(pdf_report_path), "report.pdf")
+        # expect a pdf size greater than 10kB:
+        expect_gt(file.size(pdf_report_path), 10000)
       }
     )
-    
   }
 )
