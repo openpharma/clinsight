@@ -1,8 +1,6 @@
 {
   "input": {
-    "test-report-check_missing_data": 0,
     "test-report-create_report": 1,
-    "test-report-get_incomplete_report": 1,
     "test-report-include_from_date": "2023-01-01",
     "test-report-report_type": "session",
     "test-report-review_completed_table_cell_clicked": {
@@ -12,14 +10,96 @@
 
     ],
     "test-report-review_completed_table_columns_selected": null,
-    "test-report-review_completed_table_rows_all": null,
-    "test-report-review_completed_table_rows_current": null,
+    "test-report-review_completed_table_rows_all": 1,
+    "test-report-review_completed_table_rows_current": 1,
     "test-report-review_completed_table_rows_selected": null,
     "test-report-review_completed_table_search": "",
-    "test-report-review_completed_table_state": null
+    "test-report-review_completed_table_state": {
+      "start": 0,
+      "length": 99,
+      "order": [
+
+      ],
+      "search": {
+        "search": "",
+        "smart": true,
+        "regex": false,
+        "caseInsensitive": true
+      },
+      "columns": [
+        {
+          "visible": true,
+          "search": {
+            "search": "",
+            "smart": true,
+            "regex": false,
+            "caseInsensitive": true
+          }
+        },
+        {
+          "visible": true,
+          "search": {
+            "search": "",
+            "smart": true,
+            "regex": false,
+            "caseInsensitive": true
+          }
+        },
+        {
+          "visible": true,
+          "search": {
+            "search": "",
+            "smart": true,
+            "regex": false,
+            "caseInsensitive": true
+          }
+        },
+        {
+          "visible": true,
+          "search": {
+            "search": "",
+            "smart": true,
+            "regex": false,
+            "caseInsensitive": true
+          }
+        },
+        {
+          "visible": true,
+          "search": {
+            "search": "",
+            "smart": true,
+            "regex": false,
+            "caseInsensitive": true
+          }
+        },
+        {
+          "visible": true,
+          "search": {
+            "search": "",
+            "smart": true,
+            "regex": false,
+            "caseInsensitive": true
+          }
+        },
+        {
+          "visible": true,
+          "search": {
+            "search": "",
+            "smart": true,
+            "regex": false,
+            "caseInsensitive": true
+          }
+        }
+      ],
+      "scroller": {
+        "topRow": 0,
+        "baseScrollTop": 0,
+        "baseRowTop": 0,
+        "scrollTop": 0
+      }
+    }
   },
   "output": {
-    "test-report-missing_review_info": "<b>1<\/b> Forms still need review. Please finish the review before proceeding.",
     "test-report-review_completed_table": {
       "x": {
         "style": "bootstrap5",

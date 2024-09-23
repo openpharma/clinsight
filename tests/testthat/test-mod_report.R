@@ -202,7 +202,8 @@ describe(
         con <- get_db_connection(temp_path)
         query_df <- data.frame(
           "query_id"      = c("ID1-unique_id", "ID2-unique_id"),
-          "subject_id"     = c("ID1", "ID2"),
+          "subject_id"    = c("ID1", "ID2"),
+          "type"          = c("Major", "Normal"),
           "event_label"   = c("Visit 1"),
           "item_group"    = c("Vital signs", "Adverse events"),
           "item"          = c("Pulse", "Sepsis"),
@@ -251,7 +252,7 @@ describe(
               user_role = "Medical Monitor",
               filtered_data = get_appdata(clinsightful_data)
             ),
-            rev_data = reactiveValues(summary = reactive({review_df})), 
+            rev_data = reactiveValues(summary = reactive({review_df[0,]})), 
             db_path = temp_path, 
             table_names = setNames(
               metadata$table_names$raw_name,
@@ -271,10 +272,9 @@ describe(
         withr::defer(app$stop())
         
         app$click("test-report-create_report")
-        app$wait_for_idle()
-        app$click("test-report-get_incomplete_report")
-        app$wait_for_idle()
+        app$wait_for_idle(800)
         app$set_inputs("test-report-include_from_date" = "2023-01-01")
+        app$wait_for_idle()
         app$expect_values()
         
         pdf_report_path <- app$get_download("test-report-report")

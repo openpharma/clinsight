@@ -47,7 +47,7 @@ invisible(
   unlist(lapply(unique(df$query_id), \(x){
     df <- dplyr::filter(df, query_id == x)
     id_x <- unique(df$ID); form_x <- unique(df$Form); event_x <- unique(df$Event)
-    item_x <- unique(df$Item); type_x <- unique(df$Type)
+    item_x <- unique(df$Item); type_x <- unique(df[["Type"]]) %||% ""
     header <- sprintf("%s query for: %s; %s (%s, %s)", df$Type, id_x, item_x, form_x, event_x)
     if(any(df$resolved == "Yes")){
       header <- paste0(header, "; Resolved")
