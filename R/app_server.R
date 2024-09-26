@@ -137,10 +137,10 @@ app_server <- function(
     overview = reactive({
       static_overview_data |>
         dplyr::filter(subject_id %in% r$filtered_subjects) |>
-        dplyr::arrange(subject_id) |>
         dplyr::mutate(
           needs_review = subject_id %in% unique(rev_data$summary()$subject_id)
-        )
+        ) |> 
+        dplyr::arrange(dplyr::desc(needs_review), subject_id)
     }),
     subject = app_vars$subject_id[1],
     open_modal = 0,
