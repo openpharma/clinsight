@@ -69,11 +69,19 @@ write_file_results <- function(file, categories, ...) {
 write_category_results <- function(category, tests, ...) {
   cat("####", category, "\n")
   
-  if (knitr::is_latex_output() || knitr::is_html_output()) {
+  if (knitr::is_latex_output() ) {
     tab <- knitr::kable(tests, booktabs = TRUE)  |>
+      kableExtra::kable_styling() |>
+      kableExtra::column_spec(1, width = "30em")
+  } else{
+    if(knitr::is_html_output()){
+       tab <- knitr::kable(tests, booktabs = TRUE)  |>
       kableExtra::kable_styling(full_width = TRUE) |>
       kableExtra::column_spec(1, width = "30em")
-  } else{  tab <- knitr::kable(tests) }
+    } else{  
+      tab <- knitr::kable(tests) 
+      }
+  } 
   print(tab)
   cat("\n")
 }
@@ -122,19 +130,19 @@ applications and components'.
 ## General constraints
 
 1.  The application is developed within Mozilla Firefox (v121.0) and
-    validated with Google Chrome (v120.0.6099.199). Although all major
+    validated with Google Chrome (129.0.6668.60). Although all major
     browsers (Google Chrome, Mozilla Firefox, Safari, Microsoft Edge)
     released after 2013 should work with the application (if they
     support [Websockets](https://caniuse.com/websockets)), it cannot be
     guaranteed that the layout is exactly as intended in browsers other
-    than Mozilla Firefox and Google Chrome.
+    than Mozilla Firefox and Google
 2.  The application is deployed in a secure environment that is only
     accessible through a VPN.
 
 ## General requirements
 
 |     | Requirement                                                                                                                                                                                                                                                                                                                                                       | Validation proof                                                                                                                                                                                                                |
-|-----|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|-----------------|-----------------------------------|---------------------|
 | 1   | Secure Authentication and Authorization: the application should have a robust user authentication system with secure password management and role-based access control to ensure that only authorized users, such as medical monitors and data managers, can access sensitive clinical trial data data.                                                           | *Secure authentication for accessing the virtual machine is validated in the deployment validation document. Validation of authentication within the application can be found here: [app_authentication](#app_authentication).* |
 | 2   | File Integration/loading data: Can processes raw data in the form of CSV files downloaded from the applicable external EDC system. The data in the application, including the data in the local database, should be updated accordingly.                                                                                                                          | Tested in [Feature 4](#app_feature_04) and in the tests for [loading appdata](#fct_appdata), [*creating* *and updating the database*](#fct_SQLite) *, and [updating review data](#update_review_data).*                         |
 | 3   | Data Visualization Tools: Has interactive and user-friendly data visualization tools to present complex medical data in a comprehensible manner, enabling monitors to make informed judgments based on the medical context and in alignment with various medical aspects such as potential (serious) adverse events, concomitant medications and medical history. | Main modules: [Common Forms](#common-forms), [Study Forms](#study-forms), [Timeline](#timeline).                                                                                                                                |
@@ -157,12 +165,10 @@ including their additional risk mitigation strategies.
 
 1b) Access possible and granted to a user that is unauthorized.
 
--   Risk mitigation: We implement three layers of security to protect
-    against unauthorized access: first, the user needs access to our
-    access-restricted VPN. Then, the user needs to login into the
-    virtual machine. Lastly, the user needs to sign in into the
-    application on the virtual machine. This is documented in the
-    Installation Qualification.
+-   Risk mitigation: We are using the authentication standard OpenID
+    Connect to ensure secure authentication, in combination with
+    Microsoft Entra ID as secure identity and access management system
+    in order to authenticate users and prevent unauthorized access.
 
 8a) The application fails to save a review in the database but not in
 the application itself.
@@ -515,7 +521,7 @@ The use of R and R packages within a GxP environment" (GMP_XXX\_, under
 development, draft available here: Z:\\RValidation\\01. Documentation).
 
 | Package           | Version                            | Use case                                           | Risk classification |
-|-------------------|------------------------------------|----------------------------------------------------|---------------------|
+|----------------|----------------|-----------------------|----------------|
 | `bslib`           | `r packageVersion("bslib")`        | Application interface                              | Low risk            |
 | `config`          | `r packageVersion("config")`       | Application interface                              | Low risk            |
 | `DBI`             | `r packageVersion("DBI")`          | Data input/output                                  | Low risk            |
@@ -537,6 +543,7 @@ development, draft available here: Z:\\RValidation\\01. Documentation).
 | `timevis`         | `r packageVersion("timevis")`      | Visualization                                      | Low risk            |
 | `tools`           | `r packageVersion("tools")`        | Data wrangling                                     | Low risk            |
 | `rlang`           | `r packageVersion("rlang")`        | Data wrangling                                     | Low risk            |
+| `withr`           | `r packageVersion("withr")`        | Data handling                                      | Low risk            |
 
 ### Medium-risk R packages
 
@@ -544,22 +551,12 @@ development, draft available here: Z:\\RValidation\\01. Documentation).
 
 `shinymanager`
 
-#### Rationale for use
+#### Rationale for use and risk mitigation
 
-This package is used because it helps to implement a login system and a
-credential management layer within the application, while the
-credentials database can be stored locally. No better alternatives that
-allow a locally stored credentials database are known as of writing of
-this validation report.
-
-#### Risk mitigation
-
-The risk of using this package is mitigated by adding an additional
-security layer: the application will be deployed behind our local VPN,
-ensuring that the application can only be reached by authorized
-personnel. The `shinymanager` package will be used as a second
-authentication system to enable identification of the application users.
-This mitigates the risk of the package use.
+We decided to implement a different authentication methodology based on
+OpenID Connect in combination with Microsofts' Identity and Access
+Management system 'Microsoft Entra ID (former Azure Active Directory)'.
+Therefore, this risk became not applicable.
 
 ### High-risk R packages
 
@@ -584,8 +581,11 @@ reproducible. The reproducible environment was created by using a fixed
 R version (`r R.version$version.string`), and by using the `renv`
 package (version 1.0.3, developed by POSIT) to maintain consistent
 package versions, in combination with the publicly available POSIT
-package manager with a snapshot of the public CRAN repository on
-11November 2023 (https://packagemanager.posit.co/cran/2023-11-01).
+package manager with a snapshot of the public CRAN repository on 17
+September 2024 (https://packagemanager.posit.co/cran/2023-09-17).
+Furthermore, the application and the environment was made fully
+reproducible by creating a custom Docker image using Alpine Linux, in
+which all dependencies are fully controlled and managed.
 
 ## Documentation
 
