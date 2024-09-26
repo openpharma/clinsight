@@ -46,7 +46,7 @@ describe(
   patient performed.", 
   {
     it(
-      "Scenario 1 | Subject 1, with Adverse Events and a Serious Adverse Event. 
+      "Scenario 1 - Subject 1, with Adverse Events and a Serious Adverse Event. 
         Given data sets [rev_data] and [nav_info] and 
         [r$filtered_tables$`Adverse events`] set with test data, 
         and the active subject ID [r$subject_id] set to ['Subj01'] , 
@@ -107,7 +107,7 @@ describe(
       }
     )
     it(
-      "Scenario 2 | Subject 2, no AEs recorded. Given data sets [rev_data] and [nav_info] and 
+      "Scenario 2 - Subject 2, no AEs recorded. Given data sets [rev_data] and [nav_info] and 
         [r$filtered_data$`Adverse events`] set with test data, 
         and the active subject ID [r$subject_id] set to ['Subj02'], 
         and the active subject having no adverse event data available, 

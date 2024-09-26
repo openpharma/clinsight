@@ -49,7 +49,7 @@ describe(
            suppressWarnings()
        })
     
-    # it("Scenario 1. Given [preconditions], and [inputs], I expect ...", {
+    # it("Scenario 1 - Given [preconditions], and [inputs], I expect ...", {
     #   testServer(
     #     app_server(app_data = appdata, app_tables = apptables, 
     #                app_vars - vars, meta = metadata), {

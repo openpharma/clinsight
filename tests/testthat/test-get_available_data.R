@@ -57,7 +57,7 @@ describe(
            c("Seizure (custom_name: 1)", "Seizure (custom_name: 3)")
          )
        })
-    it("Scenario 3. Given ... and some forms defined in the metadata but 
+    it("Scenario 3 - Given ... and some forms defined in the metadata but 
     completely missing in the data or tables,
        I expect that I still get a table with available data", {
          #TODO: implement test

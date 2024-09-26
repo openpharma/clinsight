@@ -24,7 +24,7 @@ describe(
         )
     })
     
-    it(paste0("Scenario 1. Given a data frame with raw data,", 
+    it(paste0("Scenario 1 - Given a data frame with raw data,", 
               "I expect that the output will be the same as recorded in a snapshot."), {
                 df <- merge_meta_with_data(raw_data, metadata)
                 expect_snapshot(df[c(1, 1000, 2000, 3000, 4000, 5000), ])

@@ -6,7 +6,7 @@ describe(
          "to load data from the raw csv file output from the EDC system and use a ", 
          "different metadata file to customize the application."), {
     it(
-      paste0("Scenario 1 | Load raw data with custom metadata. ", 
+      paste0("Scenario 1 - Load raw data with custom metadata. ", 
       "Given raw CSV data exported from the EDC system from patient [9600-002], ", 
       "and with metadata in which total visits is restricted to V0-V10, ",
       "and with only the study_forms 'Response' and 'Vitals adjusted' in the metadata",

@@ -39,7 +39,7 @@ together with data related to patient monitoring stuch as adverse events. ",
         expect_true(grepl("test", ns("test")))
         })
     })
-    it("Scenario 1 | Given a Form 'Adverse events', I expect 
+    it("Scenario 1 - Given a Form 'Adverse events', I expect 
        two internal dataframes (timeline_data_active() and timeline_data()) 
        and a JSON timeline object timeline as output", {
       testServer(mod_timeline_server, args = testargs, {
@@ -51,7 +51,7 @@ together with data related to patient monitoring stuch as adverse events. ",
           expect_true(inherits(output$timeline, "json"))
         })
     })
-    it("Scenario 2 | Given a Form other than 'Adverse events', I expect 
+    it("Scenario 2 - Given a Form other than 'Adverse events', I expect 
        two empty internal dataframes (timeline_data_active() and timeline_data()) 
        and an empty timeline object as output", {
          testargs <- list(

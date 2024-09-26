@@ -5,7 +5,7 @@ describe(
     common forms and study-specific forms of multiple participants in the application,
     so that I can appropriately assess whether there is a risk for the patient's safety.",
   {
-    it("Scenario 1 | Data visualization.
+    it("Scenario 1 - Data visualization.
           Given a fixed random test data set,
           with all data being marked as 'new'/not yet reviewed,
           and being logged in as test user,

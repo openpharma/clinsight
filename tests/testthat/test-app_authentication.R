@@ -8,7 +8,7 @@ describe(
     the password needs to be changed after first login. ", 
   {
     it(
-      "Scenario 1 | Existing credentials database. 
+      "Scenario 1 - Existing credentials database. 
         Given an existing a database named 'credentials.db' containing a test data 
         frame, stored in a temporary folder, 
         I expect that no new database will be created,
@@ -29,7 +29,7 @@ describe(
       }
     )
     it(
-      "Scenario 2 | Create a new credentials database. 
+      "Scenario 2 - Create a new credentials database. 
         Given that [credentials_db] leads to a non-existing database, 
         and [credentials_pwd] is set to 'test_password', 
         I expect that a new credentials database will be created,
@@ -74,7 +74,7 @@ describe(
       }
     )
     it(
-      "Scenario 3 | Create a new credentials database in a non-existent folder. 
+      "Scenario 3 - Create a new credentials database in a non-existent folder. 
         Given that [credentials_db] leads to a non-existing .sqlite database in 
         a nont-existent folder, 
         and [credentials_pwd] is set to 'test_password', 
@@ -101,7 +101,7 @@ describe(
   and remain on the login screen.", 
   {
     it(
-      "Scenario 1 | Access restricted. 
+      "Scenario 1 - Access restricted. 
         Given a credentials database containing the user 'test_user_normal' 
         with password '1234', and the [credentials_db] does not yet exist, 
         and [credentials_pwd] is set to '1234', 

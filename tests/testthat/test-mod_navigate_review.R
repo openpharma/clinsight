@@ -33,7 +33,7 @@ describe(
       })
     })
     it(
-      "Scenario 1. Given Subject id set to 'subject01-test',
+      "Scenario 1 - Given Subject id set to 'subject01-test',
           and [input$show_all_data] set to TRUE/FALSE,
           I expect that the table header text will be 'All data'/'subject01-test'
           , respectively (in bold font)",
@@ -54,7 +54,7 @@ describe(
       }
     )
     it(
-      "Scenario 2. Given Subject id set to 'subject01-test',
+      "Scenario 2 - Given Subject id set to 'subject01-test',
           and [input$show_all_data] set to either TRUE/FALSE,
           and rev_data$summary (=reactiveVal()) containing summary data with at least the column subject_id,
           I expect that the table with review data shows either the summary
@@ -112,7 +112,7 @@ describe(
       }
     )
     it(
-      "Scenario 3. Given Subject id set to 'subject01-test',
+      "Scenario 3 - Given Subject id set to 'subject01-test',
           and [input$show_all_data] set to either TRUE/FALSE,
           and rev_data$summary() (=reactiveVal()) containing an empty data frame,
           and r$query_data being an empty data frame, 
@@ -151,7 +151,7 @@ describe(
       }
     )
     it(
-      "Scenario 4. Given Subject id set to 'subject01-test',
+      "Scenario 4 - Given Subject id set to 'subject01-test',
           and the input value [show_all_data] is set to either TRUE/FALSE,
           and the [summary()] data frame in [rev_data] contains summary review data,
           and I click on an external button to open the review data modal, 

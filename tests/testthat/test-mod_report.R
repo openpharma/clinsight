@@ -1,8 +1,5 @@
-describe(
-  "mod_report. Feature 1 | As a user, I want to be able to create a PDF report that 
-  contains my review activities of that session.", 
-  {
-    
+describe("mod_report. Feature 1 | As a user, I want to be able to start the 
+  module in isolation", {
     it("Can load the module UI, with functioning base paramneters and internals.", {
       ui <- mod_report_ui(id = "test")
       golem::expect_shinytaglist(ui)
@@ -26,8 +23,14 @@ describe(
         expect_true(grepl("test", ns("test")))
       })
     })
+  })
+
+describe(
+  "mod_report. Feature 2 | As a user, I want to be able to create a PDF report that 
+  contains my review activities of that session.", 
+  {
     it(
-      "Scenario 1 | Report data preparation. 
+      "Scenario 1 - Report data preparation. 
           Given data frames [query_data] and [review_data], 
           and all values in column 'Reviewed' in [review_data] are 'Yes',
           and the get_review_data is set to 1, 
@@ -123,7 +126,7 @@ describe(
       }
     )
     it(
-      "Scenario 2 | Warn for missing reviews. 
+      "Scenario 2 - Warn for missing reviews. 
           Given data frames [query_data] and [review_data], 
           and some values in column 'Reviewed' in [review_data] are 'No',
           and the get_review_data is set to 1, 
@@ -190,7 +193,7 @@ describe(
     )
     
     it(
-      "Scenario 3 | Download report. 
+      "Scenario 3 - Download report. 
           Given data frames [query_data] and [review_data], 
           and all values in column 'Reviewed' in [review_data] are 'Yes',
           and the get_review_data is set to 1, 

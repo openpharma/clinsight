@@ -34,7 +34,7 @@ describe(
   {
     # See also database update date.
     it(
-      "Scenario 1 | DB synch date and EDC update date. 
+      "Scenario 1 - DB synch date and EDC update date. 
       Given current date set to 2024-01-10,
        and db_synch_time to 2024-01-10,
        and edc_latest_date to 2024-01-10,
@@ -73,7 +73,7 @@ describe(
 describe("mod_db_synch_info. Feature 3 | DB out of synch. As a user, I want to get a
   warning if the database synchronization did not happen on the same day as the data review.", {
     it(
-      "Scenario 1 | Old synchronization. Given the current date set to 2024-01-10,
+      "Scenario 1 - Old synchronization. Given the current date set to 2024-01-10,
        and the latest DB synch date set to '2024-01-08',
        and the latest EDC udpate date to '2024-01-01',
        I expect that a pop-up window will be shown with a warning 
@@ -109,7 +109,7 @@ describe("mod_db_synch_info. Feature 3 | DB out of synch. As a user, I want to g
       }
     )
     it(
-      "Scenario 2 | Synchronization date or EDC update date missing. Given the 
+      "Scenario 2 - Synchronization date or EDC update date missing. Given the 
         current date set to 2024-01-10,
         and the latest DB synch date is either missing or 'NULL',
         and the latest EDC update date is set to '2024-01-01',

@@ -5,7 +5,7 @@ describe(
   data of a patient. ", 
   {
     it(
-      "Scenario 1. Given a Report template at inst/app/Report.Rmd,
+      "Scenario 1 - Create report. Given a Report template at inst/app/Report.Rmd,
         and input of a reactiveValue r containing the user name and the review 
         data with all sites reviewed, 
         and a data frame [review_df] with the review information,

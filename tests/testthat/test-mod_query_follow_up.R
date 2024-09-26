@@ -35,7 +35,7 @@ describe(
   review database and should be the same as the message in-memory. ", 
   {
     it(
-      "Scenario 1 | Add query follow-up message. Given a query database 
+      "Scenario 1 - Add query follow-up message. Given a query database 
           containing a row with [query] set to 'Query text test.' and [query_id] 
           set to 'ID1-unique_id',  
           and [selected_query] set to 'ID1-unique_id',
@@ -86,7 +86,7 @@ describe(
   query and mark a query as resolved. The information should be saved in the query database.", 
   {    
     it(
-      "Scenario 1 | Add query follow-up and resolve query. Given a query database 
+      "Scenario 1 - Add query follow-up and resolve query. Given a query database 
           containing a row with [query] set to 'Query text test.' 
           and [query_id] set to 'ID1-unique_id',  
           and [selected_query] set to 'ID1-unique_id',
@@ -153,7 +153,7 @@ describe(
   of the follow-up messages remains as expected.", 
   {
     it(
-      "Scenario 1 | Saving multiple query follow-up messages. Given a query database 
+      "Scenario 1 - Saving multiple query follow-up messages. Given a query database 
       containing a row with [query] set to 'Query text test.' 
       and [query_id] set to 'ID1-unique_id',  
       and [selected_query] set to 'ID1-unique_id', 
@@ -230,7 +230,7 @@ describe(
   if it is unclear which query the follow-up message concerns.", 
   {
     it(
-      "Scenario 1 | No follow-up query without selected query id. Given a specific [query_follow_up_text], 
+      "Scenario 1 - No follow-up query without selected query id. Given a specific [query_follow_up_text], 
           and no query id set in [selected_query],
           I expect that the query database and internal query data frame 
           remain the same.", 
@@ -269,7 +269,7 @@ describe(
       }
     )
     it(
-      "Scenario 2 | No follow-up query with an unknown query id. Given a specific [query_follow_up_text], 
+      "Scenario 2 - No follow-up query with an unknown query id. Given a specific [query_follow_up_text], 
           and the query id in [selected_query()] is set to an unknown query_id 
           which is not in the database,
           I expect that no data will be written to the database,
@@ -312,7 +312,7 @@ describe(
   will be written to the database if no valid user name or user role is available.", 
   {
     it(
-      "Scenario 1 | No user name available. 
+      "Scenario 1 - No user name available. 
       follow-up query without selected query id. Given no user name is available, 
           and [query_follow_up_text] contains a specific follow-up text, 
           and [selected_query] is set to 'ID1-unique_id',
@@ -356,7 +356,7 @@ describe(
       }
     )
     it(
-      "Scenario 2 | No user role available. Given the same a conditions as in Scenario 1,
+      "Scenario 2 - No user role available. Given the same a conditions as in Scenario 1,
           but now with [user_name] set to 'test user' 
           and no [user_role] available, 
           and trying to save a follow-up query by pressing [query_add_follow_up],
@@ -407,7 +407,7 @@ describe(
   after saving a new entry.",
   {
     it(
-      "Scenario 1 | Database save function not working. 
+      "Scenario 1 - Database save function not working. 
         Given a test data base, 
         and the function 'db_save' being mocked (temporarily replaced) with a
         function that does not write to the database,

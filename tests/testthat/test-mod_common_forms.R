@@ -35,7 +35,7 @@ describe(
 )
 
 describe(
-  "mod_common_forms. Feature 1 | View common forms. As a user, I want to be able 
+  "mod_common_forms. Feature 2 | View common forms. As a user, I want to be able 
       to view common forms in the application, which includes at least the 
       adverse events forms (with timeline view), but can also include forms 
       such as (concomitant) medication, and medical history.", 
@@ -69,7 +69,7 @@ describe(
       form_items = form_items
     ) 
     it(
-      "Scenario 1 | View Adverse events table. Given a list of appdata in [filtered_tables],
+      "Scenario 1 - View Adverse events table. Given a list of appdata in [filtered_tables],
           and the active subject_id set to the existing subject with ID 'DEU_02_482',
           and a data frame with current review_data in [review_data],
           and the active form set to 'Adverse events',
@@ -97,7 +97,7 @@ describe(
       }
     )
     it(
-      "Scenario 2 | View timeline. Given a list of appdata in [filtered_tables],
+      "Scenario 2 - View timeline. Given a list of appdata in [filtered_tables],
           and a data frame with current review_data in [review_data],
           and the active subject_id set to the existing subject with ID 'DEU_02_482',
           and the selected [form] is 'Adverse events',
@@ -117,7 +117,7 @@ describe(
       }
     )
     it(
-      "Scenario 3 | View Medication.  
+      "Scenario 3 - View Medication.  
           Given a list of appdata in [filtered_tables],
           and the active subject_id set to the existing subject with ID 'NLD_06_755',
           and the active form set to 'Medication',

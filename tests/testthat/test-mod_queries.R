@@ -54,7 +54,7 @@ describe(
   resolved status (open queries first), and query type (major queries on top) . 
   If show_resolved is set to FALSE, only open queries will be shown.", {
     it(
-      "Scenario 1 | Show queries. Given a data frame [query_df],
+      "Scenario 1 - Show queries. Given a data frame [query_df],
         and [show_resolved] is set to 'TRUE',
         I expect the initial queries to be shown in 'initial_queries' ordered 
         by resolved status and query type, 
@@ -128,7 +128,7 @@ describe(
     )
   
     it(
-      "Scenario 2 | Select query with follow-up messages. 
+      "Scenario 2 - Select query with follow-up messages. 
         Given a data frame with test query data, 
         and with the selected row [queries_row_selected] set to '2', 
         and show_resolved set to 'TRUE',
@@ -161,7 +161,7 @@ describe(
         }
     )
     it(
-      "Scenario 3 | Selected query that is unresolved. Given a data frame [query_df], 
+      "Scenario 3 - Selected query that is unresolved. Given a data frame [query_df], 
        and with the selected row [queries_row_selected] set to '1', 
        and show_resolved set to 'TRUE',
           I expect [selected_query] to be the selected query_id 'ID2-unique_id', 

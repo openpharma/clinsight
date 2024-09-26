@@ -13,7 +13,7 @@ describe(
     )
     withr::defer(app$stop())
     it(
-      "Scenario 1 | Save normal query. 
+      "Scenario 1 - Save normal query. 
         Given a fixed fixed random test data set with all data marked as not yet reviewed, 
           and being logged in as 'test user' with the user role 'Administrator', 
           and patient BEL_08_45 selected as active patient,
@@ -71,7 +71,7 @@ describe(
       }
     )
     it(
-      "Scenario 2 | Browse to patient and save major query. 
+      "Scenario 2 - Browse to patient and save major query. 
         Given a fixed fixed random test data set with all data marked as not yet reviewed, 
           and being logged in as 'test user' with the user role 'Administrator', 
           and browsing to patient BEL_04_772 with tab 'Adverse events',
@@ -142,7 +142,7 @@ describe(
       }
     )
     it(
-      "Scenario 3 | viewing, and responding to a query. 
+      "Scenario 3 - Viewing of and responding to a query. 
         Given two queries being created as in the previous scenarios,
         and clicking on the queries tab,
         I expect that I can see the saved queries. 
@@ -186,7 +186,7 @@ describe(
       }
     )
     it(
-      "Scenario 4 | responding to a query and closing it. 
+      "Scenario 4 - responding to a query and closing it. 
        Given two queries being created as in the previous scenarios,
         and viewing the queries tab,
         and clicking on the pre-existing query of subject [BEL_08_45],

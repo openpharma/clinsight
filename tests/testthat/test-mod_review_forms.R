@@ -1,6 +1,6 @@
 describe(
   "mod_review_forms. Feature 1 | As a user, I want to be able to 
-         load the application in isolation. ", 
+         load the application in isolation.", 
   {
     it("Can load the module UI, with functioning internal parameters.", {
       ui <- mod_review_forms_ui(id = "test")
@@ -45,7 +45,7 @@ describe(
          "reviewed."), 
   {
     it(
-      paste0("Scenario 1 | Save a review. Given test review data with at ",
+      paste0("Scenario 1 - Save a review. Given test review data with at ",
              "least an 'Adverse event' form with patient '885',",
              "and [user_name] set to 'test_name' and [user_role] to 'Medical Monitor'",
              "and [active_patient] set to '885', ",
@@ -118,7 +118,7 @@ describe(
       }
     )
     it(
-      "Scenario 2 | Save a review. Given a data frame
+      "Scenario 2 - Save a review. Given a data frame
       and a database with review data with [reviewed] status set to 'new' (not reviewed yet),
         and [user_name] set to 'test_name' and [user_role] to 'Medical Monitor',
         and [subject_id]  set to '885',
@@ -206,7 +206,7 @@ describe(
   enabled when there is data to review.", 
   {
     it(
-      "Scenario 1 | Review needed. Given test review data with at least an 
+      "Scenario 1 - Review needed. Given test review data with at least an 
         'Adverse event' form with patient '885',
         and [active_patient] set to '885',
         and [active_form] set to 'Adverse events',
@@ -250,7 +250,7 @@ describe(
       }
     )
     it(
-      "Scenario 2 | Saving with unchanged review status. Given the same 
+      "Scenario 2 - Saving with unchanged review status. Given the same 
       conditions as in Scenario 1, and setting comment to 'test comment',
       and attempting to save a review 'save review',
       I expect that [enable_save_review()] is set to 'FALSE',
@@ -291,7 +291,7 @@ describe(
       }
     )
     it(
-      "Scenario 3 | No data to review. Given [active_form] set to a 
+      "Scenario 3 - No data to review. Given [active_form] set to a 
         form of which no data is available named [no_data_form],
         and that I try to save a review by setting [save_review] to 1,
         I expect that a warning message will be displayed with the text [Nothing to review],
@@ -342,7 +342,7 @@ describe(
   possible with a valid user name", 
   {
     it(
-      "Scenario 1 | Trying to save data without user name. Given 
+      "Scenario 1 - Trying to save data without user name. Given 
         a data frame and a database with review data with [reviewed] status set 
         to 'new' (not reviewed yet), 
         and [subject_id]  set to '885', 
@@ -413,7 +413,7 @@ describe(
   in the database, even if an error occurs when saving data to the database", 
   {
     it(
-      "Scenario 1 | Database save function not working. 
+      "Scenario 1 - Database save function not working. 
       Given test review data,
       and the function 'db_save_review' being mocked (temporarily replaced) with a
       function that does not write to the database,
@@ -471,7 +471,7 @@ describe(
   right to review forms to the roles specified in the config file.", 
   {
     it(
-      "Scenario 1 | Role without review privileges. 
+      "Scenario 1 - Role without review privileges. 
         Given the [user_name] 'test_user',
         and the unprivileged user_role 'restricted_role',
         I expect that all the review options are disabled,

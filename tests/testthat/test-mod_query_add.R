@@ -58,7 +58,7 @@ describe(
     )
     
     it(
-      "Scenario 1 | The currently active form information is correct. Given 
+      "Scenario 1 - The currently active form information is correct. Given 
         [subject_id] set to 'ID1', 
         and [active_form] consecutively set to 'Vital signs' and 'Adverse events', 
         I expect that the data frame [selected_data] shows a data frame with 
@@ -100,7 +100,7 @@ describe(
       }
     )
     it(
-      "Scenario 2 | A query can be saved successfully. 
+      "Scenario 2 - A query can be saved successfully. 
         Given [subject_id] is set to 'ID2', 
         and [active_form()] is set to 'Medication',
         and [query_text] is 'Add a new test query',
@@ -163,7 +163,7 @@ describe(
     )
     
     it(
-      "Scenario 3 | Save a major query. 
+      "Scenario 3 - Save a major query. 
         Given [subject_id] is set to 'ID3', 
         and [active_form()] is set to 'Adverse events',
         and [query_text] is 'Major query text.',
@@ -234,7 +234,7 @@ describe(
   after saving a new entry.",
   {
     it(
-    "Scenario 1 | Database save function not working. 
+    "Scenario 1 - Database save function not working. 
       Given a test data base, 
       and the function 'db_save' being mocked (temporarily replaced) with a
       function that does not write to the database,
@@ -293,7 +293,7 @@ describe(
   possible with a valid user name and role", 
   {
     it(
-      "Scenario 1 | Trying to save a query without user name. Given 
+      "Scenario 1 - Trying to save a query without user name. Given 
         a data frame and a database with review data with [reviewed] status set 
         to 'new' (not reviewed yet), 
         and no [user_name] available,
@@ -349,7 +349,7 @@ describe(
       }
     )
     it(
-      "Scenario 2 | Trying to save a query without user role. Given 
+      "Scenario 2 - Trying to save a query without user role. Given 
         the same conditions as in scenario 1, 
         but user_name now set to 'test user',
         and no user role available,
