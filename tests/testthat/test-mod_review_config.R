@@ -140,7 +140,9 @@ describe(
         I expect that only the sites 'Site 01' and 'Site 02' will be selected,
         and given that I click on [Save],
         I expect that a confirmation will be shown with the text 'Review configuration applied successfully',
-        and that the data within the app only contains data of 'Site 01' and 'Site 02'. ", 
+        and that the data within the app only contains data of 'Site 01' and 'Site 02', 
+        and I expect that the selected configuration is shown correctly when 
+        opening the configuration panel again.", 
       {
         test_ui <- function(request){
           tagList(
@@ -202,6 +204,15 @@ describe(
           all_sites[order(all_sites)], 
           c("Site 01", "Site 02")
         )
+        
+        app$wait_for_js("$('#shiny-modal').modal('hide');")
+        app$click("test-config_review")
+        app$wait_for_idle(800)
+        
+        input_vals <- app$get_values(input = TRUE)$input
+        expect_equal(input_vals$`test-active_role`, "Medical Monitor")
+        expect_equal(input_vals$`test-region_selection`, "DEU")
+        expect_equal(input_vals$`test-site_selection`, c("Site 01", "Site 02"))
       }
     )
   }

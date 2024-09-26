@@ -152,6 +152,7 @@ mod_review_config_server <- function(
       )
       
       modvars$site_selection   <- input$site_selection
+      modvars$region_selection <- input$region_selection
       
       golem::cat_dev("Selected sites:", modvars$site_selection, "\n")
       r <- filter_data(r, sites = input$site_selection, subject_ids = subject_ids, 
