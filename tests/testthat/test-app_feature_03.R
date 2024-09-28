@@ -171,9 +171,10 @@ describe(
           "queries_1-queries_rows_selected" = 1, 
           allow_no_input_binding_ = TRUE
         )
-        output_names_2 <- names(app$get_values(output = TRUE)$output)
+        app$wait_for_idle()
         
         ####### snap feature-3-004
+        output_names_2 <- names(app$get_values(output = TRUE)$output)
         app$expect_values(
           output = vector_select(output_names_2, include = "queries_1")
         )
