@@ -25,7 +25,7 @@
       #   DesignVersion <chr>, ItemValue <chr>, ItemCode <chr>, EditDateTime <chr>,
       #   EditBy <chr>, EditReason <chr>
 
-# merge_meta_with_data. Feature 1 | As a user, I want to be able to merge raw data with metadata. Furthermore, I want to be able to fix suffixes and rename the limits and significance values to the standard names used in the app.: Scenario 1 - Given a data frame with raw data,I expect that the output will be the same as recorded in a snapshot.
+# merge_meta_with_data. Feature 1 | Merge raw data with metadata. As a user, I want to be able to merge raw data with metadata. Furthermore, I want to be able to fix suffixes and rename the limits and significance values to the standard names used in the app.: Scenario 1 - Given a data frame with raw data,I expect that the output will be the same as recorded in a snapshot.
 
     Code
       df[c(1, 1000, 2000, 3000, 4000, 5000), ]

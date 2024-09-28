@@ -1,4 +1,4 @@
-# db_update(). Feature 1 | As a user, I want to be able to update the database.: Adds a new row to a database if there are new rows
+# db_update(). Feature 2 | Update user data database.: Adds a new row to a database if there are new rows
 
     Code
       DBI::dbGetQuery(con, "SELECT * FROM all_review_data")
@@ -10,7 +10,7 @@
       1            Admin     2023-11-13 01:01:01    old
       2             <NA> 2024-02-02 01:01:01 UTC    new
 
-# db_update(). Feature 1 | As a user, I want to be able to update the database.: Still performs an update if synch_time is not available
+# db_update(). Feature 2 | Update user data database.: Still performs an update if synch_time is not available
 
     Code
       DBI::dbGetQuery(con, query)
@@ -22,7 +22,7 @@
       1    old
       2    new
 
-# db_update(). Feature 1 | As a user, I want to be able to update the database.: Adds a new row for each data point with a new/updated EditdateTime.
+# db_update(). Feature 2 | Update user data database.: Adds a new row for each data point with a new/updated EditdateTime.
 
     Code
       DBI::dbGetQuery(con, "SELECT * FROM all_review_data")
@@ -34,7 +34,7 @@
       1            Admin     2023-11-13 01:01:01     old
       2             <NA> 2024-02-02 01:01:01 UTC updated
 
-# db_update(). Feature 1 | As a user, I want to be able to update the database.: Does not change the database if there are no changes (synch_time is the same)
+# db_update(). Feature 2 | Update user data database.: Does not change the database if there are no changes (synch_time is the same)
 
     Code
       db_update(rev_data, db_path = temp_path, common_vars = comvars)
