@@ -114,7 +114,7 @@ create_report <- function(
   # Knit the document, passing in the `params` list, and eval it in a
   # child of the global environment (this isolates the code in the document
   # from the code in this app).
-  rmarkdown::render(tempReport, output_file = fileinput,
+  rmarkdown::render(tempReport, output_file = basename(fileinput),
                     params = params,
                     envir = new.env(parent = globalenv())
   )
