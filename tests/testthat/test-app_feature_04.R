@@ -1,8 +1,8 @@
 library(shinytest2)
 
 describe(
-  paste0("Feature 4 | Load data from raw csv files and with a customized ", 
-         "metadata file. As a user, I want to be able ", 
+  paste0("Feature 4 | Load data from CSV files, merge with custom metadata, and start the application.", 
+         "As a user, I want to be able ", 
          "to load data from the raw csv file output from the EDC system and use a ", 
          "different metadata file to customize the application."), {
     it(

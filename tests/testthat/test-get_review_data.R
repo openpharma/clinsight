@@ -1,7 +1,8 @@
 describe(
-  "get_review_data(). Feature 1 | As a user, I want to be able to extract data from a data frame, 
-  with only the required columns and, if there are duplicates in the rows, the 
-  row with the latest edit date-time is selected, ", 
+  "get_review_data(). Feature 1 | Select correct data to review. 
+      As a user, I want to be able to extract data from a data frame, 
+      with only the required columns and, if there are duplicates in the rows, the 
+      row with the latest edit date-time is selected. ", 
   {
     set.seed(2023)
     df <- data.frame(

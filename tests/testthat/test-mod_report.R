@@ -1,5 +1,5 @@
-describe("mod_report. Feature 1 | As a user, I want to be able to start the 
-  module in isolation", {
+describe(
+  "mod_report. Feature 1 | Load application module in isolation.", {
     it("Can load the module UI, with functioning base paramneters and internals.", {
       ui <- mod_report_ui(id = "test")
       golem::expect_shinytaglist(ui)
@@ -23,11 +23,13 @@ describe("mod_report. Feature 1 | As a user, I want to be able to start the
         expect_true(grepl("test", ns("test")))
       })
     })
-  })
+  }
+)
 
 describe(
-  "mod_report. Feature 2 | As a user, I want to be able to create a PDF report that 
-  contains my review activities of that session.", 
+  "mod_report. Feature 2 | Create PDF report of review actions. 
+    As a user, I want to be able to create a PDF report that 
+    contains my review activities of that session.", 
   {
     it(
       "Scenario 1 - Report data preparation. 

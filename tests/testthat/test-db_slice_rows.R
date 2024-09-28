@@ -1,5 +1,6 @@
 describe(
-  "db_slice_rows. Feature 1 | As a user, I want to be able to select rows in a database or 
+  "db_slice_rows. Feature 1 | Select rows with latest time stamp. 
+    As a user, I want to be able to select rows in a database or 
     data frame, that have the lastest timestamp per selection group. This way, 
     I can select (for example) the latest data point with the latest review activity.
     I want to be able to at least filter using two timestamp variables, so that the data

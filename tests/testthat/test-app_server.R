@@ -1,5 +1,5 @@
 describe(
-  "app_server(). Feature 1 | As a user, I want to be able to start the application", 
+  "app_server(). Feature 1 | Start application.", 
   {
     it("Can load the server without errors", {
       withr::local_envvar("GOLEM_CONFIG_ACTIVE" = "default")
@@ -66,8 +66,7 @@ describe(
 )
 
 describe(
-  "app_server(). Feature 2 | As a user, I want to be warned if no user 
-         role or user name is available", 
+  "app_server(). Feature 2 | Warn if no user role or user name is provided.", 
   {
     it("warns if there is no valid user role", {
       withr::local_envvar("GOLEM_CONFIG_ACTIVE" = "default")

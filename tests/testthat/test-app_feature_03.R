@@ -1,7 +1,7 @@
 library(shinytest2)
 
 describe(
-  "Feature 3 | Save query. As a user, I want to be able to save a query based 
+  "Feature 3 | Save a query. As a user, I want to be able to save a query based 
   on a specific item of a patient sucessfully, and store the query in the app database", {
     
     app <- AppDriver$new(

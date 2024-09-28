@@ -1,6 +1,5 @@
 describe(
-  "mod_query_follow_up. Feature 1 | As a user, I want to be able to start the 
-  module in isolation", 
+  "mod_query_follow_up. Feature 1 | Load application module in isolation.", 
   {
     it("Can load the module UI, with functioning internal parameters.", {
       ui <- mod_query_follow_up_ui(id = "test")
@@ -30,9 +29,10 @@ describe(
 )
 
 describe(
-  "mod_query_follow_up. Feature 2 | As a user, I want to be able 
-  to create a follow-up message on a selected query. The follow-up message should be saved in the 
-  review database and should be the same as the message in-memory. ", 
+  "mod_query_follow_up. Feature 2 | Create follow-up query. 
+    As a user, I want to be able to create a follow-up message on a 
+    selected query. The follow-up message should be saved in the 
+    review database and should be the same as the message in-memory. ", 
   {
     it(
       "Scenario 1 - Add query follow-up message. Given a query database 
@@ -82,8 +82,10 @@ describe(
 )
 
 describe(
-  "mod_query_follow_up. Feature 3 | As a user, I want to be able to add a follow-up 
-  query and mark a query as resolved. The information should be saved in the query database.", 
+  "mod_query_follow_up. Feature 3 | Add follow-up query, mark query as resolved. 
+    As a user, I want to be able to add a follow-up 
+    query and mark a query as resolved. The information should be saved in the 
+    query database.", 
   {    
     it(
       "Scenario 1 - Add query follow-up and resolve query. Given a query database 
@@ -148,9 +150,10 @@ describe(
 )
 
 describe(
-  "mod_query_follow_up. Feature 4 | As a user, I want that multiple follow-up messages 
-  for a query can be written and saved in the query database, and that the order 
-  of the follow-up messages remains as expected.", 
+  "mod_query_follow_up. Feature 4 | Write multiple query follow-up messages. 
+    As a user, I want that multiple follow-up messages for a query can be 
+    written and saved in the query database, and that the order 
+    of the follow-up messages remains as expected.", 
   {
     it(
       "Scenario 1 - Saving multiple query follow-up messages. Given a query database 
@@ -225,9 +228,11 @@ describe(
 )
 
 describe(
-  "mod_query_follow_up. Feature 5 | As a user, I want that no follow-up query 
-  will be written to the database and that the in-memory query information remains the same
-  if it is unclear which query the follow-up message concerns.", 
+  "mod_query_follow_up. Feature 5 | Only allow to write follow-up query if query 
+    id matches to one in database. 
+    As a user, I want that no follow-up query will be written to the database 
+    and that the in-memory query information remains the same if it is unclear 
+    which query the follow-up message concerns.", 
   {
     it(
       "Scenario 1 - No follow-up query without selected query id. Given a specific [query_follow_up_text], 
@@ -308,8 +313,10 @@ describe(
 )
 
 describe(
-  "mod_query_follow_up. Feature 6 | As a user, I want that no follow-up query 
-  will be written to the database if no valid user name or user role is available.", 
+  "mod_query_follow_up. Feature 6 | Only allow to write follow-up query with 
+    valid user name and user role. 
+    As a user, I want that no follow-up query will be written to the database 
+    if no valid user name or user role is available.", 
   {
     it(
       "Scenario 1 - No user name available. 
@@ -402,9 +409,11 @@ describe(
 
 
 describe(
-  "mod_query_follow_up. Feature 7 | As a user, I want to be able to see an error
-  message if the latest query entry does not match the one in the database
-  after saving a new entry.",
+  "mod_query_follow_up. Feature 7 | Verify follow-up query correctly being 
+    written in database. 
+    As a user, I want to be able to see an error
+    message if the latest query entry does not match the one in the database
+    after saving a new entry.",
   {
     it(
       "Scenario 1 - Database save function not working. 

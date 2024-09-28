@@ -1,37 +1,39 @@
 library(shinytest2)
-describe(
-  "mod_navigate_review. Feature 1 | As a user, I want to be able to see detailed 
-  information about which forms need to be reviewed, and which queries are already queried. 
-  This can be shown in tables. I want to be able to switch view so that I can 
-  quickly filter only the forms of the active participant, or show data of all 
-  participants of the selected sites.
-  ", 
-  {
-    
-    it("Can load the module UI, with functioning internal parameters.", {
-      ui <- mod_navigate_review_ui(id = "test")
-      golem::expect_shinytaglist(ui)
-      # Check that formals have not been removed
-      fmls <- formals(mod_navigate_review_ui)
-      for (i in c("id")){
-        expect_true(i %in% names(fmls))
-      }
+describe("mod_navigate_review. Feature 1 | Load application module in isolation.", {
+  it("Can load the module UI, with functioning internal parameters.", {
+    ui <- mod_navigate_review_ui(id = "test")
+    golem::expect_shinytaglist(ui)
+    # Check that formals have not been removed
+    fmls <- formals(mod_navigate_review_ui)
+    for (i in c("id")){
+      expect_true(i %in% names(fmls))
+    }
+  })
+  
+  it("Can load the module server, with functioning internal parameters.", {
+    testargs <- list(
+      r = reactiveValues(),
+      rev_data = reactiveValues(summary = reactiveVal()),
+      navinfo = reactiveValues(),
+      all_forms = data.frame()
+    )
+    testServer(mod_navigate_review_server, args = testargs, {
+      ns <- session$ns
+      expect_true(inherits(ns, "function"))
+      expect_true(grepl(id, ns("")))
+      expect_true(grepl("test", ns("test")))
     })
+  })
+})
 
-    it("Can load the module server, with functioning internal parameters.", {
-      testargs <- list(
-        r = reactiveValues(),
-        rev_data = reactiveValues(summary = reactiveVal()),
-        navinfo = reactiveValues(),
-        all_forms = data.frame()
-      )
-      testServer(mod_navigate_review_server, args = testargs, {
-        ns <- session$ns
-        expect_true(inherits(ns, "function"))
-        expect_true(grepl(id, ns("")))
-        expect_true(grepl("test", ns("test")))
-      })
-    })
+describe(
+  "mod_navigate_review. Feature 2 | Show overview tables of data to review.
+    As a user, I want to be able to see detailed 
+    information about which forms need to be reviewed, and which queries are 
+    already queried. This can be shown in tables. I want to be able to switch 
+    view so that I can quickly filter only the forms of the active participant, 
+    or show data of all participants of the selected sites.", 
+  {
     it(
       "Scenario 1 - Given Subject id set to 'subject01-test',
           and [input$show_all_data] set to TRUE/FALSE,

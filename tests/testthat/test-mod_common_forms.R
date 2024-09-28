@@ -1,6 +1,5 @@
 describe(
-  "mod_common_forms. Feature 1 | As a user, I want to be able to start the 
-  module in isolation", 
+  "mod_common_forms. Feature 1 | Load application module in isolation.", 
   {
     testargs <- list(
       r = reactiveValues(

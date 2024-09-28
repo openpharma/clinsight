@@ -1,6 +1,5 @@
 describe(
-  "mod_db_synch_info. Feature 1 | As a user, I want to be able to run the 
-  module in isolation", 
+  "mod_db_synch_info. Feature 1 | Load application module in isolation.", 
   {
     it("Can load the module UI, with functioning internal parameters.", {
       ui <- mod_db_synch_info_ui(id = "test")
@@ -28,9 +27,10 @@ describe(
 )
 
 describe(
-  "mod_db_synch_info. Feature 2 | DB synch date information. As a user, I want to
-  be able to see the latest date at which the database is updated and at which
-  new data was entered in the EDC.",
+  "mod_db_synch_info. Feature 2 | Display database synchronization information. 
+      As a user, I want to
+      be able to see the latest date at which the database is updated and at which
+      new data was entered in the EDC.",
   {
     # See also database update date.
     it(
@@ -70,8 +70,12 @@ describe(
   }
 )
 
-describe("mod_db_synch_info. Feature 3 | DB out of synch. As a user, I want to get a
-  warning if the database synchronization did not happen on the same day as the data review.", {
+describe(
+  "mod_db_synch_info. Feature 3 | Warn if database synchronization is outdated. 
+    As a user, I want to get a
+    warning if the database synchronization did not happen on the same day as 
+    the data review.", 
+  {
     it(
       "Scenario 1 - Old synchronization. Given the current date set to 2024-01-10,
        and the latest DB synch date set to '2024-01-08',

@@ -1,6 +1,5 @@
 describe(
-  "mod_header_widgets. Feature 1 | As a user, I want to be able to run the 
-  module in isolation", 
+  "mod_header_widgets. Feature 1 | Load application module in isolation.", 
   {
     it("Can load the module UI, with functioning internal parameters.", {
       ui <- mod_header_widgets_ui(id = "test")
@@ -38,12 +37,13 @@ describe(
 )
 
 describe(
-  "mod_header_widgets. Feature 2 | As a user, I want to be able to get an overview
-  of the selected, active patient's data in the header. The information should 
-  show the patient ID, the number of adverse events (including a color code 
-  showing if new/updated adverse events are available), the number of forms that 
-  need a review, and a timeline figure showing the number of visits that the 
-  patient performed.", 
+  "mod_header_widgets. Feature 2 | Get overview statistics of selected patient. 
+      As a user, I want to be able to get an overview
+      of the selected, active patient's data in the header. The information should 
+      show the patient ID, the number of adverse events (including a color code 
+      showing if new/updated adverse events are available), the number of forms that 
+      need a review, and a timeline figure showing the number of visits that the 
+      patient performed.", 
   {
     it(
       "Scenario 1 - Subject 1, with Adverse Events and a Serious Adverse Event. 

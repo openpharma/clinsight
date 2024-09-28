@@ -1,5 +1,5 @@
-describe("mod_report. Feature 1 | As a user, I want to be able to start the 
-  module in isolation", {
+describe(
+  "mod_report. Feature 1 | Load application module in isolation.", {
     appdata <- get_appdata(clinsightful_data)
     vars <- get_meta_vars(appdata, metadata)
     testargs <- list(
@@ -8,7 +8,7 @@ describe("mod_report. Feature 1 | As a user, I want to be able to start the
         user_name = "test user",
         user_roles = "Medical Monitor",
         user_role = "Medical Monitor"
-        ),
+      ),
       app_data = appdata,
       app_tables = list("tab1" = data.frame(subject_id = vars$subject_id)),
       sites = vars$Sites,
@@ -32,14 +32,16 @@ describe("mod_report. Feature 1 | As a user, I want to be able to start the
         expect_true(grepl("test", ns("test")))
       })
     })
-  })
+  }
+)
 
 describe(
-  "mod_review_config. Feature 1 | As a user, I want to be able to select my user 
-  configuration before I start to perform a review. I want to be able to 
-  configure the regions and the sites that I will review. After selecting these, 
-  the data should be filtered so that only data from the filtered regions/sites 
-  will be shown.", 
+  "mod_review_config. Feature 2 | Select user configuration. 
+    As a user, I want to be able to select my user 
+    configuration before I start to perform a review. I want to be able to 
+    configure the regions and the sites that I will review. After selecting these, 
+    the data should be filtered so that only data from the filtered regions/sites 
+    will be shown.", 
   {
     appdata <- get_appdata(clinsightful_data)
     vars <- get_meta_vars(appdata, metadata)
@@ -219,8 +221,9 @@ describe(
 )
 
 describe(
-  "mod_review_config. Feature 2 | As a user, I want to be able to change my role, 
-  if there are multiple roles allocated", 
+  "mod_review_config. Feature 3 | Allow to change roles if multiple are assigned. 
+    As a user, I want to be able to change my role, 
+    if there are multiple roles allocated.", 
   {
     it("Scenario 1 - Change user role. 
         Given a user named 'test user' with the user_role set to 'Administrator', 

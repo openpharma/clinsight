@@ -1,4 +1,38 @@
 describe(
+  "mod_timeline. Feature 1 | Load application module in isolation.",
+  {
+    it("Can load the module UI, with functioning internal parameters.", {
+      ui <- mod_timeline_ui(id = "test")
+      golem::expect_shinytaglist(ui)
+      # Check that formals have not been removed
+      fmls <- formals(mod_study_forms_ui)
+      for (i in c("id")){
+        expect_true(i %in% names(fmls))
+      }
+    })
+    
+    it("Can load the module server, with functioning internal parameters.", {
+      
+      testargs <- list(
+        r = reactiveValues(
+          filtered_data = list(),
+          review_data = data.frame(), 
+          filtered_tables = list("Adverse events" =  data.frame()),
+          subject_id = "BEL_04_133"
+        ),
+        form = "Adverse events"
+      ) 
+      testServer(mod_timeline_server, args = testargs , {
+        ns <- session$ns
+        expect_true(inherits(ns, "function"))
+        expect_true(grepl(id, ns("")))
+        expect_true(grepl("test", ns("test")))
+      })
+    })
+  }
+)
+
+describe(
 "mod_timeline. Feature 1 | As a user, I want to be able to view an interactive timeline 
 that displays study events, such as visits and study drug administration, 
 together with data related to patient monitoring stuch as adverse events. ", 
@@ -20,25 +54,6 @@ together with data related to patient monitoring stuch as adverse events. ",
       ),
       form = "Adverse events"
     ) 
-    
-    it("Can load the module UI, with functioning internal parameters.", {
-      ui <- mod_timeline_ui(id = "test")
-      golem::expect_shinytaglist(ui)
-      # Check that formals have not been removed
-      fmls <- formals(mod_study_forms_ui)
-      for (i in c("id")){
-        expect_true(i %in% names(fmls))
-      }
-    })
-    
-    it("Can load the module server, with functioning internal parameters.", {
-      testServer(mod_timeline_server, args = testargs , {
-        ns <- session$ns
-        expect_true(inherits(ns, "function"))
-        expect_true(grepl(id, ns("")))
-        expect_true(grepl("test", ns("test")))
-        })
-    })
     it("Scenario 1 - Given a Form 'Adverse events', I expect 
        two internal dataframes (timeline_data_active() and timeline_data()) 
        and a JSON timeline object timeline as output", {

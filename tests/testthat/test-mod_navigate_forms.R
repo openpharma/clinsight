@@ -1,5 +1,4 @@
-describe("mod_navigate_forms. Feature 1 | As a user, I want to be able to start the 
-  module in isolation", {
+describe("mod_navigate_forms. Feature 1 | Load application module in isolation.", {
     navinfo <- reactiveValues(active_form = "Adverse events", active_tab = "Common events", 
                               trigger_page_change = 0)
     review_forms <- reactive({"Adverse events"})
@@ -30,9 +29,10 @@ describe("mod_navigate_forms. Feature 1 | As a user, I want to be able to start 
 })
 
 describe(
-  "mod_navigate_forms. Feature 2 | As a user, I want to be able to navigate forms in the application, using 
-  the back and forward buttons in the application. When clicking on the forward 
-  button, I should navigate to the next form of the same patient.", {
+  "mod_navigate_forms. Feature 2 | Navigate through forms with study data. 
+    As a user, I want to be able to navigate forms in the application, using 
+    the back and forward buttons in the application. When clicking on the forward 
+    button, I should navigate to the next form of the same patient.", {
     navinfo <- reactiveValues(active_form = "Adverse events", active_tab = "Common events", 
                               trigger_page_change = 0)
     review_forms <- reactive({"Adverse events"})

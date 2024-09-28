@@ -1,6 +1,5 @@
 describe(
-  "mod_queries. Feature 1 | As a user, I want to be able to start the module in 
-  isolation", 
+  "mod_queries. Feature 1 | Load application module in isolation.", 
   {
     query_df <- data.frame(
       "subject_id"     = c("ID1"),

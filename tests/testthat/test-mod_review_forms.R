@@ -1,6 +1,5 @@
 describe(
-  "mod_review_forms. Feature 1 | As a user, I want to be able to 
-         load the application in isolation.", 
+  "mod_review_forms. Feature 1 | Load application module in isolation.", 
   {
     it("Can load the module UI, with functioning internal parameters.", {
       ui <- mod_review_forms_ui(id = "test")
@@ -39,7 +38,8 @@ describe(
 )
 
 describe(
-  paste0("mod_review_forms. Feature 2 | As a user, I want to be able to save ",
+  paste0("mod_review_forms. Feature 2 | Save review of a form. ",
+         "As a user, I want to be able to save ",
          "a review of a form in the database. After saving the review, all items of ", 
          "that form that are not yet reviewed should get a tag that the value was ",
          "reviewed."), 
@@ -201,9 +201,11 @@ describe(
 )
 
 describe(
-  "mod_review_forms. Feature 3 | As a user, I want to get feedback on whether a 
-  review is needed or not for an active form. The review controls should only be 
-  enabled when there is data to review.", 
+  "mod_review_forms. Feature 3 | Disable review buttons if review not applicable 
+    or not allowed, and give feedback why. 
+    As a user, I want to get feedback on whether a 
+    review is needed or not for an active form. The review controls should only be 
+    enabled when there is data to review.", 
   {
     it(
       "Scenario 1 - Review needed. Given test review data with at least an 
@@ -338,8 +340,10 @@ describe(
   }
 )
 describe(
-  "mod_review_forms. Feature 4 | As a user, I want that saving data is only 
-  possible with a valid user name", 
+  "mod_review_forms. Feature 4 | Only allow to save review with valid user name 
+    and role. 
+    As a user, I want that saving data is only 
+    possible with a valid user name", 
   {
     it(
       "Scenario 1 - Trying to save data without user name. Given 
@@ -409,8 +413,9 @@ describe(
 )
 
 describe(
-  "Feature 5 | As a user, I want that data in memory remains the same as the one 
-  in the database, even if an error occurs when saving data to the database", 
+  "Feature 5 | Ensure data in memory remains in synch with the database. 
+    As a user, I want that data in memory remains the same as the one 
+    in the database, even if an error occurs when saving data to the database", 
   {
     it(
       "Scenario 1 - Database save function not working. 
@@ -467,8 +472,10 @@ describe(
 )
 
 describe(
-  "mod_review_forms. Feature 6 | As an admin, I want to be able to restrict the 
-  right to review forms to the roles specified in the config file.", 
+  "mod_review_forms. Feature 6 | Restrict right to review forms to roles 
+    specified in the app configuration. 
+    As an admin, I want to be able to restrict the 
+    right to review forms to the roles specified in the config file.", 
   {
     it(
       "Scenario 1 - Role without review privileges. 

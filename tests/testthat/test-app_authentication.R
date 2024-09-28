@@ -1,8 +1,8 @@
 library(shinytest2)
 
 describe(
-  "initialize_credentials(). (only applicable for shinymanager deployments). 
-    Feature 1 | As a user, I want to be able to create a credentials 
+  "initialize_credentials(). Feature 1 | (only applicable for shinymanager deployments) Restrict access. 
+    As a user, I want to be able to create a credentials 
     database if there is none yet. The database should be accessible by a common admin 
     account and password combination, with the requirement set in the database that 
     the password needs to be changed after first login. ", 
@@ -29,7 +29,7 @@ describe(
       }
     )
     it(
-      "Scenario 2 - Create a new credentials database. 
+      "Scenario 2 - Create credentials database. Create a new credentials database. 
         Given that [credentials_db] leads to a non-existing database, 
         and [credentials_pwd] is set to 'test_password', 
         I expect that a new credentials database will be created,

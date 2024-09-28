@@ -8,7 +8,8 @@ describe("get_raw_csv_data works", {
 })
 
 describe(
-  paste0("merge_meta_with_data. Feature 1 | As a user, I want to be able to merge raw data with ", 
+  paste0("merge_meta_with_data. Feature 1 | Merge raw data with metadata. ",
+         "As a user, I want to be able to merge raw data with ", 
          "metadata. Furthermore, I want to be able to fix suffixes and rename the ", 
          "limits and significance values to the standard names used in the app."), 
   {

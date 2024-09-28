@@ -1,6 +1,5 @@
 describe(
-  "mod_go_to_form. Feature 1 | As a user, I want to be able to start the 
-  module in isolation", 
+  "mod_go_to_form. Feature 1 | Load application module in isolation.", 
   {
     testargs <- list(
       r = reactiveValues(subject_id = "Subj1", filtered_subjects = "Subj1"),
@@ -33,7 +32,8 @@ describe(
   }
 )
 describe(
-  paste0("mod_go_to_form. Feature 2 | As a user, I want to be able to navigate ", 
+  paste0("mod_go_to_form. Feature 2 | Navigate to patient selected in a table. ", 
+         "As a user, I want to be able to navigate ", 
          "to the patient in the selected table row.", 
          "If the table row contains a form name, I want to navigate to that form of the", 
          "applicable patient directly"), 

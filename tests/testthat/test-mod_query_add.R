@@ -1,6 +1,5 @@
 describe(
-  "mod_query_add. Feature 1 | As a user, I want to be able to run the module in 
-  isolation", 
+  "mod_query_add. Feature 1 | Load application module in isolation.", 
   {
     it("Can load the module UI, with functioning internal parameters.", {
       ui <- mod_query_add_ui(id = "test")
@@ -229,9 +228,10 @@ describe(
 )
 
 describe(
-  "mod_query_add. Feature 3 | As a user, I want to be able to see an error
-  message if the latest query entry does not match the one in the database
-  after saving a new entry.",
+  "mod_query_add. Feature 3 | Error if query entry in app does not match database. 
+    As a user, I want to be able to see an error
+    message if the latest query entry does not match the one in the database
+    after saving a new entry.",
   {
     it(
     "Scenario 1 - Database save function not working. 
@@ -289,8 +289,9 @@ describe(
 )
 
 describe(
-  "mod_query_add. Feature 4 | As a user, I want that saving a query is only 
-  possible with a valid user name and role", 
+  "mod_query_add. Feature 4 | Only allow to add query with valid user name and role. 
+    As a user, I want that saving a query is only 
+    possible with a valid user name and role", 
   {
     it(
       "Scenario 1 - Trying to save a query without user name. Given 

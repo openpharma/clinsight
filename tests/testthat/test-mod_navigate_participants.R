@@ -1,5 +1,4 @@
-describe("mod_navigate_participants. Feature 1 | As a user, I want to be able to start the 
-  module in isolation", {
+describe("mod_navigate_participants. Feature 1 | Load application module in isolation.", {
     testargs <- list(
       r = reactiveValues(
         filtered_tables = list(
@@ -33,11 +32,12 @@ describe("mod_navigate_participants. Feature 1 | As a user, I want to be able to
   })
 
 describe(
-  "mod_navigate_participants. Feature 2 | As a user, I want to be able to browse 
-  through the study participants by means of a back and forward button, or with 
-  a drop-down menu. I want to be able to see some summary information of the 
-  selected patient. After pressing save, the patient should be selected as 
-  active patient in the app.", 
+  "mod_navigate_participants. Feature 2 | Navigate through participants. 
+    As a user, I want to be able to browse 
+    through the study participants by means of a back and forward button, or with 
+    a drop-down menu. I want to be able to see some summary information of the 
+    selected patient. After pressing save, the patient should be selected as 
+    active patient in the app.", 
   {
     testargs <- list(
       r = reactiveValues(

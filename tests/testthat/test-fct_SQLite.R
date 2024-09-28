@@ -1,6 +1,7 @@
 describe(
-  "db_create(). Feature 1 | As a user, I want to be able to create an app database that 
-  contains the necessary tables for the application to function. ", 
+  "db_create(). Feature 1 | Create app user database. 
+      As a user, I want to be able to create an app database that 
+      contains the necessary tables for the application to function. ", 
   {
     it("Can create an app database", {
       rev_data <- data.frame(
@@ -75,7 +76,7 @@ describe(
 
 
 describe(
-  "db_update(). Feature 1 | As a user, I want to be able to update the database.", 
+  "db_update(). Feature 2 | Update user data database.", 
   {
     comvars = c("key_col1", "item_group")
     old_data <- data.frame(

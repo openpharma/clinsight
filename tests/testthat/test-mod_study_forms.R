@@ -1,6 +1,5 @@
 describe(
-  "mod_study_forms. Feature 1 | As a user, I want to be able to  run the
-  module in isolation",
+  "mod_study_forms. Feature 1 | Load application module in isolation.",
   {
     it("Can load the module UI, with functioning internal parameters.", {
       ui <- mod_study_forms_ui(
@@ -33,7 +32,8 @@ describe(
   }
 )
 describe(
-  "mod_study_forms. Feature 2 | As a user, I want to be able to view a form with
+  "mod_study_forms. Feature 2 | View forms with study-specific data. 
+      As a user, I want to be able to view a form with
       study-specific data. The forms will be specified with a study-specific
       metadata file. ",
   {
@@ -134,8 +134,9 @@ describe(
 )
 
 describe(
-  "Feature 4 | As a user, I want to be able to see data that has not yet been 
-  reviewed highlighted", 
+  "Feature 4 | Highlight data that is not yet reviewed. 
+    As a user, I want to be able to see data that has not yet been 
+    reviewed highlighted", 
   {
     set.seed(2023)
     appdata <- get_appdata(clinsightful_data)

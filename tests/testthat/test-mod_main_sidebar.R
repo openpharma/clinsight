@@ -1,7 +1,6 @@
 library(shinytest2)
 
-describe("mod_main_sidebar. Feature 1 | As a user, I want to be able to start the 
-  module in isolation", {
+describe("mod_main_sidebar. Feature 1 | Load application module in isolation.", {
     testargs <- list(
       r = reactiveValues(create_query = 0),
       navinfo = reactiveValues(),
@@ -39,7 +38,8 @@ describe("mod_main_sidebar. Feature 1 | As a user, I want to be able to start th
   })
 
 describe(
-  "mod_main_sidebar. Feature 2 | As a user, I want to be able to view the main sidebar that 
+  "mod_main_sidebar. Feature 2 | View sidebar containing controls of application. 
+    As a user, I want to be able to view the main sidebar that 
     contains buttons to save review actions, including comments, to the selected worksheet. 
     In addition, I want to be able to navigate to the next/previous form by 
     clicking on the next or previous button. The sidebar should also contain a 

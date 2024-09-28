@@ -1,6 +1,5 @@
 describe(
-  "mod_start_page. Feature 1 | As a user, I want to be able to 
-         load the application in isolation.", 
+  "mod_start_page. Feature 1 | Load application module in isolation.", 
   {
     testargs <- list(
       r = reactiveValues(), 
