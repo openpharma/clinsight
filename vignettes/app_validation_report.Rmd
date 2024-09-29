@@ -135,24 +135,76 @@ applications and components'.
     released after 2013 should work with the application (if they
     support [Websockets](https://caniuse.com/websockets)), it cannot be
     guaranteed that the layout is exactly as intended in browsers other
-    than Mozilla Firefox and Google
-2.  The application is deployed in a secure environment that is only
-    accessible through a VPN.
+    than Mozilla Firefox and Google.
 
 ## General requirements
 
-|     | Requirement                                                                                                                                                                                                                                                                                                                                                       | Validation proof                                                                                                                                                                                                                |
-|-----------------|-----------------------------------|---------------------|
-| 1   | Secure Authentication and Authorization: the application should have a robust user authentication system with secure password management and role-based access control to ensure that only authorized users, such as medical monitors and data managers, can access sensitive clinical trial data data.                                                           | *Secure authentication for accessing the virtual machine is validated in the deployment validation document. Validation of authentication within the application can be found here: [app_authentication](#app_authentication).* |
-| 2   | File Integration/loading data: Can processes raw data in the form of CSV files downloaded from the applicable external EDC system. The data in the application, including the data in the local database, should be updated accordingly.                                                                                                                          | Tested in [Feature 4](#app_feature_04) and in the tests for [loading appdata](#fct_appdata), [*creating* *and updating the database*](#fct_SQLite) *, and [updating review data](#update_review_data).*                         |
-| 3   | Data Visualization Tools: Has interactive and user-friendly data visualization tools to present complex medical data in a comprehensible manner, enabling monitors to make informed judgments based on the medical context and in alignment with various medical aspects such as potential (serious) adverse events, concomitant medications and medical history. | Main modules: [Common Forms](#common-forms), [Study Forms](#study-forms), [Timeline](#timeline).                                                                                                                                |
-| 4   | Data highlighting: it can highlight data that has not yet been reviewed.                                                                                                                                                                                                                                                                                          | Main modules: [Common Forms](#common-forms), [Study Forms](#study-forms).                                                                                                                                                       |
-| 5   | Classification of continuous values: it can visualize classification of a value based on available metadata in the EDC.                                                                                                                                                                                                                                           | Main module: [Study Forms](#study-forms).                                                                                                                                                                                       |
-| 6   | Navigation functionality: Allows users to quickly browse to specific patients, to filter on review status, and to browse to a selected form, enhancing overall efficiency.                                                                                                                                                                                        | Main modules: [Navigate Review](#navigate-review), [Navigate Participants](#navigate-participants), [Go to Form](#go-to-form), [Start page](#start-page), [App sidebar](#app-sidebar), [Header widgets](#header-widgets).       |
-| 7   | Query Management System: Contains a system for creating, tracking, and managing queries.                                                                                                                                                                                                                                                                          | Main modules: [Add Query](#add-query)*,* [Add Query Follow-up](#add-query-follow-up), [View Queries](#view-queries).                                                                                                            |
-| 8   | Reviewing functionality: the application contains a system to perform review per pre-defined study form, and includes a system to show which data has been reviewed before, which is newly entered, and which was already reviewed in a previous review session by the user.                                                                                      | Main modules: [Review Forms](#study-forms), [Review Configuration](#review-configuration).                                                                                                                                      |
-| 9   | Reporting functionality: Enable the generation of reports that summarize reviewed visits, items, and open queries, providing a comprehensive overview for both medical monitors and study members (e.g. project managers, data mangers, etc.)                                                                                                                     | Main module: [Create Report](#create-report).                                                                                                                                                                                   |
-| 10  | Audit Trail: Contains an audit trail to log all reviewing activities within the app, ensuring accountability and traceability of actions performed.                                                                                                                                                                                                               | Main module: [Add review](#add-review), [Add Query](#add-query)*,* [Add Query Follow-up](#add-query-follow-up).                                                                                                                 |
+|   | Requirement | Feature | Validation |
+|----|----|----|----|
+| 1 | Secure Authentication and Authorization | Restrict access *(only applicable for Shinymanager deployment). Secure authentication for accessing the virtual machine is validated in the deployment validation document.* | [app_authentication](#app_authentication) |
+| 2 | File Integration/loading data | Create app user database | [fct_SQLite](#fct_SQLite) |
+|  |  | Create credentials database | [app_authentication](#app_authentication) |
+|  |  | Display database synchronization information | [mod_db_synch_info](#mod_db_synch_info) |
+|  |  | Ensure data in memory remains in synch with the database | [mod_review_forms](#mod_review_forms) |
+|  |  | Explore data | [app_feature_01](#app_feature_01) |
+|  |  | Load application module in isolation | *tested in all modules* |
+|  |  | Load data from CSV files, merge with custom metadata, and start the application | [app_feature_04](#app_feature_04) |
+|  |  | Merge raw data with metadata | [fct_appdata](#fct_appdata) |
+|  |  | Only allow to add query with valid user name and role | [mod_query_add](#mod_query_add) |
+|  |  | Save a query | [app_feature_03](#app_feature_03) |
+|  |  | Save review of a form | [app_feature_02](#app_feature_02) |
+|  |  | Select correct data to review | [get_review_data](#get_review_data) |
+|  |  | Select rows with latest time stamp | [db_slice_rows](#db_slice_rows) |
+|  |  | Start application | [app_server](#app_server) |
+|  |  | Update user data database | [fct_SQLite](#fct_SQLite) |
+|  |  | Warn if database synchronization is outdated | [mod_db_synch_info](#mod_db_synch_info) |
+|  |  | Warn if no user role or user name is provided | [app_server](#app_server) |
+| 3 | Data Visualization Tools | Explore data | [app_feature_01](#app_feature_01) |
+|  |  | Get overview statistics of selected patient | [mod_header_widgets](#mod_header_widgets) |
+|  |  | Highlight data that is not yet reviewed | [mod_study_forms](#mod_study_forms) |
+|  |  | Save a query | [app_feature_3](#app_feature_3) |
+|  |  | Save review of a form | [app_feature_02](#app_feature_02) |
+|  |  | View common form | [mod_common_forms](#mod_common_forms) |
+|  |  | View forms with study-specific data | [mod_study_forms](#mod_study_forms) |
+|  |  | View interactive timeline | [mod_timeline](#mod_timeline) |
+| 4 | Data highlighting | Explore data | [app_feature_01](#app_feature_01) |
+|  |  | Get overview statistics of selected patient | [mod_header_widgets](#mod_header_widgets) |
+|  |  | Highlight data that is not yet reviewed | [mod_study_forms](#mod_study_forms) |
+|  |  | Save a query | [app_feature_03](#app_feature_03) |
+|  |  | Save review of a form | [app_feature_02](#app_feature_02) |
+|  |  | View common form | [mod_common_forms](#mod_common_forms) |
+|  |  | View forms with study-specific data | [mod_study_forms](#mod_study_forms) |
+|  |  | View interactive timeline | [mod_timeline](#mod_timeline) |
+| 5 | Navigation functionality | Explore data | [app_feature_01](#app_feature_01) |
+|  |  | Navigate through forms with study data | [mod_navigate_forms](#mod_navigate_forms) |
+|  |  | Navigate through participants | [mod_navigate_participants](#mod_navigate_participants) |
+|  |  | Navigate to patient selected in a table | [mod_go_to_form](#mod_go_to_form) |
+|  |  | Save a query | [app_feature_03](#app_feature_03) |
+|  |  | Save review of a form | [app_feature_02](#app_feature_02) |
+|  |  | Select user configuration | [mod_review_config](#mod_review_config) |
+|  |  | Show overview tables of data to review | [mod_navigate_review](#mod_navigate_review) |
+|  |  | View sidebar containing controls of application | [mod_main_sidebar](#mod_main_sidebar) |
+| 6 | Query Management System | Add follow-up query, mark query as resolved | [mod_query_follow_up](#mod_query_follow_up) |
+|  |  | Create and save a query | [mod_query_add](#mod_query_add) |
+|  |  | Create follow-up query | [mod_query_follow_up](#mod_query_follow_up) |
+|  |  | Error if query entry in app does not match database | [mod_query_add](#mod_query_add) |
+|  |  | Only allow to add query with valid user name and role | [mod_query_add](#mod_query_add) |
+|  |  | Only allow to write follow-up query if query id matches to one in database | [mod_query_follow_up](#mod_query_follow_up) |
+|  |  | Only allow to write follow-up query with valid user name and user role | [mod_query_follow_up](#mod_query_follow_up) |
+|  |  | Save a query | [app_feature_03](#app_feature_03) |
+|  |  | Verify follow-up query correctly being written in database | [mod_query_follow_up](#mod_query_follow_up) |
+|  |  | View follow-up messages of a query | [mod_queries](#mod_queries) |
+|  |  | View queries | [mod_queries](#mod_queries) |
+|  |  | Write multiple query follow-up messages | [mod_query_follow_up](#mod_query_follow_up) |
+| 7 | Reviewing functionality | Disable review buttons if review not applicable or not allowed, and give feedback why. | [mod_review_forms](#mod_review_forms) |
+|  |  | Only allow to save review with valid user name and role | [mod_review_forms](#mod_review_forms) |
+|  |  | Restrict right to review forms to roles specified in the app configuration | [mod_review_forms](#mod_review_forms) |
+|  |  | Save review of a form | [app_feature_02](#app_feature_02) |
+|  |  | Save review of a form | [mod_review_forms](#mod_review_forms) |
+| 8 | Reporting functionality | Create PDF report | [mod_report_fct_helpers](#mod_report_fct_helpers) |
+|  |  | Create PDF report of review actions | [mod_report](#mod_report) |
+
+: Traceability matrix {tbl-colwidths="\[5,20,45,30\]"}
 
 ### Risk classification and mitigation
 
@@ -579,7 +631,7 @@ versions documented and declared, ensuring that the application's
 dependencies are consistent and that the application's behavior is fully
 reproducible. The reproducible environment was created by using a fixed
 R version (`r R.version$version.string`), and by using the `renv`
-package (version 1.0.3, developed by POSIT) to maintain consistent
+package (version 1.0.7, developed by POSIT) to maintain consistent
 package versions, in combination with the publicly available POSIT
 package manager with a snapshot of the public CRAN repository on 17
 September 2024 (https://packagemanager.posit.co/cran/2023-09-17).
