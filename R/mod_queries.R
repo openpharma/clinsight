@@ -11,6 +11,15 @@ mod_queries_ui <- function(id){
       col_widths = c(8,4),
       bslib::card(
         bslib::card_body(
+          shinyWidgets::materialSwitch(
+            inputId = ns("show_resolved"),
+            label = "Show resolved queries", 
+            status = "primary",
+            right = TRUE
+          ),
+          fill = FALSE
+        ),
+        bslib::card_body(
           shinycssloaders::withSpinner(
             DT::DTOutput(ns("queries")),
             type = 5
@@ -26,11 +35,12 @@ mod_queries_ui <- function(id){
         col_widths = c(12,12),
         bslib::card(
           id = ns("details_panel"),
-          bslib::page_fluid(
+          bslib::card_body(
             htmlOutput(ns("selected_query_title")),
             DT::DTOutput(ns("selected_query")),
             HTML("<br>")
-          )
+          ), 
+          full_screen = TRUE
         ),
         mod_query_follow_up_ui(ns("query_follow_up_1"))
       )
@@ -76,6 +86,7 @@ mod_queries_server <- function(id, r, navinfo, all_forms, db_path, table_names){
     selected_query <- reactive({
       req(nrow(initial_queries())>0)
       req(input$queries_rows_selected)
+      req(input$queries_rows_selected <= nrow(initial_queries()))
       with(initial_queries(), query_id[input$queries_rows_selected])
     })
     
@@ -83,19 +94,34 @@ mod_queries_server <- function(id, r, navinfo, all_forms, db_path, table_names){
       req(nrow(r$query_data)>0)
       req(selected_query())
       req(selected_query() %in% unique(r$query_data$query_id))
-      with(r$query_data, r$query_data[query_id == selected_query(), ])
+      with(r$query_data, r$query_data[query_id == selected_query(), ]) |> 
+        dplyr::mutate(reviewer = paste0(reviewer, " ", timestamp))
     })
     
     mod_query_follow_up_server("query_follow_up_1",  r = r, 
                                selected_query = selected_query, db_path = db_path)
     
     initial_queries <- reactive({
-      df <- r$query_data |> 
-        dplyr::filter(n == 1) 
-      if(nrow(df) == 0) return(df) 
-      df |>
+      df <- with(r$query_data, r$query_data[n == 1, ] )
+      if(identical(nrow(df),0)) return(df) 
+      df <- df |>
         dplyr::slice_min(timestamp, by = c(subject_id, event_label, query_id)) |>
-        dplyr::arrange(.data[["resolved"]])
+        dplyr::arrange(.data[["resolved"]], .data[["type"]]) |> 
+        # Only show part of a long message for better display in table, since 
+        # the entire message will already be shown when clicking on the row.
+        dplyr::mutate(
+          query = ifelse(
+            nchar(query)>40, 
+            paste0(trimws(substr(query, 1, 40)), "..."), 
+            query
+          )
+        )
+      if(isTRUE(input$show_resolved)) return(df)
+      with(df, df[resolved == "No", ] )
+    })
+    
+    observeEvent(input$queries_rows_selected, {
+      input$queries_rows_selected
     })
     
     mod_go_to_form_server(
@@ -111,36 +137,42 @@ mod_queries_server <- function(id, r, navinfo, all_forms, db_path, table_names){
     
     output[["queries"]] <- DT::renderDT({
       req(initial_queries())
+      query_cols <- c("subject_id", "type", "event_label", 
+                      "item_group", "query", "timestamp")
+      table_title <- "Open queries"
+      if(input$show_resolved){
+        query_cols <- c("resolved", query_cols)
+        table_title <- "All queries"
+      }
       datatable_custom(
-        initial_queries()[c("subject_id", "event_label", "item_group", "timestamp", "query", "resolved")], 
+        initial_queries()[query_cols], 
         table_names, 
-        title = "All queries"
-        )
+        title = table_title
+      )
     })
     
     output[["selected_query_title"]] <- renderText({
       req(selected_query_data())
       df <- selected_query_data()[1,]
-      query_title <-  paste0(
-        "<b><center>", 
-        tags$h5(htmlEscape(df$subject_id)), 
-        "<br>",
-        htmlEscape(df$item), " (", 
-        htmlEscape(df$item_group), "); ", 
-        df$event_label, 
-        "</center><br> resolved: ", 
-        tags$i(df$resolved),
-        "</b>",
-        tags$line()
+      paste0(
+        "<b>",
+        htmlEscape(df$subject_id), ": ",
+        htmlEscape(df$item), 
+        ifelse(identical(df$type, "Major"), " - <i>Major query</i>", ""),
+        "</b><br>", 
+        htmlEscape(df$item_group), ", ", 
+        df$event_label,
+        ifelse(identical(df$resolved, "Yes"), " (resolved)", "")
       )
     })
     
     output[["selected_query"]] <- DT::renderDT({
       req(selected_query_data())
       datatable_custom(
-        selected_query_data()[c("reviewer", "timestamp", "query")], 
-        table_names, 
-        options = list(dom = 't', ordering = FALSE, pageLength = 100, scrollY = "200px"),
+        selected_query_data()[c("query", "reviewer")], 
+        rename_vars = table_names,
+        dom = 't',
+        options = list(scroller = FALSE),
         class = "row-border hover",
         rownames = FALSE,
         selection = "none"

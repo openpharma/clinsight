@@ -52,7 +52,7 @@ mod_review_config_server <- function(
     app_tables,
     sites,
     subject_ids
-    ){
+){
   moduleServer( id, function(input, output, session){
     stopifnot(is.reactivevalues(r))
     stopifnot(is.data.frame(sites))
@@ -62,7 +62,7 @@ mod_review_config_server <- function(
     if(!all(sites$site_code %in% sites_in_appdata)){
       warning("Not all sites are found in the appdata. 
               This might produce unexpected results")
-      }
+    }
     
     # These values need to be stored so that the modal will remember the 
     # settings when opened again: 
@@ -73,7 +73,7 @@ mod_review_config_server <- function(
     )
     review_modal <- function(){
       modalDialog(
-        title = "Select regions and sites to review",
+        title = "Review configuration",
         fade = FALSE,
         footer = bslib::layout_columns(
           col_widths = c(6,6), 
@@ -86,7 +86,7 @@ mod_review_config_server <- function(
         ),
         shiny::checkboxGroupInput(
           ns("region_selection"), 
-          label = "Regions and sites",
+          label = "Select regions and sites to review",
           choices  = unique(sites$region), 
           selected = modvars$region_selection,
           inline = TRUE
@@ -105,15 +105,26 @@ mod_review_config_server <- function(
           ),
           multiple = TRUE
         ),
-        shiny::verbatimTextOutput(ns("review_config_feedback")),
+        htmltools::HTML("<hr><br>"),
+        textOutput(ns("user_name")),
+        selectizeInput(
+          ns("active_role"), 
+          label = "Active role:", 
+          choices = r$user_roles,
+          selected = r$user_role
+        ),
+        verbatimTextOutput(ns("review_config_feedback")),
         easyClose = TRUE
       )
     }
     
+    output[["user_name"]] <- shiny::renderText({
+      paste0("Reviewer: ", r$user_name)
+    })
+    
     observeEvent(input$config_review, showModal(review_modal()))
     
     observeEvent(input$region_selection, {
-      req(input$region_selection, input$site_selection)
       selected_sites <- with(sites, site_code[region %in% input$region_selection])
       golem::cat_dev("update region selection to ", selected_sites, "\n")
       shinyWidgets::updatePickerInput(
@@ -122,6 +133,11 @@ mod_review_config_server <- function(
         choices  = selected_sites,
         selected = selected_sites
       )
+    }, ignoreNULL = FALSE, ignoreInit = TRUE)
+    
+    output$review_config_feedback <- renderText({
+      req(!isTruthy(input$region_selection) | !isTruthy(input$site_selection))
+      "You must select at least one site/region to review."
     })
     
     observeEvent(input$save_review_config, {
@@ -134,14 +150,15 @@ mod_review_config_server <- function(
                 aborted. To resolve this, verify sites provided to the module 
                 with sites in the appdata ")
       )
-        
+      
       modvars$site_selection   <- input$site_selection
+      modvars$region_selection <- input$region_selection
       
       golem::cat_dev("Selected sites:", modvars$site_selection, "\n")
-      
       r <- filter_data(r, sites = input$site_selection, subject_ids = subject_ids, 
                        appdata = app_data, apptables = app_tables)
-
+      r$user_role <- input$active_role
+      
       shiny::showModal(
         modalDialog(
           footer = modalButton("Close"), 
@@ -155,8 +172,3 @@ mod_review_config_server <- function(
   })
 }
 
-## To be copied in the UI
-# mod_review_config_ui("review_config_1")
-
-## To be copied in the server
-# mod_review_config_server("review_config_1", r)

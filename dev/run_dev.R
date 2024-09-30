@@ -9,21 +9,23 @@ golem::detach_all_attached()
 # rm(list=ls(all.names = TRUE))
 
 # Document and reload your package
-golem::document_and_reload(export_all = TRUE)
+# Using golem::pkg_path() is needed here, see:
+# https://github.com/openpharma/clinsight/issues/69#issue-2504462187
+golem::document_and_reload(pkg = golem::pkg_path(), export_all = TRUE)
 
 # Run the application
 load_and_run_app <- function(){
-  # withr call here does not work since the tempfile gets deleted during app initialization. 
-  # different option below, using onStop() within the run_app() function to clean up.
-  temp_folder <- tempdir()
-  db_path <- file.path(temp_folder, "testdb.sqlite")
+  temp_folder <- tempfile(tmpdir = tempdir())
+  dir.create(temp_folder)
+  old_golem_config <- Sys.getenv("GOLEM_CONFIG_ACTIVE")
+  Sys.setenv("GOLEM_CONFIG_ACTIVE" = "dev")
   
   run_app(
-    meta = metadata, 
-    data = clinsightful_data,
-    user_db = db_path, 
-    test_mode = TRUE, 
-    onStart = \(){onStop(\(){unlink(temp_folder, recursive = TRUE)})}
+    data_folder = temp_folder,
+    onStart = \(){onStop(\(){
+      unlink(temp_folder, recursive = TRUE); 
+      Sys.setenv("GOLEM_CONFIG_ACTIVE" = old_golem_config)
+    })}
   )
 } 
 

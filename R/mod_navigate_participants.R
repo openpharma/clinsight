@@ -155,8 +155,9 @@ mod_navigate_participants_server <- function(id, r){
       bslib::value_box(
         title = gsub("IME-", "", as.character(unique(r$subject_id)[1])),
         value = subject_info()$pt_info,
-        showcase = subject_info()$status_icon,
-        theme_color = "primary"
+        showcase = subject_info()$status_icon, 
+        max_height = "100px",
+        theme = "primary"
       )
     }) 
     

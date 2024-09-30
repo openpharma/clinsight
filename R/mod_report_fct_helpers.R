@@ -58,6 +58,7 @@ select_report_data <- function(
       dplyr::select(
         query_id, 
         "ID" = subject_id, 
+        "Type" = type,
         "Form" = item_group, 
         "Item" = item, 
         "Event" = event_label, 
@@ -99,6 +100,9 @@ create_report <- function(
     tempReport, overwrite = TRUE
     )
   
+  # Remove line breaks since they cause issues with simple kable() PDF tables: 
+  query_df$Query <- gsub("\n", "  ", query_df$Query)
+  
   # Set up parameters to pass to Rmd document
   params <- list(
     author = reviewer,
@@ -110,7 +114,7 @@ create_report <- function(
   # Knit the document, passing in the `params` list, and eval it in a
   # child of the global environment (this isolates the code in the document
   # from the code in this app).
-  rmarkdown::render(tempReport, output_file = fileinput,
+  rmarkdown::render(tempReport, output_file = basename(fileinput),
                     params = params,
                     envir = new.env(parent = globalenv())
   )

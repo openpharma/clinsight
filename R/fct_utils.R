@@ -23,9 +23,9 @@ time_stamp <- function(
   # propagate errors from internal base R as.Date() function to check for valid 
   # function options:
   check_valid_date_format <- try(as.Date(ts), silent = TRUE)
-       if(inherits(check_valid_date_format, "try-error")){
-         stop(check_valid_date_format)
-       }
+  if(inherits(check_valid_date_format, "try-error")){
+    stop(check_valid_date_format)
+  }
   ts
 }
 
@@ -175,7 +175,7 @@ title_case <- function(x) {
       toupper(substring(x, 1, 1)), 
       tolower(substring(x, 2)),
       collapse = " "
-      ) }) |> 
+    ) }) |> 
     unlist()
 }
 
@@ -410,7 +410,7 @@ is_date <- function(x) {
   stopifnot(is.atomic(x))
   inherits(x, c("Date", "POSIXt"))
 }
-  
+
 #' Convert non-numeric columns to character
 #'
 #' @param data A data frame with columns that need to be converted.
@@ -453,7 +453,7 @@ date_cols_to_char <- function(data){
   list_data <- lapply(data, \(x){ 
     if(is_date(x)) as.character(x) else x 
   })  
-    dplyr::bind_rows(list_data)
+  dplyr::bind_rows(list_data)
 }
 
 
@@ -481,14 +481,14 @@ clean_dates <- function(
     x,
     unknown_pattern = "NK",
     unknown_replacement = "01"
-    ){
+){
   stopifnot(is.character(x) | is_date(x))
   if(is_date(x)) return(x)
   gsub(
     paste0("-", unknown_pattern[1]), 
     paste0("-", unknown_replacement[1]), 
     x
-    ) |> 
+  ) |> 
     as.Date()
 }
 
@@ -571,28 +571,138 @@ get_test_results <- function(
     reporter = reporter,
     stop_on_failure = FALSE,
     stop_on_warning = FALSE
-  ) 
-  
-  test_results <- list(
-    "results" = test_results_raw,
-    "time"    = time_stamp(form = "%Y-%m-%d %H:%M:%S %Z", timezone = "UTC"),
-    "session" = utils::sessionInfo()
   )
+  cat("\n\n----------------------------\n\nFinished unit testing. Results: \n")
+  test_results <- format_test_results(test_results_raw)
+  
   if(is.null(outfile)) return(test_results)
-  cat("Finished unit testing. Results: \n")
+  saveRDS(test_results, outfile)
+  if(file.exists(outfile)){
+    cat("Output created in ", outfile, "\n") 
+  }
+  cat("\n----------------------------\n\n")
+}
+
+#' Format testthat results
+#'
+#' Helper function to reshape original testthat output into a list format  with
+#' the testthat tests output, and some metadata to make it easier to
+#' interpretate the results.
+#'
+#' @param results An object of class `testthat_results`, created with one of the
+#'   `testthat::test_*` functions.
+#'
+#' @return A list with test results and metadata containing information such as
+#'   a summary of the tests and their outcome, a timestamp, and the results of
+#'   utils::sessionInfo() of the environment in which the tests ran.
+#' @noRd
+#' 
+format_test_results <- function(
+    results
+){
+  if(isFALSE(inherits(results, "testthat_results"))){
+    stop("Expecting an object of class 'testthat_results'")
+  }
+  test_results <- list(
+    "results" = results,
+    "time"    = time_stamp(form = "%Y-%m-%d %H:%M:%S %Z", timezone = "UTC"),
+    "session" = utils::sessionInfo(),
+    "sum_results" = "",
+    "test_outcome" = ""
+  )
   # Summary is nice to have but should not give a fatal error: 
   tryCatch({
     # TODO: maybe import testthat:::as.data.frame.testthat_results?
     test_df <- as.data.frame(test_results$results)
-    print(
-      sapply(test_df[c("failed", "skipped", "error", "warning", "passed")], sum)
-    )
+    sum_results <- sapply(test_df[c("failed", "skipped", "error", "warning", "passed")], sum)
+    print(sum_results)
+    test_results[["sum_results"]] <- sum_results
+    test_outcome <- ifelse(isTRUE(all_tests_passed(test_results)), "pass", "fail")
+    test_results[["test_outcome"]] <-  test_outcome
   },
   error = function(x) "Could not summarize results. Verify results manually"
   )
-  saveRDS(test_results, outfile)
-  if(file.exists(outfile)){
-    cat("Output created successfully in ", outfile, "\n") 
-  }
+  tryCatch({
+    if(identical(test_outcome, "pass")) {
+      cat("All tests passed successfully\n")
+    } else{
+      warning("Not all tests passed successfully. Verify the outcome.")
+      failed_tests <- with(test_df, file[failed != 0])
+      if(length(failed_tests) != 0){
+        cat(
+          "There was a failure in the following tests: \n", 
+          paste0(failed_tests, collapse = "\n"), 
+          "\n",
+          sep = ""
+        )
+        cat("Failure messages: \n\n")
+        res <- unlist(with(test_df, result[file %in% failed_tests]), recursive = FALSE) 
+        lapply(res, \(x){if(expectation_type(x, "failure")) x[]}) |> 
+          unlist() |> 
+          cat(sep = "\n\n") 
+      }
+    }
+  },
+  error = function(x) "Could not print problematic results. Verify results manually"
+  )
+  test_results
 }
 
+#' All tests passed
+#'
+#' Helper function to determine whether all tests passed. Designed to be used
+#' together with get_test_results.
+#'
+#' @param results A list with test results. Should contain `var`
+#' @param var A character vector with the name of the list element that contains
+#'   the summary results.
+#' @param include_skipped Boolean. Whether to check if no tests were skipped.
+#'
+#' @return A boolean.
+#' @noRd
+#' 
+all_tests_passed <- function(results, var = "sum_results", include_skipped = TRUE){
+  stopifnot("results needs to be a list" = inherits(results, "list"))
+  if(!var %in% names(results)){
+    warning(paste0(var, " is missing from the results. Cannot determine if all tests passed"))
+    return(NA)
+  }
+  res <- results[[var]]
+  cols_to_verify <- c("failed", "error", "warning")
+  if(include_skipped) cols_to_verify <- c(cols_to_verify, "skipped")
+  (sum(res[cols_to_verify]) == 0 ) && res[["passed"]] != 0
+}
+
+#' Verify expectation type
+#'
+#' Helper function to verify expectation type.
+#'
+#' @param exp The expection to verify
+#' @param type Character string with the expected type
+#'
+#' @return A boolean
+#' @noRd
+expectation_type <- function(
+    exp, 
+    type = c("failure", "error", "skip", "warning", "success")
+) {
+  stopifnot(testthat::is.expectation(exp))
+  type <- match.arg(type)
+  identical(gsub("^expectation_", "", class(exp)[[1]]), type)
+}
+
+
+#' Custom config path
+#'
+#' Note: this is a temporary solution, to circumvent the issue described here:
+#' https://github.com/ThinkR-open/golem/issues/1178#issue-2513219365. It ensures
+#' that a flexible path to the config file can be set by the user. Works with
+#' golem version 0.5.1.
+#'
+#' @return A path to the active config file to use for the application.
+#' @noRd
+#' 
+custom_config_path <- function(
+){
+  Sys.getenv("CONFIG_PATH", app_sys("golem-config.yml")) 
+}

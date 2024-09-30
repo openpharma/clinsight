@@ -67,7 +67,6 @@ mod_main_sidebar_ui <- function(id){
 #'   created with the function [get_available_data()]. The data frame will be
 #'   passed on to the module [mod_query_add_server()], which requires this data
 #'   frame and is embedded in `mod_main_sidebar_server()`.
-#' @param test_mode Logical. Required for testing [mod_db_synch_info_server()].
 #'
 #' @seealso [mod_main_sidebar_ui()], [mod_query_add_server()]
 #' 
@@ -80,8 +79,7 @@ mod_main_sidebar_server <- function(
     app_vars,
     db_path, 
     forms_to_review,
-    available_data,
-    test_mode
+    available_data
 ){
   stopifnot(is.reactivevalues(r))
   
@@ -114,6 +112,7 @@ mod_main_sidebar_server <- function(
     mod_review_forms_server(
       id = "review_forms_1", 
       r = r, 
+      review_required_data = app_vars$form_level_data[c("item_group", "review_required")],
       active_form = reactive(navinfo$active_form), 
       active_tab = reactive(navinfo$active_tab), 
       db_path = db_path
@@ -137,9 +136,7 @@ mod_main_sidebar_server <- function(
     mod_db_synch_info_server(
       id = "synch_info",
       app_data = app_data,
-      db_path = db_path,
-      test_mode = test_mode,
-      show_warning = !test_mode
+      db_path = db_path
       )
   })
 }

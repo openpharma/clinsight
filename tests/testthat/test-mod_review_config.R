@@ -1,23 +1,18 @@
 describe(
-  "mod_review_config. Feature 1 | As a user, I want to be able to select my user 
-  configuration before I start to perform a review. I want to be able to 
-  configure the regions and the sites that I will review. After selecting these, 
-  the data should be filtered so that only data from the filtered regions/sites 
-  will be shown.", 
-  {
+  "mod_report. Feature 1 | Load application module in isolation.", {
     appdata <- get_appdata(clinsightful_data)
     vars <- get_meta_vars(appdata, metadata)
-    apptables <- list("tab1" = data.frame(subject_id = vars$subject_id))
-    
     testargs <- list(
-      r = reactiveValues(subject_id = "DEU_02_866", 
-                         filtered_data = appdata, 
-                         filtered_tables = apptables, 
-                         filtered_subjects = vars$subject_id),
+      r = reactiveValues(
+        subject_id = "DEU_02_866",
+        user_name = "test user",
+        user_roles = "Medical Monitor",
+        user_role = "Medical Monitor"
+      ),
       app_data = appdata,
-      app_tables = apptables,
+      app_tables = list("tab1" = data.frame(subject_id = vars$subject_id)),
       sites = vars$Sites,
-      subject_ids = vars$subject_id
+      subject_ids = "DEU_02_866"
     )
     it("Can load the module UI, with functioning internal parameters.", {
       ui <- mod_review_config_ui(id = "test")
@@ -37,21 +32,53 @@ describe(
         expect_true(grepl("test", ns("test")))
       })
     })
+  }
+)
+
+describe(
+  "mod_review_config. Feature 2 | Select user configuration. 
+    As a user, I want to be able to select my user 
+    configuration before I start to perform a review. I want to be able to 
+    configure the regions and the sites that I will review. After selecting these, 
+    the data should be filtered so that only data from the filtered regions/sites 
+    will be shown.", 
+  {
+    appdata <- get_appdata(clinsightful_data)
+    vars <- get_meta_vars(appdata, metadata)
+    apptables <- list("tab1" = data.frame(subject_id = vars$subject_id))
     
-    it("Scenario 1. Given a test data set with random data, 
+    testargs <- list(
+      r = reactiveValues(subject_id = "DEU_02_866",
+                         user_name = "test user",
+                         user_roles = "Medical Monitor",
+                         user_role = "Medical Monitor",
+                         filtered_data = appdata, 
+                         filtered_tables = apptables, 
+                         filtered_subjects = vars$subject_id),
+      app_data = appdata,
+      app_tables = apptables,
+      sites = vars$Sites,
+      subject_ids = vars$subject_id
+    )
+    
+    it(
+      "Scenario 1 - Warn for missing sites. Given a test data set with random data, 
         and and a site name was provided that is not available in the test data set, 
-        I expect that a warning will be given with the text 'Not all sites are found in the appdata'.", {
-          testargs$sites <- testargs$sites |> 
-            rbind(data.frame("site_code" = "Site Unknown", "region" = "NLD"))
-          expect_warning(
-            testServer(mod_review_config_server, args = testargs, {
-            }), 
-            "Not all sites are found in the appdata."
-          )
-        })
+        I expect that a warning will be given with the text 'Not all sites are 
+        found in the appdata'.", 
+      {
+        testargs$sites <- testargs$sites |> 
+          rbind(data.frame("site_code" = "Site Unknown", "region" = "NLD"))
+        expect_warning(
+          testServer(mod_review_config_server, args = testargs, {
+          }), 
+          "Not all sites are found in the appdata."
+        )
+      }
+    )
     
     
-    it("Scenario 2. Filters data and subject ids as expected. 
+    it("Scenario 2 - Filters data and subject ids as expected. 
         Given a test data set with random data containing the regions 'BEL', 'NLD', and 'DEU',
           I expect that the regions are initially set to 'BEL', 'NLD', and 'DEU', 
           and given that I select the region 'NLD' and press the [Save] button,
@@ -71,6 +98,7 @@ describe(
               expect_equal(subjects_filtered_initial, subject_ids)
               
               session$setInputs(
+                active_role = r$user_role,
                 site_selection = with(sites, site_code[region == "NLD"]),
                 region_selection = "NLD",
                 save_review_config = 1
@@ -82,7 +110,7 @@ describe(
               expect_true(all(grepl("^NLD_", subjects)))
             })
           })
-    it("Scenario 3. Warns if only sites are selected that are not in the app data set. 
+    it("Scenario 3 - Warns if only sites are selected that are not in the app data set. 
        Given a test data set with random data,
        and region is set to 'NLD',
        and site selection is set only to the non-existent 'Site x',
@@ -102,15 +130,21 @@ describe(
          })
        })
     it(
-      "Scenario 4. Given a test data set containing regions 'NLD', 'DEU', and 'BEL', 
+      "Scenario 4 - Apply review configuration. 
+        Given a test data set containing regions 'NLD', 'DEU', and 'BEL', 
         and sites 'Site 01' and 'Site 02' belonging to region 'DEU',
         and clicking on [settings],
         I expect to see the modal to select regions and sites to review,
-        and given that I deselect regions 'NLD' and 'BEL',
-        I expect that only the sites 'Site 01' and 'Site 02' are still selected,
+        and given that I deselect all regions and click on [Save],
+        I expect that I will get the message 'You must select at least one site/region to review.',
+        and that the data within the app will not be updated with the empty selection,
+        and given that I select region 'DEU',
+        I expect that only the sites 'Site 01' and 'Site 02' will be selected,
         and given that I click on [Save],
         I expect that a confirmation will be shown with the text 'Review configuration applied successfully',
-        and that the data within the app only contains data of 'Site 01' and 'Site 02'. ", 
+        and that the data within the app only contains data of 'Site 01' and 'Site 02', 
+        and I expect that the selected configuration is shown correctly when 
+        opening the configuration panel again.", 
       {
         test_ui <- function(request){
           tagList(
@@ -125,6 +159,9 @@ describe(
         test_server <- function(input, output, session){
           r = reactiveValues(
             subject_id = "DEU_02_866", 
+            user_name = "test user",
+            user_roles = "Medical Monitor",
+            user_role = "Medical Monitor",
             filtered_data = appdata, 
             filtered_tables = apptables, 
             filtered_subjects = vars$subject_id
@@ -146,6 +183,17 @@ describe(
         withr::defer(app$stop())
         app$click("test-config_review")
         app$expect_values(input = TRUE, output = TRUE)
+        app$set_inputs(`test-region_selection` = "")
+        app$expect_values(input = TRUE, output = TRUE)
+        app$click("test-save_review_config")
+        filtered_data <- app$get_value(export = "filtered_data")
+        all_sites <- lapply(filtered_data, \(x){x[["site_code"]]}) |> 
+          unlist() |> 
+          unique()
+        expect_equal(
+          all_sites[order(all_sites)], 
+          sort(vars$Sites$site_code)
+        )
         app$set_inputs(`test-region_selection` = "DEU")
         app$expect_values(input = TRUE, output = TRUE)
         app$click("test-save_review_config")
@@ -158,8 +206,67 @@ describe(
           all_sites[order(all_sites)], 
           c("Site 01", "Site 02")
         )
+        
+        app$wait_for_js("$('#shiny-modal').modal('hide');")
+        app$click("test-config_review")
+        app$wait_for_idle(800)
+        
+        input_vals <- app$get_values(input = TRUE)$input
+        expect_equal(input_vals$`test-active_role`, "Medical Monitor")
+        expect_equal(input_vals$`test-region_selection`, "DEU")
+        expect_equal(input_vals$`test-site_selection`, c("Site 01", "Site 02"))
       }
     )
+  }
+)
+
+describe(
+  "mod_review_config. Feature 3 | Allow to change roles if multiple are assigned. 
+    As a user, I want to be able to change my role, 
+    if there are multiple roles allocated.", 
+  {
+    it("Scenario 1 - Change user role. 
+        Given a user named 'test user' with the user_role set to 'Administrator', 
+          and the available roles set to 'Administrator' and 'Medical Monitor', 
+          and a test data set with random data, 
+          and after setting the 'active_role' to 'Medical Monitor' 
+          and clicking 'save changes',
+          I expect that the user role is changed to 'Medical Monitor'.", {
+            appdata <- get_appdata(clinsightful_data)
+            vars <- get_meta_vars(appdata, metadata)
+            apptables <- list("tab1" = data.frame(subject_id = vars$subject_id))
+            
+            testargs <- list(
+              r = reactiveValues(subject_id = "DEU_02_866",
+                                 user_name = "test user",
+                                 user_roles = c("Administrator", 
+                                                "Medical Monitor"),
+                                 user_role = "Administrator",
+                                 filtered_data = appdata, 
+                                 filtered_tables = apptables, 
+                                 filtered_subjects = vars$subject_id),
+              app_data = appdata,
+              app_tables = apptables,
+              sites = vars$Sites,
+              subject_ids = vars$subject_id
+            )
+            
+            testServer(mod_review_config_server, args = testargs, {
+              ns <- session$ns
+              modvars <- reactiveValues()
+              
+              expect_equal(r$user_role, "Administrator")
+              expect_equal(r$user_roles, c("Administrator", "Medical Monitor"))
+              
+              session$setInputs(
+                active_role = "Medical Monitor",
+                site_selection = vars$Sites$site_code,
+                region_selection = vars$subject_id,
+                save_review_config = 1
+              )
+              expect_equal(r$user_role, "Medical Monitor")
+            })
+          })
   }
 )
 

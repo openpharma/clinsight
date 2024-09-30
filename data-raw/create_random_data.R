@@ -3,7 +3,7 @@ library(dplyr)
 #library(clinsight)
 set.seed(2023)
 
-raw_data <- get_raw_data(data_path, column_specs = metadata$column_specs)
+raw_data <- get_raw_csv_data(data_path)
 
 length(unique(raw_data$subject_id))
 
@@ -21,7 +21,7 @@ randomized_raw_data <- raw_data |>
     subject_id = new_id, 
     dplyr::everything(), -subject_id, -site_code
     )
-merged_data <- merge_meta_with_data(randomized_raw_data)
+merged_data <- merge_meta_with_data(randomized_raw_data, metadata)
 
 ####################### Randomize continuous data #######################
 random_continuous <- merged_data |> 

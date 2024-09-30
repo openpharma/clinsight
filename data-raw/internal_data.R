@@ -12,7 +12,8 @@ names(col_palette) <- c("within limits",
 # Empty data frame used to reset query data frame if needed.
 query_data_skeleton <- dplyr::tibble(
   "query_id"      = character(),
-  "subject_id"     = character(),
+  "type"         = character(),
+  "subject_id"    = character(),
   "event_label"   = character(),
   "item_group"    = character(),
   "item"          = character(),
@@ -25,23 +26,55 @@ query_data_skeleton <- dplyr::tibble(
   "edit_reason"   = character()
 )
 
-# columns names that are required for the application to function. 
-# Used to test whether these are all available in the column_specs when reading 
-# in data with get_raw_data().
-required_col_names <- c(
-  "site_code", 
-  "subject_id", 
-  "event_id", 
-  "event_date", 
-  "event_name", 
-  "event_repeat", 
-  "form_id", 
-  "form_repeat", 
+# columns specifications required for the application to function properly. 
+# Used to convert columns to the right format, and to test whether all the required 
+# columns are available when merging raw data with metadata.
+clinsight_col_specs <- c(
+  "site_code" = "c", 
+  "subject_id" = "c", 
+  "event_id" = "c", 
+  "event_date" = "D", 
+  "event_name" = "c", 
+  "event_repeat" = "i", 
+  "form_id" = "c", 
+  "form_repeat" = "i", 
+  "var" = "c", 
+  "item_value" = "c", 
+  "edit_date_time" = "T",
+  ".default" = "c"
+  ) |> 
+  readr::as.col_spec()
+
+# Required columns needed in study data for the application to function.
+required_col_names <- names(clinsight_col_specs$cols)
+
+required_meta_cols <- c(
   "var", 
-  "item_value", 
-  "edit_date_time"
+  "suffix", 
+  "item_name", 
+  "item_group", 
+  "unit", 
+  "lower_limit", 
+  "upper_limit", 
+  "item_type"
   )
 
+# Used in get_form_level_data(). Set a default if ClinSight needs the columns 
+# to function properly. 
+# Choosing NA for vars like item_scale, because setting these variables by 
+# default for forms like 'Adverse events' does not make so much sense. 
+form_level_defaults <- data.frame(
+  "item_scale" = as.logical(NA),
+  "use_unscaled_limits" = as.logical(NA), 
+  "review_required" = TRUE
+)
 
-usethis::use_data(col_palette, query_data_skeleton, required_col_names,
+# Converting column types, and do not guess default: 
+form_level_default_specs <- c(form_level_defaults, ".default" = "c") |> 
+  sapply(class) |> 
+  readr::as.col_spec()
+
+usethis::use_data(col_palette, query_data_skeleton, required_col_names, 
+                  required_meta_cols, clinsight_col_specs, 
+                  form_level_defaults, form_level_default_specs, 
                   overwrite = TRUE, internal = TRUE)

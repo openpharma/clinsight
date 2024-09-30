@@ -1,3 +1,6 @@
+template:
+  bootstrap: 5
+  bootswatch: spacelab
 reference:
 - title: Main application
   desc:  Top-level functions to run the Shiny application
@@ -40,7 +43,7 @@ reference:
 - title: Data frame functions
   desc: Create data for use in the application.
 - contents: 
-  - get_raw_data
+  - get_raw_csv_data
   - merge_meta_with_data
   - apply_study_specific_fixes
   - get_appdata
@@ -62,8 +65,8 @@ reference:
   - db_slice_rows 
   - update_review_data
   - collect_query_data
-  - db_get_latest_review
-  - db_get_latest_query
+  - db_get_review
+  - db_get_query
 - title: Internal dataset
   desc: Create or describe internal data. 
 - contents: 
@@ -92,7 +95,6 @@ reference:
   - adjust_colnames
   - bind_rows_custom
   - check_appdata
-  - check_available_data
   - filter_data
   - clean_dates
   - collapse_column_vals

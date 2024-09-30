@@ -1,6 +1,5 @@
 describe(
-  "mod_go_to_form. Feature 1 | As a user, I want to be able to start the 
-  module in isolation", 
+  "mod_go_to_form. Feature 1 | Load application module in isolation.", 
   {
     testargs <- list(
       r = reactiveValues(subject_id = "Subj1", filtered_subjects = "Subj1"),
@@ -33,7 +32,8 @@ describe(
   }
 )
 describe(
-  paste0("mod_go_to_form. Feature 2 | As a user, I want to be able to navigate ", 
+  paste0("mod_go_to_form. Feature 2 | Navigate to patient selected in a table. ", 
+         "As a user, I want to be able to navigate ", 
          "to the patient in the selected table row.", 
          "If the table row contains a form name, I want to navigate to that form of the", 
          "applicable patient directly"), 
@@ -58,7 +58,7 @@ describe(
       form_name = "Form",
       subject_id = "subject_id"
     )
-    it("Scenario 1 | Can browse to a dedicated patient and form", {
+    it("Scenario 1 - Browse to a dedicated patient and form.", {
       testServer(mod_go_to_form_server, args = testargs, {
         ns <- session$ns
         # twice because ignoreinit=TRUE in the module:
@@ -78,7 +78,7 @@ describe(
         expect_equal(r$subject_id, "Subj1")
       })
     })
-    it("Scenario 2 | Ignores form_name if form_name is null and browses to the first 
+    it("Scenario 2 - Ignores form_name if form_name is null and browses to the first 
        form of the patient", {
          testargs["form_name"] <- list(NULL) 
          testServer(mod_go_to_form_server, args = testargs, {
@@ -91,7 +91,7 @@ describe(
            expect_equal(r$subject_id, "Subj2")
          })
        })
-    it("Scenario 3 | Multiple rows selected. I expect that it warns that only 
+    it("Scenario 3 - Multiple rows selected. I expect that it warns that only 
           the first row will be used if multiple tablerows are selected", {
             testServer(mod_go_to_form_server, args = testargs, {
               ns <- session$ns
@@ -103,7 +103,7 @@ describe(
             })
           })
     
-    it("Scenario 4 | form_name missing. I expect that it warns and aborts if 
+    it("Scenario 4 - form_name missing. I expect that it warns and aborts if 
        form_name is not found in the table", {
       testargs <- list(
         r = reactiveValues(),
@@ -123,7 +123,7 @@ describe(
       })
     })
     
-    it("Scenario 5 | subject_id column missing. I expect that it warns and aborts 
+    it("Scenario 5 - subject_id column missing. I expect that it warns and aborts 
        if subject_id column is not found in the table", {
       testargs <- list(
         r = reactiveValues(),
@@ -145,7 +145,7 @@ describe(
     
     
     it(
-      "Scenario 6 | Empty subject id row. I expect that it warns and aborts if 
+      "Scenario 6 - Empty subject id row. I expect that it warns and aborts if 
       the selected subject id row is NULL", 
       {
         test_args <- list(
@@ -167,7 +167,7 @@ describe(
     )
     
     it(
-      "Scenario 7 | Unknown subject_id. I expect that it warns and aborts if an 
+      "Scenario 7 - Unknown subject_id. I expect that it warns and aborts if an 
       unknowwn subject_id was selected in the table", 
       {
         test_args <- list(
@@ -202,7 +202,7 @@ describe(
     )
     
     it(
-      "Scenario 8 | Form name missing. Warns and aborts if the form name is missing in the selected table row", 
+      "Scenario 8 - Form name missing. Warns and aborts if the form name is missing in the selected table row", 
       {
         test_args <- list(
           r = reactiveValues(subject_id = "Subj1", filtered_subjects = "Subj1"),

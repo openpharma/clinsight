@@ -6,21 +6,25 @@
 \alias{clinsight-package}
 \title{clinsight: ClinSight}
 \description{
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
 Interactive application to monitor patient safety during clinical trials. Goal is to provide an interactive overview of a patients' data, highlighting not yet reviewed data, and to improve assessments of the patients' safety. Secondary goal is to improve data quality by identifying suspicious outliers.
 }
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/LDSamson/clinsight}
-  \item Report bugs at \url{https://github.com/LDSamson/clinsight/issues}
+  \item \url{https://github.com/openpharma/clinsight}
+  \item Report bugs at \url{https://github.com/openpharma/clinsight/issues}
 }
 
 }
 \author{
-\strong{Maintainer}: Leonard Daniël Samson \email{lsamson@gcp-service.com}
+\strong{Maintainer}: Leonard Daniël Samson \email{lsamson@gcp-service.com} (\href{https://orcid.org/0000-0002-6252-7639}{ORCID})
 
 Other contributors:
 \itemize{
+  \item Aaron Clark \email{aclark02@arcusbio.com} (\href{https://orcid.org/0000-0002-0123-0970}{ORCID}) [contributor]
+  \item Jeff Thompson \email{jthompson@arcusbio.com} (\href{https://orcid.org/0009-0007-3640-1075}{ORCID}) [contributor]
   \item GCP-Service International Ltd.& Co. KG [funder]
 }
 

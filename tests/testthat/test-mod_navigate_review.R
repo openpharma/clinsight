@@ -1,39 +1,41 @@
 library(shinytest2)
-describe(
-  "mod_navigate_review. Feature 1 | As a user, I want to be able to see detailed 
-  information about which forms need to be reviewed, and which queries are already queried. 
-  This can be shown in tables. I want to be able to switch view so that I can 
-  quickly filter only the forms of the active participant, or show data of all 
-  participants of the selected sites.
-  ", 
-  {
-    
-    it("Can load the module UI, with functioning internal parameters.", {
-      ui <- mod_navigate_review_ui(id = "test")
-      golem::expect_shinytaglist(ui)
-      # Check that formals have not been removed
-      fmls <- formals(mod_navigate_review_ui)
-      for (i in c("id")){
-        expect_true(i %in% names(fmls))
-      }
+describe("mod_navigate_review. Feature 1 | Load application module in isolation.", {
+  it("Can load the module UI, with functioning internal parameters.", {
+    ui <- mod_navigate_review_ui(id = "test")
+    golem::expect_shinytaglist(ui)
+    # Check that formals have not been removed
+    fmls <- formals(mod_navigate_review_ui)
+    for (i in c("id")){
+      expect_true(i %in% names(fmls))
+    }
+  })
+  
+  it("Can load the module server, with functioning internal parameters.", {
+    testargs <- list(
+      r = reactiveValues(),
+      rev_data = reactiveValues(summary = reactiveVal()),
+      navinfo = reactiveValues(),
+      all_forms = data.frame()
+    )
+    testServer(mod_navigate_review_server, args = testargs, {
+      ns <- session$ns
+      expect_true(inherits(ns, "function"))
+      expect_true(grepl(id, ns("")))
+      expect_true(grepl("test", ns("test")))
     })
+  })
+})
 
-    it("Can load the module server, with functioning internal parameters.", {
-      testargs <- list(
-        r = reactiveValues(),
-        rev_data = reactiveValues(summary = reactiveVal()),
-        navinfo = reactiveValues(),
-        all_forms = data.frame()
-      )
-      testServer(mod_navigate_review_server, args = testargs, {
-        ns <- session$ns
-        expect_true(inherits(ns, "function"))
-        expect_true(grepl(id, ns("")))
-        expect_true(grepl("test", ns("test")))
-      })
-    })
+describe(
+  "mod_navigate_review. Feature 2 | Show overview tables of data to review.
+    As a user, I want to be able to see detailed 
+    information about which forms need to be reviewed, and which queries are 
+    already queried. This can be shown in tables. I want to be able to switch 
+    view so that I can quickly filter only the forms of the active participant, 
+    or show data of all participants of the selected sites.", 
+  {
     it(
-      "Scenario 1. Given Subject id set to 'subject01-test',
+      "Scenario 1 - Given Subject id set to 'subject01-test',
           and [input$show_all_data] set to TRUE/FALSE,
           I expect that the table header text will be 'All data'/'subject01-test'
           , respectively (in bold font)",
@@ -54,7 +56,7 @@ describe(
       }
     )
     it(
-      "Scenario 2. Given Subject id set to 'subject01-test',
+      "Scenario 2 - Given Subject id set to 'subject01-test',
           and [input$show_all_data] set to either TRUE/FALSE,
           and rev_data$summary (=reactiveVal()) containing summary data with at least the column subject_id,
           I expect that the table with review data shows either the summary
@@ -69,11 +71,13 @@ describe(
         queries_df <- summary_df[, 1, drop = FALSE] |>
           dplyr::mutate(
             query = paste0("random query", 1:4),
+            type = "Major",
             timestamp = "2023-11-01 01:01:01",
             query_id = paste0("query_id-", subject_id),
             resolved = "No",
+            item = c("Intoxication", "Sepsis", "Pneumothorax", "Delirium"),
             item_group = "Adverse events",
-            event_label = "Visit 1"
+            event_label = paste0("Visit ", 1:4)
           )
 
         testargs <- list(
@@ -85,16 +89,21 @@ describe(
           navinfo = reactiveValues(),
           all_forms = data.frame()
         )
-        query_table_data <- queries_df |>
-          dplyr::select(subject_id, item_group, event_label, query, resolved)
+        query_table_data <- queries_df |> 
+          dplyr::mutate(
+            ID = paste0(item, " (", item_group, ", ", event_label, ")"),
+            ID = ifelse(type == "Major", paste0(ID, " Major query"), ID)
+          ) |> 
+          dplyr::select(tidyr::all_of(c("subject_id", "ID", "query"))) 
+        
         testServer(mod_navigate_review_server, args = testargs, {
           ns <- session$ns
           session$setInputs(show_all_data = TRUE)
+
           expect_equal(modal_rev_data(), summary_df)
           expect_true(inherits(output[["review_df"]], "json"))
           expect_equal(queries_table_data(), query_table_data)
           expect_true(inherits(output[["queries_table"]], "json"))
-
 
           session$setInputs(show_all_data = FALSE)
           expect_equal(modal_rev_data(), summary_df[1,])
@@ -105,7 +114,7 @@ describe(
       }
     )
     it(
-      "Scenario 3. Given Subject id set to 'subject01-test',
+      "Scenario 3 - Given Subject id set to 'subject01-test',
           and [input$show_all_data] set to either TRUE/FALSE,
           and rev_data$summary() (=reactiveVal()) containing an empty data frame,
           and r$query_data being an empty data frame, 
@@ -116,17 +125,10 @@ describe(
           subject_id = "",
           summary_col = ""
         )
-        queries_df <- summary_df[, 1, drop = FALSE] |>
-          dplyr::mutate(
-            subject_id = "",
-            query = "",
-            timestamp = "",
-            query_id = "",
-            resolved = "",
-            item_group = "",
-            event_label = ""
-          )
-
+        
+        queries_df <- summary_df[, 1, drop = FALSE] |> 
+          add_missing_columns(names(query_data_skeleton))
+        
         testargs <- list(
           r = reactiveValues(
             subject_id = "subject01-test",
@@ -138,6 +140,7 @@ describe(
         )
         testServer(mod_navigate_review_server, args = testargs, {
           ns <- session$ns
+          
           session$setInputs(show_all_data = TRUE)
           expect_equal(modal_rev_data(), summary_df[0,])
           expect_true(inherits(output[["review_df"]], "json"))
@@ -150,7 +153,7 @@ describe(
       }
     )
     it(
-      "Scenario 4. Given Subject id set to 'subject01-test',
+      "Scenario 4 - Given Subject id set to 'subject01-test',
           and the input value [show_all_data] is set to either TRUE/FALSE,
           and the [summary()] data frame in [rev_data] contains summary review data,
           and I click on an external button to open the review data modal, 
@@ -163,15 +166,17 @@ describe(
           Form = "Adverse events", 
           summary_col = paste0("summary_info", 1:4)
         )
+        
         queries_df <- summary_df[, 1, drop = FALSE] |> 
           dplyr::mutate(
-            subject_id = "",
-            query = "",
-            timestamp = "",
-            query_id = "",
-            resolved = "",
-            item_group = "",
-            event_label = ""
+            query = paste0("random query", 1:4),
+            type = "Major",
+            timestamp = "2023-11-01 01:01:01",
+            query_id = paste0("query_id-", subject_id),
+            resolved = "No",
+            item = c("Intoxication", "Sepsis", "Pneumothorax", "Delirium"),
+            item_group = "Adverse events",
+            event_label = paste0("Visit ", 1:4)
           )
         
         test_ui <- function(request){
@@ -197,7 +202,7 @@ describe(
             id = "test", 
             r = reactiveValues(
               subject_id = "subject01-test",
-              query_data = queries_df[0,]
+              query_data = queries_df
             ), 
             rev_data = rev_data,  
             navinfo = reactiveValues(active_form = "Adverse events", active_tab = "Common events"),

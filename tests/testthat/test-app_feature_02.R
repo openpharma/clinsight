@@ -7,13 +7,13 @@ describe(
     app <- AppDriver$new(
       app_dir = test_path("fixtures/testapp"),
       name = "app-feature-2",
-      timeout = 12000,
+      timeout = 20000,
       width = 1619, 
       height = 955    
     )
     withr::defer(app$stop())
     it(
-      "Scenario 1. Save review. 
+      "Scenario 1 - Save review. 
             Given a fixed fixed random test data set with all data marked as not yet reviewed, 
             and being logged in as test user, 
             and patient 45 selected as active patient,
@@ -47,7 +47,7 @@ describe(
             item_group == app$get_value(export = "active_form")
           ) 
         expect_equal(unique(active_form_data$reviewed), "Yes")
-        expect_equal(unique(active_form_data$reviewer), "test user")
+        expect_equal(unique(active_form_data$reviewer), "test user (Administrator)")
         expect_equal(unique(active_form_data$comment), "test comment")
       }
     )

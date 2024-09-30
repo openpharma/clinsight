@@ -1,0 +1,280 @@
+---
+title: "Test report"
+subtitle: "ClinSight traceability matrix and test report"
+date: today
+format: 
+  docx:
+    toc: true
+    toc-depth: 2
+    reference-doc: word_template/template.docx
+    number-sections: true
+  html:
+    code-fold: true
+    toc: true
+    embed-resources: true
+    page-layout: article
+    number-sections: true
+  pdf: 
+    toc: true
+    number-sections: true
+    header-includes:
+      \usepackage{fancyhdr}
+      \usepackage{graphicx}
+      \usepackage[bottom=3.5cm]{geometry}
+params: 
+  test_results: "test_results.rds"
+vignette: >
+  %\VignetteIndexEntry{Unit test report}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  markdown: 
+    wrap: 72
+    canonical: true
+---
+
+```{=latex}
+\addtolength{\headheight}{0.5cm} 
+\fancypagestyle{plain}{} 
+\pagestyle{fancy} 
+\fancyhead[R]{\includegraphics[height=30pt, width=135pt]{gcp_logo.png}}
+\fancyfoot{}
+\fancyfoot[R]{\thepage}
+\renewcommand{\headrulewidth}{0pt} 
+```
+```{r, include = FALSE}
+pkg_name <- "clinsight"
+library(pkg_name, character.only = TRUE)
+# testthat should be loaded to convert results to a data frame with the internal 
+# function testthat:::as.data.frame.testthat_results
+library(testthat)
+
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  echo = FALSE
+) 
+
+summarize_results <- function(results) {
+  results |>  dplyr::summarise(across(where(is.numeric), sum)) |>  knitr::kable()
+}
+write_results <- function(results) {
+  purrr::pwalk(list(results$file, results$Categories), write_file_results)
+}
+write_file_results <- function(file, categories, ...) {
+  cat("###", file, paste0("{#", file, "}"), "\n")
+  purrr::pwalk(list(categories$context, categories$Results), write_category_results)
+}
+write_category_results <- function(category, tests, ...) {
+  cat("####", category, "\n")
+  
+  if (knitr::is_latex_output() ) {
+    tab <- knitr::kable(tests, booktabs = TRUE)  |>
+      kableExtra::kable_styling() |>
+      kableExtra::column_spec(1, width = "30em")
+  } else{
+    if(knitr::is_html_output()){
+       tab <- knitr::kable(tests, booktabs = TRUE)  |>
+      kableExtra::kable_styling(full_width = TRUE) |>
+      kableExtra::column_spec(1, width = "30em")
+    } else{  
+      tab <- knitr::kable(tests) 
+      }
+  } 
+  print(tab)
+  cat("\n")
+}
+
+#load tests 
+tests <- if(file.exists(params$test_results)){
+  readRDS(params$test_results)
+} else{
+  get_test_results(package = pkg_name, outfile = params$test_results)
+}
+
+```
+
+# Traceability matrix {#sec-traceability-matrix}
+
+|     | Requirement                             | Feature                                                                                                                                                                                     | Validation                                              |
+|------------|------------|--------------------------------------|------------|
+| 1   | Secure Authentication and Authorization | Restrict access *(using Shinymanager. Not applicable for internal deployment; for use in production, authentication and authorization is validated in the deployment validation document).* | [app_authentication](#app_authentication)               |
+| 2   | File Integration/loading data           | Create app user database                                                                                                                                                                    | [fct_SQLite](#fct_SQLite)                               |
+|     |                                         | Create credentials database                                                                                                                                                                 | [app_authentication](#app_authentication)               |
+|     |                                         | Display database synchronization information                                                                                                                                                | [mod_db_synch_info](#mod_db_synch_info)                 |
+|     |                                         | Ensure data in memory remains in synch with the database                                                                                                                                    | [mod_review_forms](#mod_review_forms)                   |
+|     |                                         | Explore data                                                                                                                                                                                | [app_feature_01](#app_feature_01)                       |
+|     |                                         | Load application module in isolation                                                                                                                                                        | *tested in all modules*                                 |
+|     |                                         | Load data from CSV files, merge with custom metadata, and start the application                                                                                                             | [app_feature_04](#app_feature_04)                       |
+|     |                                         | Merge raw data with metadata                                                                                                                                                                | [fct_appdata](#fct_appdata)                             |
+|     |                                         | Only allow to add query with valid user name and role                                                                                                                                       | [mod_query_add](#mod_query_add)                         |
+|     |                                         | Save a query                                                                                                                                                                                | [app_feature_03](#app_feature_03)                       |
+|     |                                         | Save review of a form                                                                                                                                                                       | [app_feature_02](#app_feature_02)                       |
+|     |                                         | Select correct data to review                                                                                                                                                               | [get_review_data](#get_review_data)                     |
+|     |                                         | Select rows with latest time stamp                                                                                                                                                          | [db_slice_rows](#db_slice_rows)                         |
+|     |                                         | Start application                                                                                                                                                                           | [app_server](#app_server)                               |
+|     |                                         | Update user data database                                                                                                                                                                   | [fct_SQLite](#fct_SQLite)                               |
+|     |                                         | Warn if database synchronization is outdated                                                                                                                                                | [mod_db_synch_info](#mod_db_synch_info)                 |
+|     |                                         | Warn if no user role or user name is provided                                                                                                                                               | [app_server](#app_server)                               |
+| 3   | Data Visualization Tools                | Explore data                                                                                                                                                                                | [app_feature_01](#app_feature_01)                       |
+|     |                                         | Get overview statistics of selected patient                                                                                                                                                 | [mod_header_widgets](#mod_header_widgets)               |
+|     |                                         | Highlight data that is not yet reviewed                                                                                                                                                     | [mod_study_forms](#mod_study_forms)                     |
+|     |                                         | Save a query                                                                                                                                                                                | [app_feature_3](#app_feature_3)                         |
+|     |                                         | Save review of a form                                                                                                                                                                       | [app_feature_02](#app_feature_02)                       |
+|     |                                         | View common form                                                                                                                                                                            | [mod_common_forms](#mod_common_forms)                   |
+|     |                                         | View forms with study-specific data                                                                                                                                                         | [mod_study_forms](#mod_study_forms)                     |
+|     |                                         | View interactive timeline                                                                                                                                                                   | [mod_timeline](#mod_timeline)                           |
+| 4   | Data highlighting                       | Explore data                                                                                                                                                                                | [app_feature_01](#app_feature_01)                       |
+|     |                                         | Get overview statistics of selected patient                                                                                                                                                 | [mod_header_widgets](#mod_header_widgets)               |
+|     |                                         | Highlight data that is not yet reviewed                                                                                                                                                     | [mod_study_forms](#mod_study_forms)                     |
+|     |                                         | Save a query                                                                                                                                                                                | [app_feature_03](#app_feature_03)                       |
+|     |                                         | Save review of a form                                                                                                                                                                       | [app_feature_02](#app_feature_02)                       |
+|     |                                         | View common form                                                                                                                                                                            | [mod_common_forms](#mod_common_forms)                   |
+|     |                                         | View forms with study-specific data                                                                                                                                                         | [mod_study_forms](#mod_study_forms)                     |
+|     |                                         | View interactive timeline                                                                                                                                                                   | [mod_timeline](#mod_timeline)                           |
+| 5   | Navigation functionality                | Explore data                                                                                                                                                                                | [app_feature_01](#app_feature_01)                       |
+|     |                                         | Navigate through forms with study data                                                                                                                                                      | [mod_navigate_forms](#mod_navigate_forms)               |
+|     |                                         | Navigate through participants                                                                                                                                                               | [mod_navigate_participants](#mod_navigate_participants) |
+|     |                                         | Navigate to patient selected in a table                                                                                                                                                     | [mod_go_to_form](#mod_go_to_form)                       |
+|     |                                         | Save a query                                                                                                                                                                                | [app_feature_03](#app_feature_03)                       |
+|     |                                         | Save review of a form                                                                                                                                                                       | [app_feature_02](#app_feature_02)                       |
+|     |                                         | Select user configuration                                                                                                                                                                   | [mod_review_config](#mod_review_config)                 |
+|     |                                         | Show overview tables of data to review                                                                                                                                                      | [mod_navigate_review](#mod_navigate_review)             |
+|     |                                         | View sidebar containing controls of application                                                                                                                                             | [mod_main_sidebar](#mod_main_sidebar)                   |
+| 6   | Query Management System                 | Add follow-up query, mark query as resolved                                                                                                                                                 | [mod_query_follow_up](#mod_query_follow_up)             |
+|     |                                         | Create and save a query                                                                                                                                                                     | [mod_query_add](#mod_query_add)                         |
+|     |                                         | Create follow-up query                                                                                                                                                                      | [mod_query_follow_up](#mod_query_follow_up)             |
+|     |                                         | Error if query entry in app does not match database                                                                                                                                         | [mod_query_add](#mod_query_add)                         |
+|     |                                         | Only allow to add query with valid user name and role                                                                                                                                       | [mod_query_add](#mod_query_add)                         |
+|     |                                         | Only allow to write follow-up query if query id matches to one in database                                                                                                                  | [mod_query_follow_up](#mod_query_follow_up)             |
+|     |                                         | Only allow to write follow-up query with valid user name and user role                                                                                                                      | [mod_query_follow_up](#mod_query_follow_up)             |
+|     |                                         | Save a query                                                                                                                                                                                | [app_feature_03](#app_feature_03)                       |
+|     |                                         | Verify follow-up query correctly being written in database                                                                                                                                  | [mod_query_follow_up](#mod_query_follow_up)             |
+|     |                                         | View follow-up messages of a query                                                                                                                                                          | [mod_queries](#mod_queries)                             |
+|     |                                         | View queries                                                                                                                                                                                | [mod_queries](#mod_queries)                             |
+|     |                                         | Write multiple query follow-up messages                                                                                                                                                     | [mod_query_follow_up](#mod_query_follow_up)             |
+| 7   | Reviewing functionality                 | Disable review buttons if review not applicable or not allowed, and give feedback why.                                                                                                      | [mod_review_forms](#mod_review_forms)                   |
+|     |                                         | Only allow to save review with valid user name and role                                                                                                                                     | [mod_review_forms](#mod_review_forms)                   |
+|     |                                         | Restrict right to review forms to roles specified in the app configuration                                                                                                                  | [mod_review_forms](#mod_review_forms)                   |
+|     |                                         | Save review of a form                                                                                                                                                                       | [app_feature_02](#app_feature_02)                       |
+|     |                                         | Save review of a form                                                                                                                                                                       | [mod_review_forms](#mod_review_forms)                   |
+| 8   | Reporting functionality                 | Create PDF report                                                                                                                                                                           | [mod_report_fct_helpers](#mod_report_fct_helpers)       |
+|     |                                         | Create PDF report of review actions                                                                                                                                                         | [mod_report](#mod_report)                               |
+
+: Traceability matrix {tbl-colwidths="\[5,20,45,30\]"}
+
+```{r , warning=F, message=FALSE}
+# The S3 method testthat:::as.data.frame.testthat_results should be available
+# to run the following without error
+test_results <- tests$results |> 
+  dplyr::as_tibble() |> 
+  dplyr::rename(Test = test) |> 
+  dplyr::mutate(
+  #  Test = gsub("\n", "", Test), #since new lines mess up markdown tables
+    context = stringr::str_extract(
+      gsub("\n", "", Test), 
+      pattern = "^.+\\:"),
+    context = gsub(":", "", context),
+    context = ifelse(is.na(context), "", context),
+    Test = gsub("^.+\\:", "", Test),
+    Test = gsub("\\$", "\\\\$", Test),
+    file = gsub("test-", "", file),
+    file = gsub(".R", "", file)
+  ) |> 
+  dplyr::summarize(
+    N        = dplyr::first(nb),
+    Passed   = sum(passed),
+    Failed   = sum(failed),
+    Warnings = sum(warning),
+    Errors   = sum(as.numeric(error)),
+    Skipped  = sum(as.numeric(skipped)),  
+    .by = c(file, context, Test)
+  ) 
+
+
+results_grouped <- test_results |> 
+  dplyr::mutate(Test = gsub("\n", "", Test)) |> 
+  tidyr::pivot_longer(-c(file, context, Test, N)) |> 
+  dplyr::filter(value != 0) |> 
+  dplyr::mutate(
+    Result = ifelse(
+      value == N, 
+      name, 
+      paste0(name, "(N=", value, ")")
+    )
+  ) |> 
+  dplyr::select(-c(name, value)) |> 
+  collapse_column_vals("Result", group_by = c("file", "context", "Test")) |> 
+  dplyr::distinct()
+
+results_nested <- results_grouped |> 
+  tidyr::nest( .by = c(file, context), .key = "Results") |> 
+  tidyr::nest( .by = file, .key = "Categories")
+
+results_modules <- results_nested |> 
+  dplyr::filter(grepl("mod_", file))
+
+results_functions <- results_nested |> 
+  dplyr::filter(
+    !grepl("mod_", file) & 
+      !grepl("app_authentication", file) & 
+      !grepl("app_feature_", file)
+    )
+
+results_system <- results_nested |> 
+  dplyr::filter(grepl("app_authentication", file) | grepl("app_feature_", file))
+
+all_tests_passed <- ( sum(test_results$Passed) == sum(test_results$N) ) && 
+  sum(test_results$Errors) == 0
+conclusion <- if(all_tests_passed){
+ "Acceptance criteria according to test plan are met. Validation successful."
+} else ("Not all tests passed without problems.")
+```
+
+# Application Test report
+
+Created on: `r tests$time`.
+
+## Test Summary
+
+**`r conclusion`**
+
+```{r , results='asis'}
+summarize_results(test_results)
+```
+
+## Test environment
+
+Tests were run in the following environment:
+
+```{r}
+tests$session
+```
+
+## End-to-end tests
+
+These are the tests and test results of testing the entire application
+end-to-end.
+
+```{r , results='asis'}
+write_results(results_system)
+```
+
+## Module tests
+
+These are the tests and test results of the application's modules.
+
+```{r , results='asis'}
+write_results(results_modules)
+```
+
+## Function tests
+
+These are tests and test results of lower-level functions (units) that
+are used within the application modules.
+
+```{r , results='asis'}
+write_results(results_functions)
+```
+
+# References

@@ -1,6 +1,5 @@
 describe(
-  "mod_query_follow_up. Feature 1 | As a user, I want to be able to start the 
-  module in isolation", 
+  "mod_query_follow_up. Feature 1 | Load application module in isolation.", 
   {
     it("Can load the module UI, with functioning internal parameters.", {
       ui <- mod_query_follow_up_ui(id = "test")
@@ -30,17 +29,18 @@ describe(
 )
 
 describe(
-  "mod_query_follow_up. Feature 2 | As a user, I want to be able 
-  to create a follow-up message on a selected query. The follow-up message should be saved in the 
-  review database and should be the same as the message in-memory. ", 
+  "mod_query_follow_up. Feature 2 | Create follow-up query. 
+    As a user, I want to be able to create a follow-up message on a 
+    selected query. The follow-up message should be saved in the 
+    review database and should be the same as the message in-memory. ", 
   {
     it(
-      "Scenario 1 | Add query follow-up message. Given a query database 
+      "Scenario 1 - Add query follow-up message. Given a query database 
           containing a row with [query] set to 'Query text test.' and [query_id] 
           set to 'ID1-unique_id',  
           and [selected_query] set to 'ID1-unique_id',
           and the input [query_follow_up_text] set to 'Test Follow-up message',
-          and [user_name] set to 'Admin test',
+          and [user_name] set to 'Admin test' and [user_role] to 'Medical Monitor',
           and the input value [resolved] set to 'FALSE',
           and the input [query_add_follow_up] incremented to 1 to save the query,
           I expect that the follow-up message will be written in the remote and 
@@ -53,7 +53,8 @@ describe(
         testargs <- list(
           r = reactiveValues(
             query_data = query_df,
-            user_name = reactiveVal("Admin test"),
+            user_name = "Admin test",
+            user_role = "Medical Monitor",
             subject_id = "ID1"
           ),
           selected_query = reactiveVal(),
@@ -81,16 +82,18 @@ describe(
 )
 
 describe(
-  "mod_query_follow_up. Feature 3 | As a user, I want to be able to add a follow-up 
-  query and mark a query as resolved. The information should be saved in the query database.", 
+  "mod_query_follow_up. Feature 3 | Add follow-up query, mark query as resolved. 
+    As a user, I want to be able to add a follow-up 
+    query and mark a query as resolved. The information should be saved in the 
+    query database.", 
   {    
     it(
-      "Scenario 1 | Add query follow-up and resolve query. Given a query database 
+      "Scenario 1 - Add query follow-up and resolve query. Given a query database 
           containing a row with [query] set to 'Query text test.' 
           and [query_id] set to 'ID1-unique_id',  
           and [selected_query] set to 'ID1-unique_id',
           and the input [query_follow_up_text] set to 'Test Follow-up message',
-          and [user_name] set to 'Admin test',
+          and [user_name] set to 'Admin test' and [user_role] to 'Medical Monitor',
           and the input value [resolved] set to 'TRUE',
           and the input [query_add_follow_up] incremented to 1 to save the query,
           I expect that the value [query] with query_id 'ID1-unique_id' 
@@ -99,7 +102,8 @@ describe(
           and that the [resolved] value is 'Yes',
           and that a valid date is written in the [resolved_date],
           and that the in-memory [query_data] data frame contains the same query timestamp, 
-          and the same query text, and the same query reviewer name as the query database,  
+          and the same query text, and the same query reviewer name and reviewer 
+          role as in the query database,  
           and that the database [resolved] values are 'No' for the row with the 
           initial query and 'Yes' for the follow-up query.", 
       {
@@ -110,7 +114,8 @@ describe(
         testargs <- list(
           r = reactiveValues(
             query_data = query_df,
-            user_name = reactiveVal("Admin test"),
+            user_name = "Admin test",
+            user_role = "Medical Monitor",
             subject_id = "ID1"
           ),
           selected_query = reactiveVal(),
@@ -145,16 +150,17 @@ describe(
 )
 
 describe(
-  "mod_query_follow_up. Feature 4 | As a user, I want that multiple follow-up messages 
-  for a query can be written and saved in the query database, and that the order 
-  of the follow-up messages remains as expected.", 
+  "mod_query_follow_up. Feature 4 | Write multiple query follow-up messages. 
+    As a user, I want that multiple follow-up messages for a query can be 
+    written and saved in the query database, and that the order 
+    of the follow-up messages remains as expected.", 
   {
     it(
-      "Scenario 1 | Saving multiple query follow-up messages. Given a query database 
+      "Scenario 1 - Saving multiple query follow-up messages. Given a query database 
       containing a row with [query] set to 'Query text test.' 
       and [query_id] set to 'ID1-unique_id',  
       and [selected_query] set to 'ID1-unique_id', 
-      and [user_name] set to 'Admin test',
+      and [user_name] set to 'Admin test' and [user_role] to 'Medical Monitor',
       and the input [query_follow_up_text] set to 'FU message 1',  
       and [resolved] set to 'FALSE', 
       and the input [query_add_follow_up] incremented to 1 to save the query,
@@ -167,7 +173,7 @@ describe(
       and that a valid date is written in the [resolved_date],
       and that both the in-memory [query_data] data frame and the query database 
       contain the same query timestamp, 
-      and the same query text, and the same query reviewer name,  
+      and the same query text, and the same query reviewer name and reviewer role,
       and that the database [resolved] values are 'No' for the first two rose 
       and 'Yes' for the final follow-up query.", 
       {
@@ -178,7 +184,8 @@ describe(
         testargs <- list(
           r = reactiveValues(
             query_data = query_df,
-            user_name = reactiveVal("Admin test"),
+            user_name = "Admin test",
+            user_role = "Medical Monitor",
             subject_id = "ID1"
           ),
           selected_query = reactiveVal("ID1-unique_id"),
@@ -221,12 +228,14 @@ describe(
 )
 
 describe(
-  "mod_query_follow_up. Feature 5 | As a user, I want that no follow-up query 
-  will be written to the database and that the in-memory query information remains the same
-  if it is unclear which query the follow-up message concerns.", 
+  "mod_query_follow_up. Feature 5 | Only allow to write follow-up query if query 
+    id matches to one in database. 
+    As a user, I want that no follow-up query will be written to the database 
+    and that the in-memory query information remains the same if it is unclear 
+    which query the follow-up message concerns.", 
   {
     it(
-      "Scenario 1 | No follow-up query without selected query id. Given a specific [query_follow_up_text], 
+      "Scenario 1 - No follow-up query without selected query id. Given a specific [query_follow_up_text], 
           and no query id set in [selected_query],
           I expect that the query database and internal query data frame 
           remain the same.", 
@@ -238,7 +247,8 @@ describe(
         testargs <- list(
           r = reactiveValues(
             query_data = query_df,
-            user_name = reactiveVal("Admin test"),
+            user_name = "Admin test",
+            user_role = "Medical Monitor",
             subject_id = "ID1"
           ),
           selected_query = reactiveVal(),
@@ -264,7 +274,7 @@ describe(
       }
     )
     it(
-      "Scenario 2 | No follow-up query with an unknown query id. Given a specific [query_follow_up_text], 
+      "Scenario 2 - No follow-up query with an unknown query id. Given a specific [query_follow_up_text], 
           and the query id in [selected_query()] is set to an unknown query_id 
           which is not in the database,
           I expect that no data will be written to the database,
@@ -277,7 +287,8 @@ describe(
         testargs <- list(
           r = reactiveValues(
             query_data = query_df,
-            user_name = reactiveVal("Admin test"),
+            user_name = "Admin test",
+            user_role = "Medical Monitor",
             subject_id = "ID1"
           ),
           selected_query = reactiveVal(),
@@ -302,12 +313,110 @@ describe(
 )
 
 describe(
-  "mod_query_follow_up. Feature 6 | As a user, I want to be able to see an error
-  message if the latest query entry does not match the one in the database
-  after saving a new entry.",
+  "mod_query_follow_up. Feature 6 | Only allow to write follow-up query with 
+    valid user name and user role. 
+    As a user, I want that no follow-up query will be written to the database 
+    if no valid user name or user role is available.", 
   {
     it(
-      "Scenario 1 | Database save function not working. 
+      "Scenario 1 - No user name available. 
+      follow-up query without selected query id. Given no user name is available, 
+          and [query_follow_up_text] contains a specific follow-up text, 
+          and [selected_query] is set to 'ID1-unique_id',
+          and trying to save a follow-up query by pressing [query_add_follow_up],
+          I expect that [query_error] shows an informative error,
+          and I expect that the query database and internal query data frame 
+          remain the same.", 
+      {
+        query_df <- readRDS(test_path("fixtures", "query_testdata.rds"))
+        temp_path <- withr::local_tempfile(fileext = ".sqlite") 
+        con <- get_db_connection(temp_path)
+        DBI::dbWriteTable(con, "query_data", query_df)
+        testargs <- list(
+          r = reactiveValues(
+            query_data = query_df,
+            user_name = "",
+            user_role = "Medical Monitor",
+            subject_id = "ID1"
+          ),
+          selected_query = reactiveVal("ID1-unique_id"),
+          db_path = temp_path
+        ) 
+        testServer(mod_query_follow_up_server, args = testargs , {
+          ns <- session$ns
+          session$setInputs(
+            query_follow_up_text = "Test Follow-up message",
+            resolved = TRUE,
+            query_add_follow_up = 1
+          )
+          
+          expect_error(
+            output$query_error, 
+            "User name missing. Cannot save query anonymously"
+          )
+          expect_equal(r$query_data, query_df)
+          expect_equal(
+            DBI::dbGetQuery(con, "SELECT * FROM query_data"), 
+            query_df
+          )
+        })
+      }
+    )
+    it(
+      "Scenario 2 - No user role available. Given the same a conditions as in Scenario 1,
+          but now with [user_name] set to 'test user' 
+          and no [user_role] available, 
+          and trying to save a follow-up query by pressing [query_add_follow_up],
+          I expect that no data will be written to the database,
+          and that a warning will be given", 
+      {
+        query_df <- readRDS(test_path("fixtures", "query_testdata.rds"))
+        temp_path <- withr::local_tempfile(fileext = ".sqlite") 
+        con <- get_db_connection(temp_path)
+        DBI::dbWriteTable(con, "query_data", query_df)
+        testargs <- list(
+          r = reactiveValues(
+            query_data = query_df,
+            user_name = "test user",
+            user_role = "",
+            subject_id = "ID1"
+          ),
+          selected_query = reactiveVal("ID1-unique_id"),
+          db_path = temp_path
+        ) 
+        testServer(mod_query_follow_up_server, args = testargs , {
+          ns <- session$ns
+          session$setInputs(
+            query_follow_up_text = "Test Follow-up message",
+            resolved = TRUE,
+            query_add_follow_up = 1
+          )
+          
+          expect_error(
+            output$query_error, 
+            "User role missing. Cannot save query without user role"
+          )
+          expect_equal(r$query_data, query_df)
+          expect_equal(
+            DBI::dbGetQuery(con, "SELECT * FROM query_data"), 
+            query_df
+          )
+        })
+      }
+    )
+  }
+)
+
+
+describe(
+  "mod_query_follow_up. Feature 7 | Verify follow-up query correctly being 
+    written in database. 
+    As a user, I want to be able to see an error
+    message if the latest query entry does not match the one in the database
+    after saving a new entry.",
+  {
+    it(
+      "Scenario 1 - Database save function not working. 
         Given a test data base, 
         and the function 'db_save' being mocked (temporarily replaced) with a
         function that does not write to the database,
@@ -331,7 +440,8 @@ describe(
         testargs <- list(
           r = reactiveValues(
             query_data = query_df,
-            user_name = reactiveVal("Admin test"),
+            user_name = "Admin test",
+            user_role = "Medical Monitor",
             subject_id = "ID1"
           ),
           selected_query = reactiveVal(),

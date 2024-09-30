@@ -1,6 +1,7 @@
 describe(
-  "db_create(). Feature 1 | As a user, I want to be able to create an app database that 
-  contains the necessary tables for the application to function. ", 
+  "db_create(). Feature 1 | Create app user database. 
+      As a user, I want to be able to create an app database that 
+      contains the necessary tables for the application to function. ", 
   {
     it("Can create an app database", {
       rev_data <- data.frame(
@@ -48,12 +49,34 @@ describe(
         dplyr::as_tibble(query_data_skeleton)
       )
     })
+    it("Can create a .sqlite app database if the database folder does not exist, 
+       with the required tables named [all_review_data], db_synch_time, and query_data", {
+      rev_data <- data.frame(
+        subject_id = "Test_name",
+        event_name = "Visit 1",
+        item_group = "Test_group",
+        form_repeat = 1,
+        item_name = "Test_item",
+        event_date = "2023-11-01",
+        edit_date_time = "2023-11-05 01:26:00"
+      )
+      temp_path <- file.path(withr::local_tempdir(), "non_existing_folder/db.sqlite")
+      
+      db_create(rev_data, temp_path)
+      
+      expect_true(file.exists(temp_path))
+      con <- get_db_connection(temp_path)
+      expect_equal(
+        DBI::dbListTables(con), 
+        c("all_review_data", "db_synch_time", "query_data")
+      )
+    })
   }
 )
 
 
 describe(
-  "db_update(). Feature 1 | As a user, I want to be able to update the database.", 
+  "db_update(). Feature 2 | Update user data database.", 
   {
     comvars = c("key_col1", "item_group")
     old_data <- data.frame(
@@ -82,12 +105,16 @@ describe(
       con <- get_db_connection(temp_path)
       
       DBI::dbWriteTable(con, "all_review_data", cbind(old_data, review_cols))
-      df_old <- dplyr::as_tibble(cbind(old_data, review_cols))
+      DBI::dbWriteTable(con, "db_synch_time", data.frame("synch_time" = "2024-01-01 01:01:01 UTC"))
       
-      db_update(rbind(old_data, new_data), db_path = temp_path, 
-                common_vars = comvars)
+      df_old <- cbind(old_data, review_cols)
+      
+      rev_data <- rbind(old_data, new_data)
+      # newer synch_time indicating need for update:
+      attr(rev_data, "synch_time") <- "2024-02-02 01:01:01 UTC" 
+      db_update(rev_data, db_path = temp_path, common_vars = comvars)
       expect_equal(
-        dplyr::collect(dplyr::tbl(con, "all_review_data"))[1, ], 
+        DBI::dbGetQuery(con, "SELECT * FROM all_review_data")[1, ],
         df_old
         )
     })
@@ -95,31 +122,57 @@ describe(
       temp_path <- withr::local_tempfile(fileext = ".sqlite") 
       con <- get_db_connection(temp_path)
       DBI::dbWriteTable(con, "all_review_data", cbind(old_data, review_cols))
+      DBI::dbWriteTable(con, "db_synch_time", data.frame("synch_time" = "2024-01-01 01:01:01 UTC"))
       
-      db_update(rbind(old_data, new_data), db_path = temp_path, 
-                common_vars = comvars)
-      expect_snapshot(dplyr::collect(dplyr::tbl(con, "all_review_data")))
+      rev_data <- rbind(old_data, new_data)
+      attr(rev_data, "synch_time") <- "2024-02-02 01:01:01 UTC" 
+      db_update(rev_data, db_path = temp_path, common_vars = comvars)
+      expect_snapshot(DBI::dbGetQuery(con, "SELECT * FROM all_review_data"))
     })
+    it("Still performs an update if synch_time is not available", {
+      temp_path <- withr::local_tempfile(fileext = ".sqlite") 
+      con <- get_db_connection(temp_path)
+      DBI::dbWriteTable(con, "all_review_data", cbind(old_data, review_cols))
+      
+      rev_data <- rbind(old_data, new_data) # no synch_time attribute added
+      db_update(rev_data, db_path = temp_path, common_vars = comvars)
+      
+      # exclude time stamp since it defaults to current date/time when 
+      # synch_date is not available:
+      check_cols <- paste0(c("key_col1", "item_group", "item_name", "event_date", 
+                       "edit_date_time", "reviewed", "status"), collapse = ", ")
+      query <- paste("SELECT", check_cols, "FROM all_review_data")
+      expect_snapshot(DBI::dbGetQuery(con, query))
+    })
+    
     it("Adds a new row for each data point with a new/updated EditdateTime.", {
       temp_path <- withr::local_tempfile(fileext = ".sqlite") 
       con <- get_db_connection(temp_path)
       DBI::dbWriteTable(con, "all_review_data", cbind(old_data, review_cols))
-      updated_row_data <- old_data |> 
-        dplyr::mutate(edit_date_time = "2023-11-13 01:01:01")
+      DBI::dbWriteTable(con, "db_synch_time", data.frame("synch_time" = "2024-01-01 01:01:01 UTC"))
       
-      db_update(updated_row_data, db_path = temp_path, common_vars = comvars)
-      expect_snapshot(print(dplyr::collect(dplyr::tbl(con, "all_review_data")), 
-                            width = 10))
+      rev_data <- old_data |> 
+        dplyr::mutate(edit_date_time = "2023-11-13 01:01:01")
+      attr(rev_data, "synch_time") <- "2024-02-02 01:01:01 UTC" 
+      
+      db_update(rev_data, db_path = temp_path, common_vars = comvars)
+      expect_snapshot(DBI::dbGetQuery(con, "SELECT * FROM all_review_data"))
     })
-    it("Does not change the database if there are no changes (latest max edit_date_time is the same)", {
+    it("Does not change the database if there are no changes (synch_time is the same)", {
       temp_path <- withr::local_tempfile(fileext = ".sqlite") 
       con <- get_db_connection(temp_path)
-      DBI::dbWriteTable(con, "all_review_data", cbind(old_data, review_cols))
+      
+      synch_time <- "2024-01-01 01:01:01 UTC"
+      rev_data <- cbind(old_data, review_cols)
+      attr(rev_data, "synch_time") <- synch_time
+      DBI::dbWriteTable(con, "all_review_data", rev_data)
+      DBI::dbWriteTable(con, "db_synch_time", data.frame("synch_time" = synch_time))
       
       expect_snapshot({
-        db_update(old_data, db_path = temp_path, common_vars = comvars)
-        dplyr::collect(dplyr::tbl(con, "all_review_data"))
+        db_update(rev_data, db_path = temp_path, common_vars = comvars)
       })
+      attr(rev_data, "synch_time") <- NULL
+      expect_equal(rev_data, DBI::dbGetQuery(con, "SELECT * FROM all_review_data"))
     })
     
   }
@@ -251,6 +304,7 @@ describe(
     it("can save a query", {
       new_query <- data.frame(
         query_id = "ID124234", 
+        type = "Normal",
         subject_id = "ID1",
         event_label = "Visit 1",
         item_group = "Vital signs",
@@ -273,35 +327,40 @@ describe(
 )
 
 
-describe("db_get_latest_query can collect latest query data from a database", {
+describe("db_get_query can collect latest query data from a database", {
   temp_path <- withr::local_tempfile(fileext = ".sqlite") 
   con <- get_db_connection(temp_path)
   
   new_query <- dplyr::tibble(
     query_id = "ID124234", 
     subject_id = "ID1",
-    n = 1,
-    timestamp = "2024-02-05 01:01:01",
+    n = 1:2,
+    timestamp = c("2024-02-05 01:01:01", "2024-04-01 01:01:01"),
     other_info = "testinfo"
     ) 
   DBI::dbWriteTable(con, "query_data", new_query)
   
   it("Can collect the desired data.", {
-    query_output <- db_get_latest_query(temp_path, query_id = "ID124234", n = 1)
-    expect_equal(query_output, new_query)
+    query_output <- db_get_query(temp_path, query_id = "ID124234", n = 1)
+    expect_equal(query_output, new_query[1, ])
   })
   
   it("Collects an empty data frame if query_id or n are not found", {
-    query_output <- db_get_latest_query(temp_path, query_id = "non-existent", n = 1)
+    query_output <- db_get_query(temp_path, query_id = "non-existent", n = 1)
     expect_equal(query_output, new_query[0,])
-    query_output <- db_get_latest_query(temp_path, query_id = "ID124234", n = 6)
+    query_output <- db_get_query(temp_path, query_id = "ID124234", n = 6)
     expect_equal(query_output, new_query[0,])
+  })
+  
+  it("Collects all rows with the same query ID if n is set to NULL", {
+    query_output <- db_get_query(temp_path, query_id = "ID124234", n = NULL)
+    expect_equal(query_output, new_query)
   })
   
 })
 
 
-describe("db_get_latest_review can collect latest review data from a database", {
+describe("db_get_review can collect latest review data from a database", {
   temp_path <- withr::local_tempfile(fileext = ".sqlite") 
   con <- get_db_connection(temp_path)
  
@@ -318,15 +377,15 @@ describe("db_get_latest_review can collect latest review data from a database", 
   DBI::dbWriteTable(con, "all_review_data", review_data)
 
   it("Can collect the desired data.", {
-    output <- db_get_latest_review(temp_path, subject = "Test_name", form = "Test_group")
+    output <- db_get_review(temp_path, subject = "Test_name", form = "Test_group")
     expect_equal(output, review_data)
   })
   
   it("Collects an empty data frame if the requested subject or form are not found", {
-    output <- db_get_latest_review(temp_path, subject = "Non-existent", 
+    output <- db_get_review(temp_path, subject = "Non-existent", 
                                          form = "Test_group")
     expect_equal(output, review_data[0,])
-    output <- db_get_latest_review(temp_path, subject = "Test_name", 
+    output <- db_get_review(temp_path, subject = "Test_name", 
                                         form = "Non-existent")
     expect_equal(output, review_data[0,])
   })

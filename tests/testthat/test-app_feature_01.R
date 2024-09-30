@@ -5,7 +5,7 @@ describe(
     common forms and study-specific forms of multiple participants in the application,
     so that I can appropriately assess whether there is a risk for the patient's safety.",
   {
-    it("Scenario 1 | Data visualization.
+    it("Scenario 1 - Data visualization.
           Given a fixed random test data set,
           with all data being marked as 'new'/not yet reviewed,
           and being logged in as test user,
@@ -24,20 +24,20 @@ describe(
          app <- AppDriver$new(
            app_dir = test_path("fixtures/testapp"),
            name = "app-feature-1",
-           timeout = 20000,
+           timeout = 25000,
            width = 1619,
            height = 955
          )
          withr::defer(app$stop())
-         app$wait_for_idle(3000)
+         app$wait_for_idle(8000)
          # focus on the output, since input has some values that are 
          # inconsistently created by DT::datatable (for example, 
          # xxx_table_rows_current)
          # also, remove ggplot figure since it is recommended to remove these 
          # from snaps, since they cannot be serialized to JSON and produce a 
          # flaky hash https://rstudio.github.io/shinytest2/articles/robust.html
-         app$wait_for_js("$('#navigate_participants_1-subject_info').click()")
-         app$wait_for_idle()
+         app$run_js("$('#navigate_participants_1-subject_info').click()")
+         app$wait_for_idle(1500)
          app$set_inputs("navigate_participants_1-participant_selection" = "BEL_04_772")
          app$wait_for_idle(1000)
          app$click("navigate_participants_1-subj_apply")

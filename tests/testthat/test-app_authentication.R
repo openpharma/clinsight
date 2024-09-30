@@ -1,19 +1,21 @@
 library(shinytest2)
 
 describe(
-  "initialize_credentials(). Feature 1 | As a user, I want to be able to create a credentials 
+  "initialize_credentials(). Feature 1 | (only applicable for shinymanager deployments) Restrict access. 
+    As a user, I want to be able to create a credentials 
     database if there is none yet. The database should be accessible by a common admin 
     account and password combination, with the requirement set in the database that 
     the password needs to be changed after first login. ", 
   {
     it(
-      "Scenario 1 | Existing credentials database. 
+      "Scenario 1 - Existing credentials database. 
         Given an existing a database named 'credentials.db' containing a test data 
         frame, stored in a temporary folder, 
         I expect that no new database will be created,
         and that the test data frame within the existing database still exists 
         and is unchaged", 
       {
+        testthat::skip_if_not_installed("shinymanager")
         db_name <- file.path(withr::local_tempdir(), "credentials.db")
         con <- get_db_connection(db_name)
         DBI::dbWriteTable(con, "test", data.frame(test = 1))
@@ -27,7 +29,7 @@ describe(
       }
     )
     it(
-      "Scenario 2 | Create a new credentials database. 
+      "Scenario 2 - Create credentials database. Create a new credentials database. 
         Given that [credentials_db] leads to a non-existing database, 
         and [credentials_pwd] is set to 'test_password', 
         I expect that a new credentials database will be created,
@@ -39,7 +41,8 @@ describe(
         from the initialization password ('1234'),
         and that the value (password) [must_change] is set to TRUE.", 
       {
-        db_name <- file.path(withr::local_tempdir(), "credentials.db")
+        testthat::skip_if_not_installed("shinymanager")
+        db_name <- file.path(withr::local_tempdir(), "credentials.sqlite")
         initialize_credentials(
           credentials_db = db_name,
           credentials_pwd = "test_password"
@@ -53,7 +56,7 @@ describe(
         expect_equal(
           names(credentials_table),
           c("user", "password", "start", "expire", "admin", "name", 
-            "mail", "role", "sites", "is_hashed_password")
+            "mail", "roles", "sites", "is_hashed_password")
         )
         expect_equal(credentials_table[["user"]], "admin")
         expect_equal(credentials_table[["admin"]], "TRUE")
@@ -70,18 +73,35 @@ describe(
         )
       }
     )
+    it(
+      "Scenario 3 - Create a new credentials database in a non-existent folder. 
+        Given that [credentials_db] leads to a non-existing .sqlite database in 
+        a nont-existent folder, 
+        and [credentials_pwd] is set to 'test_password', 
+        I expect that a new credentials database will be created in the specified folder.", 
+      {
+        testthat::skip_if_not_installed("shinymanager")
+        db_name <- file.path(withr::local_tempdir(), "non_existing_folder/credentials.sqlite")
+        initialize_credentials(
+            credentials_db = db_name,
+            credentials_pwd = "test_password"
+          )
+        expect_true(file.exists(db_name))
+      }
+    )
   }
 )
 
 
 describe(
-  "authenticate_ui() and authenticate_server(). Feature 1 | As a user, I want to be able to 
+  "authenticate_ui() and authenticate_server(). (only applicable for shinymanager 
+  deployments). Feature 1 | As a user, I want to be able to 
   enter user name and password at the login screen of the application. 
   If the user name and password are incorrect, I want to see an error message, 
   and remain on the login screen.", 
   {
     it(
-      "Scenario 1 | Access restricted. 
+      "Scenario 1 - Access restricted. 
         Given a credentials database containing the user 'test_user_normal' 
         with password '1234', and the [credentials_db] does not yet exist, 
         and [credentials_pwd] is set to '1234', 
@@ -91,10 +111,11 @@ describe(
         and that, when I try to log in with an incorrect password, I will not be 
         granted access.", 
       {
+        testthat::skip_if_not_installed("shinymanager")
         app <- AppDriver$new(
           app_dir = test_path("fixtures/testapp-authentication"),
           name = "authenticate",
-          timeout = 20000,
+          timeout = 25000,
           width = 1619, 
           height = 955    
         )
@@ -109,6 +130,7 @@ describe(
         app$click("auth-go_auth")
         app$wait_for_idle()
         app$expect_values(input = TRUE, output = TRUE)
+        expect_null(app$get_value(export = "user_error"))
         
         # After login, connection with the shiny app is lost in shinytest2, and 
         # therefore further automated tests dont work. Dont know how to solve this at the moment. 

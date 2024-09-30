@@ -1,11 +1,4 @@
-describe(
-  "mod_navigate_participants. Feature 1 | As a user, I want to be able to browse 
-  through the study participants by means of a back and forward button, or with 
-  a drop-down menu. I want to be able to see some summary information of the 
-  selected patient. After pressing save, the patient should be selected as 
-  active patient in the app.", 
-  {
-    # Set up module parameters here
+describe("mod_navigate_participants. Feature 1 | Load application module in isolation.", {
     testargs <- list(
       r = reactiveValues(
         filtered_tables = list(
@@ -36,8 +29,30 @@ describe(
         expect_true(grepl("test", ns("test")))
       })
     })
+  })
+
+describe(
+  "mod_navigate_participants. Feature 2 | Navigate through participants. 
+    As a user, I want to be able to browse 
+    through the study participants by means of a back and forward button, or with 
+    a drop-down menu. I want to be able to see some summary information of the 
+    selected patient. After pressing save, the patient should be selected as 
+    active patient in the app.", 
+  {
+    testargs <- list(
+      r = reactiveValues(
+        filtered_tables = list(
+          General = data.frame(
+            subject_id = c("Subj1", "Subj2", "Subj3"),
+            status_label = c("lab1", "lab2", "lab3")
+          )
+        ),
+        subject_id = "",
+        filtered_subjects = c("Subj1", "Subj2", "Subj3")
+      )
+    ) 
     it(
-      "Scenario 1. Given a table with general information in reactiveValues [r], 
+      "Scenario 1 - Given a table with general information in reactiveValues [r], 
         and the selected participant set to 'Subj2',
         and pressing the apply button (setting [subj_apply] to 2),
         I expect that the global active subject_id in reactivevalues [r] is set to 'Subj2'", 
@@ -55,7 +70,7 @@ describe(
       }
     )
     it(
-      "Scenario 2. Given a table with general information in reactiveValues [r], 
+      "Scenario 2 - Given a table with general information in reactiveValues [r], 
           and the selected participant set to 'Subj2',
           and pressing the next or previous button,
           I expect that the selected subject will be the nex or previous subject.", 
@@ -74,7 +89,7 @@ describe(
       }
     )
     it(
-      "Scenario 3.  Given a table with general information in reactiveValues [r], 
+      "Scenario 3 - Given a table with general information in reactiveValues [r], 
           and the selected participant set to the FIRST subject in the table, 
           and pressing the back button,
           I expect that the active subject ID does not change", 
@@ -90,7 +105,7 @@ describe(
       }
     )
     it(
-      "Scenario 4. Given a table with general information in reactiveValues [r], 
+      "Scenario 4 - Given a table with general information in reactiveValues [r], 
           and the selected participant set to the LAST subject in the table, 
           and pressing the next button,
           I expect that the active subject ID does not change", 
@@ -108,7 +123,7 @@ describe(
       }
     )
     it(
-      "Scenario 5. Given a table with general information in reactiveValues [r], 
+      "Scenario 5 - Given a table with general information in reactiveValues [r], 
           and the active global subject in [r] is set to a non-existent one,
           I expect that [pt_info] contains a message with the text 'Data missing'", 
       {
@@ -121,7 +136,7 @@ describe(
       }
     )
     it(
-      "Scenario 6. Given a table with general information in reactiveValues [r], 
+      "Scenario 6 - Given a table with general information in reactiveValues [r], 
       and the active [subject_id] set to 'Subj1',
       and the actions 
       and clicking the subject tile in the header, 

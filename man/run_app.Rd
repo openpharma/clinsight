@@ -9,12 +9,8 @@ run_app(
   options = list(),
   enableBookmarking = NULL,
   uiPattern = "/",
-  meta = metadata,
-  data = clinsightful_data,
-  user_db = "user_db.sqlite",
-  credentials_db = "credentials_db.sqlite",
+  data_folder = NULL,
   credentials_pwd = Sys.getenv("DB_SECRET"),
-  test_mode = FALSE,
   ...
 )
 }
@@ -39,21 +35,12 @@ request to determine whether the \code{ui} should be used to handle the
 request. Note that the entire request path must match the regular
 expression in order for the match to be considered successful.}
 
-\item{meta}{A data frame containing metadata.}
-
-\item{data}{Either a data frame or a character string with the path to the
-app data in .rds format.}
-
-\item{user_db}{Character string. Path to the app database. If not existing,
-will be created based on app data and metadata, with all data labeled as
-'new'/not yet reviewed.}
-
-\item{credentials_db}{Character string. Path to the credentials database.}
+\item{data_folder}{Character string. The folder in which all data resides is
+usually set in the config.yml file. However, this can be overwritten if a
+path is set in this argument. Useful for testing purposes.}
 
 \item{credentials_pwd}{Character string with the credentials' database
 password.}
-
-\item{test_mode}{Logical, whether to run the application in test mode.}
 
 \item{...}{arguments to pass to golem_opts. See \code{?golem::get_golem_options}
 for more details.}

@@ -1,6 +1,5 @@
 describe(
-  "mod_review_forms. Feature 1 | As a user, I want to be able to 
-         load the application in isolation. ", 
+  "mod_review_forms. Feature 1 | Load application module in isolation.", 
   {
     it("Can load the module UI, with functioning internal parameters.", {
       ui <- mod_review_forms_ui(id = "test")
@@ -14,12 +13,17 @@ describe(
     it("Can load the module server, with functioning internal parameters.", {
       testargs <- list(
         r = reactiveValues(
-          user_name = reactiveVal("test_name"),
+          user_name = "test_name",
+          user_role = "Medical Monitor",
           subject_id = "885",
           review_data = data.frame()
         ),
         active_form = reactiveVal("Adverse events"),
         active_tab = reactiveVal("Common forms"),
+        review_required_data = data.frame(
+          "item_group" = "Adverse events", 
+          "review_required" = TRUE
+          ),
         db_path = ""
       )
       testServer(
@@ -34,14 +38,16 @@ describe(
 )
 
 describe(
-  paste0("mod_review_forms. Feature 2 | As a user, I want to be able to save ",
+  paste0("mod_review_forms. Feature 2 | Save review of a form. ",
+         "As a user, I want to be able to save ",
          "a review of a form in the database. After saving the review, all items of ", 
          "that form that are not yet reviewed should get a tag that the value was ",
          "reviewed."), 
   {
     it(
-      paste0("Scenario 1 | Save a review. Given test review data with at ",
+      paste0("Scenario 1 - Save a review. Given test review data with at ",
              "least an 'Adverse event' form with patient '885',",
+             "and [user_name] set to 'test_name' and [user_role] to 'Medical Monitor'",
              "and [active_patient] set to '885', ",
              "and [active_form] set to 'Adverse events', ",
              "and [active_tab] set to 'Common forms', ",
@@ -55,12 +61,17 @@ describe(
         
         testargs <- list(
           r = reactiveValues(
-            user_name = reactiveVal("test_name"),
+            user_name = "test_name",
+            user_role = "Medical Monitor",
             subject_id = "885",
             review_data = db_slice_rows(temp_path)
           ),
           active_form = reactiveVal("Adverse events"),
           active_tab = reactiveVal("Common forms"),
+          review_required_data = data.frame(
+            "item_group" = "Adverse events", 
+            "review_required" = TRUE
+          ),
           db_path = temp_path
         )
         testServer(
@@ -71,6 +82,7 @@ describe(
               dplyr::tbl(con, "all_review_data") |> 
                 dplyr::collect()
             })
+            
             expect_equal(r$review_data, db_slice_rows(db_path))
             # it should have two rows in the DB, one with review= 'No' and the other with reviewed = "Yes"
             expect_equal(with(db_reviewdata, reviewed[subject_id == "885"]), c("No", "Yes") )
@@ -83,34 +95,39 @@ describe(
             # It would still work since it defaults to select the last row of the database, 
             # but it might give a warning. 
             
-            # It saves a review a second time properly,
+            # It saves a review a second time properly if the review state is changed, 
             # only showing the latest review data in the app but storing all review
             # data, including the previous one, in the database
             # ! if add_comment != logical (1 for example), the test below will fail.
             # two rows with the same editdateetime will be written to the database.
-            session$setInputs(add_comment = TRUE, review_comment = "test review")
-            session$setInputs(save_review = 2)
+            session$setInputs(
+              form_reviewed = FALSE, 
+              add_comment = TRUE, 
+              review_comment = "test review",
+              save_review = 2
+              )
             db_reviewdata <- db_temp_connect(db_path, {
               dplyr::tbl(con, "all_review_data") |> 
                 dplyr::collect()
             })
             expect_equal(with(db_reviewdata, comment[subject_id == "885"]), c("", "", "test review"))
-            expect_equal(with(db_reviewdata, reviewed[subject_id == "885"]), c("No", "Yes", "Yes"))
+            expect_equal(with(db_reviewdata, reviewed[subject_id == "885"]), c("No", "Yes", "No"))
             expect_equal(r$review_data, db_slice_rows(db_path))
             expect_snapshot(print(dplyr::select(r$review_data, -timestamp), width = Inf))
           })
       }
     )
     it(
-      "Scenario 2 | Save a review. Given a data frame
+      "Scenario 2 - Save a review. Given a data frame
       and a database with review data with [reviewed] status set to 'new' (not reviewed yet),
-        and [user_name] set to 'test_name',
+        and [user_name] set to 'test_name' and [user_role] to 'Medical Monitor',
         and [subject_id]  set to '885',
         and [active_form] set to 'Adverse events',
-        and first (1) No input is given, then (2) the value [form_review] is set to 'TRUE',
+        and first (1) No input is given, then (2) the [form_reviewed] tick box 
+        is ticked and the comment field enabled,
         and then (3) the [save_review] button is clicked,
-        I expect that, after each action, the save review button will be
-        (1) disabled, (2) enabled, and (3) disabled,
+        I expect that, after each action, the save review button and the option 
+        to add a comment will be (1) disabled, (2) enabled, and (3) disabled,
         and that, after the aforementioned input actions, the review status of the active form and
         active subject in the database is set to 'old' (reviewed),
         and the reviewer is set to 'test_name'.",
@@ -127,12 +144,17 @@ describe(
           mod_review_forms_server(
             id = "test",
             r = reactiveValues(
-              user_name = reactiveVal("test_name"),
+              user_name = "test_name",
+              user_role = "Medical Monitor",
               subject_id = "885",
               review_data = db_slice_rows(temp_path)
             ),
             active_form = reactiveVal("Adverse events"),
             active_tab = reactiveVal("Common events"),
+            review_required_data = data.frame(
+              "item_group" = "Adverse events", 
+              "review_required" = TRUE
+            ),
             db_path = temp_path
           )
         }
@@ -145,35 +167,48 @@ describe(
           height = 955
         )
         withr::defer(app$stop())
-        app$wait_for_idle(2000)
-        # save button should not be available:
+        app$wait_for_idle(2500)
+        # save button and comment option should not be available:
         app$expect_values()
+        expect_true(app$get_js("document.getElementById('test-save_review').disabled;"))
+        expect_true(app$get_js("document.getElementById('test-add_comment').disabled;"))
+        expect_true(app$get_js("document.getElementById('test-review_comment').disabled;"))
         
         app$click("test-form_reviewed")
-        # now the save button is available:
+        app$click("test-add_comment")
+        # now the save button and comment option is available:
         app$expect_values()
+        expect_false(app$get_js("document.getElementById('test-save_review').disabled;"))
+        expect_false(app$get_js("document.getElementById('test-add_comment').disabled;"))
+        expect_false(app$get_js("document.getElementById('test-review_comment').disabled;"))
+        
         app$click("test-save_review")
         app$wait_for_idle()
-        # save button should not be available anymore:
+        # save button and comment option should not be available anymore:
         app$expect_values()
+        expect_true(app$get_js("document.getElementById('test-save_review').disabled;"))
+        expect_true(app$get_js("document.getElementById('test-add_comment').disabled;"))
+        expect_true(app$get_js("document.getElementById('test-review_comment').disabled;"))
         
         # review status and reviewer is saved as expected
         saved_review_row <- db_slice_rows(temp_path) |>
           dplyr::filter(subject_id == "885")
         expect_equal(saved_review_row$status, "old")
-        expect_equal(saved_review_row$reviewer, "test_name")
+        expect_equal(saved_review_row$reviewer, "test_name (Medical Monitor)")
       }
     )
   }
 )
 
 describe(
-  "mod_review_forms. Feature 3 | As a user, I want to get feedback on whether a 
-  review is needed or not for an active form. The review controls should only be 
-  enabled when there is data to review.", 
+  "mod_review_forms. Feature 3 | Disable review buttons if review not applicable 
+    or not allowed, and give feedback why. 
+    As a user, I want to get feedback on whether a 
+    review is needed or not for an active form. The review controls should only be 
+    enabled when there is data to review.", 
   {
     it(
-      "Scenario 1 | Review needed. Given test review data with at least an 
+      "Scenario 1 - Review needed. Given test review data with at least an 
         'Adverse event' form with patient '885',
         and [active_patient] set to '885',
         and [active_form] set to 'Adverse events',
@@ -188,12 +223,17 @@ describe(
         file.copy(test_path("fixtures", "review_testdb.sqlite"), temp_path) 
         testargs <- list(
           r = reactiveValues(
-            user_name = reactiveVal("test_name"),
+            user_name = "test_name",
+            user_role = "Medical Monitor",
             subject_id = "885",
             review_data = db_slice_rows(temp_path)
           ),
           active_form = reactiveVal("Adverse events"),
           active_tab = reactiveVal("Common forms"),
+          review_required_data = data.frame(
+            "item_group" = "Adverse events", 
+            "review_required" = TRUE
+          ),
           db_path = temp_path
         )
         
@@ -212,9 +252,50 @@ describe(
       }
     )
     it(
-      "Scenario 2 | No data to review. Given [active_form] set to a 
-        non-existing form named [non-existent],
-        and that I try to save a review by setting [save_review] to 2,
+      "Scenario 2 - Saving with unchanged review status. Given the same 
+      conditions as in Scenario 1, and setting comment to 'test comment',
+      and attempting to save a review 'save review',
+      I expect that [enable_save_review()] is set to 'FALSE',
+      and that the review database remains unchanged.",
+      {
+        temp_path <- withr::local_tempfile(fileext = ".sqlite")
+        file.copy(test_path("fixtures", "review_testdb.sqlite"), temp_path) 
+        old_review_table <- db_temp_connect(temp_path, {
+          DBI::dbGetQuery(con, "SELECT * FROM all_review_data")
+        })
+        testargs <- list(
+          r = reactiveValues(
+            user_name = "test_name",
+            user_role = "Medical Monitor",
+            subject_id = "885",
+            review_data = db_slice_rows(temp_path)
+          ),
+          active_form = reactiveVal("Adverse events"),
+          active_tab = reactiveVal("Common forms"),
+          review_required_data = data.frame(
+            "item_group" = "Adverse events", 
+            "review_required" = TRUE
+          ),
+          db_path = temp_path
+        )
+        
+        testServer(mod_review_forms_server, args = testargs, {
+          ns <- session$ns
+          session$setInputs(form_reviewed = FALSE, add_comment = "test comment")
+          expect_false(enable_save_review())
+          session$setInputs(save_review = 1)
+          new_review_table <- db_temp_connect(db_path, {
+            DBI::dbGetQuery(con, "SELECT * FROM all_review_data")
+          })
+          expect_error(output[["save_review_error"]], "Requires review")
+          expect_equal(old_review_table, new_review_table)
+        })
+      }
+    )
+    it(
+      "Scenario 3 - No data to review. Given [active_form] set to a 
+        form of which no data is available named [no_data_form],
+        and that I try to save a review by setting [save_review] to 1,
         I expect that a warning message will be displayed with the text [Nothing to review],
         and that no new information is saved to the database,
         and that no new information is saved to the app data frame.",
@@ -223,18 +304,23 @@ describe(
         file.copy(test_path("fixtures", "review_testdb.sqlite"), temp_path) 
         testargs <- list(
           r = reactiveValues(
-            user_name = reactiveVal("test_name"),
+            user_name = "test_name",
+            user_role = "Medical Monitor",
             subject_id = "885",
             review_data = db_slice_rows(temp_path)
           ),
           active_form = reactiveVal("Adverse events"),
           active_tab = reactiveVal("Common forms"),
+          review_required_data = data.frame(
+            "item_group" = c("Adverse events", "no_data_form"),
+            "review_required" = TRUE
+          ),
           db_path = temp_path
         )
         testServer(
           mod_review_forms_server, args = testargs, {
             ns <- session$ns
-            active_form("Non-existing")
+            active_form("no_data_form")
             data_before_save <- r$review_data
             db_before_save <- db_temp_connect(db_path, {
               dplyr::tbl(con, "all_review_data") |> 
@@ -254,11 +340,13 @@ describe(
   }
 )
 describe(
-  "mod_review_forms. Feature 4 | As a user, I want that saving data is only 
-  possible with a valid user name", 
+  "mod_review_forms. Feature 4 | Only allow to save review with valid user name 
+    and role. 
+    As a user, I want that saving data is only 
+    possible with a valid user name", 
   {
     it(
-      "Scenario 1 | Trying to save data without user name. Given 
+      "Scenario 1 - Trying to save data without user name. Given 
         a data frame and a database with review data with [reviewed] status set 
         to 'new' (not reviewed yet), 
         and [subject_id]  set to '885', 
@@ -281,12 +369,17 @@ describe(
           mod_review_forms_server(
             id = "test", 
             r = reactiveValues(
-              user_name = reactiveVal(NULL), 
+              user_name = NULL,
+              user_role = "Medical Monitor",
               subject_id = "885", 
               review_data = db_slice_rows(temp_path)
             ),
             active_form = reactiveVal("Adverse events"),
             active_tab = reactiveVal("Common events"),
+            review_required_data = data.frame(
+              "item_group" = "Adverse events", 
+              "review_required" = TRUE
+            ),
             db_path = temp_path
           )
         }
@@ -299,8 +392,8 @@ describe(
           height = 955
         )
         withr::defer(app$stop())
-        app$wait_for_idle(2000)
         
+        app$wait_for_idle(2500)
         app$click("test-form_reviewed")
         app$click("test-save_review")  
         
@@ -308,7 +401,7 @@ describe(
         app$expect_values()
         
         # review status and reviewer is saved as expected
-        saved_review_row <- db_get_latest_review(
+        saved_review_row <- db_get_review(
           temp_path, subject = "885", form = "Adverse events"
         )
         expect_equal(saved_review_row$status, "new")
@@ -320,11 +413,12 @@ describe(
 )
 
 describe(
-  "Feature 5 | As a user, I want that data in memory remains the same as the one 
-  in the database, even if an error occurs when saving data to the database", 
+  "Feature 5 | Ensure data in memory remains in synch with the database. 
+    As a user, I want that data in memory remains the same as the one 
+    in the database, even if an error occurs when saving data to the database", 
   {
     it(
-      "Scenario 1 | Database save function not working. 
+      "Scenario 1 - Database save function not working. 
       Given test review data,
       and the function 'db_save_review' being mocked (temporarily replaced) with a
       function that does not write to the database,
@@ -346,12 +440,17 @@ describe(
         )
         testargs <- list(
           r = reactiveValues(
-            user_name = reactiveVal("test_name"),
+            user_name = "test_name",
+            user_role = "Medical Monitor",
             subject_id = "885",
             review_data = rev_data
           ),
           active_form = reactiveVal("Adverse events"),
           active_tab = reactiveVal("Common forms"),
+          review_required_data = data.frame(
+            "item_group" = "Adverse events", 
+            "review_required" = TRUE
+          ),
           db_path = temp_path
         )
         testServer(
@@ -372,4 +471,69 @@ describe(
   }
 )
 
-
+describe(
+  "mod_review_forms. Feature 6 | Restrict right to review forms to roles 
+    specified in the app configuration. 
+    As an admin, I want to be able to restrict the 
+    right to review forms to the roles specified in the config file.", 
+  {
+    it(
+      "Scenario 1 - Role without review privileges. 
+        Given the [user_name] 'test_user',
+        and the unprivileged user_role 'restricted_role',
+        I expect that all the review options are disabled,
+        and that in the review_error output a message is shown that review is 
+        not allowed for the user's active role.
+      ", 
+      {
+        temp_path <- withr::local_tempfile(fileext = ".sqlite")
+        file.copy(test_path("fixtures", "review_testdb.sqlite"), temp_path) 
+        test_ui <- function(request){
+          tagList(
+            shinyjs::useShinyjs(),
+            bslib::page_navbar(sidebar = bslib::sidebar(mod_review_forms_ui("test")))
+          )
+        }
+        test_server <- function(input, output, session){
+          mod_review_forms_server(
+            id = "test",
+            r = reactiveValues(
+              user_name = "test_name",
+              user_role = "restricted_role",
+              subject_id = "885",
+              review_data = db_slice_rows(temp_path)
+            ),
+            active_form = reactiveVal("Adverse events"),
+            active_tab = reactiveVal("Common events"),
+            review_required_data = data.frame(
+              "item_group" = "Adverse events", 
+              "review_required" = TRUE
+            ),
+            db_path = temp_path
+          )
+        }
+        test_app <- shinyApp(test_ui, test_server)
+        app <- shinytest2::AppDriver$new(
+          app_dir = test_app,
+          name = "test-mod_review_forms",
+          timeout = 8000,
+          width = 1619,
+          height = 955
+        )
+        withr::defer(app$stop())
+        app$wait_for_idle(2500)
+        # save button and comment option should not be available:
+        expect_true(app$get_js("document.getElementById('test-save_review').disabled;"))
+        expect_true(app$get_js("document.getElementById('test-add_comment').disabled;"))
+        expect_true(app$get_js("document.getElementById('test-review_comment').disabled;"))
+        expect_true(app$get_js("document.getElementById('test-form_reviewed').disabled;"))
+        
+        # correct error message is shown in the output:
+        expect_equal(
+          app$get_value(output = "test-save_review_error")$message, 
+          "Review not allowed for a 'restricted_role'."
+        )
+      }
+    )
+  }
+)

@@ -7,20 +7,26 @@ mod_common_forms_ui <- function(id, form){
   ns <- NS(id)
   bslib::nav_panel(
     title = form, 
-    bslib::card(
-      mod_timeline_ui(ns("timeline_fig")),
-      bslib::layout_columns(
-        col_widths = c(3, 9, 12, 12),
-        fillable = FALSE,
+    mod_timeline_ui(ns("timeline_fig")),
+    bslib::layout_sidebar(
+      fillable = FALSE,
+      if(form == "Adverse events"){
+        DT::dataTableOutput(ns("SAE_table"))
+      },
+      DT::dataTableOutput(ns("common_form_table")), 
+      sidebar = bslib::sidebar(
+        bg = "white", 
+        position = "right",
         shinyWidgets::materialSwitch(
           inputId = ns("show_all_data"),
           label = "Show all participants", 
           status = "primary",
           right = TRUE
         ),
-        HTML("<b>Bold*</b>: New/updated data"),
-        DT::dataTableOutput(ns("SAE_table")),
-        DT::dataTableOutput(ns("common_form_table"))
+        bslib::card_body(
+          HTML("<b>Bold*:</b> New/updated data"), 
+          fillable = FALSE
+          )
       )
     )
   )
@@ -106,7 +112,6 @@ mod_common_forms_server <- function(
           )
         ) |> 
         create_table(expected_columns = names(form_items))
-      df[["form_repeat"]] <- NULL
       if(!input$show_all_data){ 
         df <-  with(df, df[subject_id == r$subject_id, ]) 
       }
@@ -115,22 +120,19 @@ mod_common_forms_server <- function(
     
     mod_timeline_server("timeline_fig", r = r, form = form)
     
-    if(form != "Adverse events"){
-      shinyjs::hide("SAE_table")
-    }
     output[["SAE_table"]] <- DT::renderDT({
       req(form == "Adverse events")
       SAE_data <- data_active() |> 
         dplyr::filter(grepl("Yes", `Serious Adverse Event`)) |> 
         dplyr::select(dplyr::any_of(
-          c("subject_id", "Name", "AESI",  "SAE Start date", 
+          c("subject_id","form_repeat", "Name", "AESI",  "SAE Start date", 
             "SAE End date", "CTCAE severity", "Treatment related", 
             "Treatment action", "Other action", "SAE Category", 
             "SAE Awareness date", "SAE Date of death", "SAE Death reason")
         )) |> 
         adjust_colnames("^SAE ")
       if(!input$show_all_data) SAE_data$subject_id <- NULL
-      datatable_custom(SAE_data, rename_vars = table_names,
+      datatable_custom(SAE_data, rename_vars = table_names, rownames= FALSE,
                        title = "Serious Adverse Events", escape = FALSE)
     })
     
@@ -143,7 +145,7 @@ mod_common_forms_server <- function(
           dplyr::select(-dplyr::starts_with("SAE"))
       }
       if(!input$show_all_data) df$subject_id <- NULL
-      datatable_custom(df, rename_vars = table_names,
+      datatable_custom(df, rename_vars = table_names, rownames= FALSE,
                        title = form, escape = FALSE)
     })
     

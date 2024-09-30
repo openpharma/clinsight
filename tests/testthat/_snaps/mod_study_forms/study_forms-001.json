@@ -875,9 +875,9 @@
         ],
         "layout": {
           "margin": {
-            "t": 52.563980534653908,
+            "t": 50.258086796362392,
             "r": 7.3059360730593621,
-            "b": 51.90644628807857,
+            "b": 49.600552549787054,
             "l": 37.260273972602747
           },
           "plot_bgcolor": "rgba(255,255,255,1)",
@@ -931,7 +931,7 @@
             "tickfont": {
               "color": "rgba(77,77,77,1)",
               "family": "",
-              "size": 11.68949771689498
+              "size": 11.689497716894984
             },
             "tickangle": 0,
             "showline": false,
@@ -1105,11 +1105,11 @@
             "font": {
               "color": "rgba(0,0,0,1)",
               "family": "",
-              "size": 11.68949771689498
+              "size": 11.689497716894984
             }
           },
           "hovermode": "closest",
-          "height": 213,
+          "height": 238,
           "barmode": "relative"
         },
         "config": {
@@ -1195,9 +1195,9 @@
         },
         {
           "name": "crosstalk",
-          "version": "1.2.0",
+          "version": "1.2.1",
           "src": {
-            "href": "crosstalk-1.2.0"
+            "href": "crosstalk-1.2.1"
           },
           "meta": null,
           "script": "js/crosstalk.min.js",
@@ -1239,12 +1239,63 @@
         "style": "bootstrap5",
         "filter": "none",
         "vertical": false,
+        "extensions": [
+          "Scroller"
+        ],
         "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>event_name<\/th>\n      <th>Systolic blood pressure<\/th>\n      <th>Diastolic blood pressure<\/th>\n      <th>Pulse<\/th>\n      <th>Resp<\/th>\n      <th>Temperature<\/th>\n      <th>Weight change since screening<\/th>\n      <th>BMI<\/th>\n      <th>Weight<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
         "options": {
+          "scrollY": 400,
+          "scrollX": true,
+          "scroller": true,
+          "deferRender": true,
+          "scrollResize": true,
+          "scrollCollapse": true,
+          "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"\")\n}",
+          "dom": "f<\"header h5\">ti",
           "columnDefs": [
             {
               "orderable": false,
               "targets": 0
+            },
+            {
+              "name": " ",
+              "targets": 0
+            },
+            {
+              "name": "event_name",
+              "targets": 1
+            },
+            {
+              "name": "Systolic blood pressure",
+              "targets": 2
+            },
+            {
+              "name": "Diastolic blood pressure",
+              "targets": 3
+            },
+            {
+              "name": "Pulse",
+              "targets": 4
+            },
+            {
+              "name": "Resp",
+              "targets": 5
+            },
+            {
+              "name": "Temperature",
+              "targets": 6
+            },
+            {
+              "name": "Weight change since screening",
+              "targets": 7
+            },
+            {
+              "name": "BMI",
+              "targets": 8
+            },
+            {
+              "name": "Weight",
+              "targets": 9
             }
           ],
           "order": [
@@ -1267,6 +1318,7 @@
         }
       },
       "evals": [
+        "options.initComplete",
         "options.ajax.data"
       ],
       "jsHooks": [
@@ -1288,9 +1340,9 @@
         },
         {
           "name": "dt-core-bootstrap5",
-          "version": "1.13.4",
+          "version": "1.13.6",
           "src": {
-            "href": "dt-core-bootstrap5-1.13.4"
+            "href": "dt-core-bootstrap5-1.13.6"
           },
           "meta": null,
           "script": [
@@ -1305,9 +1357,9 @@
         },
         {
           "name": "bootstrap",
-          "version": "5.2.2",
+          "version": "5.3.1",
           "src": {
-            "href": "bootstrap-5.2.2"
+            "href": "bootstrap-5.3.1"
           },
           "meta": {
             "viewport": "width=device-width, initial-scale=1, shrink-to-fit=no"
@@ -1321,9 +1373,9 @@
         },
         {
           "name": "bs3compat",
-          "version": "0.5.1",
+          "version": "0.8.0",
           "src": {
-            "href": "bs3compat-0.5.1"
+            "href": "bs3compat-0.8.0"
           },
           "meta": null,
           "script": [
@@ -1337,10 +1389,43 @@
           "all_files": true
         },
         {
-          "name": "crosstalk",
-          "version": "1.2.0",
+          "name": "dt-ext-scroller-bootstrap5",
+          "version": "1.13.6",
           "src": {
-            "href": "crosstalk-1.2.0"
+            "href": "dt-ext-scroller-bootstrap5-1.13.6"
+          },
+          "meta": null,
+          "script": [
+            "js/dataTables.scroller.min.js",
+            "js/scroller.bootstrap5.min.js"
+          ],
+          "stylesheet": "css/scroller.bootstrap5.min.css",
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": false
+        },
+        {
+          "name": "dt-plugin-scrollresize",
+          "version": "1.13.6",
+          "src": {
+            "href": "dt-plugin-scrollresize-1.13.6"
+          },
+          "meta": null,
+          "script": "source.min.js",
+          "stylesheet": [
+
+          ],
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": true
+        },
+        {
+          "name": "crosstalk",
+          "version": "1.2.1",
+          "src": {
+            "href": "crosstalk-1.2.1"
           },
           "meta": null,
           "script": "js/crosstalk.min.js",

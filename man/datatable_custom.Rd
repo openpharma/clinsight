@@ -9,6 +9,10 @@ datatable_custom(
   rename_vars = NULL,
   title = NULL,
   selection = "single",
+  extensions = "Scroller",
+  plugins = "scrollResize",
+  dom = "fti",
+  options = list(),
   ...
 )
 }
@@ -22,7 +26,33 @@ rename any column names found in this vector to the provided name.}
 
 \item{selection}{See \code{\link[DT:datatable]{DT::datatable()}}. Default set to 'single'.}
 
-\item{...}{Other optional arguments that will be parsed to \code{\link[DT:datatable]{DT::datatable()}}.}
+\item{extensions}{See \code{\link[DT:datatable]{DT::datatable()}}. Default set to 'Scroller'.}
+
+\item{plugins}{See \code{\link[DT:datatable]{DT::datatable()}}. Default set to 'scrollResize'.}
+
+\item{dom}{See \url{https://datatables.net/reference/option/dom}. A div
+element will be inserted before the table for the table title. Default set
+to 'fti' resulting in 'f<"header h5">ti'.}
+
+\item{options}{See \code{\link[DT:datatable]{DT::datatable()}}. Must be a list.
+\itemize{
+\item Modifiable defaults:
+\itemize{
+\item \code{scrollY = '400px'}
+\item \code{scrollX = TRUE}
+\item \code{scroller = TRUE}
+\item \code{deferREnder = TRUE}
+\item \code{scrollResize = TRUE}
+\item \code{scrollCollapse = TRUE}
+}
+\item Non-modifiable defaults:
+\itemize{
+\item \code{dom}: Defined by the \code{dom} parameter.
+\item \code{initComplete}: Defaults to a function to insert table title into dataTable container.
+}
+}}
+
+\item{...}{Other optional arguments that will be passed to \code{\link[DT:datatable]{DT::datatable()}}.}
 }
 \value{
 A \code{DT::datatable} object.

@@ -9,45 +9,51 @@ mod_study_forms_ui <- function(id, form, form_items){
   bslib::nav_panel(
     title = form,
     bslib::card(
-      full_screen = T,
-      bslib::layout_columns(
-        col_widths = c(2, -4, 2, -4, 12, 12),
-        shinyWidgets::radioGroupButtons(
-          inputId = ns("switch_view"),
-          choiceNames = list(icon("line-chart"), icon("table-list")),
-          choiceValues = list("graph", "table"),
-          selected = "graph"
-        ),
+      full_screen = T, 
+      bslib::layout_sidebar(
         conditionalPanel(
           condition = "input.switch_view === 'graph'",
           ns = NS(id),
-          shinyWidgets::pickerInput(
-            inputId = ns("filter"),
-            label = NULL,
-            choices = form_items,
-            selected = form_items,
-            options = shinyWidgets::pickerOptions(
-              actionsBox = TRUE,
-              size = 10,
-              selectedTextFormat = "count > 3",
-              style = "btn-outline-primary"
-            ),
-            multiple = TRUE
+          shinycssloaders::withSpinner(
+            plotly::plotlyOutput(ns("figure"), height = "100%"),
+            type = 5
           )
         ),
         conditionalPanel(
-          condition = "input.switch_view === 'graph'",
+          condition = "input.switch_view === 'table'",
           ns = NS(id),
-          bslib::layout_columns(
-            col_widths = c(8,4),
-            shinycssloaders::withSpinner(
-              plotly::plotlyOutput(ns("figure"), height = "100%"),
-              type = 5
-            ),
-            img(src="www/figure_legend.png", width = 200, height = 233)
-          )
+          DT::dataTableOutput(ns("table"), width = "auto")
         ),
-        bslib::card_body(
+        sidebar = bslib::sidebar(
+          position = "right", 
+          bg = "white",
+          shinyWidgets::radioGroupButtons(
+            inputId = ns("switch_view"),
+            choiceNames = list(icon("line-chart"), icon("table-list")),
+            choiceValues = list("graph", "table"),
+            selected = "graph"
+          ),
+          conditionalPanel(
+            condition = "input.switch_view === 'graph'",
+            ns = NS(id),
+            shinyWidgets::pickerInput(
+              inputId = ns("filter"),
+              label = NULL,
+              choices = form_items,
+              selected = form_items,
+              options = shinyWidgets::pickerOptions(
+                actionsBox = TRUE,
+                size = 10,
+                selectedTextFormat = "count > 3",
+                style = "btn-outline-primary"
+              ),
+              multiple = TRUE
+            ), 
+            bslib::popover(
+              tags$a("Legend", tags$sup(icon("circle-info")), class =  "link"),
+              bslib::card_body(img(src="www/figure_legend.png"))
+            )
+          ),
           conditionalPanel(
             condition = "input.switch_view === 'table'",
             ns = NS(id),
@@ -56,8 +62,7 @@ mod_study_forms_ui <- function(id, form, form_items){
               label = "Show all participants", 
               status = "primary",
               right = TRUE
-            ),
-            DT::dataTableOutput(ns("table"), width = "auto")
+            )
           )
         )
       )
@@ -104,6 +109,9 @@ mod_study_forms_ui <- function(id, form, form_items){
 #'   interactive tables.
 #' @param id_item Character vector containing the column names of the columns
 #'   that can uniquely identify one item/row.
+#' @param item_info A data frame containing the names of the study forms (in the
+#'   column `item_group`), and the columns `item_scale` `use_unscaled_limits`,
+#'   which are used to customize the way the figures are shown in the page.
 #'
 #' @seealso [mod_study_forms_ui()]
 #' 
@@ -114,12 +122,15 @@ mod_study_forms_server <- function(
     form_items, 
     id_item = c("subject_id", "event_name", "item_group", 
                 "form_repeat", "item_name"),
-    table_names = NULL
+    table_names = NULL,
+    item_info
 ){
   stopifnot(is.reactivevalues(r))
   stopifnot(is.character(form), length(form) == 1)
   stopifnot(is.character(form_items))
   stopifnot(is.character(id_item))
+  stopifnot(is.data.frame(item_info))
+  
   names(form_items) <- names(form_items) %||% form_items
   moduleServer(id, function(input, output, session){
     ns <- session$ns
@@ -141,7 +152,7 @@ mod_study_forms_server <- function(
         paste0("Warning: no data found in the database for the form '", form, "'.")
       ))
       df <- r$filtered_data[[form]] 
-      if(is.null(df)) return(NULL)
+      
       status_df <- r$review_data |> 
         dplyr::filter(item_group == form) |> 
         dplyr::select(dplyr::all_of(c(id_item, "edit_date_time", "status", "reviewed"))) |> 
@@ -176,10 +187,16 @@ mod_study_forms_server <- function(
         dplyr::select(-dplyr::all_of("subject_id"))
     })
     
+    scaling_data <- reactive({
+      cols <- c("item_scale", "use_unscaled_limits")
+      # Ensure no errors even if cols are missing, with FALSE as default:
+      lapply(add_missing_columns(item_info, cols)[1, cols], isTRUE)
+    })
+    
     ############################### Outputs: ###################################
     dynamic_figure <- reactive({
-      req(nrow(fig_data()) > 0)
-      scale_yval <- as.logical(with(metadata$groups, item_scale[item_group == form]))
+      req(nrow(fig_data()) > 0, scaling_data())
+      scale_yval <- scaling_data()$item_scale
       yval <- ifelse(scale_yval, "value_scaled", "item_value")
       validate(need(
         fig_data()[[yval]], 
@@ -194,11 +211,9 @@ mod_study_forms_server <- function(
         id = "subject_id",
         id_to_highlight = r$subject_id, 
         point_size = "reviewed",
-        height = ceiling(0.5*length(unique(fig_data()$item_name))*125+150),
-        scale = as.logical(with(metadata$groups, item_scale[item_group == form])),
-        use_unscaled_limits = as.logical(
-          with(metadata$groups, use_unscaled_limits[item_group == form])
-        )
+        height = ceiling(0.5*length(unique(fig_data()$item_name))*125+175),
+        scale = scale_yval,
+        use_unscaled_limits = scaling_data()$use_unscaled_limits
       )
     })
     
@@ -211,7 +226,7 @@ mod_study_forms_server <- function(
       datatable_custom(table_data_active(), table_names, escape = FALSE)
     })
     
-    if(form == "Vital signs"){
+    if(form %in% c("Vital signs", "Vitals adjusted")){
       shiny::exportTestValues(
         table_data = table_data_active(),
         fig_data = fig_data()

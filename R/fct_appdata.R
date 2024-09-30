@@ -1,95 +1,53 @@
-#' Get raw data
-#'
+#' Get raw data from CSV files
 #'
 #' @param data_path Path to the folder that contains the CSV files with the
 #'   application data.
-#' @param column_specs A data frame containing at least the columns 'name_raw',
-#'   'name_new', and 'col_type'. Used to set the column specifications, and to
-#'   set the column names to the names expected for the application to function.
+#' @param synch_time Time at which the data was extracted from the EDC system.
+#'   Defaults to the current date time. Important to set this correctly, since
+#'   it will be shown in the application. By default, a warning will be given in
+#'   the application if the synchronization time is more than one day old.
+#' @param exclude character vector with regular expressions that identify csv
+#'   files that should be excluded from the study data. Useful to exclude files
+#'   with different data structures, or files with metadata.
 #' @param delim Delimiter to use to read in files.
 #' @param skip Number of rows to skip when reading in files.
 #'
 #' @return A data frame with raw application data.
 #' @export
-#' 
-get_raw_data <- function(
-    data_path,
-    column_specs = metadata$column_specs,
+get_raw_csv_data <- function(
+    data_path = Sys.getenv("RAW_DATA_PATH"),
+    synch_time = time_stamp(),
+    exclude = c("README.csv$", "Pending_forms.csv$", "MEDRA.csv$", "WHODrug.csv$", "_Queries.csv$"),
     delim = ",",
     skip = 1
 ){
   all_files <- list.files(data_path, pattern = ".csv")
   if(length(all_files) == 0) stop("No files found. Verify whether the path is correct.")
-  all_files <- all_files[!grepl("README.csv$", all_files)]
+  synch_time <- synch_time %||% ""
+  stopifnot(is.character(exclude))
+  stopifnot(is.character(synch_time), length(synch_time) == 1)
   
-  stopifnot(is.data.frame(column_specs))
-  stopifnot(c("name_raw", "name_new", "col_type") %in% names(column_specs))
-  stopifnot(required_col_names %in% column_specs$name_new)
+  exclude_regex <- paste0(exclude, collapse = "|")
+  all_files <- all_files[!grepl(exclude_regex, all_files)]
   
-  col_specs <- setNames(column_specs$col_type, column_specs$name_raw) |> 
-    append(list(".default" = vroom::col_skip())) |> 
-    vroom::as.col_spec()
-  
-  raw_data <- vroom::vroom(
+  raw_data <- readr::read_delim(
     file.path(data_path, all_files),  
     delim = delim, 
     skip = skip, 
-    # Consider to make all character columns character type in the future (more robust: 
-    # if any is missing, it will be filled with char values using add_missing_cols
-    col_types = col_specs, 
+    col_types = readr::cols(.default = readr::col_character()), 
     show_col_types = FALSE
-  ) |> 
-    dplyr::rename(
-      setNames(column_specs$name_raw, column_specs$name_new)
-      ) |> 
-    dplyr::mutate(
-      db_update_time = max(edit_date_time, na.rm = T),
-      region = dplyr::case_when(
-        grepl("^AU", site_code)  ~ "AUS",
-        grepl("^DE", site_code)  ~ "GER",
-        grepl("^FR", site_code)  ~ "FRA",
-        TRUE                    ~ NA_character_
-      )
-    ) |> 
-    dplyr::mutate(
-      day = event_date - min(event_date, na.rm = TRUE), 
-      vis_day = ifelse(event_id %in% c("SCR", "VIS", "VISEXT", "VISVAR", "FU1", "FU2"), day, NA),
-      vis_num = as.numeric(factor(vis_day))-1,
-      event_name = dplyr::case_when(
-        event_id == "SCR"    ~ "Screening",
-        event_id %in% c("VIS", "VISEXT", "VISVAR")    ~ paste0("Visit ", vis_num),
-        grepl("^FU[[:digit:]]+", event_id)  ~ paste0("Visit ", vis_num, "(FU)"),
-        event_id == "UN"     ~ paste0("Unscheduled visit ", event_repeat),
-        event_id == "EOT"    ~ "EoT",
-        event_id == "EXIT"   ~ "Exit",
-        form_id %in% c("AE", "CM", "CP", "MH", "MH", "MHTR", "PR") ~ "Any visit",
-        TRUE                ~ paste0("Other (", event_name, ")")
-      ),
-      event_label = dplyr::case_when(
-        !is.na(vis_num)   ~ paste0("V", vis_num),
-        event_id == "UN"   ~ paste0("UV", event_repeat),
-        TRUE              ~ event_name
-      ),
-      .by = subject_id
-    ) |> 
-    # Add a fix for MC in raw dataset. 
-    # Otherwise, we have to repeat this calculation multiple times when creating 
-    # other datasets from the raw data
-    fix_multiple_choice_vars() |> 
-    dplyr::arrange(
-      factor(site_code, levels = order_string(site_code)),
-      factor(subject_id, levels = order_string(subject_id))
-    )
-  if(any(grepl("^Other ", raw_data$event_name))) warning(
-    "Undefined Events detected. Please verify data before proceeding."
   )
+  if(identical(synch_time, "")){warning("No synch time provided")}
+  cat("Adding synch time '", synch_time, "' as the attribute 'synch_time'",
+      "to the data set.\n")
+  attr(raw_data, "synch_time") <- "synch_time"
   raw_data
 }
 
 #' Merge metadata with raw data
 #'
 #' Study-specific function that will combine raw data gathered with
-#' [get_raw_data()] with study-specific metadata. It also fixes the metadata
+#' [get_raw_csv_data()] with study-specific metadata. It also fixes the metadata
 #' suffix if needed, and renames the limits and significance values to the app
 #' standard names. Some study-specific variables need to be created with this
 #' step.
@@ -104,13 +62,23 @@ get_raw_data <- function(
 #' @export
 #' 
 merge_meta_with_data <- function(
-    data = raw_data,
-    meta = metadata,
+    data,
+    meta,
     expected_columns = c("LBORNR_Lower", "LBORNR_Upper", "LBORRESU", 
                          "LBORRESUOTH", "LBREASND", "unit", 
                          "lower_limit", "upper_limit", "LBCLSIG")
 ){
+  stopifnot(is.data.frame(data))
+  stopifnot(inherits(meta, "list"))
+  stopifnot(is.character(expected_columns))
+  # Preserve synch time manually since pivot functions do not preserve attributes
+  synch_time <- attr(data, "synch_time") %||% ""
   merged_data <- data |> 
+    rename_raw_data(column_names = meta$column_names) |> 
+    readr::type_convert(clinsight_col_specs) |> 
+    add_timevars_to_data() |> 
+    # fix MC values before merging:
+    fix_multiple_choice_vars(expected_vars = meta$items_expanded$var) |> 
     dplyr::right_join(meta$items_expanded, by = "var") |> 
     dplyr::filter(!is.na(item_value)) |> 
     dplyr::mutate(
@@ -135,7 +103,6 @@ merge_meta_with_data <- function(
       LBORRESU     = ifelse(LBORRESU == "Other", LBORRESUOTH, LBORRESU),
       LBORRESU     = ifelse(is.na(LBORRESU), "(unit missing)", LBORRESU)
     ) |> 
-    dplyr::mutate(day = event_date - min(event_date, na.rm = TRUE), .by = subject_id) |> 
     dplyr::select(-c(lower_limit, upper_limit, unit, LBORRESUOTH)) |> 
     dplyr::rename(
       "lower_lim" = LBORNR_Lower,
@@ -144,8 +111,10 @@ merge_meta_with_data <- function(
       "significance" = LBCLSIG,
       "item_value" = VAL,
       "reason_notdone" = LBREASND
-    )
-  apply_study_specific_fixes(merged_data) 
+    ) |> 
+    apply_study_specific_fixes() 
+  attr(merged_data, "synch_time") <- synch_time
+  merged_data
 }
 
 
@@ -161,7 +130,7 @@ merge_meta_with_data <- function(
 apply_study_specific_fixes <- function(
     data, 
     form_id_vars = c("subject_id", "event_name", "item_group")
-    ){
+){
   ## apply study-specific fixes:
   # fix significance in ECG before proceeding (stored in its own separate variable):
   ECG_significance <- data |> 
@@ -204,7 +173,17 @@ apply_study_specific_fixes <- function(
       ),
       .by = c(subject_id, form_repeat)
     ) 
-  data
+  
+  # Add regions: 
+  data |> 
+    dplyr::mutate(
+      region = dplyr::case_when(
+        grepl("^AU", site_code)  ~ "AUS",
+        grepl("^DE", site_code)  ~ "GER",
+        grepl("^FR", site_code)  ~ "FRA",
+        TRUE                    ~ NA_character_
+      )
+    )
 }
 
 #' Get appdata

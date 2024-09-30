@@ -1,6 +1,5 @@
 describe(
-  "mod_db_synch_info. Feature 1 | As a user, I want to be able to run the 
-  module in isolation", 
+  "mod_db_synch_info. Feature 1 | Load application module in isolation.", 
   {
     it("Can load the module UI, with functioning internal parameters.", {
       ui <- mod_db_synch_info_ui(id = "test")
@@ -14,8 +13,7 @@ describe(
     # Set up server module parameters here
     testargs <- list(
       app_data = list(),
-      db_path = "",
-      test_mode = TRUE
+      db_path = ""
     ) 
     it("Can load the module server, with functioning internal parameters.", {
       testServer(mod_db_synch_info_server, args = testargs , {
@@ -29,13 +27,14 @@ describe(
 )
 
 describe(
-  "mod_db_synch_info. Feature 2 | DB synch date information. As a user, I want to
-  be able to see the latest date at which the database is updated and at which
-  new data was entered in the EDC.",
+  "mod_db_synch_info. Feature 2 | Display database synchronization information. 
+      As a user, I want to
+      be able to see the latest date at which the database is updated and at which
+      new data was entered in the EDC.",
   {
     # See also database update date.
     it(
-      "Scenario 1 | DB synch date and EDC update date. 
+      "Scenario 1 - DB synch date and EDC update date. 
       Given current date set to 2024-01-10,
        and db_synch_time to 2024-01-10,
        and edc_latest_date to 2024-01-10,
@@ -51,8 +50,9 @@ describe(
 
          testargs <- list(
            app_data = list("Form1" = data.frame("site_code" = "", "edit_date_time" = "2024-01-10")), 
-           db_path = temp_path,
-           test_mode = TRUE
+           db_path = temp_path, 
+           current_date = as.Date("2024-01-10"),
+           show_synch_warning = TRUE
          )
          
          testServer(mod_db_synch_info_server, args = testargs, {
@@ -70,10 +70,14 @@ describe(
   }
 )
 
-describe("mod_db_synch_info. Feature 3 | DB out of synch. As a user, I want to get a
-  warning if the database synchronization did not happen on the same day as the data review.", {
+describe(
+  "mod_db_synch_info. Feature 3 | Warn if database synchronization is outdated. 
+    As a user, I want to get a
+    warning if the database synchronization did not happen on the same day as 
+    the data review.", 
+  {
     it(
-      "Scenario 1 | Old synchronization. Given the current date set to 2024-01-10,
+      "Scenario 1 - Old synchronization. Given the current date set to 2024-01-10,
        and the latest DB synch date set to '2024-01-08',
        and the latest EDC udpate date to '2024-01-01',
        I expect that a pop-up window will be shown with a warning 
@@ -93,7 +97,8 @@ describe("mod_db_synch_info. Feature 3 | DB out of synch. As a user, I want to g
             id = "test", 
             app_data = list("Form1" = data.frame("site_code" = "", "edit_date_time" = "2024-01-01")), 
             db_path = temp_path,
-            test_mode = TRUE
+            current_date = as.Date("2024-01-10"),
+            show_synch_warning = TRUE
           )
         }
         test_app <- shinyApp(test_ui, test_server)
@@ -108,7 +113,7 @@ describe("mod_db_synch_info. Feature 3 | DB out of synch. As a user, I want to g
       }
     )
     it(
-      "Scenario 2 | Synchronization date or EDC update date missing. Given the 
+      "Scenario 2 - Synchronization date or EDC update date missing. Given the 
         current date set to 2024-01-10,
         and the latest DB synch date is either missing or 'NULL',
         and the latest EDC update date is set to '2024-01-01',
@@ -128,7 +133,8 @@ describe("mod_db_synch_info. Feature 3 | DB out of synch. As a user, I want to g
             id = "test", 
             app_data = list("Form1" = data.frame("site_code" = "", "edit_date_time" = "")), 
             db_path = temp_path,
-            test_mode = TRUE
+            current_date = as.Date("2024-01-01"), 
+            show_synch_warning = TRUE
           )
         }
         test_app <- shinyApp(test_ui, test_server)

@@ -1,6 +1,5 @@
 describe(
-  "mod_study_forms. Feature 1 | As a user, I want to be able to  run the
-  module in isolation",
+  "mod_study_forms. Feature 1 | Load application module in isolation.",
   {
     it("Can load the module UI, with functioning internal parameters.", {
       ui <- mod_study_forms_ui(
@@ -20,7 +19,8 @@ describe(
         r = reactiveValues(),
         form = "Vital signs",
         id_item = "",
-        form_items = ""
+        form_items = "",
+        item_info = data.frame()
       )
       testServer(mod_study_forms_server, args = testargs , {
         ns <- session$ns
@@ -32,7 +32,8 @@ describe(
   }
 )
 describe(
-  "mod_study_forms. Feature 2 | As a user, I want to be able to view a form with
+  "mod_study_forms. Feature 2 | View forms with study-specific data. 
+      As a user, I want to be able to view a form with
       study-specific data. The forms will be specified with a study-specific
       metadata file. ",
   {
@@ -59,9 +60,10 @@ describe(
       form = "Vital signs",
       id_item = c("subject_id", "event_name", "item_group",
                   "form_repeat", "item_name"),
-      form_items = form_items
+      form_items = form_items,
+      item_info = metadata$form_level_data[metadata$form_level_data$item_group == "Vital signs", ]
     )
-    it("Scenario 1 | Given subject id is set to NLD_05_561, and form filter set to 'pulse' and
+    it("Scenario 1 - Given subject id is set to NLD_05_561, and form filter set to 'pulse' and
        'bmi', I expect that [fig_data] contains a data frame with only items 'BMI' and 'Pulse',
         and that a plotly [dynamic_figure] contains a plotly htmlwidget figure,
         and that the figure outputcontains a valid JSON object", {
@@ -76,7 +78,7 @@ describe(
         })
 
     it(
-      "Scenario 3 | 'show_all' set to FALSE. Given subject id NLD_05_561,
+      "Scenario 3 - 'show_all' set to FALSE. Given subject id NLD_05_561,
           and input value 'show_all' is set to 'FALSE',
           I expect that a table with only review data of subject NLD_05_561 will be shown,
           and that a valid JSON output table will be created",
@@ -105,7 +107,7 @@ describe(
         })
       })
     it(
-      "Scenario 4 | Given subject id NLD_05_561,
+      "Scenario 4 - Given subject id NLD_05_561,
           and the input value [show_all] is set to 'TRUE',
           I expect that a table with review data of everyone will be shown,
           and that a valid JSON output table will be created", {
@@ -132,8 +134,9 @@ describe(
 )
 
 describe(
-  "Feature 4 | As a user, I want to be able to see data that has not yet been 
-  reviewed highlighted", 
+  "Feature 4 | Highlight data that is not yet reviewed. 
+    As a user, I want to be able to see data that has not yet been 
+    reviewed highlighted", 
   {
     set.seed(2023)
     appdata <- get_appdata(clinsightful_data)
@@ -153,11 +156,12 @@ describe(
       form = "Vital signs",
       id_item = c("subject_id", "event_name", "item_group", 
                   "form_repeat", "item_name"),
-      form_items = with(metadata$study_forms, item_name[item_group == "Vital signs"])
+      form_items = with(metadata$study_forms, item_name[item_group == "Vital signs"]),
+      item_info = metadata$form_level_data[metadata$form_level_data$item_group == "Vital signs", ]
     ) 
     
     it(
-      "Scenario 1 | Review status information. Given subject id is set to '885',
+      "Scenario 1 - Review status information. Given subject id is set to '885',
         and the form set to 'Vital signs',
         and the filter set to 'pulse' and 'bmi',
         I expect that [fig_data] contains a column named 'reviewed',
@@ -175,7 +179,7 @@ describe(
     )
     
     it(
-      "Scenario 2 | Showing review status. 
+      "Scenario 2 - Showing review status. 
         Given a test data set with random test data, 
         and [subject_id] is set to  'NLD_06_755',
         and form is set to 'Vital signs',
@@ -209,7 +213,8 @@ describe(
             form = "Vital signs",
             id_item = c("subject_id", "event_name", "item_group", 
                         "form_repeat", "item_name"),
-            form_items = form_items
+            form_items = form_items,
+            item_info = metadata$form_level_data[metadata$form_level_data$item_group == "Vital signs", ]
           )
         }
         test_app <- shinyApp(test_ui, test_server)

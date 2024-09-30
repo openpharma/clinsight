@@ -1,84 +1,79 @@
-# get_raw_data works: Produces the expected output.
+# get_raw_csv_data works: Produces the expected output.
 
     Code
-      get_raw_data(data_path, column_specs = metadata$column_specs)
+      get_raw_csv_data(data_path, synch_time = "2024-01-01 00:00:00")
     Output
-      multiple choice vars that will be adjusted: 
-      AE_AEACNOTH
-      AE_AESER_SC
-      CM_MHREL
-      CM_AEREL
-      CP_MHREL
-      CP_AEREL
-      MH_TRT
-      DM_RACE
-      # A tibble: 3,006 x 17
-         site_code subject_id event_repeat event_id event_name event_date form_id
-         <chr>     <chr>             <int> <chr>    <chr>      <date>     <chr>  
-       1 9600      9600-001              1 SCR      Screening  2022-11-09 DM     
-       2 9600      9600-001              1 SCR      Screening  2022-11-09 DM     
-       3 9600      9600-001              1 SCR      Screening  2022-11-09 DM     
-       4 9600      9600-001              1 SCR      Screening  2022-11-09 DM     
-       5 9600      9600-002              1 SCR      Screening  2022-01-01 DM     
-       6 9600      9600-002              1 SCR      Screening  2022-01-01 DM     
-       7 9600      9600-002              1 SCR      Screening  2022-01-01 DM     
-       8 9600      9600-002              1 SCR      Screening  2022-01-01 DM     
-       9 9600      9600-002              1 SCR      Screening  2022-01-01 STE    
-      10 9600      9600-002              1 SCR      Screening  2022-01-01 STE    
-      # i 2,996 more rows
-      # i 10 more variables: form_repeat <int>, var <chr>, item_value <chr>,
-      #   edit_date_time <dttm>, db_update_time <dttm>, region <chr>, day <drtn>,
-      #   vis_day <dbl>, vis_num <dbl>, event_label <chr>
+      Adding synch time ' 2024-01-01 00:00:00 ' as the attribute 'synch_time' to the data set.
+      # A tibble: 3,267 x 26
+         SiteSeq SiteCode SubjectSeq SubjectId EventSeq EventId   EventName  EventDate
+         <chr>   <chr>    <chr>      <chr>     <chr>    <chr>     <chr>      <chr>    
+       1 2       9700     1          9700-001  1        COMMON_AE Adverse E~ 2022-11-~
+       2 2       9700     1          9700-001  1        COMMON_AE Adverse E~ 2022-11-~
+       3 2       9700     1          9700-001  1        COMMON_AE Adverse E~ 2022-11-~
+       4 2       9700     1          9700-001  1        COMMON_AE Adverse E~ 2022-11-~
+       5 2       9700     1          9700-001  1        COMMON_AE Adverse E~ 2022-11-~
+       6 2       9700     1          9700-001  1        COMMON_AE Adverse E~ 2022-11-~
+       7 2       9700     1          9700-001  1        COMMON_AE Adverse E~ 2022-11-~
+       8 2       9700     1          9700-001  1        COMMON_AE Adverse E~ 2022-11-~
+       9 2       9700     1          9700-001  1        COMMON_AE Adverse E~ 2022-11-~
+      10 2       9700     1          9700-001  1        COMMON_AE Adverse E~ 2022-11-~
+      # i 3,257 more rows
+      # i 18 more variables: ActivityId <chr>, ActivityName <chr>, FormId <chr>,
+      #   FormName <chr>, FormSeq <chr>, SubjectFormSeq <chr>,
+      #   OriginSubjectFormSeq <chr>, SourceSubjectFormSeq <chr>, ItemGroupId <chr>,
+      #   ItemGroupSeq <chr>, ItemId <chr>, ItemExportLabel <chr>,
+      #   DesignVersion <chr>, ItemValue <chr>, ItemCode <chr>, EditDateTime <chr>,
+      #   EditBy <chr>, EditReason <chr>
 
-# merge_meta_with_data. Feature 1 | As a user, I want to be able to merge raw data with metadata. Furthermore, I want to be able to fix suffixes and rename the limits and significance values to the standard names used in the app.: Scenario 1. Given a data frame with raw data,I expect that the output will be the same as recorded in a snapshot.
+# merge_meta_with_data. Feature 1 | Merge raw data with metadata. As a user, I want to be able to merge raw data with metadata. Furthermore, I want to be able to fix suffixes and rename the limits and significance values to the standard names used in the app.: Scenario 1 - Given a data frame with raw data,I expect that the output will be the same as recorded in a snapshot.
 
     Code
       df[c(1, 1000, 2000, 3000, 4000, 5000), ]
     Output
-      # A tibble: 6 x 24
-        site_code subject_id event_repeat event_id event_name event_date form_id
-        <chr>     <chr>             <int> <chr>    <chr>      <date>     <chr>  
-      1 9600      9600-001              1 SCR      Screening  2022-11-09 DM     
-      2 <NA>      <NA>                 NA <NA>     <NA>       NA         <NA>   
-      3 <NA>      <NA>                 NA <NA>     <NA>       NA         <NA>   
-      4 <NA>      <NA>                 NA <NA>     <NA>       NA         <NA>   
-      5 <NA>      <NA>                 NA <NA>     <NA>       NA         <NA>   
-      6 <NA>      <NA>                 NA <NA>     <NA>       NA         <NA>   
-      # i 17 more variables: form_repeat <int>, edit_date_time <dttm>,
-      #   db_update_time <dttm>, region <chr>, day <drtn>, vis_day <dbl>,
-      #   vis_num <dbl>, event_label <chr>, item_name <chr>, item_type <chr>,
-      #   item_group <chr>, item_value <chr>, item_unit <chr>, lower_lim <dbl>,
-      #   upper_lim <dbl>, significance <chr>, reason_notdone <chr>
+      # A tibble: 6 x 23
+        site_code subject_id event_id event_date event_name event_repeat form_id
+        <chr>     <chr>      <chr>    <date>     <chr>             <int> <chr>  
+      1 9600      9600-001   SCR      2022-11-09 Screening             1 DM     
+      2 <NA>      <NA>       <NA>     NA         <NA>                 NA <NA>   
+      3 <NA>      <NA>       <NA>     NA         <NA>                 NA <NA>   
+      4 <NA>      <NA>       <NA>     NA         <NA>                 NA <NA>   
+      5 <NA>      <NA>       <NA>     NA         <NA>                 NA <NA>   
+      6 <NA>      <NA>       <NA>     NA         <NA>                 NA <NA>   
+      # i 16 more variables: form_repeat <int>, edit_date_time <dttm>, day <drtn>,
+      #   vis_day <dbl>, vis_num <dbl>, event_label <chr>, item_name <chr>,
+      #   item_type <chr>, item_group <chr>, item_value <chr>, item_unit <chr>,
+      #   lower_lim <dbl>, upper_lim <dbl>, significance <chr>, reason_notdone <chr>,
+      #   region <chr>
 
 ---
 
     Code
       df
     Output
-      # A tibble: 543 x 24
-         site_code subject_id event_repeat event_id event_name event_date form_id
-         <chr>     <chr>             <int> <chr>    <chr>      <date>     <chr>  
-       1 9600      9600-001              1 SCR      Screening  2022-11-09 DM     
-       2 9600      9600-001              1 SCR      Screening  2022-11-09 DM     
-       3 9600      9600-001              1 SCR      Screening  2022-11-09 DM     
-       4 9600      9600-002              1 SCR      Screening  2022-01-01 DM     
-       5 9600      9600-002              1 SCR      Screening  2022-01-01 DM     
-       6 9600      9600-002              1 SCR      Screening  2022-01-01 DM     
-       7 9600      9600-002              1 SCR      Screening  2022-01-01 STE    
-       8 9600      9600-002              1 SCR      Screening  2022-01-01 STE    
-       9 9600      9600-002              1 SCR      Screening  2022-01-01 VS     
-      10 9600      9600-002              1 SCR      Screening  2022-01-01 VS     
+      # A tibble: 543 x 23
+         site_code subject_id event_id event_date event_name event_repeat form_id
+         <chr>     <chr>      <chr>    <date>     <chr>             <int> <chr>  
+       1 9600      9600-001   SCR      2022-11-09 Screening             1 DM     
+       2 9600      9600-001   SCR      2022-11-09 Screening             1 DM     
+       3 9600      9600-002   SCR      2022-01-01 Screening             1 DM     
+       4 9600      9600-002   SCR      2022-01-01 Screening             1 DM     
+       5 9600      9600-002   SCR      2022-01-01 Screening             1 DM     
+       6 9600      9600-002   SCR      2022-01-01 Screening             1 STE    
+       7 9600      9600-002   SCR      2022-01-01 Screening             1 STE    
+       8 9600      9600-002   SCR      2022-01-01 Screening             1 VS     
+       9 9600      9600-002   SCR      2022-01-01 Screening             1 VS     
+      10 9600      9600-002   SCR      2022-01-01 Screening             1 VS     
       # i 533 more rows
-      # i 17 more variables: form_repeat <int>, edit_date_time <dttm>,
-      #   db_update_time <dttm>, region <chr>, day <drtn>, vis_day <dbl>,
-      #   vis_num <dbl>, event_label <chr>, item_name <chr>, item_type <chr>,
-      #   item_group <chr>, item_value <chr>, item_unit <chr>, lower_lim <dbl>,
-      #   upper_lim <dbl>, significance <chr>, reason_notdone <chr>
+      # i 16 more variables: form_repeat <int>, edit_date_time <dttm>, day <drtn>,
+      #   vis_day <dbl>, vis_num <dbl>, event_label <chr>, item_name <chr>,
+      #   item_type <chr>, item_group <chr>, item_value <chr>, item_unit <chr>,
+      #   lower_lim <dbl>, upper_lim <dbl>, significance <chr>, reason_notdone <chr>,
+      #   region <chr>
 
 # get_appdata works: produces the expected output
 
     Code
-      get_appdata(clinsightful_data)
+      get_appdata(clinsightful_data, metadata)
     Output
       $`Adverse events`
       # A tibble: 799 x 24

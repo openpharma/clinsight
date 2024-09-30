@@ -12,3 +12,6 @@ inst/doc
 /doc/
 /Meta/
 *.sqlite
+/pkgdown/
+/test_data/
+*.rds

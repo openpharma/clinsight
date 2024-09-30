@@ -15,7 +15,7 @@ describe(
         reviewed
       )
     
-    it("Scenario 1. Given a random data set provided, I expect that summary dataframe snapshot will be as expected", {
+    it("Scenario 1 - Given a random data set provided, I expect that summary dataframe snapshot will be as expected", {
       expect_snapshot(
         summarize_review_data(
           review_df, 
@@ -26,7 +26,7 @@ describe(
       )
     })   
     it(
-      "Scenario 1. Given that none of the data within a group was reviewed, 
+      "Scenario 1 - Given that none of the data within a group was reviewed, 
           and all values in the [status] column are 'new',
           I expect that, in the summarized data frame, 
           all values in the [reviewed] column are 'No' 
@@ -50,7 +50,7 @@ describe(
       }
     )
     it(
-      "Scenario 2. Given that all data within a group was reviewed,
+      "Scenario 2 - Given that all data within a group was reviewed,
           I expect that, in the summarized data frame, 
           all values in the [reviewed] column are 'Yes' 
           and all values in the [status] column labels are 'old'.", 
@@ -73,7 +73,7 @@ describe(
       }
     )
     it(
-      "Scenario 3. Given that some data within a group was new and some was updated,
+      "Scenario 3 - Given that some data within a group was new and some was updated,
           I expect that, in the summarized data frame, 
           all values in the [reviewed] column are 'No' 
           and all values in the [status] column labels are 'new/updated'.", 
@@ -98,7 +98,7 @@ describe(
       }
     )
     it(
-      "Scenario 4. Given that some data within a group was old and some was new,
+      "Scenario 4 - Given that some data within a group was old and some was new,
           I expect that, in the summarized data frame, 
           all values in the [reviewed] column are 'No' 
           and all values in the [status] column labels are 'new'.", 
@@ -124,7 +124,7 @@ describe(
       }
     )
     it(
-      "Scenario 5. Given that some values within a group were old and some were updated,
+      "Scenario 5 - Given that some values within a group were old and some were updated,
           I expect that, in the summarized data frame, 
           all values in the [reviewed] column are 'No' 
           and all values in the [status] column labels are 'updated'.", 
@@ -151,7 +151,7 @@ describe(
       }
     )
     it(
-      "Scenario 6. Given that some values within a group were 'old', some 'updated' and some 'new',
+      "Scenario 6 - Given that some values within a group were 'old', some 'updated' and some 'new',
           I expect that, in the summarized data frame, 
           all values in the [reviewed] column are 'No' 
           and all values in the [status] column labels are 'new/updated'.", 

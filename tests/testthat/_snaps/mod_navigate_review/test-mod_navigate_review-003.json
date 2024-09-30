@@ -7,12 +7,31 @@
         "style": "bootstrap5",
         "filter": "none",
         "vertical": false,
-        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Subject<\/th>\n      <th>Form<\/th>\n      <th>event_label<\/th>\n      <th>query<\/th>\n      <th>resolved<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
+        "extensions": [
+          "Scroller"
+        ],
+        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th>Subject<\/th>\n      <th>ID<\/th>\n      <th>query<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
         "options": {
+          "scrollY": 400,
+          "scrollX": true,
+          "scroller": false,
+          "deferRender": true,
+          "scrollResize": true,
+          "scrollCollapse": true,
+          "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"\")\n}",
+          "dom": "f<\"header h5\">ti",
           "columnDefs": [
             {
-              "orderable": false,
+              "name": "Subject",
               "targets": 0
+            },
+            {
+              "name": "ID",
+              "targets": 1
+            },
+            {
+              "name": "query",
+              "targets": 2
             }
           ],
           "order": [
@@ -28,13 +47,14 @@
           "processing": true
         },
         "selection": {
-          "mode": "single",
+          "mode": "none",
           "selected": null,
           "target": "row",
           "selectable": null
         }
       },
       "evals": [
+        "options.initComplete",
         "options.ajax.data"
       ],
       "jsHooks": [
@@ -56,9 +76,9 @@
         },
         {
           "name": "dt-core-bootstrap5",
-          "version": "1.13.4",
+          "version": "1.13.6",
           "src": {
-            "href": "dt-core-bootstrap5-1.13.4"
+            "href": "dt-core-bootstrap5-1.13.6"
           },
           "meta": null,
           "script": [
@@ -73,9 +93,9 @@
         },
         {
           "name": "bootstrap",
-          "version": "5.2.2",
+          "version": "5.3.1",
           "src": {
-            "href": "bootstrap-5.2.2"
+            "href": "bootstrap-5.3.1"
           },
           "meta": {
             "viewport": "width=device-width, initial-scale=1, shrink-to-fit=no"
@@ -89,9 +109,9 @@
         },
         {
           "name": "bs3compat",
-          "version": "0.5.1",
+          "version": "0.8.0",
           "src": {
-            "href": "bs3compat-0.5.1"
+            "href": "bs3compat-0.8.0"
           },
           "meta": null,
           "script": [
@@ -105,10 +125,43 @@
           "all_files": true
         },
         {
-          "name": "crosstalk",
-          "version": "1.2.0",
+          "name": "dt-ext-scroller-bootstrap5",
+          "version": "1.13.6",
           "src": {
-            "href": "crosstalk-1.2.0"
+            "href": "dt-ext-scroller-bootstrap5-1.13.6"
+          },
+          "meta": null,
+          "script": [
+            "js/dataTables.scroller.min.js",
+            "js/scroller.bootstrap5.min.js"
+          ],
+          "stylesheet": "css/scroller.bootstrap5.min.css",
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": false
+        },
+        {
+          "name": "dt-plugin-scrollresize",
+          "version": "1.13.6",
+          "src": {
+            "href": "dt-plugin-scrollresize-1.13.6"
+          },
+          "meta": null,
+          "script": "source.min.js",
+          "stylesheet": [
+
+          ],
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": true
+        },
+        {
+          "name": "crosstalk",
+          "version": "1.2.1",
+          "src": {
+            "href": "crosstalk-1.2.1"
           },
           "meta": null,
           "script": "js/crosstalk.min.js",
@@ -124,12 +177,39 @@
         "style": "bootstrap5",
         "filter": "none",
         "vertical": false,
+        "extensions": [
+          "Scroller"
+        ],
         "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Subject<\/th>\n      <th>Form<\/th>\n      <th>summary_col<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
         "options": {
+          "scrollY": 400,
+          "scrollX": true,
+          "scroller": true,
+          "deferRender": true,
+          "scrollResize": true,
+          "scrollCollapse": true,
+          "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"\")\n}",
+          "dom": "f<\"header h5\">ti",
           "columnDefs": [
             {
               "orderable": false,
               "targets": 0
+            },
+            {
+              "name": " ",
+              "targets": 0
+            },
+            {
+              "name": "Subject",
+              "targets": 1
+            },
+            {
+              "name": "Form",
+              "targets": 2
+            },
+            {
+              "name": "summary_col",
+              "targets": 3
             }
           ],
           "order": [
@@ -152,6 +232,7 @@
         }
       },
       "evals": [
+        "options.initComplete",
         "options.ajax.data"
       ],
       "jsHooks": [
@@ -173,9 +254,9 @@
         },
         {
           "name": "dt-core-bootstrap5",
-          "version": "1.13.4",
+          "version": "1.13.6",
           "src": {
-            "href": "dt-core-bootstrap5-1.13.4"
+            "href": "dt-core-bootstrap5-1.13.6"
           },
           "meta": null,
           "script": [
@@ -190,9 +271,9 @@
         },
         {
           "name": "bootstrap",
-          "version": "5.2.2",
+          "version": "5.3.1",
           "src": {
-            "href": "bootstrap-5.2.2"
+            "href": "bootstrap-5.3.1"
           },
           "meta": {
             "viewport": "width=device-width, initial-scale=1, shrink-to-fit=no"
@@ -206,9 +287,9 @@
         },
         {
           "name": "bs3compat",
-          "version": "0.5.1",
+          "version": "0.8.0",
           "src": {
-            "href": "bs3compat-0.5.1"
+            "href": "bs3compat-0.8.0"
           },
           "meta": null,
           "script": [
@@ -222,10 +303,43 @@
           "all_files": true
         },
         {
-          "name": "crosstalk",
-          "version": "1.2.0",
+          "name": "dt-ext-scroller-bootstrap5",
+          "version": "1.13.6",
           "src": {
-            "href": "crosstalk-1.2.0"
+            "href": "dt-ext-scroller-bootstrap5-1.13.6"
+          },
+          "meta": null,
+          "script": [
+            "js/dataTables.scroller.min.js",
+            "js/scroller.bootstrap5.min.js"
+          ],
+          "stylesheet": "css/scroller.bootstrap5.min.css",
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": false
+        },
+        {
+          "name": "dt-plugin-scrollresize",
+          "version": "1.13.6",
+          "src": {
+            "href": "dt-plugin-scrollresize-1.13.6"
+          },
+          "meta": null,
+          "script": "source.min.js",
+          "stylesheet": [
+
+          ],
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": true
+        },
+        {
+          "name": "crosstalk",
+          "version": "1.2.1",
+          "src": {
+            "href": "crosstalk-1.2.1"
           },
           "meta": null,
           "script": "js/crosstalk.min.js",

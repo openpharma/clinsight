@@ -70,8 +70,8 @@ mod_review_forms_ui <- function(id){
 #'   updated since the last review session. In addition, if a page contains new
 #'   data, the user can mark all data in the form as being reviewed and can
 #'   (optionally) add a comment to this review action. The data will be saved in
-#'   a database. All review activity is stored with an audit-trail, with date/time 
-#'   stamps and with the reviewer's name. 
+#'   a database. All review activity is stored with an audit-trail, with
+#'   date/time stamps and with the reviewer's name.
 #'
 #' @param id Character string, used to connect the module UI with the module
 #'   Server.
@@ -83,6 +83,9 @@ mod_review_forms_ui <- function(id){
 #' @param active_tab Reactive value containing the active tab. Needed to hide
 #'   the review controls if non-relevant tabs are selected (tabs that do not
 #'   contain common forms or study forms).
+#' @param review_required_data a data frame with information about whether
+#'   review is mandatory for each form. Should contain the columns `item_group`
+#'   and `review_required`.
 #' @param db_path Character string with the file path to the database.
 #'
 #' @seealso [mod_review_forms_ui()]
@@ -92,11 +95,17 @@ mod_review_forms_server <- function(
     r, 
     active_form, 
     active_tab, 
+    review_required_data,
     db_path
 ){
   stopifnot(is.reactivevalues(r))
   stopifnot(is.reactive(active_form))
   stopifnot(is.reactive(active_tab))
+  stopifnot(is.data.frame(review_required_data))
+  if(!all(c("item_group", "review_required") %in% names(review_required_data))){
+    stop("Either the 'study_forms or 'review_required' column is missing ", 
+         "from the review_required data frame")
+  }
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     
@@ -135,13 +144,13 @@ mod_review_forms_server <- function(
       
       updateCheckboxInput(
         inputId = "form_reviewed",
-        value = (review_status == "Yes")
+        value = identical(review_status, "Yes")
       )
       
       shinyWidgets::updatePrettySwitch(
         session = session,
         inputId = "add_comment",
-        value = (review_comment != "")
+        value = !identical(review_comment, "")
       )
       updateTextAreaInput(
         inputId = "review_comment",
@@ -149,22 +158,55 @@ mod_review_forms_server <- function(
       )
     })
     
-    enable_save_review <- reactive({
-      req(review_data_active())
-      req(!is.null(input$form_reviewed))
-      if(nrow(review_data_active()) == 0) return(FALSE)
-      any(c(
-        unique(review_data_active()$reviewed) == "No"  & input$form_reviewed, 
-        unique(review_data_active()$reviewed) == "Yes" & !input$form_reviewed, 
-        input$review_comment != unique(review_data_active()$comment)
+    user_allowed_to_review <- reactive({
+      isFALSE(is.null(r$user_name) || r$user_name == "")
+    })
+    
+    role_allowed_to_review <- reactive({
+      get_roles_from_config()[r$user_role] %in% get_golem_config("allow_to_review")
+    })
+    
+    review_required <- reactive({
+      req(active_form(), review_required_data)
+      with(
+        review_required_data, 
+        review_required[item_group == active_form()]
+      ) %||% TRUE
+    })
+    
+    enable_any_review <- reactive({
+      all(c(
+        review_required(),
+        user_allowed_to_review(),
+        role_allowed_to_review(),
+        nrow(review_data_active()) != 0
       ))
     })
     
-    observeEvent(enable_save_review(), {
+    enable_save_review <- reactive({
+      req(
+        review_data_active(), 
+        is.logical(input$form_reviewed), 
+        is.logical(enable_any_review())
+        ) 
+      if(!enable_any_review()) return(FALSE)
+      any(c(
+        unique(review_data_active()$reviewed) == "No"  & input$form_reviewed, 
+        unique(review_data_active()$reviewed) == "Yes" & !input$form_reviewed
+      ))
+    })
+    
+    observeEvent(c(enable_any_review(), enable_save_review()), {
+      req(is.logical(enable_any_review()), is.logical(enable_save_review()))
+      shinyjs::toggleState("form_reviewed", enable_any_review())
       if(enable_save_review()){
         shinyjs::enable("save_review")
-      } else { 
-        shinyjs::disable(id = "save_review")
+        shinyjs::enable("add_comment")
+        shinyjs::enable("review_comment")
+      } else{
+        shinyjs::disable("save_review")
+        shinyjs::disable("add_comment")
+        shinyjs::disable("review_comment")
       }
     })
     
@@ -185,12 +227,8 @@ mod_review_forms_server <- function(
     review_save_error <- reactiveVal(FALSE)
     observeEvent(input$save_review, {
       req(is.logical(input$form_reviewed), review_data_active())
-      req(nrow(review_data_active()) != 0)
+      req(enable_save_review())
       review_save_error(FALSE)
-      
-      if(is.null(r$user_name()) || r$user_name() == "" ) return({
-        showNotification("No user name found. Cannot save review", duration = 1, type = "error") 
-      })
       golem::cat_dev("Save review status reviewed:", input$form_reviewed, "\n")
       
       review_row <- review_data_active() |> 
@@ -198,7 +236,7 @@ mod_review_forms_server <- function(
         dplyr::mutate(
           reviewed    = if(input$form_reviewed) "Yes" else "No",
           comment     = ifelse(is.null(input$review_comment), "", input$review_comment),
-          reviewer    = r$user_name(),
+          reviewer    = paste0(r$user_name, " (", r$user_role, ")"),
           timestamp   = time_stamp(),
           status      = if(input$form_reviewed) "old" else "new"
         ) 
@@ -215,7 +253,7 @@ mod_review_forms_server <- function(
         tables = "all_review_data" 
       )
       
-      review_row_db <- db_get_latest_review(
+      review_row_db <- db_get_review(
         db_path, subject = review_row$subject_id, form = review_row$item_group
         )
       review_row_db <- unique(review_row_db[names(review_row)])
@@ -255,8 +293,20 @@ mod_review_forms_server <- function(
     
     output[["save_review_error"]] <- renderPrint({
       validate(need(
+        role_allowed_to_review(), 
+        paste0("Review not allowed for a '", r$user_role, "'.")
+        ))
+      validate(need(
+        review_required(), 
+        "Review not required"
+      ))
+      validate(need(
         nrow(review_data_active()) != 0,
         "Nothing to review"
+      ))
+      validate(need(
+        user_allowed_to_review(), 
+        "No user name found. Cannot save review"
       ))
       validate(need(
         !review_data_active()$reviewed == "Yes",

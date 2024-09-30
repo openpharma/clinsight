@@ -11,9 +11,16 @@ app_ui <- function(request){
     bslib::page_navbar(
       id = "main_tabs",
       window_title = "Interactive Trial Safety Surveillance Tool",
-      theme = bslib::bs_theme(bootswatch = "spacelab", version = "5"),
+      theme = bslib::bs_theme(
+        bootswatch = "spacelab", 
+        version = "5",  
+        # this disables 'compact' value-boxes introduced in bslib 0.6.0
+        # see https://github.com/rstudio/bslib/issues/963
+        "bslib-value-box-horizontal-break-point" = "1px"
+        ),
       bg = "#43464c",
       title = tags$a(
+        href = "/",
         tags$img(src='www/gcp_logo.png', height = '40', width ='180')
       ), 
       sidebar = bslib::sidebar(mod_main_sidebar_ui("main_sidebar_1")),

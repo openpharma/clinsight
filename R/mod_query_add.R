@@ -73,7 +73,7 @@ mod_query_add_server <- function(
         bslib::card(
           bslib::layout_sidebar(
             sidebar = bslib::sidebar(
-              id = ns("query.sidebar"),
+              id = ns("query_sidebar"),
               open = "always",
               HTML(paste0("<b>", unique(sel_data$item_group), "</b>")),
               shiny::selectizeInput(
@@ -83,7 +83,7 @@ mod_query_add_server <- function(
                 options = list(
                   placeholder = 'Select a visit',
                   onInitialize = if(length(unique(sel_data$event_name)) == 1) NULL else {
-                    I('function() { this.setValue(""); }')
+                      I('function() { this.setValue(""); }')
                   }
                 )
               ),
@@ -105,9 +105,28 @@ mod_query_add_server <- function(
                 width = "100%",
                 placeholder = "add query text here"
               ),
+              bslib::card_body(
+                shinyWidgets::materialSwitch(
+                  inputId = ns("query_major"),
+                  label = "Major query", 
+                  status = "danger",
+                  inline = TRUE, 
+                  right = TRUE
+                ),
+                bslib::popover(
+                  icon("circle-info"),
+                  title = "Major queries",
+                  id = ns("query_major_info"),
+                  markdown("Only use for issues that could have a major impact 
+                  on either the patient safety or the study outcomes.")
+                ), 
+                class = "d-flex flex-row", 
+                fillable = FALSE,
+                gap = 0
+              ),
               verbatimTextOutput(ns("reviewer"))
             ),
-            shiny::verbatimTextOutput(ns("query_error"))
+            verbatimTextOutput(ns("query_error"))
           ),
           min_height = "500px"
         ),
@@ -135,18 +154,19 @@ mod_query_add_server <- function(
     
     query_save_error <- reactiveVal(FALSE)
     observeEvent(input$query_add_input, {
-      req(input$query_select_visit, input$query_text, r$user_name())
+      req(input$query_select_visit, input$query_text, r$user_name, r$user_role)
       query_save_error(FALSE)
       golem::cat_dev("Query text to add: ", input$query_text, "\n")
       new_query <- dplyr::tibble(
         "query_id"      = paste0(r$subject_id, create_unique_id(5)), 
-        "subject_id"     = r$subject_id,
+        "type"          = ifelse(input$query_major, "Major", "Normal"),
+        "subject_id"    = r$subject_id,
         "event_label"   = input$query_select_visit, 
         "item_group"    = active_form(), 
         "item"          = input$query_select_item, 
         "timestamp"     = time_stamp(),
         "n"             = 1,
-        "reviewer"      = r$user_name(),
+        "reviewer"      = paste0(r$user_name," (", r$user_role, ")"),
         "query"         = input$query_text,
         "resolved"      = "No",
         "resolved_date" = NA_character_,
@@ -155,7 +175,7 @@ mod_query_add_server <- function(
       golem::print_dev(new_query)
       
       db_save(data = new_query, db_path = db_path, db_table = "query_data")
-      query_in_db <- db_get_latest_query(
+      query_in_db <- db_get_query(
         db_path, query_id = new_query$query_id, n = new_query$n
       )
       query_in_db <- unique(query_in_db[names(new_query)])
@@ -196,7 +216,7 @@ mod_query_add_server <- function(
             "Form: ", htmlEscape(query_in_db$item_group), "<br>",
             "Item: ", htmlEscape(query_in_db$item), "<br>",
             "Query: ", htmlEscape(query_in_db$event_label), "<br>",
-            "Author: ", htmlEscape(query_in_db$reviewer), "<br>"
+            "Author: ", htmlEscape(query_in_db$reviewer)
           )),
           footer = modalButton("Close")
         )
@@ -206,23 +226,23 @@ mod_query_add_server <- function(
     output[["query_error"]] <- renderPrint({
       req(input$query_add_input)
       validate(
+        need(r$user_name, "User name missing. Cannot save query anonymously."),
+        need(r$user_role, "User role missing. Cannot save query without user role."),
         need(input$query_select_visit, "Please select a visit"),
-        need(input$query_text, "Please add a query message"),
-        need(r$user_name(), "User name missing. Cannot save query anonymously.")
+        need(input$query_text, "Please add a query message")
       )
     })
     
     output[["reviewer"]] <- renderPrint({
-      req(r$user_name())
-      cat("Author:", r$user_name(), "\n")
+      req(r$user_name)
+      cat("Author: ", r$user_name, " (", r$user_role, ")\n", sep = "")
     })
     
-
   })
 }
-    
+
 ## To be copied in the UI
 # mod_write_queries_ui("write_queries_1")
-    
+
 ## To be copied in the server
 # mod_write_queries_server("write_queries_1")

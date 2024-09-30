@@ -22,9 +22,9 @@ updated data is available), the number of forms that need a review, and a
 timeline figure showing the number of visits that the patient performed. The
 value box with adverse events also serves as a link to the adverse events
 form. Furthermore, clicking on the box with forms to review will trigger
-\code{\link[=mod_navigate_review_server]{mod_navigate_review_server()}}, opening a modal that shows the forms that need
-review and the queries that are open of the active participant, to which you
-can directly navigate to.
+\code{\link[=mod_navigate_review_server]{mod_navigate_review_server()}}, opening a modal that shows the forms that
+need review and the queries that are open of the active participant, to which
+you can directly navigate to.
 }
 \seealso{
 \code{\link[=mod_header_widgets_server]{mod_header_widgets_server()}}

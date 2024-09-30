@@ -11,7 +11,7 @@ mod_navigate_review_ui <- function(id){
     bslib::value_box(
       id = ns("review_value_box"),
       title = "To review:",
-      theme_color = "primary",
+      theme = "primary",
       value = uiOutput(ns("forms_to_review")),
       showcase = icon("clipboard-list", class = 'fa-2x')
     )
@@ -134,16 +134,28 @@ mod_navigate_review_server <- function(
     
     queries_table_data <- reactive({
       # Select the initial query for every query id with slice_min: 
+      #TODO: try to use the tables of mod_queries instead to remove duplication
       df <- dplyr::slice_min(r$query_data, timestamp, by = query_id) |> 
         dplyr::filter(resolved == "No") |> 
-        dplyr::select(tidyr::all_of(c("subject_id", "item_group", "event_label", "query", "resolved")))
-      if(input$show_all_data) df else { dplyr::filter(df, subject_id == r$subject_id) |> 
+        dplyr::mutate(
+          ID = paste0(item, " (", item_group, ", ", event_label, ")"),
+          ID = ifelse(type == "Major", paste0(ID, " Major query"), ID)
+        ) |> 
+        dplyr::select(tidyr::all_of(c("subject_id", "ID", "query"))) 
+      if(input$show_all_data) df else { 
+        dplyr::filter(df, subject_id == r$subject_id) |> 
           dplyr::select(-subject_id)
       }
     })
     
     output[["queries_table"]] <- DT::renderDT({
-      datatable_custom(queries_table_data(), table_names)
+      datatable_custom(
+        queries_table_data(), 
+        rename_vars = table_names,
+        options = list(scroller = FALSE),
+        rownames = FALSE,
+        selection = "none"
+        )
     })
     
     mod_go_to_form_server(

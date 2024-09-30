@@ -4,7 +4,14 @@
 \alias{mod_review_forms_server}
 \title{Review form - Shiny module Server}
 \usage{
-mod_review_forms_server(id, r, active_form, active_tab, db_path)
+mod_review_forms_server(
+  id,
+  r,
+  active_form,
+  active_tab,
+  review_required_data,
+  db_path
+)
 }
 \arguments{
 \item{id}{Character string, used to connect the module UI with the module
@@ -21,6 +28,10 @@ whether that form needs review.}
 the review controls if non-relevant tabs are selected (tabs that do not
 contain common forms or study forms).}
 
+\item{review_required_data}{a data frame with information about whether
+review is mandatory for each form. Should contain the columns \code{item_group}
+and \code{review_required}.}
+
 \item{db_path}{Character string with the file path to the database.}
 }
 \description{
@@ -33,8 +44,8 @@ displayed in the application has any values that are newly entered or
 updated since the last review session. In addition, if a page contains new
 data, the user can mark all data in the form as being reviewed and can
 (optionally) add a comment to this review action. The data will be saved in
-a database. All review activity is stored with an audit-trail, with date/time
-stamps and with the reviewer's name.
+a database. All review activity is stored with an audit-trail, with
+date/time stamps and with the reviewer's name.
 }
 \seealso{
 \code{\link[=mod_review_forms_ui]{mod_review_forms_ui()}}

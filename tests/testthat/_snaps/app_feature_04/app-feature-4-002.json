@@ -1,11 +1,11 @@
 {
   "input": {
-    "sf_vital_signs-switch_view": "table"
+    "sf_vitals_adjusted-switch_view": "table"
   },
   "output": {
-    "main_sidebar_1-navigate_forms_1-form_name": "<center><b>Vital signs<\/b><\/center>",
+    "main_sidebar_1-navigate_forms_1-form_name": "<center><b>Vitals adjusted<\/b><\/center>",
     "navigate_participants_1-subject_info": {
-      "html": "<div class=\"card bslib-card bslib-mb-spacing html-fill-item html-fill-container bslib-value-box border-0 bg-primary\" data-bslib-card-init data-require-bs-caller=\"card() value_box()\" data-require-bs-version=\"5 5\">\n  <div class=\"card-body bslib-gap-spacing html-fill-item html-fill-container\" style=\"margin-top:auto;margin-bottom:auto;flex:1 1 auto; padding:0;\">\n    <div class=\"bslib-grid bslib-mb-spacing html-fill-item value-box-grid\" data-require-bs-caller=\"layout_column_wrap()\" data-require-bs-version=\"5\" style=\"--bslib-grid-height:auto;--bslib-grid-height-mobile:auto;gap:0px; --bslib-value-box-widths:30% 70%;--bslib-value-box-widths-full-screen:1fr auto;\">\n      <div class=\"bslib-gap-spacing html-fill-container\">\n        <div class=\"value-box-showcase overflow-hidden html-fill-item html-fill-container\" style=\"--bslib-value-box-max-height:100px;--bslib-value-box-max-height-full-screen:67%;\">\n          <i class=\"fas fa-user-check fa-2x\" role=\"presentation\" aria-label=\"user-check icon\"><\/i>\n        <\/div>\n      <\/div>\n      <div class=\"bslib-gap-spacing html-fill-container\">\n        <div class=\"value-box-area html-fill-item html-fill-container border-start\">\n          <p>9600-002<\/p>\n          <p>Female, 36yrs.<\/p>\n        <\/div>\n      <\/div>\n    <\/div>\n  <\/div>\n  <script data-bslib-card-init>bslib.Card.initializeAllCards();<\/script>\n<\/div>",
+      "html": "<div class=\"card bslib-card bslib-mb-spacing html-fill-item html-fill-container bslib-value-box bg-primary showcase-left-center\" data-bslib-card-init data-require-bs-caller=\"card() value_box()\" data-require-bs-version=\"5 5\" style=\"max-height:100px;\">\n  <div class=\"card-body bslib-gap-spacing html-fill-item html-fill-container\" style=\"margin-top:auto;margin-bottom:auto;flex:1 1 auto; padding:0;\">\n    <div class=\"value-box-grid html-fill-item\" style=\"--bslib-grid-height:auto;--bslib-grid-height-mobile:auto;---bslib-value-box-showcase-w:30%;---bslib-value-box-showcase-w-fs:1fr;---bslib-value-box-showcase-max-h:100px;---bslib-value-box-showcase-max-h-fs:67%;\">\n      <div class=\"value-box-showcase html-fill-item html-fill-container\">\n        <i class=\"fas fa-user-check fa-2x\" role=\"presentation\" aria-label=\"user-check icon\"><\/i>\n      <\/div>\n      <div class=\"value-box-area html-fill-item html-fill-container\">\n        <p class=\"value-box-title\">9600-002<\/p>\n        <p class=\"value-box-value\">Female, 36yrs.<\/p>\n      <\/div>\n    <\/div>\n  <\/div>\n  <script data-bslib-card-init>bslib.Card.initializeAllCards();<\/script>\n<\/div>",
       "deps": [
         {
           "name": "font-awesome",
@@ -25,9 +25,9 @@
         },
         {
           "name": "htmltools-fill",
-          "version": "0.5.6.1",
+          "version": "0.5.8.1",
           "src": {
-            "href": "htmltools-fill-0.5.6.1"
+            "href": "htmltools-fill-0.5.8.1"
           },
           "meta": null,
           "script": null,
@@ -37,23 +37,45 @@
           "all_files": true
         },
         {
-          "name": "bslib-grid-styles",
-          "version": "0.5.1",
+          "name": "bslib-component-js",
+          "version": "0.8.0",
           "src": {
-            "href": "bslib-grid-styles-0.5.1"
+            "href": "bslib-component-js-0.8.0"
           },
           "meta": null,
-          "script": null,
-          "stylesheet": "grid.css",
+          "script": [
+            {
+              "src": "components.min.js"
+            },
+            {
+              "src": "web-components.min.js",
+              "type": "module"
+            }
+          ],
+          "stylesheet": null,
           "head": null,
           "attachment": null,
           "all_files": true
         },
         {
-          "name": "bslib-tag-require",
-          "version": "0.5.1",
+          "name": "bslib-component-css",
+          "version": "0.8.0",
           "src": {
-            "href": "bslib-tag-require-0.5.1"
+            "href": "bslib-component-css-0.8.0"
+          },
+          "meta": null,
+          "script": null,
+          "stylesheet": "bslib-component-css.min.css",
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": true
+        },
+        {
+          "name": "bslib-tag-require",
+          "version": "0.8.0",
+          "src": {
+            "href": "bslib-tag-require-0.8.0"
           },
           "meta": null,
           "script": "tag-require.js",
@@ -61,51 +83,10 @@
           "head": null,
           "attachment": null,
           "all_files": true
-        },
-        {
-          "name": "bslib-value_box-styles",
-          "version": "0.5.1",
-          "src": {
-            "href": "bslib-value_box-styles-0.5.1"
-          },
-          "meta": null,
-          "script": null,
-          "stylesheet": "value_box.css",
-          "head": null,
-          "attachment": null,
-          "all_files": true
-        },
-        {
-          "name": "bslib-card-js",
-          "version": "0.5.1",
-          "src": {
-            "href": "bslib-card-js-0.5.1"
-          },
-          "meta": null,
-          "script": {
-            "src": "card.min.js"
-          },
-          "stylesheet": null,
-          "head": null,
-          "attachment": null,
-          "all_files": true
-        },
-        {
-          "name": "bslib-card-styles",
-          "version": "0.5.1",
-          "src": {
-            "href": "bslib-card-styles-0.5.1"
-          },
-          "meta": null,
-          "script": null,
-          "stylesheet": "card.css",
-          "head": null,
-          "attachment": null,
-          "all_files": true
         }
       ]
     },
-    "sf_vital_signs-figure": {
+    "sf_vitals_adjusted-figure": {
       "x": {
         "data": [
           {
@@ -254,8 +235,8 @@
               265.64999999999998
             ],
             "y": [
-              10,
-              10
+              30,
+              30
             ],
             "text": "",
             "type": "scatter",
@@ -278,30 +259,6 @@
               265.64999999999998
             ],
             "y": [
-              30,
-              30
-            ],
-            "text": "",
-            "type": "scatter",
-            "mode": "lines",
-            "line": {
-              "width": 1.8897637795275593,
-              "color": "rgba(127,127,127,1)",
-              "dash": "dot"
-            },
-            "hoveron": "points",
-            "showlegend": false,
-            "xaxis": "x",
-            "yaxis": "y7",
-            "hoverinfo": "text",
-            "frame": null
-          },
-          {
-            "x": [
-              -12.65,
-              265.64999999999998
-            ],
-            "y": [
               200,
               200
             ],
@@ -315,8 +272,8 @@
             },
             "hoveron": "points",
             "showlegend": false,
-            "xaxis": "x2",
-            "yaxis": "y8",
+            "xaxis": "x",
+            "yaxis": "y7",
             "hoverinfo": "text",
             "frame": null
           },
@@ -466,8 +423,8 @@
               265.64999999999998
             ],
             "y": [
-              -10,
-              -10
+              18.5,
+              18.5
             ],
             "text": "",
             "type": "scatter",
@@ -490,30 +447,6 @@
               265.64999999999998
             ],
             "y": [
-              18.5,
-              18.5
-            ],
-            "text": "",
-            "type": "scatter",
-            "mode": "lines",
-            "line": {
-              "width": 1.8897637795275593,
-              "color": "rgba(127,127,127,1)",
-              "dash": "dot"
-            },
-            "hoveron": "points",
-            "showlegend": false,
-            "xaxis": "x",
-            "yaxis": "y7",
-            "hoverinfo": "text",
-            "frame": null
-          },
-          {
-            "x": [
-              -12.65,
-              265.64999999999998
-            ],
-            "y": [
               45,
               45
             ],
@@ -527,8 +460,8 @@
             },
             "hoveron": "points",
             "showlegend": false,
-            "xaxis": "x2",
-            "yaxis": "y8",
+            "xaxis": "x",
+            "yaxis": "y7",
             "hoverinfo": "text",
             "frame": null
           },
@@ -654,7 +587,7 @@
           },
           {
             "x": 0,
-            "y": 0,
+            "y": 22.09,
             "text": "",
             "type": "scatter",
             "mode": "lines",
@@ -672,7 +605,7 @@
           },
           {
             "x": 0,
-            "y": 22.09,
+            "y": 70,
             "text": "",
             "type": "scatter",
             "mode": "lines",
@@ -685,24 +618,6 @@
             "showlegend": false,
             "xaxis": "x",
             "yaxis": "y7",
-            "hoverinfo": "text",
-            "frame": null
-          },
-          {
-            "x": 0,
-            "y": 70,
-            "text": "",
-            "type": "scatter",
-            "mode": "lines",
-            "line": {
-              "width": 3.7795275590551185,
-              "color": "rgba(0,0,0,1)",
-              "dash": "solid"
-            },
-            "hoveron": "points",
-            "showlegend": false,
-            "xaxis": "x2",
-            "yaxis": "y8",
             "hoverinfo": "text",
             "frame": null
           },
@@ -848,8 +763,8 @@
           },
           {
             "x": 0,
-            "y": 0,
-            "text": "<b>9600-002<\/b><br />2022-01-01<br />Screening (day 0)<br />Value: 0 %",
+            "y": 22.09,
+            "text": "<b>9600-002<\/b><br />2022-01-01<br />Screening (day 0)<br />Value: 22.09 kg/m2",
             "type": "scatter",
             "mode": "markers",
             "marker": {
@@ -874,32 +789,6 @@
           },
           {
             "x": 0,
-            "y": 22.09,
-            "text": "<b>9600-002<\/b><br />2022-01-01<br />Screening (day 0)<br />Value: 22.09 kg/m2",
-            "type": "scatter",
-            "mode": "markers",
-            "marker": {
-              "autocolorscale": false,
-              "color": "rgba(26,150,65,1)",
-              "opacity": 1,
-              "size": 15.118110236220474,
-              "symbol": "circle",
-              "line": {
-                "width": 1.8897637795275593,
-                "color": "rgba(0,0,0,1)"
-              }
-            },
-            "hoveron": "points",
-            "name": "(within limits,No)",
-            "legendgroup": "(within limits,No)",
-            "showlegend": false,
-            "xaxis": "x",
-            "yaxis": "y7",
-            "hoverinfo": "text",
-            "frame": null
-          },
-          {
-            "x": 0,
             "y": 70,
             "text": "<b>9600-002<\/b><br />2022-01-01<br />Screening (day 0)<br />Value: 70 kg",
             "type": "scatter",
@@ -919,8 +808,8 @@
             "name": "(within limits,No)",
             "legendgroup": "(within limits,No)",
             "showlegend": false,
-            "xaxis": "x2",
-            "yaxis": "y8",
+            "xaxis": "x",
+            "yaxis": "y7",
             "hoverinfo": "text",
             "frame": null
           },
@@ -962,9 +851,9 @@
         ],
         "layout": {
           "margin": {
-            "t": 37.80540920266948,
+            "t": 38.239603119622792,
             "r": 7.3059360730593621,
-            "b": 37.147874956094142,
+            "b": 37.582068873047447,
             "l": 43.105022831050235
           },
           "plot_bgcolor": "rgba(255,255,255,1)",
@@ -1115,7 +1004,7 @@
             {
               "text": "Pulse",
               "x": 0.23505603985056039,
-              "y": 0.72471022128556373,
+              "y": 0.72318375829627479,
               "showarrow": false,
               "ax": 0,
               "ay": 0,
@@ -1133,7 +1022,7 @@
             {
               "text": "Resp",
               "x": 0.76494396014943966,
-              "y": 0.72471022128556373,
+              "y": 0.72318375829627479,
               "showarrow": false,
               "ax": 0,
               "ay": 0,
@@ -1151,25 +1040,7 @@
             {
               "text": "Temperature",
               "x": 0.23505603985056039,
-              "y": 0.47471022128556373,
-              "showarrow": false,
-              "ax": 0,
-              "ay": 0,
-              "font": {
-                "color": "rgba(26,26,26,1)",
-                "family": "",
-                "size": 14.611872146118724
-              },
-              "xref": "paper",
-              "yref": "paper",
-              "textangle": 0,
-              "xanchor": "center",
-              "yanchor": "bottom"
-            },
-            {
-              "text": "Weight change since screening",
-              "x": 0.76494396014943966,
-              "y": 0.47471022128556373,
+              "y": 0.47318375829627479,
               "showarrow": false,
               "ax": 0,
               "ay": 0,
@@ -1186,8 +1057,8 @@
             },
             {
               "text": "BMI",
-              "x": 0.23505603985056039,
-              "y": 0.22471022128556375,
+              "x": 0.76494396014943966,
+              "y": 0.47318375829627479,
               "showarrow": false,
               "ax": 0,
               "ay": 0,
@@ -1204,8 +1075,8 @@
             },
             {
               "text": "Weight",
-              "x": 0.76494396014943966,
-              "y": 0.22471022128556375,
+              "x": 0.23505603985056039,
+              "y": 0.22318375829627476,
               "showarrow": false,
               "ax": 0,
               "ay": 0,
@@ -1223,7 +1094,7 @@
           ],
           "yaxis": {
             "domain": [
-              0.77528977871443627,
+              0.77681624170372521,
               1
             ],
             "automargin": true,
@@ -1292,7 +1163,7 @@
               "xref": "paper",
               "x0": 0,
               "x1": 0.47011207970112079,
-              "y0": 0.77528977871443627,
+              "y0": 0.77681624170372521,
               "y1": 1
             },
             {
@@ -1324,7 +1195,7 @@
               "xref": "paper",
               "x0": 0.52988792029887921,
               "x1": 1,
-              "y0": 0.77528977871443627,
+              "y0": 0.77681624170372521,
               "y1": 1
             },
             {
@@ -1356,8 +1227,8 @@
               "xref": "paper",
               "x0": 0,
               "x1": 0.47011207970112079,
-              "y0": 0.52528977871443627,
-              "y1": 0.72471022128556373
+              "y0": 0.52681624170372521,
+              "y1": 0.72318375829627479
             },
             {
               "type": "rect",
@@ -1373,7 +1244,7 @@
               "x1": 0.47011207970112079,
               "y0": 0,
               "y1": 26.301369863013704,
-              "yanchor": 0.72471022128556373,
+              "yanchor": 0.72318375829627479,
               "ysizemode": "pixel"
             },
             {
@@ -1388,8 +1259,8 @@
               "xref": "paper",
               "x0": 0.52988792029887921,
               "x1": 1,
-              "y0": 0.52528977871443627,
-              "y1": 0.72471022128556373
+              "y0": 0.52681624170372521,
+              "y1": 0.72318375829627479
             },
             {
               "type": "rect",
@@ -1405,7 +1276,7 @@
               "x1": 1,
               "y0": 0,
               "y1": 26.301369863013704,
-              "yanchor": 0.72471022128556373,
+              "yanchor": 0.72318375829627479,
               "ysizemode": "pixel"
             },
             {
@@ -1420,72 +1291,8 @@
               "xref": "paper",
               "x0": 0,
               "x1": 0.47011207970112079,
-              "y0": 0.27528977871443627,
-              "y1": 0.47471022128556373
-            },
-            {
-              "type": "rect",
-              "fillcolor": "transparent",
-              "line": {
-                "color": "transparent",
-                "width": 0.66417600664176002,
-                "linetype": "solid"
-              },
-              "yref": "paper",
-              "xref": "paper",
-              "x0": 0,
-              "x1": 0.47011207970112079,
-              "y0": 0,
-              "y1": 26.301369863013704,
-              "yanchor": 0.47471022128556373,
-              "ysizemode": "pixel"
-            },
-            {
-              "type": "rect",
-              "fillcolor": "transparent",
-              "line": {
-                "color": "rgba(51,51,51,1)",
-                "width": 0.66417600664176002,
-                "linetype": "solid"
-              },
-              "yref": "paper",
-              "xref": "paper",
-              "x0": 0.52988792029887921,
-              "x1": 1,
-              "y0": 0.27528977871443627,
-              "y1": 0.47471022128556373
-            },
-            {
-              "type": "rect",
-              "fillcolor": "transparent",
-              "line": {
-                "color": "transparent",
-                "width": 0.66417600664176002,
-                "linetype": "solid"
-              },
-              "yref": "paper",
-              "xref": "paper",
-              "x0": 0.52988792029887921,
-              "x1": 1,
-              "y0": 0,
-              "y1": 26.301369863013704,
-              "yanchor": 0.47471022128556373,
-              "ysizemode": "pixel"
-            },
-            {
-              "type": "rect",
-              "fillcolor": "transparent",
-              "line": {
-                "color": "rgba(51,51,51,1)",
-                "width": 0.66417600664176002,
-                "linetype": "solid"
-              },
-              "yref": "paper",
-              "xref": "paper",
-              "x0": 0,
-              "x1": 0.47011207970112079,
-              "y0": 0,
-              "y1": 0.22471022128556375
+              "y0": 0.27681624170372521,
+              "y1": 0.47318375829627479
             },
             {
               "type": "rect",
@@ -1501,7 +1308,7 @@
               "x1": 0.47011207970112079,
               "y0": 0,
               "y1": 26.301369863013704,
-              "yanchor": 0.22471022128556375,
+              "yanchor": 0.47318375829627479,
               "ysizemode": "pixel"
             },
             {
@@ -1516,8 +1323,8 @@
               "xref": "paper",
               "x0": 0.52988792029887921,
               "x1": 1,
-              "y0": 0,
-              "y1": 0.22471022128556375
+              "y0": 0.27681624170372521,
+              "y1": 0.47318375829627479
             },
             {
               "type": "rect",
@@ -1533,7 +1340,39 @@
               "x1": 1,
               "y0": 0,
               "y1": 26.301369863013704,
-              "yanchor": 0.22471022128556375,
+              "yanchor": 0.47318375829627479,
+              "ysizemode": "pixel"
+            },
+            {
+              "type": "rect",
+              "fillcolor": "transparent",
+              "line": {
+                "color": "rgba(51,51,51,1)",
+                "width": 0.66417600664176002,
+                "linetype": "solid"
+              },
+              "yref": "paper",
+              "xref": "paper",
+              "x0": 0,
+              "x1": 0.47011207970112079,
+              "y0": 0,
+              "y1": 0.22318375829627476
+            },
+            {
+              "type": "rect",
+              "fillcolor": "transparent",
+              "line": {
+                "color": "transparent",
+                "width": 0.66417600664176002,
+                "linetype": "solid"
+              },
+              "yref": "paper",
+              "xref": "paper",
+              "x0": 0,
+              "x1": 0.47011207970112079,
+              "y0": 0,
+              "y1": 26.301369863013704,
+              "yanchor": 0.22318375829627476,
               "ysizemode": "pixel"
             }
           ],
@@ -1593,7 +1432,7 @@
             "gridcolor": null,
             "gridwidth": 0,
             "zeroline": false,
-            "anchor": "y8",
+            "anchor": "y6",
             "title": "",
             "hoverformat": ".2f"
           },
@@ -1644,7 +1483,7 @@
             "linewidth": 0,
             "showgrid": true,
             "domain": [
-              0.77528977871443627,
+              0.77681624170372521,
               1
             ],
             "gridcolor": "rgba(204,204,204,1)",
@@ -1701,8 +1540,8 @@
             "linewidth": 0,
             "showgrid": true,
             "domain": [
-              0.52528977871443627,
-              0.72471022128556373
+              0.52681624170372521,
+              0.72318375829627479
             ],
             "gridcolor": "rgba(204,204,204,1)",
             "gridwidth": 0.66417600664176002,
@@ -1755,8 +1594,8 @@
             "linewidth": 0,
             "showgrid": true,
             "domain": [
-              0.52528977871443627,
-              0.72471022128556373
+              0.52681624170372521,
+              0.72318375829627479
             ],
             "gridcolor": "rgba(204,204,204,1)",
             "gridwidth": 0.66417600664176002,
@@ -1809,8 +1648,8 @@
             "linewidth": 0,
             "showgrid": true,
             "domain": [
-              0.27528977871443627,
-              0.47471022128556373
+              0.27681624170372521,
+              0.47318375829627479
             ],
             "gridcolor": "rgba(204,204,204,1)",
             "gridwidth": 0.66417600664176002,
@@ -1820,63 +1659,6 @@
             "hoverformat": ".2f"
           },
           "yaxis6": {
-            "type": "linear",
-            "autorange": false,
-            "range": [
-              -13,
-              12
-            ],
-            "tickmode": "array",
-            "ticktext": [
-              "-10",
-              "-5",
-              "0",
-              "5",
-              "10"
-            ],
-            "tickvals": [
-              -10,
-              -5,
-              0,
-              5,
-              10
-            ],
-            "categoryorder": "array",
-            "categoryarray": [
-              "-10",
-              "-5",
-              "0",
-              "5",
-              "10"
-            ],
-            "nticks": null,
-            "ticks": "outside",
-            "tickcolor": "rgba(51,51,51,1)",
-            "ticklen": 3.6529680365296811,
-            "tickwidth": 0.66417600664176002,
-            "showticklabels": true,
-            "tickfont": {
-              "color": "rgba(77,77,77,1)",
-              "family": "",
-              "size": 11.68949771689498
-            },
-            "tickangle": 0,
-            "showline": false,
-            "linecolor": null,
-            "linewidth": 0,
-            "showgrid": true,
-            "domain": [
-              0.27528977871443627,
-              0.47471022128556373
-            ],
-            "gridcolor": "rgba(204,204,204,1)",
-            "gridwidth": 0.66417600664176002,
-            "zeroline": false,
-            "anchor": "x2",
-            "title": "",
-            "hoverformat": ".2f"
-          },
-          "yaxis7": {
             "type": "linear",
             "autorange": false,
             "range": [
@@ -1917,17 +1699,17 @@
             "linewidth": 0,
             "showgrid": true,
             "domain": [
-              0,
-              0.22471022128556375
+              0.27681624170372521,
+              0.47318375829627479
             ],
             "gridcolor": "rgba(204,204,204,1)",
             "gridwidth": 0.66417600664176002,
             "zeroline": false,
-            "anchor": "x",
+            "anchor": "x2",
             "title": "",
             "hoverformat": ".2f"
           },
-          "yaxis8": {
+          "yaxis7": {
             "type": "linear",
             "autorange": false,
             "range": [
@@ -1972,12 +1754,12 @@
             "showgrid": true,
             "domain": [
               0,
-              0.22471022128556375
+              0.22318375829627476
             ],
             "gridcolor": "rgba(204,204,204,1)",
             "gridwidth": 0.66417600664176002,
             "zeroline": false,
-            "anchor": "x2",
+            "anchor": "x",
             "title": "",
             "hoverformat": ".2f"
           },
@@ -1993,7 +1775,7 @@
             }
           },
           "hovermode": "closest",
-          "height": 650,
+          "height": 613,
           "barmode": "relative"
         },
         "config": {
@@ -2079,9 +1861,9 @@
         },
         {
           "name": "crosstalk",
-          "version": "1.2.0",
+          "version": "1.2.1",
           "src": {
-            "href": "crosstalk-1.2.0"
+            "href": "crosstalk-1.2.1"
           },
           "meta": null,
           "script": "js/crosstalk.min.js",

@@ -5,13 +5,14 @@
 make_query_testdata <- function(){
   data.frame(
     "query_id"      = c("ID1-unique_id", "ID2-unique_id"),
-    "subject_id"     = c("ID1"),
+    "type"          = c("Normal"),
+    "subject_id"    = c("ID1"),
     "event_label"   = c("Visit 1"),
     "item_group"    = c("Vital signs", "Adverse events"),
     "item"          = c("Pulse", "Sepsis"),
     "timestamp"     = c("2023-01-01 01:01:01 UTC", "2023-11-02 01:01:01 UTC"),
     "n"             = c(1),     
-    "reviewer"      = c("Test author", "Author3"),
+    "reviewer"      = c("Test author (Administrator)", "Author3 (Medical Monitor)"),
     "query"         = c("Query text test.", "Scoring correct? Please verify"),
     "resolved"      = c("No"),
     "resolved_date" = NA_character_,

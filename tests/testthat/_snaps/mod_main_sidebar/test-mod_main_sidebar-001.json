@@ -5,20 +5,29 @@
     "test-review_config_1-config_review": 0,
     "test-review_forms_1-add_comment": false,
     "test-review_forms_1-confirm_review_tabs": "show_checkbox",
-    "test-review_forms_1-form_reviewed": true,
+    "test-review_forms_1-form_reviewed": false,
     "test-review_forms_1-review_comment": "",
     "test-review_forms_1-save_review": 0,
     "test-show_review_controls": "panel_controls",
     "test-write_query-create_query": 1,
-    "test-write_query-query.sidebar": false,
     "test-write_query-query_add_input": 0,
+    "test-write_query-query_major": false,
+    "test-write_query-query_major_info": false,
     "test-write_query-query_select_item": "",
     "test-write_query-query_select_visit": "Any visit",
+    "test-write_query-query_sidebar": true,
     "test-write_query-query_text": ""
   },
   "output": {
     "test-navigate_forms_1-form_name": "<center>Adverse events<\/center>",
-    "test-review_forms_1-save_review_error": "",
+    "test-review_forms_1-save_review_error": {
+      "message": "Requires review",
+      "call": "NULL",
+      "type": [
+        "shiny.silent.error",
+        "validation"
+      ]
+    },
     "test-synch_info-db_synch_info": "EDC Sync date: <br>Unknown<br><br>EDC latest data: Unknown",
     "test-write_query-query_error": {
       "message": "",
@@ -28,7 +37,7 @@
         "validation"
       ]
     },
-    "test-write_query-reviewer": "Author: Admin "
+    "test-write_query-reviewer": "Author: Admin (Medical Monitor)"
   },
   "export": {
 

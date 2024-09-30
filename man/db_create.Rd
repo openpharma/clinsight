@@ -7,8 +7,8 @@
 db_create(data, db_path, reviewed = "No", reviewer = "", status = "new")
 }
 \arguments{
-\item{data}{Either a data frame with review data (Usually created with
-\code{\link[=get_review_data]{get_review_data()}}), or a character path to the raw data files.}
+\item{data}{A data frame with review data (Usually created with
+\code{\link[=get_review_data]{get_review_data()}}).}
 
 \item{db_path}{A character vector with the path to the database to be
 created.}
@@ -16,8 +16,7 @@ created.}
 \item{reviewed}{Character vector. Sets the reviewed tag in the review
 database.}
 
-\item{reviewer}{Character vector. Sets the reviewer in the review database.
-Defaults to \code{Admin}.}
+\item{reviewer}{Character vector. Sets the reviewer in the review database.}
 
 \item{status}{Character vector. Sets the status in the review database.
 Defaults to \code{new}.}

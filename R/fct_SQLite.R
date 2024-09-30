@@ -48,14 +48,13 @@ db_temp_connect <- function(db_path, code, drv = RSQLite::SQLite()){
 #' Creates application database. To create a database with all data flagged as
 #' 'new', use the default settings of `reviewed`, `reviewer`, and `status`.
 #'
-#' @param data Either a data frame with review data (Usually created with
-#'   [get_review_data()]), or a character path to the raw data files.
+#' @param data A data frame with review data (Usually created with
+#'   [get_review_data()]).
 #' @param db_path A character vector with the path to the database to be
 #'   created.
 #' @param reviewed Character vector. Sets the reviewed tag in the review
 #'   database.
 #' @param reviewer Character vector. Sets the reviewer in the review database.
-#'   Defaults to `Admin`.
 #' @param status Character vector. Sets the status in the review database.
 #'   Defaults to `new`.
 #'
@@ -74,11 +73,15 @@ db_create <- function(
   stopifnot(!file.exists(db_path))
   stopifnot(reviewed %in% c("Yes", "No", ""))
   stopifnot(is.data.frame(data) || is.character(data))
-  if(!is.data.frame(data)){
-    data <- get_raw_data(data) |> 
-      merge_meta_with_data() |> 
-      get_review_data() 
+  db_directory <- dirname(db_path)
+  if(tools::file_ext(db_path) == "sqlite" && !dir.exists(db_directory)) {
+    cat("Directory to store user database does not exist. ", 
+        "Creating new directory named '", db_directory, "'.\n", sep = "")
+    dir_created <- dir.create(db_directory)
+    if(!dir_created) stop("Could not create directory for user database")
   }
+  data_synch_time <- attr(data, "synch_time") %||% ""
+  
   df <- data |> 
     dplyr::mutate(
       reviewed = reviewed, 
@@ -91,7 +94,7 @@ db_create <- function(
   new_data <- list(
     "all_review_data" = df,
     "query_data"      = query_data_skeleton,
-    "db_synch_time"   = data.frame(synch_time = "")
+    "db_synch_time"   = data.frame(synch_time = data_synch_time)
   )
   con <- get_db_connection(db_path)
   for(i in names(new_data)){
@@ -111,9 +114,6 @@ db_create <- function(
 #' @param common_vars A character vector containing the common key variables.
 #' @param edit_time_var A character vector with the column name of the edit-time
 #'   variable.
-#' @param data_synched Logical. Whether the database was synched or not. If
-#'   TRUE, the synchronization date stored in the database will be updated to
-#'   the current day.
 #'
 #' @return Nothing will be returned.
 #' @export
@@ -123,36 +123,43 @@ db_update <- function(
     db_path,
     common_vars = c("subject_id", "event_name", "item_group", 
                     "form_repeat", "item_name"), 
-    edit_time_var = "edit_date_time",
-    data_synched = FALSE
+    edit_time_var = "edit_date_time"
 ){
   stopifnot(file.exists(db_path))
   con <- get_db_connection(db_path)
-  # check if review_data is still up to date and if not, expand review_data
-  review_data <- con |> 
-    dplyr::tbl("all_review_data") |> 
-    dplyr::collect() 
+  data_synch_time <- attr(data, "synch_time") %||% ""
   
-  edit_time_raw <- get_max_time(data, edit_time_var) 
-  edit_time_review <- get_max_time(review_data, edit_time_var) 
-  # update db synch time: 
-  if(data_synched){
-    cat("Raw data renewed. Updating synch date \n")
-    DBI::dbWriteTable(con, "db_synch_time", data.frame("synch_time" =   time_stamp()), overwrite = TRUE)
+  db_synch_time <- tryCatch({
+    DBI::dbGetQuery(con, "SELECT synch_time FROM db_synch_time") |> 
+    unlist(use.names = FALSE)}, error = \(e){""})
+  if(!identical(data_synch_time, "") && identical(data_synch_time, db_synch_time)){
+    return("Database up to date. No update needed") 
   }
-  # update review_data DB if needed:
-  if(edit_time_raw == edit_time_review){
-    return("Database up to date. No update needed")
+  if(!identical(data_synch_time, "") && db_synch_time > data_synch_time){
+    return({
+      warning("DB synch time is more recent than data synch time. ", 
+              "Aborting synchronization.")
+      })
   }
+  # Continue in the case data_synch_time is missing and if data_synch_time is 
+  # more recent than db_synch_time
+  review_data <- DBI::dbGetQuery(con, "SELECT * FROM all_review_data")
   cat("Start adding new rows to database\n")
   updated_review_data <- update_review_data(
     review_df = review_data,
-    latest_review_data = data, #get_review_data(merge_meta_with_data(data), common_vars), 
+    latest_review_data = data,
     common_vars = common_vars,
-    edit_time_var = edit_time_var
-    )
+    edit_time_var = edit_time_var,
+    update_time = data_synch_time
+  )
   cat("writing updated review data to database...\n")
   DBI::dbWriteTable(con, "all_review_data", updated_review_data, append = TRUE)
+  DBI::dbWriteTable(
+    con, 
+    "db_synch_time", 
+    data.frame("synch_time" = data_synch_time), 
+    overwrite = TRUE
+  )
   cat("Finished updating review data\n")
 }
 
@@ -205,12 +212,12 @@ db_save_review <- function(
     dplyr::collect()
   if(nrow(new_review_rows) == 0){return(
     warning("Review state unaltered. No review will be saved.")
-    )}
+  )}
   new_review_rows <- new_review_rows |> 
     db_slice_rows(slice_vars = c("timestamp", "edit_date_time"), group_vars = common_vars) |> 
     dplyr::select(-dplyr::all_of(cols_to_change)) |> 
     # If there are multiple edits, make sure to only select the latest editdatetime for all items:
-   # dplyr::slice_max(edit_date_time, by = dplyr::all_of(common_vars)) |> 
+    # dplyr::slice_max(edit_date_time, by = dplyr::all_of(common_vars)) |> 
     dplyr::bind_cols(rv_row[cols_to_change]) # bind_cols does not work in a db connection.
   cat("write updated review data to database\n")
   lapply(tables, \(x){DBI::dbWriteTable(db_con, x, new_review_rows, append = TRUE)}) |> 
@@ -243,63 +250,73 @@ db_save <- function(data, db_path, db_table = "query_data"){
 }
 
 
-#' Retrieve latest query
+#'Retrieve query from database
 #'
-#' Small helper function to retrieve the latest query with the provided query_id
-#' and query follow-up number (n)
+#'Small helper function to retrieve a query from the database. if no follow-up
+#'number is provided, all messages will be collected.
 #'
-#' @param db_path Character vector. Needs to be a valid path to a database.
-#' @param query_id Character string with the query identifier to extract from
-#'   the database.
-#' @param n Numerical or character string, with the query follow-up number to
-#'   extract
-#' @param db_table Character vector with the name of the table to read from.
+#'@param db_path Character vector. Needs to be a valid path to a database.
+#'@param query_id Character string with the query identifier to extract from the
+#'  database.
+#'@param n (optional) numerical or character string, with the query follow-up
+#'  number to extract
+#'@param db_table Character vector with the name of the table to read from.
 #'
-#' @return A data frame 
-#' @export
-#' @inheritParams db_slice_rows
+#'@return A data frame
+#'@export
+#'@inheritParams db_slice_rows
 #'
-#' @examples 
+#' @examples
 #'local({
-#' temp_path <- withr::local_tempfile(fileext = ".sqlite") 
+#' temp_path <- withr::local_tempfile(fileext = ".sqlite")
 #' con <- get_db_connection(temp_path)
-#' 
+#'
 #' new_query <- dplyr::tibble(
-#'  query_id = "ID124234", 
+#'  query_id = "ID124234",
 #'  subject_id = "ID1",
 #'  n = 1,
 #'  timestamp = "2024-02-05 01:01:01",
 #'  other_info = "testinfo"
-#' ) 
+#' )
 #' DBI::dbWriteTable(con, "query_data", new_query)
-#' db_get_latest_query(temp_path, query_id = "ID124234", n = 1)
+#' db_get_query(temp_path, query_id = "ID124234", n = 1)
 #' })
 #' 
-db_get_latest_query <- function(
+db_get_query <- function(
     db_path, 
-    query_id = new_query$query_id, 
-    n = new_query$n,
+    query_id, 
+    n = NULL,
     db_table = "query_data",
     slice_vars = "timestamp",
     group_vars = c("query_id", "n")
-    ){
+){
   stopifnot(file.exists(db_path))
   stopifnot(is.character(query_id))
   stopifnot(is.character(db_table))
-  stopifnot(is.numeric(n) | is.character(n))
+  stopifnot(is.null(n) | is.numeric(n) | is.character(n))
+  filter_n <- ifelse(is.null(n), "", " AND n=?n")
+  sql <- paste0(
+    "SELECT * FROM ?db_table WHERE query_id = ?query_id", 
+    filter_n, ";"
+  )
   db_temp_connect(db_path, {
-    sql <- "SELECT * FROM ?db_table WHERE query_id = ?query_id AND n = ?n;"
-    query <- DBI::sqlInterpolate(con, sql, db_table = db_table[1], 
-                                 query_id = query_id[1], n = n[1])
+    sql_args <- list(
+      conn = con, 
+      sql = sql, 
+      db_table = db_table[1], 
+      query_id = query_id[1]
+    )
+    sql_args$n <- n[1] #So that this function argument will be conditional.
+    query <- do.call(DBI::sqlInterpolate, sql_args)
     DBI::dbGetQuery(con, query) |> 
       db_slice_rows(slice_vars = slice_vars, group_vars = group_vars) |> 
       dplyr::as_tibble()
   })
 }
 
-#' Retrieve latest review
+#' Retrieve review
 #'
-#' Small helper function to retrieve the latest review data from the database
+#' Small helper function to retrieve the (latest) review data from the database
 #' with the given subject id (`subject`) and `form`.
 #'
 #' @param db_path Character vector. Needs to be a valid path to a database.
@@ -328,10 +345,10 @@ db_get_latest_query <- function(
 #'   ) |>
 #'    dplyr::as_tibble()
 #'   DBI::dbWriteTable(con, "all_review_data", review_data)
-#'   db_get_latest_review(temp_path, subject = "Test_name", form = "Test_group")
+#'   db_get_review(temp_path, subject = "Test_name", form = "Test_group")
 #' })
 #' 
-db_get_latest_review <- function(
+db_get_review <- function(
     db_path, 
     subject = review_row$subject_id, 
     form = review_row$item_group,
@@ -339,13 +356,14 @@ db_get_latest_review <- function(
     slice_vars = c("timestamp", "edit_date_time"),
     group_vars = c("subject_id", "event_name", "item_group",
                    "form_repeat", "item_name")
-    ){
+){
   stopifnot(file.exists(db_path))
   stopifnot(is.character(subject))
   stopifnot(is.character(form))
   db_temp_connect(db_path, {
     sql <- "SELECT * FROM ?db_table WHERE subject_id = ?id AND item_group = ?group;"
-    query <- DBI::sqlInterpolate(con, sql, db_table = db_table[1], id = subject[1], group = form[1])
+    query <- DBI::sqlInterpolate(con, sql, db_table = db_table[1], 
+                                 id = subject[1], group = form[1])
     DBI::dbGetQuery(con, query) |> 
       db_slice_rows(slice_vars = slice_vars, group_vars = group_vars) |> 
       dplyr::as_tibble()

@@ -2,12 +2,14 @@
   "bioconductor.version": null,
   "external.libraries": [],
   "ignored.packages": [
+    "clinsight",
     "pak",
     "pkgdown",
     "stringr",
     "kableExtra",
     "usethis",
-    "cowplot"
+    "cowplot",
+    "shinymanager"
   ],
   "package.dependency.fields": [
     "Imports",

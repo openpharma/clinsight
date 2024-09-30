@@ -17,8 +17,18 @@ interest in the common forms.
 and in addition the columns \code{unit}, \code{lower_limit}, \code{uppter_limit}. Used to
 select and rename the variables of interest in the common forms.
 \item \code{general}: Contains the same columns as \code{common_forms}.
-\item \code{groups}: Contains the columns \code{item_group}, \code{item_type}, \code{item_scale},
-\code{use_unscaled_limits}.
+\item \code{form_level_data}: For specifying form-level data. When reading in metadata
+from the Excel format, this table will created and sanitized if needed,
+creating the minimum columns  \code{item_group}, \code{item_scale},
+\code{use_unscaled_limits}, and \code{review_required}. The column \code{item_group}
+contains the name of the forms to which the settings apply. Columns
+\code{item_scale} and \code{use_unscaled_limits} are used in
+\code{\link[=mod_study_forms_server]{mod_study_forms_server()}} to specify the scaling of the figures. It is
+recommended to set the required values here; by default, they are both set
+to FALSE in \code{\link[=mod_study_forms_server]{mod_study_forms_server()}}. The last column that is expected
+here is \code{review_required}, which can be used to specify whether review is
+required for a form. Will default to TRUE for each form it is unset for a
+form.
 }
 }
 }

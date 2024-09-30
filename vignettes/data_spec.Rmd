@@ -1,0 +1,246 @@
+---
+title: "App Configuration & Input Data Specifications"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{App Configuration & Input Data Specifications}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Note: this page is "under construction" until the `clinsight` package developers create helper functions that transform at least one other EDC data source into the desired format. In the meantime, this page provides useful documentation to the existing data specifications. Eventually, it will also share guidelines about how to combine your input data with metadata sources, etc.
+
+## Intro
+
+In order to get started and plug your organizations EDC data into the `clinsight` application, please notice this app is outfitted with a `./inst/golem-config.yml` file to configure several elements of deployment. Below is a typical configuration file:
+
+```yml
+default:
+  golem_name: clinsight
+  golem_version: 0.0.0.9004
+  app_prod: no
+  user_identification: test_user
+  study_data: !expr clinsight::clinsightful_data
+  meta_data: !expr clinsight::metadata
+  user_db: user_db.sqlite
+  user_roles:
+   Administrator: admin
+   Medical Monitor: medical_monitor
+   Data Manager: data_manager
+shinymanager:
+  app_prod: yes
+  user_identification: shinymanager
+  study_data: study_data.rds
+  meta_data: metadata.rds
+  credentials_db: credentials_db.sqlite
+```
+
+First and foremost, notice that the configuration can vary depending on deployment use case. For example, the above file is designed to run (by default) with test data built into the app. Only once in `production` mode, does the app actually leverage data you've gathered from your EDC system, as RDS files. As seen above, there are several other elements defined in `golem-config.yml` that can be configured before launching the application for the first time. 
+
+The main two elements are `meta_data` and `study_data`, accepting file paths to the app's primary data sources, stored as RDS files. The `study_data` object should be created with the pre-processing helper function called `merge_meta_with_data()` which accepts raw data sources and merges them with the `meta_data` object defined in this article.
+
+Other elements are:
+
+- `user_db` a Character string providing the path to the app's review database. If it does not exist, one will be created based on the `study_data` and `meta_data`, with all data labeled as new/not yet reviewed.
+- `credentials_db` Character string. Path to the credentials database. Only needed when using `shinymanager` for user identification. The database will be created automatically if needed. 
+
+Depending on the EDC vendor used, the size, shape, and format of their "raw data" may vary. We've compiled a few functions that help admin users pre-process the data they own. However, before we deep dive into how to use those, let's focus on what the final result of those pre-processing steps to understand what's being fed to the app.
+
+
+## Data Specifications
+
+Baked into the `clinsight` package is an internal data.frame called `clinsightful_data`, which is comprised of randomly generated test data for this application. Here is a preview of that data:
+
+```{r clinsightful_data}
+# Run to load the data into an R session. 
+# pkg_name <- "clinsight"
+# library(pkg_name, character.only = TRUE)
+# data("clinsightful_data") 
+
+head(clinsight::clinsightful_data)
+
+```
+
+This object is an example of a healthy `study_data` object, that should preferably be stored as an RDS file prior to launching the app. let's inspect it a little more:
+
+### `study_data`
+
+The RDS file (or data.frame) ported to the `study_data` element contains the following required columns below. 
+
+- `site_code`: character or integer, identifier for study site; If an integer, recommended to add prefix "Site" as this will display more intuitively in the application's UI
+- `subject_id`: character, unique identifier for a subject
+- `event_repeat`: integer, helps keep track of unique `event_id` for a single `subject_id` and `event_date`
+- `event_id`: character, names that help classify types of  `event_name`s into like-groups, generally characterized by site visits. For example,  "SCR" for the screening visit, "VIS" for Visit X (where X is some integer), and "EXIT" for when the patient exits the study trial. However, some `event_id`s track events that could apply outside of any visit, like AE, ConMed, Medical History, etc.
+- `event_name`: character, an "event" generally characterizes some sort of site visit, whether that be a "Screening", "Visit X" (where X is some integer), "Exit", or "Any Visit".
+- `event_date`: Date, the date associated with `event_name`
+- `form_id`: character, a unique identifier for the form the `item_name` metric and `item_value` were pulled from. Note: when `item_type` is continuous, `form_id` can contain several different `item_group`s. However, when `item_type` is 'other', `item_group` can be made up of several `form_id` values.
+- `form_repeat`: integer, helps keep track of unique `item_name`s collected from a specific `form_id` for a given `subject_id`. `form_repeat` is particularly helpful when consolidating data like Adverse Events into this data format. Specifically, if more than one AE is collected on a patient, they'll have more than one `form_repeat`
+- `edit_date_time`: datetime (POSIXct), the last time this record was edited
+- `db_update_time`: datetime (POSIXct), the last time the database storing this record was updated.
+- `region`: character, describing the region code that `site_code` falls under
+- `day`: a difftime number, meaning it contains both a number and unit of time. It measures the number of days each visit is from screening
+- `vis_day`: numeric, a numeric representation of `day`
+- `vis_num`: numeric, a numeric representation of `event_name`
+- `event_label`: character, an abbreviation of `event_name`
+- `item_name`:  character, describes a metric or parameter of interest.
+- `item_type`:  character, classifies `item_name`s into either 'continuous' or 'other', where continuous types are those generally associated with the CDISC "basic data structure" (BDS). That is, each `item_name` metric is collected over time at a patient visit (`event_name`). The 'other' type represents all non-time dependent measures, like demographic info, adverse events, Medications, medical history, etc.
+- `item_group`:  character, provides is a high level category that groups like-`item_name`s together. For example, and `item_group` = 'Vital Signs' will group together pertinent `item_name` metrics like BMI, Pulse, Blood pressure, etc.
+- `item_value`:  character, the measurement collected for a given `item_name`. The value collected may be a number like 150 (when collecting a patient's weight) or a word (such as 'white' for the subject's race).
+- `item_unit`:  character, tracking the unit of measurement for `item_name` and `item_value`.
+- `lower_lim`: numeric, some `item_name`s (particularly the 'continuous' type) have a pre-defined range of values that are considered normal. This is the lower limit to that range.
+- `upper_lim`: numeric, some `item_name`s (particularly the 'continuous' type) have a pre-defined range of values that are considered normal. This is the upper limit to that range.
+- `significance`:  character, either 'CS' which means 'Clinically Significant' or 'NCS' which means 'Not Clinically Significant'
+- `reason_notdone`:  character, an effort to describe why the `item_value` field is `NA` / missing.
+
+
+
+### Processing your Raw Data
+
+So, the next logical question is "How do I get my EDC's data into the `study_data` format?" Well, this package currently offers a pre-processing helper function called `merge_meta_with_data()` which accepts raw data sources from the [Viedoc] EDC vendor and merges them with the `meta_data` object (defined below) to create a viable `study_data` object. As such, we'll spend some time covering what this helper function expects of your raw data and `meta_data` object and how it transforms it into the `study_data` object we need for app launch.
+
+First, let's discuss the app's metadata needs!
+
+### `meta_data`
+
+The `meta_data` object is a list of data.frames which (not surprisingly) contains metadata information for the application. It will provide study-specific settings, and controls where study data in the application will be visible. It can be created in the right format by changing the Excel template in the `data-raw/metadata.xlsx`, and then create a metadata object with the function`get_metadata` (e.g. `meta <- clinsight::get_metadata("path-to-custom-metadata.xlsx")`). The `meta_data` object should be saved as a `.rds` file so that `clinsight` can use it (e.g. `saveRDS(meta, "data_folder/metadata.rds")`).
+
+As stated previously, the metadata should also be used to shape the raw `study_data` in the right format, and to dictate which variables will be included in the `study_data`. This can be done by using the function `merge_meta_with_data()`, and will be described in detail in the next section. The goal is that most, if not all study-specific data will be captured in the metadata, leaving the scripts to run the application largely unaltered between studies.
+
+Just like for `study_data`, this package also bundles a built-in metadata object called `metadata`. To view an example metadata file, run the following chunk of code:
+
+```{r metadata}
+
+meta_data <- clinsight::metadata
+lapply(meta_data, head)
+
+```
+
+Specifications for the list of data.frames include:
+
+ - `column_names`: Used to map raw data variable names over to new names.
+     - `name_raw`: character, variable name in the raw data source
+     - `name_new`: character, desired variable name to use in `study_data` and in the application
+ - `events`: Used to create a simple timeline in the application, with predefined number of planned visits, N. It contains the following columns:
+     - `event_number`: integer. Example: 0, 1, 2, ..., N
+     - `event_name`: character. Example: "Screening", "Visit 1", "Visit 2", ..., "Visit N"
+     - `event_label`: character. Example: "V0", "V1", "V2", ..., "VN"
+  
+ - `common_forms`: Used to select and rename the variables of interest in the raw data when transformed into the desired `study_data` format. Note: creating the `study_data` data.frame should use `merge_meta_with_data()` where (not surprisingly), the metadata is merged with the raw study data. `common_forms` contains the columns below:
+     - `var`: character, the variable name to display in the table, mapped from a known `item_name` provided in `study_data`. Example: `item_name = "AE Name"` will be replaced by "AE_AETERM" when `var = "AE_AETERM"`.
+     - `suffix`: Usually blank in this data.frame. This column is more commonly used in the `study_forms` data.frame
+     - `item_name`: character, known `item_name`s found in `study_data`. There are certain `item_name`s that are required, even if missing in `study_data`, including: "AE Name", "AE start date", "AE end date", "AE date of worsening", "AE CTCAE severity", "AE CTCAE severity worsening", "Serious Adverse Event", and "SAE Start date".
+     - `item_type`: character, known `item_type` corresponding to those found for `item_name`s in `study_data`.
+     - `item_group`: character, known `item_group` corresponding to those found for `item_name`s in `study_data`.
+  
+ - `study_forms`: Contains the same columns as the data.frame `common_forms`, and in addition the columns `unit`, `lower_limit`, `upper_limit`. Used to select and rename the raw data variables of interest. In addition, the `suffix` column is used more regularly in this "study" context. This is because, these variable names may have a consistent trunk / stem, with varying suffixes to describe a similar style measurement. So instead of creating a new row for these variables in the `meta_data` data.frame, we allow for inclusion of several suffixes. For example, VS_PULSE measures beats/min. Typically, these measures are collected using VS_PULSE_VSORRES & VS_PULSE_VSREAND, but in this format, we can list the stem "VS_PULSE" as the `var` and `"VSORRES, VSREAND"` in the suffix field. As for the new columns, they are defined as follows:
+      - `unit`: character, unit of measure
+      - `lower_limit`: numeric, the lower limit of what's considered clinically significant
+      - `upper_limit`: numeric, the upper limit of what's considered clinically significant
+  
+ - `general`: Contains the same columns as `common_forms` and is used in the same way. That is, it's used to select and rename the raw data when transformed into the desired `study_data` format. Note: creating the `study_data` data.frame should use `merge_meta_with_data()` where (not surprisingly), the metadata is merged with the raw study data. Please refer to the `common_forms` spec above. However, I will note that there are certain `item_name`s that are required, even if missing in `study_data`, including: "Age", "Sex", "ECOG", "Eligible", "WHO.classification", "DiscontinuationReason", "DrugAdminDate", and "DrugAdminDose".
+ 
+ - `groups`: Contains the columns `item_group`, `item_type`, `item_scale`,`use_unscaled_limits`.
+
+ - `table_names`: Used for renaming table column names into a more readable format. It is not required to name all column names; if the column names are not defined here, the raw name will be used instead.
+     - `table_name`: character, 
+     - `raw_name`: character,
+
+
+#### `get_metadata()` & `items_expanded`
+
+So, lastly, you may notice that there is a 7th data.frame called `items_expanded`. This data.frame is actually derived after the user runs a helper function called `get_metadata()` which takes an XLSX file containing the first 6 data.frames (one per tab) and expands the tabs of your choosing with the column of your choosing. In other words, `get_metadata()` makes sure your existing metadata is in the correct format and helps us get create something a bit more polished & digestible, like `items_expanded` for `clinsight::metadata`. As you'll see later, performing this step is crucial for `merge_meta_with_data()` which comes next. So, after you've compiled your metadata XLSX spreadsheet with the first 6 data.frames (tabs) mentioned above, you're ready to run code that looks like the following:
+
+```{r get_metadata(), eval = FALSE}
+# usethis::edit_r_environ()
+meta_path <- Sys.getenv("METADATA_PATH")
+meta_data <- get_metadata(file.path(meta_path, "my_metadata.xlsx"),
+                          expand_tab_items = c("common_forms", "study_forms", "general"),
+                          expand_cols = "suffix")
+
+```
+
+In summary, `get_metadata` will initiate the `meta_data` object with the first 6 data.frames directly from the Excel file, and then `items_expanded` will be created by expanding `common_forms`, `study_forms`, and `general` data.frames by the values stored in the `suffix` column. The result will be appended onto the `meta_data` object as the 7th data.frame in the list.
+
+Once complete, save your metadata to an .RDS file:
+
+```{r save_metadata, eval = FALSE}
+
+saveRDS(meta_data, file.path(Sys.getenv("METADATA_PATH"), "meta_data.rds"))
+
+```
+
+
+### Read in your study data with `get_raw_csv_data()`
+
+Now that we have an understanding of our `meta_data` specs, we can discuss how they interact with your raw data. The rest of this vignette will feel more like an R script as we discuss how this happens. First, we need to read in our raw data. There is yet another helper function bundled in this package called `get_raw_csv_data()` to help us do that. It's a pretty simple wrapper function that basically reads in raw data files stored as CSVs from a designated folder. As such, your function call should look something like the following code chunk. Notice, you can either set your raw data path explicitly, or in your `.Renviron` file.
+
+```{r get_raw_csv_data(), eval = FALSE}
+# usethis::edit_r_environ()
+data_path <- Sys.getenv("DATA_PATH")
+raw_data <- get_raw_csv_data(data_path)
+
+```
+
+### Finish the job with `merge_meta_with_data()`
+
+Now that our data has been read in and minimally cleaned up, we can finally use the `merge_meta_with_data()` function as shown below:
+
+```{r merge_meta_with_data(), eval = FALSE}
+
+study_data <- merge_meta_with_data(data = raw_data, meta = meta_data)
+
+```
+
+This function uses the rest of the metadata data.frames to further organize your raw data into something usable by the app, including but not limited to the following:
+
+- renaming columns to the required column names needed in the application
+  - it will use the column provided in the metadata tab `column_names`, and will verify if the new names still match with the expected/required names. Notice that all of these variables are required, so it's important that you identify which variables from your EDC mirror them. 
+- converting columns to the required column type (e.g. dates, character, integer)
+- fixing multiple choice variables using a function called `fix_multiple_choice_vars()`
+- adding derivative values and columns such as:
+  - `vis_day` and `vis_num`, `day` (variables based on `event_id` and `event_date`). 
+- `event_name` & `event_label` have some clean up performed on it's values to standardize them for presentation in the app. Last, the data is ordered by `site_code` and `subject_id`
+- merging the raw data with `meta_data$items_expanded`
+- 
+- applying any study specific fixes using a function called `apply_study_specfific_fixes()`. #TODO
+
+
+Once complete, save your metadata to an .RDS file:
+
+```{r save_study_data, eval = FALSE}
+
+saveRDS(study_data, file.path(Sys.getenv("DATA_PATH"), "study_data.rds"))
+
+```
+
+## Launch the app
+
+Circling back to the configuration file we shared at the beginning of this vignette, you're now ready to launch this application.
+
+```yml
+default:
+  golem_name: clinsight
+  golem_version: 0.0.0.9004
+  app_prod: no
+  user_identification: test_user
+  study_data: !expr clinsight::clinsightful_data
+  meta_data: !expr clinsight::metadata
+  user_db: user_db.sqlite
+  user_roles:
+   Administrator: admin
+   Medical Monitor: medical_monitor
+   Data Manager: data_manager
+shinymanager:
+  app_prod: yes
+  user_identification: shinymanager
+  study_data: study_data.rds
+  meta_data: metadata.rds
+  credentials_db: credentials_db.sqlite
+```
+
+

@@ -1,5 +1,6 @@
 describe(
-  "db_slice_rows. Feature 1 | As a user, I want to be able to select rows in a database or 
+  "db_slice_rows. Feature 1 | Select rows with latest time stamp. 
+    As a user, I want to be able to select rows in a database or 
     data frame, that have the lastest timestamp per selection group. This way, 
     I can select (for example) the latest data point with the latest review activity.
     I want to be able to at least filter using two timestamp variables, so that the data
@@ -7,7 +8,7 @@ describe(
     as well as on the latest edit of the review data by the reviewer in the application.", 
   {
     it(
-      "Scenario 1. Given a data frame with review data with one date-time variable [review_dttm] 
+      "Scenario 1 - Given a data frame with review data with one date-time variable [review_dttm] 
         and grouping variables [ID] and [group], 
         I expect that I can slice the database with the output being a data frame,
         and with the output data frame containing the rows with the latest data point per group", 
@@ -31,7 +32,7 @@ describe(
       }
     )
     it(
-      "Scenario 2. Given a data frame with review data with and two date-time variables, 
+      "Scenario 2 - Given a data frame with review data with and two date-time variables, 
         that is stored in a database,
         I expect that I can slice the data frame based on both date-time variables,
         selecting the rows with the latest date-time values.", 
@@ -62,7 +63,7 @@ describe(
       }
     )
     it(
-      "Scenario 3. Given a data frame with the same date time values in the same group, 
+      "Scenario 3 - Given a data frame with the same date time values in the same group, 
       and the data frame being saved in a database,
       I expect a warning if I try to slice the database,
       and that the last entry per group is selected, which is the most recent entry.", {

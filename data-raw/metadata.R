@@ -1,6 +1,6 @@
 ## code to prepare metadata. Raw data is expected to be in Excel format.
-library(here)
+devtools::load_all(".")
 
-metadata <- get_metadata(filepath = here::here("data-raw/metadata.xlsx"))
+metadata <- get_metadata(filepath = app_sys("data-raw/metadata.xlsx"))
 
 usethis::use_data(metadata, overwrite = TRUE)

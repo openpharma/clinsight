@@ -5,8 +5,8 @@
 \title{Merge metadata with raw data}
 \usage{
 merge_meta_with_data(
-  data = raw_data,
-  meta = metadata,
+  data,
+  meta,
   expected_columns = c("LBORNR_Lower", "LBORNR_Upper", "LBORRESU", "LBORRESUOTH",
     "LBREASND", "unit", "lower_limit", "upper_limit", "LBCLSIG")
 )
@@ -25,7 +25,7 @@ A data frame.
 }
 \description{
 Study-specific function that will combine raw data gathered with
-\code{\link[=get_raw_data]{get_raw_data()}} with study-specific metadata. It also fixes the metadata
+\code{\link[=get_raw_csv_data]{get_raw_csv_data()}} with study-specific metadata. It also fixes the metadata
 suffix if needed, and renames the limits and significance values to the app
 standard names. Some study-specific variables need to be created with this
 step.

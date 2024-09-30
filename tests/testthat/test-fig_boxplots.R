@@ -1,6 +1,5 @@
 describe(
-  "fig_boxplots(). Feature 1 | As a user, I should be able to create custom 
-  boxplots.", 
+  "fig_boxplots(). Creates custom boxplots.", 
   {
     set.seed(2023)
     fig_data <- data.frame(

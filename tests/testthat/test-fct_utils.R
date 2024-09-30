@@ -115,11 +115,11 @@ describe(
     })
     it("works on character vectors and returns NA if a 
        value in the vector is missing", {
-      expect_equal(
-        title_case(c("convert me", "convert me too", NA)), 
-        c("Convert Me", "Convert Me Too", NA_character_)
-      )
-    })
+         expect_equal(
+           title_case(c("convert me", "convert me too", NA)), 
+           c("Convert Me", "Convert Me Too", NA_character_)
+         )
+       })
   }
 )
 
@@ -200,24 +200,24 @@ describe(
     )
     it("gets all unique variables, outputs a data frame, and returns the 
        expected results", {
-      expect_true(is.data.frame(get_unique_vars(test_case, "ID")))
-      expect_true(is.data.frame(get_unique_vars(test_case, c("Sites", "ID"))))
-      expect_equal(get_unique_vars(test_case, c("Sites", "ID")), expected_results)
-    })
+         expect_true(is.data.frame(get_unique_vars(test_case, "ID")))
+         expect_true(is.data.frame(get_unique_vars(test_case, c("Sites", "ID"))))
+         expect_equal(get_unique_vars(test_case, c("Sites", "ID")), expected_results)
+       })
     it("returns a data frame with with the requested variables but with missing values 
        if the variables are not available in the dataset", {
-      expect_equal(
-        get_unique_vars(test_case, "missing_var"),
-        data.frame(missing_var = NA_character_)
-        )
-      outcome <- get_unique_vars(test_case, c("Sites", "missing_var"))
-      rownames(outcome) <- NULL
-      outcome_expected <- data.frame(
-        Sites =  c("site_1", "site_3", "site_4", "site_9"),
-        missing_var = rep(NA_character_, times = 4)
-      )
-      expect_equal(outcome, outcome_expected)
-    })
+         expect_equal(
+           get_unique_vars(test_case, "missing_var"),
+           data.frame(missing_var = NA_character_)
+         )
+         outcome <- get_unique_vars(test_case, c("Sites", "missing_var"))
+         rownames(outcome) <- NULL
+         outcome_expected <- data.frame(
+           Sites =  c("site_1", "site_3", "site_4", "site_9"),
+           missing_var = rep(NA_character_, times = 4)
+         )
+         expect_equal(outcome, outcome_expected)
+       })
     it("works with a data frame as input", {
       test_df <- dplyr::bind_rows(test_case)
       expect_equal(
@@ -297,17 +297,17 @@ describe(
     it("does not error with if the column to be converted does not exist in one 
        of the data frames. Instead the column will be added for that data frame 
        with missing character values.", {
-      test_case <- list(
-        data.frame("ID" = "subj_x"),
-        data.frame("ID" = "subj_7", "values" = 10)
-      )
-      expected_results <- data.frame(
-        ID = c("subj_x", "subj_7"),
-        values = c(NA_character_, "10")
-      )
-      expect_true(is.data.frame(bind_rows_custom(test_case, "values")))
-      expect_equal(bind_rows_custom(test_case, "values"), expected_results)
-    })
+         test_case <- list(
+           data.frame("ID" = "subj_x"),
+           data.frame("ID" = "subj_7", "values" = 10)
+         )
+         expected_results <- data.frame(
+           ID = c("subj_x", "subj_7"),
+           values = c(NA_character_, "10")
+         )
+         expect_true(is.data.frame(bind_rows_custom(test_case, "values")))
+         expect_equal(bind_rows_custom(test_case, "values"), expected_results)
+       })
   }
 )
 
@@ -336,11 +336,11 @@ describe(
     })
     it("returns an empty factor with new_levels as levels if a 
        vector with only missing values is provided", {
-      expect_equal(
-        collapse_fct_levels(factor(NA_character_), new_levels = list("A-C" = "") ),
-        factor(NA_character_, levels = "A-C")
-      )
-    })
+         expect_equal(
+           collapse_fct_levels(factor(NA_character_), new_levels = list("A-C" = "") ),
+           factor(NA_character_, levels = "A-C")
+         )
+       })
   }
 )
 
@@ -364,13 +364,13 @@ describe(
   "cols_to_char() works", 
   {
     it("converts non-numeric columns (for example factors) to character", {
-         expect_true(is.character(cols_to_char(iris)$Species))
-       })
+      expect_true(is.character(cols_to_char(iris)$Species))
+    })
     it("errors with non-data.frame input", {
       expect_error(cols_to_char(list(iris, mtcars)))
       expect_error(cols_to_char(iris$Species))
     })
-
+    
   }
 )
 
@@ -442,7 +442,7 @@ describe(
     it("04 | Can use multiple include and exclude statements simultaneously", {
       expect_equal(
         vector_select(names(iris), include = c("Sepal", "Species"), 
-                        exclude = c("Length", "Width")),
+                      exclude = c("Length", "Width")),
         "Species"
       )
     })
@@ -454,7 +454,166 @@ describe(
       expect_equal(
         vector_select(names(iris), include = NULL, exclude = NULL),
         names(iris)
-        )
+      )
     })
   }
 )
+
+describe("format_test_results() works", {
+  it("errors with incorrect input", {
+    expect_error(
+      format_test_results(data.frame()),
+      "Expecting an object of class 'testthat_results'"
+    )
+  })
+  it("returns a list with expected output and informs that all tests passed", {
+    res <- list(
+      list(
+        file = c("test-file1.R"),
+        context = "",
+        test = c("Test description"),
+        user = 0.1234,
+        system = 0,
+        real = 0.145,
+        results = list(
+          expectation("success", "success message"), 
+          expectation("success", "second success message"), 
+          expectation("success", "third success message")
+        )
+      )
+    )
+    class(res) <- "testthat_results"
+    # this approach instead of snapshot prevents the message being printed 
+    # when running all tests, which might be confusing:
+    temp.sink <- withr::local_tempfile(fileext = ".txt")
+    sink(file = temp.sink)
+    output <- format_test_results(res)
+    sink()
+    expect_equal(
+      readLines(temp.sink),
+      c(
+        " failed skipped   error warning  passed ",
+        "      0       0       0       0       3 ",
+        "All tests passed successfully"
+      )
+    )
+    expect_true(inherits(output, "list"))
+    expect_true(inherits(output$results, "testthat_results"))
+    expect_equal(
+      names(output), 
+      c("results", "time", "session", "sum_results", "test_outcome")
+    )
+  })
+  
+  
+  it("returns a list with expected output, and prints a warning if there are failures", {
+    res <- list(
+      list(
+        file = c("test-file1.R"),
+        context = "",
+        test = c("Test description"),
+        user = 0.1234,
+        system = 0,
+        real = 0.145,
+        results = list(
+          expectation("success", "success message"), 
+          expectation("failure", "first failure message"), 
+          expectation("failure", "second failure message")
+        )
+      )
+    )
+    class(res) <- "testthat_results"
+    temp.sink <- withr::local_tempfile(fileext = ".txt")
+    sink(file = temp.sink)
+    output <- suppressWarnings(format_test_results(res))
+    sink()
+    expect_equal(
+      readLines(temp.sink),
+      c(
+        " failed skipped   error warning  passed ",
+        "      2       0       0       0       1 ",
+        "There was a failure in the following tests: ",
+        "test-file1.R",
+        "Failure messages: ",
+        "",
+        "first failure message",
+        "",
+        "second failure message"
+      )
+    )
+    expect_true(inherits(output, "list"))
+    expect_true(inherits(output$results, "testthat_results"))
+    expect_equal(
+      names(output), 
+      c("results", "time", "session", "sum_results", "test_outcome")
+    )
+  })
+})
+
+describe("all_tests_passed() provides expected output", {
+  it("returns TRUE when all pass", {
+    res <- list(
+      "sum_results" = c("failed" = 0, "skipped" = 0, "error" = 0, "warning" = 0, "passed" = 10)
+    )
+    expect_true(all_tests_passed(res))
+  })
+  it("returns TRUE with a skipped test and [include_skipped] is FALSE", {
+    res <- list(
+      "sum_results" = c("failed" = 0, "skipped" = 1, "error" = 0, "warning" = 0, "passed" = 10)
+    )
+    expect_true(all_tests_passed(res, include_skipped = FALSE))
+  })
+  it("returns FALSE with a failure", {
+    res <- list(
+      "sum_results" = c("failed" = 1, "skipped" = 0, "error" = 0, "warning" = 0, "passed" = 10)
+    )
+    expect_false(all_tests_passed(res))
+  })
+  it("returns FALSE with a skipped test and [include_skipped] is TRUE", {
+    res <- list(
+      "sum_results" = c("failed" = 0, "skipped" = 1, "error" = 0, "warning" = 0, "passed" = 10)
+    )
+    expect_false(all_tests_passed(res))
+  })
+  it("returns FALSE with an error", {
+    res <- list(
+      "sum_results" = c("failed" = 0, "skipped" = 0, "error" = 1, "warning" = 0, "passed" = 10)
+    )
+    expect_false(all_tests_passed(res))
+  })
+  it("returns FALSE with a warning", {
+    res <- list(
+      "sum_results" = c("failed" = 0, "skipped" = 0, "error" = 0, "warning" = 1, "passed" = 10)
+    )
+    expect_false(all_tests_passed(res))
+  })
+  it("returns FALSE with no tests available", {
+    res <- list(
+      "sum_results" = c("failed" = 0, "skipped" = 0, "error" = 0, "warning" = 0, "passed" = 0)
+    )
+    expect_false(all_tests_passed(res))
+  })
+  it("returns NA with a warning if [var] does not exist in the results list", {
+    res <- list("sum_results" = c())
+    expect_warning(all_tests_passed(res, var = "non_existing_var"))
+    expect_equal(
+      suppressWarnings(all_tests_passed(res, var = "non_existing_var")), 
+      NA
+    )
+  })
+})
+
+describe("expectation_type() works", {
+  it("outputs TRUE if expectation type matches the provided type and FALSE when not", {
+    types <- c("success", "failure", "warning", "error")
+    lapply(types, \(x){
+      expect_true(expectation_type(expectation(x, "foo"), x))
+    })
+    expect_false(expectation_type(expectation("success", "s"), "failure"))
+    expect_false(expectation_type(expectation("failure", "f"), "success"))
+  })
+  it("errors with incorrect input", {
+    expect_error(expectation_type(data.frame), "is.expectation")
+    expect_error(expectation_type(expectation("failure", "f"), "non-existing expectation"))
+  })
+})

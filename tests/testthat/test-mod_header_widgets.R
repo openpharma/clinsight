@@ -1,6 +1,5 @@
 describe(
-  "mod_header_widgets. Feature 1 | As a user, I want to be able to run the 
-  module in isolation", 
+  "mod_header_widgets. Feature 1 | Load application module in isolation.", 
   {
     it("Can load the module UI, with functioning internal parameters.", {
       ui <- mod_header_widgets_ui(id = "test")
@@ -24,7 +23,8 @@ describe(
           )
         ), 
         rev_data = reactiveValues(), 
-        navinfo = reactiveValues()
+        navinfo = reactiveValues(),
+        events = metadata$events
       ) 
       testServer(mod_header_widgets_server, args = testargs, {
         ns <- session$ns
@@ -37,15 +37,16 @@ describe(
 )
 
 describe(
-  "mod_header_widgets. Feature 2 | As a user, I want to be able to get an overview
-  of the selected, active patient's data in the header. The information should 
-  show the patient ID, the number of adverse events (including a color code 
-  showing if new/updated adverse events are available), the number of forms that 
-  need a review, and a timeline figure showing the number of visits that the 
-  patient performed.", 
+  "mod_header_widgets. Feature 2 | Get overview statistics of selected patient. 
+      As a user, I want to be able to get an overview
+      of the selected, active patient's data in the header. The information should 
+      show the patient ID, the number of adverse events (including a color code 
+      showing if new/updated adverse events are available), the number of forms that 
+      need a review, and a timeline figure showing the number of visits that the 
+      patient performed.", 
   {
     it(
-      "Scenario 1 | Subject 1, with Adverse Events and a Serious Adverse Event. 
+      "Scenario 1 - Subject 1, with Adverse Events and a Serious Adverse Event. 
         Given data sets [rev_data] and [nav_info] and 
         [r$filtered_tables$`Adverse events`] set with test data, 
         and the active subject ID [r$subject_id] set to ['Subj01'] , 
@@ -87,7 +88,8 @@ describe(
               )
             })
           ), 
-          navinfo = reactiveValues()
+          navinfo = reactiveValues(),
+          events = metadata$events
         ) 
         
         testServer(mod_header_widgets_server, args = testargs, {
@@ -105,7 +107,7 @@ describe(
       }
     )
     it(
-      "Scenario 2 | Subject 2, no AEs recorded. Given data sets [rev_data] and [nav_info] and 
+      "Scenario 2 - Subject 2, no AEs recorded. Given data sets [rev_data] and [nav_info] and 
         [r$filtered_data$`Adverse events`] set with test data, 
         and the active subject ID [r$subject_id] set to ['Subj02'], 
         and the active subject having no adverse event data available, 
@@ -143,7 +145,8 @@ describe(
               )
             })
           ), 
-          navinfo = reactiveValues()
+          navinfo = reactiveValues(),
+          events = metadata$events
         ) 
         
         testServer(mod_header_widgets_server, args = testargs, {

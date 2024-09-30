@@ -119,16 +119,12 @@
                                 "bmi"                        "weight" 
       
       
-      $groups
-      [1] "Vital signs"    "Electrolytes"   "Renal function" "Liver function"
-      [5] "CBC regular"    "Response"      
-      
       $all_forms
               main_tab             form
       1  Common events   Adverse events
-      2  Common events  Medical History
-      3  Common events       Medication
-      4  Common events Conc. Procedures
+      2  Common events       Medication
+      3  Common events Conc. Procedures
+      4  Common events  Medical History
       5     Study data      Vital signs
       6     Study data     Electrolytes
       7     Study data   Renal function
@@ -160,13 +156,27 @@
       $table_names
                  Edit date                 Date                Event 
           "edit_date_time"         "event_date"        "event_label" 
-                     Event                    N                 Form 
+                     Event                   eN                 Form 
               "event_name"       "event_repeat"         "item_group" 
-                     Query             Resolved               Author 
-                   "query"           "resolved"           "reviewer" 
-                    Status              Subject                 Time 
-                  "status"         "subject_id"          "timestamp" 
-                        Dx 
-      "WHO.classification" 
+                         N                Query             Resolved 
+             "form_repeat"              "query"           "resolved" 
+                    Author               Status              Subject 
+                "reviewer"             "status"         "subject_id" 
+                      Time                   Dx                 Type 
+               "timestamp" "WHO.classification"               "type" 
+      
+      $form_level_data
+               item_group item_scale use_unscaled_limits review_required
+      1    Adverse events         NA                  NA            TRUE
+      2        Medication         NA                  NA            TRUE
+      3  Conc. Procedures         NA                  NA            TRUE
+      4   Medical History         NA                  NA            TRUE
+      5       Vital signs      FALSE                TRUE            TRUE
+      6      Electrolytes       TRUE               FALSE            TRUE
+      7    Renal function       TRUE               FALSE            TRUE
+      8    Liver function       TRUE               FALSE           FALSE
+      9       CBC regular       TRUE               FALSE            TRUE
+      10         Response      FALSE               FALSE            TRUE
+      11          General         NA                  NA            TRUE
       
 

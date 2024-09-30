@@ -8,8 +8,7 @@ db_update(
   data,
   db_path,
   common_vars = c("subject_id", "event_name", "item_group", "form_repeat", "item_name"),
-  edit_time_var = "edit_date_time",
-  data_synched = FALSE
+  edit_time_var = "edit_date_time"
 )
 }
 \arguments{
@@ -21,10 +20,6 @@ db_update(
 
 \item{edit_time_var}{A character vector with the column name of the edit-time
 variable.}
-
-\item{data_synched}{Logical. Whether the database was synched or not. If
-TRUE, the synchronization date stored in the database will be updated to
-the current day.}
 }
 \value{
 Nothing will be returned.

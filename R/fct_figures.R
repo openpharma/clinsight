@@ -80,32 +80,32 @@ fig_boxplots <- function(
 }
 
 #' Create timeline
-#' 
-#' Function to create a simple timeline figure using `ggplot2`. 
+#'
+#' Function to create a simple timeline figure using `ggplot2`.
 #'
 #' @param data Data frame to use.
-#' @param meta_data Metadata file with all possible time points.
+#' @param events Data frame containing information about all events. Used
+#'   to create the right labels in the timeline figure.
 #'
 #' @return A ggplot2 object.
 #' @export
-#'
+#' 
 fig_timeline <- function(
     data, 
-    meta_data = metadata
+    events
     ){
   stopifnot(is.data.frame(data))
-  stopifnot(is.list(meta_data))
+  stopifnot(is.data.frame(events))
   
   completed_events <- data |> 
     dplyr::filter(!is.na(event_name), 
-                  event_label %in% meta_data$events$event_label) |> 
+                  event_label %in% events$event_label) |> 
     dplyr::slice_head(n = 1, by = c(event_name, item_name)) |>  # 051022 LSA ensures only one item per event
     dplyr::count(event_name, event_label) |> 
     dplyr::mutate(
-      all_data = factor(as.numeric(n == length(meta_data$items$item_name))),
-      event_label = factor(event_label, levels = meta_data$events$event_label)
+      event_label = factor(event_label, levels = events$event_label)
     )
-  all_events <- meta_data$events |> 
+  all_events <- events |> 
     dplyr::mutate(event_name = factor(event_name, levels = event_name), 
                   event_label = factor(event_label, levels = event_label))
   uneven_events   <- all_events[1:length(all_events$event_name) %% 2 == 0, ]
@@ -137,23 +137,20 @@ fig_timeline <- function(
     )
   # by showing these layers conditionally, no error will occur when no subject 
  # is yet selected
- if(nrow(data) == 0) fig else {
+ if(nrow(data) == 0 || nrow(completed_events) == 0) fig else {
    fig + 
-     ggplot2::geom_segment(
-       data = completed_events,
-       ggplot2::aes(
-         x = dplyr::first(event_label), 
-         xend = dplyr::last(event_label),
-         y = 1, 
-         yend = 1
-       )
+     ggplot2::annotate(
+       geom = "segment",
+       x = dplyr::first(completed_events$event_label), 
+       xend = dplyr::last(completed_events$event_label),
+       y = 1, 
+       yend = 1
      ) +
      ggplot2::geom_point(
        data = completed_events, 
-       ggplot2::aes(fill = all_data), 
+       fill = "grey80",
        size = 6, pch = 21
-     ) +
-     ggplot2::scale_fill_manual(values = c("0" = "grey80", "1" = "black"))
+     )
  }
 }
 

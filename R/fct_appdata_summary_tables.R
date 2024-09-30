@@ -109,27 +109,37 @@ get_timeline_data <- function(
   df
 }
 
-#' Get available data  
-#' 
-#' Creates a data frame containing info about available data per individual, 
-#' such as visits, adverse events, etc. Will be used in module [mod_queries_server()], 
-#' to select available items to create a query for per individual and per form. 
-#' Required columns are the ones distinctively identifying an item. 
-#' For now that are site_code, event_name, subject_id, event_label, item_group, item_name.
-#' 
-#' @param data list of data frames to be used. Will be used for extracting the 
-#' variables of interest from the study-specific forms.
-#' @param tables list of tables to be used. Will be used for extracting the 
-#' variables of interest from the common forms.
-#' @param all_forms A data frame containing all forms. 
-#' Mandatory columns are "form" (containing the form names), and "main_tab" 
-#' (containing the tab name where the form should be located). 
+#' Get available data
+#'
+#' Creates a data frame containing info about available data per individual,
+#' such as visits, adverse events, etc. Will be used in module
+#' [mod_queries_server()], to select available items to create a query for per
+#' individual and per form. Required columns are the ones distinctively
+#' identifying an item. For now that are site_code, event_name, subject_id,
+#' event_label, item_group, item_name.
+#'
+#' @param data list of data frames to be used. Will be used for extracting the
+#'   variables of interest from the study-specific forms.
+#' @param tables list of tables to be used. Will be used for extracting the
+#'   variables of interest from the common forms.
+#' @param all_forms A data frame containing all forms. Mandatory columns are
+#'   "form" (containing the form names), and "main_tab" (containing the tab name
+#'   where the form should be located).
+#' @param form_repeat_name A character string with the name of the `form_repeat`
+#'   variable. This variable (with this name) will be added to the item name if
+#'   duplicate names exist for each participant.
 #'
 #' @return A data frame with available data points per form.
 #' @export
-#'
-get_available_data <- function(data, tables, all_forms){
-  stopifnot(is.list(data), is.list(tables))
+#' 
+get_available_data <- function(
+    data, 
+    tables, 
+    all_forms,
+    form_repeat_name = "N"
+    ){
+  stopifnot(is.list(data), is.list(tables), is.character(form_repeat_name))
+  if(identical(form_repeat_name, character(0))){form_repeat_name <- "N"}
   study_event_selectors <- lapply(
     all_forms$form, 
     \(x){
@@ -138,12 +148,12 @@ get_available_data <- function(data, tables, all_forms){
         df_x <- data[[x]] |> 
           dplyr::select(
             dplyr::all_of(c("subject_id", "event_name", "event_label",  
-                            "item_group", "item_name"))
+                            "item_group", "item_name", "form_repeat"))
             )
       } else {
         if(is.null(tables[[x]])) return(NULL)
         df_x <- tables[[x]] |> 
-          dplyr::select(subject_id, "item_name" = Name) |>
+          dplyr::select(subject_id, "item_name" = Name, form_repeat) |>
           dplyr::mutate(item_group = x, event_name = "Any visit", 
                         event_label = "Any visit") 
       }
@@ -155,7 +165,20 @@ get_available_data <- function(data, tables, all_forms){
           )
     }) |> 
     dplyr::bind_rows()
-  study_event_selectors
+  # To uniquely identify events with the same name (mostly in common_forms):
+  study_event_selectors |> 
+    dplyr::mutate(
+      n = dplyr::n(), 
+      .by = c("subject_id", "item_group", "event_name", "item_name")
+    ) |> 
+    dplyr::mutate(
+      item_name = ifelse(
+        n > 1, 
+        sprintf("%s (%s: %s)", item_name, form_repeat_name, form_repeat), 
+        item_name
+      )
+    ) |> 
+    dplyr::select(-n)
 }
 
 

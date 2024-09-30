@@ -5,13 +5,75 @@
         "style": "bootstrap5",
         "filter": "none",
         "vertical": false,
-        "caption": "<caption style=\"caption-side: top; text-align: center;\">\n  <h5>\n    <b>Serious Adverse Events<\/b>\n  <\/h5>\n<\/caption>",
-        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Name<\/th>\n      <th>AESI<\/th>\n      <th>Start date<\/th>\n      <th>End date<\/th>\n      <th>CTCAE severity<\/th>\n      <th>Treatment related<\/th>\n      <th>Treatment action<\/th>\n      <th>Other action<\/th>\n      <th>Category<\/th>\n      <th>Awareness date<\/th>\n      <th>Date of death<\/th>\n      <th>Death reason<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
+        "extensions": [
+          "Scroller"
+        ],
+        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th>N<\/th>\n      <th>Name<\/th>\n      <th>AESI<\/th>\n      <th>Start date<\/th>\n      <th>End date<\/th>\n      <th>CTCAE severity<\/th>\n      <th>Treatment related<\/th>\n      <th>Treatment action<\/th>\n      <th>Other action<\/th>\n      <th>Category<\/th>\n      <th>Awareness date<\/th>\n      <th>Date of death<\/th>\n      <th>Death reason<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
         "options": {
+          "scrollY": 400,
+          "scrollX": true,
+          "scroller": true,
+          "deferRender": true,
+          "scrollResize": true,
+          "scrollCollapse": true,
+          "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"Serious Adverse Events\")\n}",
+          "dom": "f<\"header h5\">ti",
           "columnDefs": [
             {
-              "orderable": false,
+              "className": "dt-right",
               "targets": 0
+            },
+            {
+              "name": "N",
+              "targets": 0
+            },
+            {
+              "name": "Name",
+              "targets": 1
+            },
+            {
+              "name": "AESI",
+              "targets": 2
+            },
+            {
+              "name": "Start date",
+              "targets": 3
+            },
+            {
+              "name": "End date",
+              "targets": 4
+            },
+            {
+              "name": "CTCAE severity",
+              "targets": 5
+            },
+            {
+              "name": "Treatment related",
+              "targets": 6
+            },
+            {
+              "name": "Treatment action",
+              "targets": 7
+            },
+            {
+              "name": "Other action",
+              "targets": 8
+            },
+            {
+              "name": "Category",
+              "targets": 9
+            },
+            {
+              "name": "Awareness date",
+              "targets": 10
+            },
+            {
+              "name": "Date of death",
+              "targets": 11
+            },
+            {
+              "name": "Death reason",
+              "targets": 12
             }
           ],
           "order": [
@@ -34,6 +96,7 @@
         }
       },
       "evals": [
+        "options.initComplete",
         "options.ajax.data"
       ],
       "jsHooks": [
@@ -55,9 +118,9 @@
         },
         {
           "name": "dt-core-bootstrap5",
-          "version": "1.13.4",
+          "version": "1.13.6",
           "src": {
-            "href": "dt-core-bootstrap5-1.13.4"
+            "href": "dt-core-bootstrap5-1.13.6"
           },
           "meta": null,
           "script": [
@@ -72,9 +135,9 @@
         },
         {
           "name": "bootstrap",
-          "version": "5.2.2",
+          "version": "5.3.1",
           "src": {
-            "href": "bootstrap-5.2.2"
+            "href": "bootstrap-5.3.1"
           },
           "meta": {
             "viewport": "width=device-width, initial-scale=1, shrink-to-fit=no"
@@ -88,9 +151,9 @@
         },
         {
           "name": "bs3compat",
-          "version": "0.5.1",
+          "version": "0.8.0",
           "src": {
-            "href": "bs3compat-0.5.1"
+            "href": "bs3compat-0.8.0"
           },
           "meta": null,
           "script": [
@@ -104,10 +167,43 @@
           "all_files": true
         },
         {
-          "name": "crosstalk",
-          "version": "1.2.0",
+          "name": "dt-ext-scroller-bootstrap5",
+          "version": "1.13.6",
           "src": {
-            "href": "crosstalk-1.2.0"
+            "href": "dt-ext-scroller-bootstrap5-1.13.6"
+          },
+          "meta": null,
+          "script": [
+            "js/dataTables.scroller.min.js",
+            "js/scroller.bootstrap5.min.js"
+          ],
+          "stylesheet": "css/scroller.bootstrap5.min.css",
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": false
+        },
+        {
+          "name": "dt-plugin-scrollresize",
+          "version": "1.13.6",
+          "src": {
+            "href": "dt-plugin-scrollresize-1.13.6"
+          },
+          "meta": null,
+          "script": "source.min.js",
+          "stylesheet": [
+
+          ],
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": true
+        },
+        {
+          "name": "crosstalk",
+          "version": "1.2.1",
+          "src": {
+            "href": "crosstalk-1.2.1"
           },
           "meta": null,
           "script": "js/crosstalk.min.js",
@@ -123,13 +219,63 @@
         "style": "bootstrap5",
         "filter": "none",
         "vertical": false,
-        "caption": "<caption style=\"caption-side: top; text-align: center;\">\n  <h5>\n    <b>Adverse events<\/b>\n  <\/h5>\n<\/caption>",
-        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Name<\/th>\n      <th>AESI<\/th>\n      <th>start date<\/th>\n      <th>end date<\/th>\n      <th>CTCAE severity<\/th>\n      <th>Treatment related<\/th>\n      <th>Treatment action<\/th>\n      <th>Other action<\/th>\n      <th>Serious Adverse Event<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
+        "extensions": [
+          "Scroller"
+        ],
+        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th>N<\/th>\n      <th>Name<\/th>\n      <th>AESI<\/th>\n      <th>start date<\/th>\n      <th>end date<\/th>\n      <th>CTCAE severity<\/th>\n      <th>Treatment related<\/th>\n      <th>Treatment action<\/th>\n      <th>Other action<\/th>\n      <th>Serious Adverse Event<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
         "options": {
+          "scrollY": 400,
+          "scrollX": true,
+          "scroller": true,
+          "deferRender": true,
+          "scrollResize": true,
+          "scrollCollapse": true,
+          "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"Adverse events\")\n}",
+          "dom": "f<\"header h5\">ti",
           "columnDefs": [
             {
-              "orderable": false,
+              "className": "dt-right",
               "targets": 0
+            },
+            {
+              "name": "N",
+              "targets": 0
+            },
+            {
+              "name": "Name",
+              "targets": 1
+            },
+            {
+              "name": "AESI",
+              "targets": 2
+            },
+            {
+              "name": "start date",
+              "targets": 3
+            },
+            {
+              "name": "end date",
+              "targets": 4
+            },
+            {
+              "name": "CTCAE severity",
+              "targets": 5
+            },
+            {
+              "name": "Treatment related",
+              "targets": 6
+            },
+            {
+              "name": "Treatment action",
+              "targets": 7
+            },
+            {
+              "name": "Other action",
+              "targets": 8
+            },
+            {
+              "name": "Serious Adverse Event",
+              "targets": 9
             }
           ],
           "order": [
@@ -152,6 +298,7 @@
         }
       },
       "evals": [
+        "options.initComplete",
         "options.ajax.data"
       ],
       "jsHooks": [
@@ -173,9 +320,9 @@
         },
         {
           "name": "dt-core-bootstrap5",
-          "version": "1.13.4",
+          "version": "1.13.6",
           "src": {
-            "href": "dt-core-bootstrap5-1.13.4"
+            "href": "dt-core-bootstrap5-1.13.6"
           },
           "meta": null,
           "script": [
@@ -190,9 +337,9 @@
         },
         {
           "name": "bootstrap",
-          "version": "5.2.2",
+          "version": "5.3.1",
           "src": {
-            "href": "bootstrap-5.2.2"
+            "href": "bootstrap-5.3.1"
           },
           "meta": {
             "viewport": "width=device-width, initial-scale=1, shrink-to-fit=no"
@@ -206,9 +353,9 @@
         },
         {
           "name": "bs3compat",
-          "version": "0.5.1",
+          "version": "0.8.0",
           "src": {
-            "href": "bs3compat-0.5.1"
+            "href": "bs3compat-0.8.0"
           },
           "meta": null,
           "script": [
@@ -222,10 +369,43 @@
           "all_files": true
         },
         {
-          "name": "crosstalk",
-          "version": "1.2.0",
+          "name": "dt-ext-scroller-bootstrap5",
+          "version": "1.13.6",
           "src": {
-            "href": "crosstalk-1.2.0"
+            "href": "dt-ext-scroller-bootstrap5-1.13.6"
+          },
+          "meta": null,
+          "script": [
+            "js/dataTables.scroller.min.js",
+            "js/scroller.bootstrap5.min.js"
+          ],
+          "stylesheet": "css/scroller.bootstrap5.min.css",
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": false
+        },
+        {
+          "name": "dt-plugin-scrollresize",
+          "version": "1.13.6",
+          "src": {
+            "href": "dt-plugin-scrollresize-1.13.6"
+          },
+          "meta": null,
+          "script": "source.min.js",
+          "stylesheet": [
+
+          ],
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": true
+        },
+        {
+          "name": "crosstalk",
+          "version": "1.2.1",
+          "src": {
+            "href": "crosstalk-1.2.1"
           },
           "meta": null,
           "script": "js/crosstalk.min.js",
@@ -473,7 +653,7 @@
       ]
     },
     "header_widgets_1-ae_box": {
-      "html": "<div class=\"card bslib-card bslib-mb-spacing html-fill-item html-fill-container bslib-value-box border-0 bg-warning\" data-bslib-card-init data-require-bs-caller=\"card() value_box()\" data-require-bs-version=\"5 5\">\n  <div class=\"card-body bslib-gap-spacing html-fill-item html-fill-container\" style=\"margin-top:auto;margin-bottom:auto;flex:1 1 auto; padding:0;\">\n    <div class=\"bslib-grid bslib-mb-spacing html-fill-item value-box-grid\" data-require-bs-caller=\"layout_column_wrap()\" data-require-bs-version=\"5\" style=\"--bslib-grid-height:auto;--bslib-grid-height-mobile:auto;gap:0px; --bslib-value-box-widths:30% 70%;--bslib-value-box-widths-full-screen:1fr auto;\">\n      <div class=\"bslib-gap-spacing html-fill-container\">\n        <div class=\"value-box-showcase overflow-hidden html-fill-item html-fill-container\" style=\"--bslib-value-box-max-height:100px;--bslib-value-box-max-height-full-screen:67%;\">\n          <i class=\"fas fa-house-medical fa-2x\" role=\"presentation\" aria-label=\"house-medical icon\"><\/i>\n        <\/div>\n      <\/div>\n      <div class=\"bslib-gap-spacing html-fill-container\">\n        <div class=\"value-box-area html-fill-item html-fill-container border-start\">\n          <p>SAEs: 0<\/p>\n          <p>AEs: 5<\/p>\n        <\/div>\n      <\/div>\n    <\/div>\n  <\/div>\n  <script data-bslib-card-init>bslib.Card.initializeAllCards();<\/script>\n<\/div>",
+      "html": "<div class=\"card bslib-card bslib-mb-spacing html-fill-item html-fill-container bslib-value-box bg-warning showcase-left-center\" data-bslib-card-init data-require-bs-caller=\"card() value_box()\" data-require-bs-version=\"5 5\">\n  <div class=\"card-body bslib-gap-spacing html-fill-item html-fill-container\" style=\"margin-top:auto;margin-bottom:auto;flex:1 1 auto; padding:0;\">\n    <div class=\"value-box-grid html-fill-item\" style=\"--bslib-grid-height:auto;--bslib-grid-height-mobile:auto;---bslib-value-box-showcase-w:30%;---bslib-value-box-showcase-w-fs:1fr;---bslib-value-box-showcase-max-h:100px;---bslib-value-box-showcase-max-h-fs:67%;\">\n      <div class=\"value-box-showcase html-fill-item html-fill-container\">\n        <i class=\"fas fa-house-medical fa-2x\" role=\"presentation\" aria-label=\"house-medical icon\"><\/i>\n      <\/div>\n      <div class=\"value-box-area html-fill-item html-fill-container\">\n        <p class=\"value-box-title\">SAEs: 0<\/p>\n        <p class=\"value-box-value\">AEs: 5<\/p>\n      <\/div>\n    <\/div>\n  <\/div>\n  <script data-bslib-card-init>bslib.Card.initializeAllCards();<\/script>\n<\/div>",
       "deps": [
         {
           "name": "font-awesome",
@@ -493,9 +673,9 @@
         },
         {
           "name": "htmltools-fill",
-          "version": "0.5.6.1",
+          "version": "0.5.8.1",
           "src": {
-            "href": "htmltools-fill-0.5.6.1"
+            "href": "htmltools-fill-0.5.8.1"
           },
           "meta": null,
           "script": null,
@@ -505,68 +685,49 @@
           "all_files": true
         },
         {
-          "name": "bslib-grid-styles",
-          "version": "0.5.1",
+          "name": "bslib-component-js",
+          "version": "0.8.0",
           "src": {
-            "href": "bslib-grid-styles-0.5.1"
+            "href": "bslib-component-js-0.8.0"
+          },
+          "meta": null,
+          "script": [
+            {
+              "src": "components.min.js"
+            },
+            {
+              "src": "web-components.min.js",
+              "type": "module"
+            }
+          ],
+          "stylesheet": null,
+          "head": null,
+          "attachment": null,
+          "all_files": true
+        },
+        {
+          "name": "bslib-component-css",
+          "version": "0.8.0",
+          "src": {
+            "href": "bslib-component-css-0.8.0"
           },
           "meta": null,
           "script": null,
-          "stylesheet": "grid.css",
+          "stylesheet": "bslib-component-css.min.css",
           "head": null,
           "attachment": null,
+          "package": null,
           "all_files": true
         },
         {
           "name": "bslib-tag-require",
-          "version": "0.5.1",
+          "version": "0.8.0",
           "src": {
-            "href": "bslib-tag-require-0.5.1"
+            "href": "bslib-tag-require-0.8.0"
           },
           "meta": null,
           "script": "tag-require.js",
           "stylesheet": null,
-          "head": null,
-          "attachment": null,
-          "all_files": true
-        },
-        {
-          "name": "bslib-value_box-styles",
-          "version": "0.5.1",
-          "src": {
-            "href": "bslib-value_box-styles-0.5.1"
-          },
-          "meta": null,
-          "script": null,
-          "stylesheet": "value_box.css",
-          "head": null,
-          "attachment": null,
-          "all_files": true
-        },
-        {
-          "name": "bslib-card-js",
-          "version": "0.5.1",
-          "src": {
-            "href": "bslib-card-js-0.5.1"
-          },
-          "meta": null,
-          "script": {
-            "src": "card.min.js"
-          },
-          "stylesheet": null,
-          "head": null,
-          "attachment": null,
-          "all_files": true
-        },
-        {
-          "name": "bslib-card-styles",
-          "version": "0.5.1",
-          "src": {
-            "href": "bslib-card-styles-0.5.1"
-          },
-          "meta": null,
-          "script": null,
-          "stylesheet": "card.css",
           "head": null,
           "attachment": null,
           "all_files": true
@@ -582,10 +743,10 @@
         "validation"
       ]
     },
-    "main_sidebar_1-synch_info-db_synch_info": "EDC Sync date: <br>2024-01-10<br><br>EDC latest data: 2023-09-14 15:17:00",
+    "main_sidebar_1-synch_info-db_synch_info": "EDC Sync date: <br>2023-09-15 10:10:00 UTC<br><br>EDC latest data: 2023-09-14 15:17:00",
     "navigate_participants_1-status": "<b>BEL_04_772<\/b><br><b>Sex:<\/b> Male<br><b>Age:<\/b> 78yrs.<br><b>Status:<\/b> Enrolled<br><b>ECOG:<\/b> 0<br><b>Dx:<\/b> Syndrome O",
     "navigate_participants_1-subject_info": {
-      "html": "<div class=\"card bslib-card bslib-mb-spacing html-fill-item html-fill-container bslib-value-box border-0 bg-primary\" data-bslib-card-init data-require-bs-caller=\"card() value_box()\" data-require-bs-version=\"5 5\">\n  <div class=\"card-body bslib-gap-spacing html-fill-item html-fill-container\" style=\"margin-top:auto;margin-bottom:auto;flex:1 1 auto; padding:0;\">\n    <div class=\"bslib-grid bslib-mb-spacing html-fill-item value-box-grid\" data-require-bs-caller=\"layout_column_wrap()\" data-require-bs-version=\"5\" style=\"--bslib-grid-height:auto;--bslib-grid-height-mobile:auto;gap:0px; --bslib-value-box-widths:30% 70%;--bslib-value-box-widths-full-screen:1fr auto;\">\n      <div class=\"bslib-gap-spacing html-fill-container\">\n        <div class=\"value-box-showcase overflow-hidden html-fill-item html-fill-container\" style=\"--bslib-value-box-max-height:100px;--bslib-value-box-max-height-full-screen:67%;\">\n          <i class=\"fas fa-user-check fa-2x\" role=\"presentation\" aria-label=\"user-check icon\"><\/i>\n        <\/div>\n      <\/div>\n      <div class=\"bslib-gap-spacing html-fill-container\">\n        <div class=\"value-box-area html-fill-item html-fill-container border-start\">\n          <p>BEL_04_772<\/p>\n          <p>Male, 78yrs.<\/p>\n        <\/div>\n      <\/div>\n    <\/div>\n  <\/div>\n  <script data-bslib-card-init>bslib.Card.initializeAllCards();<\/script>\n<\/div>",
+      "html": "<div class=\"card bslib-card bslib-mb-spacing html-fill-item html-fill-container bslib-value-box bg-primary showcase-left-center\" data-bslib-card-init data-require-bs-caller=\"card() value_box()\" data-require-bs-version=\"5 5\" style=\"max-height:100px;\">\n  <div class=\"card-body bslib-gap-spacing html-fill-item html-fill-container\" style=\"margin-top:auto;margin-bottom:auto;flex:1 1 auto; padding:0;\">\n    <div class=\"value-box-grid html-fill-item\" style=\"--bslib-grid-height:auto;--bslib-grid-height-mobile:auto;---bslib-value-box-showcase-w:30%;---bslib-value-box-showcase-w-fs:1fr;---bslib-value-box-showcase-max-h:100px;---bslib-value-box-showcase-max-h-fs:67%;\">\n      <div class=\"value-box-showcase html-fill-item html-fill-container\">\n        <i class=\"fas fa-user-check fa-2x\" role=\"presentation\" aria-label=\"user-check icon\"><\/i>\n      <\/div>\n      <div class=\"value-box-area html-fill-item html-fill-container\">\n        <p class=\"value-box-title\">BEL_04_772<\/p>\n        <p class=\"value-box-value\">Male, 78yrs.<\/p>\n      <\/div>\n    <\/div>\n  <\/div>\n  <script data-bslib-card-init>bslib.Card.initializeAllCards();<\/script>\n<\/div>",
       "deps": [
         {
           "name": "font-awesome",
@@ -605,9 +766,9 @@
         },
         {
           "name": "htmltools-fill",
-          "version": "0.5.6.1",
+          "version": "0.5.8.1",
           "src": {
-            "href": "htmltools-fill-0.5.6.1"
+            "href": "htmltools-fill-0.5.8.1"
           },
           "meta": null,
           "script": null,
@@ -617,23 +778,45 @@
           "all_files": true
         },
         {
-          "name": "bslib-grid-styles",
-          "version": "0.5.1",
+          "name": "bslib-component-js",
+          "version": "0.8.0",
           "src": {
-            "href": "bslib-grid-styles-0.5.1"
+            "href": "bslib-component-js-0.8.0"
           },
           "meta": null,
-          "script": null,
-          "stylesheet": "grid.css",
+          "script": [
+            {
+              "src": "components.min.js"
+            },
+            {
+              "src": "web-components.min.js",
+              "type": "module"
+            }
+          ],
+          "stylesheet": null,
           "head": null,
           "attachment": null,
           "all_files": true
         },
         {
-          "name": "bslib-tag-require",
-          "version": "0.5.1",
+          "name": "bslib-component-css",
+          "version": "0.8.0",
           "src": {
-            "href": "bslib-tag-require-0.5.1"
+            "href": "bslib-component-css-0.8.0"
+          },
+          "meta": null,
+          "script": null,
+          "stylesheet": "bslib-component-css.min.css",
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": true
+        },
+        {
+          "name": "bslib-tag-require",
+          "version": "0.8.0",
+          "src": {
+            "href": "bslib-tag-require-0.8.0"
           },
           "meta": null,
           "script": "tag-require.js",
@@ -641,51 +824,10 @@
           "head": null,
           "attachment": null,
           "all_files": true
-        },
-        {
-          "name": "bslib-value_box-styles",
-          "version": "0.5.1",
-          "src": {
-            "href": "bslib-value_box-styles-0.5.1"
-          },
-          "meta": null,
-          "script": null,
-          "stylesheet": "value_box.css",
-          "head": null,
-          "attachment": null,
-          "all_files": true
-        },
-        {
-          "name": "bslib-card-js",
-          "version": "0.5.1",
-          "src": {
-            "href": "bslib-card-js-0.5.1"
-          },
-          "meta": null,
-          "script": {
-            "src": "card.min.js"
-          },
-          "stylesheet": null,
-          "head": null,
-          "attachment": null,
-          "all_files": true
-        },
-        {
-          "name": "bslib-card-styles",
-          "version": "0.5.1",
-          "src": {
-            "href": "bslib-card-styles-0.5.1"
-          },
-          "meta": null,
-          "script": null,
-          "stylesheet": "card.css",
-          "head": null,
-          "attachment": null,
-          "all_files": true
         }
       ]
     },
-    "navigate_review_1-forms_to_review": "9",
+    "navigate_review_1-forms_to_review": "8",
     "sf_vital_signs-figure": {
       "x": {
         "data": [
@@ -6938,9 +7080,9 @@
         ],
         "layout": {
           "margin": {
-            "t": 37.80540920266948,
+            "t": 37.538981904278714,
             "r": 7.3059360730593621,
-            "b": 37.147874956094142,
+            "b": 36.881447657703376,
             "l": 43.105022831050235
           },
           "plot_bgcolor": "rgba(255,255,255,1)",
@@ -7088,7 +7230,7 @@
             {
               "text": "Pulse",
               "x": 0.23505603985056039,
-              "y": 0.72471022128556373,
+              "y": 0.7256468797564688,
               "showarrow": false,
               "ax": 0,
               "ay": 0,
@@ -7106,7 +7248,7 @@
             {
               "text": "Resp",
               "x": 0.76494396014943966,
-              "y": 0.72471022128556373,
+              "y": 0.7256468797564688,
               "showarrow": false,
               "ax": 0,
               "ay": 0,
@@ -7124,7 +7266,7 @@
             {
               "text": "Temperature",
               "x": 0.23505603985056039,
-              "y": 0.47471022128556373,
+              "y": 0.4756468797564688,
               "showarrow": false,
               "ax": 0,
               "ay": 0,
@@ -7142,7 +7284,7 @@
             {
               "text": "Weight change since screening",
               "x": 0.76494396014943966,
-              "y": 0.47471022128556373,
+              "y": 0.4756468797564688,
               "showarrow": false,
               "ax": 0,
               "ay": 0,
@@ -7160,7 +7302,7 @@
             {
               "text": "BMI",
               "x": 0.23505603985056039,
-              "y": 0.22471022128556375,
+              "y": 0.2256468797564688,
               "showarrow": false,
               "ax": 0,
               "ay": 0,
@@ -7178,7 +7320,7 @@
             {
               "text": "Weight",
               "x": 0.76494396014943966,
-              "y": 0.22471022128556375,
+              "y": 0.2256468797564688,
               "showarrow": false,
               "ax": 0,
               "ay": 0,
@@ -7196,7 +7338,7 @@
           ],
           "yaxis": {
             "domain": [
-              0.77528977871443627,
+              0.7743531202435312,
               1
             ],
             "automargin": true,
@@ -7259,7 +7401,7 @@
               "xref": "paper",
               "x0": 0,
               "x1": 0.47011207970112079,
-              "y0": 0.77528977871443627,
+              "y0": 0.7743531202435312,
               "y1": 1
             },
             {
@@ -7291,7 +7433,7 @@
               "xref": "paper",
               "x0": 0.52988792029887921,
               "x1": 1,
-              "y0": 0.77528977871443627,
+              "y0": 0.7743531202435312,
               "y1": 1
             },
             {
@@ -7323,8 +7465,8 @@
               "xref": "paper",
               "x0": 0,
               "x1": 0.47011207970112079,
-              "y0": 0.52528977871443627,
-              "y1": 0.72471022128556373
+              "y0": 0.5243531202435312,
+              "y1": 0.7256468797564688
             },
             {
               "type": "rect",
@@ -7340,7 +7482,7 @@
               "x1": 0.47011207970112079,
               "y0": 0,
               "y1": 26.301369863013704,
-              "yanchor": 0.72471022128556373,
+              "yanchor": 0.7256468797564688,
               "ysizemode": "pixel"
             },
             {
@@ -7355,8 +7497,8 @@
               "xref": "paper",
               "x0": 0.52988792029887921,
               "x1": 1,
-              "y0": 0.52528977871443627,
-              "y1": 0.72471022128556373
+              "y0": 0.5243531202435312,
+              "y1": 0.7256468797564688
             },
             {
               "type": "rect",
@@ -7372,7 +7514,7 @@
               "x1": 1,
               "y0": 0,
               "y1": 26.301369863013704,
-              "yanchor": 0.72471022128556373,
+              "yanchor": 0.7256468797564688,
               "ysizemode": "pixel"
             },
             {
@@ -7387,72 +7529,8 @@
               "xref": "paper",
               "x0": 0,
               "x1": 0.47011207970112079,
-              "y0": 0.27528977871443627,
-              "y1": 0.47471022128556373
-            },
-            {
-              "type": "rect",
-              "fillcolor": "transparent",
-              "line": {
-                "color": "transparent",
-                "width": 0.66417600664176002,
-                "linetype": "solid"
-              },
-              "yref": "paper",
-              "xref": "paper",
-              "x0": 0,
-              "x1": 0.47011207970112079,
-              "y0": 0,
-              "y1": 26.301369863013704,
-              "yanchor": 0.47471022128556373,
-              "ysizemode": "pixel"
-            },
-            {
-              "type": "rect",
-              "fillcolor": "transparent",
-              "line": {
-                "color": "rgba(51,51,51,1)",
-                "width": 0.66417600664176002,
-                "linetype": "solid"
-              },
-              "yref": "paper",
-              "xref": "paper",
-              "x0": 0.52988792029887921,
-              "x1": 1,
-              "y0": 0.27528977871443627,
-              "y1": 0.47471022128556373
-            },
-            {
-              "type": "rect",
-              "fillcolor": "transparent",
-              "line": {
-                "color": "transparent",
-                "width": 0.66417600664176002,
-                "linetype": "solid"
-              },
-              "yref": "paper",
-              "xref": "paper",
-              "x0": 0.52988792029887921,
-              "x1": 1,
-              "y0": 0,
-              "y1": 26.301369863013704,
-              "yanchor": 0.47471022128556373,
-              "ysizemode": "pixel"
-            },
-            {
-              "type": "rect",
-              "fillcolor": "transparent",
-              "line": {
-                "color": "rgba(51,51,51,1)",
-                "width": 0.66417600664176002,
-                "linetype": "solid"
-              },
-              "yref": "paper",
-              "xref": "paper",
-              "x0": 0,
-              "x1": 0.47011207970112079,
-              "y0": 0,
-              "y1": 0.22471022128556375
+              "y0": 0.2743531202435312,
+              "y1": 0.4756468797564688
             },
             {
               "type": "rect",
@@ -7468,7 +7546,7 @@
               "x1": 0.47011207970112079,
               "y0": 0,
               "y1": 26.301369863013704,
-              "yanchor": 0.22471022128556375,
+              "yanchor": 0.4756468797564688,
               "ysizemode": "pixel"
             },
             {
@@ -7483,8 +7561,8 @@
               "xref": "paper",
               "x0": 0.52988792029887921,
               "x1": 1,
-              "y0": 0,
-              "y1": 0.22471022128556375
+              "y0": 0.2743531202435312,
+              "y1": 0.4756468797564688
             },
             {
               "type": "rect",
@@ -7500,7 +7578,71 @@
               "x1": 1,
               "y0": 0,
               "y1": 26.301369863013704,
-              "yanchor": 0.22471022128556375,
+              "yanchor": 0.4756468797564688,
+              "ysizemode": "pixel"
+            },
+            {
+              "type": "rect",
+              "fillcolor": "transparent",
+              "line": {
+                "color": "rgba(51,51,51,1)",
+                "width": 0.66417600664176002,
+                "linetype": "solid"
+              },
+              "yref": "paper",
+              "xref": "paper",
+              "x0": 0,
+              "x1": 0.47011207970112079,
+              "y0": 0,
+              "y1": 0.2256468797564688
+            },
+            {
+              "type": "rect",
+              "fillcolor": "transparent",
+              "line": {
+                "color": "transparent",
+                "width": 0.66417600664176002,
+                "linetype": "solid"
+              },
+              "yref": "paper",
+              "xref": "paper",
+              "x0": 0,
+              "x1": 0.47011207970112079,
+              "y0": 0,
+              "y1": 26.301369863013704,
+              "yanchor": 0.2256468797564688,
+              "ysizemode": "pixel"
+            },
+            {
+              "type": "rect",
+              "fillcolor": "transparent",
+              "line": {
+                "color": "rgba(51,51,51,1)",
+                "width": 0.66417600664176002,
+                "linetype": "solid"
+              },
+              "yref": "paper",
+              "xref": "paper",
+              "x0": 0.52988792029887921,
+              "x1": 1,
+              "y0": 0,
+              "y1": 0.2256468797564688
+            },
+            {
+              "type": "rect",
+              "fillcolor": "transparent",
+              "line": {
+                "color": "transparent",
+                "width": 0.66417600664176002,
+                "linetype": "solid"
+              },
+              "yref": "paper",
+              "xref": "paper",
+              "x0": 0.52988792029887921,
+              "x1": 1,
+              "y0": 0,
+              "y1": 26.301369863013704,
+              "yanchor": 0.2256468797564688,
               "ysizemode": "pixel"
             }
           ],
@@ -7605,7 +7747,7 @@
             "linewidth": 0,
             "showgrid": true,
             "domain": [
-              0.77528977871443627,
+              0.7743531202435312,
               1
             ],
             "gridcolor": "rgba(204,204,204,1)",
@@ -7659,8 +7801,8 @@
             "linewidth": 0,
             "showgrid": true,
             "domain": [
-              0.52528977871443627,
-              0.72471022128556373
+              0.5243531202435312,
+              0.7256468797564688
             ],
             "gridcolor": "rgba(204,204,204,1)",
             "gridwidth": 0.66417600664176002,
@@ -7710,8 +7852,8 @@
             "linewidth": 0,
             "showgrid": true,
             "domain": [
-              0.52528977871443627,
-              0.72471022128556373
+              0.5243531202435312,
+              0.7256468797564688
             ],
             "gridcolor": "rgba(204,204,204,1)",
             "gridwidth": 0.66417600664176002,
@@ -7767,8 +7909,8 @@
             "linewidth": 0,
             "showgrid": true,
             "domain": [
-              0.27528977871443627,
-              0.47471022128556373
+              0.2743531202435312,
+              0.4756468797564688
             ],
             "gridcolor": "rgba(204,204,204,1)",
             "gridwidth": 0.66417600664176002,
@@ -7824,8 +7966,8 @@
             "linewidth": 0,
             "showgrid": true,
             "domain": [
-              0.27528977871443627,
-              0.47471022128556373
+              0.2743531202435312,
+              0.4756468797564688
             ],
             "gridcolor": "rgba(204,204,204,1)",
             "gridwidth": 0.66417600664176002,
@@ -7882,7 +8024,7 @@
             "showgrid": true,
             "domain": [
               0,
-              0.22471022128556375
+              0.2256468797564688
             ],
             "gridcolor": "rgba(204,204,204,1)",
             "gridwidth": 0.66417600664176002,
@@ -7936,7 +8078,7 @@
             "showgrid": true,
             "domain": [
               0,
-              0.22471022128556375
+              0.2256468797564688
             ],
             "gridcolor": "rgba(204,204,204,1)",
             "gridwidth": 0.66417600664176002,
@@ -7957,7 +8099,7 @@
             }
           },
           "hovermode": "closest",
-          "height": 650,
+          "height": 675,
           "barmode": "relative"
         },
         "config": {
@@ -8043,9 +8185,9 @@
         },
         {
           "name": "crosstalk",
-          "version": "1.2.0",
+          "version": "1.2.1",
           "src": {
-            "href": "crosstalk-1.2.0"
+            "href": "crosstalk-1.2.1"
           },
           "meta": null,
           "script": "js/crosstalk.min.js",
@@ -8087,12 +8229,51 @@
         "style": "bootstrap5",
         "filter": "none",
         "vertical": false,
+        "extensions": [
+          "Scroller"
+        ],
         "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Subject<\/th>\n      <th>Status<\/th>\n      <th>Dx<\/th>\n      <th>Age<\/th>\n      <th>Sex<\/th>\n      <th>Event<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
         "options": {
+          "scrollY": 400,
+          "scrollX": true,
+          "scroller": true,
+          "deferRender": true,
+          "scrollResize": true,
+          "scrollCollapse": true,
+          "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"\")\n}",
+          "dom": "f<\"header h5\">ti",
           "columnDefs": [
             {
               "orderable": false,
               "targets": 0
+            },
+            {
+              "name": " ",
+              "targets": 0
+            },
+            {
+              "name": "Subject",
+              "targets": 1
+            },
+            {
+              "name": "Status",
+              "targets": 2
+            },
+            {
+              "name": "Dx",
+              "targets": 3
+            },
+            {
+              "name": "Age",
+              "targets": 4
+            },
+            {
+              "name": "Sex",
+              "targets": 5
+            },
+            {
+              "name": "Event",
+              "targets": 6
             }
           ],
           "order": [
@@ -8100,7 +8281,7 @@
           ],
           "autoWidth": false,
           "orderClasses": false,
-          "rowCallback": "function(row, data, displayNum, displayIndex, dataIndex) {\nvar value=data[0]; $(row).css({'font-weight':value == 1 ? \"bold\" : value == 2 ? \"bold\" : value == 3 ? \"bold\" : value == 4 ? \"bold\" : value == 6 ? \"bold\" : value == 7 ? \"bold\" : value == 8 ? \"bold\" : value == 9 ? \"bold\" : value == 10 ? \"bold\" : value == 11 ? \"bold\" : value == 12 ? \"bold\" : value == 13 ? \"bold\" : value == 14 ? \"bold\" : value == 15 ? \"bold\" : value == 16 ? \"bold\" : value == 17 ? \"bold\" : value == 18 ? \"bold\" : value == 19 ? \"bold\" : value == 21 ? \"bold\" : value == 22 ? \"bold\" : value == 23 ? \"bold\" : value == 24 ? \"bold\" : value == 25 ? \"bold\" : null});\n}",
+          "rowCallback": "function(row, data, displayNum, displayIndex, dataIndex) {\nvar value=data[0]; $(row).css({'font-weight':value == 1 ? \"bold\" : value == 2 ? \"bold\" : value == 3 ? \"bold\" : value == 4 ? \"bold\" : value == 5 ? \"bold\" : value == 6 ? \"bold\" : value == 7 ? \"bold\" : value == 8 ? \"bold\" : value == 9 ? \"bold\" : value == 10 ? \"bold\" : value == 11 ? \"bold\" : value == 12 ? \"bold\" : value == 13 ? \"bold\" : value == 14 ? \"bold\" : value == 15 ? \"bold\" : value == 16 ? \"bold\" : value == 17 ? \"bold\" : value == 18 ? \"bold\" : value == 19 ? \"bold\" : value == 20 ? \"bold\" : value == 21 ? \"bold\" : value == 22 ? \"bold\" : value == 23 ? \"bold\" : null});\n}",
           "ajax": {
             "type": "POST",
             "data": "function(d) {\nd.search.caseInsensitive = true;\nd.search.smart = true;\nd.escape = true;\nvar encodeAmp = function(x) { x.value = x.value.replace(/&/g, \"%26\"); }\nencodeAmp(d.search);\n$.each(d.columns, function(i, v) {encodeAmp(v.search);});\n}"
@@ -8116,6 +8297,7 @@
         }
       },
       "evals": [
+        "options.initComplete",
         "options.rowCallback",
         "options.ajax.data"
       ],
@@ -8138,9 +8320,9 @@
         },
         {
           "name": "dt-core-bootstrap5",
-          "version": "1.13.4",
+          "version": "1.13.6",
           "src": {
-            "href": "dt-core-bootstrap5-1.13.4"
+            "href": "dt-core-bootstrap5-1.13.6"
           },
           "meta": null,
           "script": [
@@ -8155,9 +8337,9 @@
         },
         {
           "name": "bootstrap",
-          "version": "5.2.2",
+          "version": "5.3.1",
           "src": {
-            "href": "bootstrap-5.2.2"
+            "href": "bootstrap-5.3.1"
           },
           "meta": {
             "viewport": "width=device-width, initial-scale=1, shrink-to-fit=no"
@@ -8171,9 +8353,9 @@
         },
         {
           "name": "bs3compat",
-          "version": "0.5.1",
+          "version": "0.8.0",
           "src": {
-            "href": "bs3compat-0.5.1"
+            "href": "bs3compat-0.8.0"
           },
           "meta": null,
           "script": [
@@ -8187,10 +8369,43 @@
           "all_files": true
         },
         {
-          "name": "crosstalk",
-          "version": "1.2.0",
+          "name": "dt-ext-scroller-bootstrap5",
+          "version": "1.13.6",
           "src": {
-            "href": "crosstalk-1.2.0"
+            "href": "dt-ext-scroller-bootstrap5-1.13.6"
+          },
+          "meta": null,
+          "script": [
+            "js/dataTables.scroller.min.js",
+            "js/scroller.bootstrap5.min.js"
+          ],
+          "stylesheet": "css/scroller.bootstrap5.min.css",
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": false
+        },
+        {
+          "name": "dt-plugin-scrollresize",
+          "version": "1.13.6",
+          "src": {
+            "href": "dt-plugin-scrollresize-1.13.6"
+          },
+          "meta": null,
+          "script": "source.min.js",
+          "stylesheet": [
+
+          ],
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": true
+        },
+        {
+          "name": "crosstalk",
+          "version": "1.2.1",
+          "src": {
+            "href": "crosstalk-1.2.1"
           },
           "meta": null,
           "script": "js/crosstalk.min.js",

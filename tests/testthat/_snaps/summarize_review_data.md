@@ -1,4 +1,4 @@
-# summarize_review_data() works: Scenario 1. Given a random data set provided, I expect that summary dataframe snapshot will be as expected
+# summarize_review_data() works: Scenario 1 - Given a random data set provided, I expect that summary dataframe snapshot will be as expected
 
     Code
       summarize_review_data(review_df, common_vars = c("subject_id", "Form"),

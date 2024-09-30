@@ -14,10 +14,18 @@ initialize_credentials <- function(
 ){
   if(file.exists(credentials_db)) return(
     cat("Using existing credentials database.\n")
-    )
+  )
   
   cat("No credentials database found. Initializing new database.\n", 
-          "Login with Username 'admin' and Password '1234'.")
+      "Login with Username 'admin' and Password '1234'.\n")
+  cred_directory <- dirname(credentials_db)
+  if(tools::file_ext(credentials_db) == "sqlite" && !dir.exists(cred_directory)) {
+    cat("Folder to store credentials database does not exist. ", 
+        "Creating new directory named '", cred_directory, "'.\n", sep = "")
+    dir_created <- dir.create(cred_directory)
+    if(!dir_created) stop("Could not create directory for user database")
+  }
+  
   con <- get_db_connection(credentials_db)
   initial_credentials <- data.frame(
     "user"     = "admin", 
@@ -26,7 +34,7 @@ initialize_credentials <- function(
     "admin"    = TRUE,
     "name"     = "Admin",
     "mail"     = "", 
-    "role"     = "", 
+    "roles"    = get_roles_from_config()[1], 
     "sites"    = "",
     stringsAsFactors = FALSE, 
     check.names = FALSE
@@ -58,28 +66,24 @@ initialize_credentials <- function(
 
 #' Authenticate UI
 #'
-#' Authentication implementation in the UI.
-#'
-#' @param test_mode Logical. Whether the app should be started in test mode or
-#'   not.
+#' Authentication implementation in the UI, using `shinymanager`.
 #'
 #' 
-authenticate_ui <- function(test_mode = FALSE){
-  if (test_mode) return(app_ui) 
+authenticate_ui <- function(){
   shinymanager::secure_app(
     app_ui, 
     enable_admin = TRUE, 
     theme = bslib::bs_theme(bootswatch = "spacelab", version = "5"),
     tags_top = tags$div(
       golem_add_external_resources(),
-      tags$img(src='www/gcp_logo.png', height = '100', width ='450'),
+      tags$img(src='www/logo.png', height = '278', width ='239'),
       HTML("<br><br>")
     ),
     tags_bottom = tags$div(
       tags$p(
         "For any question, please  contact the ",
         tags$a(
-          href = "mailto:lsamson@gcp-service.com?Subject=ClinSight",
+          href = "mailto:example@example.com?Subject=ClinSight",
           target="_top", "administrator"
         )
       )
@@ -92,45 +96,76 @@ authenticate_ui <- function(test_mode = FALSE){
 #'
 #' Function to authenticate the main server.
 #'
-#' @param test_mode Logical, whether to start the application in test mode.
-#' @param sites Character vector. Study sites that can be allocated to a user.
-#' @param roles Character vector. Roles that can be allocated to a user.
-#' @param credentials_db Character vector. Path to the credentials
-#'   database.
-#' @param credentials_pwd Character vector, containing the database
-#'   password.
+#' @param user_identification Character vector showing the user identification.
+#'   Is by default set by the `user_identification` option in the `golem-config`
+#'   file.
+#' @param credentials_db Character vector. Path to the credentials database. By
+#'   default, set by the `data_folder` and `credentials_db` options in the
+#'   `golem-config_file`.
+#' @param credentials_pwd Character vector, containing the database password.
+#' @param all_sites Character vector with all sites. Will be passed on to
+#'   shinymanager configuration so that data can be restricted to specific sites
+#'   per user.
+#' @param all_roles Named character vector. Used to show all roles that are
+#'   valid to use in the application. Also used to show all applicable roles
+#'   in `shinymanager` admin mode.
+#' @param session Shiny session. Needed to access user information in case of
+#'   login methods alternative to `shinymanager` are used.
 #' 
 authenticate_server <- function(
-    test_mode = FALSE, 
-    sites = app_vars$Sites$site_code,
-    roles = c("Medical Monitor", "Data Manager", "Administrator", "Investigator"),
-    credentials_db = app_sys("app/www/credentials_db.sqlite"),
-    credentials_pwd = Sys.getenv("DB_SECRET")
+    user_identification = get_golem_config("user_identification"),
+    all_sites = NULL,
+    all_roles = get_roles_from_config(),
+    credentials_db = get_golem_config("credentials_db"),
+    credentials_pwd = Sys.getenv("DB_SECRET"),
+    session
 ){
-  if (test_mode) return({
-    # To skip authentication when testing application:
-    reactiveValues(
-      admin = TRUE,
-      user = "test_user",
-      name = "test user", 
-      role = "Medical monitor",
-      sites = sites
-    )
-  }) 
-  shinymanager::secure_server(
-    check_credentials = shinymanager::check_credentials(
-      credentials_db,
-      passphrase = credentials_pwd
-    ),
-    inputs_list = list(
-      "role" = list(
-        fun = "selectInput", 
-        args = list(choices = roles, multiple = TRUE) 
+  switch(
+    user_identification,
+    shinymanager = shinymanager::secure_server(
+      check_credentials = shinymanager::check_credentials(
+        credentials_db,
+        passphrase = credentials_pwd
       ),
-      "sites" = list(
-        fun = "selectInput",
-        args = list(label = NULL, choices = sites, selected = sites, multiple = TRUE)
+      inputs_list = list(
+        "roles" = list(
+          fun = "selectInput", 
+          args = list(choices = all_roles, multiple = TRUE)
+        ),
+        "sites" = list(
+          fun = "selectInput",
+          args = list(
+            label = NULL, 
+            choices = all_sites, 
+            selected = all_sites, 
+            multiple = TRUE
+          )
+        )
       )
+    ),
+    test_user = reactiveValues(
+      user = "test_user", 
+      name = "test user", 
+      roles = all_roles[1:3],
+      sites = all_sites
+    ),
+    http_headers = reactiveValues(
+      user = session$request$HTTP_X_SP_USERID,
+      name = session$request$HTTP_X_SP_USERNAME,
+      roles = get_valid_roles(session$request$HTTP_X_SP_USERGROUPS, all_roles),
+      sites = all_sites
+    ),
+    shiny_session = reactiveValues(
+      user = session$user,
+      name = session$user,
+      roles = get_valid_roles(session$groups, all_roles),
+      sites = all_sites
+    ),
+    reactiveValues(
+      user = "Unknown",
+      name = "Unknown",
+      roles = "",
+      sites = all_sites
     )
-  ) 
+  )
 }
