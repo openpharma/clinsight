@@ -1,4 +1,5 @@
 # clinsight (development version)
+- Added `pkgdown` GHA workflow to automatically update documentation site with PRs & pushes to `main` and `dev`
 
 # clinsight 0.1.0
 
