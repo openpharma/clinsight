@@ -1,5 +1,9 @@
 # clinsight 0.1.1
 
+## Changed 
+
+- Added `pkgdown` GHA workflow to automatically update documentation site with PRs & pushes to `main` and `dev`
+
 ## Bug fixes
 
 - Fixed inconsistencies in app messages when saving a review for a form with items with different review states (with some items reviewed previously by a different reviewer, and some items being completely new).
