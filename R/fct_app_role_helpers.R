@@ -27,6 +27,7 @@ get_roles_from_config <- function(
 #' @return A named character vector with the roles applicable for the
 #'   application and available for the current user.
 #' 
+#' @keywords internal
 get_valid_roles <- function(
     roles,
     all_roles = get_roles_from_config()

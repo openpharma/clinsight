@@ -92,6 +92,7 @@ get_metadata <- function(
 #'
 #' @return A data frame
 #'
+#' @keywords internal
 rename_raw_data <- function(
     data, 
     column_names = metadata$column_names
@@ -129,6 +130,7 @@ rename_raw_data <- function(
 #' @return A data frame, with derivative time and event variables, needed for
 #'   ClinSight to function properly.
 #'
+#' @keywords internal
 add_timevars_to_data <- function(
     data
 ){
@@ -326,6 +328,7 @@ get_meta_vars <- function(data = appdata, meta = metadata){
 #'
 #' @return A cleaned data frame with form-level data.
 #' 
+#' @keywords internal
 get_form_level_data <- function(
     data,
     all_forms,
