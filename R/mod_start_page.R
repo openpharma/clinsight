@@ -86,7 +86,16 @@ mod_start_page_server <- function(id, r, rev_data, navinfo, all_forms, table_nam
       bold_rows <- which(rev_data$overview()[["needs_review"]])
       tab <- datatable_custom(
         dplyr::select(rev_data$overview(), -needs_review), 
-        rename_vars = table_names
+        rename_vars = table_names,
+        callback = DT::JS(
+          "table.on('dblclick', 'tbody tr', function(t) {",
+          "t.currentTarget.classList.add('selected');",
+          "var tblID = $(t.target).closest('.datatables').attr('id')",
+          "var inputName = tblID + '_rows_selected'",
+          "Shiny.setInputValue(inputName, t.currentTarget.rowIndex)",
+          "document.getElementById(", deparse(NS(session$ns("go_to_patient"), "go_to_form")), ").click();",
+          "})"
+        )
       )
       if(length(bold_rows) == 0) return(tab)
       DT::formatStyle(
