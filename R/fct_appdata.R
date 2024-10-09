@@ -57,9 +57,9 @@ get_raw_csv_data <- function(
 #' @param expected_columns A character vector with the columns that should be
 #'   expected in the data frame. If missing, these columns will be added with
 #'   missing data (thus, will be made explicitly missing).
-#' @param .add_fns A list of additional functions to be applied to the data. The
-#'   functions should take the merged data object as argument and return the
-#'   modified merged data object.
+#' @param .add_fns A character vector of additional functions to be applied to
+#'   the data. The functions should take the merged data object as argument and
+#'   return the modified merged data object.
 #'
 #' @return A data frame.
 #' @export
@@ -70,7 +70,7 @@ merge_meta_with_data <- function(
     expected_columns = c("LBORNR_Lower", "LBORNR_Upper", "LBORRESU", 
                          "LBORRESUOTH", "LBREASND", "unit", 
                          "lower_limit", "upper_limit", "LBCLSIG"),
-    .add_fns = list(fn1 = apply_study_specific_fixes)
+    .add_fns = "apply_study_specific_fixes"
 ){
   stopifnot(is.data.frame(data))
   stopifnot(inherits(meta, "list"))
@@ -116,7 +116,7 @@ merge_meta_with_data <- function(
       "item_value" = VAL,
       "reason_notdone" = LBREASND
     ) |> 
-    purrr::reduce(.add_fns, \(x1, x2) {x1 |> x2()}, .init = _)
+    Reduce(\(x1, x2) do.call(x2, list(x1)), .add_fns, init = _)
   attr(merged_data, "synch_time") <- synch_time
   merged_data
 }
