@@ -8,8 +8,7 @@ merge_meta_with_data(
   data,
   meta,
   expected_columns = c("LBORNR_Lower", "LBORNR_Upper", "LBORRESU", "LBORRESUOTH",
-    "LBREASND", "unit", "lower_limit", "upper_limit", "LBCLSIG"),
-  .add_fns = "apply_study_specific_fixes"
+    "LBREASND", "unit", "lower_limit", "upper_limit", "LBCLSIG")
 )
 }
 \arguments{
@@ -20,10 +19,6 @@ merge_meta_with_data(
 \item{expected_columns}{A character vector with the columns that should be
 expected in the data frame. If missing, these columns will be added with
 missing data (thus, will be made explicitly missing).}
-
-\item{.add_fns}{A character vector of additional functions to be applied to
-the data. The functions should take the merged data object as argument and
-return the modified merged data object.}
 }
 \value{
 A data frame.
