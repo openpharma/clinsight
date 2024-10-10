@@ -151,22 +151,22 @@ add_timevars_to_data <- function(
       edit_date_time = as.POSIXct(edit_date_time, tz = "UTC"),
       event_date = as.Date(event_date),
       day = day %|_|% event_date - min(event_date, na.rm = TRUE), 
-      vis_day = ifelse(grepl("^SCR|^VIS|^FU", event_id), day, NA),
+      vis_day = ifelse(grepl("^SCR|^VIS|^FU", event_id, ignore.case = TRUE), day, NA),
       vis_num = as.numeric(factor(vis_day))-1,
       event_name = event_name %|_|% dplyr::case_when(
-        event_id == "SCR"    ~ "Screening",
-        event_id %in% c("VIS", "VISEXT", "VISVAR")    ~ paste0("Visit ", vis_num),
-        grepl("^FU[[:digit:]]+", event_id)  ~ paste0("Visit ", vis_num, "(FU)"),
-        event_id == "UN"     ~ paste0("Unscheduled visit ", event_repeat),
-        event_id == "EOT"    ~ "EoT",
-        event_id == "EXIT"   ~ "Exit",
-        form_id %in% c("AE", "CM", "CP", "MH", "MH", "MHTR", "PR", "ST", "CMTR", "CMHMA") ~ "Any visit",
-        TRUE                ~ paste0("Other (", event, ")")
+        grepl("^SCR", event_id, ignore.case = TRUE) ~ "Screening",
+        grepl("^VIS", event_id, ignore.case = TRUE) ~ paste0("Visit ", vis_num),
+        grepl("^FU[[:digit:]]+", event_id, ignore.case = TRUE) ~ paste0("Visit ", vis_num, "(FU)"),
+        grepl("^UN", event_id, ignore.case = TRUE) ~ paste0("Unscheduled visit ", event_repeat),
+        toupper(event_id) == "EOT"    ~ "EoT",
+        toupper(event_id) == "EXIT"   ~ "Exit",
+        grepl("^AE|^CM|^CP|^MH|^PR|^ST", form_id) ~ "Any visit",
+        .default = paste0("Other (", event, ")")
       ),
       event_label = event_label %|_|% dplyr::case_when(
         !is.na(vis_num)   ~ paste0("V", vis_num),
-        event_id == "UN"   ~ paste0("UV", event_repeat),
-        TRUE              ~ event_name
+        grepl("^UN", event_id, ignore.case = TRUE)   ~ paste0("UV", event_repeat),
+        .default = event_name
       ),
       .by = subject_id
     ) |> 
@@ -174,7 +174,7 @@ add_timevars_to_data <- function(
       factor(site_code, levels = order_string(site_code)),
       factor(subject_id, levels = order_string(subject_id))
     )
-  if(any(grepl("^Other ", df$event_name))) warning(
+  if(any(is.na(df$event_name) | grepl("^Other ", df$event_name))) warning(
     "Undefined Events detected. Please verify data before proceeding."
   )
   df
