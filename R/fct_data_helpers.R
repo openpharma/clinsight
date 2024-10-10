@@ -151,9 +151,9 @@ add_timevars_to_data <- function(
       edit_date_time = as.POSIXct(edit_date_time, tz = "UTC"),
       event_date = as.Date(event_date),
       day = day %|_|% event_date - min(event_date, na.rm = TRUE), 
-      vis_day = ifelse(event_id %in% c("SCR", "VIS", "VISEXT", "VISVAR", "FU1", "FU2"), day, NA),
+      vis_day = ifelse(grepl("^SCR|^VIS|^FU", event_id), day, NA),
       vis_num = as.numeric(factor(vis_day))-1,
-      event_name = dplyr::case_when(
+      event_name = event_name %|_|% dplyr::case_when(
         event_id == "SCR"    ~ "Screening",
         event_id %in% c("VIS", "VISEXT", "VISVAR")    ~ paste0("Visit ", vis_num),
         grepl("^FU[[:digit:]]+", event_id)  ~ paste0("Visit ", vis_num, "(FU)"),
@@ -161,9 +161,9 @@ add_timevars_to_data <- function(
         event_id == "EOT"    ~ "EoT",
         event_id == "EXIT"   ~ "Exit",
         form_id %in% c("AE", "CM", "CP", "MH", "MH", "MHTR", "PR", "ST", "CMTR", "CMHMA") ~ "Any visit",
-        TRUE                ~ paste0("Other (", event_name, ")")
+        TRUE                ~ paste0("Other (", event, ")")
       ),
-      event_label = dplyr::case_when(
+      event_label = event_label %|_|% dplyr::case_when(
         !is.na(vis_num)   ~ paste0("V", vis_num),
         event_id == "UN"   ~ paste0("UV", event_repeat),
         TRUE              ~ event_name
