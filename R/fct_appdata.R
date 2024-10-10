@@ -115,6 +115,7 @@ merge_meta_with_data <- function(
       "item_value" = VAL,
       "reason_notdone" = LBREASND
     ) |> 
+    dplyr::mutate(region = region %|_|% "Missing") |> 
     Reduce(\(x1, x2) do.call(x2, list(x1)), # Apply next function to output of previous
            meta$settings$post_merge_fns %||% "identity", # Return merged data if no additional functions
            init = _) # Initiate with the merged data
