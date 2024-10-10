@@ -113,7 +113,7 @@ merge_meta_with_data <- function(
       "reason_notdone" = LBREASND
     ) |> 
     Reduce(\(x1, x2) do.call(x2, list(x1)), # Apply next function to output of previous
-           meta$settings$add_fns %||% "identity", # Return merged data if no additional functions
+           meta$settings$post_merge_fns %||% "identity", # Return merged data if no additional functions
            init = _) # Initiate with the merged data
   attr(merged_data, "synch_time") <- synch_time
   merged_data
