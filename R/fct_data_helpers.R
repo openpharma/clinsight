@@ -150,7 +150,7 @@ add_timevars_to_data <- function(
     dplyr::mutate(
       edit_date_time = as.POSIXct(edit_date_time, tz = "UTC"),
       event_date = as.Date(event_date),
-      day = event_date - min(event_date, na.rm = TRUE), 
+      day = day %|_|% event_date - min(event_date, na.rm = TRUE), 
       vis_day = ifelse(event_id %in% c("SCR", "VIS", "VISEXT", "VISVAR", "FU1", "FU2"), day, NA),
       vis_num = as.numeric(factor(vis_day))-1,
       event_name = dplyr::case_when(

@@ -52,3 +52,19 @@ drop_nulls <- function(x) {
     x
   }
 }
+
+#' If x does not exist, return y, otherwise return x
+#' 
+#' @param x,y Two elements to test, one potentially not existent
+#' 
+#' @noRd
+#' 
+#' @examples
+#' mtcars2 %|_|% mtcars
+"%|_|%" <- function(x, y) {
+  if (exists(deparse(substitute(x)))) {
+    x
+  } else {
+    y
+  }
+}
