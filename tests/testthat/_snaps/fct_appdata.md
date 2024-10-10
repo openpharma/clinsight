@@ -30,45 +30,45 @@
     Code
       df[c(1, 1000, 2000, 3000, 4000, 5000), ]
     Output
-      # A tibble: 6 x 23
-        site_code subject_id event_id event_date event_name event_repeat form_id
-        <chr>     <chr>      <chr>    <date>     <chr>             <int> <chr>  
-      1 9600      9600-001   SCR      2022-11-09 Screening             1 DM     
-      2 <NA>      <NA>       <NA>     NA         <NA>                 NA <NA>   
-      3 <NA>      <NA>       <NA>     NA         <NA>                 NA <NA>   
-      4 <NA>      <NA>       <NA>     NA         <NA>                 NA <NA>   
-      5 <NA>      <NA>       <NA>     NA         <NA>                 NA <NA>   
-      6 <NA>      <NA>       <NA>     NA         <NA>                 NA <NA>   
-      # i 16 more variables: form_repeat <int>, edit_date_time <dttm>, day <drtn>,
-      #   vis_day <dbl>, vis_num <dbl>, event_label <chr>, item_name <chr>,
-      #   item_type <chr>, item_group <chr>, item_value <chr>, item_unit <chr>,
-      #   lower_lim <dbl>, upper_lim <dbl>, significance <chr>, reason_notdone <chr>,
-      #   region <chr>
+      # A tibble: 6 x 24
+        site_code subject_id event_id event_date event     event_repeat form_id
+        <chr>     <chr>      <chr>    <date>     <chr>            <int> <chr>  
+      1 9600      9600-001   SCR      2022-11-09 Screening            1 DM     
+      2 <NA>      <NA>       <NA>     NA         <NA>                NA <NA>   
+      3 <NA>      <NA>       <NA>     NA         <NA>                NA <NA>   
+      4 <NA>      <NA>       <NA>     NA         <NA>                NA <NA>   
+      5 <NA>      <NA>       <NA>     NA         <NA>                NA <NA>   
+      6 <NA>      <NA>       <NA>     NA         <NA>                NA <NA>   
+      # i 17 more variables: form_repeat <int>, edit_date_time <dttm>, day <drtn>,
+      #   vis_day <dbl>, vis_num <dbl>, event_name <chr>, event_label <chr>,
+      #   item_name <chr>, item_type <chr>, item_group <chr>, item_value <chr>,
+      #   item_unit <chr>, lower_lim <dbl>, upper_lim <dbl>, significance <chr>,
+      #   reason_notdone <chr>, region <chr>
 
 ---
 
     Code
       df
     Output
-      # A tibble: 543 x 23
-         site_code subject_id event_id event_date event_name event_repeat form_id
-         <chr>     <chr>      <chr>    <date>     <chr>             <int> <chr>  
-       1 9600      9600-001   SCR      2022-11-09 Screening             1 DM     
-       2 9600      9600-001   SCR      2022-11-09 Screening             1 DM     
-       3 9600      9600-002   SCR      2022-01-01 Screening             1 DM     
-       4 9600      9600-002   SCR      2022-01-01 Screening             1 DM     
-       5 9600      9600-002   SCR      2022-01-01 Screening             1 DM     
-       6 9600      9600-002   SCR      2022-01-01 Screening             1 STE    
-       7 9600      9600-002   SCR      2022-01-01 Screening             1 STE    
-       8 9600      9600-002   SCR      2022-01-01 Screening             1 VS     
-       9 9600      9600-002   SCR      2022-01-01 Screening             1 VS     
-      10 9600      9600-002   SCR      2022-01-01 Screening             1 VS     
+      # A tibble: 543 x 24
+         site_code subject_id event_id event_date event     event_repeat form_id
+         <chr>     <chr>      <chr>    <date>     <chr>            <int> <chr>  
+       1 9600      9600-001   SCR      2022-11-09 Screening            1 DM     
+       2 9600      9600-001   SCR      2022-11-09 Screening            1 DM     
+       3 9600      9600-002   SCR      2022-01-01 Screening            1 DM     
+       4 9600      9600-002   SCR      2022-01-01 Screening            1 DM     
+       5 9600      9600-002   SCR      2022-01-01 Screening            1 DM     
+       6 9600      9600-002   SCR      2022-01-01 Screening            1 STE    
+       7 9600      9600-002   SCR      2022-01-01 Screening            1 STE    
+       8 9600      9600-002   SCR      2022-01-01 Screening            1 VS     
+       9 9600      9600-002   SCR      2022-01-01 Screening            1 VS     
+      10 9600      9600-002   SCR      2022-01-01 Screening            1 VS     
       # i 533 more rows
-      # i 16 more variables: form_repeat <int>, edit_date_time <dttm>, day <drtn>,
-      #   vis_day <dbl>, vis_num <dbl>, event_label <chr>, item_name <chr>,
-      #   item_type <chr>, item_group <chr>, item_value <chr>, item_unit <chr>,
-      #   lower_lim <dbl>, upper_lim <dbl>, significance <chr>, reason_notdone <chr>,
-      #   region <chr>
+      # i 17 more variables: form_repeat <int>, edit_date_time <dttm>, day <drtn>,
+      #   vis_day <dbl>, vis_num <dbl>, event_name <chr>, event_label <chr>,
+      #   item_name <chr>, item_type <chr>, item_group <chr>, item_value <chr>,
+      #   item_unit <chr>, lower_lim <dbl>, upper_lim <dbl>, significance <chr>,
+      #   reason_notdone <chr>, region <chr>
 
 # get_appdata works: produces the expected output
 
