@@ -21,7 +21,7 @@ drop_nulls <- function(x) {
   x[!sapply(x, is.null)]
 }
 
-#' If x is `NULL`, return y, otherwise return x
+#' If x is empty (`NULL` or 0 length), return y, otherwise return x
 #'
 #' @param x,y Two elements to test, one potentially `NULL`
 #'
@@ -30,7 +30,7 @@ drop_nulls <- function(x) {
 #' @examples
 #' NULL %||% 1
 "%||%" <- function(x, y) {
-  if (is.null(x)) {
+  if (length(x) == 0) {
     y
   } else {
     x
