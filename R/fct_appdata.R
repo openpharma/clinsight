@@ -75,7 +75,10 @@ merge_meta_with_data <- function(
   synch_time <- attr(data, "synch_time") %||% ""
   merged_data <- data |> 
     rename_raw_data(column_names = meta$column_names) |> 
-    readr::type_convert(clinsight_col_specs) |> 
+    readr::type_convert(clinsight_col_specs) |>
+    Reduce(\(x1, x2) do.call(x2, list(x1)), # Apply next function to output of previous
+           meta$settings$pre_merge_fns %||% "identity", # Return renamed data if no additional functions
+           init = _) |>  # Initiate with the renamed data
     add_timevars_to_data() |> 
     # fix MC values before merging:
     fix_multiple_choice_vars(expected_vars = meta$items_expanded$var) |> 
