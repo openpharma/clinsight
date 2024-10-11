@@ -83,21 +83,20 @@ merge_meta_with_data <- function(
     # fix MC values before merging:
     fix_multiple_choice_vars(expected_vars = meta$items_expanded$var) |> 
     dplyr::right_join(meta$items_expanded, by = "var") |> 
-    dplyr::filter(!is.na(item_value)) |> 
+    dplyr::filter(!is.na(item_value)) |>
+    readr::type_convert(clinsight_col_specs) |>
+    Reduce(\(x1, x2) do.call(x2, list(x1)), # Apply next function to output of previous
+           meta$settings$mid_merge_fns %||% "identity", # Return renamed data if no additional functions
+           init = _) |>  # Initiate with the renamed data
     dplyr::mutate(
-      suffix = ifelse(item_name == "ECG interpretation", "LBCLSIG", suffix),
-      suffix = ifelse(is.na(suffix), "VAL", suffix),
-      # TODO: improve code below to handle exceptions in a more general manner
-      suffix = ifelse(suffix %in% c("LBORRES", "VSORRES", "EGORRES") | 
-                        item_group %in% c("Cytogenetics", "General"), 
-                      "VAL", suffix)
+      suffix_names = suffix_names %|_|% ifelse(is.na(suffix) | grepl("ORRES$", suffix) | item_group == "General", "VAL", suffix)
     ) |> 
-    dplyr::select(-var) |> 
+    dplyr::select(-var, -suffix) |> 
     dplyr::mutate(
       edit_date_time = max(edit_date_time, na.rm = TRUE), 
       .by = c(subject_id, item_name, event_name, event_repeat)
     ) |> 
-    tidyr::pivot_wider(names_from = suffix, values_from = item_value) |> 
+    tidyr::pivot_wider(names_from = suffix_names, values_from = item_value) |> 
     add_missing_columns(expected_columns) |> 
     dplyr::mutate(
       LBORNR_Lower = as.numeric(ifelse(!is.na(lower_limit), lower_limit, LBORNR_Lower)),
@@ -121,6 +120,25 @@ merge_meta_with_data <- function(
            init = _) # Initiate with the merged data
   attr(merged_data, "synch_time") <- synch_time
   merged_data
+}
+
+
+#' Apply study-specific suffix fixes
+#' 
+#' These changes are study/EDC-specific and part of the legacy code for ClinSight.
+#' 
+#' @param data A data frame
+#' 
+#' @return A data frame.
+apply_study_specific_suffix_fixes <- function(data) {
+  dplyr::mutate(data,
+    suffix = ifelse(item_name == "ECG interpretation", "LBCLSIG", suffix),
+    suffix = ifelse(is.na(suffix), "VAL", suffix),
+    # TODO: improve code below to handle exceptions in a more general manner
+    suffix_names = ifelse(suffix %in% c("LBORRES", "VSORRES", "EGORRES") | 
+                      item_group %in% c("Cytogenetics", "General"), 
+                    "VAL", suffix)
+  )
 }
 
 
