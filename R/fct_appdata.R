@@ -110,7 +110,7 @@ merge_meta_with_data <- function(
       "reason_notdone" = LBREASND
     ) |> 
     dplyr::mutate(region = region %|_|% "Missing") |> 
-    apply_custom_functions(meta$settings$post_merge_fns) |>
+    apply_custom_functions(meta$settings$post_merge_fns)
   attr(merged_data, "synch_time") <- synch_time
   merged_data
 }
