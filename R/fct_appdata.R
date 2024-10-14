@@ -76,17 +76,13 @@ merge_meta_with_data <- function(
   merged_data <- data |> 
     rename_raw_data(column_names = meta$column_names) |> 
     readr::type_convert(clinsight_col_specs) |>
-    Reduce(\(x1, x2) do.call(x2, list(x1)), # Apply next function to output of previous
-           meta$settings$pre_merge_fns %||% "identity", # Return renamed data if no additional functions
-           init = _) |>  # Initiate with the renamed data
+    apply_custom_functions(meta$settings$pre_merge_fns) |>
     add_timevars_to_data() |> 
     # fix MC values before merging:
     fix_multiple_choice_vars(expected_vars = meta$items_expanded$var) |> 
     dplyr::right_join(meta$items_expanded, by = "var") |> 
     dplyr::filter(!is.na(item_value)) |>
-    Reduce(\(x1, x2) do.call(x2, list(x1)), # Apply next function to output of previous
-           meta$settings$mid_merge_fns %||% "identity", # Return renamed data if no additional functions
-           init = _) |>  # Initiate with the renamed data
+    apply_custom_functions(meta$settings$mid_merge_fns) |>
     dplyr::mutate(
       suffix_names = suffix_names %|_|% ifelse(is.na(suffix) | grepl("ORRES$", suffix) | item_group == "General", "VAL", suffix)
     ) |> 
@@ -114,9 +110,7 @@ merge_meta_with_data <- function(
       "reason_notdone" = LBREASND
     ) |> 
     dplyr::mutate(region = region %|_|% "Missing") |> 
-    Reduce(\(x1, x2) do.call(x2, list(x1)), # Apply next function to output of previous
-           meta$settings$post_merge_fns %||% "identity", # Return merged data if no additional functions
-           init = _) # Initiate with the merged data
+    apply_custom_functions(meta$settings$post_merge_fns) |>
   attr(merged_data, "synch_time") <- synch_time
   merged_data
 }
@@ -207,6 +201,19 @@ apply_study_specific_fixes <- function(
         TRUE                    ~ NA_character_
       )
     )
+}
+
+#' Apply custom modification functions
+#' 
+#' @param data A data frame (for example, raw data merged).
+#' @param functions A character vector containing the names of the functions to
+#'   apply to the data. Default is NULL.
+#' @param .default A character vector containing the names of the functions to
+#'   apply if none are provided. Default is "identity".
+apply_custom_functions <- function(data, functions = NULL, .default = "identity") {
+  Reduce(\(x1, x2) do.call(x2, list(x1)), # Apply next function to output of previous
+         functions %||% .default, # Apply default functions if no additional functions provided
+         init = data) # Initialize with the data object
 }
 
 #' Get appdata
