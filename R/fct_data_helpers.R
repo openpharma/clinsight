@@ -160,7 +160,7 @@ add_timevars_to_data <- function(
         toupper(event_id) == "EOT"    ~ "EoT",
         toupper(event_id) == "EXIT"   ~ "Exit",
         grepl("^AE|^CM|^CP|^MH|^PR|^ST", form_id) ~ "Any visit",
-        .default = paste0("Other (", event, ")")
+        .default = paste0("Other (", event_id, ")")
       ),
       event_label = event_label %|_|% dplyr::case_when(
         !is.na(vis_num)   ~ paste0("V", vis_num),
