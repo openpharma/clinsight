@@ -84,7 +84,6 @@ merge_meta_with_data <- function(
     fix_multiple_choice_vars(expected_vars = meta$items_expanded$var) |> 
     dplyr::right_join(meta$items_expanded, by = "var") |> 
     dplyr::filter(!is.na(item_value)) |>
-    readr::type_convert(clinsight_col_specs) |>
     Reduce(\(x1, x2) do.call(x2, list(x1)), # Apply next function to output of previous
            meta$settings$mid_merge_fns %||% "identity", # Return renamed data if no additional functions
            init = _) |>  # Initiate with the renamed data
