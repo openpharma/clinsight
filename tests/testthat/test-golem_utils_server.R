@@ -49,20 +49,26 @@ test_that("%|_|% works", {
     mtcarrs %|_|% iris,
     iris
   )
-  expect_warning(
-    test_wrn <- mtcars %|_|% iris,
+  test_wrn <- capture_output_lines(
+    test_out <- mtcars %|_|% iris
+  )
+  expect_equal(
+    test_wrn,
     'Using user supplied "mtcars" instead of deriving.'
   )
   expect_equal(
-    test_wrn,
+    test_out,
     mtcars
   )
-  expect_warning(
-    test_wrn <- dplyr::mutate(mtcars, test = mpg %|_|% "RHS"),
-    'Using user supplied "mpg" instead of deriving.'
+  test_wrn <- capture_output_lines(
+    test_out <- dplyr::mutate(mtcars, test = mpg %|_|% "RHS")
   )
   expect_equal(
     test_wrn,
+    'Using user supplied "mpg" instead of deriving.'
+  )
+  expect_equal(
+    test_out,
     cbind(mtcars, list(test = mtcars$mpg))
   )
   expect_equal(
