@@ -63,7 +63,7 @@ drop_nulls <- function(x) {
 #' @examples
 #' mtcars2 %|_|% mtcars
 "%|_|%" <- function(x, y, verbose = TRUE) {
-  if (exists(deparse1(substitute(x)))) {
+  if (exists(deparse1(substitute(x)), envir = parent.frame())) {
     if (verbose) warning(paste("Using user supplied", deparse(deparse1(substitute(x))), "instead of deriving."), call. = FALSE)
     x
   } else {
