@@ -44,3 +44,30 @@ test_that("%|NA|% works", {
   )
 })
 
+test_that("%|_|% works", {
+  expect_equal(
+    mtcarrs %|_|% iris,
+    iris
+  )
+  expect_warning(
+    test_wrn <- mtcars %|_|% iris,
+    'Using user supplied "mtcars" instead of deriving.'
+  )
+  expect_equal(
+    test_wrn,
+    mtcars
+  )
+  expect_warning(
+    test_wrn <- dplyr::mutate(mtcars, test = mpg %|_|% "RHS"),
+    'Using user supplied "mpg" instead of deriving.'
+  )
+  expect_equal(
+    test_wrn,
+    cbind(mtcars, list(test = mtcars$mpg))
+  )
+  expect_equal(
+    dplyr::mutate(mtcars, test = mpg2 %|_|% "RHS"),
+    cbind(mtcars, list(test = "RHS"))
+  )
+})
+
