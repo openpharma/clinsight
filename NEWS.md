@@ -1,5 +1,7 @@
 # clinsight (development version)
 
+- Generalized `merge_meta_with_data()` to allow user-defined processing functions.
+
 # clinsight 0.1.0
 
 ## Changed
