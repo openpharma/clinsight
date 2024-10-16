@@ -149,7 +149,7 @@ db_update <- function(
   }
   # Continue in the case data_synch_time is missing and if data_synch_time is 
   # more recent than db_synch_time
-  review_data <- DBI::dbGetQuery(con, "SELECT * FROM all_review_data")
+  review_data <- DBI::dbGetQuery(con, "SELECT * FROM all_review_data")[,-1]
   cat("Start adding new rows to database\n")
   updated_review_data <- update_review_data(
     review_df = review_data,
@@ -215,7 +215,8 @@ db_save_review <- function(
     # Filter below prevents unnecessarily overwriting the review status in forms   
     # with mixed reviewed status (due to an edit by the investigators). 
     dplyr::filter(reviewed != new_review_state) |> 
-    dplyr::collect()
+    dplyr::collect() |> 
+    dplyr::select(-id)
   if(nrow(new_review_rows) == 0){return(
     warning("Review state unaltered. No review will be saved.")
   )}
