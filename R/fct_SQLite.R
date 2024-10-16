@@ -101,6 +101,8 @@ db_create <- function(
     cat("\nCreating new table: ", i,  "\n")
     db_add_primary_key(con, i, new_data[[i]])
   }
+  cat("\nCreating log table: all_review_data_log\n")
+  db_add_log(con)
   cat("Finished writing to database\n\n")
 }
 
@@ -108,6 +110,40 @@ db_add_primary_key <- function(con, name, value) {
   fields <- c(id = "INTEGER PRIMARY KEY AUTOINCREMENT", DBI::dbDataType(con, value))
   DBI::dbCreateTable(con, name, fields)
   DBI::dbAppendTable(con, name, value)
+}
+
+db_add_log <- function(con) {
+  DBI::dbCreateTable(con, "all_review_data_log",
+                     c(id = "INTEGER PRIMARY KEY AUTOINCREMENT", review_id = "CHAR NOT NULL",
+                       old_data = "JSON", new_data = "JSON",
+                       dml_type = "CHAR NOT NULL", dml_timestamp = "DATETIME DEFAULT CURRENT_TIMESTAMP"))
+  DBI::dbExecute(con, paste(
+    "CREATE TRIGGER all_review_data_update_log_trigger",
+    "AFTER UPDATE ON all_review_data FOR EACH ROW",
+    "BEGIN",
+      "INSERT INTO all_review_data_log (",
+        "review_id, old_data, new_data, dml_type",
+      ")",
+      "VALUES(",
+        "NEW.id,",
+        "JSON_OBJECT(",
+          "'reviewed', OLD.reviewed,",
+          "'comment', OLD.comment,",
+          "'reviewer', OLD.reviewer,",
+          "'timestamp', OLD.timestamp,",
+          "'status', OLD.status",
+        "),",
+        "JSON_OBJECT(",
+          "'reviewed', NEW.reviewed,",
+          "'comment', NEW.comment,",
+          "'reviewer', NEW.reviewer,",
+          "'timestamp', NEW.timestamp,",
+          "'status', NEW.status",
+        "),",
+        "'UPDATE'",
+      ");",
+    "END"
+  ))
 }
 
 #' Update app database
