@@ -26,7 +26,7 @@ describe(
       con <- get_db_connection(temp_path)
       expect_equal(
         DBI::dbListTables(con), 
-        c("all_review_data", "db_synch_time", "query_data", "sqlite_sequence")
+        c("all_review_data", "all_review_data_log", "db_synch_time", "query_data", "sqlite_sequence")
         )
       expect_equal(
         colnames(dplyr::tbl(con, "all_review_data")), 
@@ -68,7 +68,7 @@ describe(
       con <- get_db_connection(temp_path)
       expect_equal(
         DBI::dbListTables(con), 
-        c("all_review_data", "db_synch_time", "query_data", "sqlite_sequence")
+        c("all_review_data", "all_review_data_log", "db_synch_time", "query_data", "sqlite_sequence")
       )
     })
   }
