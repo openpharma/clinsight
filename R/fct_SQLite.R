@@ -99,9 +99,15 @@ db_create <- function(
   con <- get_db_connection(db_path)
   for(i in names(new_data)){
     cat("\nCreating new table: ", i,  "\n")
-    DBI::dbWriteTable(con, i, new_data[[i]])
+    db_add_primary_key(con, i, new_data[[i]])
   }
   cat("Finished writing to database\n\n")
+}
+
+db_add_primary_key <- function(con, name, value) {
+  fields <- c(id = "INTEGER PRIMARY KEY AUTOINCREMENT", DBI::dbDataType(con, value))
+  DBI::dbCreateTable(con, name, fields)
+  DBI::dbAppendTable(con, name, value)
 }
 
 #' Update app database
