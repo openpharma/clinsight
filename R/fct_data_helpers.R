@@ -149,7 +149,7 @@ add_timevars_to_data <- function(
     dplyr::mutate(
       edit_date_time = as.POSIXct(edit_date_time, tz = "UTC"),
       event_date = as.Date(event_date),
-      day = day %|_|% event_date - min(event_date, na.rm = TRUE), 
+      day = day %|_|% {event_date - min(event_date, na.rm = TRUE)}, 
       vis_day = ifelse(grepl("^SCR|^VIS|^FU", event_id, ignore.case = TRUE), day, NA),
       vis_num = as.numeric(factor(vis_day))-1,
       event_name = event_name %|_|% dplyr::case_when(
