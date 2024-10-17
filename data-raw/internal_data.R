@@ -34,7 +34,6 @@ clinsight_col_specs <- c(
   "subject_id" = "c", 
   "event_id" = "c", 
   "event_date" = "D", 
-  "event_name" = "c", 
   "event_repeat" = "i", 
   "form_id" = "c", 
   "form_repeat" = "i", 

@@ -75,26 +75,23 @@ merge_meta_with_data <- function(
   synch_time <- attr(data, "synch_time") %||% ""
   merged_data <- data |> 
     rename_raw_data(column_names = meta$column_names) |> 
-    readr::type_convert(clinsight_col_specs) |> 
+    readr::type_convert(clinsight_col_specs) |>
+    apply_custom_functions(meta$settings$pre_merge_fns) |>
     add_timevars_to_data() |> 
     # fix MC values before merging:
     fix_multiple_choice_vars(expected_vars = meta$items_expanded$var) |> 
     dplyr::right_join(meta$items_expanded, by = "var") |> 
-    dplyr::filter(!is.na(item_value)) |> 
+    dplyr::filter(!is.na(item_value)) |>
+    apply_custom_functions(meta$settings$mid_merge_fns) |>
     dplyr::mutate(
-      suffix = ifelse(item_name == "ECG interpretation", "LBCLSIG", suffix),
-      suffix = ifelse(is.na(suffix), "VAL", suffix),
-      # TODO: improve code below to handle exceptions in a more general manner
-      suffix = ifelse(suffix %in% c("LBORRES", "VSORRES", "EGORRES") | 
-                        item_group %in% c("Cytogenetics", "General"), 
-                      "VAL", suffix)
+      suffix_names = suffix_names %|_|% ifelse(is.na(suffix) | grepl("ORRES$", suffix) | item_group == "General", "VAL", suffix)
     ) |> 
-    dplyr::select(-var) |> 
+    dplyr::select(-var, -suffix) |> 
     dplyr::mutate(
       edit_date_time = max(edit_date_time, na.rm = TRUE), 
       .by = c(subject_id, item_name, event_name, event_repeat)
     ) |> 
-    tidyr::pivot_wider(names_from = suffix, values_from = item_value) |> 
+    tidyr::pivot_wider(names_from = suffix_names, values_from = item_value) |> 
     add_missing_columns(expected_columns) |> 
     dplyr::mutate(
       LBORNR_Lower = as.numeric(ifelse(!is.na(lower_limit), lower_limit, LBORNR_Lower)),
@@ -112,9 +109,29 @@ merge_meta_with_data <- function(
       "item_value" = VAL,
       "reason_notdone" = LBREASND
     ) |> 
-    apply_study_specific_fixes() 
+    dplyr::mutate(region = region %|_|% "Missing") |> 
+    apply_custom_functions(meta$settings$post_merge_fns)
   attr(merged_data, "synch_time") <- synch_time
   merged_data
+}
+
+
+#' Apply study-specific suffix fixes
+#' 
+#' These changes are study/EDC-specific and part of the legacy code for ClinSight.
+#' 
+#' @param data A data frame
+#' 
+#' @return A data frame.
+apply_study_specific_suffix_fixes <- function(data) {
+  dplyr::mutate(data,
+    suffix = ifelse(item_name == "ECG interpretation", "LBCLSIG", suffix),
+    suffix = ifelse(is.na(suffix), "VAL", suffix),
+    # TODO: improve code below to handle exceptions in a more general manner
+    suffix_names = ifelse(suffix %in% c("LBORRES", "VSORRES", "EGORRES") | 
+                      item_group %in% c("Cytogenetics", "General"), 
+                    "VAL", suffix)
+  )
 }
 
 
@@ -184,6 +201,19 @@ apply_study_specific_fixes <- function(
         TRUE                    ~ NA_character_
       )
     )
+}
+
+#' Apply custom modification functions
+#' 
+#' @param data A data frame (for example, raw data merged).
+#' @param functions A character vector containing the names of the functions to
+#'   apply to the data. Default is NULL.
+#' @param .default A character vector containing the names of the functions to
+#'   apply if none are provided. Default is "identity".
+apply_custom_functions <- function(data, functions = NULL, .default = "identity") {
+  Reduce(\(x1, x2) do.call(x2, list(x1)), # Apply next function to output of previous
+         functions %||% .default, # Apply default functions if no additional functions provided
+         init = data) # Initialize with the data object
 }
 
 #' Get appdata
