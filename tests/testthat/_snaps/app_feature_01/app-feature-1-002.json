@@ -893,6 +893,7 @@
           "serverSide": true,
           "processing": true
         },
+        "callback": "function(table) {\ntable.on('dblclick', 'tbody tr', function(t) {\nt.currentTarget.classList.add('selected');\nvar tblID = $(t.target).closest('.datatables').attr('id')\nvar inputName = tblID + '_rows_selected'\nShiny.setInputValue(inputName, t.currentTarget.rowIndex)\ndocument.getElementById(\n\"start_page_1-go_to_patient-go_to_form\"\n).click();\n})\n}",
         "selection": {
           "mode": "single",
           "selected": null,
@@ -903,7 +904,8 @@
       "evals": [
         "options.initComplete",
         "options.rowCallback",
-        "options.ajax.data"
+        "options.ajax.data",
+        "callback"
       ],
       "jsHooks": [
 
