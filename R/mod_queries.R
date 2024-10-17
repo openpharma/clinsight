@@ -148,7 +148,7 @@ mod_queries_server <- function(id, r, navinfo, all_forms, db_path, table_names){
         initial_queries()[query_cols], 
         table_names, 
         title = table_title,
-        callback = dblclick_to_form(session$ns("go_to_form"))
+        callback = dblclick_to_form(ns("go_to_form"))
       )
     })
     

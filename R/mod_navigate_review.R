@@ -130,7 +130,7 @@ mod_navigate_review_server <- function(
       df[["reviewed"]] <- NULL 
       if(!input$show_all_data) df$subject_id <- NULL
       datatable_custom(df, table_names,
-                       callback = dblclick_to_form(session$ns("go_to_form")))
+                       callback = dblclick_to_form(ns("go_to_form")))
     }) 
     
     queries_table_data <- reactive({
