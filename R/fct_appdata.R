@@ -64,9 +64,8 @@ get_raw_csv_data <- function(
 merge_meta_with_data <- function(
     data,
     meta,
-    expected_columns = c("LBORNR_Lower", "LBORNR_Upper", "LBORRESU", 
-                         "LBORRESUOTH", "LBREASND", "unit", 
-                         "lower_limit", "upper_limit", "LBCLSIG")
+    expected_columns = c("lower_limit", "upper_limit", "unit", 
+                         "significance", "reason_notdone")
 ){
   stopifnot(is.data.frame(data))
   stopifnot(inherits(meta, "list"))
@@ -82,7 +81,7 @@ merge_meta_with_data <- function(
     fix_multiple_choice_vars(expected_vars = meta$items_expanded$var) |> 
     dplyr::right_join(meta$items_expanded, by = "var") |> 
     dplyr::filter(!is.na(item_value)) |>
-    apply_custom_functions(meta$settings$mid_merge_fns) |>
+    apply_custom_functions(meta$settings$pre_pivot_fns) |>
     dplyr::mutate(
       suffix_names = suffix_names %|_|% ifelse(is.na(suffix) | grepl("ORRES$", suffix) | item_group == "General", "VAL", suffix)
     ) |> 
@@ -93,21 +92,12 @@ merge_meta_with_data <- function(
     ) |> 
     tidyr::pivot_wider(names_from = suffix_names, values_from = item_value) |> 
     add_missing_columns(expected_columns) |> 
-    dplyr::mutate(
-      LBORNR_Lower = as.numeric(ifelse(!is.na(lower_limit), lower_limit, LBORNR_Lower)),
-      LBORNR_Upper = as.numeric(ifelse(!is.na(upper_limit), upper_limit, LBORNR_Upper)),
-      LBORRESU     = ifelse(is.na(LBORRESU), unit, LBORRESU),
-      LBORRESU     = ifelse(LBORRESU == "Other", LBORRESUOTH, LBORRESU),
-      LBORRESU     = ifelse(is.na(LBORRESU), "(unit missing)", LBORRESU)
-    ) |> 
-    dplyr::select(-c(lower_limit, upper_limit, unit, LBORRESUOTH)) |> 
+    apply_custom_functions(meta$settings$post_pivot_fns) |>
     dplyr::rename(
-      "lower_lim" = LBORNR_Lower,
-      "upper_lim" = LBORNR_Upper,
-      "item_unit" = LBORRESU,
-      "significance" = LBCLSIG,
-      "item_value" = VAL,
-      "reason_notdone" = LBREASND
+      "lower_lim" = lower_limit,
+      "upper_lim" = upper_limit,
+      "item_unit" = unit,
+      "item_value" = VAL
     ) |> 
     dplyr::mutate(region = region %|_|% "Missing") |> 
     apply_custom_functions(meta$settings$post_merge_fns)
@@ -132,6 +122,28 @@ apply_study_specific_suffix_fixes <- function(data) {
                       item_group %in% c("Cytogenetics", "General"), 
                     "VAL", suffix)
   )
+}
+
+apply_edc_specific_changes <- function(
+    data, 
+    expected_columns = c("LBORNR_Lower", "LBORNR_Upper", "LBORRESU", 
+                         "LBORRESUOTH", "LBCLSIG", "LBREASND")
+) {
+  data |> 
+    add_missing_columns(expected_columns) |> 
+    dplyr::mutate(
+      lower_limit = as.numeric(ifelse(!is.na(lower_limit), lower_limit, LBORNR_Lower)),
+      upper_limit = as.numeric(ifelse(!is.na(upper_limit), upper_limit, LBORNR_Upper)),
+      unit = dplyr::case_when(
+        is.na(LBORRESU) ~ unit,
+        LBORRESU == "Other" ~ LBORRESUOTH,
+        is.na(LBORRESU) ~ "(unit missing)",
+        .default = LBORRESU
+      ),
+      significance = LBCLSIG,
+      reason_notdone = LBREASND
+    ) |> 
+    dplyr::select(-expected_columns)
 }
 
 
