@@ -124,6 +124,16 @@ apply_study_specific_suffix_fixes <- function(data) {
   )
 }
 
+#' Apply EDC-specific suffix fixes
+#' 
+#' These changes are study/EDC-specific and part of the legacy code for ClinSight.
+#' 
+#' @param data A data frame
+#' @param expected_columns A character vector with the columns that should be
+#'   expected in the data frame. If missing, these columns will be added with
+#'   missing data (thus, will be made explicitly missing).
+#' 
+#' @return A data frame.
 apply_edc_specific_changes <- function(
     data, 
     expected_columns = c("LBORNR_Lower", "LBORNR_Upper", "LBORRESU", 
