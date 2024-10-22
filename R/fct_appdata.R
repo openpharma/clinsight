@@ -145,9 +145,9 @@ apply_edc_specific_changes <- function(
       lower_limit = as.numeric(ifelse(!is.na(lower_limit), lower_limit, LBORNR_Lower)),
       upper_limit = as.numeric(ifelse(!is.na(upper_limit), upper_limit, LBORNR_Upper)),
       unit = dplyr::case_when(
+        is.na(LBORRESU) & is.na(unit) ~ "(unit missing)",
         is.na(LBORRESU) ~ unit,
         LBORRESU == "Other" ~ LBORRESUOTH,
-        is.na(LBORRESU) ~ "(unit missing)",
         .default = LBORRESU
       ),
       significance = LBCLSIG,
