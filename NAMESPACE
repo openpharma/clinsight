@@ -2,6 +2,7 @@
 
 S3method(create_table,adverse_events)
 S3method(create_table,bm_cytology)
+S3method(create_table,common_events)
 S3method(create_table,conc_procedures)
 S3method(create_table,continuous)
 S3method(create_table,default)
