@@ -233,7 +233,17 @@ get_appdata <-  function(
     meta = metadata
 ){
   tableclasses <- gsub("create_table.", "", as.character(utils::methods("create_table")))
-  var_levels <- dplyr::distinct(meta$items_expanded, item_name, item_group) 
+  var_levels <- dplyr::distinct(meta$items_expanded, item_name, item_group)
+  form_types <- lapply(
+    c("common_forms", "study_forms", "general"),
+    \(x) {
+      lapply(metadata[x], \(y) {
+        cbind(form_type = x, item_group = unique(y$item_group))
+      }) |> 
+        do.call(what = rbind)
+    }) |> 
+    do.call(what = rbind) |> 
+    as.data.frame()
   
   data <- split(data, ~item_group)
   ## Apply changes specific for continuous data:
@@ -244,9 +254,10 @@ get_appdata <-  function(
       "item_group consists of multipe elements which is not allowed: ", 
       item_group_x
     )
+    class(x) <- c(with(form_types, form_type[item_group == item_group_x]), class(x))
     tableclass <- simplify_string(item_group_x)
     if(tableclass %in% tableclasses){
-      class(x) <- c(tableclass, class(x)) 
+      class(x) <- unique(c(tableclass, class(x)))
     }
     if(!all(x$item_type == "continuous")) return(x)
     df <- x |> 
@@ -289,7 +300,7 @@ get_appdata <-  function(
         )
       ) |> 
       dplyr::ungroup() 
-    class(df) <- c("continuous", class(df))
+    class(df) <- unique(c("continuous", class(x)))
     df
   }) 
   appdata
