@@ -142,15 +142,13 @@ apply_edc_specific_changes <- function(
   data |> 
     add_missing_columns(expected_columns) |> 
     dplyr::mutate(
-      lower_limit = as.numeric(ifelse(!is.na(lower_limit), lower_limit, LBORNR_Lower)),
-      upper_limit = as.numeric(ifelse(!is.na(upper_limit), upper_limit, LBORNR_Upper)),
-      unit = dplyr::case_when(
-        is.na(LBORRESU) & is.na(unit) ~ "(unit missing)",
-        is.na(LBORRESU) ~ unit,
-        LBORRESU == "Other" ~ LBORRESUOTH,
-        .default = LBORRESU
-      ),
-      significance = LBCLSIG,
+      lower_limit    = as.numeric(ifelse(!is.na(lower_limit), lower_limit, LBORNR_Lower)),
+      upper_limit    = as.numeric(ifelse(!is.na(upper_limit), upper_limit, LBORNR_Upper)),
+      LBORRESU       = ifelse(is.na(LBORRESU), unit, LBORRESU),
+      LBORRESU       = ifelse(LBORRESU == "Other", LBORRESUOTH, LBORRESU),
+      LBORRESU       = ifelse(is.na(LBORRESU), "(unit missing)", LBORRESU),
+      unit           = LBORRESU,
+      significance   = LBCLSIG,
       reason_notdone = LBREASND
     ) |> 
     dplyr::select(-expected_columns)
