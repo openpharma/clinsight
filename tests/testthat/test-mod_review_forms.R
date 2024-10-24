@@ -83,11 +83,11 @@ describe(
                 dplyr::collect()
             })
             
-            expect_equal(r$review_data, db_slice_rows(db_path))
+            expect_equal(r$review_data[,-1], db_slice_rows(db_path)[,-1])
             # it should have two rows in the DB, one with review= 'No' and the other with reviewed = "Yes"
             expect_equal(with(db_reviewdata, reviewed[subject_id == "885"]), c("No", "Yes") )
             expect_snapshot({
-              print(dplyr::select(r$review_data, -timestamp), width = Inf)
+              print(dplyr::select(r$review_data[,-1], -timestamp), width = Inf)
             })
             Sys.sleep(1) # because the timestamp only records seconds, 
             # we should add delay here to prevent that the exact same timestamp is 
@@ -112,7 +112,7 @@ describe(
             })
             expect_equal(with(db_reviewdata, comment[subject_id == "885"]), c("", "", "test review"))
             expect_equal(with(db_reviewdata, reviewed[subject_id == "885"]), c("No", "Yes", "No"))
-            expect_equal(r$review_data, db_slice_rows(db_path))
+            expect_equal(r$review_data[,-1], db_slice_rows(db_path)[,-1])
             expect_snapshot(print(dplyr::select(r$review_data, -timestamp), width = Inf))
           })
       }

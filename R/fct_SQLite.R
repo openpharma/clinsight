@@ -99,9 +99,51 @@ db_create <- function(
   con <- get_db_connection(db_path)
   for(i in names(new_data)){
     cat("\nCreating new table: ", i,  "\n")
-    DBI::dbWriteTable(con, i, new_data[[i]])
+    db_add_primary_key(con, i, new_data[[i]])
   }
+  cat("\nCreating log table: all_review_data_log\n")
+  db_add_log(con)
   cat("Finished writing to database\n\n")
+}
+
+db_add_primary_key <- function(con, name, value) {
+  fields <- c(id = "INTEGER PRIMARY KEY AUTOINCREMENT", DBI::dbDataType(con, value))
+  DBI::dbCreateTable(con, name, fields)
+  DBI::dbAppendTable(con, name, value)
+}
+
+db_add_log <- function(con) {
+  DBI::dbCreateTable(con, "all_review_data_log",
+                     c(id = "INTEGER PRIMARY KEY AUTOINCREMENT", review_id = "CHAR NOT NULL",
+                       old_data = "JSON", new_data = "JSON",
+                       dml_type = "CHAR NOT NULL", dml_timestamp = "DATETIME DEFAULT CURRENT_TIMESTAMP"))
+  DBI::dbExecute(con, paste(
+    "CREATE TRIGGER all_review_data_update_log_trigger",
+    "AFTER UPDATE ON all_review_data FOR EACH ROW",
+    "BEGIN",
+      "INSERT INTO all_review_data_log (",
+        "review_id, old_data, new_data, dml_type",
+      ")",
+      "VALUES(",
+        "NEW.id,",
+        "JSON_OBJECT(",
+          "'reviewed', OLD.reviewed,",
+          "'comment', OLD.comment,",
+          "'reviewer', OLD.reviewer,",
+          "'timestamp', OLD.timestamp,",
+          "'status', OLD.status",
+        "),",
+        "JSON_OBJECT(",
+          "'reviewed', NEW.reviewed,",
+          "'comment', NEW.comment,",
+          "'reviewer', NEW.reviewer,",
+          "'timestamp', NEW.timestamp,",
+          "'status', NEW.status",
+        "),",
+        "'UPDATE'",
+      ");",
+    "END"
+  ))
 }
 
 #' Update app database
@@ -143,7 +185,7 @@ db_update <- function(
   }
   # Continue in the case data_synch_time is missing and if data_synch_time is 
   # more recent than db_synch_time
-  review_data <- DBI::dbGetQuery(con, "SELECT * FROM all_review_data")
+  review_data <- DBI::dbGetQuery(con, "SELECT * FROM all_review_data")[,-1]
   cat("Start adding new rows to database\n")
   updated_review_data <- update_review_data(
     review_df = review_data,
@@ -209,7 +251,8 @@ db_save_review <- function(
     # Filter below prevents unnecessarily overwriting the review status in forms   
     # with mixed reviewed status (due to an edit by the investigators). 
     dplyr::filter(reviewed != new_review_state) |> 
-    dplyr::collect()
+    dplyr::collect() |> 
+    dplyr::select(-id)
   if(nrow(new_review_rows) == 0){return(
     warning("Review state unaltered. No review will be saved.")
   )}

@@ -3,15 +3,16 @@
 
 data_folder <- testthat::test_path("fixtures")
 rev_data <- get_review_data(clinsightful_data)
-db_path <- file.path(data_folder, "testdb.sqlite")
+db_path <- system.file(data_folder, "testdb.sqlite", package = "clinsight")
 db_create(rev_data, db_path)
 # fixed synch time needed for snapshots:
 db_temp_connect(db_path, {
-  DBI::dbWriteTable(
+  if ("db_synch_time" %in% DBI::dbListTables(con)) 
+    DBI::dbRemoveTable(con, "db_synch_time")
+  db_add_primary_key(
     con, 
     "db_synch_time",
-    data.frame("synch_time" = "2023-09-15 10:10:00 UTC"), 
-    overwrite = TRUE
+    data.frame("synch_time" = "2023-09-15 10:10:00 UTC")
   )
 })
 
