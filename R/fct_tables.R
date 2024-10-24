@@ -176,6 +176,23 @@ create_table.general <- function(
 }
 
 
+#' Create Default 'Common Events' Table
+#'
+#' @export
+#' @inherit create_table.default 
+create_table.common_events <- function(
+    data, 
+    name_column = "item_name",
+    value_column = "item_value",
+    keep_vars = c("subject_id", "form_repeat"),
+    expected_columns = NULL,
+    ...
+){
+  create_table.default(data, name_column, value_column, 
+                       keep_vars, expected_columns)
+}
+
+
 #' Create Adverse Events table
 #'
 #' Function to create an adverse event dataset.
