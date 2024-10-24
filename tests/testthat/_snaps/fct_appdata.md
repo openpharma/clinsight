@@ -41,9 +41,9 @@
       6 <NA>      <NA>       <NA>     NA                   NA <NA>             NA
       # i 16 more variables: edit_date_time <dttm>, day <drtn>, vis_day <dbl>,
       #   vis_num <dbl>, event_name <chr>, event_label <chr>, item_name <chr>,
-      #   item_type <chr>, item_group <chr>, item_value <chr>, item_unit <chr>,
-      #   lower_lim <dbl>, upper_lim <dbl>, significance <chr>, reason_notdone <chr>,
-      #   region <chr>
+      #   item_type <chr>, item_group <chr>, item_unit <chr>, lower_lim <dbl>,
+      #   upper_lim <dbl>, item_value <chr>, significance <chr>,
+      #   reason_notdone <chr>, region <chr>
 
 ---
 
@@ -66,9 +66,9 @@
       # i 533 more rows
       # i 16 more variables: edit_date_time <dttm>, day <drtn>, vis_day <dbl>,
       #   vis_num <dbl>, event_name <chr>, event_label <chr>, item_name <chr>,
-      #   item_type <chr>, item_group <chr>, item_value <chr>, item_unit <chr>,
-      #   lower_lim <dbl>, upper_lim <dbl>, significance <chr>, reason_notdone <chr>,
-      #   region <chr>
+      #   item_type <chr>, item_group <chr>, item_unit <chr>, lower_lim <dbl>,
+      #   upper_lim <dbl>, item_value <chr>, significance <chr>,
+      #   reason_notdone <chr>, region <chr>
 
 # get_appdata works: produces the expected output
 
