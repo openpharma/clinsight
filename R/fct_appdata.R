@@ -151,7 +151,7 @@ apply_edc_specific_changes <- function(
       significance   = LBCLSIG,
       reason_notdone = LBREASND
     ) |> 
-    dplyr::select(-expected_columns)
+    dplyr::select(-dplyr::all_of(expected_columns))
 }
 
 
