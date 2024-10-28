@@ -254,16 +254,12 @@ get_appdata <-  function(
 ){
   tableclasses <- gsub("create_table.", "", as.character(utils::methods("create_table")))
   var_levels <- dplyr::distinct(meta$items_expanded, item_name, item_group)
-  form_types <- lapply(
-    c("common_forms", "study_forms", "general"),
-    \(x) {
-      lapply(metadata[x], \(y) {
-        cbind(form_type = x, item_group = unique(y$item_group))
-      }) |> 
-        do.call(what = rbind)
-    }) |> 
-    do.call(what = rbind) |> 
-    as.data.frame()
+  forms <- c("common_forms", "study_forms", "general")
+  form_types <- Map(
+    \(x, y) cbind(form_type = y, item_group = unique(x$item_group)), 
+    metadata[forms], 
+    forms) |> 
+    do.call(what = rbind.data.frame)
   
   data <- split(data, ~item_group)
   ## Apply changes specific for continuous data:
