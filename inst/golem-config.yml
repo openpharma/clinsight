@@ -1,6 +1,6 @@
 default:
   golem_name: clinsight
-  golem_version: 0.1.0.9000
+  golem_version: 0.1.0.9005
   app_prod: no
   user_identification: test_user
   study_data: !expr clinsight::clinsightful_data
