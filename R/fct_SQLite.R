@@ -251,8 +251,7 @@ db_save_review <- function(
     # Filter below prevents unnecessarily overwriting the review status in forms   
     # with mixed reviewed status (due to an edit by the investigators). 
     dplyr::filter(reviewed != new_review_state) |> 
-    dplyr::collect() |> 
-    dplyr::select(-id)
+    dplyr::collect()
   if(nrow(new_review_rows) == 0){return(
     warning("Review state unaltered. No review will be saved.")
   )}
@@ -263,8 +262,18 @@ db_save_review <- function(
     # dplyr::slice_max(edit_date_time, by = dplyr::all_of(common_vars)) |> 
     dplyr::bind_cols(rv_row[cols_to_change]) # bind_cols does not work in a db connection.
   cat("write updated review data to database\n")
-  lapply(tables, \(x){DBI::dbWriteTable(db_con, x, new_review_rows, append = TRUE)}) |> 
-    invisible()
+  dplyr::copy_to(db_con, new_review_rows, "row_updates")
+  rs <- DBI::dbSendStatement(db_con, paste(
+    "UPDATE",
+    tables,
+    "SET",
+    sprintf("%1$s = row_updates.%1$s", cols_to_change) |> paste(collapse = ", "),
+    "FROM",
+    "row_updates",
+    "WHERE",
+    sprintf("%s.id = row_updates.id", tables)
+  ))
+  DBI::dbClearResult(rs)
   cat("finished writing to the tables:", tables, "\n")
 }
 
