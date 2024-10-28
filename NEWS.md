@@ -1,7 +1,7 @@
 # clinsight (development version)
 
 - Generalized `merge_meta_with_data()` to allow user-defined processing functions.
-- Added feature where double clicking on a row auto goes to form for applicable tables.
+- Added a feature where, in applicable tables, a user can navigate to a form by double-clicking a table row.
 
 # clinsight 0.1.0
 
