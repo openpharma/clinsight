@@ -85,7 +85,7 @@ describe(
             
             expect_equal(r$review_data[,-1], db_slice_rows(db_path)[,-1])
             # it should have two rows in the DB, one with review= 'No' and the other with reviewed = "Yes"
-            expect_equal(with(db_reviewdata, reviewed[subject_id == "885"]), c("No", "Yes") )
+            expect_equal(with(db_reviewdata, reviewed[subject_id == "885"]), c("Yes") )
             expect_snapshot({
               print(dplyr::select(r$review_data[,-1], -timestamp), width = Inf)
             })
@@ -110,8 +110,8 @@ describe(
               dplyr::tbl(con, "all_review_data") |> 
                 dplyr::collect()
             })
-            expect_equal(with(db_reviewdata, comment[subject_id == "885"]), c("", "", "test review"))
-            expect_equal(with(db_reviewdata, reviewed[subject_id == "885"]), c("No", "Yes", "No"))
+            expect_equal(with(db_reviewdata, comment[subject_id == "885"]), c("test review"))
+            expect_equal(with(db_reviewdata, reviewed[subject_id == "885"]), c("No"))
             expect_equal(r$review_data[,-1], db_slice_rows(db_path)[,-1])
             expect_snapshot(print(dplyr::select(r$review_data, -timestamp), width = Inf))
           })

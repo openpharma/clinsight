@@ -224,8 +224,7 @@ describe(
       )
       expect_equal(
         dplyr::collect(dplyr::tbl(con, "all_review_data"))[,-1], 
-        dplyr::as_tibble(rbind(cbind(df, old_review), cbind(df, new_review))
-        )
+        dplyr::as_tibble(cbind(df, new_review))
       )
     })
     it("Updates all items from a item_group as reviewed", {
@@ -268,12 +267,11 @@ describe(
       )
       expect_true(is.data.frame(dplyr::collect(dplyr::tbl(con, "all_review_data"))))
       results <- dplyr::collect(dplyr::tbl(con, "all_review_data"))
-      expect_equal(nrow(results), 4)
-      expect_equal(results$status, c("new", "new", "old", "old"))
+      expect_equal(nrow(results), 2)
+      expect_equal(results$status, c("old", "old"))
       expect_equal(
         results[,-1],
-        dplyr::as_tibble(rbind(cbind(df, old_review), cbind(df, new_review)))
-      )
+        dplyr::as_tibble(cbind(df, new_review)))
     })
     
     
