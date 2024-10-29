@@ -1,0 +1,8 @@
+pandoc: 3.1.11
+pkgdown: 2.1.0
+pkgdown_sha: ~
+articles:
+  Contributions: Contributions.html
+  data_spec: data_spec.html
+  test_report: test_report.html
+last_built: 2024-10-29T14:42Z
