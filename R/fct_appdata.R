@@ -113,6 +113,7 @@ merge_meta_with_data <- function(
 #' @param data A data frame
 #' 
 #' @return A data frame.
+#' @keywords internal
 apply_study_specific_suffix_fixes <- function(data) {
   dplyr::mutate(data,
     suffix = ifelse(item_name == "ECG interpretation", "LBCLSIG", suffix),
@@ -134,6 +135,7 @@ apply_study_specific_suffix_fixes <- function(data) {
 #'   missing data (thus, will be made explicitly missing).
 #' 
 #' @return A data frame.
+#' @keywords internal
 apply_edc_specific_changes <- function(
     data, 
     expected_columns = c("LBORNR_Lower", "LBORNR_Upper", "LBORRESU", 
@@ -230,6 +232,7 @@ apply_study_specific_fixes <- function(
 #'   apply to the data. Default is NULL.
 #' @param .default A character vector containing the names of the functions to
 #'   apply if none are provided. Default is "identity".
+#' @keywords internal
 apply_custom_functions <- function(data, functions = NULL, .default = "identity") {
   Reduce(\(x1, x2) do.call(x2, list(x1)), # Apply next function to output of previous
          functions %||% .default, # Apply default functions if no additional functions provided
