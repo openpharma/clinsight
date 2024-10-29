@@ -35,6 +35,7 @@ reference:
   - create_table.default
   - create_table.adverse_events
   - create_table.bm_cytology
+  - create_table.common_events
   - create_table.conc_procedures
   - create_table.continuous
   - create_table.general
