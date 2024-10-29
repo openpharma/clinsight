@@ -9,10 +9,10 @@ datatable_custom(
   rename_vars = NULL,
   title = NULL,
   selection = "single",
-  extensions = "Scroller",
+  extensions = c("Buttons", "Scroller"),
   plugins = "scrollResize",
-  dom = "fti",
-  options = list(),
+  dom = "Bfti",
+  options = list(buttons = list("excel")),
   ...
 )
 }
