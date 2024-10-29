@@ -46,7 +46,8 @@ describe(
         edit_date_time = as.Date(c("2023-11-05", "2023-11-09")),
         reviewed = "No",
         status = c("updated", "new")
-      )
+      ) |> 
+        dplyr::arrange(status)
       expect_true(is.data.frame(result))
       expect_equal(dplyr::select(result, dplyr::all_of(colnames(expected))), expected)
     })

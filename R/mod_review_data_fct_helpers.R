@@ -101,9 +101,10 @@ update_review_data <- function(
 
   # Grab records in the review db table that have had changes. Reset review
   # values and update status to 'updated'.
-  updated_records <- review_df |> 
-    dplyr::semi_join(latest_review_data, by = common_vars) |> 
-    dplyr::anti_join(latest_review_data, by = names(latest_review_data)) |> 
+  updated_records <- latest_review_data |> 
+    dplyr::anti_join(new_records, by = common_vars) |> 
+    dplyr::left_join(dplyr::select(review_df, dplyr::any_of(c("id", common_vars))), by = common_vars) |> 
+    dplyr::anti_join(review_df, by = names(latest_review_data)) |> 
     dplyr::mutate(
       timestamp = update_time,
       reviewed = "No",
