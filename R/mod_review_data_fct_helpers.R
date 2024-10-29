@@ -88,29 +88,31 @@ update_review_data <- function(
   # - the data point will be reviewed. a new row with the same item and edit date-time 
   #   is added, with new review status and new timestamp
   
-  df <- latest_review_data |> 
-    # including event_date in join by should work, even for Adverse events, since 
-    # if event_date changes, the edit date-time also changes, and thus all rows 
-    # will be taken into consideration.
-    dplyr::full_join(review_df, by = names(latest_review_data)) |> 
-    add_missing_columns(c("timestamp", "reviewed", "comment", "status"))
-  
-  df <- df |> 
-    tidyr::replace_na(list(timestamp = update_time, reviewed = "No", comment = "")) |> 
-    # now add status labels to the new rows:
+  # Grab the records not present in the review db table. Impute missing values.
+  new_records <- latest_review_data |> 
+    dplyr::anti_join(review_df, by = common_vars) |> 
+    add_missing_columns(c("timestamp", "reviewed", "comment", "status")) |> 
     dplyr::mutate(
-      status = ifelse(
-        # All old status labels ("old", "updated" or "new") should be retained here:
-        !is.na(status) & !status == "", status,
-        # All new rows do not have a status label yet. They should either get
-        # the label "new" or "updated", based on whether a review of the same
-        # data point did already take place in the past:
-        ifelse(any(reviewed == "Yes"), "updated", "new")
-      ),
-      .by = dplyr::all_of(c(common_vars))
+      timestamp = update_time, 
+      reviewed = "No", 
+      comment = "",
+      status = "new"
     )
-  updated_data <- dplyr::anti_join(df, review_df, 
-                                   by = c(common_vars, edit_time_var))
+
+  # Grab records in the review db table that have had changes. Reset review
+  # values and update status to 'updated'.
+  updated_records <- review_df |> 
+    dplyr::semi_join(latest_review_data, by = common_vars) |> 
+    dplyr::anti_join(latest_review_data, by = names(latest_review_data)) |> 
+    dplyr::mutate(
+      timestamp = update_time,
+      reviewed = "No",
+      reviewer = NA_character_,
+      comment = "",
+      status = "updated"
+    )
+  
+  updated_data <- dplyr::bind_rows(new_records, updated_records)
   
   if(nrow(updated_data) == 0){
     warning("No new data in the updated dataset. Returning empty data frame.")

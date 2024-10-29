@@ -176,7 +176,7 @@ db_update <- function(
   }
   # Continue in the case data_synch_time is missing and if data_synch_time is 
   # more recent than db_synch_time
-  review_data <- DBI::dbGetQuery(con, "SELECT * FROM all_review_data")[,-1]
+  review_data <- DBI::dbGetQuery(con, "SELECT * FROM all_review_data")
   cat("Start adding new rows to database\n")
   updated_review_data <- update_review_data(
     review_df = review_data,
@@ -186,7 +186,20 @@ db_update <- function(
     update_time = data_synch_time
   )
   cat("writing updated review data to database...\n")
-  DBI::dbWriteTable(con, "all_review_data", updated_review_data, append = TRUE)
+  cols_to_change <- c("reviewed", "comment", "reviewer", "timestamp", "status")
+  dplyr::copy_to(con, dplyr::filter(updated_review_data, !is.na(id)), "row_updates")
+  rs <- DBI::dbSendStatement(con, paste(
+    "UPDATE",
+    "all_review_data",
+    "SET",
+    sprintf("%1$s = row_updates.%1$s", cols_to_change) |> paste(collapse = ", "),
+    "FROM",
+    "row_updates",
+    "WHERE",
+    "all_review_data.id = row_updates.id"
+  ))
+  DBI::dbClearResult(rs)
+  DBI::dbWriteTable(con, "all_review_data", dplyr::filter(updated_review_data, is.na(id)), append = TRUE)
   DBI::dbWriteTable(
     con, 
     "db_synch_time", 
