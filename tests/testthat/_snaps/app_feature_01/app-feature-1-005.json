@@ -1,431 +1,4 @@
 {
-  "input": {
-    ".clientValue-default-plotlyCrosstalkOpts": {
-      "on": "plotly_click",
-      "persistent": false,
-      "dynamic": false,
-      "selectize": false,
-      "opacityDim": 0.2,
-      "selected": {
-        "opacity": 1
-      },
-      "debounce": 0,
-      "color": [
-
-      ]
-    },
-    "cf_adverse_events-SAE_table_cell_clicked": {
-
-    },
-    "cf_adverse_events-SAE_table_cells_selected": [
-
-    ],
-    "cf_adverse_events-SAE_table_columns_selected": null,
-    "cf_adverse_events-SAE_table_rows_all": null,
-    "cf_adverse_events-SAE_table_rows_current": null,
-    "cf_adverse_events-SAE_table_rows_selected": null,
-    "cf_adverse_events-SAE_table_search": "",
-    "cf_adverse_events-SAE_table_state": {
-      "start": 0,
-      "length": 90,
-      "order": [
-
-      ],
-      "search": {
-        "search": "",
-        "smart": true,
-        "regex": false,
-        "caseInsensitive": true
-      },
-      "columns": [
-        {
-          "visible": true,
-          "search": {
-            "search": "",
-            "smart": true,
-            "regex": false,
-            "caseInsensitive": true
-          }
-        },
-        {
-          "visible": true,
-          "search": {
-            "search": "",
-            "smart": true,
-            "regex": false,
-            "caseInsensitive": true
-          }
-        },
-        {
-          "visible": true,
-          "search": {
-            "search": "",
-            "smart": true,
-            "regex": false,
-            "caseInsensitive": true
-          }
-        },
-        {
-          "visible": true,
-          "search": {
-            "search": "",
-            "smart": true,
-            "regex": false,
-            "caseInsensitive": true
-          }
-        },
-        {
-          "visible": true,
-          "search": {
-            "search": "",
-            "smart": true,
-            "regex": false,
-            "caseInsensitive": true
-          }
-        },
-        {
-          "visible": true,
-          "search": {
-            "search": "",
-            "smart": true,
-            "regex": false,
-            "caseInsensitive": true
-          }
-        },
-        {
-          "visible": true,
-          "search": {
-            "search": "",
-            "smart": true,
-            "regex": false,
-            "caseInsensitive": true
-          }
-        },
-        {
-          "visible": true,
-          "search": {
-            "search": "",
-            "smart": true,
-            "regex": false,
-            "caseInsensitive": true
-          }
-        },
-        {
-          "visible": true,
-          "search": {
-            "search": "",
-            "smart": true,
-            "regex": false,
-            "caseInsensitive": true
-          }
-        },
-        {
-          "visible": true,
-          "search": {
-            "search": "",
-            "smart": true,
-            "regex": false,
-            "caseInsensitive": true
-          }
-        },
-        {
-          "visible": true,
-          "search": {
-            "search": "",
-            "smart": true,
-            "regex": false,
-            "caseInsensitive": true
-          }
-        },
-        {
-          "visible": true,
-          "search": {
-            "search": "",
-            "smart": true,
-            "regex": false,
-            "caseInsensitive": true
-          }
-        },
-        {
-          "visible": true,
-          "search": {
-            "search": "",
-            "smart": true,
-            "regex": false,
-            "caseInsensitive": true
-          }
-        }
-      ],
-      "scroller": {
-        "topRow": 0,
-        "baseScrollTop": 0,
-        "baseRowTop": 0,
-        "scrollTop": 0
-      }
-    },
-    "cf_adverse_events-common_form_table_cell_clicked": {
-
-    },
-    "cf_adverse_events-common_form_table_cells_selected": [
-
-    ],
-    "cf_adverse_events-common_form_table_columns_selected": null,
-    "cf_adverse_events-common_form_table_rows_all": [
-      1,
-      2,
-      3,
-      4,
-      5
-    ],
-    "cf_adverse_events-common_form_table_rows_current": [
-      1,
-      2,
-      3,
-      4,
-      5
-    ],
-    "cf_adverse_events-common_form_table_rows_selected": null,
-    "cf_adverse_events-common_form_table_search": "",
-    "cf_adverse_events-common_form_table_state": {
-      "start": 0,
-      "length": 90,
-      "order": [
-
-      ],
-      "search": {
-        "search": "",
-        "smart": true,
-        "regex": false,
-        "caseInsensitive": true
-      },
-      "columns": [
-        {
-          "visible": true,
-          "search": {
-            "search": "",
-            "smart": true,
-            "regex": false,
-            "caseInsensitive": true
-          }
-        },
-        {
-          "visible": true,
-          "search": {
-            "search": "",
-            "smart": true,
-            "regex": false,
-            "caseInsensitive": true
-          }
-        },
-        {
-          "visible": true,
-          "search": {
-            "search": "",
-            "smart": true,
-            "regex": false,
-            "caseInsensitive": true
-          }
-        },
-        {
-          "visible": true,
-          "search": {
-            "search": "",
-            "smart": true,
-            "regex": false,
-            "caseInsensitive": true
-          }
-        },
-        {
-          "visible": true,
-          "search": {
-            "search": "",
-            "smart": true,
-            "regex": false,
-            "caseInsensitive": true
-          }
-        },
-        {
-          "visible": true,
-          "search": {
-            "search": "",
-            "smart": true,
-            "regex": false,
-            "caseInsensitive": true
-          }
-        },
-        {
-          "visible": true,
-          "search": {
-            "search": "",
-            "smart": true,
-            "regex": false,
-            "caseInsensitive": true
-          }
-        },
-        {
-          "visible": true,
-          "search": {
-            "search": "",
-            "smart": true,
-            "regex": false,
-            "caseInsensitive": true
-          }
-        },
-        {
-          "visible": true,
-          "search": {
-            "search": "",
-            "smart": true,
-            "regex": false,
-            "caseInsensitive": true
-          }
-        },
-        {
-          "visible": true,
-          "search": {
-            "search": "",
-            "smart": true,
-            "regex": false,
-            "caseInsensitive": true
-          }
-        }
-      ],
-      "scroller": {
-        "topRow": 0,
-        "baseScrollTop": 0,
-        "baseRowTop": 0,
-        "scrollTop": 0
-      }
-    },
-    "cf_adverse_events-show_all_data": false,
-    "cf_adverse_events-timeline_fig-timeline_ids": [
-      "53",
-      "54",
-      "55",
-      "56",
-      "57",
-      "58",
-      "59",
-      "85",
-      "93",
-      "104",
-      "110",
-      "124",
-      "198",
-      "199",
-      "200"
-    ],
-    "cf_adverse_events-timeline_fig-timeline_selected": null,
-    "cf_adverse_events-timeline_fig-timeline_visible": [
-      "56",
-      "55",
-      "54",
-      "53",
-      "57",
-      "58",
-      "59",
-      "110",
-      "104",
-      "93",
-      "85",
-      "124",
-      "199",
-      "198",
-      "200"
-    ],
-    "cf_conc_procedures-show_all_data": false,
-    "cf_medical_history-show_all_data": false,
-    "cf_medication-show_all_data": false,
-    "common_data_tabs": "Adverse events",
-    "main_sidebar_1-navigate_forms_1-form_next": 0,
-    "main_sidebar_1-navigate_forms_1-form_previous": 0,
-    "main_sidebar_1-review_config_1-config_review": 0,
-    "main_sidebar_1-review_forms_1-add_comment": false,
-    "main_sidebar_1-review_forms_1-confirm_review_tabs": "show_checkbox",
-    "main_sidebar_1-review_forms_1-form_reviewed": false,
-    "main_sidebar_1-review_forms_1-review_comment": "",
-    "main_sidebar_1-review_forms_1-save_review": 0,
-    "main_sidebar_1-show_review_controls": "panel_controls",
-    "main_sidebar_1-write_query-create_query": 2,
-    "main_sidebar_1-write_query-query_add_input": 0,
-    "main_sidebar_1-write_query-query_major": true,
-    "main_sidebar_1-write_query-query_major_info": false,
-    "main_sidebar_1-write_query-query_select_item": "Tachycardia",
-    "main_sidebar_1-write_query-query_select_visit": "Any visit",
-    "main_sidebar_1-write_query-query_sidebar": true,
-    "main_sidebar_1-write_query-query_text": "Major test query",
-    "main_tabs": "Common events",
-    "navigate_participants_1-participant_selection": "BEL_04_772",
-    "navigate_participants_1-subj_apply": 1,
-    "navigate_participants_1-subj_next": 0,
-    "navigate_participants_1-subj_previous": 0,
-    "navigate_review_1-review_value_box_full_screen": false,
-    "plotly_afterplot-click_individuals": "\"sf_vital_signs-figure\"",
-    "queries_1-details_panel_full_screen": false,
-    "queries_1-go_to_form-go_to_form": 0,
-    "queries_1-query_follow_up_1-query_add_follow_up": 0,
-    "queries_1-query_follow_up_1-query_follow_up_full_screen": false,
-    "queries_1-query_follow_up_1-query_follow_up_text": "",
-    "queries_1-query_follow_up_1-resolved": false,
-    "queries_1-show_resolved": false,
-    "report_1-create_report": 0,
-    "sf_cbc_regular-filter": [
-      "haemoglobin",
-      "haematocrit",
-      "platelets",
-      "neutrophils",
-      "lymphocytes",
-      "monocytes"
-    ],
-    "sf_cbc_regular-show_all": false,
-    "sf_cbc_regular-switch_view": "graph",
-    "sf_electrolytes-filter": [
-      "sodium",
-      "potassium",
-      "chloride",
-      "bicarbonate",
-      "calcium",
-      "magnesium"
-    ],
-    "sf_electrolytes-show_all": false,
-    "sf_electrolytes-switch_view": "graph",
-    "sf_liver_function-filter": [
-      "bilirubin",
-      "ast",
-      "alt",
-      "ggt"
-    ],
-    "sf_liver_function-show_all": false,
-    "sf_liver_function-switch_view": "graph",
-    "sf_renal_function-filter": [
-      "creatinine",
-      "egfr",
-      "urate"
-    ],
-    "sf_renal_function-show_all": false,
-    "sf_renal_function-switch_view": "graph",
-    "sf_response-filter": [
-      "response",
-      "responder"
-    ],
-    "sf_response-show_all": false,
-    "sf_response-switch_view": "table",
-    "sf_vital_signs-filter": [
-      "systolic_blood_pressure",
-      "diastolic_blood_pressure",
-      "pulse",
-      "resp",
-      "temperature",
-      "weight_change_since_screening",
-      "bmi",
-      "weight"
-    ],
-    "sf_vital_signs-show_all": false,
-    "sf_vital_signs-switch_view": "graph",
-    "start_page_1-go_to_nav_review": 0,
-    "start_page_1-go_to_patient-go_to_form": 0,
-    "study_data_tabs": "Vital signs"
-  },
   "output": {
     "cf_adverse_events-SAE_table": {
       "x": {
@@ -1080,7 +653,7 @@
       ]
     },
     "header_widgets_1-ae_box": {
-      "html": "<div class=\"card bslib-card bslib-mb-spacing html-fill-item html-fill-container bslib-value-box bg-warning showcase-left-center\" data-bslib-card-init data-require-bs-caller=\"card() value_box()\" data-require-bs-version=\"5 5\">\n  <div class=\"card-body bslib-gap-spacing html-fill-item html-fill-container\" style=\"margin-top:auto;margin-bottom:auto;flex:1 1 auto; padding:0;\">\n    <div class=\"value-box-grid html-fill-item\" style=\"--bslib-grid-height:auto;--bslib-grid-height-mobile:auto;---bslib-value-box-showcase-w:30%;---bslib-value-box-showcase-w-fs:1fr;---bslib-value-box-showcase-max-h:100px;---bslib-value-box-showcase-max-h-fs:67%;\">\n      <div class=\"value-box-showcase html-fill-item html-fill-container\">\n        <i class=\"fas fa-house-medical fa-2x\" role=\"presentation\" aria-label=\"house-medical icon\"><\/i>\n      <\/div>\n      <div class=\"value-box-area html-fill-item html-fill-container\">\n        <p class=\"value-box-title\">SAEs: 0<\/p>\n        <p class=\"value-box-value\">AEs: 5<\/p>\n      <\/div>\n    <\/div>\n  <\/div>\n  <script data-bslib-card-init>bslib.Card.initializeAllCards();<\/script>\n<\/div>",
+      "html": "<div class=\"card bslib-card bslib-mb-spacing html-fill-item html-fill-container bslib-value-box bg-primary showcase-left-center\" data-bslib-card-init data-require-bs-caller=\"card() value_box()\" data-require-bs-version=\"5 5\">\n  <div class=\"card-body bslib-gap-spacing html-fill-item html-fill-container\" style=\"margin-top:auto;margin-bottom:auto;flex:1 1 auto; padding:0;\">\n    <div class=\"value-box-grid html-fill-item\" style=\"--bslib-grid-height:auto;--bslib-grid-height-mobile:auto;---bslib-value-box-showcase-w:30%;---bslib-value-box-showcase-w-fs:1fr;---bslib-value-box-showcase-max-h:100px;---bslib-value-box-showcase-max-h-fs:67%;\">\n      <div class=\"value-box-showcase html-fill-item html-fill-container\">\n        <i class=\"fas fa-house-medical fa-2x\" role=\"presentation\" aria-label=\"house-medical icon\"><\/i>\n      <\/div>\n      <div class=\"value-box-area html-fill-item html-fill-container\">\n        <p class=\"value-box-title\">SAEs: 0<\/p>\n        <p class=\"value-box-value\">AEs: 0<\/p>\n      <\/div>\n    <\/div>\n  <\/div>\n  <script data-bslib-card-init>bslib.Card.initializeAllCards();<\/script>\n<\/div>",
       "deps": [
         {
           "name": "font-awesome",
@@ -1161,7 +734,7 @@
         }
       ]
     },
-    "main_sidebar_1-navigate_forms_1-form_name": "<center><b>Adverse events<\/b><\/center>",
+    "main_sidebar_1-navigate_forms_1-form_name": "<center><b>Vital signs<\/b><\/center>",
     "main_sidebar_1-review_forms_1-save_review_error": {
       "message": "Requires review",
       "call": "NULL",
@@ -1171,18 +744,9 @@
       ]
     },
     "main_sidebar_1-synch_info-db_synch_info": "EDC Sync date: <br>2023-09-15 10:10:00 UTC<br><br>EDC latest data: 2023-09-14 15:17:00",
-    "main_sidebar_1-write_query-query_error": {
-      "message": "",
-      "call": "NULL",
-      "type": [
-        "shiny.silent.error",
-        "validation"
-      ]
-    },
-    "main_sidebar_1-write_query-reviewer": "Author: test user (Administrator)",
-    "navigate_participants_1-status": "<b>BEL_04_772<\/b><br><b>Sex:<\/b> Male<br><b>Age:<\/b> 78yrs.<br><b>Status:<\/b> Enrolled<br><b>ECOG:<\/b> 0<br><b>Dx:<\/b> Syndrome O",
+    "navigate_participants_1-status": "<b>NLD_06_893<\/b><br><b>Sex:<\/b> Male<br><b>Age:<\/b> 41yrs.<br><b>Status:<\/b> Enrolled<br><b>ECOG:<\/b> 0<br><b>Dx:<\/b> Syndrome R",
     "navigate_participants_1-subject_info": {
-      "html": "<div class=\"card bslib-card bslib-mb-spacing html-fill-item html-fill-container bslib-value-box bg-primary showcase-left-center\" data-bslib-card-init data-require-bs-caller=\"card() value_box()\" data-require-bs-version=\"5 5\" style=\"max-height:100px;\">\n  <div class=\"card-body bslib-gap-spacing html-fill-item html-fill-container\" style=\"margin-top:auto;margin-bottom:auto;flex:1 1 auto; padding:0;\">\n    <div class=\"value-box-grid html-fill-item\" style=\"--bslib-grid-height:auto;--bslib-grid-height-mobile:auto;---bslib-value-box-showcase-w:30%;---bslib-value-box-showcase-w-fs:1fr;---bslib-value-box-showcase-max-h:100px;---bslib-value-box-showcase-max-h-fs:67%;\">\n      <div class=\"value-box-showcase html-fill-item html-fill-container\">\n        <i class=\"fas fa-user-check fa-2x\" role=\"presentation\" aria-label=\"user-check icon\"><\/i>\n      <\/div>\n      <div class=\"value-box-area html-fill-item html-fill-container\">\n        <p class=\"value-box-title\">BEL_04_772<\/p>\n        <p class=\"value-box-value\">Male, 78yrs.<\/p>\n      <\/div>\n    <\/div>\n  <\/div>\n  <script data-bslib-card-init>bslib.Card.initializeAllCards();<\/script>\n<\/div>",
+      "html": "<div class=\"card bslib-card bslib-mb-spacing html-fill-item html-fill-container bslib-value-box bg-primary showcase-left-center\" data-bslib-card-init data-require-bs-caller=\"card() value_box()\" data-require-bs-version=\"5 5\" style=\"max-height:100px;\">\n  <div class=\"card-body bslib-gap-spacing html-fill-item html-fill-container\" style=\"margin-top:auto;margin-bottom:auto;flex:1 1 auto; padding:0;\">\n    <div class=\"value-box-grid html-fill-item\" style=\"--bslib-grid-height:auto;--bslib-grid-height-mobile:auto;---bslib-value-box-showcase-w:30%;---bslib-value-box-showcase-w-fs:1fr;---bslib-value-box-showcase-max-h:100px;---bslib-value-box-showcase-max-h-fs:67%;\">\n      <div class=\"value-box-showcase html-fill-item html-fill-container\">\n        <i class=\"fas fa-user-check fa-2x\" role=\"presentation\" aria-label=\"user-check icon\"><\/i>\n      <\/div>\n      <div class=\"value-box-area html-fill-item html-fill-container\">\n        <p class=\"value-box-title\">NLD_06_893<\/p>\n        <p class=\"value-box-value\">Male, 41yrs.<\/p>\n      <\/div>\n    <\/div>\n  <\/div>\n  <script data-bslib-card-init>bslib.Card.initializeAllCards();<\/script>\n<\/div>",
       "deps": [
         {
           "name": "font-awesome",
@@ -1263,7 +827,7 @@
         }
       ]
     },
-    "navigate_review_1-forms_to_review": "8",
+    "navigate_review_1-forms_to_review": "5",
     "sf_vital_signs-figure": {
       "x": {
         "data": [
@@ -6864,8 +6428,24 @@
             "frame": null
           },
           {
-            "x": 0,
-            "y": 125,
+            "x": [
+              0,
+              7,
+              21,
+              35,
+              49,
+              63,
+              77
+            ],
+            "y": [
+              131,
+              132,
+              129,
+              117,
+              128,
+              137,
+              131
+            ],
             "text": "",
             "type": "scatter",
             "mode": "lines",
@@ -6882,8 +6462,24 @@
             "frame": null
           },
           {
-            "x": 0,
-            "y": 56,
+            "x": [
+              0,
+              7,
+              21,
+              35,
+              49,
+              63,
+              77
+            ],
+            "y": [
+              68,
+              79,
+              73,
+              77,
+              62,
+              76,
+              61
+            ],
             "text": "",
             "type": "scatter",
             "mode": "lines",
@@ -6900,8 +6496,24 @@
             "frame": null
           },
           {
-            "x": 0,
-            "y": 76,
+            "x": [
+              0,
+              7,
+              21,
+              35,
+              49,
+              63,
+              77
+            ],
+            "y": [
+              76,
+              63,
+              73,
+              70,
+              70,
+              75,
+              72
+            ],
             "text": "",
             "type": "scatter",
             "mode": "lines",
@@ -6918,8 +6530,24 @@
             "frame": null
           },
           {
-            "x": 0,
-            "y": 16,
+            "x": [
+              0,
+              7,
+              21,
+              35,
+              49,
+              63,
+              77
+            ],
+            "y": [
+              17,
+              16,
+              16,
+              18,
+              18,
+              18,
+              19
+            ],
             "text": "",
             "type": "scatter",
             "mode": "lines",
@@ -6936,8 +6564,24 @@
             "frame": null
           },
           {
-            "x": 0,
-            "y": 37,
+            "x": [
+              0,
+              7,
+              21,
+              35,
+              49,
+              63,
+              77
+            ],
+            "y": [
+              37,
+              36.700000000000003,
+              36.899999999999999,
+              36,
+              36.600000000000001,
+              36.100000000000001,
+              36.899999999999999
+            ],
             "text": "",
             "type": "scatter",
             "mode": "lines",
@@ -6954,8 +6598,18 @@
             "frame": null
           },
           {
-            "x": 0,
-            "y": 3.1000000000000001,
+            "x": [
+              0,
+              7,
+              35,
+              63
+            ],
+            "y": [
+              0.01,
+              2,
+              0.01,
+              0.01
+            ],
             "text": "",
             "type": "scatter",
             "mode": "lines",
@@ -6972,8 +6626,18 @@
             "frame": null
           },
           {
-            "x": 0,
-            "y": 22.149999999999999,
+            "x": [
+              0,
+              7,
+              35,
+              63
+            ],
+            "y": [
+              17.440000000000001,
+              17.100000000000001,
+              17.100000000000001,
+              24.129999999999999
+            ],
             "text": "",
             "type": "scatter",
             "mode": "lines",
@@ -6990,8 +6654,18 @@
             "frame": null
           },
           {
-            "x": 0,
-            "y": 66,
+            "x": [
+              0,
+              7,
+              35,
+              63
+            ],
+            "y": [
+              61,
+              62,
+              50,
+              50
+            ],
             "text": "",
             "type": "scatter",
             "mode": "lines",
@@ -7008,9 +6682,33 @@
             "frame": null
           },
           {
-            "x": 0,
-            "y": 125,
-            "text": "<b>BEL_08_45<\/b><br />2023-06-05<br />Screening (day 0)<br />Value: 125 mmHg",
+            "x": [
+              0,
+              7,
+              21,
+              35,
+              49,
+              63,
+              77
+            ],
+            "y": [
+              131,
+              132,
+              129,
+              117,
+              128,
+              137,
+              131
+            ],
+            "text": [
+              "<b>BEL_04_772<\/b><br />2023-06-05<br />Screening (day 0)<br />Value: 131 mmHg",
+              "<b>BEL_04_772<\/b><br />2023-07-05<br />Visit 1 (day 7)<br />Value: 132 mmHg",
+              "<b>BEL_04_772<\/b><br />2023-07-19<br />Visit 2 (day 21)<br />Value: 129 mmHg",
+              "<b>BEL_04_772<\/b><br />2023-08-02<br />Visit 3 (day 35)<br />Value: 117 mmHg",
+              "<b>BEL_04_772<\/b><br />2023-08-16<br />Visit 4 (day 49)<br />Value: 128 mmHg",
+              "<b>BEL_04_772<\/b><br />2023-08-30<br />Visit 5 (day 63)<br />Value: 137 mmHg",
+              "<b>BEL_04_772<\/b><br />2023-09-13<br />Visit 6 (day 77)<br />Value: 131 mmHg"
+            ],
             "type": "scatter",
             "mode": "markers",
             "marker": {
@@ -7034,9 +6732,33 @@
             "frame": null
           },
           {
-            "x": 0,
-            "y": 56,
-            "text": "<b>BEL_08_45<\/b><br />2023-06-05<br />Screening (day 0)<br />Value: 56 mmHg",
+            "x": [
+              0,
+              7,
+              21,
+              35,
+              49,
+              63,
+              77
+            ],
+            "y": [
+              68,
+              79,
+              73,
+              77,
+              62,
+              76,
+              61
+            ],
+            "text": [
+              "<b>BEL_04_772<\/b><br />2023-06-05<br />Screening (day 0)<br />Value: 68 mmHg",
+              "<b>BEL_04_772<\/b><br />2023-07-05<br />Visit 1 (day 7)<br />Value: 79 mmHg",
+              "<b>BEL_04_772<\/b><br />2023-07-19<br />Visit 2 (day 21)<br />Value: 73 mmHg",
+              "<b>BEL_04_772<\/b><br />2023-08-02<br />Visit 3 (day 35)<br />Value: 77 mmHg",
+              "<b>BEL_04_772<\/b><br />2023-08-16<br />Visit 4 (day 49)<br />Value: 62 mmHg",
+              "<b>BEL_04_772<\/b><br />2023-08-30<br />Visit 5 (day 63)<br />Value: 76 mmHg",
+              "<b>BEL_04_772<\/b><br />2023-09-13<br />Visit 6 (day 77)<br />Value: 61 mmHg"
+            ],
             "type": "scatter",
             "mode": "markers",
             "marker": {
@@ -7060,9 +6782,33 @@
             "frame": null
           },
           {
-            "x": 0,
-            "y": 76,
-            "text": "<b>BEL_08_45<\/b><br />2023-06-05<br />Screening (day 0)<br />Value: 76 beats/min",
+            "x": [
+              0,
+              7,
+              21,
+              35,
+              49,
+              63,
+              77
+            ],
+            "y": [
+              76,
+              63,
+              73,
+              70,
+              70,
+              75,
+              72
+            ],
+            "text": [
+              "<b>BEL_04_772<\/b><br />2023-06-05<br />Screening (day 0)<br />Value: 76 beats/min",
+              "<b>BEL_04_772<\/b><br />2023-07-05<br />Visit 1 (day 7)<br />Value: 63 beats/min",
+              "<b>BEL_04_772<\/b><br />2023-07-19<br />Visit 2 (day 21)<br />Value: 73 beats/min",
+              "<b>BEL_04_772<\/b><br />2023-08-02<br />Visit 3 (day 35)<br />Value: 70 beats/min",
+              "<b>BEL_04_772<\/b><br />2023-08-16<br />Visit 4 (day 49)<br />Value: 70 beats/min",
+              "<b>BEL_04_772<\/b><br />2023-08-30<br />Visit 5 (day 63)<br />Value: 75 beats/min",
+              "<b>BEL_04_772<\/b><br />2023-09-13<br />Visit 6 (day 77)<br />Value: 72 beats/min"
+            ],
             "type": "scatter",
             "mode": "markers",
             "marker": {
@@ -7086,9 +6832,33 @@
             "frame": null
           },
           {
-            "x": 0,
-            "y": 16,
-            "text": "<b>BEL_08_45<\/b><br />2023-06-05<br />Screening (day 0)<br />Value: 16 breaths/min",
+            "x": [
+              0,
+              7,
+              21,
+              35,
+              49,
+              63,
+              77
+            ],
+            "y": [
+              17,
+              16,
+              16,
+              18,
+              18,
+              18,
+              19
+            ],
+            "text": [
+              "<b>BEL_04_772<\/b><br />2023-06-05<br />Screening (day 0)<br />Value: 17 breaths/min",
+              "<b>BEL_04_772<\/b><br />2023-07-05<br />Visit 1 (day 7)<br />Value: 16 breaths/min",
+              "<b>BEL_04_772<\/b><br />2023-07-19<br />Visit 2 (day 21)<br />Value: 16 breaths/min",
+              "<b>BEL_04_772<\/b><br />2023-08-02<br />Visit 3 (day 35)<br />Value: 18 breaths/min",
+              "<b>BEL_04_772<\/b><br />2023-08-16<br />Visit 4 (day 49)<br />Value: 18 breaths/min",
+              "<b>BEL_04_772<\/b><br />2023-08-30<br />Visit 5 (day 63)<br />Value: 18 breaths/min",
+              "<b>BEL_04_772<\/b><br />2023-09-13<br />Visit 6 (day 77)<br />Value: 19 breaths/min"
+            ],
             "type": "scatter",
             "mode": "markers",
             "marker": {
@@ -7112,9 +6882,33 @@
             "frame": null
           },
           {
-            "x": 0,
-            "y": 37,
-            "text": "<b>BEL_08_45<\/b><br />2023-06-05<br />Screening (day 0)<br />Value: 37 °C",
+            "x": [
+              0,
+              7,
+              21,
+              35,
+              49,
+              63,
+              77
+            ],
+            "y": [
+              37,
+              36.700000000000003,
+              36.899999999999999,
+              36,
+              36.600000000000001,
+              36.100000000000001,
+              36.899999999999999
+            ],
+            "text": [
+              "<b>BEL_04_772<\/b><br />2023-06-05<br />Screening (day 0)<br />Value: 37 °C",
+              "<b>BEL_04_772<\/b><br />2023-07-05<br />Visit 1 (day 7)<br />Value: 36.7 °C",
+              "<b>BEL_04_772<\/b><br />2023-07-19<br />Visit 2 (day 21)<br />Value: 36.9 °C",
+              "<b>BEL_04_772<\/b><br />2023-08-02<br />Visit 3 (day 35)<br />Value: 36 °C",
+              "<b>BEL_04_772<\/b><br />2023-08-16<br />Visit 4 (day 49)<br />Value: 36.6 °C",
+              "<b>BEL_04_772<\/b><br />2023-08-30<br />Visit 5 (day 63)<br />Value: 36.1 °C",
+              "<b>BEL_04_772<\/b><br />2023-09-13<br />Visit 6 (day 77)<br />Value: 36.9 °C"
+            ],
             "type": "scatter",
             "mode": "markers",
             "marker": {
@@ -7138,9 +6932,24 @@
             "frame": null
           },
           {
-            "x": 0,
-            "y": 3.1000000000000001,
-            "text": "<b>BEL_08_45<\/b><br />2023-06-05<br />Screening (day 0)<br />Value: 3.1 %",
+            "x": [
+              0,
+              7,
+              35,
+              63
+            ],
+            "y": [
+              0.01,
+              2,
+              0.01,
+              0.01
+            ],
+            "text": [
+              "<b>BEL_04_772<\/b><br />2023-06-05<br />Screening (day 0)<br />Value: 0.01 %",
+              "<b>BEL_04_772<\/b><br />2023-07-05<br />Visit 1 (day 7)<br />Value: 2 %",
+              "<b>BEL_04_772<\/b><br />2023-08-02<br />Visit 3 (day 35)<br />Value: 0.01 %",
+              "<b>BEL_04_772<\/b><br />2023-08-30<br />Visit 5 (day 63)<br />Value: 0.01 %"
+            ],
             "type": "scatter",
             "mode": "markers",
             "marker": {
@@ -7164,9 +6973,9 @@
             "frame": null
           },
           {
-            "x": 0,
-            "y": 22.149999999999999,
-            "text": "<b>BEL_08_45<\/b><br />2023-06-05<br />Screening (day 0)<br />Value: 22.15 kg/m2",
+            "x": 63,
+            "y": 24.129999999999999,
+            "text": "<b>BEL_04_772<\/b><br />2023-08-30<br />Visit 5 (day 63)<br />Value: 24.13 kg/m2",
             "type": "scatter",
             "mode": "markers",
             "marker": {
@@ -7190,9 +6999,24 @@
             "frame": null
           },
           {
-            "x": 0,
-            "y": 66,
-            "text": "<b>BEL_08_45<\/b><br />2023-06-05<br />Screening (day 0)<br />Value: 66 kg",
+            "x": [
+              0,
+              7,
+              35,
+              63
+            ],
+            "y": [
+              61,
+              62,
+              50,
+              50
+            ],
+            "text": [
+              "<b>BEL_04_772<\/b><br />2023-06-05<br />Screening (day 0)<br />Value: 61 kg",
+              "<b>BEL_04_772<\/b><br />2023-07-05<br />Visit 1 (day 7)<br />Value: 62 kg",
+              "<b>BEL_04_772<\/b><br />2023-08-02<br />Visit 3 (day 35)<br />Value: 50 kg",
+              "<b>BEL_04_772<\/b><br />2023-08-30<br />Visit 5 (day 63)<br />Value: 50 kg"
+            ],
             "type": "scatter",
             "mode": "markers",
             "marker": {
@@ -7212,6 +7036,44 @@
             "showlegend": false,
             "xaxis": "x2",
             "yaxis": "y8",
+            "hoverinfo": "text",
+            "frame": null
+          },
+          {
+            "x": [
+              0,
+              7,
+              35
+            ],
+            "y": [
+              17.440000000000001,
+              17.100000000000001,
+              17.100000000000001
+            ],
+            "text": [
+              "<b>BEL_04_772<\/b><br />2023-06-05<br />Screening (day 0)<br />Value: 17.44 kg/m2",
+              "<b>BEL_04_772<\/b><br />2023-07-05<br />Visit 1 (day 7)<br />Value: 17.1 kg/m2",
+              "<b>BEL_04_772<\/b><br />2023-08-02<br />Visit 3 (day 35)<br />Value: 17.1 kg/m2"
+            ],
+            "type": "scatter",
+            "mode": "markers",
+            "marker": {
+              "autocolorscale": false,
+              "color": "rgba(253,174,97,1)",
+              "opacity": 1,
+              "size": 15.118110236220474,
+              "symbol": "circle",
+              "line": {
+                "width": 1.8897637795275593,
+                "color": "rgba(0,0,0,1)"
+              }
+            },
+            "hoveron": "points",
+            "name": "(out of limits, significance unknown,No)",
+            "legendgroup": "(out of limits, significance unknown,No)",
+            "showlegend": true,
+            "xaxis": "x",
+            "yaxis": "y7",
             "hoverinfo": "text",
             "frame": null
           }
@@ -8359,6 +8221,208 @@
           "head": null,
           "attachment": null,
           "all_files": false
+        }
+      ]
+    },
+    "sf_vital_signs-table": {
+      "x": {
+        "style": "bootstrap5",
+        "filter": "none",
+        "vertical": false,
+        "extensions": [
+          "Scroller"
+        ],
+        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Event<\/th>\n      <th>Systolic blood pressure<\/th>\n      <th>Diastolic blood pressure<\/th>\n      <th>Pulse<\/th>\n      <th>Resp<\/th>\n      <th>Temperature<\/th>\n      <th>Weight change since screening<\/th>\n      <th>BMI<\/th>\n      <th>Weight<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
+        "options": {
+          "scrollY": 400,
+          "scrollX": true,
+          "scroller": true,
+          "deferRender": true,
+          "scrollResize": true,
+          "scrollCollapse": true,
+          "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"\")\n}",
+          "dom": "f<\"header h5\">ti",
+          "columnDefs": [
+            {
+              "orderable": false,
+              "targets": 0
+            },
+            {
+              "name": " ",
+              "targets": 0
+            },
+            {
+              "name": "Event",
+              "targets": 1
+            },
+            {
+              "name": "Systolic blood pressure",
+              "targets": 2
+            },
+            {
+              "name": "Diastolic blood pressure",
+              "targets": 3
+            },
+            {
+              "name": "Pulse",
+              "targets": 4
+            },
+            {
+              "name": "Resp",
+              "targets": 5
+            },
+            {
+              "name": "Temperature",
+              "targets": 6
+            },
+            {
+              "name": "Weight change since screening",
+              "targets": 7
+            },
+            {
+              "name": "BMI",
+              "targets": 8
+            },
+            {
+              "name": "Weight",
+              "targets": 9
+            }
+          ],
+          "order": [
+
+          ],
+          "autoWidth": false,
+          "orderClasses": false,
+          "ajax": {
+            "type": "POST",
+            "data": "function(d) {\nd.search.caseInsensitive = true;\nd.search.smart = true;\nd.escape = false;\nvar encodeAmp = function(x) { x.value = x.value.replace(/&/g, \"%26\"); }\nencodeAmp(d.search);\n$.each(d.columns, function(i, v) {encodeAmp(v.search);});\n}"
+          },
+          "serverSide": true,
+          "processing": true
+        },
+        "selection": {
+          "mode": "single",
+          "selected": null,
+          "target": "row",
+          "selectable": null
+        }
+      },
+      "evals": [
+        "options.initComplete",
+        "options.ajax.data"
+      ],
+      "jsHooks": [
+
+      ],
+      "deps": [
+        {
+          "name": "jquery",
+          "version": "3.6.0",
+          "src": {
+            "href": "jquery-3.6.0"
+          },
+          "meta": null,
+          "script": "jquery-3.6.0.min.js",
+          "stylesheet": null,
+          "head": null,
+          "attachment": null,
+          "all_files": true
+        },
+        {
+          "name": "dt-core-bootstrap5",
+          "version": "1.13.6",
+          "src": {
+            "href": "dt-core-bootstrap5-1.13.6"
+          },
+          "meta": null,
+          "script": [
+            "js/jquery.dataTables.min.js",
+            "js/dataTables.bootstrap5.min.js"
+          ],
+          "stylesheet": "css/dataTables.bootstrap5.min.css",
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": false
+        },
+        {
+          "name": "bootstrap",
+          "version": "5.3.1",
+          "src": {
+            "href": "bootstrap-5.3.1"
+          },
+          "meta": {
+            "viewport": "width=device-width, initial-scale=1, shrink-to-fit=no"
+          },
+          "script": "bootstrap.bundle.min.js",
+          "stylesheet": "bootstrap.min.css",
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": true
+        },
+        {
+          "name": "bs3compat",
+          "version": "0.8.0",
+          "src": {
+            "href": "bs3compat-0.8.0"
+          },
+          "meta": null,
+          "script": [
+            "transition.js",
+            "tabs.js",
+            "bs3compat.js"
+          ],
+          "stylesheet": null,
+          "head": null,
+          "attachment": null,
+          "all_files": true
+        },
+        {
+          "name": "dt-ext-scroller-bootstrap5",
+          "version": "1.13.6",
+          "src": {
+            "href": "dt-ext-scroller-bootstrap5-1.13.6"
+          },
+          "meta": null,
+          "script": [
+            "js/dataTables.scroller.min.js",
+            "js/scroller.bootstrap5.min.js"
+          ],
+          "stylesheet": "css/scroller.bootstrap5.min.css",
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": false
+        },
+        {
+          "name": "dt-plugin-scrollresize",
+          "version": "1.13.6",
+          "src": {
+            "href": "dt-plugin-scrollresize-1.13.6"
+          },
+          "meta": null,
+          "script": "source.min.js",
+          "stylesheet": [
+
+          ],
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": true
+        },
+        {
+          "name": "crosstalk",
+          "version": "1.2.1",
+          "src": {
+            "href": "crosstalk-1.2.1"
+          },
+          "meta": null,
+          "script": "js/crosstalk.min.js",
+          "stylesheet": "css/crosstalk.min.css",
+          "head": null,
+          "attachment": null,
+          "all_files": true
         }
       ]
     },
