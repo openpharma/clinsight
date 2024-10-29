@@ -97,6 +97,7 @@ get_metadata <- function(
 #'
 #' @return A data frame
 #'
+#' @keywords internal
 rename_raw_data <- function(
     data, 
     column_names = metadata$column_names
@@ -134,6 +135,7 @@ rename_raw_data <- function(
 #' @return A data frame, with derivative time and event variables, needed for
 #'   ClinSight to function properly.
 #'
+#' @keywords internal
 add_timevars_to_data <- function(
     data
 ){
@@ -149,7 +151,7 @@ add_timevars_to_data <- function(
     dplyr::mutate(
       edit_date_time = as.POSIXct(edit_date_time, tz = "UTC"),
       event_date = as.Date(event_date),
-      day = day %|_|% event_date - min(event_date, na.rm = TRUE), 
+      day = day %|_|% {event_date - min(event_date, na.rm = TRUE)}, 
       vis_day = ifelse(grepl("^SCR|^VIS|^FU", event_id, ignore.case = TRUE), day, NA),
       vis_num = as.numeric(factor(vis_day))-1,
       event_name = event_name %|_|% dplyr::case_when(
@@ -331,6 +333,7 @@ get_meta_vars <- function(data = appdata, meta = metadata){
 #'
 #' @return A cleaned data frame with form-level data.
 #' 
+#' @keywords internal
 get_form_level_data <- function(
     data,
     all_forms,

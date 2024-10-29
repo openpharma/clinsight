@@ -706,3 +706,14 @@ custom_config_path <- function(
 ){
   Sys.getenv("CONFIG_PATH", app_sys("golem-config.yml")) 
 }
+
+dblclick_to_form <- function(bttn_ns) {
+  DT::JS(
+    "table.on('dblclick', 'tbody tr', function(t) {",
+    "t.currentTarget.classList.add('selected');",
+    "var tblID = $(t.target).closest('.datatables').attr('id')",
+    "var inputName = tblID + '_rows_selected'",
+    "Shiny.setInputValue(inputName, t.currentTarget.rowIndex)",
+    "document.getElementById(", deparse(NS(bttn_ns, "go_to_form")), ").click();",
+    "})"
+  )}
