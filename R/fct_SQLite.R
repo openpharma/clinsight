@@ -122,17 +122,19 @@ db_add_primary_key <- function(con, name, value) {
 db_add_log <- function(con) {
   DBI::dbCreateTable(con, "all_review_data_log",
                      c(id = "INTEGER PRIMARY KEY AUTOINCREMENT", review_id = "INTEGER NOT NULL",
-                       reviewed = "CHAR", comment = "CHAR", reviewer = "CHAR", timestamp = "CHAR", status = "CHAR",
+                       edit_date_time = "CHAR", reviewed = "CHAR", comment = "CHAR", 
+                       reviewer = "CHAR", timestamp = "CHAR", status = "CHAR",
                        dml_type = "CHAR NOT NULL", dml_timestamp = "DATETIME DEFAULT CURRENT_TIMESTAMP"))
   DBI::dbExecute(con, paste(
     "CREATE TRIGGER all_review_data_update_log_trigger",
     "AFTER UPDATE ON all_review_data FOR EACH ROW",
     "BEGIN",
       "INSERT INTO all_review_data_log (",
-        "review_id, reviewed, comment, reviewer, timestamp, status, dml_type",
+        "review_id, edit_date_time, reviewed, comment, reviewer, timestamp, status, dml_type",
       ")",
       "VALUES(",
         "NEW.id,",
+        "OLD.edit_date_time,",
         "OLD.reviewed,",
         "OLD.comment,",
         "OLD.reviewer,",
