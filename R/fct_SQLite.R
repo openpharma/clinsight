@@ -195,7 +195,7 @@ db_update <- function(
     update_time = data_synch_time
   )
   cat("writing updated review data to database...\n")
-  cols_to_change <- c("reviewed", "comment", "reviewer", "timestamp", "status")
+  cols_to_change <- names(updated_review_data)[!names(updated_review_data) %in% c("id", common_vars)]
   dplyr::copy_to(con, dplyr::filter(updated_review_data, !is.na(id)), "row_updates")
   rs <- DBI::dbSendStatement(con, paste(
     "UPDATE",
