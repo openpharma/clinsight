@@ -82,12 +82,21 @@ describe(
               dplyr::tbl(con, "all_review_data") |> 
                 dplyr::collect()
             })
+            db_reviewlogdata <- db_temp_connect(db_path, {
+              dplyr::tbl(con, "all_review_data_log") |> 
+                dplyr::collect()
+            })
             
-            expect_equal(r$review_data[,-1], db_slice_rows(db_path)[,-1])
-            # it should have two rows in the DB, one with review= 'No' and the other with reviewed = "Yes"
+            expect_equal(r$review_data, db_slice_rows(db_path))
+            # new process expects the app data to be equal to DB data
+            expect_equal(r$review_data, dplyr::arrange(db_reviewdata, edit_date_time))
+            # review table should only have one row in the DB containing the new reviewed = "Yes"
             expect_equal(with(db_reviewdata, reviewed[subject_id == "885"]), c("Yes") )
+            # log table should only have one row in the DB containing the old reviewed = "No"
+            r_id <- with(db_reviewdata, id[subject_id == "885"])
+            expect_equal(with(db_reviewlogdata, reviewed[review_id == r_id]), c("No") )
             expect_snapshot({
-              print(dplyr::select(r$review_data[,-1], -timestamp), width = Inf)
+              print(dplyr::select(r$review_data, -timestamp), width = Inf)
             })
             Sys.sleep(1) # because the timestamp only records seconds, 
             # we should add delay here to prevent that the exact same timestamp is 
@@ -110,9 +119,18 @@ describe(
               dplyr::tbl(con, "all_review_data") |> 
                 dplyr::collect()
             })
+            db_reviewlogdata <- db_temp_connect(db_path, {
+              dplyr::tbl(con, "all_review_data_log") |> 
+                dplyr::collect()
+            })
+            
             expect_equal(with(db_reviewdata, comment[subject_id == "885"]), c("test review"))
             expect_equal(with(db_reviewdata, reviewed[subject_id == "885"]), c("No"))
-            expect_equal(r$review_data[,-1], db_slice_rows(db_path)[,-1])
+            r_id <- with(db_reviewdata, id[subject_id == "885"])
+            expect_equal(with(db_reviewlogdata, comment[review_id == r_id]), c("", ""))
+            expect_equal(with(db_reviewlogdata, reviewed[review_id == r_id]), c("No", "Yes"))
+            expect_equal(r$review_data, db_slice_rows(db_path))
+            expect_equal(r$review_data, dplyr::arrange(db_reviewdata, edit_date_time))
             expect_snapshot(print(dplyr::select(r$review_data, -timestamp), width = Inf))
           })
       }

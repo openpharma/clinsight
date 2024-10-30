@@ -26,4 +26,5 @@ db_temp_connect(paste0(fixture_path, "/review_testdb.sqlite"), {
   if ("all_review_data" %in% DBI::dbListTables(con)) 
     DBI::dbRemoveTable(con, "all_review_data")
   db_add_primary_key(con, "all_review_data", make_review_testdata())
+  db_add_log(con)
 })
