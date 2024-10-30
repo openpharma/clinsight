@@ -42,8 +42,18 @@ describe(
       )
       
       expect_equal(
+        colnames(dplyr::tbl(con, "all_review_data_log")), 
+        c("id", "review_id", "edit_date_time", "reviewed", "comment", 
+          "reviewer", "timestamp", "status", "dml_type", "dml_timestamp")
+      )
+      
+      expect_equal(
         dplyr::collect(dplyr::tbl(con, "db_synch_time")), 
         dplyr::tibble(synch_time = "")
+      )
+      expect_equal(
+        dplyr::collect(dplyr::tbl(con, "db_version")), 
+        dplyr::tibble(version = "1.1")
       )
       expect_equal(
         dplyr::collect(dplyr::tbl(con, "query_data")), 
@@ -107,29 +117,50 @@ describe(
       con <- get_db_connection(temp_path)
       
       db_add_primary_key(con, "all_review_data", cbind(old_data, review_cols))
-      db_add_primary_key(con, "db_synch_time", data.frame("synch_time" = "2024-01-01 01:01:01 UTC"))
+      db_add_log(con)
+      DBI::dbWriteTable(con, "db_synch_time", data.frame("synch_time" = "2024-01-01 01:01:01 UTC"))
       
-      df_old <- cbind(old_data, review_cols)
+      df_old <- cbind(id = 1, old_data, review_cols)
+      log_old <- DBI::dbGetQuery(con, "SELECT * FROM all_review_data_log")
       
       rev_data <- rbind(old_data, new_data)
       # newer synch_time indicating need for update:
       attr(rev_data, "synch_time") <- "2024-02-02 01:01:01 UTC" 
       db_update(rev_data, db_path = temp_path, common_vars = comvars)
       expect_equal(
-        DBI::dbGetQuery(con, "SELECT * FROM all_review_data")[1, -1],
+        DBI::dbGetQuery(con, "SELECT * FROM all_review_data")[1,],
         df_old
         )
+      expect_equal(
+        nrow(log_old),
+        0
+      )
+      expect_equal(
+        DBI::dbGetQuery(con, "SELECT * FROM all_review_data_log"),
+        log_old
+      )
     })
     it("Adds a new row to a database if there are new rows", {
       temp_path <- withr::local_tempfile(fileext = ".sqlite") 
       con <- get_db_connection(temp_path)
       db_add_primary_key(con, "all_review_data", cbind(old_data, review_cols))
-      db_add_primary_key(con, "db_synch_time", data.frame("synch_time" = "2024-01-01 01:01:01 UTC"))
+      db_add_log(con)
+      DBI::dbWriteTable(con, "db_synch_time", data.frame("synch_time" = "2024-01-01 01:01:01 UTC"))
+      
+      log_old <- DBI::dbGetQuery(con, "SELECT * FROM all_review_data_log")
       
       rev_data <- rbind(old_data, new_data)
       attr(rev_data, "synch_time") <- "2024-02-02 01:01:01 UTC" 
       db_update(rev_data, db_path = temp_path, common_vars = comvars)
       expect_snapshot(DBI::dbGetQuery(con, "SELECT * FROM all_review_data"))
+      expect_equal(
+        nrow(log_old),
+        0
+      )
+      expect_equal(
+        DBI::dbGetQuery(con, "SELECT * FROM all_review_data_log"),
+        log_old
+      )
     })
     it("Still performs an update if synch_time is not available", {
       temp_path <- withr::local_tempfile(fileext = ".sqlite") 
@@ -147,11 +178,13 @@ describe(
       expect_snapshot(DBI::dbGetQuery(con, query))
     })
     
-    it("Adds a new row for each data point with a new/updated EditdateTime.", {
+    it("Adds a new row for each data point with a new EditdateTime and updates 
+       rows with an updated EditdateTime", {
       temp_path <- withr::local_tempfile(fileext = ".sqlite") 
       con <- get_db_connection(temp_path)
       db_add_primary_key(con, "all_review_data", cbind(old_data, review_cols))
-      db_add_primary_key(con, "db_synch_time", data.frame("synch_time" = "2024-01-01 01:01:01 UTC"))
+      db_add_log(con)
+      DBI::dbWriteTable(con, "db_synch_time", data.frame("synch_time" = "2024-01-01 01:01:01 UTC"))
       
       rev_data <- old_data |> 
         dplyr::mutate(edit_date_time = "2023-11-13 01:01:01")
@@ -159,6 +192,9 @@ describe(
       
       db_update(rev_data, db_path = temp_path, common_vars = comvars)
       expect_snapshot(DBI::dbGetQuery(con, "SELECT * FROM all_review_data"))
+      log_tbl <- DBI::dbGetQuery(con, "SELECT * FROM all_review_data_log")
+      # Drop dml_timestamp
+      expect_snapshot(log_tbl[!names(log_tbl) %in% "dml_timestamp"])
     })
     it("Does not change the database if there are no changes (synch_time is the same)", {
       temp_path <- withr::local_tempfile(fileext = ".sqlite") 
@@ -168,13 +204,24 @@ describe(
       rev_data <- cbind(old_data, review_cols)
       attr(rev_data, "synch_time") <- synch_time
       db_add_primary_key(con, "all_review_data", rev_data)
-      db_add_primary_key(con, "db_synch_time", data.frame("synch_time" = synch_time))
+      db_add_log(con)
+      DBI::dbWriteTable(con, "db_synch_time", data.frame("synch_time" = synch_time))
+      
+      log_old <- DBI::dbGetQuery(con, "SELECT * FROM all_review_data_log")
       
       expect_snapshot({
         db_update(rev_data, db_path = temp_path, common_vars = comvars)
       })
       attr(rev_data, "synch_time") <- NULL
       expect_equal(rev_data, DBI::dbGetQuery(con, "SELECT * FROM all_review_data")[,-1])
+      expect_equal(
+        nrow(log_old),
+        0
+      )
+      expect_equal(
+        DBI::dbGetQuery(con, "SELECT * FROM all_review_data_log"),
+        log_old
+      )
     })
     
   }
@@ -216,6 +263,7 @@ describe(
       temp_path <- withr::local_tempfile(fileext = ".sqlite")
       con <- get_db_connection(temp_path)
       db_add_primary_key(con, "all_review_data", cbind(df, old_review))
+      db_add_log(con)
       
       db_save_review(
         cbind(df, new_review), 
@@ -225,8 +273,15 @@ describe(
         review_by = c("key_col1", "item_group")
       )
       expect_equal(
-        dplyr::collect(dplyr::tbl(con, "all_review_data"))[,-1], 
-        dplyr::as_tibble(cbind(df, new_review))
+        dplyr::collect(dplyr::tbl(con, "all_review_data")), 
+        dplyr::as_tibble(cbind(id = 1, df, new_review))
+      )
+      log_tbl <- dplyr::collect(dplyr::tbl(con, "all_review_data_log"))
+      expect_equal(
+        log_tbl[c("id", "review_id", "edit_date_time", names(old_review))],
+        cbind(id = 1, review_id = 1, edit_date_time = "2023-11-12 01:01:01",
+              old_review),
+        ignore_attr = TRUE
       )
     })
     it("Updates all items from a item_group as reviewed", {
@@ -260,6 +315,7 @@ describe(
       temp_path <- withr::local_tempfile(fileext = ".sqlite")
       con <- get_db_connection(temp_path)
       db_add_primary_key(con, "all_review_data", cbind(df, old_review))
+      db_add_log(con)
       db_save_review(
         review_row, 
         temp_path, 
@@ -272,8 +328,16 @@ describe(
       expect_equal(nrow(results), 2)
       expect_equal(results$status, c("old", "old"))
       expect_equal(
-        results[,-1],
-        dplyr::as_tibble(cbind(df, new_review)))
+        results,
+        dplyr::as_tibble(cbind(id = 1:2, df, new_review)))
+      
+      expect_true(is.data.frame(dplyr::collect(dplyr::tbl(con, "all_review_data_log"))))
+      results <- dplyr::collect(dplyr::tbl(con, "all_review_data_log"))
+      expect_equal(nrow(results), 2)
+      expect_equal(results$status, c("new", "new"))
+      expect_equal(
+        results[c("id", "review_id", names(old_review))],
+        dplyr::as_tibble(cbind(id = 1:2, review_id = 1:2, old_review)))
     })
     
     
@@ -283,6 +347,7 @@ describe(
       con <- get_db_connection(temp_path)
       
       db_add_primary_key(con, "all_review_data", cbind(df, old_review))
+      db_add_log(con)
       db_save_review(
         rbind(cbind(df, new_review), cbind(df, new_review)), 
         temp_path, 
@@ -375,6 +440,7 @@ describe("db_get_review can collect latest review data from a database", {
   ) |> 
     dplyr::as_tibble()
   db_add_primary_key(con, "all_review_data", review_data)
+  db_add_log(con)
 
   it("Can collect the desired data.", {
     output <- db_get_review(temp_path, subject = "Test_name", form = "Test_group")

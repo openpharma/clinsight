@@ -10,7 +10,7 @@ db_temp_connect(db_path, {
   DBI::dbWriteTable(
     con, 
     "db_synch_time",
-    data.frame("synch_time" = "2023-09-15 10:10:00 UTC"),
+    data.frame("synch_time" = "2023-09-15 10:10:00 UTC"), 
     overwrite = TRUE
   )
 })
