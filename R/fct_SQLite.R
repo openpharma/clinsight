@@ -95,6 +95,10 @@ db_create <- function(
     "all_review_data" = df,
     "query_data"      = query_data_skeleton
   )
+  idx_pk_rows <- list(
+    all_review_data = c("subject_id", "event_name", "item_group", 
+                        "form_repeat", "item_name")
+  )
   new_data <- list(
     "db_synch_time"   = data.frame(synch_time = data_synch_time),
     "db_version" = data.frame(version = "1.1")
@@ -102,7 +106,7 @@ db_create <- function(
   con <- get_db_connection(db_path)
   for(i in names(new_pk_data)){
     cat("\nCreating new table: ", i,  "\n")
-    db_add_primary_key(con, i, new_pk_data[[i]])
+    db_add_primary_key(con, i, new_pk_data[[i]], idx_pk_rows[[i]])
   }
   for(i in names(new_data)){
     cat("\nCreating new table: ", i,  "\n")
@@ -113,10 +117,14 @@ db_create <- function(
   cat("Finished writing to database\n\n")
 }
 
-db_add_primary_key <- function(con, name, value) {
+db_add_primary_key <- function(con, name, value, keys = NULL) {
   fields <- c(id = "INTEGER PRIMARY KEY AUTOINCREMENT", DBI::dbDataType(con, value))
   DBI::dbCreateTable(con, name, fields)
   DBI::dbAppendTable(con, name, value)
+  if (!is.null(keys)) {
+    rs <- DBI::dbSendStatement(con, sprintf("CREATE UNIQUE INDEX idx_%1$s ON %1$s (%2$s)", name, paste(keys, collapse = ", ")))
+    DBI::dbClearResult(rs)
+  }
 }
 
 db_add_log <- function(con) {
@@ -125,7 +133,7 @@ db_add_log <- function(con) {
                        edit_date_time = "CHAR", reviewed = "CHAR", comment = "CHAR", 
                        reviewer = "CHAR", timestamp = "CHAR", status = "CHAR",
                        dml_type = "CHAR NOT NULL", dml_timestamp = "DATETIME DEFAULT CURRENT_TIMESTAMP"))
-  DBI::dbExecute(con, paste(
+  rs <- DBI::dbSendStatement(con, paste(
     "CREATE TRIGGER all_review_data_update_log_trigger",
     "AFTER UPDATE ON all_review_data FOR EACH ROW",
     "BEGIN",
@@ -144,6 +152,7 @@ db_add_log <- function(con) {
       ");",
     "END"
   ))
+  DBI::dbClearResult(rs)
 }
 
 #' Update app database
