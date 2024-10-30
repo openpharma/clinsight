@@ -26,7 +26,8 @@ describe(
       con <- get_db_connection(temp_path)
       expect_equal(
         DBI::dbListTables(con), 
-        c("all_review_data", "all_review_data_log", "db_synch_time", "query_data", "sqlite_sequence")
+        c("all_review_data", "all_review_data_log", "db_synch_time", 
+          "db_version", "query_data", "sqlite_sequence")
         )
       expect_equal(
         colnames(dplyr::tbl(con, "all_review_data")), 
@@ -42,7 +43,7 @@ describe(
       
       expect_equal(
         dplyr::collect(dplyr::tbl(con, "db_synch_time")), 
-        dplyr::tibble(id = 1, synch_time = "")
+        dplyr::tibble(synch_time = "")
       )
       expect_equal(
         dplyr::collect(dplyr::tbl(con, "query_data")), 
@@ -68,7 +69,8 @@ describe(
       con <- get_db_connection(temp_path)
       expect_equal(
         DBI::dbListTables(con), 
-        c("all_review_data", "all_review_data_log", "db_synch_time", "query_data", "sqlite_sequence")
+        c("all_review_data", "all_review_data_log", "db_synch_time", 
+          "db_version", "query_data", "sqlite_sequence")
       )
     })
   }

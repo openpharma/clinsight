@@ -28,7 +28,7 @@
       DBI::dbGetQuery(con, "SELECT * FROM all_review_data")
     Output
         id  key_col1 item_group item_name event_date      edit_date_time reviewed
-      1  1 Test_name    Visit 1 Test_item 2023-11-01 2023-11-05 01:26:00       No
+      1  1 Test_name    Visit 1 Test_item 2023-11-01 2023-11-13 01:01:01       No
         comment reviewer               timestamp  status
       1             <NA> 2024-02-02 01:01:01 UTC updated
 
