@@ -102,7 +102,7 @@ db_create <- function(
   con <- get_db_connection(db_path)
   for(i in names(new_pk_data)){
     cat("\nCreating new table: ", i,  "\n")
-    db_add_primary_key(con, i, new_data[[i]])
+    db_add_primary_key(con, i, new_pk_data[[i]])
   }
   for(i in names(new_data)){
     cat("\nCreating new table: ", i,  "\n")
