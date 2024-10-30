@@ -91,15 +91,22 @@ db_create <- function(
       status = status
     )
   
-  new_data <- list(
+  new_pk_data <- list(
     "all_review_data" = df,
-    "query_data"      = query_data_skeleton,
-    "db_synch_time"   = data.frame(synch_time = data_synch_time)
+    "query_data"      = query_data_skeleton
+  )
+  new_data <- list(
+    "db_synch_time"   = data.frame(synch_time = data_synch_time),
+    "db_version" = data.frame(version = "1.1")
   )
   con <- get_db_connection(db_path)
-  for(i in names(new_data)){
+  for(i in names(new_pk_data)){
     cat("\nCreating new table: ", i,  "\n")
     db_add_primary_key(con, i, new_data[[i]])
+  }
+  for(i in names(new_data)){
+    cat("\nCreating new table: ", i,  "\n")
+    DBI::dbWriteTable(con, i, new_data[[i]])
   }
   cat("\nCreating log table: all_review_data_log\n")
   db_add_log(con)
