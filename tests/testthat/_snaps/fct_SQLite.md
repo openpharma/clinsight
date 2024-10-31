@@ -22,8 +22,7 @@
       1    old
       2    new
 
-# db_update(). Feature 2 | Update user data database.: Adds a new row for each data point with a new EditdateTime and updates 
-       rows with an updated EditdateTime
+# db_update(). Feature 2 | Update user data database.: Adds a new row for each data point with a new EditdateTime and updates rows with an updated EditdateTime
 
     Code
       DBI::dbGetQuery(con, "SELECT * FROM all_review_data")

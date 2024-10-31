@@ -178,8 +178,7 @@ describe(
       expect_snapshot(DBI::dbGetQuery(con, query))
     })
     
-    it("Adds a new row for each data point with a new EditdateTime and updates 
-       rows with an updated EditdateTime", {
+    it("Adds a new row for each data point with a new EditdateTime and updates rows with an updated EditdateTime", {
       temp_path <- withr::local_tempfile(fileext = ".sqlite") 
       con <- get_db_connection(temp_path)
       db_add_primary_key(con, "all_review_data", cbind(old_data, review_cols), comvars)
