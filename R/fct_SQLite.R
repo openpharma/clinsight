@@ -205,19 +205,18 @@ db_update <- function(
   )
   cat("writing updated review data to database...\n")
   cols_to_change <- names(updated_review_data)[!names(updated_review_data) %in% c("id", common_vars)]
-  dplyr::copy_to(con, dplyr::filter(updated_review_data, !is.na(id)), "row_updates")
+  dplyr::copy_to(con, dplyr::select(updated_review_data, -id), "row_updates")
   rs <- DBI::dbSendStatement(con, paste(
-    "UPDATE",
+    "INSERT INTO",
     "all_review_data",
-    "SET",
-    sprintf("%1$s = row_updates.%1$s", cols_to_change) |> paste(collapse = ", "),
-    "FROM",
-    "row_updates",
-    "WHERE",
-    "all_review_data.id = row_updates.id"
+    sprintf("(%s)", names(updated_review_data)[-1] |> paste(collapse = ", ")),
+    "SELECT * FROM row_updates WHERE true",
+    "ON CONFLICT",
+    sprintf("(%s)", paste(common_vars, collapse = ", ")),
+    "DO UPDATE SET",
+    sprintf("%1$s = excluded.%1$s", cols_to_change) |> paste(collapse = ", ")
   ))
   DBI::dbClearResult(rs)
-  DBI::dbWriteTable(con, "all_review_data", dplyr::filter(updated_review_data, is.na(id)), append = TRUE)
   DBI::dbWriteTable(
     con, 
     "db_synch_time", 

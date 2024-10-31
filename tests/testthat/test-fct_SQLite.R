@@ -116,7 +116,7 @@ describe(
       temp_path <- withr::local_tempfile(fileext = ".sqlite") 
       con <- get_db_connection(temp_path)
       
-      db_add_primary_key(con, "all_review_data", cbind(old_data, review_cols))
+      db_add_primary_key(con, "all_review_data", cbind(old_data, review_cols), comvars)
       db_add_log(con)
       DBI::dbWriteTable(con, "db_synch_time", data.frame("synch_time" = "2024-01-01 01:01:01 UTC"))
       
@@ -143,7 +143,7 @@ describe(
     it("Adds a new row to a database if there are new rows", {
       temp_path <- withr::local_tempfile(fileext = ".sqlite") 
       con <- get_db_connection(temp_path)
-      db_add_primary_key(con, "all_review_data", cbind(old_data, review_cols))
+      db_add_primary_key(con, "all_review_data", cbind(old_data, review_cols), comvars)
       db_add_log(con)
       DBI::dbWriteTable(con, "db_synch_time", data.frame("synch_time" = "2024-01-01 01:01:01 UTC"))
       
@@ -165,7 +165,7 @@ describe(
     it("Still performs an update if synch_time is not available", {
       temp_path <- withr::local_tempfile(fileext = ".sqlite") 
       con <- get_db_connection(temp_path)
-      db_add_primary_key(con, "all_review_data", cbind(old_data, review_cols))
+      db_add_primary_key(con, "all_review_data", cbind(old_data, review_cols), comvars)
       
       rev_data <- rbind(old_data, new_data) # no synch_time attribute added
       db_update(rev_data, db_path = temp_path, common_vars = comvars)
@@ -182,7 +182,7 @@ describe(
        rows with an updated EditdateTime", {
       temp_path <- withr::local_tempfile(fileext = ".sqlite") 
       con <- get_db_connection(temp_path)
-      db_add_primary_key(con, "all_review_data", cbind(old_data, review_cols))
+      db_add_primary_key(con, "all_review_data", cbind(old_data, review_cols), comvars)
       db_add_log(con)
       DBI::dbWriteTable(con, "db_synch_time", data.frame("synch_time" = "2024-01-01 01:01:01 UTC"))
       
@@ -203,7 +203,7 @@ describe(
       synch_time <- "2024-01-01 01:01:01 UTC"
       rev_data <- cbind(old_data, review_cols)
       attr(rev_data, "synch_time") <- synch_time
-      db_add_primary_key(con, "all_review_data", rev_data)
+      db_add_primary_key(con, "all_review_data", rev_data, comvars)
       db_add_log(con)
       DBI::dbWriteTable(con, "db_synch_time", data.frame("synch_time" = synch_time))
       
