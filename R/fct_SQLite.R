@@ -451,3 +451,76 @@ db_get_review <- function(
       dplyr::as_tibble()
   })
 }
+
+update_db_version <- function(db_path, version = "1.1") {
+  stopifnot(file.exists(db_path))
+  version <- match.arg(version)
+  temp_path <- withr::local_tempfile(fileext = ".sqlite")
+  file.copy(db_path, temp_path)
+  con <- get_db_connection(temp_path)
+  
+  db_version <- tryCatch({
+    DBI::dbGetQuery(con, "SELECT version FROM db_version") |> 
+      unlist(use.names = FALSE)}, error = \(e){""})
+  if(identical(db_version, "1.1")) return("Database up to date. No update needed")
+  
+  review_skeleton <- DBI::dbGetQuery(con, "SELECT * FROM all_review_data LIMIT 0")
+  rs <- DBI::dbSendQuery(con, "ALTER TABLE all_review_data RENAME TO all_review_data_old")
+  DBI::dbClearResult(rs)
+  rs <- DBI::dbSendQuery(con, "ALTER TABLE query_data RENAME TO query_data_old")
+  DBI::dbClearResult(rs)
+  
+  new_pk_data <- list(
+    "all_review_data" = review_skeleton,
+    "query_data"      = query_data_skeleton
+  )
+  idx_pk_rows <- list(
+    all_review_data = c("subject_id", "event_name", "item_group", 
+                        "form_repeat", "item_name")
+  )
+  new_data <- list(
+    "db_version" = data.frame(version = "1.1")
+  )
+  for(i in names(new_pk_data)){
+    db_add_primary_key(con, i, new_pk_data[[i]], idx_pk_rows[[i]])
+  }
+  for(i in names(new_data)){
+    DBI::dbWriteTable(con, i, new_data[[i]])
+  }
+  db_add_log(con)
+  
+  query_cols <- paste(names(query_data_skeleton), collapse = ", ")
+  rs <- DBI::dbSendStatement(con, sprintf("INSERT INTO query_data (%1$s) SELECT %1$s FROM query_data_old", query_cols))
+  DBI::dbClearResult(rs)
+  
+  stopifnot(DBI::dbGetQuery(con, "SELECT COUNT(*) FROM query_data") == 
+              DBI::dbGetQuery(con, "SELECT COUNT(*) FROM query_data_old"))
+  
+  rs <- DBI::dbSendStatement(con, "DROP TABLE query_data_old")
+  DBI::dbClearResult(rs)
+  
+  cols_to_update <- names(review_skeleton)[!names(review_skeleton) %in% idx_pk_rows$all_review_data]
+  cols_to_insert <- names(review_skeleton) |> 
+    paste(collapse = ", ")
+  upsert_statement <- paste(
+    "INSERT INTO",
+    "all_review_data",
+    sprintf("(%s)", cols_to_insert),
+    sprintf("SELECT %s FROM all_review_data_old WHERE true", cols_to_insert),
+    "ON CONFLICT",
+    sprintf("(%s)", paste(idx_pk_rows$all_review_data, collapse = ", ")),
+    "DO UPDATE SET",
+    sprintf("%1$s = excluded.%1$s", cols_to_update) |> paste(collapse = ", ")
+  )
+  rs <- DBI::dbSendStatement(con, upsert_statement)
+  DBI::dbClearResult(rs)
+  
+  stopifnot(DBI::dbGetQuery(con, "SELECT COUNT(*) FROM all_review_data") +
+              DBI::dbGetQuery(con, "SELECT COUNT(*) FROM all_review_data_log") == 
+              DBI::dbGetQuery(con, "SELECT COUNT(*) FROM all_review_data_old"))
+  
+  rs <- DBI::dbSendStatement(con, "DROP TABLE all_review_data_old")
+  DBI::dbClearResult(rs)
+  
+  file.copy(temp_path, db_path, overwrite = TRUE)
+}
