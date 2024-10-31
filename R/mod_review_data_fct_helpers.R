@@ -113,7 +113,8 @@ update_review_data <- function(
       status = "updated"
     )
   
-  updated_data <- dplyr::bind_rows(new_records, updated_records)[, names(review_df)]
+  updated_data <- dplyr::bind_rows(new_records, updated_records)
+  updated_data$id <- NULL
   
   if(nrow(updated_data) == 0){
     warning("No new data in the updated dataset. Returning empty data frame.")

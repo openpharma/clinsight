@@ -204,19 +204,7 @@ db_update <- function(
     update_time = data_synch_time
   )
   cat("writing updated review data to database...\n")
-  cols_to_change <- names(updated_review_data)[!names(updated_review_data) %in% c("id", common_vars)]
-  dplyr::copy_to(con, dplyr::select(updated_review_data, -id), "row_updates")
-  rs <- DBI::dbSendStatement(con, paste(
-    "INSERT INTO",
-    "all_review_data",
-    sprintf("(%s)", names(updated_review_data)[-1] |> paste(collapse = ", ")),
-    "SELECT * FROM row_updates WHERE true",
-    "ON CONFLICT",
-    sprintf("(%s)", paste(common_vars, collapse = ", ")),
-    "DO UPDATE SET",
-    sprintf("%1$s = excluded.%1$s", cols_to_change) |> paste(collapse = ", ")
-  ))
-  DBI::dbClearResult(rs)
+  db_upsert(con, updated_review_data, common_vars)
   DBI::dbWriteTable(
     con, 
     "db_synch_time", 
@@ -224,6 +212,27 @@ db_update <- function(
     overwrite = TRUE
   )
   cat("Finished updating review data\n")
+}
+
+db_upsert <- function(con, data, common_cols) {
+  if ("id" %in% names(data))
+    data$id <- NULL
+  cols_to_update <- names(data)[!names(data) %in% common_cols]
+  cols_to_insert <- names(data) |> 
+    paste(collapse = ", ")
+  constraint_cols <- paste(common_cols, collapse = ", ")
+  dplyr::copy_to(con, data, "row_updates")
+  rs <- DBI::dbSendStatement(con, paste(
+    "INSERT INTO",
+    "all_review_data",
+    sprintf("(%s)", cols_to_insert),
+    sprintf("SELECT %s FROM row_updates WHERE true", cols_to_insert),
+    "ON CONFLICT",
+    sprintf("(%s)", constraint_cols),
+    "DO UPDATE SET",
+    sprintf("%1$s = excluded.%1$s", cols_to_update) |> paste(collapse = ", ")
+  ))
+  DBI::dbClearResult(rs)
 }
 
 
