@@ -617,3 +617,28 @@ describe("expectation_type() works", {
     expect_error(expectation_type(expectation("failure", "f"), "non-existing expectation"))
   })
 })
+
+describe("decode_base64() works", {
+  it("converts a base64-encoded string with special characters as expected", {
+    testthat::skip_if_not_installed("base64enc")
+    #base64enc::base64encode(charToRaw("Ťěšťůšěř 的"))
+    expect_equal(
+      decode_base64("xaTEm8WhxaXFr8WhxJvFmSDnmoQ="), 
+      "Ťěšťůšěř 的"
+      )
+  })
+  it("returns NULL if the input is NULL", {
+    testthat::skip_if_not_installed("base64enc")
+    expect_null(decode_base64(NULL))
+  })
+  it("warns if decoded output is not a UTF-8 encoded string and 
+     returns a safe, quoted string in such a case", {
+    testthat::skip_if_not_installed("base64enc")
+    expect_warning(
+      output <- decode_base64("I am not encoded"),
+      paste0("decoded string does not contain valid UTF-8. ",
+             "Is the input really base64 encoded?")
+    )
+    expect_equal(output, "\"!\\xa9\\xa7\\xa2קr\\x87^\"")
+  })
+})
