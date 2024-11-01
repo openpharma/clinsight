@@ -50,7 +50,7 @@ get_metadata <- function(
   }
   
   meta$items_expanded <- meta[expand_tab_items] |> 
-    dplyr::bind_rows() |> 
+    dplyr::bind_rows(.id = "form_type") |> 
     expand_columns(
       columns = expand_cols,
       separator = ",",

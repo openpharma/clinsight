@@ -256,13 +256,7 @@ get_appdata <-  function(
     meta = metadata
 ){
   tableclasses <- gsub("create_table.", "", as.character(utils::methods("create_table")))
-  var_levels <- dplyr::distinct(meta$items_expanded, item_name, item_group)
-  forms <- c("common_forms", "study_forms", "general")
-  form_types <- Map(
-    \(x, y) cbind(form_type = y, item_group = unique(x$item_group)), 
-    metadata[forms], 
-    forms) |> 
-    do.call(what = rbind.data.frame)
+  var_levels <- dplyr::distinct(meta$items_expanded, form_type, item_name, item_group)
   
   data <- split(data, ~item_group)
   ## Apply changes specific for continuous data:
@@ -273,7 +267,12 @@ get_appdata <-  function(
       "item_group consists of multipe elements which is not allowed: ", 
       item_group_x
     )
-    class(x) <- c(with(form_types, form_type[item_group == item_group_x]), class(x))
+    form_type_x <- unique(with(var_levels, form_type[item_group == item_group_x]))
+    if(length(form_type_x) != 1) stop(
+      "form_type consists of multipe elements which is not allowed: ", 
+      form_type_x
+    )
+    class(x) <- c(form_type_x, class(x))
     tableclass <- simplify_string(item_group_x)
     if(tableclass %in% tableclasses){
       class(x) <- unique(c(tableclass, class(x)))
