@@ -46,6 +46,7 @@ Imports:
     tools,
     withr
 Suggests: 
+    base64enc,
     kableExtra,
     knitr,
     pkgload,
