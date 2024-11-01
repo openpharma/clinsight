@@ -180,7 +180,7 @@ create_table.general <- function(
 #'
 #' @export
 #' @inherit create_table.default 
-create_table.common_events <- function(
+create_table.common_forms <- function(
     data, 
     name_column = "item_name",
     value_column = "item_value",
