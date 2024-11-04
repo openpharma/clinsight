@@ -541,7 +541,7 @@ datatable_custom <- function(
     selection = "single",
     extensions = c("Buttons", "Scroller"),
     plugins = "scrollResize",
-    dom = "Bfti",
+    dom = "<'sep'>Bfti",
     options = list(buttons=list('excel')),
     ...
     ){

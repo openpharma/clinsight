@@ -1,3 +1,6 @@
+.sep {
+  float: right;
+}
 
 .bslib-value-box .value-box-area {
   padding: 0.1rem 0rem 0.1rem 1rem;
