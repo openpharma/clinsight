@@ -542,10 +542,10 @@ datatable_custom <- function(
     rename_vars = NULL, 
     title = NULL, 
     selection = "single",
-    extensions = "Scroller",
+    extensions = c("Scroller", "ColReorder"),
     plugins = "scrollResize",
     dom = "fti",
-    options = list(),
+    options = list(colReorder = TRUE),
     ...
     ){
   stopifnot(is.data.frame(data))
