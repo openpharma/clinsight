@@ -133,7 +133,10 @@ mod_common_forms_server <- function(
         adjust_colnames("^SAE ")
       if(!input$show_all_data) SAE_data$subject_id <- NULL
       
-      DT <- dt_options(SAE_data) # determine DT dom / exts / opts
+      # determine DT dom / exts / opts
+      DT <- dt_config(SAE_data,
+        table_name = paste("SAE", ifelse(input$show_all_data,
+        "all_patients", r$subject_id), sep = ".")) 
       datatable_custom(
         SAE_data, rename_vars = table_names, rownames= FALSE,
         title = "Serious Adverse Events", escape = FALSE,
@@ -151,7 +154,10 @@ mod_common_forms_server <- function(
       }
       if(!input$show_all_data) df$subject_id <- NULL
       
-      DT <- dt_options(df) # determine DT dom / exts / opts
+      # determine DT dom / exts / opts
+      DT <- dt_config(df,
+         table_name = paste(form, ifelse(input$show_all_data,
+         "all_patients", r$subject_id), sep = ".")) 
       datatable_custom(
         df, rename_vars = table_names, rownames= FALSE,title = form,
         escape = FALSE, dom = DT$dom, extensions = DT$exts, options = DT$opts)

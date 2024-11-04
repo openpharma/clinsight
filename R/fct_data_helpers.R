@@ -502,19 +502,26 @@ add_missing_columns <- function(
   data
 }
 
-#' Decide if Excel Button is appropriate
+#' Configure DT helper
 #'
 #' Small wrapper that helps handle some messiness preparing the correct `DT`
-#'   options when needed.
+#' dom, extensions, & options when needed. Specifically, when & how to add an
+#' Excel download button.
 #'
-#' @param data A data frame to use within the application.
-#' 
+#' @param data A data frame used for display in a DT table. Number of rows will
+#'   be assessed
+#' @param table_name character string, usually the form name
+#'
 #' @keywords internal
-dt_options <- function(data) {
+#' @return list with three named objects: `dom`, `exts`, and `opts`
+dt_config <- function(data, table_name = "form") {
   if(nrow(data) > 0 & isTRUE(get_golem_config("allow_listing_download"))) {
     dt_dom <- "Bfti"
     dt_exts <- c("Buttons", "Scroller")
-    dt_opts <- list(buttons=list('excel'))
+    dt_opts <- list(buttons=list(list(extend = 'excel',
+        filename = paste("clinsight", gsub(" ", "-", table_name),
+                         gsub(":", "-", gsub(" ", "_", time_stamp())), sep = ".")
+        )))
   } else {
     dt_exts <- c("Scroller")
     dt_opts <- list()

@@ -223,7 +223,10 @@ mod_study_forms_server <- function(
     
     output[["table"]] <- DT::renderDT({
       req(table_data_active())
-      DT <- dt_options(table_data_active()) # determine DT dom / exts / opts
+      # determine DT dom / exts / opts
+      DT <- dt_config(table_data_active(),
+        table_name = paste(form, ifelse(input$show_all, 
+                     "all_patients", r$subject_id), sep = ".")) 
       datatable_custom(table_data_active(), table_names, escape = FALSE,
                        dom = DT$dom, extensions = DT$exts, options = DT$opts)
     })
