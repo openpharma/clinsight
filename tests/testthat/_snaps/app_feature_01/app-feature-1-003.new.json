@@ -234,7 +234,7 @@
           "buttons": [
             {
               "extend": "excel",
-              "filename": "clinsight.Adverse-events.BEL_04_772.2024-11-04_17-42-24_UTC"
+              "filename": "clinsight.Adverse-events.BEL_04_772.2024-11-04_17-49-37_UTC"
             }
           ],
           "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"Adverse events\")\n}",
@@ -694,7 +694,7 @@
       ]
     },
     "header_widgets_1-ae_box": {
-      "html": "<div class=\"card bslib-card bslib-mb-spacing html-fill-item html-fill-container bslib-value-box bg-primary showcase-left-center\" data-bslib-card-init data-require-bs-caller=\"card() value_box()\" data-require-bs-version=\"5 5\">\n  <div class=\"card-body bslib-gap-spacing html-fill-item html-fill-container\" style=\"margin-top:auto;margin-bottom:auto;flex:1 1 auto; padding:0;\">\n    <div class=\"value-box-grid html-fill-item\" style=\"--bslib-grid-height:auto;--bslib-grid-height-mobile:auto;---bslib-value-box-showcase-w:30%;---bslib-value-box-showcase-w-fs:1fr;---bslib-value-box-showcase-max-h:100px;---bslib-value-box-showcase-max-h-fs:67%;\">\n      <div class=\"value-box-showcase html-fill-item html-fill-container\">\n        <i class=\"fas fa-house-medical fa-2x\" role=\"presentation\" aria-label=\"house-medical icon\"><\/i>\n      <\/div>\n      <div class=\"value-box-area html-fill-item html-fill-container\">\n        <p class=\"value-box-title\">SAEs: 0<\/p>\n        <p class=\"value-box-value\">AEs: 0<\/p>\n      <\/div>\n    <\/div>\n  <\/div>\n  <script data-bslib-card-init>bslib.Card.initializeAllCards();<\/script>\n<\/div>",
+      "html": "<div class=\"card bslib-card bslib-mb-spacing html-fill-item html-fill-container bslib-value-box bg-warning showcase-left-center\" data-bslib-card-init data-require-bs-caller=\"card() value_box()\" data-require-bs-version=\"5 5\">\n  <div class=\"card-body bslib-gap-spacing html-fill-item html-fill-container\" style=\"margin-top:auto;margin-bottom:auto;flex:1 1 auto; padding:0;\">\n    <div class=\"value-box-grid html-fill-item\" style=\"--bslib-grid-height:auto;--bslib-grid-height-mobile:auto;---bslib-value-box-showcase-w:30%;---bslib-value-box-showcase-w-fs:1fr;---bslib-value-box-showcase-max-h:100px;---bslib-value-box-showcase-max-h-fs:67%;\">\n      <div class=\"value-box-showcase html-fill-item html-fill-container\">\n        <i class=\"fas fa-house-medical fa-2x\" role=\"presentation\" aria-label=\"house-medical icon\"><\/i>\n      <\/div>\n      <div class=\"value-box-area html-fill-item html-fill-container\">\n        <p class=\"value-box-title\">SAEs: 0<\/p>\n        <p class=\"value-box-value\">AEs: 5<\/p>\n      <\/div>\n    <\/div>\n  <\/div>\n  <script data-bslib-card-init>bslib.Card.initializeAllCards();<\/script>\n<\/div>",
       "deps": [
         {
           "name": "font-awesome",
@@ -785,9 +785,8 @@
       ]
     },
     "main_sidebar_1-synch_info-db_synch_info": "EDC Sync date: <br>2023-09-15 10:10:00 UTC<br><br>EDC latest data: 2023-09-14 15:17:00",
-    "navigate_participants_1-status": "<b>NLD_06_893<\/b><br><b>Sex:<\/b> Male<br><b>Age:<\/b> 41yrs.<br><b>Status:<\/b> Enrolled<br><b>ECOG:<\/b> 0<br><b>Dx:<\/b> Syndrome R",
     "navigate_participants_1-subject_info": {
-      "html": "<div class=\"card bslib-card bslib-mb-spacing html-fill-item html-fill-container bslib-value-box bg-primary showcase-left-center\" data-bslib-card-init data-require-bs-caller=\"card() value_box()\" data-require-bs-version=\"5 5\" style=\"max-height:100px;\">\n  <div class=\"card-body bslib-gap-spacing html-fill-item html-fill-container\" style=\"margin-top:auto;margin-bottom:auto;flex:1 1 auto; padding:0;\">\n    <div class=\"value-box-grid html-fill-item\" style=\"--bslib-grid-height:auto;--bslib-grid-height-mobile:auto;---bslib-value-box-showcase-w:30%;---bslib-value-box-showcase-w-fs:1fr;---bslib-value-box-showcase-max-h:100px;---bslib-value-box-showcase-max-h-fs:67%;\">\n      <div class=\"value-box-showcase html-fill-item html-fill-container\">\n        <i class=\"fas fa-user-check fa-2x\" role=\"presentation\" aria-label=\"user-check icon\"><\/i>\n      <\/div>\n      <div class=\"value-box-area html-fill-item html-fill-container\">\n        <p class=\"value-box-title\">NLD_06_893<\/p>\n        <p class=\"value-box-value\">Male, 41yrs.<\/p>\n      <\/div>\n    <\/div>\n  <\/div>\n  <script data-bslib-card-init>bslib.Card.initializeAllCards();<\/script>\n<\/div>",
+      "html": "<div class=\"card bslib-card bslib-mb-spacing html-fill-item html-fill-container bslib-value-box bg-primary showcase-left-center\" data-bslib-card-init data-require-bs-caller=\"card() value_box()\" data-require-bs-version=\"5 5\" style=\"max-height:100px;\">\n  <div class=\"card-body bslib-gap-spacing html-fill-item html-fill-container\" style=\"margin-top:auto;margin-bottom:auto;flex:1 1 auto; padding:0;\">\n    <div class=\"value-box-grid html-fill-item\" style=\"--bslib-grid-height:auto;--bslib-grid-height-mobile:auto;---bslib-value-box-showcase-w:30%;---bslib-value-box-showcase-w-fs:1fr;---bslib-value-box-showcase-max-h:100px;---bslib-value-box-showcase-max-h-fs:67%;\">\n      <div class=\"value-box-showcase html-fill-item html-fill-container\">\n        <i class=\"fas fa-user-check fa-2x\" role=\"presentation\" aria-label=\"user-check icon\"><\/i>\n      <\/div>\n      <div class=\"value-box-area html-fill-item html-fill-container\">\n        <p class=\"value-box-title\">BEL_04_772<\/p>\n        <p class=\"value-box-value\">Male, 78yrs.<\/p>\n      <\/div>\n    <\/div>\n  <\/div>\n  <script data-bslib-card-init>bslib.Card.initializeAllCards();<\/script>\n<\/div>",
       "deps": [
         {
           "name": "font-awesome",
@@ -868,7 +867,7 @@
         }
       ]
     },
-    "navigate_review_1-forms_to_review": "5",
+    "navigate_review_1-forms_to_review": "8",
     "sf_vital_signs-figure": {
       "x": {
         "data": [
@@ -8262,249 +8261,6 @@
           "head": null,
           "attachment": null,
           "all_files": false
-        }
-      ]
-    },
-    "sf_vital_signs-table": {
-      "x": {
-        "style": "bootstrap5",
-        "filter": "none",
-        "vertical": false,
-        "extensions": [
-          "Buttons",
-          "Scroller"
-        ],
-        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Event<\/th>\n      <th>Systolic blood pressure<\/th>\n      <th>Diastolic blood pressure<\/th>\n      <th>Pulse<\/th>\n      <th>Resp<\/th>\n      <th>Temperature<\/th>\n      <th>Weight change since screening<\/th>\n      <th>BMI<\/th>\n      <th>Weight<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
-        "options": {
-          "scrollY": 400,
-          "scrollX": true,
-          "scroller": true,
-          "deferRender": true,
-          "scrollResize": true,
-          "scrollCollapse": true,
-          "buttons": [
-            {
-              "extend": "excel",
-              "filename": "clinsight.Vital-signs.NLD_06_893.2024-11-04_17-42-49_UTC"
-            }
-          ],
-          "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"\")\n}",
-          "dom": "Bf<\"header h5\">ti",
-          "columnDefs": [
-            {
-              "orderable": false,
-              "targets": 0
-            },
-            {
-              "name": " ",
-              "targets": 0
-            },
-            {
-              "name": "Event",
-              "targets": 1
-            },
-            {
-              "name": "Systolic blood pressure",
-              "targets": 2
-            },
-            {
-              "name": "Diastolic blood pressure",
-              "targets": 3
-            },
-            {
-              "name": "Pulse",
-              "targets": 4
-            },
-            {
-              "name": "Resp",
-              "targets": 5
-            },
-            {
-              "name": "Temperature",
-              "targets": 6
-            },
-            {
-              "name": "Weight change since screening",
-              "targets": 7
-            },
-            {
-              "name": "BMI",
-              "targets": 8
-            },
-            {
-              "name": "Weight",
-              "targets": 9
-            }
-          ],
-          "order": [
-
-          ],
-          "autoWidth": false,
-          "orderClasses": false,
-          "ajax": {
-            "type": "POST",
-            "data": "function(d) {\nd.search.caseInsensitive = true;\nd.search.smart = true;\nd.escape = false;\nvar encodeAmp = function(x) { x.value = x.value.replace(/&/g, \"%26\"); }\nencodeAmp(d.search);\n$.each(d.columns, function(i, v) {encodeAmp(v.search);});\n}"
-          },
-          "serverSide": true,
-          "processing": true
-        },
-        "selection": {
-          "mode": "single",
-          "selected": null,
-          "target": "row",
-          "selectable": null
-        }
-      },
-      "evals": [
-        "options.initComplete",
-        "options.ajax.data"
-      ],
-      "jsHooks": [
-
-      ],
-      "deps": [
-        {
-          "name": "jquery",
-          "version": "3.6.0",
-          "src": {
-            "href": "jquery-3.6.0"
-          },
-          "meta": null,
-          "script": "jquery-3.6.0.min.js",
-          "stylesheet": null,
-          "head": null,
-          "attachment": null,
-          "all_files": true
-        },
-        {
-          "name": "dt-core-bootstrap5",
-          "version": "1.13.6",
-          "src": {
-            "href": "dt-core-bootstrap5-1.13.6"
-          },
-          "meta": null,
-          "script": [
-            "js/jquery.dataTables.min.js",
-            "js/dataTables.bootstrap5.min.js"
-          ],
-          "stylesheet": "css/dataTables.bootstrap5.min.css",
-          "head": null,
-          "attachment": null,
-          "package": null,
-          "all_files": false
-        },
-        {
-          "name": "bootstrap",
-          "version": "5.3.1",
-          "src": {
-            "href": "bootstrap-5.3.1"
-          },
-          "meta": {
-            "viewport": "width=device-width, initial-scale=1, shrink-to-fit=no"
-          },
-          "script": "bootstrap.bundle.min.js",
-          "stylesheet": "bootstrap.min.css",
-          "head": null,
-          "attachment": null,
-          "package": null,
-          "all_files": true
-        },
-        {
-          "name": "bs3compat",
-          "version": "0.8.0",
-          "src": {
-            "href": "bs3compat-0.8.0"
-          },
-          "meta": null,
-          "script": [
-            "transition.js",
-            "tabs.js",
-            "bs3compat.js"
-          ],
-          "stylesheet": null,
-          "head": null,
-          "attachment": null,
-          "all_files": true
-        },
-        {
-          "name": "jszip",
-          "version": "1.13.6",
-          "src": {
-            "href": "jszip-1.13.6"
-          },
-          "meta": null,
-          "script": "jszip.min.js",
-          "stylesheet": null,
-          "head": null,
-          "attachment": null,
-          "package": null,
-          "all_files": false
-        },
-        {
-          "name": "dt-ext-buttons-bootstrap5",
-          "version": "1.13.6",
-          "src": {
-            "href": "dt-ext-buttons-bootstrap5-1.13.6"
-          },
-          "meta": null,
-          "script": [
-            "js/dataTables.buttons.min.js",
-            "js/buttons.html5.min.js",
-            "js/buttons.colVis.min.js",
-            "js/buttons.print.min.js",
-            "js/buttons.bootstrap5.min.js"
-          ],
-          "stylesheet": "css/buttons.bootstrap5.min.css",
-          "head": null,
-          "attachment": null,
-          "package": null,
-          "all_files": false
-        },
-        {
-          "name": "dt-ext-scroller-bootstrap5",
-          "version": "1.13.6",
-          "src": {
-            "href": "dt-ext-scroller-bootstrap5-1.13.6"
-          },
-          "meta": null,
-          "script": [
-            "js/dataTables.scroller.min.js",
-            "js/scroller.bootstrap5.min.js"
-          ],
-          "stylesheet": "css/scroller.bootstrap5.min.css",
-          "head": null,
-          "attachment": null,
-          "package": null,
-          "all_files": false
-        },
-        {
-          "name": "dt-plugin-scrollresize",
-          "version": "1.13.6",
-          "src": {
-            "href": "dt-plugin-scrollresize-1.13.6"
-          },
-          "meta": null,
-          "script": "source.min.js",
-          "stylesheet": [
-
-          ],
-          "head": null,
-          "attachment": null,
-          "package": null,
-          "all_files": true
-        },
-        {
-          "name": "crosstalk",
-          "version": "1.2.1",
-          "src": {
-            "href": "crosstalk-1.2.1"
-          },
-          "meta": null,
-          "script": "js/crosstalk.min.js",
-          "stylesheet": "css/crosstalk.min.css",
-          "head": null,
-          "attachment": null,
-          "all_files": true
         }
       ]
     },

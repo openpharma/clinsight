@@ -234,7 +234,7 @@
           "buttons": [
             {
               "extend": "excel",
-              "filename": "clinsight.Adverse-events.BEL_04_772.2024-11-04_17-42-24_UTC"
+              "filename": "clinsight.Adverse-events.BEL_04_772.2024-11-04_17-49-37_UTC"
             }
           ],
           "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"Adverse events\")\n}",
@@ -8285,7 +8285,7 @@
           "buttons": [
             {
               "extend": "excel",
-              "filename": "clinsight.Vital-signs.NLD_06_893.2024-11-04_17-42-49_UTC"
+              "filename": "clinsight.Vital-signs.NLD_06_893.2024-11-04_17-49-59_UTC"
             }
           ],
           "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"\")\n}",
