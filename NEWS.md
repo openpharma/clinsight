@@ -3,6 +3,8 @@
 - Generalized `merge_meta_with_data()` to allow user-defined processing functions.
 - Added a feature where, in applicable tables, a user can navigate to a form by double-clicking a table row.
 - Fixed warnings in `apply_edc_specific_changes` due to the use of a vector within `dplyr::select`.
+- Added `Excel` download button to Queries table & patient listings that need review.
+- Added helper function to automatically determine when adding said excel button is appropriate.
 
 # clinsight 0.1.0
 
