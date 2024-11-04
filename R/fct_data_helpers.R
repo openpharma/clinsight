@@ -502,6 +502,27 @@ add_missing_columns <- function(
   data
 }
 
+#' Decide if Excel Button is appropriate
+#'
+#' Small wrapper that helps handle some messiness preparing the correct `DT`
+#'   options when needed.
+#'
+#' @param data A data frame to use within the application.
+#' 
+#' @keywords internal
+dt_options <- function(data) {
+  if(nrow(data) > 0 & isTRUE(get_golem_config("allow_listing_download"))) {
+    dt_dom <- "Bfti"
+    dt_exts <- c("Buttons", "Scroller")
+    dt_opts <- list(buttons=list('excel'))
+  } else {
+    dt_exts <- c("Scroller")
+    dt_opts <- list()
+    dt_dom <- "fti"
+  }
+  return(list(dom = dt_dom, exts = dt_exts, opts = dt_opts))
+}
+
 #' Custom interactive datatable
 #'
 #' Small wrapper around [DT::datatable()]. Will be used to create tables in a
@@ -539,10 +560,10 @@ datatable_custom <- function(
     rename_vars = NULL, 
     title = NULL, 
     selection = "single",
-    extensions = c("Buttons", "Scroller"),
+    extensions = c("Scroller"),
     plugins = "scrollResize",
-    dom = "<'sep'>Bfti",
-    options = list(buttons=list('excel')),
+    dom = "fti",
+    options = list(),
     ...
     ){
   stopifnot(is.data.frame(data))

@@ -223,7 +223,9 @@ mod_study_forms_server <- function(
     
     output[["table"]] <- DT::renderDT({
       req(table_data_active())
-      datatable_custom(table_data_active(), table_names, escape = FALSE)
+      DT <- dt_options(table_data_active()) # determine DT dom / exts / opts
+      datatable_custom(table_data_active(), table_names, escape = FALSE,
+                       dom = DT$dom, extensions = DT$exts, options = DT$opts)
     })
     
     if(form %in% c("Vital signs", "Vitals adjusted")){
