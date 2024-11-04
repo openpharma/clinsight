@@ -738,6 +738,7 @@ dblclick_to_form <- function(bttn_ns) {
 decode_base64 <- function(
     x
 ){
+  stopifnot("base64enc is not installed" = rlang::is_installed("base64enc"))
   if(is.null(x)) return(x)
   stopifnot(is.character(x))
   decoded <- base64enc::base64decode(x)
