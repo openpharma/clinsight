@@ -33,7 +33,7 @@ db_create(get_review_data(merged_data),
           )
 
 run_app(
-  # data = data_path, #merged_data, # or db_path works too
+  data = data_path, #merged_data, # or db_path works too
   # user_db = db_path, # defaults to "user_db.sqlite"
   # onStart = \(){onStop(\(){unlink(data_folder, recursive = TRUE)})} # be careful here
 )
