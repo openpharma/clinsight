@@ -1,5 +1,7 @@
-.sep {
-  float: right;
+
+.dataTables_wrapper .dt-buttons {
+  padding-left: 0.5em;
+  float: right;  
 }
 
 .bslib-value-box .value-box-area {

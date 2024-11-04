@@ -9,7 +9,7 @@ datatable_custom(
   rename_vars = NULL,
   title = NULL,
   selection = "single",
-  extensions = c("Scroller"),
+  extensions = "Scroller",
   plugins = "scrollResize",
   dom = "fti",
   options = list(),

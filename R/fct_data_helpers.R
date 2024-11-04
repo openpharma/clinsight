@@ -516,7 +516,7 @@ add_missing_columns <- function(
 #' @return list with three named objects: `dom`, `exts`, and `opts`
 dt_config <- function(data, table_name = "form") {
   if(nrow(data) > 0 & isTRUE(get_golem_config("allow_listing_download"))) {
-    dt_dom <- "Bfti"
+    dt_dom <- 'Bfti'
     dt_exts <- c("Buttons", "Scroller")
     dt_opts <- list(buttons=list(list(extend = 'excel',
         filename = paste("clinsight", gsub(" ", "-", table_name),
