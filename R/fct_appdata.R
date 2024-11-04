@@ -272,7 +272,10 @@ get_appdata <-  function(
       "form_type consists of multipe elements which is not allowed: ", 
       form_type_x
     )
-    class(x) <- c(form_type_x, class(x))
+    tableclass <- simplify_string(form_type_x)
+    if(tableclass %in% tableclasses){
+      class(x) <- unique(c(tableclass, class(x)))
+    }
     tableclass <- simplify_string(item_group_x)
     if(tableclass %in% tableclasses){
       class(x) <- unique(c(tableclass, class(x)))
