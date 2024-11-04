@@ -528,6 +528,7 @@ add_missing_columns <- function(
 #'     * `deferREnder = TRUE`
 #'     * `scrollResize = TRUE`
 #'     * `scrollCollapse = TRUE`
+#'     * `colReorder = TRUE`
 #'   * Non-modifiable defaults:
 #'     * `dom`: Defined by the `dom` parameter.
 #'     * `initComplete`: Defaults to a function to insert table title into dataTable container.
@@ -545,7 +546,7 @@ datatable_custom <- function(
     extensions = c("Scroller", "ColReorder"),
     plugins = "scrollResize",
     dom = "fti",
-    options = list(colReorder = TRUE),
+    options = list(),
     ...
     ){
   stopifnot(is.data.frame(data))
@@ -563,7 +564,8 @@ datatable_custom <- function(
     scroller = TRUE,
     deferRender = TRUE,
     scrollResize = TRUE,
-    scrollCollapse = TRUE
+    scrollCollapse = TRUE,
+    colReorder = TRUE
   )
   fixed_opts <- list(
     initComplete = DT::JS(
