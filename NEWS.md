@@ -1,10 +1,16 @@
 # clinsight (development version)
 
+## Changed 
+
 - Added `pkgdown` GHA workflow to automatically update documentation site with PRs & pushes to `main` and `dev`
 - Generalized `merge_meta_with_data()` to allow user-defined processing functions.
 - Added a feature where, in applicable tables, a user can navigate to a form by double-clicking a table row.
 - Fixed warnings in `apply_edc_specific_changes` due to the use of a vector within `dplyr::select`.
 - Added form type as a class to be used in `create_table()` to display tables.
+
+## Bug fixes
+
+- When using the `shinyproxy` deployment configuration, the user name is now expected to be base64 encoded, and will now be base64 encoded by `clinsight` by default, so that the app can also handle non-ASCII signs in user names that are stored in HTTP headers. To display the user name correctly, use base64 encoding in the `application.yml` in ShinyProxy settings (for example: `http-headers.X_SP_USERNAME: "#{T(java.util.Base64).getEncoder().encodeToString(oidcUser.getFullName().getBytes())}"`).
 
 # clinsight 0.1.0
 
