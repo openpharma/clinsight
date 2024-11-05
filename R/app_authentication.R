@@ -151,7 +151,7 @@ authenticate_server <- function(
     ),
     http_headers = reactiveValues(
       user = session$request$HTTP_X_SP_USERID,
-      name = session$request$HTTP_X_SP_USERNAME,
+      name = decode_base64(session$request$HTTP_X_SP_USERNAME),
       roles = get_valid_roles(session$request$HTTP_X_SP_USERGROUPS, all_roles),
       sites = all_sites
     ),
