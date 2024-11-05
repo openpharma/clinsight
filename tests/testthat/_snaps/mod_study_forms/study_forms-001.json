@@ -1240,7 +1240,8 @@
         "filter": "none",
         "vertical": false,
         "extensions": [
-          "Scroller"
+          "Scroller",
+          "ColReorder"
         ],
         "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>event_name<\/th>\n      <th>Systolic blood pressure<\/th>\n      <th>Diastolic blood pressure<\/th>\n      <th>Pulse<\/th>\n      <th>Resp<\/th>\n      <th>Temperature<\/th>\n      <th>Weight change since screening<\/th>\n      <th>BMI<\/th>\n      <th>Weight<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
         "options": {
@@ -1250,6 +1251,7 @@
           "deferRender": true,
           "scrollResize": true,
           "scrollCollapse": true,
+          "colReorder": true,
           "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"\")\n}",
           "dom": "f<\"header h5\">ti",
           "columnDefs": [
@@ -1400,6 +1402,23 @@
             "js/scroller.bootstrap5.min.js"
           ],
           "stylesheet": "css/scroller.bootstrap5.min.css",
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": false
+        },
+        {
+          "name": "dt-ext-colreorder-bootstrap5",
+          "version": "1.13.6",
+          "src": {
+            "href": "dt-ext-colreorder-bootstrap5-1.13.6"
+          },
+          "meta": null,
+          "script": [
+            "js/dataTables.colReorder.min.js",
+            "js/colReorder.bootstrap5.min.js"
+          ],
+          "stylesheet": "css/colReorder.bootstrap5.min.css",
           "head": null,
           "attachment": null,
           "package": null,
