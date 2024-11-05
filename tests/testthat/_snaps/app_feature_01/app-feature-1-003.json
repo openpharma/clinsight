@@ -235,7 +235,7 @@
             {
               "extend": "excel",
               "text": "<i class=\"fa-solid fa-download\"><\/i>",
-              "filename": "clinsight.Adverse-events.BEL_04_772.2024-11-05_01-03-29_UTC"
+              "filename": "clinsight.Adverse-events.BEL_04_772"
             }
           ],
           "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"Adverse events\")\n}",
