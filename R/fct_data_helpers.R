@@ -520,8 +520,7 @@ dt_config <- function(data, table_name = "form") {
     dt_exts <- c("Buttons", "Scroller")
     dt_opts <- list(buttons=list(list(extend = 'excel',
         text = '<i class="fa-solid fa-download"></i>',
-        filename = paste("clinsight", gsub(" ", "-", table_name),
-                         gsub(":", "-", gsub(" ", "_", time_stamp())), sep = ".")
+        filename = paste("clinsight", gsub(" ", "-", table_name), sep = ".")
         )))
   } else {
     dt_exts <- c("Scroller")
