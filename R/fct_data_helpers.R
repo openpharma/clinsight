@@ -518,17 +518,18 @@ add_missing_columns <- function(
 #' @keywords internal
 #' @return list with three named objects: `dom`, `exts`, and `opts`
 dt_config <- function(data, table_name = "form") {
+  default_args<- formals(datatable_custom)
   if(nrow(data) > 0 & isTRUE(get_golem_config("allow_listing_download"))) {
     dt_dom <- 'Bfti'
-    dt_exts <- c("Buttons", "Scroller")
+    dt_exts <- c("Buttons", eval(default_args$extensions))
     dt_opts <- list(buttons=list(list(extend = 'excel',
         text = '<i class="fa-solid fa-download"></i>',
         filename = paste("clinsight", gsub(" ", "-", table_name), sep = ".")
         )))
   } else {
-    dt_exts <- c("Scroller")
-    dt_opts <- list()
-    dt_dom <- "fti"
+    dt_dom <- default_args$dom |> eval()
+    dt_exts <- default_args$extensions |> eval()
+    dt_opts <- default_args$options |> eval()
   }
   return(list(dom = dt_dom, exts = dt_exts, opts = dt_opts))
 }
