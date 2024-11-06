@@ -113,6 +113,7 @@ merge_meta_with_data <- function(
 #' @param data A data frame
 #' 
 #' @return A data frame.
+#' @keywords internal
 apply_study_specific_suffix_fixes <- function(data) {
   dplyr::mutate(data,
     suffix = ifelse(item_name == "ECG interpretation", "LBCLSIG", suffix),
@@ -134,6 +135,7 @@ apply_study_specific_suffix_fixes <- function(data) {
 #'   missing data (thus, will be made explicitly missing).
 #' 
 #' @return A data frame.
+#' @keywords internal
 apply_edc_specific_changes <- function(
     data, 
     expected_columns = c("LBORNR_Lower", "LBORNR_Upper", "LBORRESU", 
@@ -230,6 +232,7 @@ apply_study_specific_fixes <- function(
 #'   apply to the data. Default is NULL.
 #' @param .default A character vector containing the names of the functions to
 #'   apply if none are provided. Default is "identity".
+#' @keywords internal
 apply_custom_functions <- function(data, functions = NULL, .default = "identity") {
   Reduce(\(x1, x2) do.call(x2, list(x1)), # Apply next function to output of previous
          functions %||% .default, # Apply default functions if no additional functions provided
@@ -253,7 +256,7 @@ get_appdata <-  function(
     meta = metadata
 ){
   tableclasses <- gsub("create_table.", "", as.character(utils::methods("create_table")))
-  var_levels <- dplyr::distinct(meta$items_expanded, item_name, item_group) 
+  var_levels <- dplyr::distinct(meta$items_expanded, form_type, item_name, item_group)
   
   data <- split(data, ~item_group)
   ## Apply changes specific for continuous data:
@@ -264,9 +267,18 @@ get_appdata <-  function(
       "item_group consists of multipe elements which is not allowed: ", 
       item_group_x
     )
+    form_type_x <- unique(with(var_levels, form_type[item_group == item_group_x]))
+    if(length(form_type_x) != 1) stop(
+      "form_type consists of multipe elements which is not allowed: ", 
+      form_type_x
+    )
+    tableclass <- simplify_string(form_type_x)
+    if(tableclass %in% tableclasses){
+      class(x) <- unique(c(tableclass, class(x)))
+    }
     tableclass <- simplify_string(item_group_x)
     if(tableclass %in% tableclasses){
-      class(x) <- c(tableclass, class(x)) 
+      class(x) <- unique(c(tableclass, class(x)))
     }
     if(!all(x$item_type == "continuous")) return(x)
     df <- x |> 
@@ -309,7 +321,7 @@ get_appdata <-  function(
         )
       ) |> 
       dplyr::ungroup() 
-    class(df) <- c("continuous", class(df))
+    class(df) <- unique(c("continuous", class(x)))
     df
   }) 
   appdata

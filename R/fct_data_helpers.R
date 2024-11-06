@@ -50,7 +50,7 @@ get_metadata <- function(
   }
   
   meta$items_expanded <- meta[expand_tab_items] |> 
-    dplyr::bind_rows() |> 
+    dplyr::bind_rows(.id = "form_type") |> 
     expand_columns(
       columns = expand_cols,
       separator = ",",
@@ -97,6 +97,7 @@ get_metadata <- function(
 #'
 #' @return A data frame
 #'
+#' @keywords internal
 rename_raw_data <- function(
     data, 
     column_names = metadata$column_names
@@ -134,6 +135,7 @@ rename_raw_data <- function(
 #' @return A data frame, with derivative time and event variables, needed for
 #'   ClinSight to function properly.
 #'
+#' @keywords internal
 add_timevars_to_data <- function(
     data
 ){
@@ -331,6 +333,7 @@ get_meta_vars <- function(data = appdata, meta = metadata){
 #'
 #' @return A cleaned data frame with form-level data.
 #' 
+#' @keywords internal
 get_form_level_data <- function(
     data,
     all_forms,
@@ -553,6 +556,7 @@ dt_config <- function(data, table_name = "form") {
 #'     * `deferREnder = TRUE`
 #'     * `scrollResize = TRUE`
 #'     * `scrollCollapse = TRUE`
+#'     * `colReorder = TRUE`
 #'   * Non-modifiable defaults:
 #'     * `dom`: Defined by the `dom` parameter.
 #'     * `initComplete`: Defaults to a function to insert table title into dataTable container.
@@ -567,7 +571,7 @@ datatable_custom <- function(
     rename_vars = NULL, 
     title = NULL, 
     selection = "single",
-    extensions = "Scroller",
+    extensions = c("Scroller", "ColReorder"),
     plugins = "scrollResize",
     dom = "fti",
     options = list(),
@@ -588,7 +592,8 @@ datatable_custom <- function(
     scroller = TRUE,
     deferRender = TRUE,
     scrollResize = TRUE,
-    scrollCollapse = TRUE
+    scrollCollapse = TRUE,
+    colReorder = TRUE
   )
   fixed_opts <- list(
     initComplete = DT::JS(

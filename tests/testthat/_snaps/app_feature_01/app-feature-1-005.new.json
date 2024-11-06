@@ -6,8 +6,7 @@
         "filter": "none",
         "vertical": false,
         "extensions": [
-          "Scroller",
-          "ColReorder"
+          "Scroller"
         ],
         "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th>N<\/th>\n      <th>Name<\/th>\n      <th>AESI<\/th>\n      <th>Start date<\/th>\n      <th>End date<\/th>\n      <th>CTCAE severity<\/th>\n      <th>Treatment related<\/th>\n      <th>Treatment action<\/th>\n      <th>Other action<\/th>\n      <th>Category<\/th>\n      <th>Awareness date<\/th>\n      <th>Date of death<\/th>\n      <th>Death reason<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
         "options": {
@@ -186,23 +185,6 @@
           "all_files": false
         },
         {
-          "name": "dt-ext-colreorder-bootstrap5",
-          "version": "1.13.6",
-          "src": {
-            "href": "dt-ext-colreorder-bootstrap5-1.13.6"
-          },
-          "meta": null,
-          "script": [
-            "js/dataTables.colReorder.min.js",
-            "js/colReorder.bootstrap5.min.js"
-          ],
-          "stylesheet": "css/colReorder.bootstrap5.min.css",
-          "head": null,
-          "attachment": null,
-          "package": null,
-          "all_files": false
-        },
-        {
           "name": "dt-plugin-scrollresize",
           "version": "1.13.6",
           "src": {
@@ -240,8 +222,7 @@
         "vertical": false,
         "extensions": [
           "Buttons",
-          "Scroller",
-          "ColReorder"
+          "Scroller"
         ],
         "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th>N<\/th>\n      <th>Name<\/th>\n      <th>AESI<\/th>\n      <th>start date<\/th>\n      <th>end date<\/th>\n      <th>CTCAE severity<\/th>\n      <th>Treatment related<\/th>\n      <th>Treatment action<\/th>\n      <th>Other action<\/th>\n      <th>Serious Adverse Event<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
         "options": {
@@ -251,6 +232,7 @@
           "deferRender": true,
           "scrollResize": true,
           "scrollCollapse": true,
+          "colReorder": true,
           "buttons": [
             {
               "extend": "excel",
@@ -258,7 +240,6 @@
               "filename": "clinsight.Adverse-events.BEL_04_772"
             }
           ],
-          "colReorder": true,
           "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"Adverse events\")\n}",
           "dom": "Bf<\"header h5\">ti",
           "columnDefs": [
@@ -443,23 +424,6 @@
             "js/scroller.bootstrap5.min.js"
           ],
           "stylesheet": "css/scroller.bootstrap5.min.css",
-          "head": null,
-          "attachment": null,
-          "package": null,
-          "all_files": false
-        },
-        {
-          "name": "dt-ext-colreorder-bootstrap5",
-          "version": "1.13.6",
-          "src": {
-            "href": "dt-ext-colreorder-bootstrap5-1.13.6"
-          },
-          "meta": null,
-          "script": [
-            "js/dataTables.colReorder.min.js",
-            "js/colReorder.bootstrap5.min.js"
-          ],
-          "stylesheet": "css/colReorder.bootstrap5.min.css",
           "head": null,
           "attachment": null,
           "package": null,
@@ -733,7 +697,7 @@
       ]
     },
     "header_widgets_1-ae_box": {
-      "html": "<div class=\"card bslib-card bslib-mb-spacing html-fill-item html-fill-container bslib-value-box bg-warning showcase-left-center\" data-bslib-card-init data-require-bs-caller=\"card() value_box()\" data-require-bs-version=\"5 5\">\n  <div class=\"card-body bslib-gap-spacing html-fill-item html-fill-container\" style=\"margin-top:auto;margin-bottom:auto;flex:1 1 auto; padding:0;\">\n    <div class=\"value-box-grid html-fill-item\" style=\"--bslib-grid-height:auto;--bslib-grid-height-mobile:auto;---bslib-value-box-showcase-w:30%;---bslib-value-box-showcase-w-fs:1fr;---bslib-value-box-showcase-max-h:100px;---bslib-value-box-showcase-max-h-fs:67%;\">\n      <div class=\"value-box-showcase html-fill-item html-fill-container\">\n        <i class=\"fas fa-house-medical fa-2x\" role=\"presentation\" aria-label=\"house-medical icon\"><\/i>\n      <\/div>\n      <div class=\"value-box-area html-fill-item html-fill-container\">\n        <p class=\"value-box-title\">SAEs: 0<\/p>\n        <p class=\"value-box-value\">AEs: 5<\/p>\n      <\/div>\n    <\/div>\n  <\/div>\n  <script data-bslib-card-init>bslib.Card.initializeAllCards();<\/script>\n<\/div>",
+      "html": "<div class=\"card bslib-card bslib-mb-spacing html-fill-item html-fill-container bslib-value-box bg-primary showcase-left-center\" data-bslib-card-init data-require-bs-caller=\"card() value_box()\" data-require-bs-version=\"5 5\">\n  <div class=\"card-body bslib-gap-spacing html-fill-item html-fill-container\" style=\"margin-top:auto;margin-bottom:auto;flex:1 1 auto; padding:0;\">\n    <div class=\"value-box-grid html-fill-item\" style=\"--bslib-grid-height:auto;--bslib-grid-height-mobile:auto;---bslib-value-box-showcase-w:30%;---bslib-value-box-showcase-w-fs:1fr;---bslib-value-box-showcase-max-h:100px;---bslib-value-box-showcase-max-h-fs:67%;\">\n      <div class=\"value-box-showcase html-fill-item html-fill-container\">\n        <i class=\"fas fa-house-medical fa-2x\" role=\"presentation\" aria-label=\"house-medical icon\"><\/i>\n      <\/div>\n      <div class=\"value-box-area html-fill-item html-fill-container\">\n        <p class=\"value-box-title\">SAEs: 0<\/p>\n        <p class=\"value-box-value\">AEs: 0<\/p>\n      <\/div>\n    <\/div>\n  <\/div>\n  <script data-bslib-card-init>bslib.Card.initializeAllCards();<\/script>\n<\/div>",
       "deps": [
         {
           "name": "font-awesome",
@@ -824,8 +788,9 @@
       ]
     },
     "main_sidebar_1-synch_info-db_synch_info": "EDC Sync date: <br>2023-09-15 10:10:00 UTC<br><br>EDC latest data: 2023-09-14 15:17:00",
+    "navigate_participants_1-status": "<b>NLD_06_893<\/b><br><b>Sex:<\/b> Male<br><b>Age:<\/b> 41yrs.<br><b>Status:<\/b> Enrolled<br><b>ECOG:<\/b> 0<br><b>Dx:<\/b> Syndrome R",
     "navigate_participants_1-subject_info": {
-      "html": "<div class=\"card bslib-card bslib-mb-spacing html-fill-item html-fill-container bslib-value-box bg-primary showcase-left-center\" data-bslib-card-init data-require-bs-caller=\"card() value_box()\" data-require-bs-version=\"5 5\" style=\"max-height:100px;\">\n  <div class=\"card-body bslib-gap-spacing html-fill-item html-fill-container\" style=\"margin-top:auto;margin-bottom:auto;flex:1 1 auto; padding:0;\">\n    <div class=\"value-box-grid html-fill-item\" style=\"--bslib-grid-height:auto;--bslib-grid-height-mobile:auto;---bslib-value-box-showcase-w:30%;---bslib-value-box-showcase-w-fs:1fr;---bslib-value-box-showcase-max-h:100px;---bslib-value-box-showcase-max-h-fs:67%;\">\n      <div class=\"value-box-showcase html-fill-item html-fill-container\">\n        <i class=\"fas fa-user-check fa-2x\" role=\"presentation\" aria-label=\"user-check icon\"><\/i>\n      <\/div>\n      <div class=\"value-box-area html-fill-item html-fill-container\">\n        <p class=\"value-box-title\">BEL_04_772<\/p>\n        <p class=\"value-box-value\">Male, 78yrs.<\/p>\n      <\/div>\n    <\/div>\n  <\/div>\n  <script data-bslib-card-init>bslib.Card.initializeAllCards();<\/script>\n<\/div>",
+      "html": "<div class=\"card bslib-card bslib-mb-spacing html-fill-item html-fill-container bslib-value-box bg-primary showcase-left-center\" data-bslib-card-init data-require-bs-caller=\"card() value_box()\" data-require-bs-version=\"5 5\" style=\"max-height:100px;\">\n  <div class=\"card-body bslib-gap-spacing html-fill-item html-fill-container\" style=\"margin-top:auto;margin-bottom:auto;flex:1 1 auto; padding:0;\">\n    <div class=\"value-box-grid html-fill-item\" style=\"--bslib-grid-height:auto;--bslib-grid-height-mobile:auto;---bslib-value-box-showcase-w:30%;---bslib-value-box-showcase-w-fs:1fr;---bslib-value-box-showcase-max-h:100px;---bslib-value-box-showcase-max-h-fs:67%;\">\n      <div class=\"value-box-showcase html-fill-item html-fill-container\">\n        <i class=\"fas fa-user-check fa-2x\" role=\"presentation\" aria-label=\"user-check icon\"><\/i>\n      <\/div>\n      <div class=\"value-box-area html-fill-item html-fill-container\">\n        <p class=\"value-box-title\">NLD_06_893<\/p>\n        <p class=\"value-box-value\">Male, 41yrs.<\/p>\n      <\/div>\n    <\/div>\n  <\/div>\n  <script data-bslib-card-init>bslib.Card.initializeAllCards();<\/script>\n<\/div>",
       "deps": [
         {
           "name": "font-awesome",
@@ -906,7 +871,7 @@
         }
       ]
     },
-    "navigate_review_1-forms_to_review": "8",
+    "navigate_review_1-forms_to_review": "5",
     "sf_vital_signs-figure": {
       "x": {
         "data": [
@@ -8310,8 +8275,7 @@
         "vertical": false,
         "extensions": [
           "Buttons",
-          "Scroller",
-          "ColReorder"
+          "Scroller"
         ],
         "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Event<\/th>\n      <th>Systolic blood pressure<\/th>\n      <th>Diastolic blood pressure<\/th>\n      <th>Pulse<\/th>\n      <th>Resp<\/th>\n      <th>Temperature<\/th>\n      <th>Weight change since screening<\/th>\n      <th>BMI<\/th>\n      <th>Weight<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
         "options": {
@@ -8321,14 +8285,14 @@
           "deferRender": true,
           "scrollResize": true,
           "scrollCollapse": true,
+          "colReorder": true,
           "buttons": [
             {
               "extend": "excel",
               "text": "<i class=\"fa-solid fa-download\"><\/i>",
-              "filename": "clinsight.Vital-signs.BEL_04_772"
+              "filename": "clinsight.Vital-signs.NLD_06_893"
             }
           ],
-          "colReorder": true,
           "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"\")\n}",
           "dom": "Bf<\"header h5\">ti",
           "columnDefs": [
@@ -8513,23 +8477,6 @@
             "js/scroller.bootstrap5.min.js"
           ],
           "stylesheet": "css/scroller.bootstrap5.min.css",
-          "head": null,
-          "attachment": null,
-          "package": null,
-          "all_files": false
-        },
-        {
-          "name": "dt-ext-colreorder-bootstrap5",
-          "version": "1.13.6",
-          "src": {
-            "href": "dt-ext-colreorder-bootstrap5-1.13.6"
-          },
-          "meta": null,
-          "script": [
-            "js/dataTables.colReorder.min.js",
-            "js/colReorder.bootstrap5.min.js"
-          ],
-          "stylesheet": "css/colReorder.bootstrap5.min.css",
           "head": null,
           "attachment": null,
           "package": null,
