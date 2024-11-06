@@ -7,8 +7,7 @@
         "vertical": false,
         "extensions": [
           "Buttons",
-          "Scroller",
-          "ColReorder"
+          "Scroller"
         ],
         "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Resolved<\/th>\n      <th>Subject<\/th>\n      <th>Type<\/th>\n      <th>Event<\/th>\n      <th>Form<\/th>\n      <th>Query<\/th>\n      <th>Time<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
         "options": {
@@ -18,6 +17,7 @@
           "deferRender": true,
           "scrollResize": true,
           "scrollCollapse": true,
+          "colReorder": true,
           "buttons": [
             {
               "extend": "excel",
@@ -25,7 +25,6 @@
               "filename": "clinsight.all.queries"
             }
           ],
-          "colReorder": true,
           "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"All queries\")\n}",
           "dom": "Bf<\"header h5\">ti",
           "columnDefs": [
@@ -204,23 +203,6 @@
             "js/scroller.bootstrap5.min.js"
           ],
           "stylesheet": "css/scroller.bootstrap5.min.css",
-          "head": null,
-          "attachment": null,
-          "package": null,
-          "all_files": false
-        },
-        {
-          "name": "dt-ext-colreorder-bootstrap5",
-          "version": "1.13.6",
-          "src": {
-            "href": "dt-ext-colreorder-bootstrap5-1.13.6"
-          },
-          "meta": null,
-          "script": [
-            "js/dataTables.colReorder.min.js",
-            "js/colReorder.bootstrap5.min.js"
-          ],
-          "stylesheet": "css/colReorder.bootstrap5.min.css",
           "head": null,
           "attachment": null,
           "package": null,
