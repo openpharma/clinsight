@@ -50,7 +50,7 @@ get_metadata <- function(
   }
   
   meta$items_expanded <- meta[expand_tab_items] |> 
-    dplyr::bind_rows() |> 
+    dplyr::bind_rows(.id = "form_type") |> 
     expand_columns(
       columns = expand_cols,
       separator = ",",
@@ -528,6 +528,7 @@ add_missing_columns <- function(
 #'     * `deferREnder = TRUE`
 #'     * `scrollResize = TRUE`
 #'     * `scrollCollapse = TRUE`
+#'     * `colReorder = TRUE`
 #'   * Non-modifiable defaults:
 #'     * `dom`: Defined by the `dom` parameter.
 #'     * `initComplete`: Defaults to a function to insert table title into dataTable container.
@@ -542,7 +543,7 @@ datatable_custom <- function(
     rename_vars = NULL, 
     title = NULL, 
     selection = "single",
-    extensions = "Scroller",
+    extensions = c("Scroller", "ColReorder"),
     plugins = "scrollResize",
     dom = "fti",
     options = list(),
@@ -563,7 +564,8 @@ datatable_custom <- function(
     scroller = TRUE,
     deferRender = TRUE,
     scrollResize = TRUE,
-    scrollCollapse = TRUE
+    scrollCollapse = TRUE,
+    colReorder = TRUE
   )
   fixed_opts <- list(
     initComplete = DT::JS(

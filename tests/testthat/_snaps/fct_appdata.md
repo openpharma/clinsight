@@ -30,7 +30,7 @@
     Code
       df[c(1, 1000, 2000, 3000, 4000, 5000), ]
     Output
-      # A tibble: 6 x 23
+      # A tibble: 6 x 24
         site_code subject_id event_id event_date event_repeat form_id form_repeat
         <chr>     <chr>      <chr>    <date>            <int> <chr>         <int>
       1 9600      9600-001   SCR      2022-11-09            1 DM                1
@@ -39,10 +39,10 @@
       4 <NA>      <NA>       <NA>     NA                   NA <NA>             NA
       5 <NA>      <NA>       <NA>     NA                   NA <NA>             NA
       6 <NA>      <NA>       <NA>     NA                   NA <NA>             NA
-      # i 16 more variables: edit_date_time <dttm>, day <drtn>, vis_day <dbl>,
-      #   vis_num <dbl>, event_name <chr>, event_label <chr>, item_name <chr>,
-      #   item_type <chr>, item_group <chr>, item_unit <chr>, lower_lim <dbl>,
-      #   upper_lim <dbl>, item_value <chr>, significance <chr>,
+      # i 17 more variables: edit_date_time <dttm>, day <drtn>, vis_day <dbl>,
+      #   vis_num <dbl>, event_name <chr>, event_label <chr>, form_type <chr>,
+      #   item_name <chr>, item_type <chr>, item_group <chr>, item_unit <chr>,
+      #   lower_lim <dbl>, upper_lim <dbl>, item_value <chr>, significance <chr>,
       #   reason_notdone <chr>, region <chr>
 
 ---
@@ -50,7 +50,7 @@
     Code
       df
     Output
-      # A tibble: 543 x 23
+      # A tibble: 543 x 24
          site_code subject_id event_id event_date event_repeat form_id form_repeat
          <chr>     <chr>      <chr>    <date>            <int> <chr>         <int>
        1 9600      9600-001   SCR      2022-11-09            1 DM                1
@@ -64,10 +64,10 @@
        9 9600      9600-002   SCR      2022-01-01            1 VS                1
       10 9600      9600-002   SCR      2022-01-01            1 VS                1
       # i 533 more rows
-      # i 16 more variables: edit_date_time <dttm>, day <drtn>, vis_day <dbl>,
-      #   vis_num <dbl>, event_name <chr>, event_label <chr>, item_name <chr>,
-      #   item_type <chr>, item_group <chr>, item_unit <chr>, lower_lim <dbl>,
-      #   upper_lim <dbl>, item_value <chr>, significance <chr>,
+      # i 17 more variables: edit_date_time <dttm>, day <drtn>, vis_day <dbl>,
+      #   vis_num <dbl>, event_name <chr>, event_label <chr>, form_type <chr>,
+      #   item_name <chr>, item_type <chr>, item_group <chr>, item_unit <chr>,
+      #   lower_lim <dbl>, upper_lim <dbl>, item_value <chr>, significance <chr>,
       #   reason_notdone <chr>, region <chr>
 
 # get_appdata works: produces the expected output
