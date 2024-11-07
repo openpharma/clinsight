@@ -4,17 +4,22 @@
 \alias{db_upsert}
 \title{UPSERT to all_review_data}
 \usage{
-db_upsert(con, data, common_cols)
+db_upsert(con, data, idx_cols)
 }
 \arguments{
 \item{con}{A DBI Connection to the SQLite DB}
 
 \item{data}{A data frame containing the data to UPSERT into all_review_data}
 
-\item{common_cols}{A character vector specifying which columns define a
-unique row}
+\item{idx_cols}{A character vector specifying which columns define a
+unique index for a row}
+}
+\value{
+invisibly returns TRUE. Is run for it's side effects on the DB.
 }
 \description{
-UPSERT to all_review_data
+Performs an UPSERT on all_review_data. New records will be appended to the
+table. Changed/updated records will be applied to the table based on the
+index column constraint.
 }
 \keyword{internal}

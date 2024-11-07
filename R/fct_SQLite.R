@@ -247,19 +247,25 @@ db_update <- function(
 
 #' UPSERT to all_review_data
 #' 
+#' Performs an UPSERT on all_review_data. New records will be appended to the
+#' table. Changed/updated records will be applied to the table based on the
+#' index column constraint.
+#' 
 #' @param con A DBI Connection to the SQLite DB
 #' @param data A data frame containing the data to UPSERT into all_review_data
-#' @param common_cols A character vector specifying which columns define a
-#'   unique row
+#' @param idx_cols A character vector specifying which columns define a
+#'   unique index for a row
+#'   
+#' @return invisibly returns TRUE. Is run for it's side effects on the DB.
 #' 
 #' @keywords internal
-db_upsert <- function(con, data, common_cols) {
+db_upsert <- function(con, data, idx_cols) {
   if ("id" %in% names(data))
     data$id <- NULL
-  cols_to_update <- names(data)[!names(data) %in% common_cols]
+  cols_to_update <- names(data)[!names(data) %in% idx_cols]
   cols_to_insert <- names(data) |> 
     paste(collapse = ", ")
-  constraint_cols <- paste(common_cols, collapse = ", ")
+  constraint_cols <- paste(idx_cols, collapse = ", ")
   dplyr::copy_to(con, data, "row_updates")
   rs <- DBI::dbSendStatement(con, paste(
     "INSERT INTO",
