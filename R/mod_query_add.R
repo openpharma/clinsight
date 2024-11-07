@@ -179,6 +179,8 @@ mod_query_add_server <- function(
         db_path, query_id = new_query$query_id, n = new_query$n
       )
       query_in_db <- unique(query_in_db[names(new_query)])
+      query_in_db <- query_in_db[query_in_db$timestamp == new_query$timestamp[1], ]
+      
       if(identical(new_query, query_in_db)){
         r$query_data <- dplyr::bind_rows(r$query_data, new_query)
       }
