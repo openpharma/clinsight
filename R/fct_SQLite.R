@@ -117,16 +117,33 @@ db_create <- function(
   cat("Finished writing to database\n\n")
 }
 
+#' Add primary key field
+#' 
+#' @param con A DBI Connection to the SQLite DB
+#' @param name The table name
+#' @param value A data.frame to add to the table
+#' @param keys A character vector specifying which columns define a unique row
+#'   for the table. If `NULL`, no unique index will be created.
+#'   
+#' @keywords internal
 db_add_primary_key <- function(con, name, value, keys = NULL) {
   fields <- c(id = "INTEGER PRIMARY KEY AUTOINCREMENT", DBI::dbDataType(con, value))
   DBI::dbCreateTable(con, name, fields)
-  DBI::dbAppendTable(con, name, value)
   if (!is.null(keys)) {
     rs <- DBI::dbSendStatement(con, sprintf("CREATE UNIQUE INDEX idx_%1$s ON %1$s (%2$s)", name, paste(keys, collapse = ", ")))
     DBI::dbClearResult(rs)
   }
+  DBI::dbAppendTable(con, name, value)
 }
 
+#' Add Logging Table
+#'
+#' Both creates the logging table and the trigger to update it for
+#' all_review_data.
+#' 
+#' @param con A DBI Connection to the SQLite DB
+#' 
+#' @keywords internal
 db_add_log <- function(con) {
   DBI::dbCreateTable(con, "all_review_data_log",
                      c(id = "INTEGER PRIMARY KEY AUTOINCREMENT", review_id = "INTEGER NOT NULL",
@@ -214,6 +231,14 @@ db_update <- function(
   cat("Finished updating review data\n")
 }
 
+#' UPSERT to all_review_data
+#' 
+#' @param con A DBI Connection to the SQLite DB
+#' @param data A data frame containing the data to UPSERT into all_review_data
+#' @param common_cols A character vector specifying which columns define a
+#'   unique row
+#' 
+#' @keywords internal
 db_upsert <- function(con, data, common_cols) {
   if ("id" %in% names(data))
     data$id <- NULL
