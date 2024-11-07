@@ -95,26 +95,40 @@ db_create <- function(
     "all_review_data" = df,
     "query_data"      = query_data_skeleton
   )
-  idx_pk_rows <- list(
-    all_review_data = c("subject_id", "event_name", "item_group", 
-                        "form_repeat", "item_name")
+  idx_pk_cols <- list(
+    all_review_data = idx_cols
   )
-  new_data <- list(
+  other_data <- list(
     "db_synch_time"   = data.frame(synch_time = data_synch_time),
-    "db_version" = data.frame(version = "1.1")
+    "db_version" = data.frame(version = db_version)
   )
   con <- get_db_connection(db_path)
-  for(i in names(new_pk_data)){
+  db_add_tables(con, new_pk_data, idx_pk_cols, other_data)
+  cat("Finished writing to database\n\n")
+}
+
+#' Add new tables to DB
+#'
+#' @param con A DBI Connection to the SQLite DB
+#' @param pk_data A named list of data frames to add a primary key field to DB
+#'   table. Names will correspond to the DB table names.
+#' @param idx_cols A named list of the fields defining unique records for a
+#'   table. Names will correspond to the table to apply the index constraint.
+#' @param other_data A named list of other data frames to add to the DB. Names
+#'   will correspond to the DB table names.
+#'
+#' @keywords internal
+db_add_tables <- function(con, pk_data, idx_cols, other_data) {
+  for(i in names(pk_data)){
     cat("\nCreating new table: ", i,  "\n")
-    db_add_primary_key(con, i, new_pk_data[[i]], idx_pk_rows[[i]])
+    db_add_primary_key(con, i, pk_data[[i]], idx_cols[[i]])
   }
-  for(i in names(new_data)){
+  for(i in names(other_data)){
     cat("\nCreating new table: ", i,  "\n")
-    DBI::dbWriteTable(con, i, new_data[[i]])
+    DBI::dbWriteTable(con, i, other_data[[i]])
   }
   cat("\nCreating log table: all_review_data_log\n")
   db_add_log(con)
-  cat("Finished writing to database\n\n")
 }
 
 #' Add primary key field
@@ -484,10 +498,10 @@ update_db_version <- function(db_path, version = "1.1") {
   file.copy(db_path, temp_path)
   con <- get_db_connection(temp_path)
   
-  db_version <- tryCatch({
+  current_version <- tryCatch({
     DBI::dbGetQuery(con, "SELECT version FROM db_version") |> 
       unlist(use.names = FALSE)}, error = \(e){""})
-  if(identical(db_version, "1.1")) return("Database up to date. No update needed")
+  if(identical(current_version, db_version)) return("Database up to date. No update needed")
   
   review_skeleton <- DBI::dbGetQuery(con, "SELECT * FROM all_review_data LIMIT 0")
   rs <- DBI::dbSendQuery(con, "ALTER TABLE all_review_data RENAME TO all_review_data_old")
@@ -499,22 +513,16 @@ update_db_version <- function(db_path, version = "1.1") {
     "all_review_data" = review_skeleton,
     "query_data"      = query_data_skeleton
   )
-  idx_pk_rows <- list(
-    all_review_data = c("subject_id", "event_name", "item_group", 
-                        "form_repeat", "item_name")
+  idx_pk_cols <- list(
+    all_review_data = idx_cols
   )
-  new_data <- list(
-    "db_version" = data.frame(version = "1.1")
+  other_data <- list(
+    "db_version" = data.frame(version = db_version)
   )
-  for(i in names(new_pk_data)){
-    db_add_primary_key(con, i, new_pk_data[[i]], idx_pk_rows[[i]])
-  }
-  for(i in names(new_data)){
-    DBI::dbWriteTable(con, i, new_data[[i]])
-  }
-  db_add_log(con)
+  db_add_tables(con, new_pk_data, idx_pk_cols, other_data)
   
   query_cols <- paste(names(query_data_skeleton), collapse = ", ")
+  cat("\nInserting old query records into new table.\n")
   rs <- DBI::dbSendStatement(con, sprintf("INSERT INTO query_data (%1$s) SELECT %1$s FROM query_data_old", query_cols))
   DBI::dbClearResult(rs)
   
@@ -524,6 +532,7 @@ update_db_version <- function(db_path, version = "1.1") {
   rs <- DBI::dbSendStatement(con, "DROP TABLE query_data_old")
   DBI::dbClearResult(rs)
   
+  cat("\nInserting old review records into new tables.\n")
   cols_to_update <- names(review_skeleton)[!names(review_skeleton) %in% idx_pk_rows$all_review_data]
   cols_to_insert <- names(review_skeleton) |> 
     paste(collapse = ", ")
@@ -548,4 +557,5 @@ update_db_version <- function(db_path, version = "1.1") {
   DBI::dbClearResult(rs)
   
   file.copy(temp_path, db_path, overwrite = TRUE)
+  cat("Finished updating to new database standard\n\n")
 }
