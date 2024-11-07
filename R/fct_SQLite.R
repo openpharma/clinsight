@@ -533,7 +533,7 @@ update_db_version <- function(db_path, version = "1.1") {
   DBI::dbClearResult(rs)
   
   cat("\nInserting old review records into new tables.\n")
-  cols_to_update <- names(review_skeleton)[!names(review_skeleton) %in% idx_pk_rows$all_review_data]
+  cols_to_update <- names(review_skeleton)[!names(review_skeleton) %in% idx_pk_cols$all_review_data]
   cols_to_insert <- names(review_skeleton) |> 
     paste(collapse = ", ")
   upsert_statement <- paste(
@@ -542,7 +542,7 @@ update_db_version <- function(db_path, version = "1.1") {
     sprintf("(%s)", cols_to_insert),
     sprintf("SELECT %s FROM all_review_data_old WHERE true", cols_to_insert),
     "ON CONFLICT",
-    sprintf("(%s)", paste(idx_pk_rows$all_review_data, collapse = ", ")),
+    sprintf("(%s)", paste(idx_pk_cols$all_review_data, collapse = ", ")),
     "DO UPDATE SET",
     sprintf("%1$s = excluded.%1$s", cols_to_update) |> paste(collapse = ", ")
   )
