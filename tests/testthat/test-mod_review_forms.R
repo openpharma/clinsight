@@ -98,7 +98,7 @@ describe(
             expect_snapshot({
               print(dplyr::select(r$review_data, -timestamp), width = Inf)
             })
-            Sys.sleep(1) # because the timestamp only records seconds, 
+            Sys.sleep(2) # because the timestamp only records seconds, 
             # we should add delay here to prevent that the exact same timestamp is 
             # created in the next step. The timestamp is needed for uniquely selecting the latest entry.
             # It would still work since it defaults to select the last row of the database, 

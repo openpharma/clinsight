@@ -17,3 +17,22 @@
       1 old   
       2 new   
 
+---
+
+    Code
+      print(dplyr::select(r$review_data, -timestamp), width = Inf)
+    Output
+      # A tibble: 2 x 12
+           id subject_id event_name item_group     form_repeat item_name              
+        <int> <chr>      <chr>      <chr>                <dbl> <chr>                  
+      1     1 885        Any visit  Adverse events           1 AE Number              
+      2     2 361        Visit 5    Vital signs              4 Systolic blood pressure
+        event_date edit_date_time      reviewed comment      
+        <chr>      <chr>               <chr>    <chr>        
+      1 2023-08-15 2023-09-30 01:01:01 No       "test review"
+      2 2023-07-01 2023-08-30 01:01:01 No       ""           
+        reviewer                      status
+        <chr>                         <chr> 
+      1 "test_name (Medical Monitor)" new   
+      2 ""                            new   
+
