@@ -283,7 +283,7 @@ mod_review_forms_server <- function(
             id = ns("review_save_error"),
             type = "error"
           )
-          r$review_data <- db_slice_rows(db_path, db_table = "all_review_data")
+          r$review_data <- db_get_table(db_path, db_table = "all_review_data")
         })
       }
       showNotification("Input saved successfully", duration = 1, type = "message") 
