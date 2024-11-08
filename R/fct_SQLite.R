@@ -325,13 +325,11 @@ db_save_review <- function(
     dplyr::inner_join(dplyr::tbl(db_con, "row_ids"), by = review_by) |> 
     # Filter below prevents unnecessarily overwriting the review status in forms   
     # with mixed reviewed status (due to an edit by the investigators). 
-    dplyr::filter(reviewed != new_review_state) |> 
     dplyr::collect()
   if(nrow(new_review_rows) == 0){return(
     warning("Review state unaltered. No review will be saved.")
   )}
   new_review_rows <- new_review_rows |> 
-    db_slice_rows(slice_vars = c("timestamp", "edit_date_time"), group_vars = common_vars) |> 
     dplyr::select(-dplyr::all_of(cols_to_change)) |> 
     # If there are multiple edits, make sure to only select the latest editdatetime for all items:
     # dplyr::slice_max(edit_date_time, by = dplyr::all_of(common_vars)) |> 
