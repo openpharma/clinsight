@@ -64,7 +64,7 @@ describe(
             user_name = "test_name",
             user_role = "Medical Monitor",
             subject_id = "885",
-            review_data = db_slice_rows(temp_path)
+            review_data = db_get_table(temp_path)
           ),
           active_form = reactiveVal("Adverse events"),
           active_tab = reactiveVal("Common forms"),
@@ -87,9 +87,9 @@ describe(
                 dplyr::collect()
             })
             
-            expect_equal(r$review_data, db_slice_rows(db_path))
+            expect_equal(r$review_data, db_get_table(db_path))
             # new process expects the app data to be equal to DB data
-            expect_equal(r$review_data, dplyr::arrange(db_reviewdata, edit_date_time))
+            expect_equal(r$review_data, db_reviewdata)
             # review table should only have one row in the DB containing the new reviewed = "Yes"
             expect_equal(with(db_reviewdata, reviewed[subject_id == "885"]), c("Yes") )
             # log table should only have one row in the DB containing the old reviewed = "No"
@@ -129,8 +129,8 @@ describe(
             r_id <- with(db_reviewdata, id[subject_id == "885"])
             expect_equal(with(db_reviewlogdata, comment[review_id == r_id]), c("", ""))
             expect_equal(with(db_reviewlogdata, reviewed[review_id == r_id]), c("No", "Yes"))
-            expect_equal(r$review_data, db_slice_rows(db_path))
-            expect_equal(r$review_data, dplyr::arrange(db_reviewdata, edit_date_time))
+            expect_equal(r$review_data, db_get_table(db_path))
+            expect_equal(r$review_data, db_reviewdata)
             expect_snapshot(print(dplyr::select(r$review_data, -timestamp), width = Inf))
           })
       }
@@ -165,7 +165,7 @@ describe(
               user_name = "test_name",
               user_role = "Medical Monitor",
               subject_id = "885",
-              review_data = db_slice_rows(temp_path)
+              review_data = db_get_table(temp_path)
             ),
             active_form = reactiveVal("Adverse events"),
             active_tab = reactiveVal("Common events"),
@@ -209,7 +209,7 @@ describe(
         expect_true(app$get_js("document.getElementById('test-review_comment').disabled;"))
         
         # review status and reviewer is saved as expected
-        saved_review_row <- db_slice_rows(temp_path) |>
+        saved_review_row <- db_get_table(temp_path) |>
           dplyr::filter(subject_id == "885")
         expect_equal(saved_review_row$status, "old")
         expect_equal(saved_review_row$reviewer, "test_name (Medical Monitor)")
@@ -244,7 +244,7 @@ describe(
             user_name = "test_name",
             user_role = "Medical Monitor",
             subject_id = "885",
-            review_data = db_slice_rows(temp_path)
+            review_data = db_get_table(temp_path)
           ),
           active_form = reactiveVal("Adverse events"),
           active_tab = reactiveVal("Common forms"),
@@ -286,7 +286,7 @@ describe(
             user_name = "test_name",
             user_role = "Medical Monitor",
             subject_id = "885",
-            review_data = db_slice_rows(temp_path)
+            review_data = db_get_table(temp_path)
           ),
           active_form = reactiveVal("Adverse events"),
           active_tab = reactiveVal("Common forms"),
@@ -325,7 +325,7 @@ describe(
             user_name = "test_name",
             user_role = "Medical Monitor",
             subject_id = "885",
-            review_data = db_slice_rows(temp_path)
+            review_data = db_get_table(temp_path)
           ),
           active_form = reactiveVal("Adverse events"),
           active_tab = reactiveVal("Common forms"),
@@ -390,7 +390,7 @@ describe(
               user_name = NULL,
               user_role = "Medical Monitor",
               subject_id = "885", 
-              review_data = db_slice_rows(temp_path)
+              review_data = db_get_table(temp_path)
             ),
             active_form = reactiveVal("Adverse events"),
             active_tab = reactiveVal("Common events"),
@@ -452,7 +452,7 @@ describe(
       {
         temp_path <- withr::local_tempfile(fileext = ".sqlite")
         file.copy(test_path("fixtures", "review_testdb.sqlite"), temp_path) 
-        rev_data <- db_slice_rows(temp_path)
+        rev_data <- db_get_table(temp_path)
         local_mocked_bindings(
           db_save_review = function(...) "no data saved in database"
         )
@@ -519,7 +519,7 @@ describe(
               user_name = "test_name",
               user_role = "restricted_role",
               subject_id = "885",
-              review_data = db_slice_rows(temp_path)
+              review_data = db_get_table(temp_path)
             ),
             active_form = reactiveVal("Adverse events"),
             active_tab = reactiveVal("Common events"),
