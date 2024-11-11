@@ -8,13 +8,14 @@
 - Fixed warnings in `apply_edc_specific_changes` due to the use of a vector within `dplyr::select`.
 - Gave users ability to re-organized the column order in any table.
 - Added form type as a class to be used in `create_table()` to display tables.
-- Added `Excel` download button to Queries table & patient listings that need review.
-- Added helper function to automatically determine when adding said excel button is appropriate.
 
 ## Bug fixes
 
 - When using the `shinyproxy` deployment configuration, the user name is now expected to be base64 encoded, and will now be base64 encoded by `clinsight` by default, so that the app can also handle non-ASCII signs in user names that are stored in HTTP headers. To display the user name correctly, use base64 encoding in the `application.yml` in ShinyProxy settings (for example: `http-headers.X_SP_USERNAME: "#{T(java.util.Base64).getEncoder().encodeToString(oidcUser.getFullName().getBytes())}"`).
 
+## `devex` changes
+- Added `Excel` download button to Queries table & patient listings that need review.
+- Added helper function to automatically determine when adding said excel button is appropriate.
 
 # clinsight 0.1.0
 
