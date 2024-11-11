@@ -164,6 +164,16 @@ db_add_log <- function(con) {
                        edit_date_time = "CHAR", reviewed = "CHAR", comment = "CHAR", 
                        reviewer = "CHAR", timestamp = "CHAR", status = "CHAR",
                        dml_type = "CHAR NOT NULL", dml_timestamp = "DATETIME DEFAULT CURRENT_TIMESTAMP"))
+  # This will trigger before any UPDATEs happen on all_review_data. Instead of
+  # allowing 'id' to be updated, it will throw an error.
+  rs <- DBI::dbSendStatement(con, paste(
+    "CREATE TRIGGER all_review_data_id_update_trigger",
+    "BEFORE UPDATE OF id ON all_review_data",
+    "BEGIN",
+    "SELECT RAISE(FAIL, 'all_review_data.id is read only');",
+    "END"
+  ))
+  DBI::dbClearResult(rs)
   rs <- DBI::dbSendStatement(con, paste(
     "CREATE TRIGGER all_review_data_update_log_trigger",
     "AFTER UPDATE ON all_review_data FOR EACH ROW",
