@@ -58,6 +58,9 @@ required_meta_cols <- c(
   "item_type"
   )
 
+# Since the columns required to define unique records are not user defined, they
+# should be captured by an internal object to keep from having to simplify some
+# functions.
 idx_cols <- c(
   "subject_id",
   "event_name",

@@ -4,7 +4,7 @@
 \alias{db_add_tables}
 \title{Add new tables to DB}
 \usage{
-db_add_tables(con, pk_data, idx_cols, other_data)
+db_add_tables(con, pk_data, unique_cols, other_data)
 }
 \arguments{
 \item{con}{A DBI Connection to the SQLite DB}
@@ -12,7 +12,7 @@ db_add_tables(con, pk_data, idx_cols, other_data)
 \item{pk_data}{A named list of data frames to add a primary key field to DB
 table. Names will correspond to the DB table names.}
 
-\item{idx_cols}{A named list of the fields defining unique records for a
+\item{unique_cols}{A named list of the fields defining unique records for a
 table. Names will correspond to the table to apply the index constraint.}
 
 \item{other_data}{A named list of other data frames to add to the DB. Names
