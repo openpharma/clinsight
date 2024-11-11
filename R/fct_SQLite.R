@@ -505,6 +505,17 @@ db_get_review <- function(
   })
 }
 
+db_get_version <- function(db_path) {
+  stopifnot(file.exists(db_path))
+  con <- get_db_connection(db_path)
+  tryCatch({
+    DBI::dbGetQuery(con, "SELECT version FROM db_version") |> 
+      unlist(use.names = FALSE)
+  },
+  error = \(e) {""}
+  )
+}
+
 update_db_version <- function(db_path, version = "1.1") {
   stopifnot(file.exists(db_path))
   version <- match.arg(version)
