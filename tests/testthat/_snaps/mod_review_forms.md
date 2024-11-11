@@ -3,11 +3,11 @@
     Code
       print(dplyr::select(r$review_data, -timestamp), width = Inf)
     Output
-      # A tibble: 2 x 11
-        subject_id event_name item_group     form_repeat item_name              
-        <chr>      <chr>      <chr>                <dbl> <chr>                  
-      1 361        Visit 5    Vital signs              4 Systolic blood pressure
-      2 885        Any visit  Adverse events           1 AE Number              
+      # A tibble: 2 x 12
+           id subject_id event_name item_group     form_repeat item_name              
+        <int> <chr>      <chr>      <chr>                <dbl> <chr>                  
+      1     2 361        Visit 5    Vital signs              4 Systolic blood pressure
+      2     1 885        Any visit  Adverse events           1 AE Number              
         event_date edit_date_time      reviewed comment reviewer                     
         <chr>      <chr>               <chr>    <chr>   <chr>                        
       1 2023-07-01 2023-08-30 01:01:01 No       ""      ""                           
@@ -22,11 +22,11 @@
     Code
       print(dplyr::select(r$review_data, -timestamp), width = Inf)
     Output
-      # A tibble: 2 x 11
-        subject_id event_name item_group     form_repeat item_name              
-        <chr>      <chr>      <chr>                <dbl> <chr>                  
-      1 361        Visit 5    Vital signs              4 Systolic blood pressure
-      2 885        Any visit  Adverse events           1 AE Number              
+      # A tibble: 2 x 12
+           id subject_id event_name item_group     form_repeat item_name              
+        <int> <chr>      <chr>      <chr>                <dbl> <chr>                  
+      1     2 361        Visit 5    Vital signs              4 Systolic blood pressure
+      2     1 885        Any visit  Adverse events           1 AE Number              
         event_date edit_date_time      reviewed comment      
         <chr>      <chr>               <chr>    <chr>        
       1 2023-07-01 2023-08-30 01:01:01 No       ""           
