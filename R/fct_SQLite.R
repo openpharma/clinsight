@@ -112,16 +112,16 @@ db_create <- function(
 #' @param con A DBI Connection to the SQLite DB
 #' @param pk_data A named list of data frames to add a primary key field to DB
 #'   table. Names will correspond to the DB table names.
-#' @param idx_cols A named list of the fields defining unique records for a
+#' @param unique_cols A named list of the fields defining unique records for a
 #'   table. Names will correspond to the table to apply the index constraint.
 #' @param other_data A named list of other data frames to add to the DB. Names
 #'   will correspond to the DB table names.
 #'
 #' @keywords internal
-db_add_tables <- function(con, pk_data, idx_cols, other_data) {
+db_add_tables <- function(con, pk_data, unique_cols, other_data) {
   for(i in names(pk_data)){
     cat("\nCreating new table: ", i,  "\n")
-    db_add_primary_key(con, i, pk_data[[i]], idx_cols[[i]])
+    db_add_primary_key(con, i, pk_data[[i]], unique_cols[[i]])
   }
   for(i in names(other_data)){
     cat("\nCreating new table: ", i,  "\n")
