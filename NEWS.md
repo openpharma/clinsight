@@ -9,6 +9,7 @@
 - Gave users ability to re-organized the column order in any table.
 - Added form type as a class to be used in `create_table()` to display tables.
 - Add a logging table to the DB for reviews.
+- Simplify pulling data from DB for reviews.
 
 ## Bug fixes
 
