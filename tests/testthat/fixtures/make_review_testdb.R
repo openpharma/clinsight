@@ -23,5 +23,8 @@ make_review_testdata <- function(){
 
 fixture_path <- system.file("tests/testthat/fixtures", package = "clinsight")
 db_temp_connect(paste0(fixture_path, "/review_testdb.sqlite"), {
-  DBI::dbWriteTable(con, "all_review_data", make_review_testdata(), overwrite = TRUE)
+  if ("all_review_data" %in% DBI::dbListTables(con)) 
+    DBI::dbRemoveTable(con, "all_review_data")
+  db_add_primary_key(con, "all_review_data", make_review_testdata())
+  db_add_log(con)
 })

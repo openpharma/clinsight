@@ -98,14 +98,22 @@ describe(
               dplyr::tbl(con, "all_review_data") |> 
                 dplyr::collect()
             })
+            db_reviewlogdata <- db_temp_connect(db_path, {
+              dplyr::tbl(con, "all_review_data_log") |> 
+                dplyr::collect()
+            })
             
-            expect_equal(r$review_data, db_slice_rows(db_path))
-            # it should have two rows for the item_name 'Cystitis' in the DB, 
-            # one with review= 'No' and the other with reviewed = "Yes"
+            # new process expects the app data to be equal to DB data
+            expect_equal(r$review_data, dplyr::arrange(db_reviewdata, subject_id, item_group, form_repeat))
+            # review table should only have one row in the DB containing the new reviewed = "Yes"
+            # for the item 'Cystitis'
             expect_equal(
               with(db_reviewdata, reviewed[subject_id == "885" & item_name == "Cystitis"]), 
-              c("No", "Yes") 
-              )
+              "Yes"
+            )
+            # log table should only have one row in the DB containing the old reviewed = "No"
+            r_id <- with(db_reviewdata, id[subject_id == "885" & item_name == "Cystitis"])
+            expect_equal(with(db_reviewlogdata, reviewed[review_id == r_id]), c("No") )
             expect_snapshot({
               print(dplyr::select(r$review_data, -timestamp), width = Inf)
             })
@@ -133,7 +141,23 @@ describe(
             
             expect_equal(updated_rows_db$comment, c("test review", "test review"))
             expect_equal(updated_rows_db$reviewed, c("No", "No"))
-            expect_equal(r$review_data, db_slice_rows(db_path))
+          
+            db_reviewdata <- db_temp_connect(db_path, {
+              dplyr::tbl(con, "all_review_data") |> 
+                dplyr::collect()
+            })
+            db_reviewlogdata <- db_temp_connect(db_path, {
+              dplyr::tbl(con, "all_review_data_log") |> 
+                dplyr::collect()
+            })
+            
+            expect_equal(with(db_reviewdata, comment[subject_id == "885"]), c("test review", "test review"))
+            expect_equal(with(db_reviewdata, reviewed[subject_id == "885"]), c("No", "No"))
+            r_id <- with(db_reviewdata, id[subject_id == "885"])
+            expect_equal(with(db_reviewlogdata, comment[review_id %in% r_id]), c("", "test comment", ""))
+            expect_equal(with(db_reviewlogdata, reviewed[review_id %in% r_id]), c("No", "Yes", "Yes"))
+          
+            expect_equal(r$review_data, dplyr::arrange(db_reviewdata, subject_id, item_group, form_repeat))
             expect_snapshot(print(dplyr::select(r$review_data, -timestamp), width = Inf))
           })
       }
