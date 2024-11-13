@@ -110,14 +110,10 @@ mod_review_forms_server <- function(
     ns <- session$ns
     
     review_data_active <- reactive({
-      df <- r$review_data |>
+      r$review_data |>
         dplyr::filter(subject_id == r$subject_id, 
                       item_group == active_form()) |> 
-        dplyr::distinct(subject_id, item_group, edit_date_time, reviewed, comment, status)
-      #!! below selects the latest edit_date_time; usually only one row will remain by then since there are no items displayed here.
-      if(nrow(df)== 0) return(df)
-      df |> 
-        dplyr::filter(edit_date_time == max(as.POSIXct(edit_date_time)))
+        dplyr::select(id, dplyr::all_of(idx_cols), edit_date_time, reviewed, comment, status)
     }) 
     
     observeEvent(c(active_form(), r$subject_id), {
@@ -231,8 +227,8 @@ mod_review_forms_server <- function(
       review_save_error(FALSE)
       golem::cat_dev("Save review status reviewed:", input$form_reviewed, "\n")
       
-      review_row <- review_data_active() |> 
-        dplyr::distinct(subject_id, item_group) |> 
+      review_records <- review_data_active() |> 
+        dplyr::distinct(id) |>
         dplyr::mutate(
           reviewed    = if(input$form_reviewed) "Yes" else "No",
           comment     = ifelse(is.null(input$review_comment), "", input$review_comment),
@@ -242,34 +238,34 @@ mod_review_forms_server <- function(
         ) 
       
       golem::cat_dev("review row to add:\n")
-      golem::print_dev(review_row)
+      golem::print_dev(review_records)
       
       cat("write review progress to database\n")
       db_save_review(
-        review_row, 
+        review_records, 
         db_path = db_path,
         # More tables can be added here if needed, to track process of 
         # individual reviewers in individual tables:
         tables = "all_review_data" 
       )
       
-      review_row_db <- db_get_review(
-        db_path, subject = review_row$subject_id, form = review_row$item_group
-        )
-      review_row_db <- unique(review_row_db[names(review_row)])
-      if(identical(review_row_db, review_row)){
+      review_records_db <- db_get_review(
+        db_path, ids = review_records$id
+        ) |> 
+        dplyr::select(dplyr::all_of(names(review_records)))
+      if(identical(review_records_db, review_records)){
         cat("Update review data and status in app\n")
         r$review_data <- r$review_data |> 
-          dplyr::rows_update(review_row, by = c("subject_id", "item_group"))
+          dplyr::rows_update(review_records, by = "id")
       }
       
-      review_row_memory <- review_row |> 
-        dplyr::left_join(r$review_data, by = names(review_row)) 
-      review_row_memory <- unique(review_row_memory[names(review_row)])
+      review_row_memory <- review_records |> 
+        dplyr::left_join(r$review_data, by = "id", suffix = c("", ".y")) |> 
+        dplyr::select(dplyr::all_of(names(review_records)))
       
       review_save_error(any(
-        !identical(review_row_db, review_row),
-        !identical(review_row_memory, review_row_db)
+        !identical(review_records_db, review_records),
+        !identical(review_row_memory, review_records_db)
       ))
       
       if(review_save_error()){

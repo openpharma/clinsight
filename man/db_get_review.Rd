@@ -4,33 +4,16 @@
 \alias{db_get_review}
 \title{Retrieve review}
 \usage{
-db_get_review(
-  db_path,
-  subject = review_row$subject_id,
-  form = review_row$item_group,
-  db_table = "all_review_data",
-  slice_vars = c("timestamp", "edit_date_time"),
-  group_vars = c("subject_id", "event_name", "item_group", "form_repeat", "item_name")
-)
+db_get_review(db_path, ids = review_row$id, db_table = "all_review_data")
 }
 \arguments{
 \item{db_path}{Character vector. Needs to be a valid path to a database.}
 
-\item{subject}{Character vector with the subject identifier to select from
+\item{ids}{Integer vector with the unique identifier to select from
 the database.}
-
-\item{form}{Character vector with the form identifier to select from the
-database.}
 
 \item{db_table}{Character string. Name of the table to collect. Will only be
 used if \code{data} is a character string to a database.}
-
-\item{slice_vars}{Character vector. Names of the variables that will be used
-to slice the data frame. Note that the order matters: Slicing will occur
-for each variable in this vector successively,}
-
-\item{group_vars}{Character vector. Variable names of the variables to
-perform the grouping on.}
 }
 \value{
 A data frame.
