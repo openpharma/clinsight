@@ -447,7 +447,8 @@ db_get_query <- function(
 #'   temp_path <- withr::local_tempfile(fileext = ".sqlite")
 #'   con <- get_db_connection(temp_path)
 #'   review_data <- data.frame(
-#'   subject_id = "Test_name",
+#'    subject_id = "Test_name",
+#'    id = 1L,
 #'    event_name = "Visit 1",
 #'    item_group = "Test_group",
 #'    form_repeat = 1,
@@ -457,7 +458,7 @@ db_get_query <- function(
 #'   ) |>
 #'    dplyr::as_tibble()
 #'   DBI::dbWriteTable(con, "all_review_data", review_data)
-#'   db_get_review(temp_path, subject = "Test_name", form = "Test_group")
+#'   db_get_review(temp_path, ids = 1L)
 #' })
 #' 
 db_get_review <- function(
