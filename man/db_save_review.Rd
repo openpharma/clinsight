@@ -7,13 +7,13 @@
 db_save_review(rv_records, db_path, tables = c("all_review_data"))
 }
 \arguments{
+\item{rv_records}{A data frame containing the rows of data that needs to be
+checked.}
+
 \item{db_path}{Character vector. Path to the database.}
 
 \item{tables}{Character vector. Names of the tables within the database to
 save the review in.}
-
-\item{rv_row}{A data frame containing the row of the data that needs to be
-checked.}
 }
 \value{
 Review information will be written in the database. No local objects

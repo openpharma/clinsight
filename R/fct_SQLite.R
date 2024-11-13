@@ -297,7 +297,7 @@ db_upsert <- function(con, data, idx_cols) {
 #' New rows with the new/updated review data will be added to the applicable
 #' database tables.
 #'
-#' @param rv_row A data frame containing the row of the data that needs to be
+#' @param rv_records A data frame containing the rows of data that needs to be
 #'   checked.
 #' @param db_path Character vector. Path to the database.
 #' @param tables Character vector. Names of the tables within the database to
