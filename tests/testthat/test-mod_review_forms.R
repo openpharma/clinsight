@@ -260,8 +260,8 @@ describe(
           session$setInputs(form_reviewed = FALSE)
           expect_equal(
             review_data_active(),
-            dplyr::filter(r$review_data, subject_id == "885", item_group == "Adverse events") |>
-              dplyr::select(subject_id, item_group, edit_date_time, reviewed, comment, status)
+            dplyr::filter(r$review_data, subject_id == "885", item_group == "Adverse events") |> 
+              dplyr::select(id, dplyr::all_of(idx_cols), edit_date_time, reviewed, comment, status)
           )
           expect_equal(review_data_active()$item_group, "Adverse events")
           expect_equal(nrow(review_data_active()), 1)
@@ -420,7 +420,7 @@ describe(
         
         # review status and reviewer is saved as expected
         saved_review_row <- db_get_review(
-          temp_path, subject = "885", form = "Adverse events"
+          temp_path, ids = 1L
         )
         expect_equal(saved_review_row$status, "new")
         expect_equal(saved_review_row$reviewer, "")
