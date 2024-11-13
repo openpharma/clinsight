@@ -267,7 +267,10 @@ mod_review_forms_server <- function(
       if(identical(review_row_db, review_row)){
         cat("Update review data and status in app\n")
         r$review_data <- r$review_data |> 
-          dplyr::rows_update(review_row, by = c("subject_id", "item_group"))
+          dplyr::rows_update(
+            updated_rows_db, 
+            by = c("subject_id", "item_group", "event_name", "item_name", "form_repeat")
+          )
       }
       
       updated_items_memory <- sort(with(r$review_data, item_name[
