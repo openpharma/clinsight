@@ -333,7 +333,9 @@ db_save_review <- function(
     "FROM",
     "row_updates",
     "WHERE",
-    sprintf("%s.id = row_updates.id", tables)
+    sprintf("%s.id = row_updates.id", tables),
+    "AND",
+    sprintf("%s.reviewed <> row_updates.reviewed", tables)
   ))
   DBI::dbClearResult(rs)
   cat("finished writing to the tables:", tables, "\n")
