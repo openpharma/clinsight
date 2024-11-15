@@ -18,3 +18,4 @@ application and available for the current user.
 \description{
 Helper function to retrieve all roles that are relevant for the application.
 }
+\keyword{internal}

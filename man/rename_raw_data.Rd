@@ -21,3 +21,4 @@ A data frame
 \description{
 Helper function to rename raw data
 }
+\keyword{internal}
