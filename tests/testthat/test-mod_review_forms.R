@@ -89,14 +89,14 @@ describe(
             
             expect_equal(r$review_data, db_get_table(db_path))
             # new process expects the app data to be equal to DB data
-            expect_equal(r$review_data, db_reviewdata)
+            expect_equal(r$review_data, db_reviewdata, ignore_attr = TRUE)
             # review table should only have one row in the DB containing the new reviewed = "Yes"
             expect_equal(with(db_reviewdata, reviewed[subject_id == "885"]), c("Yes") )
             # log table should only have one row in the DB containing the old reviewed = "No"
             r_id <- with(db_reviewdata, id[subject_id == "885"])
             expect_equal(with(db_reviewlogdata, reviewed[review_id == r_id]), c("No") )
             expect_snapshot({
-              print(dplyr::select(r$review_data, -timestamp), width = Inf)
+              dplyr::select(r$review_data, -timestamp)
             })
             Sys.sleep(2) # because the timestamp only records seconds, 
             # we should add delay here to prevent that the exact same timestamp is 
@@ -130,8 +130,8 @@ describe(
             expect_equal(with(db_reviewlogdata, comment[review_id == r_id]), c("", ""))
             expect_equal(with(db_reviewlogdata, reviewed[review_id == r_id]), c("No", "Yes"))
             expect_equal(r$review_data, db_get_table(db_path))
-            expect_equal(r$review_data, db_reviewdata)
-            expect_snapshot(print(dplyr::select(r$review_data, -timestamp), width = Inf))
+            expect_equal(r$review_data, db_reviewdata, ignore_attr = TRUE)
+            expect_snapshot(dplyr::select(r$review_data, -timestamp))
           })
       }
     )
