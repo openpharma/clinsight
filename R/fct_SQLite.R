@@ -335,6 +335,7 @@ db_save_review <- function(
     dplyr::inner_join(dplyr::tbl(db_con, "row_ids"), by = review_by) |> 
     # Filter below prevents unnecessarily overwriting the review status in forms   
     # with mixed reviewed status (due to an edit by the investigators). 
+    dplyr::filter(reviewed != new_review_state) |> 
     dplyr::collect()
   if(nrow(new_review_rows) == 0){return(
     warning("Review state unaltered. No review will be saved.")
