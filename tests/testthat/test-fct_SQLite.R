@@ -117,7 +117,7 @@ describe(
       con <- get_db_connection(temp_path)
       
       db_add_primary_key(con, "all_review_data", cbind(old_data, review_cols), comvars)
-      db_add_log(con)
+      db_add_log(con, c("id", comvars))
       DBI::dbWriteTable(con, "db_synch_time", data.frame("synch_time" = "2024-01-01 01:01:01 UTC"))
       
       df_old <- cbind(id = 1, old_data, review_cols)
@@ -144,7 +144,7 @@ describe(
       temp_path <- withr::local_tempfile(fileext = ".sqlite") 
       con <- get_db_connection(temp_path)
       db_add_primary_key(con, "all_review_data", cbind(old_data, review_cols), comvars)
-      db_add_log(con)
+      db_add_log(con, c("id", comvars))
       DBI::dbWriteTable(con, "db_synch_time", data.frame("synch_time" = "2024-01-01 01:01:01 UTC"))
       
       log_old <- DBI::dbGetQuery(con, "SELECT * FROM all_review_data_log")
@@ -182,7 +182,7 @@ describe(
       temp_path <- withr::local_tempfile(fileext = ".sqlite") 
       con <- get_db_connection(temp_path)
       db_add_primary_key(con, "all_review_data", cbind(old_data, review_cols), comvars)
-      db_add_log(con)
+      db_add_log(con, c("id", comvars))
       DBI::dbWriteTable(con, "db_synch_time", data.frame("synch_time" = "2024-01-01 01:01:01 UTC"))
       
       rev_data <- old_data |> 
@@ -203,7 +203,7 @@ describe(
       rev_data <- cbind(old_data, review_cols)
       attr(rev_data, "synch_time") <- synch_time
       db_add_primary_key(con, "all_review_data", rev_data, comvars)
-      db_add_log(con)
+      db_add_log(con, c("id", comvars))
       DBI::dbWriteTable(con, "db_synch_time", data.frame("synch_time" = synch_time))
       
       log_old <- DBI::dbGetQuery(con, "SELECT * FROM all_review_data_log")
@@ -262,7 +262,7 @@ describe(
       temp_path <- withr::local_tempfile(fileext = ".sqlite")
       con <- get_db_connection(temp_path)
       db_add_primary_key(con, "all_review_data", cbind(df, old_review))
-      db_add_log(con)
+      db_add_log(con, "id")
       
       db_save_review(
         cbind(df, new_review), 
@@ -313,7 +313,7 @@ describe(
       temp_path <- withr::local_tempfile(fileext = ".sqlite")
       con <- get_db_connection(temp_path)
       db_add_primary_key(con, "all_review_data", cbind(df, old_review))
-      db_add_log(con)
+      db_add_log(con, "id")
       db_save_review(
         review_row, 
         temp_path, 
@@ -344,7 +344,7 @@ describe(
       con <- get_db_connection(temp_path)
       
       db_add_primary_key(con, "all_review_data", cbind(df, old_review))
-      db_add_log(con)
+      db_add_log(con, "id")
       db_save_review(
         rbind(cbind(df, new_review), cbind(df, new_review)), 
         temp_path, 
@@ -436,7 +436,7 @@ describe("db_get_review can collect latest review data from a database", {
   ) |> 
     dplyr::as_tibble()
   db_add_primary_key(con, "all_review_data", review_data)
-  db_add_log(con)
+  db_add_log(con, "id")
 
   it("Can collect the desired data.", {
     output <- db_get_review(temp_path, subject = "Test_name", form = "Test_group")
