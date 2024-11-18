@@ -87,8 +87,9 @@ db_get_table <- function(db_path, db_table = "all_review_data") {
   stopifnot(is.character(db_table))
   
   con <- get_db_connection(db_path)
-  dplyr::tbl(con, db_table) |> 
-    dplyr::collect()
+  sql <- "SELECT * FROM ?db_table"
+  query <- DBI::sqlInterpolate(con, sql, db_table = db_table[1])
+  DBI::dbGetQuery(con, query)
 }
 
 
