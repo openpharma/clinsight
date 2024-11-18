@@ -8,7 +8,6 @@ db_save_review(
   rv_row,
   db_path,
   tables = c("all_review_data"),
-  common_vars = c("subject_id", "event_name", "item_group", "form_repeat", "item_name"),
   review_by = c("subject_id", "item_group")
 )
 }
@@ -20,8 +19,6 @@ checked.}
 
 \item{tables}{Character vector. Names of the tables within the database to
 save the review in.}
-
-\item{common_vars}{A character vector containing the common key variables.}
 
 \item{review_by}{A character vector, containing the key variables to perform
 the review on. For example, the review can be performed on form level

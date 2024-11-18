@@ -302,7 +302,6 @@ db_upsert <- function(con, data, idx_cols) {
 #' @param db_path Character vector. Path to the database.
 #' @param tables Character vector. Names of the tables within the database to
 #'   save the review in.
-#' @param common_vars A character vector containing the common key variables.
 #' @param review_by A character vector, containing the key variables to perform
 #'   the review on. For example, the review can be performed on form level
 #'   (writing the same review to all items in a form), or on item level, with a
@@ -316,8 +315,6 @@ db_save_review <- function(
     rv_row,
     db_path,
     tables = c("all_review_data"),
-    common_vars = c("subject_id", "event_name", "item_group", 
-                    "form_repeat", "item_name"),
     review_by = c("subject_id", "item_group")
 ){
   stopifnot(is.data.frame(rv_row))
@@ -342,8 +339,6 @@ db_save_review <- function(
   )}
   new_review_rows <- new_review_rows |> 
     dplyr::select(-dplyr::all_of(cols_to_change)) |> 
-    # If there are multiple edits, make sure to only select the latest editdatetime for all items:
-    # dplyr::slice_max(edit_date_time, by = dplyr::all_of(common_vars)) |> 
     dplyr::bind_cols(rv_row[cols_to_change]) # bind_cols does not work in a db connection.
   cat("write updated review data to database\n")
   dplyr::copy_to(db_con, new_review_rows, "row_updates")
