@@ -156,6 +156,8 @@ db_add_primary_key <- function(con, name, value, keys = NULL) {
 #' all_review_data.
 #' 
 #' @param con A DBI Connection to the SQLite DB
+#' @param keys A character vector specifying which columns should not be updated
+#'   in a table. Default is ID and package defined index columns.
 #' 
 #' @keywords internal
 db_add_log <- function(con, keys = c("id", idx_cols)) {
