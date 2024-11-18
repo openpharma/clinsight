@@ -168,9 +168,9 @@ db_add_log <- function(con) {
   # allowing 'id' to be updated, it will throw an error.
   rs <- DBI::dbSendStatement(con, paste(
     "CREATE TRIGGER all_review_data_id_update_trigger",
-    "BEFORE UPDATE OF id ON all_review_data",
+    sprintf("BEFORE UPDATE OF %s ON all_review_data", paste(c("id", idx_cols), collapse = ", ")),
     "BEGIN",
-    "SELECT RAISE(FAIL, 'all_review_data.id is read only');",
+    sprintf("SELECT RAISE(FAIL, 'Fields %s are read only');", paste(c("id", idx_cols), collapse = ", ")),
     "END"
   ))
   DBI::dbClearResult(rs)
