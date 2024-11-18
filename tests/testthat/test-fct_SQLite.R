@@ -268,7 +268,6 @@ describe(
         cbind(df, new_review), 
         temp_path, 
         tables = c("all_review_data"),
-        common_vars = c("key_col1", "item_group", "item_name"), 
         review_by = c("key_col1", "item_group")
       )
       expect_equal(
@@ -319,7 +318,6 @@ describe(
         review_row, 
         temp_path, 
         tables = c("all_review_data"),
-        common_vars = c("key_col1", "item_group", "item_name"), 
         review_by = c("key_col1", "item_group")
       )
       expect_true(is.data.frame(dplyr::collect(dplyr::tbl(con, "all_review_data"))))
@@ -351,7 +349,6 @@ describe(
         rbind(cbind(df, new_review), cbind(df, new_review)), 
         temp_path, 
         tables = "all_review_data",
-        common_vars = c("key_col1", "item_group", "item_name"), 
         review_by = c("key_col1", "item_group")
       ) |> expect_warning()
     })
