@@ -156,9 +156,11 @@ db_add_primary_key <- function(con, name, value, keys = NULL) {
 #' all_review_data.
 #' 
 #' @param con A DBI Connection to the SQLite DB
+#' @param keys A character vector specifying which columns should not be updated
+#'   in a table. Default is ID and package defined index columns.
 #' 
 #' @keywords internal
-db_add_log <- function(con) {
+db_add_log <- function(con, keys = c("id", idx_cols)) {
   DBI::dbCreateTable(con, "all_review_data_log",
                      c(id = "INTEGER PRIMARY KEY AUTOINCREMENT", review_id = "INTEGER NOT NULL",
                        edit_date_time = "CHAR", reviewed = "CHAR", comment = "CHAR", 
@@ -168,9 +170,9 @@ db_add_log <- function(con) {
   # allowing 'id' to be updated, it will throw an error.
   rs <- DBI::dbSendStatement(con, paste(
     "CREATE TRIGGER all_review_data_id_update_trigger",
-    "BEFORE UPDATE OF id ON all_review_data",
+    sprintf("BEFORE UPDATE OF %s ON all_review_data", paste(keys, collapse = ", ")),
     "BEGIN",
-    "SELECT RAISE(FAIL, 'all_review_data.id is read only');",
+    sprintf("SELECT RAISE(FAIL, 'Fields %s are read only');", paste(keys, collapse = ", ")),
     "END"
   ))
   DBI::dbClearResult(rs)
@@ -323,6 +325,7 @@ db_save_review <- function(
   if(nrow(rv_records) == 0){return(
     warning("Review state unaltered. No review will be saved.")
   )}
+  
   cat("write updated review data to database\n")
   dplyr::copy_to(db_con, rv_records, "row_updates")
   rs <- DBI::dbSendStatement(db_con, paste(
