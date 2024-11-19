@@ -3,36 +3,48 @@
     Code
       print(dplyr::select(r$review_data, -timestamp), width = Inf)
     Output
-      # A tibble: 2 x 12
+      # A tibble: 4 x 12
            id subject_id event_name item_group     form_repeat item_name              
         <int> <chr>      <chr>      <chr>                <dbl> <chr>                  
-      1     2 361        Visit 5    Vital signs              4 Systolic blood pressure
-      2     1 885        Any visit  Adverse events           1 AE Number              
-        event_date edit_date_time      reviewed comment reviewer                     
-        <chr>      <chr>               <chr>    <chr>   <chr>                        
-      1 2023-07-01 2023-08-30 01:01:01 No       ""      ""                           
-      2 2023-08-15 2023-09-30 01:01:01 Yes      ""      "test_name (Medical Monitor)"
-        status
-        <chr> 
-      1 new   
-      2 old   
+      1     3 361        Visit 5    Vital signs              4 Systolic blood pressure
+      2     4 361        Visit 6    Vital signs              5 Systolic blood pressure
+      3     1 885        Any visit  Adverse events           1 Atrial Fibrillation    
+      4     2 885        Any visit  Adverse events           2 Cystitis               
+        event_date edit_date_time      reviewed comment          
+        <chr>      <chr>               <chr>    <chr>            
+      1 2023-07-01 2023-08-30 01:01:01 Yes      "another comment"
+      2 2023-08-01 2023-08-02 01:01:01 No       ""               
+      3 2023-08-15 2023-09-30 01:01:01 Yes      "test comment"   
+      4 2023-09-01 2023-10-01 01:01:01 Yes      ""               
+        reviewer                      status
+        <chr>                         <chr> 
+      1 "Reviewer 2"                  old   
+      2 ""                            new   
+      3 "Reviewer 1"                  old   
+      4 "test_name (Medical Monitor)" old   
 
 ---
 
     Code
       print(dplyr::select(r$review_data, -timestamp), width = Inf)
     Output
-      # A tibble: 2 x 12
+      # A tibble: 4 x 12
            id subject_id event_name item_group     form_repeat item_name              
         <int> <chr>      <chr>      <chr>                <dbl> <chr>                  
-      1     2 361        Visit 5    Vital signs              4 Systolic blood pressure
-      2     1 885        Any visit  Adverse events           1 AE Number              
-        event_date edit_date_time      reviewed comment      
-        <chr>      <chr>               <chr>    <chr>        
-      1 2023-07-01 2023-08-30 01:01:01 No       ""           
-      2 2023-08-15 2023-09-30 01:01:01 No       "test review"
+      1     3 361        Visit 5    Vital signs              4 Systolic blood pressure
+      2     4 361        Visit 6    Vital signs              5 Systolic blood pressure
+      3     1 885        Any visit  Adverse events           1 Atrial Fibrillation    
+      4     2 885        Any visit  Adverse events           2 Cystitis               
+        event_date edit_date_time      reviewed comment          
+        <chr>      <chr>               <chr>    <chr>            
+      1 2023-07-01 2023-08-30 01:01:01 Yes      "another comment"
+      2 2023-08-01 2023-08-02 01:01:01 No       ""               
+      3 2023-08-15 2023-09-30 01:01:01 No       "test review"    
+      4 2023-09-01 2023-10-01 01:01:01 No       "test review"    
         reviewer                      status
         <chr>                         <chr> 
-      1 ""                            new   
-      2 "test_name (Medical Monitor)" new   
+      1 "Reviewer 2"                  old   
+      2 ""                            new   
+      3 "test_name (Medical Monitor)" new   
+      4 "test_name (Medical Monitor)" new   
 

@@ -77,6 +77,22 @@ describe(
         testServer(
           mod_review_forms_server, args = testargs, {
             ns <- session$ns
+            
+            ## patient has two rows: AF and Cystitis. AF is already reviewed by someone else: 
+            expect_equal(
+              data.frame(
+                item_name = c("Atrial Fibrillation", "Cystitis"),
+                status = c("old", "new")
+              ),
+              db_temp_connect(db_path, {
+                DBI::dbGetQuery(
+                  con, 
+                  paste0("SELECT item_name, status FROM all_review_data ",
+                         "WHERE subject_id = '885'")
+                )
+              })
+            )
+            
             session$setInputs(form_reviewed = TRUE, save_review = 1)
             db_reviewdata <- db_temp_connect(db_path, {
               dplyr::tbl(con, "all_review_data") |> 
@@ -87,13 +103,16 @@ describe(
                 dplyr::collect()
             })
             
-            expect_equal(r$review_data, db_slice_rows(db_path))
             # new process expects the app data to be equal to DB data
-            expect_equal(r$review_data, dplyr::arrange(db_reviewdata, edit_date_time))
+            expect_equal(r$review_data, dplyr::arrange(db_reviewdata, subject_id, item_group, form_repeat))
             # review table should only have one row in the DB containing the new reviewed = "Yes"
-            expect_equal(with(db_reviewdata, reviewed[subject_id == "885"]), c("Yes") )
+            # for the item 'Cystitis'
+            expect_equal(
+              with(db_reviewdata, reviewed[subject_id == "885" & item_name == "Cystitis"]), 
+              "Yes"
+            )
             # log table should only have one row in the DB containing the old reviewed = "No"
-            r_id <- with(db_reviewdata, id[subject_id == "885"])
+            r_id <- with(db_reviewdata, id[subject_id == "885" & item_name == "Cystitis"])
             expect_equal(with(db_reviewlogdata, reviewed[review_id == r_id]), c("No") )
             expect_snapshot({
               print(dplyr::select(r$review_data, -timestamp), width = Inf)
@@ -115,7 +134,14 @@ describe(
               review_comment = "test review",
               save_review = 2
               )
-            db_reviewdata <- db_temp_connect(db_path, {
+            updated_rows_db <- db_get_review(
+              db_path, subject = "885", form = "Adverse events"
+            )
+            
+            expect_equal(updated_rows_db$comment, c("test review", "test review"))
+            expect_equal(updated_rows_db$reviewed, c("No", "No"))
+
+                        db_reviewdata <- db_temp_connect(db_path, {
               dplyr::tbl(con, "all_review_data") |> 
                 dplyr::collect()
             })
@@ -124,13 +150,13 @@ describe(
                 dplyr::collect()
             })
             
-            expect_equal(with(db_reviewdata, comment[subject_id == "885"]), c("test review"))
-            expect_equal(with(db_reviewdata, reviewed[subject_id == "885"]), c("No"))
+            expect_equal(with(db_reviewdata, comment[subject_id == "885"]), c("test review", "test review"))
+            expect_equal(with(db_reviewdata, reviewed[subject_id == "885"]), c("No", "No"))
             r_id <- with(db_reviewdata, id[subject_id == "885"])
-            expect_equal(with(db_reviewlogdata, comment[review_id == r_id]), c("", ""))
-            expect_equal(with(db_reviewlogdata, reviewed[review_id == r_id]), c("No", "Yes"))
-            expect_equal(r$review_data, db_slice_rows(db_path))
-            expect_equal(r$review_data, dplyr::arrange(db_reviewdata, edit_date_time))
+            expect_equal(with(db_reviewlogdata, comment[review_id %in% r_id]), c("", "test comment", ""))
+            expect_equal(with(db_reviewlogdata, reviewed[review_id %in% r_id]), c("No", "Yes", "Yes"))
+
+            expect_equal(r$review_data, dplyr::arrange(db_reviewdata, subject_id, item_group, form_repeat))
             expect_snapshot(print(dplyr::select(r$review_data, -timestamp), width = Inf))
           })
       }
@@ -209,10 +235,9 @@ describe(
         expect_true(app$get_js("document.getElementById('test-review_comment').disabled;"))
         
         # review status and reviewer is saved as expected
-        saved_review_row <- db_slice_rows(temp_path) |>
-          dplyr::filter(subject_id == "885")
-        expect_equal(saved_review_row$status, "old")
-        expect_equal(saved_review_row$reviewer, "test_name (Medical Monitor)")
+        saved_review_row <- db_get_review(temp_path, subject = "885", form = "Adverse events")
+        expect_equal(saved_review_row$status, c("old", "old"))
+        expect_equal(saved_review_row$reviewer, c("Reviewer 1", "test_name (Medical Monitor)"))
       }
     )
   }
@@ -259,8 +284,12 @@ describe(
           ns <- session$ns
           session$setInputs(form_reviewed = FALSE)
           expect_equal(
-            review_data_active(),
-            dplyr::filter(r$review_data, subject_id == "885", item_group == "Adverse events") |>
+            review_data_active(), 
+            dplyr::filter(
+              r$review_data, subject_id == "885", 
+              item_group == "Adverse events", 
+              edit_date_time == max(edit_date_time)
+              ) |>
               dplyr::select(subject_id, item_group, edit_date_time, reviewed, comment, status)
           )
           expect_equal(review_data_active()$item_group, "Adverse events")
@@ -339,19 +368,17 @@ describe(
           mod_review_forms_server, args = testargs, {
             ns <- session$ns
             active_form("no_data_form")
-            data_before_save <- r$review_data
-            db_before_save <- db_temp_connect(db_path, {
-              dplyr::tbl(con, "all_review_data") |> 
-                dplyr::collect()
+            data_before_saving <- r$review_data
+            db_before_saving <- db_temp_connect(db_path, {
+              DBI::dbGetQuery(con, "SELECT * FROM all_review_data")
             })
             session$setInputs(save_review = 1)
             expect_error(output[["save_review_error"]], "Nothing to review")
-            expect_equal(r$review_data, data_before_save)
-            db_reviewdata <- db_temp_connect(db_path, {
-              dplyr::tbl(con, "all_review_data") |> 
-                dplyr::collect()
+            expect_equal(r$review_data, data_before_saving)
+            db_after_saving <- db_temp_connect(db_path, {
+              DBI::dbGetQuery(con, "SELECT * FROM all_review_data")
             })
-            expect_equal(db_reviewdata, db_before_save)
+            expect_equal(db_after_saving, db_before_saving)
           })
       }
     )
@@ -410,6 +437,9 @@ describe(
           height = 955
         )
         withr::defer(app$stop())
+        db_before_saving <- db_temp_connect(temp_path, {
+          DBI::dbGetQuery(con, "SELECT * FROM all_review_data")
+        })
         
         app$wait_for_idle(2500)
         app$click("test-form_reviewed")
@@ -418,12 +448,11 @@ describe(
         app$wait_for_idle()
         app$expect_values()
         
-        # review status and reviewer is saved as expected
-        saved_review_row <- db_get_review(
-          temp_path, subject = "885", form = "Adverse events"
-        )
-        expect_equal(saved_review_row$status, "new")
-        expect_equal(saved_review_row$reviewer, "")
+        # review status and reviewer is unchanged as expected
+        db_after_saving <- db_temp_connect(temp_path, {
+          DBI::dbGetQuery(con, "SELECT * FROM all_review_data")
+        })
+        expect_equal(db_after_saving, db_before_saving)
       }
     )   
     
@@ -474,15 +503,17 @@ describe(
         testServer(
           mod_review_forms_server, args = testargs, {
             ns <- session$ns
+            db_before_saving <- db_temp_connect(db_path, {
+              DBI::dbGetQuery(con, "SELECT * FROM all_review_data")
+              })
             session$setInputs(form_reviewed = TRUE, save_review = 1)
-            db_reviewdata <- db_temp_connect(db_path, {
-              dplyr::tbl(con, "all_review_data") |> 
-                dplyr::collect()
+            db_after_saving <- db_temp_connect(db_path, {
+              DBI::dbGetQuery(con, "SELECT * FROM all_review_data")
             })
+            
             expect_true(review_save_error())
             expect_equal(r$review_data, rev_data)
-            # it should still have one row in the DB with review= 'No'
-            expect_equal(with(db_reviewdata, reviewed[subject_id == "885"]), "No" )
+            expect_equal(db_after_saving, db_before_saving)
           })
       }
     )
