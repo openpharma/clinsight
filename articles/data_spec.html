@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">clinsight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9004</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,7 +60,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>App Configuration &amp; Input Data Specifications</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/openpharma/clinsight/blob/dev/vignettes/data_spec.Rmd" class="external-link"><code>vignettes/data_spec.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/openpharma/clinsight/blob/main/vignettes/data_spec.Rmd" class="external-link"><code>vignettes/data_spec.Rmd</code></a></small>
       <div class="d-none name"><code>data_spec.Rmd</code></div>
     </div>
 
@@ -333,8 +333,8 @@ example metadata file, run the following chunk of code:</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> SubjectId subject_id  </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> EventId   event_id    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> EventDate event_date  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> EventSeq  event_repeat</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> FormId    form_id     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> EventName event_name  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> EventSeq  event_repeat</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $events</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 3</span></span></span>
@@ -400,17 +400,6 @@ example metadata file, run the following chunk of code:</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Event      event_name    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> eN         event_repeat  </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> Form       item_group    </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $settings</span></span>
-<span><span class="co">#&gt; $settings$pre_pivot_fns</span></span>
-<span><span class="co">#&gt; [1] "apply_study_specific_suffix_fixes"</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $settings$post_pivot_fns</span></span>
-<span><span class="co">#&gt; [1] "apply_edc_specific_changes"</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $settings$post_merge_fns</span></span>
-<span><span class="co">#&gt; [1] "apply_study_specific_fixes"</span></span>
-<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $items_expanded</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 8</span></span></span>
