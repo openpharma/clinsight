@@ -136,7 +136,7 @@ describe(
               )
             
             updated_rows_db <- db_get_review(
-              db_path, subject = "885", form = "Adverse events"
+              db_path, ids = 1:2
             )
             
             expect_equal(updated_rows_db$comment, c("test review", "test review"))
@@ -236,7 +236,7 @@ describe(
         expect_true(app$get_js("document.getElementById('test-review_comment').disabled;"))
         
         # review status and reviewer is saved as expected
-        saved_review_row <- db_get_review(temp_path, subject = "885", form = "Adverse events")
+        saved_review_row <- db_get_review(temp_path, ids = 1:2)
         expect_equal(saved_review_row$status, c("old", "old"))
         expect_equal(saved_review_row$reviewer, c("Reviewer 1", "test_name (Medical Monitor)"))
       }
@@ -289,8 +289,8 @@ describe(
             dplyr::filter(r$review_data, subject_id == "885", item_group == "Adverse events") |> 
               dplyr::select(id, dplyr::all_of(idx_cols), edit_date_time, reviewed, comment, status)
           )
-          expect_equal(review_data_active()$item_group, "Adverse events")
-          expect_equal(nrow(review_data_active()), 1)
+          expect_equal(review_data_active()$item_group, c("Adverse events", "Adverse events"))
+          expect_equal(nrow(review_data_active()), 2)
           expect_error(output[["save_review_error"]], "Requires review")
         })
       }
