@@ -132,8 +132,8 @@ mod_review_forms_server <- function(
         # it will give a warning. This would be rare since it would mean a datapoint with the same edit date-time was reviewed but another one was not. 
         # probably better to use defensive coding here to ensure the app does not crash in that case. However we need to define which review status we need to select
         # in this case get the reviewed = "No"
-        review_status  <- unique(review_data_active()$reviewed)
-        review_comment <- unique(review_data_active()$comment)
+        review_status <- with(review_data_active(), reviewed[edit_date_time == max(as.POSIXct(edit_date_time))]) |> unique()
+        review_comment <- with(review_data_active(), comment[edit_date_time == max(as.POSIXct(edit_date_time))]) |> unique()
         if(length(review_status) != 1) warning("multiple variables in review_status, namely: ", 
                                                review_status, "Verify data.")
       }
@@ -187,8 +187,8 @@ mod_review_forms_server <- function(
         ) 
       if(!enable_any_review()) return(FALSE)
       any(c(
-        unique(review_data_active()$reviewed) == "No"  & input$form_reviewed, 
-        unique(review_data_active()$reviewed) == "Yes" & !input$form_reviewed
+        unique(with(review_data_active(), reviewed[edit_date_time == max(as.POSIXct(edit_date_time))])) == "No"  & input$form_reviewed, 
+        unique(with(review_data_active(), reviewed[edit_date_time == max(as.POSIXct(edit_date_time))])) == "Yes" & !input$form_reviewed
       ))
     })
     
@@ -305,7 +305,7 @@ mod_review_forms_server <- function(
         "No user name found. Cannot save review"
       ))
       validate(need(
-        !review_data_active()$reviewed == "Yes",
+        !unique(with(review_data_active(), reviewed[edit_date_time == max(as.POSIXct(edit_date_time))])) == "Yes",
         "Form already reviewed"
       ))
       validate(need(input$form_reviewed, "Requires review"))
