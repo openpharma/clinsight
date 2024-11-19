@@ -706,3 +706,41 @@ custom_config_path <- function(
 ){
   Sys.getenv("CONFIG_PATH", app_sys("golem-config.yml")) 
 }
+
+#' Decode a base64 encoded string.
+#'
+#' Used to decode base64-encoded HTTP headers. Encoding these headers
+#' ensures that they can contain complex names with special characters.
+#'
+#' The function will warn if the decoded output string is no valid UTF-8. This
+#' might occur if the input was not base64 encoded.
+#'
+#' @param x A base64 encoded character string.
+#'
+#' @return A decoded character string.
+#' @noRd
+#'
+#' @examples
+#' encoded_username <- base64enc::base64encode(charToRaw("Ťěšťůšěř 的"))
+#' decode_base64(encoded_username)
+#' 
+decode_base64 <- function(
+    x
+){
+  stopifnot("base64enc is not installed" = rlang::is_installed("base64enc"))
+  if(is.null(x)) return(x)
+  stopifnot(is.character(x))
+  decoded <- base64enc::base64decode(x)
+  valid_UTF8 <- base64enc::checkUTF8(decoded, quiet = TRUE)
+  
+  if(isFALSE(valid_UTF8)){
+    warning(
+      "decoded string does not contain valid UTF-8. ",
+      "Is the input really base64 encoded?"
+    )
+    # using deparse creates visible quotes around the string but doing so will
+    # prevent the app from breaking due to incorrect UTF-8 encoding:
+    return({deparse1(rawToChar(decoded))})
+  }
+  rawToChar(decoded)
+}

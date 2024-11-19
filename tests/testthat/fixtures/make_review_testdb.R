@@ -4,20 +4,20 @@
 
 make_review_testdata <- function(){
   data.frame(
-    subject_id = c("885", "361"),
-    event_name = c("Any visit", "Visit 5"),
-    item_group = c("Adverse events", "Vital signs"),
-    form_repeat = c(1, 4),
-    item_name = c("AE Number", "Systolic blood pressure"),
-    event_date = c("2023-08-15", "2023-07-01"),
-    edit_date_time = c("2023-09-30 01:01:01", "2023-08-30 01:01:01")
+    subject_id = c("885", "885", "361", "361"),
+    event_name = c("Any visit", "Any visit", "Visit 5", "Visit 6"),
+    item_group = c("Adverse events", "Adverse events", "Vital signs", "Vital signs"),
+    form_repeat = c(1, 2, 4, 5),
+    item_name = c("Atrial Fibrillation", "Cystitis",  "Systolic blood pressure", "Systolic blood pressure"),
+    event_date = c("2023-08-15", "2023-09-01", "2023-07-01", "2023-08-01"),
+    edit_date_time = c("2023-09-30 01:01:01", "2023-10-01 01:01:01", "2023-08-30 01:01:01", "2023-08-02 01:01:01")
   ) |> 
     dplyr::mutate(
-      reviewed = "No", 
-      comment = "", 
-      reviewer = "", 
-      timestamp = "2000-01-01 01:01:01",
-      status = "new"
+      reviewed = c("Yes", "No", "Yes", "No"), 
+      comment = c("test comment", "", "another comment", ""), 
+      reviewer = c("Reviewer 1", "", "Reviewer 2", ""), 
+      timestamp = c("2000-01-01 01:01:01", "", "2023-09-01 01:01:01", ""),
+      status = c("old", "new", "old", "new")
     )
 }
 

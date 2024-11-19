@@ -147,6 +147,12 @@ usethis::use_vignette(name = "data_spec", title = "Input Data Specification")
 # Add action for PR
 #usethis::use_github_action_pr_commands()
 
+# For pkgdown
+# https://gist.github.com/ramnathv/2227408 to create an orphan gh-pages branch
+# and then run this
+usethis::use_github_action("pkgdown")
+
+
 # Circle CI
 #usethis::use_circleci()
 #usethis::use_circleci_badge()
