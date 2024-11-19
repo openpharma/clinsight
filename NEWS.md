@@ -2,7 +2,7 @@
 
 ## Changed 
 
-- Added `pkgdown` GHA workflow to automatically update documentation site with PRs & pushes to `main` and `dev`
+- Added `pkgdown` GHA workflow to automatically update documentation site with pushes to `main`
 
 ## Bug fixes
 
