@@ -9,6 +9,7 @@
 - Added form type as a class to be used in `create_table()` to display tables.
 - Add a logging table to the DB for reviews.
 - Simplify pulling data from DB for reviews.
+- Review data by records IDs instead of subject & form
 
 ## Bug fixes
 
