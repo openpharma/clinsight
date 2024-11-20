@@ -391,7 +391,7 @@ get_form_level_data <- function(
 #' @param value_column A string containing the column name with the item values.
 #' @param id_column The columns identifying a unique participant (subject_id).
 #'
-#' @return as data frame with an additional column named "base_{varname}". 
+#' @return as data frame with an additional column named "base_`varname`". 
 #' @export
 #' @examples
 #'  library(dplyr)
