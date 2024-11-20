@@ -13,6 +13,11 @@
 ## Bug fixes
 
 
+## `devex` changes
+- Added `Excel` download button to Queries table & patient listings that need review.
+- Added helper function to automatically determine when adding said excel button is appropriate.
+- Review data by records IDs instead of subject & form
+
 # clinsight 0.1.1
 
 ## Changed 
@@ -23,10 +28,6 @@
 
 - Fixed inconsistencies in app messages when saving a review for a form with items with different review states (with some items reviewed previously by a different reviewer, and some items being completely new).
 - Fixed a bug where clinsight deployed with `shinyproxy` would crash when a user with non-ASCII letters in their name would attempt to login. In this new version, when using the `shinyproxy` deployment configuration, the user name is now expected to be base64 encoded, and will now be base64 encoded by `clinsight` by default, so that the app can also handle non-ASCII signs in user names that are stored in HTTP headers. To display the user name correctly, use base64 encoding in the `application.yml` in ShinyProxy settings (for example: `http-headers.X_SP_USERNAME: "#{T(java.util.Base64).getEncoder().encodeToString(oidcUser.getFullName().getBytes())}"`).
-
-## `devex` changes
-- Added `Excel` download button to Queries table & patient listings that need review.
-- Added helper function to automatically determine when adding said excel button is appropriate.
 
 # clinsight 0.1.0
 

@@ -459,10 +459,12 @@ db_get_query <- function(
 #' with the given subject id (`subject`) and `form`.
 #'
 #' @param db_path Character vector. Needs to be a valid path to a database.
-#' @param ids Integer vector with the unique identifier to select from
-#'   the database.
+#' @param ... Named arguments specifying which records to retrieve, see
+#'   examples. Note that `...` will be processed with `data.frame()` since
+#'   parameters must have equal length.
+#' @param db_table Character string. Name of the table to collect. Will only be
+#'   used if `data` is a character string to a database.
 #'
-#' @inheritParams db_slice_rows
 #' @return A data frame.
 #' @export
 #'
@@ -472,32 +474,33 @@ db_get_query <- function(
 #'   temp_path <- withr::local_tempfile(fileext = ".sqlite")
 #'   con <- get_db_connection(temp_path)
 #'   review_data <- data.frame(
-#'    subject_id = "Test_name",
-#'    id = 1L,
-#'    event_name = "Visit 1",
-#'    item_group = "Test_group",
-#'    form_repeat = 1,
-#'    item_name = "Test_item",
-#'    edit_date_time = "2023-11-05 01:26:00",
-#'    timestamp = "2024-02-05 01:01:01"
+#'    subject_id = c("Test_name", "Test_name2"),
+#'    id = 1:2,
+#'    event_name = c("Visit 1", "Visit 1"),
+#'    item_group = c("Test_group", "Test_group2"),
+#'    form_repeat = c(1, 1),
+#'    item_name = c("Test_item", "Test_item2"),
+#'    edit_date_time = rep("2023-11-05 01:26:00", 2),
+#'    timestamp = rep("2024-02-05 01:01:01", 2)
 #'   ) |>
 #'    dplyr::as_tibble()
 #'   DBI::dbWriteTable(con, "all_review_data", review_data)
-#'   db_get_review(temp_path, ids = 1L)
+#'   db_get_review(temp_path, id = 1L)
+#'   db_get_review(temp_path, subject_id = "Test_name2")
 #' })
 #' 
 db_get_review <- function(
     db_path, 
-    ids = review_row$id,
+    ...,
     db_table = "all_review_data"
 ){
   stopifnot(file.exists(db_path))
-  stopifnot(is.integer(ids))
   db_temp_connect(db_path, {
-    sql <- "SELECT * FROM ?db_table WHERE id = $id"
+    fields <- ...names()
+    sql <- paste("SELECT * FROM ?db_table WHERE", paste0(fields, " = $", fields, collapse = " AND "))
     query <- DBI::sqlInterpolate(con, sql, db_table = db_table[1])
     rs <- DBI::dbSendQuery(con, query)
-    DBI::dbBind(rs, list(id = ids))
+    DBI::dbBind(rs, params = data.frame(...))
     df <- 
       DBI::dbFetch(rs) |> 
       dplyr::as_tibble()

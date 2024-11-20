@@ -437,12 +437,16 @@ describe("db_get_review can collect latest review data from a database", {
   db_add_log(con, "id")
 
   it("Can collect the desired data.", {
-    output <- db_get_review(temp_path, ids = 1L)
+    output <- db_get_review(temp_path, subject_id = "Test_name", item_group = "Test_group")
     expect_equal(output[,-1], review_data)
   })
   
-  it("Collects an empty data frame if the requested ids are not found", {
-    output <- db_get_review(temp_path, ids = 2L)
+  it("Collects an empty data frame if the requested subject or form are not found", {
+    output <- db_get_review(temp_path, subject_id = "Non-existent", 
+                            item_group = "Test_group")
+    expect_equal(output[,-1], review_data[0,])
+    output <- db_get_review(temp_path, subject_id = "Test_name", 
+                            item_group = "Non-existent")
     expect_equal(output[,-1], review_data[0,])
   })
 
