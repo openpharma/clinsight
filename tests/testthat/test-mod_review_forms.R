@@ -141,7 +141,7 @@ describe(
             expect_equal(updated_rows_db$comment, c("test review", "test review"))
             expect_equal(updated_rows_db$reviewed, c("No", "No"))
 
-                        db_reviewdata <- db_temp_connect(db_path, {
+            db_reviewdata <- db_temp_connect(db_path, {
               dplyr::tbl(con, "all_review_data") |> 
                 dplyr::collect()
             })
