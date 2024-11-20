@@ -249,23 +249,29 @@ mod_review_forms_server <- function(
         tables = "all_review_data" 
       )
       
-      review_records_db <- db_get_review(
+      updated_rows_db <- db_get_review(
         db_path, ids = review_records$id
         ) |> 
         dplyr::select(dplyr::all_of(names(review_records)))
-      if(identical(review_records_db, review_records)){
+      
+      review_records_db <- updated_rows_db |> 
+        # Within a form, only items with a changed review state are updated and 
+        # contain the new (current) time stamp. 
+        dplyr::filter(timestamp == review_records$timestamp[1])
+      if(isTRUE(all.equal(review_records_db, review_records, check.attributes = FALSE))){
         cat("Update review data and status in app\n")
         r$review_data <- r$review_data |> 
           dplyr::rows_update(review_records, by = "id")
       }
       
-      review_row_memory <- review_records |> 
+      updated_items_memory <- review_records |> 
         dplyr::left_join(r$review_data, by = "id", suffix = c("", ".y")) |> 
-        dplyr::select(dplyr::all_of(names(review_records)))
+        dplyr::select(dplyr::all_of(names(review_records))) |> 
+        dplyr::filter(timestamp == review_records$timestamp[1])
       
       review_save_error(any(
-        !identical(review_records_db, review_records),
-        !identical(review_row_memory, review_records_db)
+        !isTRUE(all.equal(review_records_db, review_records, check.attributes = FALSE)),
+        !isTRUE(all.equal(updated_items_memory, review_records_db, check.attributes = FALSE))
       ))
       
       if(review_save_error()){
