@@ -279,7 +279,7 @@ describe(
         app$click("test-report-create_report")
         app$wait_for_idle(800)
         app$set_inputs("test-report-include_from_date" = "2023-01-01")
-        app$wait_for_idle()
+        app$wait_for_idle(800)
         app$expect_values()
         
         pdf_report_path <- app$get_download("test-report-report")

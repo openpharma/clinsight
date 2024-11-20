@@ -9,7 +9,7 @@
 #' the `header widgets` ([mod_header_widgets_server()]), and the `query page`
 #' ([mod_queries_server()])
 #'
-#' @param input,output,session Internal parameters for {shiny}.
+#' @param input,output,session Internal parameters for `shiny`.
 #' @seealso [app_ui()], [run_app()]
 #' 
 app_server <- function(

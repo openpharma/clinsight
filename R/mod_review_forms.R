@@ -253,23 +253,34 @@ mod_review_forms_server <- function(
         tables = "all_review_data" 
       )
       
-      review_row_db <- db_get_review(
+      # Contains multiple rows, one for each item.
+      updated_rows_db <- db_get_review(
         db_path, subject = review_row$subject_id, form = review_row$item_group
-        )
-      review_row_db <- unique(review_row_db[names(review_row)])
+        )[c(names(review_row), "event_name", "item_name", "form_repeat")]
+      # Within a form, only items with a changed review state are updated and 
+      # contain the new (current) time stamp. 
+      updated_rows_db <- updated_rows_db[
+        updated_rows_db$timestamp == review_row$timestamp[1], 
+        ]
+      
+      review_row_db <- unique(updated_rows_db[names(review_row)])
       if(identical(review_row_db, review_row)){
         cat("Update review data and status in app\n")
         r$review_data <- r$review_data |> 
-          dplyr::rows_update(review_row, by = c("subject_id", "item_group"))
+          dplyr::rows_update(
+            updated_rows_db, 
+            by = c("subject_id", "item_group", "event_name", "item_name", "form_repeat")
+          )
       }
       
-      review_row_memory <- review_row |> 
-        dplyr::left_join(r$review_data, by = names(review_row)) 
-      review_row_memory <- unique(review_row_memory[names(review_row)])
+      updated_items_memory <- sort(with(r$review_data, item_name[
+        reviewer == review_row$reviewer[1] & timestamp == review_row$timestamp[1]
+      ]))
+      updated_items_db <- sort(updated_rows_db$item_name)
       
       review_save_error(any(
         !identical(review_row_db, review_row),
-        !identical(review_row_memory, review_row_db)
+        !identical(updated_items_db, updated_items_memory)
       ))
       
       if(review_save_error()){

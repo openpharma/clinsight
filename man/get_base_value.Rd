@@ -26,7 +26,7 @@ The name of the character vector should match the column in the data frame with 
 \item{id_column}{The columns identifying a unique participant (subject_id).}
 }
 \value{
-as data frame with an additional column named "base_{varname}".
+as data frame with an additional column named "base_\code{varname}".
 }
 \description{
 Adds base value to a long-format data frame.

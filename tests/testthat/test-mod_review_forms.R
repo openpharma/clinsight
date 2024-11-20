@@ -94,19 +94,13 @@ describe(
             )
             
             session$setInputs(form_reviewed = TRUE, save_review = 1)
-            db_reviewdata <- db_temp_connect(db_path, {
-              dplyr::tbl(con, "all_review_data") |> 
-                dplyr::collect()
-            })
-            db_reviewlogdata <- db_temp_connect(db_path, {
-              dplyr::tbl(con, "all_review_data_log") |> 
-                dplyr::collect()
-            })
+            db_reviewdata <- db_get_table(db_path)
+            db_reviewlogdata <- db_get_table(db_path, "all_review_data_log")
             
-            expect_equal(r$review_data, db_get_table(db_path))
-            # new process expects the app data to be equal to DB data
-            expect_equal(r$review_data, db_reviewdata, ignore_attr = TRUE)
+            # app data should be equal to DB data
+            expect_equal(r$review_data, db_reviewdata)
             # review table should only have one row in the DB containing the new reviewed = "Yes"
+            # for the item 'Cystitis'
             expect_equal(
               with(db_reviewdata, reviewed[subject_id == "885" & item_name == "Cystitis"]), 
               "Yes"
@@ -290,7 +284,7 @@ describe(
               r$review_data, subject_id == "885", 
               item_group == "Adverse events", 
               edit_date_time == max(edit_date_time)
-            ) |>
+              ) |>
               dplyr::select(subject_id, item_group, edit_date_time, reviewed, comment, status)
           )
           expect_equal(review_data_active()$item_group, "Adverse events")
@@ -370,7 +364,8 @@ describe(
             ns <- session$ns
             active_form("no_data_form")
             data_before_saving <- r$review_data
-            db_before_save <- db_get_table(db_path)
+            db_before_saving <- db_get_table(db_path)
+            
             session$setInputs(save_review = 1)
             expect_error(output[["save_review_error"]], "Nothing to review")
             expect_equal(r$review_data, data_before_saving)
@@ -499,6 +494,7 @@ describe(
             db_before_saving <- db_get_table(db_path)
             session$setInputs(form_reviewed = TRUE, save_review = 1)
             db_after_saving <- db_get_table(db_path)
+            
             expect_true(review_save_error())
             expect_equal(r$review_data, rev_data)
             expect_equal(db_after_saving, db_before_saving)
