@@ -9,7 +9,7 @@
 #' the `header widgets` ([mod_header_widgets_server()]), and the `query page`
 #' ([mod_queries_server()])
 #'
-#' @param input,output,session Internal parameters for {shiny}.
+#' @param input,output,session Internal parameters for `shiny`.
 #' @seealso [app_ui()], [run_app()]
 #' 
 app_server <- function(
@@ -58,7 +58,7 @@ app_server <- function(
   )
   # think of using the pool package, but functions such as row_update are not yet supported.
   r <- reactiveValues(
-    review_data       = db_slice_rows(user_db, db_table = "all_review_data"),
+    review_data       = db_get_table(user_db, db_table = "all_review_data"),
     query_data        = collect_query_data(user_db),
     filtered_subjects = app_vars$subject_id,
     filtered_data     = app_data,

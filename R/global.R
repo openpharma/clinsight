@@ -111,7 +111,8 @@ utils::globalVariables(
     "vis_day",
     "event_id",
     "region",
-    "suffix_names"
+    "suffix_names",
+    "form_type"
   )
 )
 
