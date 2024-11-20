@@ -144,7 +144,11 @@ db_add_primary_key <- function(con, name, value, keys = NULL) {
   fields <- c(id = "INTEGER PRIMARY KEY AUTOINCREMENT", DBI::dbDataType(con, value))
   DBI::dbCreateTable(con, name, fields)
   if (!is.null(keys)) {
-    rs <- DBI::dbSendStatement(con, sprintf("CREATE UNIQUE INDEX idx_%1$s ON %1$s (%2$s)", name, paste(keys, collapse = ", ")))
+    all_keys <- paste(keys, collapse = ", ")
+    rs <- DBI::dbSendStatement(
+      con, 
+      sprintf("CREATE UNIQUE INDEX idx_%1$s ON %1$s (%2$s)", name, all_keys)
+      )
     DBI::dbClearResult(rs)
   }
   DBI::dbAppendTable(con, name, value)
@@ -154,25 +158,41 @@ db_add_primary_key <- function(con, name, value, keys = NULL) {
 #'
 #' Both creates the logging table and the trigger to update it for
 #' all_review_data.
-#' 
+#'
 #' @param con A DBI Connection to the SQLite DB
 #' @param keys A character vector specifying which columns should not be updated
-#'   in a table. Default is ID and package defined index columns.
-#' 
+#'   in a table. Defaults to 'id' and the package-defined index columns
+#'   (`idx_cols`).
+#'
 #' @keywords internal
 db_add_log <- function(con, keys = c("id", idx_cols)) {
-  DBI::dbCreateTable(con, "all_review_data_log",
-                     c(id = "INTEGER PRIMARY KEY AUTOINCREMENT", review_id = "INTEGER NOT NULL",
-                       edit_date_time = "CHAR", reviewed = "CHAR", comment = "CHAR", 
-                       reviewer = "CHAR", timestamp = "CHAR", status = "CHAR",
-                       dml_type = "CHAR NOT NULL", dml_timestamp = "DATETIME DEFAULT CURRENT_TIMESTAMP"))
+  stopifnot(is.character(keys))
+  all_keys <- paste(keys, collapse = ", ")
+  stopifnot("'keys' parameter cannot be empty" = nchar(all_keys) > 0)
+  
+  DBI::dbCreateTable(
+    con, 
+    "all_review_data_log",
+    c(
+      id = "INTEGER PRIMARY KEY AUTOINCREMENT", 
+      review_id = "INTEGER NOT NULL",
+      edit_date_time = "CHAR", 
+      reviewed = "CHAR", 
+      comment = "CHAR", 
+      reviewer = "CHAR", 
+      timestamp = "CHAR", 
+      status = "CHAR",
+      dml_type = "CHAR NOT NULL", 
+      dml_timestamp = "DATETIME DEFAULT CURRENT_TIMESTAMP"
+      )
+  )
   # This will trigger before any UPDATEs happen on all_review_data. Instead of
   # allowing 'id' to be updated, it will throw an error.
   rs <- DBI::dbSendStatement(con, paste(
     "CREATE TRIGGER all_review_data_id_update_trigger",
-    sprintf("BEFORE UPDATE OF %s ON all_review_data", paste(keys, collapse = ", ")),
+    sprintf("BEFORE UPDATE OF %s ON all_review_data", all_keys),
     "BEGIN",
-    sprintf("SELECT RAISE(FAIL, 'Fields %s are read only');", paste(keys, collapse = ", ")),
+    sprintf("SELECT RAISE(FAIL, 'Fields %s are read only');", all_keys),
     "END"
   ))
   DBI::dbClearResult(rs)

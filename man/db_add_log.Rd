@@ -10,7 +10,8 @@ db_add_log(con, keys = c("id", idx_cols))
 \item{con}{A DBI Connection to the SQLite DB}
 
 \item{keys}{A character vector specifying which columns should not be updated
-in a table. Default is ID and package defined index columns.}
+in a table. Defaults to 'id' and the package-defined index columns
+(\code{idx_cols}).}
 }
 \description{
 Both creates the logging table and the trigger to update it for
