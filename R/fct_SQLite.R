@@ -144,7 +144,11 @@ db_add_primary_key <- function(con, name, value, keys = NULL) {
   fields <- c(id = "INTEGER PRIMARY KEY AUTOINCREMENT", DBI::dbDataType(con, value))
   DBI::dbCreateTable(con, name, fields)
   if (!is.null(keys)) {
-    rs <- DBI::dbSendStatement(con, sprintf("CREATE UNIQUE INDEX idx_%1$s ON %1$s (%2$s)", name, paste(keys, collapse = ", ")))
+    all_keys <- paste(keys, collapse = ", ")
+    rs <- DBI::dbSendStatement(
+      con, 
+      sprintf("CREATE UNIQUE INDEX idx_%1$s ON %1$s (%2$s)", name, all_keys)
+      )
     DBI::dbClearResult(rs)
   }
   DBI::dbAppendTable(con, name, value)
@@ -154,16 +158,44 @@ db_add_primary_key <- function(con, name, value, keys = NULL) {
 #'
 #' Both creates the logging table and the trigger to update it for
 #' all_review_data.
-#' 
+#'
 #' @param con A DBI Connection to the SQLite DB
-#' 
+#' @param keys A character vector specifying which columns should not be updated
+#'   in a table. Defaults to 'id' and the package-defined index columns
+#'   (`idx_cols`).
+#'
 #' @keywords internal
-db_add_log <- function(con) {
-  DBI::dbCreateTable(con, "all_review_data_log",
-                     c(id = "INTEGER PRIMARY KEY AUTOINCREMENT", review_id = "INTEGER NOT NULL",
-                       edit_date_time = "CHAR", reviewed = "CHAR", comment = "CHAR", 
-                       reviewer = "CHAR", timestamp = "CHAR", status = "CHAR",
-                       dml_type = "CHAR NOT NULL", dml_timestamp = "DATETIME DEFAULT CURRENT_TIMESTAMP"))
+db_add_log <- function(con, keys = c("id", idx_cols)) {
+  stopifnot(is.character(keys))
+  all_keys <- paste(keys, collapse = ", ")
+  stopifnot("'keys' parameter cannot be empty" = nchar(all_keys) > 0)
+  
+  DBI::dbCreateTable(
+    con, 
+    "all_review_data_log",
+    c(
+      id = "INTEGER PRIMARY KEY AUTOINCREMENT", 
+      review_id = "INTEGER NOT NULL",
+      edit_date_time = "CHAR", 
+      reviewed = "CHAR", 
+      comment = "CHAR", 
+      reviewer = "CHAR", 
+      timestamp = "CHAR", 
+      status = "CHAR",
+      dml_type = "CHAR NOT NULL", 
+      dml_timestamp = "DATETIME DEFAULT CURRENT_TIMESTAMP"
+      )
+  )
+  # This will trigger before any UPDATEs happen on all_review_data. Instead of
+  # allowing 'id' to be updated, it will throw an error.
+  rs <- DBI::dbSendStatement(con, paste(
+    "CREATE TRIGGER all_review_data_id_update_trigger",
+    sprintf("BEFORE UPDATE OF %s ON all_review_data", all_keys),
+    "BEGIN",
+    sprintf("SELECT RAISE(FAIL, 'Fields %s are read only');", all_keys),
+    "END"
+  ))
+  DBI::dbClearResult(rs)
   rs <- DBI::dbSendStatement(con, paste(
     "CREATE TRIGGER all_review_data_update_log_trigger",
     "AFTER UPDATE ON all_review_data FOR EACH ROW",
@@ -292,7 +324,6 @@ db_upsert <- function(con, data, idx_cols) {
 #' @param db_path Character vector. Path to the database.
 #' @param tables Character vector. Names of the tables within the database to
 #'   save the review in.
-#' @param common_vars A character vector containing the common key variables.
 #' @param review_by A character vector, containing the key variables to perform
 #'   the review on. For example, the review can be performed on form level
 #'   (writing the same review to all items in a form), or on item level, with a
@@ -306,8 +337,6 @@ db_save_review <- function(
     rv_row,
     db_path,
     tables = c("all_review_data"),
-    common_vars = c("subject_id", "event_name", "item_group", 
-                    "form_repeat", "item_name"),
     review_by = c("subject_id", "item_group")
 ){
   stopifnot(is.data.frame(rv_row))
@@ -331,10 +360,7 @@ db_save_review <- function(
     warning("Review state unaltered. No review will be saved.")
   )}
   new_review_rows <- new_review_rows |> 
-    db_slice_rows(slice_vars = c("timestamp", "edit_date_time"), group_vars = common_vars) |> 
     dplyr::select(-dplyr::all_of(cols_to_change)) |> 
-    # If there are multiple edits, make sure to only select the latest editdatetime for all items:
-    # dplyr::slice_max(edit_date_time, by = dplyr::all_of(common_vars)) |> 
     dplyr::bind_cols(rv_row[cols_to_change]) # bind_cols does not work in a db connection.
   cat("write updated review data to database\n")
   dplyr::copy_to(db_con, new_review_rows, "row_updates")
@@ -495,6 +521,17 @@ db_get_review <- function(
       db_slice_rows(slice_vars = slice_vars, group_vars = group_vars) |> 
       dplyr::as_tibble()
   })
+}
+
+db_get_version <- function(db_path) {
+  stopifnot(file.exists(db_path))
+  con <- get_db_connection(db_path)
+  tryCatch({
+    DBI::dbGetQuery(con, "SELECT version FROM db_version") |> 
+      unlist(use.names = FALSE)
+  },
+  error = \(e) {""}
+  )
 }
 
 update_db_version <- function(db_path, version = "1.1") {

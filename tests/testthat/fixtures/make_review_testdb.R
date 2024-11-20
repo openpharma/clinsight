@@ -24,6 +24,6 @@ make_review_testdata <- function(){
 fixture_path <- system.file("tests/testthat/fixtures", package = "clinsight")
 unlink(file.path(fixture_path, "review_testdb.sqlite"))
 db_temp_connect(file.path(fixture_path, "review_testdb.sqlite"), {
-  db_add_primary_key(con, "all_review_data", make_review_testdata())
+  db_add_primary_key(con, "all_review_data", make_review_testdata(), idx_cols)
   db_add_log(con)
 })
