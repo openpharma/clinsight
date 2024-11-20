@@ -755,4 +755,3 @@ decode_base64 <- function(
   }
   rawToChar(decoded)
 }
-
