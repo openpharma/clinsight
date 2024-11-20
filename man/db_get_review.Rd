@@ -4,13 +4,14 @@
 \alias{db_get_review}
 \title{Retrieve review}
 \usage{
-db_get_review(db_path, ids = review_row$id, db_table = "all_review_data")
+db_get_review(db_path, ..., db_table = "all_review_data")
 }
 \arguments{
 \item{db_path}{Character vector. Needs to be a valid path to a database.}
 
-\item{ids}{Integer vector with the unique identifier to select from
-the database.}
+\item{...}{Named arguments specifying which records to retrieve, see
+examples. Note that \code{...} will be processed with \code{data.frame()} since
+parameters must have equal length.}
 
 \item{db_table}{Character string. Name of the table to collect. Will only be
 used if \code{data} is a character string to a database.}
@@ -28,18 +29,19 @@ local({
   temp_path <- withr::local_tempfile(fileext = ".sqlite")
   con <- get_db_connection(temp_path)
   review_data <- data.frame(
-   subject_id = "Test_name",
-   id = 1L,
-   event_name = "Visit 1",
-   item_group = "Test_group",
-   form_repeat = 1,
-   item_name = "Test_item",
-   edit_date_time = "2023-11-05 01:26:00",
-   timestamp = "2024-02-05 01:01:01"
+   subject_id = c("Test_name", "Test_name2"),
+   id = 1:2,
+   event_name = c("Visit 1", "Visit 1"),
+   item_group = c("Test_group", "Test_group2"),
+   form_repeat = c(1, 1),
+   item_name = c("Test_item", "Test_item2"),
+   edit_date_time = rep("2023-11-05 01:26:00", 2),
+   timestamp = rep("2024-02-05 01:01:01", 2)
   ) |>
    dplyr::as_tibble()
   DBI::dbWriteTable(con, "all_review_data", review_data)
-  db_get_review(temp_path, ids = 1L)
+  db_get_review(temp_path, id = 1L)
+  db_get_review(temp_path, subject_id = "Test_name2")
 })
 
 }

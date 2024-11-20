@@ -250,7 +250,7 @@ mod_review_forms_server <- function(
       )
       
       updated_rows_db <- db_get_review(
-        db_path, ids = review_records$id
+        db_path, id = review_records$id
         ) |> 
         dplyr::select(dplyr::all_of(names(review_records)))
       
