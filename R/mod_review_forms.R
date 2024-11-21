@@ -112,8 +112,7 @@ mod_review_forms_server <- function(
     review_data_active <- reactive({
       r$review_data |>
         dplyr::filter(subject_id == r$subject_id, 
-                      item_group == active_form()) |> 
-        dplyr::select(id, dplyr::all_of(idx_cols), edit_date_time, reviewed, comment, status)
+                      item_group == active_form())
     }) 
     
     observeEvent(c(active_form(), r$subject_id), {
