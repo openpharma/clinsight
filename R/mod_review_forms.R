@@ -237,7 +237,7 @@ mod_review_forms_server <- function(
           status      = if(input$form_reviewed) "old" else "new"
         ) 
       
-      golem::cat_dev("review row to add:\n")
+      golem::cat_dev("review records to add:\n")
       golem::print_dev(review_records)
       
       cat("write review progress to database\n")
