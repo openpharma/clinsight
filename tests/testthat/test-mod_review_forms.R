@@ -252,7 +252,7 @@ describe(
         and [active_form] set to 'Adverse events',
         and [active_tab] set to 'Common forms',
         and [form_reviewed] set to FALSE,
-        I expect that the data frame [active_review_data] contains one row with 
+        I expect that the data frame [active_review_data] contains two rows with 
         data of participant '885',
         and with the [item_group] set to 'Adverse events',
         and that a message will be displayed containing the text 'Requires review'", 
