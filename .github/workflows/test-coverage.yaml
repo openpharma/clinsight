@@ -36,7 +36,7 @@ jobs:
 
       - uses: r-lib/actions/setup-renv@v2
         with:
-          profile: full
+          profile: '"full"'
         
       - name: Test coverage
         run: |

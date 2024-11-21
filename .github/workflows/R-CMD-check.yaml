@@ -31,7 +31,7 @@ jobs:
       
       - uses: r-lib/actions/setup-renv@v2
         with:
-          profile: full
+          profile: '"full"'
 
       - uses: r-lib/actions/check-r-package@v2
         with:
