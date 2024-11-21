@@ -13,6 +13,7 @@
 
 ## Bug fixes
 
+- The test-coverage GHA workflow is updated so that codecov uploads work again.
 
 # clinsight 0.1.1
 
