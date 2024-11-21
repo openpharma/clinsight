@@ -335,7 +335,7 @@ db_save_review <- function(
     table = "all_review_data"
 ){
   stopifnot(is.data.frame(rv_records))
-  stopifnot(is.character(table) && length(table) != 1)
+  stopifnot(is.character(table) && length(table) == 1)
   if (any(duplicated(rv_records[["id"]]))) {
     warning("duplicate records detected to save in database. Only the first will be selected.")
     rv_records <- rv_records[!duplicated(rv_records[["id"]]),]
