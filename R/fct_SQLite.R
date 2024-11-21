@@ -497,10 +497,20 @@ db_get_review <- function(
   stopifnot(file.exists(db_path))
   db_temp_connect(db_path, {
     fields <- ...names()
-    sql <- paste("SELECT * FROM ?db_table WHERE", paste0(fields, " = $", fields, collapse = " AND "))
+    if (is.null(fields)) {
+      if (...length() > 0)
+        warning("Unnamed arguments passed in `...`. Returning full data table.")
+      else
+        warning("No arguments passed in `...`. Returning full data table.")
+      conditionals <- "true"
+    } else {
+      conditionals <- paste0(fields, " = $", fields, collapse = " AND ")
+    }
+    sql <- paste("SELECT * FROM ?db_table WHERE", conditionals)
     query <- DBI::sqlInterpolate(con, sql, db_table = db_table[1])
     rs <- DBI::dbSendQuery(con, query)
-    DBI::dbBind(rs, params = data.frame(...))
+    if (!is.null(fields))
+      DBI::dbBind(rs, params = data.frame(...))
     df <- 
       DBI::dbFetch(rs) |> 
       dplyr::as_tibble()
