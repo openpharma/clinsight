@@ -227,7 +227,6 @@ mod_review_forms_server <- function(
       golem::cat_dev("Save review status reviewed:", input$form_reviewed, "\n")
       
       review_records <- review_data_active() |> 
-        dplyr::distinct(id) |>
         dplyr::mutate(
           reviewed    = if(input$form_reviewed) "Yes" else "No",
           comment     = ifelse(is.null(input$review_comment), "", input$review_comment),
