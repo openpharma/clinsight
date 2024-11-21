@@ -337,7 +337,7 @@ db_save_review <- function(
   stopifnot(is.data.frame(rv_records))
   if (any(duplicated(rv_records[["id"]]))) {
     warning("duplicate records detected to save in database. Only the first will be selected.")
-    rv_records[!duplicated(rv_records[["id"]]),]
+    rv_records <- rv_records[!duplicated(rv_records[["id"]]),]
   }
 
   cols_to_change <- c("reviewed", "comment", "reviewer", "timestamp", "status")
