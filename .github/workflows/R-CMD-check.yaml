@@ -32,7 +32,8 @@ jobs:
       - uses: r-lib/actions/setup-renv@v2
         with:
           profile: '"full"'
-
+          working-directory: './renv/profiles/full'
+          
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: false
