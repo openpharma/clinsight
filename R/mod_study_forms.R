@@ -223,7 +223,21 @@ mod_study_forms_server <- function(
     
     output[["table"]] <- DT::renderDT({
       req(table_data_active())
-      datatable_custom(table_data_active(), table_names, escape = FALSE)
+      datatable_custom(
+        table_data_active(), 
+        table_names, 
+        rownames= FALSE,
+        escape = FALSE,
+        options = list(
+          columnDefs = list(list(
+            targets = 0,
+            render = DT::JS(
+              "function(data, type, row, meta) {",
+              "return `<input type='checkbox' ${data ? 'checked' : ''}/>`;",
+              "}"
+            )
+          ))
+        ))
     })
     
     if(form %in% c("Vital signs", "Vitals adjusted")){

@@ -125,15 +125,29 @@ mod_common_forms_server <- function(
       SAE_data <- data_active() |> 
         dplyr::filter(grepl("Yes", `Serious Adverse Event`)) |> 
         dplyr::select(dplyr::any_of(
-          c("subject_id","form_repeat", "Name", "AESI",  "SAE Start date", 
+          c("o_reviewed", "subject_id","form_repeat", "Name", "AESI",  "SAE Start date", 
             "SAE End date", "CTCAE severity", "Treatment related", 
             "Treatment action", "Other action", "SAE Category", 
             "SAE Awareness date", "SAE Date of death", "SAE Death reason")
         )) |> 
         adjust_colnames("^SAE ")
       if(!input$show_all_data) SAE_data$subject_id <- NULL
-      datatable_custom(SAE_data, rename_vars = table_names, rownames= FALSE,
-                       title = "Serious Adverse Events", escape = FALSE)
+      datatable_custom(
+        SAE_data, 
+        rename_vars = table_names, 
+        rownames= FALSE,
+        title = "Serious Adverse Events", 
+        escape = FALSE,
+        options = list(
+          columnDefs = list(list(
+            targets = 0,
+            render = DT::JS(
+              "function(data, type, row, meta) {",
+              "return `<input type='checkbox' ${data ? 'checked' : ''}/>`;",
+              "}"
+            )
+          ))
+        ))
     })
     
     output[["common_form_table"]] <- DT::renderDT({
@@ -145,8 +159,22 @@ mod_common_forms_server <- function(
           dplyr::select(-dplyr::starts_with("SAE"))
       }
       if(!input$show_all_data) df$subject_id <- NULL
-      datatable_custom(df, rename_vars = table_names, rownames= FALSE,
-                       title = form, escape = FALSE)
+      datatable_custom(
+        df, 
+        rename_vars = table_names, 
+        rownames= FALSE,
+        title = form, 
+        escape = FALSE,
+        options = list(
+          columnDefs = list(list(
+            targets = 0,
+            render = DT::JS(
+              "function(data, type, row, meta) {",
+              "return `<input type='checkbox' ${data ? 'checked' : ''}/>`;",
+              "}"
+            )
+          ))
+        ))
     })
     
   })
