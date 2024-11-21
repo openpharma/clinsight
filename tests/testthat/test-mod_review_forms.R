@@ -280,8 +280,7 @@ describe(
           session$setInputs(form_reviewed = FALSE)
           expect_equal(
             review_data_active(),
-            dplyr::filter(r$review_data, subject_id == "885", item_group == "Adverse events") |> 
-              dplyr::select(id, dplyr::all_of(idx_cols), edit_date_time, reviewed, comment, status)
+            dplyr::filter(r$review_data, subject_id == "885", item_group == "Adverse events")
           )
           expect_equal(review_data_active()$item_group, c("Adverse events", "Adverse events"))
           expect_equal(nrow(review_data_active()), 2)
