@@ -322,7 +322,7 @@ db_upsert <- function(con, data, idx_cols) {
 #' @param rv_records A data frame containing the rows of data that needs to be
 #'   checked.
 #' @param db_path Character vector. Path to the database.
-#' @param tables Character vector. Names of the tables within the database to
+#' @param table Character vector. Names of the table within the database to
 #'   save the review in.
 #'
 #' @return Review information will be written in the database. No local objects
@@ -332,9 +332,10 @@ db_upsert <- function(con, data, idx_cols) {
 db_save_review <- function(
     rv_records,
     db_path,
-    tables = c("all_review_data")
+    table = "all_review_data"
 ){
   stopifnot(is.data.frame(rv_records))
+  stopifnot(is.character(table) && length(table) != 1)
   if (any(duplicated(rv_records[["id"]]))) {
     warning("duplicate records detected to save in database. Only the first will be selected.")
     rv_records <- rv_records[!duplicated(rv_records[["id"]]),]
@@ -350,18 +351,18 @@ db_save_review <- function(
   dplyr::copy_to(db_con, rv_records, "row_updates")
   rs <- DBI::dbSendStatement(db_con, paste(
     "UPDATE",
-    tables,
+    table,
     "SET",
     sprintf("%1$s = row_updates.%1$s", cols_to_change) |> paste(collapse = ", "),
     "FROM",
     "row_updates",
     "WHERE",
-    sprintf("%s.id = row_updates.id", tables),
+    sprintf("%s.id = row_updates.id", table),
     "AND",
-    sprintf("%s.reviewed <> row_updates.reviewed", tables)
+    sprintf("%s.reviewed <> row_updates.reviewed", table)
   ))
   DBI::dbClearResult(rs)
-  cat("finished writing to the tables:", tables, "\n")
+  cat("finished writing to the table:", table, "\n")
 }
 
 #' Append database table

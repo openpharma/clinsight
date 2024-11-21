@@ -267,7 +267,7 @@ describe(
       db_save_review(
         cbind(id = 1, df, new_review), 
         temp_path, 
-        tables = c("all_review_data")
+        table = c("all_review_data")
       )
       expect_equal(
         dplyr::collect(dplyr::tbl(con, "all_review_data")), 
@@ -317,7 +317,7 @@ describe(
       db_save_review(
         review_row, 
         temp_path, 
-        tables = c("all_review_data")
+        table = c("all_review_data")
       )
       expect_true(is.data.frame(dplyr::collect(dplyr::tbl(con, "all_review_data"))))
       results <- dplyr::collect(dplyr::tbl(con, "all_review_data"))
@@ -347,7 +347,7 @@ describe(
       db_save_review(
         rbind(cbind(id = 1:2, df, new_review), cbind(id = 1:2, df, new_review)), 
         temp_path, 
-        tables = "all_review_data"
+        table = "all_review_data"
       ) |> expect_warning()
     })
   }

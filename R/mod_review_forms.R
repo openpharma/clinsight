@@ -242,9 +242,7 @@ mod_review_forms_server <- function(
       db_save_review(
         review_records, 
         db_path = db_path,
-        # More tables can be added here if needed, to track process of 
-        # individual reviewers in individual tables:
-        tables = "all_review_data" 
+        table = "all_review_data" 
       )
       
       updated_rows_db <- db_get_review(
