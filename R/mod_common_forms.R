@@ -165,6 +165,16 @@ mod_common_forms_server <- function(
         rownames= FALSE,
         title = form, 
         escape = FALSE,
+        callback = DT::JS(
+          "table.on('click', 'input[type=\"checkbox\"]', function(){",
+          "var id = $(this).closest('.datatables').attr('id');",
+          "var cell = table.cell($(this).closest('td'));",
+          "var ids = cell.data().ids;",
+          "var review = $(this).is(':checked');",
+          "var info = {review: review, ids: ids};",
+          "Shiny.setInputValue(id + '_review_selection:CS.reviewInfo', info);",
+          "})"
+        ),
         options = list(
           columnDefs = list(list(
             targets = 0,
