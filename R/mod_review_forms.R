@@ -226,7 +226,7 @@ mod_review_forms_server <- function(
       review_save_error(FALSE)
       golem::cat_dev("Save review status reviewed:", input$form_reviewed, "\n")
       
-      review_records <- review_data_active() |> 
+      review_records <- review_data_active()["id"] |> 
         dplyr::mutate(
           reviewed    = if(input$form_reviewed) "Yes" else "No",
           comment     = ifelse(is.null(input$review_comment), "", input$review_comment),
@@ -260,10 +260,11 @@ mod_review_forms_server <- function(
           dplyr::rows_update(review_records, by = "id")
       }
       
-      updated_items_memory <- review_records |> 
-        dplyr::left_join(r$review_data, by = "id", suffix = c("", ".y")) |> 
-        dplyr::select(dplyr::all_of(names(review_records))) |> 
-        dplyr::filter(timestamp == review_records$timestamp[1])
+      updated_items_memory <- r$review_data |> 
+        dplyr::filter(
+          id %in% review_records$id,
+          timestamp == review_records$timestamp[1]
+          )
       
       review_save_error(any(
         !isTRUE(all.equal(review_records_db, review_records, check.attributes = FALSE)),
