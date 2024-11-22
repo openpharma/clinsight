@@ -170,7 +170,8 @@ mod_common_forms_server <- function(
             targets = 0,
             render = DT::JS(
               "function(data, type, row, meta) {",
-              "return `<input type='checkbox' class='${data == null ? 'indeterminate' : data ? 'checked' : 'unchecked'}' ${data ? 'checked' : ''}/>`;",
+              "var reviewed = data.reviewed;",
+              "return `<input type='checkbox' class='${reviewed == null ? 'indeterminate' : reviewed ? 'checked' : 'unchecked'}' ${reviewed ? 'checked' : ''} ${reviewed == null ? 'onclick=\"ts(this)\"' : ''}/>`;",
               "}"
             )
           )),

@@ -55,9 +55,9 @@ create_table.default <- function(
     data <- dplyr::mutate(
       data,
       o_reviewed = dplyr::case_when(
-        any(reviewed == "No") & any(reviewed == "Yes") ~ NA,
-        any(reviewed == "Yes") ~ TRUE,
-        .default = FALSE
+        any(reviewed == "No") & any(reviewed == "Yes") ~ list(list(reviewed = NA, ids = id)),
+        any(reviewed == "Yes") ~ list(list(reviewed = TRUE, ids = id)),
+        .default = list(list(reviewed = FALSE, ids = id))
       ),
       .by = keep_vars)
     keep_vars <- c("o_reviewed", keep_vars)
