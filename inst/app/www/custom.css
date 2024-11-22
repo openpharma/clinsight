@@ -61,3 +61,17 @@ div.datatables div.header {
   font-weight: bold;
 }
 
+tr:has(td input[type="checkbox"].checked:not(:checked))>td {
+    background-color: aquamarine;
+    border-color: aquamarine;
+}
+
+tr:has(td input[type="checkbox"].unchecked:checked)>td {
+    background-color: aquamarine;
+    border-color: aquamarine;
+}
+
+tr:has(td input[type="checkbox"].indeterminate:not(:indeterminate))>td {
+    background-color: aquamarine;
+    border-color: aquamarine;
+}

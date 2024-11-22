@@ -233,10 +233,18 @@ mod_study_forms_server <- function(
             targets = 0,
             render = DT::JS(
               "function(data, type, row, meta) {",
-              "return `<input type='checkbox' ${data ? 'checked' : ''}/>`;",
+              "return `<input type='checkbox' class='${data == null ? 'indeterminate' : data ? 'checked' : 'unchecked'}' ${data ? 'checked' : ''}/>`;",
               "}"
             )
-          ))
+          )),
+          createdRow = DT::JS(
+            "function(row, data, dataIndex) {",
+            "if (data[0] == null) {",
+            "let cb = row.cells[0].getElementsByTagName('input')[0]",
+            "cb.indeterminate = cb.readOnly = true;",
+            "}",
+            "}"
+          )
         ))
     })
     
