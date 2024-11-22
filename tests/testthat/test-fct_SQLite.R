@@ -449,5 +449,10 @@ describe("db_get_review can collect latest review data from a database", {
                             item_group = "Non-existent")
     expect_equal(output[,-1], review_data[0,])
   })
+  
+  it("Throws a warning if no filters are specified and returns full table", {
+    expect_warning(output <- db_get_review(temp_path))
+    expect_equal(output[,-1], review_data)
+  })
 
 })
