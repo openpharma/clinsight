@@ -205,6 +205,10 @@ mod_study_forms_server <- function(
           input$table_review_selection,
           by = "id"
         ) |>
+        dplyr::anti_join(
+          subset(r$review_data, item_group == form),
+          by = c("id", "reviewed")
+        ) |> 
         dplyr::arrange(id)
     })
     
