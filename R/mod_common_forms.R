@@ -139,15 +139,13 @@ mod_common_forms_server <- function(
         rownames= FALSE,
         title = "Serious Adverse Events", 
         escape = FALSE,
+        callback = checkbox_callback,
         options = list(
           columnDefs = list(list(
             targets = 0,
-            render = DT::JS(
-              "function(data, type, row, meta) {",
-              "return `<input type='checkbox' ${data ? 'checked' : ''}/>`;",
-              "}"
-            )
-          ))
+            render = checkbox_render
+          )),
+          createdRow = checkbox_create_callback
         ))
     })
     
@@ -191,6 +189,7 @@ mod_common_forms_server <- function(
           "Shiny.setInputValue(tblId + '_review_selection:CS.reviewInfo', info);",
           "})"
         ),
+        callback = checkbox_callback,
         options = list(
           columnDefs = list(list(
             targets = 0,
@@ -200,6 +199,7 @@ mod_common_forms_server <- function(
               "return `<input type='checkbox' class='${reviewed == null ? 'indeterminate' : reviewed ? 'checked' : 'unchecked'}' ${reviewed ? 'checked' : ''} ${reviewed == null ? 'onclick=\"ts(this)\"' : ''}/>`;",
               "}"
             )
+            render = checkbox_render
           )),
           createdRow = DT::JS(
             "function(row, data, dataIndex) {",
@@ -209,6 +209,7 @@ mod_common_forms_server <- function(
             "}",
             "}"
           )
+          createdRow = checkbox_create_callback
         ))
     })
     
