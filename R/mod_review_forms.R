@@ -226,11 +226,10 @@ mod_review_forms_server <- function(
       
       review_records <- session$userData$review_records[[active_form()]][c("id", "reviewed")] |> 
         dplyr::mutate(
-          # reviewed    = if(input$form_reviewed) "Yes" else "No",
           comment     = ifelse(is.null(input$review_comment), "", input$review_comment),
           reviewer    = paste0(r$user_name, " (", r$user_role, ")"),
           timestamp   = time_stamp(),
-          status      = if(input$form_reviewed) "old" else "new"
+          status      = ifelse(reviewed == "Yes", "old", "new")
         ) 
       
       golem::cat_dev("review records to add:\n")
@@ -266,7 +265,7 @@ mod_review_forms_server <- function(
       
       review_save_error(any(
         !isTRUE(all.equal(review_records_db, review_records, check.attributes = FALSE)),
-        !isTRUE(all.equal(updated_items_memory, review_records_db, check.attributes = FALSE))
+        !isTRUE(all.equal(updated_items_memory[,names(review_records_db)], review_records_db, check.attributes = FALSE))
       ))
       
       if(review_save_error()){
