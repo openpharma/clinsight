@@ -94,6 +94,7 @@ mod_common_forms_server <- function(
     ns <- session$ns
 
     data_active <- reactive({
+      req(!is.null(input$show_all_data))
       shiny::validate(need(
         !is.null(r$filtered_data[[form]]),
         paste0("Warning: no data found in the database for the form '", form, "'.")
@@ -150,6 +151,20 @@ mod_common_forms_server <- function(
         ))
     })
     
+    observeEvent(data_active(), {
+      session$userData$review_records[[form]] <- data.frame(id = integer(), reviewed = character(), row_index = character())
+    })
+    
+    observeEvent(input$common_form_table_review_selection, {
+      session$userData$review_records[[form]] <-
+        dplyr::rows_upsert(
+          session$userData$review_records[[form]],
+          input$common_form_table_review_selection,
+          by = "id"
+        ) |> 
+        dplyr::arrange(id)
+    })
+    
     output[["common_form_table"]] <- DT::renderDT({
       df <- data_active()
       if(form == "Adverse events") {
@@ -167,12 +182,13 @@ mod_common_forms_server <- function(
         escape = FALSE,
         callback = DT::JS(
           "table.on('click', 'input[type=\"checkbox\"]', function(){",
-          "var id = $(this).closest('.datatables').attr('id');",
+          "var tblId = $(this).closest('.datatables').attr('id');",
           "var cell = table.cell($(this).closest('td'));",
+          "var rowIdx = table.row($(this).closest('tr')).index();",
           "var ids = cell.data().ids;",
           "var review = $(this).is(':checked');",
-          "var info = {review: review, ids: ids};",
-          "Shiny.setInputValue(id + '_review_selection:CS.reviewInfo', info);",
+          "var info = {review: review, ids: ids, row: tblId + '_row_' + rowIdx};",
+          "Shiny.setInputValue(tblId + '_review_selection:CS.reviewInfo', info);",
           "})"
         ),
         options = list(

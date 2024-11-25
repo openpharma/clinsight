@@ -30,6 +30,8 @@ app_server <- function(
     })
   check_appdata(app_data, meta)
   
+  session$userData$review_records <- reactiveValues()
+  
   res_auth <- authenticate_server(
     all_sites = app_vars$Sites$site_code, 
     credentials_db = credentials_db,
