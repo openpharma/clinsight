@@ -247,6 +247,7 @@ mod_study_forms_server <- function(
         table_names, 
         rownames= FALSE,
         escape = FALSE,
+        selection = "none",
         callback = checkbox_callback,
         options = list(
           columnDefs = list(list(

@@ -139,6 +139,7 @@ mod_common_forms_server <- function(
         rownames= FALSE,
         title = "Serious Adverse Events", 
         escape = FALSE,
+        selection = "none",
         callback = checkbox_callback,
         options = list(
           columnDefs = list(list(
@@ -196,6 +197,7 @@ mod_common_forms_server <- function(
         rownames= FALSE,
         title = form, 
         escape = FALSE,
+        selection = "none",
         callback = checkbox_callback,
         options = list(
           columnDefs = list(list(
