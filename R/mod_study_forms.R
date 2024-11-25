@@ -163,7 +163,7 @@ mod_study_forms_server <- function(
     })
     
     table_data_active <- reactive({
-      req(!is.null(input$show_all_data))
+      req(!is.null(input$show_all))
       validate(need(
         r$filtered_data[[form]],
         paste0("Warning: no data found in database for the form '", form, "'")
