@@ -180,15 +180,13 @@ mod_review_forms_server <- function(
     
     enable_save_review <- reactive({
       req(
-        review_data_active(), 
+        active_form(),
+        session$userData$review_records[[active_form()]], 
         is.logical(input$form_reviewed), 
         is.logical(enable_any_review())
         ) 
       if(!enable_any_review()) return(FALSE)
-      any(c(
-        unique(with(review_data_active(), reviewed[edit_date_time == max(as.POSIXct(edit_date_time))])) == "No"  & input$form_reviewed, 
-        unique(with(review_data_active(), reviewed[edit_date_time == max(as.POSIXct(edit_date_time))])) == "Yes" & !input$form_reviewed
-      ))
+      nrow(session$userData$review_records[[active_form()]]) != 0
     })
     
     observeEvent(c(enable_any_review(), enable_save_review()), {
@@ -226,9 +224,9 @@ mod_review_forms_server <- function(
       review_save_error(FALSE)
       golem::cat_dev("Save review status reviewed:", input$form_reviewed, "\n")
       
-      review_records <- review_data_active()["id"] |> 
+      review_records <- session$userData$review_records[[active_form()]][c("id", "reviewed")] |> 
         dplyr::mutate(
-          reviewed    = if(input$form_reviewed) "Yes" else "No",
+          # reviewed    = if(input$form_reviewed) "Yes" else "No",
           comment     = ifelse(is.null(input$review_comment), "", input$review_comment),
           reviewer    = paste0(r$user_name, " (", r$user_role, ")"),
           timestamp   = time_stamp(),
