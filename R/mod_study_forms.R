@@ -163,6 +163,7 @@ mod_study_forms_server <- function(
     })
     
     table_data_active <- reactive({
+      req(!is.null(input$show_all_data))
       validate(need(
         r$filtered_data[[form]],
         paste0("Warning: no data found in database for the form '", form, "'")
@@ -191,6 +192,20 @@ mod_study_forms_server <- function(
       cols <- c("item_scale", "use_unscaled_limits")
       # Ensure no errors even if cols are missing, with FALSE as default:
       lapply(add_missing_columns(item_info, cols)[1, cols], isTRUE)
+    })
+    
+    observeEvent(table_data_active(), {
+      session$userData$review_records[[form]] <- data.frame(id = integer(), reviewed = character(), row_index = character())
+    })
+
+    observeEvent(input$table_review_selection, {
+      session$userData$review_records[[form]] <-
+        dplyr::rows_upsert(
+          session$userData$review_records[[form]],
+          input$table_review_selection,
+          by = "id"
+        ) |>
+        dplyr::arrange(id)
     })
     
     ############################### Outputs: ###################################
