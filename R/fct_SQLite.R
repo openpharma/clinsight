@@ -467,28 +467,7 @@ db_get_query <- function(
 #'   used if `data` is a character string to a database.
 #'
 #' @return A data frame.
-#' @export
-#'
-#' @examples
-#'
-#' local({
-#'   temp_path <- withr::local_tempfile(fileext = ".sqlite")
-#'   con <- get_db_connection(temp_path)
-#'   review_data <- data.frame(
-#'    subject_id = c("Test_name", "Test_name2"),
-#'    id = 1:2,
-#'    event_name = c("Visit 1", "Visit 1"),
-#'    item_group = c("Test_group", "Test_group2"),
-#'    form_repeat = c(1, 1),
-#'    item_name = c("Test_item", "Test_item2"),
-#'    edit_date_time = rep("2023-11-05 01:26:00", 2),
-#'    timestamp = rep("2024-02-05 01:01:01", 2)
-#'   ) |>
-#'    dplyr::as_tibble()
-#'   DBI::dbWriteTable(con, "all_review_data", review_data)
-#'   db_get_review(temp_path, id = 1L)
-#'   db_get_review(temp_path, subject_id = "Test_name2")
-#' })
+#' @keywords internal
 #' 
 db_get_review <- function(
     db_path, 
