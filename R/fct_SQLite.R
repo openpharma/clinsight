@@ -461,8 +461,11 @@ db_get_query <- function(
 #'
 #' @param db_path Character vector. Needs to be a valid path to a database.
 #' @param ... Named arguments specifying which records to retrieve, see
-#'   examples. Note that `...` will be processed with `data.frame()` since
-#'   parameters must have equal length.
+#'   examples. Note that `...` will be processed with `data.frame()` and thus
+#'   the arguments within `...` should be convertible to a data frame. This is
+#'   chosen so that filters of length one can be used with other filters since
+#'   they will be recycled (for example, when selecting multiple events of one
+#'   subject). 
 #' @param db_table Character string. Name of the table to collect. Will only be
 #'   used if `data` is a character string to a database.
 #'
