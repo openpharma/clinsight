@@ -263,6 +263,7 @@ mod_review_forms_server <- function(
       updated_records_memory <- with(r$review_data, r$review_data[
         id %in% review_records$id &
         timestamp == review_records$timestamp[1],
+        names(review_records_db)
       ])
       
       review_save_error(any(
