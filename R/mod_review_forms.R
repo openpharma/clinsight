@@ -314,6 +314,9 @@ mod_review_forms_server <- function(
       validate(need(input$form_reviewed, "Requires review"))
     })
     
+    shiny::exportTestValues(
+      review_save_error = review_save_error()
+    )
   })
 }
 
