@@ -260,7 +260,7 @@ mod_review_forms_server <- function(
           dplyr::rows_update(review_records, by = "id")
       }
       
-      updated_items_memory <- r$review_data |> 
+      updated_records_memory <- r$review_data |> 
         dplyr::filter(
           id %in% review_records$id,
           timestamp == review_records$timestamp[1]
@@ -268,7 +268,7 @@ mod_review_forms_server <- function(
       
       review_save_error(any(
         !isTRUE(all.equal(review_records_db, review_records, check.attributes = FALSE)),
-        !isTRUE(all.equal(updated_items_memory, review_records_db, check.attributes = FALSE))
+        !isTRUE(all.equal(updated_records_memory, review_records_db, check.attributes = FALSE))
       ))
       
       if(review_save_error()){
