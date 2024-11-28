@@ -478,24 +478,25 @@ db_get_review <- function(
     db_table = "all_review_data"
 ){
   stopifnot(file.exists(db_path))
-  db_temp_connect(db_path, {
-    fields <- ...names()
-    if (is.null(fields)) {
-      if (...length() > 0)
-        warning("Unnamed arguments passed in `...`. Returning full data table.")
-      else
-        warning("No arguments passed in `...`. Returning full data table.")
-      conditionals <- "true"
+  fields <- ...names()
+  if (is.null(fields)) {
+    if (...length() > 0) {
+      warning("Unnamed arguments passed in `...`. Returning full data table.")
     } else {
-      conditionals <- paste0(fields, " = $", fields, collapse = " AND ")
+      warning("No arguments passed in `...`. Returning full data table.")
     }
+    conditionals <- "true"
+  } else {
+    conditionals <- paste0(fields, " = $", fields, collapse = " AND ")
+    parameters <- data.frame(...)
+  }
+  
+  db_temp_connect(db_path, {
     sql <- paste("SELECT * FROM ?db_table WHERE", conditionals)
     query <- DBI::sqlInterpolate(con, sql, db_table = db_table[1])
     rs <- DBI::dbSendQuery(con, query)
-    if (!is.null(fields))
-      DBI::dbBind(rs, params = data.frame(...))
-    df <- 
-      DBI::dbFetch(rs) |> 
+    if (!is.null(fields)) DBI::dbBind(rs, params = parameters)
+    df <- DBI::dbFetch(rs) |> 
       dplyr::as_tibble()
     DBI::dbClearResult(rs)
     df
