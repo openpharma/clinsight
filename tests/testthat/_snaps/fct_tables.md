@@ -220,3 +220,40 @@
       # i 3 more variables: `BM smear assessment` <chr>, `Auer Rods` <chr>,
       #   `Ringed Sideroblasts` <chr>
 
+# create_table.common_forms: creates expected medical history table
+
+    Code
+      print(create_table(df, expected_columns = expected_cols), n = 25)
+    Output
+      # A tibble: 152 x 9
+         subject_id form_repeat `MH Number` `MH Name`     `MH Start Date` `MH Ongoing`
+         <chr>            <int> <chr>       <chr>         <chr>           <chr>       
+       1 BEL_08_885           1 1           Epilepsy      2008-01-01      Yes         
+       2 BEL_09_464           1 1           Atrial fibri~ 1990-01-01      No          
+       3 BEL_09_464           2 2           Hypothyroidi~ 2017-11-01      No          
+       4 BEL_09_464           3 3           Arhtritis     2010-01-01      No          
+       5 BEL_09_464           4 4           Chronic hepa~ 2010-01-01      No          
+       6 BEL_09_464           5 5           Familial Med~ 1990-01-01      Yes         
+       7 BEL_09_464           6 6           Migraine      2007-01-01      Yes         
+       8 BEL_09_464           7 7           Atrial fibri~ 2013-01-01      Yes         
+       9 BEL_09_361           1 1           Hypertension  2021-02-NK      Yes         
+      10 BEL_09_361           2 2           Diabetes mel~ 2023-06-NK      Yes         
+      11 BEL_09_361           3 3           COPD          2003-NK-NK      Yes         
+      12 BEL_09_361           4 4           COPD          2020-NK-NK      Yes         
+      13 DEU_02_968           1 1           Hypertension  <NA>            <NA>        
+      14 NLD_06_755           1 1           Familial Med~ 2023-03-15      Yes         
+      15 NLD_06_755           2 2           Chronic hepa~ 2023-03-08      Yes         
+      16 NLD_06_755           3 3           Familial Med~ 2023-06-28      No          
+      17 NLD_06_755           4 4           Hypertension  2023-05-19      Yes         
+      18 NLD_06_755           5 5           Diabetes mel~ 2023-05-19      Yes         
+      19 NLD_06_755           6 6           Migraine      2023-05-19      Yes         
+      20 NLD_06_755           7 7           Malaria       2015-07-10      No          
+      21 NLD_06_755           8 8           Malaria       2022-09-12      Yes         
+      22 NLD_06_755           9 9           Osteoporosis  2015-NK-NK      Yes         
+      23 NLD_06_755          10 10          Malaria       2023-03-08      Yes         
+      24 DEU_02_866           1 1           Epilepsy      2021-01-NK      Yes         
+      25 DEU_02_866           2 2           COPD          2020-09-NK      Yes         
+      # i 127 more rows
+      # i 3 more variables: `MH End Date` <chr>, `MH Treatment` <chr>,
+      #   `MH Comment` <chr>
+

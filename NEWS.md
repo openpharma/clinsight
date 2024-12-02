@@ -1,3 +1,20 @@
+# clinsight (development version)
+
+## Changed 
+
+- Generalized `merge_meta_with_data()` to allow user-defined processing functions.
+- Added a feature where, in applicable tables, a user can navigate to a form by double-clicking a table row.
+- Fixed warnings in `apply_edc_specific_changes` due to the use of a vector within `dplyr::select`.
+- Gave users ability to re-organized the column order in any table.
+- Added form type as a class to be used in `create_table()` to display tables.
+- Add a logging table to the DB for reviews.
+- Simplify pulling data from DB for reviews.
+- Review data by records IDs instead of subject & form
+
+## Bug fixes
+
+- The test-coverage GHA workflow is updated so that codecov uploads work again.
+
 # clinsight 0.1.1
 
 ## Changed 

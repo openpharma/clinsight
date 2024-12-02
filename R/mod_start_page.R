@@ -86,7 +86,8 @@ mod_start_page_server <- function(id, r, rev_data, navinfo, all_forms, table_nam
       bold_rows <- which(rev_data$overview()[["needs_review"]])
       tab <- datatable_custom(
         dplyr::select(rev_data$overview(), -needs_review), 
-        rename_vars = table_names
+        rename_vars = table_names,
+        callback = dblclick_to_form(ns("go_to_patient"))
       )
       if(length(bold_rows) == 0) return(tab)
       DT::formatStyle(
