@@ -260,11 +260,10 @@ mod_review_forms_server <- function(
           dplyr::rows_update(review_records, by = "id")
       }
       
-      updated_records_memory <- with(r$review_data, r$review_data[
-        id %in% review_records$id &
-        timestamp == review_records$timestamp[1],
+      updated_records_memory <- r$review_data[
+        r$review_data$id %in% review_records$id,
         names(review_records_db)
-      ])
+      ]
       
       review_save_error(any(
         !isTRUE(all.equal(review_records_db, review_records, check.attributes = FALSE)),
