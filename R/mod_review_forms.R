@@ -226,7 +226,12 @@ mod_review_forms_server <- function(
       review_save_error(FALSE)
       golem::cat_dev("Save review status reviewed:", input$form_reviewed, "\n")
       
-      review_records <- review_data_active()["id"] |> 
+      old_review_status <- if (!input$form_reviewed) "Yes" else "No"
+      review_records <- review_data_active()[
+        review_data_active()$reviewed == old_review_status,
+        "id", 
+        drop = FALSE
+        ] |> 
         dplyr::mutate(
           reviewed    = if(input$form_reviewed) "Yes" else "No",
           comment     = ifelse(is.null(input$review_comment), "", input$review_comment),
@@ -245,16 +250,11 @@ mod_review_forms_server <- function(
         table = "all_review_data" 
       )
       
-      updated_rows_db <- db_get_review(
+      review_records_db <- db_get_review(
         db_path, id = review_records$id
-        ) |> 
-        dplyr::select(dplyr::all_of(names(review_records)))
+      )[, names(review_records)] 
       
-      review_records_db <- updated_rows_db |> 
-        # Within a form, only items with a changed review state are updated and 
-        # contain the new (current) time stamp. 
-        dplyr::filter(timestamp == review_records$timestamp[1])
-      if(isTRUE(all.equal(review_records_db, review_records, check.attributes = FALSE))){
+      if (isTRUE(all.equal(review_records_db, review_records, check.attributes = FALSE))){
         cat("Update review data and status in app\n")
         r$review_data <- r$review_data |> 
           dplyr::rows_update(review_records, by = "id")
