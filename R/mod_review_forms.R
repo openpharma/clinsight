@@ -20,7 +20,8 @@ mod_review_forms_ui <- function(id){
               inputId = ns("form_reviewed"),
               label = "Reviewed",
               value = FALSE 
-            ),
+            ) |> 
+              shiny::tagAppendAttributes(class = "cs_checkbox", .cssSelector = "input"),
             "Mark as reviewed",
             placement = "bottom"
           ),
@@ -129,16 +130,19 @@ mod_review_forms_server <- function(
         dplyr::distinct(reviewed) |> 
         dplyr::pull()
       
-      if (length(review_status) == 1)
-        updateCheckboxInput(
-          inputId = "form_reviewed",
-          value = identical(review_status, "Yes")
-        )
+      shinyjs::runjs(sprintf("$('#%s').prop('checked', %s)", ns("form_reviewed"), tolower(identical(review_status, "Yes"))))
       review_indeterminate(length(review_status) > 1)
     }) |>
       bindEvent(active_form(), session$userData$review_records[[active_form()]])
     
+    observeEvent(r$subject_id, {
+      session$userData$update_checkboxes[[active_form()]] <- NULL
+      session$userData$review_records[[active_form()]] <- NULL
+    })
+    
     observeEvent(input$form_reviewed, {
+      session$userData$update_checkboxes[[active_form()]] <- input$form_reviewed
+
       session$userData$review_records[[active_form()]] <-
         review_data_active() |> 
         dplyr::mutate(reviewed = ifelse(input$form_reviewed, "Yes", "No")) |> 
@@ -148,7 +152,7 @@ mod_review_forms_server <- function(
           by = c("id", "reviewed")
         ) |> 
         dplyr::arrange(id)
-    })    
+    }, ignoreInit = TRUE)    
     
     observeEvent(c(active_form(), r$subject_id), {
       cat("Update confirm review button\n\n\n")
@@ -169,16 +173,11 @@ mod_review_forms_server <- function(
         # in this case get the reviewed = "No"
         review_status <- unique(review_data_active()[["reviewed"]])
         review_comment <- unique(review_data_active()[["comment"]])
-        if(length(review_status) != 1) {
+        if(length(review_status) != 1)
           review_indeterminate(TRUE)
-          review_status <- "No"
-        }
       }
       
-      updateCheckboxInput(
-        inputId = "form_reviewed",
-        value = identical(review_status, "Yes")
-      )
+      shinyjs::runjs(sprintf("$('#%s').prop('checked', %s)", ns("form_reviewed"), tolower(identical(review_status, "Yes"))))
       shinyjs::runjs(sprintf("$('#%s').prop('indeterminate', %s)", ns("form_reviewed"), tolower(review_indeterminate())))
       
       shinyWidgets::updatePrettySwitch(
@@ -221,7 +220,6 @@ mod_review_forms_server <- function(
       req(
         active_form(),
         session$userData$review_records[[active_form()]], 
-        is.logical(input$form_reviewed), 
         is.logical(enable_any_review())
         ) 
       if(!enable_any_review()) return(FALSE)
@@ -258,10 +256,10 @@ mod_review_forms_server <- function(
     
     review_save_error <- reactiveVal(FALSE)
     observeEvent(input$save_review, {
-      req(is.logical(input$form_reviewed), review_data_active())
+      req(review_data_active())
       req(enable_save_review())
       review_save_error(FALSE)
-      golem::cat_dev("Save review status reviewed:", input$form_reviewed, "\n")
+      # golem::cat_dev("Save review status reviewed:", input$form_reviewed, "\n")
       
       review_records <- session$userData$review_records[[active_form()]][c("id", "reviewed")] |> 
         dplyr::mutate(

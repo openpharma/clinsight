@@ -31,6 +31,7 @@ app_server <- function(
   check_appdata(app_data, meta)
   
   session$userData$review_records <- reactiveValues()
+  session$userData$update_checkboxes <- reactiveValues()
   
   res_auth <- authenticate_server(
     all_sites = app_vars$Sites$site_code, 

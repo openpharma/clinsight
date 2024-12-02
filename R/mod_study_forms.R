@@ -212,6 +212,12 @@ mod_study_forms_server <- function(
         dplyr::arrange(id)
     })
     
+    observeEvent(session$userData$update_checkboxes[[form]], {
+      checked <- session$userData$update_checkboxes[[form]]
+      
+      shinyjs::runjs(sprintf("$(':checkbox', $('#%s .table').DataTable().rows().nodes()).prop('checked', %s)", ns("table"), tolower(checked)))
+    })
+    
     ############################### Outputs: ###################################
     dynamic_figure <- reactive({
       req(nrow(fig_data()) > 0, scaling_data())

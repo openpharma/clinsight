@@ -168,6 +168,13 @@ mod_common_forms_server <- function(
         dplyr::arrange(id)
     })
     
+    observeEvent(session$userData$update_checkboxes[[form]], {
+      checked <- session$userData$update_checkboxes[[form]]
+      
+      shinyjs::runjs(sprintf("$(':checkbox', $('#%s .table').DataTable().rows().nodes()).prop('checked', %s)", ns("common_form_table"), tolower(checked)))
+      shinyjs::runjs(sprintf("$(':checkbox', $('#%s .table').DataTable().rows().nodes()).prop('checked', %s)", ns("SAE_table"), tolower(checked)))
+    })
+    
     observeEvent(input$SAE_table_review_selection, {
       session$userData$review_records[[form]] <-
         dplyr::rows_upsert(
