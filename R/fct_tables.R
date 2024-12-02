@@ -59,7 +59,7 @@ create_table.default <- function(
         any(reviewed == "Yes") ~ list(list(reviewed = TRUE, ids = id)),
         .default = list(list(reviewed = FALSE, ids = id))
       ),
-      .by = keep_vars)
+      .by = dplyr::all_of(keep_vars))
     keep_vars <- c("o_reviewed", keep_vars)
   }
   df <- data[c(keep_vars, name_column, value_column)] |> 
