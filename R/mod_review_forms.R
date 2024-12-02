@@ -110,9 +110,9 @@ mod_review_forms_server <- function(
     ns <- session$ns
     
     review_data_active <- reactive({
-      r$review_data |>
-        dplyr::filter(subject_id == r$subject_id, 
-                      item_group == active_form())
+      with(r$review_data, r$review_data[
+        subject_id == r$subject_id & item_group == active_form(),
+        ])
     }) 
     
     observeEvent(c(active_form(), r$subject_id), {
@@ -242,30 +242,24 @@ mod_review_forms_server <- function(
         table = "all_review_data" 
       )
       
-      updated_rows_db <- db_get_review(
+      review_records_db <- db_get_review(
         db_path, id = review_records$id
-        ) |> 
-        dplyr::select(dplyr::all_of(names(review_records)))
+      )[, names(review_records)] 
       
-      review_records_db <- updated_rows_db |> 
-        # Within a form, only items with a changed review state are updated and 
-        # contain the new (current) time stamp. 
-        dplyr::filter(timestamp == review_records$timestamp[1])
-      if(isTRUE(all.equal(review_records_db, review_records, check.attributes = FALSE))){
+      if (isTRUE(all.equal(review_records_db, review_records, check.attributes = FALSE))){
         cat("Update review data and status in app\n")
         r$review_data <- r$review_data |> 
           dplyr::rows_update(review_records, by = "id")
       }
       
-      updated_items_memory <- r$review_data |> 
-        dplyr::filter(
-          id %in% review_records$id,
-          timestamp == review_records$timestamp[1]
-          )
+      updated_records_memory <- r$review_data[
+        r$review_data$id %in% review_records$id,
+        names(review_records_db)
+      ]
       
       review_save_error(any(
         !isTRUE(all.equal(review_records_db, review_records, check.attributes = FALSE)),
-        !isTRUE(all.equal(updated_items_memory[,names(review_records_db)], review_records_db, check.attributes = FALSE))
+        !isTRUE(all.equal(updated_records_memory, review_records_db, check.attributes = FALSE))
       ))
       
       if(review_save_error()){
@@ -311,6 +305,9 @@ mod_review_forms_server <- function(
       validate(need(input$form_reviewed, "Requires review"))
     })
     
+    shiny::exportTestValues(
+      review_save_error = review_save_error()
+    )
   })
 }
 

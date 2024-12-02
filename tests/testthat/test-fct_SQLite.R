@@ -454,5 +454,24 @@ describe("db_get_review can collect latest review data from a database", {
     expect_warning(output <- db_get_review(temp_path))
     expect_equal(output[,-1], review_data)
   })
+  
+  it("Throws a warning if specified filters are unnamed and returns full table", {
+    expect_warning(
+      output <- db_get_review(temp_path, "Test_name"), 
+      "Unnamed arguments passed"
+      )
+    expect_equal(output[,-1], review_data)
+  })
+  
+  it("Errors if provided filters cannot be coerced to a data frame", {
+    expect_error(
+      db_get_review(
+        temp_path, 
+        event_name = c("Visit 1", "Visit 2"), 
+        subject_id = c("Test_name", "another name", "third name")
+        ), 
+      "arguments imply differing number of rows"
+    )
+  })
 
 })

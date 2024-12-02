@@ -54,7 +54,8 @@ describe(
              "and [form_reviewed] set to FALSE, ",
              "I expect that I can save a new review properly, ",
              "with the result saved in the application being the same as ", 
-             "the one saved in the database."),
+             "the one saved in the database, ",
+             "and no review error occurring"),
       {
         temp_path <- withr::local_tempfile(fileext = ".sqlite")
         file.copy(test_path("fixtures", "review_testdb.sqlite"), temp_path) 
@@ -97,6 +98,7 @@ describe(
             db_reviewdata <- db_get_table(db_path)
             db_reviewlogdata <- db_get_table(db_path, "all_review_data_log")
             
+            expect_false(review_save_error())
             # app data should be equal to DB data
             expect_equal(r$review_data, db_reviewdata)
             # review table should only have one row in the DB containing the new reviewed = "Yes"
@@ -145,6 +147,7 @@ describe(
                 dplyr::collect()
             })
             
+            expect_false(review_save_error())
             expect_equal(with(db_reviewdata, comment[subject_id == "885"]), c("test review", "test review"))
             expect_equal(with(db_reviewdata, reviewed[subject_id == "885"]), c("No", "No"))
             r_id <- with(db_reviewdata, id[subject_id == "885"])

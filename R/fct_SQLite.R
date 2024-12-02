@@ -461,34 +461,16 @@ db_get_query <- function(
 #'
 #' @param db_path Character vector. Needs to be a valid path to a database.
 #' @param ... Named arguments specifying which records to retrieve, see
-#'   examples. Note that `...` will be processed with `data.frame()` since
-#'   parameters must have equal length.
+#'   examples. Note that `...` will be processed with `data.frame()` and thus
+#'   the arguments within `...` should be convertible to a data frame. This is
+#'   chosen so that filters of length one can be used with other filters since
+#'   they will be recycled (for example, when selecting multiple events of one
+#'   subject). 
 #' @param db_table Character string. Name of the table to collect. Will only be
 #'   used if `data` is a character string to a database.
 #'
 #' @return A data frame.
-#' @export
-#'
-#' @examples
-#'
-#' local({
-#'   temp_path <- withr::local_tempfile(fileext = ".sqlite")
-#'   con <- get_db_connection(temp_path)
-#'   review_data <- data.frame(
-#'    subject_id = c("Test_name", "Test_name2"),
-#'    id = 1:2,
-#'    event_name = c("Visit 1", "Visit 1"),
-#'    item_group = c("Test_group", "Test_group2"),
-#'    form_repeat = c(1, 1),
-#'    item_name = c("Test_item", "Test_item2"),
-#'    edit_date_time = rep("2023-11-05 01:26:00", 2),
-#'    timestamp = rep("2024-02-05 01:01:01", 2)
-#'   ) |>
-#'    dplyr::as_tibble()
-#'   DBI::dbWriteTable(con, "all_review_data", review_data)
-#'   db_get_review(temp_path, id = 1L)
-#'   db_get_review(temp_path, subject_id = "Test_name2")
-#' })
+#' @keywords internal
 #' 
 db_get_review <- function(
     db_path, 
@@ -496,24 +478,25 @@ db_get_review <- function(
     db_table = "all_review_data"
 ){
   stopifnot(file.exists(db_path))
-  db_temp_connect(db_path, {
-    fields <- ...names()
-    if (is.null(fields)) {
-      if (...length() > 0)
-        warning("Unnamed arguments passed in `...`. Returning full data table.")
-      else
-        warning("No arguments passed in `...`. Returning full data table.")
-      conditionals <- "true"
+  fields <- ...names()
+  if (is.null(fields)) {
+    if (...length() > 0) {
+      warning("Unnamed arguments passed in `...`. Returning full data table.")
     } else {
-      conditionals <- paste0(fields, " = $", fields, collapse = " AND ")
+      warning("No arguments passed in `...`. Returning full data table.")
     }
+    conditionals <- "true"
+  } else {
+    conditionals <- paste0(fields, " = $", fields, collapse = " AND ")
+    parameters <- data.frame(...)
+  }
+  
+  db_temp_connect(db_path, {
     sql <- paste("SELECT * FROM ?db_table WHERE", conditionals)
     query <- DBI::sqlInterpolate(con, sql, db_table = db_table[1])
     rs <- DBI::dbSendQuery(con, query)
-    if (!is.null(fields))
-      DBI::dbBind(rs, params = data.frame(...))
-    df <- 
-      DBI::dbFetch(rs) |> 
+    if (!is.null(fields)) DBI::dbBind(rs, params = parameters)
+    df <- DBI::dbFetch(rs) |> 
       dplyr::as_tibble()
     DBI::dbClearResult(rs)
     df
