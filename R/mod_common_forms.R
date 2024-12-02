@@ -151,7 +151,7 @@ mod_common_forms_server <- function(
     })
     
     observeEvent(data_active(), {
-      session$userData$review_records[[form]] <- data.frame(id = integer(), reviewed = character(), row_index = character())
+      session$userData$review_records[[form]] <- data.frame(id = integer(), reviewed = character())
     })
     
     observeEvent(input$common_form_table_review_selection, {

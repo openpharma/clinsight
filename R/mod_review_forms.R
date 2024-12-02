@@ -113,13 +113,49 @@ mod_review_forms_server <- function(
       with(r$review_data, r$review_data[
         subject_id == r$subject_id & item_group == active_form(),
         ])
-    }) 
+    })
+    
+    review_indeterminate <- reactiveVal()
+    
+    observeEvent(review_indeterminate(), {
+      shinyjs::runjs(sprintf("$('#%s').prop('indeterminate', %s)", ns("form_reviewed"), tolower(review_indeterminate())))
+    })
+    
+    observe({
+      req(session$userData$review_records[[active_form()]])
+      review_status <-
+        review_data_active()[,c("id", "reviewed")] |> 
+        dplyr::rows_update(session$userData$review_records[[active_form()]][,c("id", "reviewed")], by = "id") |> 
+        dplyr::distinct(reviewed) |> 
+        dplyr::pull()
+      
+      if (length(review_status) == 1)
+        updateCheckboxInput(
+          inputId = "form_reviewed",
+          value = identical(review_status, "Yes")
+        )
+      review_indeterminate(length(review_status) > 1)
+    }) |>
+      bindEvent(active_form(), session$userData$review_records[[active_form()]])
+    
+    observeEvent(input$form_reviewed, {
+      session$userData$review_records[[active_form()]] <-
+        review_data_active() |> 
+        dplyr::mutate(reviewed = ifelse(input$form_reviewed, "Yes", "No")) |> 
+        dplyr::select(id, reviewed) |> 
+        dplyr::anti_join(
+          subset(r$review_data, item_group == active_form()),
+          by = c("id", "reviewed")
+        ) |> 
+        dplyr::arrange(id)
+    })    
     
     observeEvent(c(active_form(), r$subject_id), {
       cat("Update confirm review button\n\n\n")
       req(r$review_data)
       golem::cat_dev("review_data_active:\n")
       golem::print_dev(review_data_active())
+      review_indeterminate(FALSE)
       if(nrow(review_data_active()) == 0){ 
         cat("No review data found for Subject id: ", r$subject_id, 
             " and group: ", active_form(), "\n") 
@@ -131,16 +167,19 @@ mod_review_forms_server <- function(
         # it will give a warning. This would be rare since it would mean a datapoint with the same edit date-time was reviewed but another one was not. 
         # probably better to use defensive coding here to ensure the app does not crash in that case. However we need to define which review status we need to select
         # in this case get the reviewed = "No"
-        review_status <- with(review_data_active(), reviewed[edit_date_time == max(as.POSIXct(edit_date_time))]) |> unique()
-        review_comment <- with(review_data_active(), comment[edit_date_time == max(as.POSIXct(edit_date_time))]) |> unique()
-        if(length(review_status) != 1) warning("multiple variables in review_status, namely: ", 
-                                               review_status, "Verify data.")
+        review_status <- unique(review_data_active()[["reviewed"]])
+        review_comment <- unique(review_data_active()[["comment"]])
+        if(length(review_status) != 1) {
+          review_indeterminate(TRUE)
+          review_status <- "No"
+        }
       }
       
       updateCheckboxInput(
         inputId = "form_reviewed",
         value = identical(review_status, "Yes")
       )
+      shinyjs::runjs(sprintf("$('#%s').prop('indeterminate', %s)", ns("form_reviewed"), tolower(review_indeterminate())))
       
       shinyWidgets::updatePrettySwitch(
         session = session,
