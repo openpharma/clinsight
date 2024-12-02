@@ -110,9 +110,9 @@ mod_review_forms_server <- function(
     ns <- session$ns
     
     review_data_active <- reactive({
-      r$review_data |>
-        dplyr::filter(subject_id == r$subject_id, 
-                      item_group == active_form())
+      with(r$review_data, r$review_data[
+        subject_id == r$subject_id & item_group == active_form(),
+        ])
     }) 
     
     observeEvent(c(active_form(), r$subject_id), {
