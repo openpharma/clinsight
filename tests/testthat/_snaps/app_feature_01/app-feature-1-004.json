@@ -9,7 +9,7 @@
           "Scroller",
           "ColReorder"
         ],
-        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th>N<\/th>\n      <th>Name<\/th>\n      <th>AESI<\/th>\n      <th>Start date<\/th>\n      <th>End date<\/th>\n      <th>CTCAE severity<\/th>\n      <th>Treatment related<\/th>\n      <th>Treatment action<\/th>\n      <th>Other action<\/th>\n      <th>Category<\/th>\n      <th>Awareness date<\/th>\n      <th>Date of death<\/th>\n      <th>Death reason<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
+        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th>o_reviewed<\/th>\n      <th>N<\/th>\n      <th>Name<\/th>\n      <th>AESI<\/th>\n      <th>Start date<\/th>\n      <th>End date<\/th>\n      <th>CTCAE severity<\/th>\n      <th>Treatment related<\/th>\n      <th>Treatment action<\/th>\n      <th>Other action<\/th>\n      <th>Category<\/th>\n      <th>Awareness date<\/th>\n      <th>Date of death<\/th>\n      <th>Death reason<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
         "options": {
           "scrollY": 400,
           "scrollX": true,
@@ -18,66 +18,75 @@
           "scrollResize": true,
           "scrollCollapse": true,
           "colReorder": true,
-          "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"Serious Adverse Events\")\n}",
-          "dom": "f<\"header h5\">ti",
           "columnDefs": [
             {
+              "targets": 0,
+              "render": "function(data, type, row, meta) {\nvar reviewed = data.reviewed;\nreturn `<input type='checkbox' class='${reviewed == null ? 'indeterminate' : reviewed ? 'checked' : 'unchecked'}' ${reviewed ? 'checked' : ''} ${reviewed == null ? 'onclick=\"ts(this)\"' : ''}/>`;\n}"
+            },
+            {
               "className": "dt-right",
+              "targets": 1
+            },
+            {
+              "name": "o_reviewed",
               "targets": 0
             },
             {
               "name": "N",
-              "targets": 0
-            },
-            {
-              "name": "Name",
               "targets": 1
             },
             {
-              "name": "AESI",
+              "name": "Name",
               "targets": 2
             },
             {
-              "name": "Start date",
+              "name": "AESI",
               "targets": 3
             },
             {
-              "name": "End date",
+              "name": "Start date",
               "targets": 4
             },
             {
-              "name": "CTCAE severity",
+              "name": "End date",
               "targets": 5
             },
             {
-              "name": "Treatment related",
+              "name": "CTCAE severity",
               "targets": 6
             },
             {
-              "name": "Treatment action",
+              "name": "Treatment related",
               "targets": 7
             },
             {
-              "name": "Other action",
+              "name": "Treatment action",
               "targets": 8
             },
             {
-              "name": "Category",
+              "name": "Other action",
               "targets": 9
             },
             {
-              "name": "Awareness date",
+              "name": "Category",
               "targets": 10
             },
             {
-              "name": "Date of death",
+              "name": "Awareness date",
               "targets": 11
             },
             {
-              "name": "Death reason",
+              "name": "Date of death",
               "targets": 12
+            },
+            {
+              "name": "Death reason",
+              "targets": 13
             }
           ],
+          "createdRow": "function(row, data, dataIndex) {\nif (data[0] == null) {\nlet cb = row.cells[0].getElementsByTagName('input')[0]\ncb.indeterminate = cb.readOnly = true;\n}\n}",
+          "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"Serious Adverse Events\")\n}",
+          "dom": "f<\"header h5\">ti",
           "order": [
 
           ],
@@ -90,16 +99,20 @@
           "serverSide": true,
           "processing": true
         },
+        "callback": "function(table) {\ntable.on('click', 'input[type=\"checkbox\"]', function(){\nvar tblId = $(this).closest('.datatables').attr('id');\nvar cell = table.cell($(this).closest('td'));\nvar rowIdx = table.row($(this).closest('tr')).index();\nvar ids = cell.data().ids;\nvar review = $(this).is(':checked');\nvar info = {review: review, ids: ids, row: tblId + '_row_' + rowIdx};\nShiny.setInputValue(tblId + '_review_selection:CS.reviewInfo', info);\n})\n}",
         "selection": {
-          "mode": "single",
+          "mode": "none",
           "selected": null,
           "target": "row",
           "selectable": null
         }
       },
       "evals": [
+        "options.columnDefs.0.render",
+        "options.createdRow",
         "options.initComplete",
-        "options.ajax.data"
+        "options.ajax.data",
+        "callback"
       ],
       "jsHooks": [
 
@@ -242,7 +255,7 @@
           "Scroller",
           "ColReorder"
         ],
-        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th>N<\/th>\n      <th>Name<\/th>\n      <th>AESI<\/th>\n      <th>start date<\/th>\n      <th>end date<\/th>\n      <th>CTCAE severity<\/th>\n      <th>Treatment related<\/th>\n      <th>Treatment action<\/th>\n      <th>Other action<\/th>\n      <th>Serious Adverse Event<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
+        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th>o_reviewed<\/th>\n      <th>N<\/th>\n      <th>Name<\/th>\n      <th>AESI<\/th>\n      <th>start date<\/th>\n      <th>end date<\/th>\n      <th>CTCAE severity<\/th>\n      <th>Treatment related<\/th>\n      <th>Treatment action<\/th>\n      <th>Other action<\/th>\n      <th>Serious Adverse Event<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
         "options": {
           "scrollY": 400,
           "scrollX": true,
@@ -251,54 +264,63 @@
           "scrollResize": true,
           "scrollCollapse": true,
           "colReorder": true,
-          "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"Adverse events\")\n}",
-          "dom": "f<\"header h5\">ti",
           "columnDefs": [
             {
+              "targets": 0,
+              "render": "function(data, type, row, meta) {\nvar reviewed = data.reviewed;\nreturn `<input type='checkbox' class='${reviewed == null ? 'indeterminate' : reviewed ? 'checked' : 'unchecked'}' ${reviewed ? 'checked' : ''} ${reviewed == null ? 'onclick=\"ts(this)\"' : ''}/>`;\n}"
+            },
+            {
               "className": "dt-right",
+              "targets": 1
+            },
+            {
+              "name": "o_reviewed",
               "targets": 0
             },
             {
               "name": "N",
-              "targets": 0
-            },
-            {
-              "name": "Name",
               "targets": 1
             },
             {
-              "name": "AESI",
+              "name": "Name",
               "targets": 2
             },
             {
-              "name": "start date",
+              "name": "AESI",
               "targets": 3
             },
             {
-              "name": "end date",
+              "name": "start date",
               "targets": 4
             },
             {
-              "name": "CTCAE severity",
+              "name": "end date",
               "targets": 5
             },
             {
-              "name": "Treatment related",
+              "name": "CTCAE severity",
               "targets": 6
             },
             {
-              "name": "Treatment action",
+              "name": "Treatment related",
               "targets": 7
             },
             {
-              "name": "Other action",
+              "name": "Treatment action",
               "targets": 8
             },
             {
-              "name": "Serious Adverse Event",
+              "name": "Other action",
               "targets": 9
+            },
+            {
+              "name": "Serious Adverse Event",
+              "targets": 10
             }
           ],
+          "createdRow": "function(row, data, dataIndex) {\nif (data[0] == null) {\nlet cb = row.cells[0].getElementsByTagName('input')[0]\ncb.indeterminate = cb.readOnly = true;\n}\n}",
+          "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"Adverse events\")\n}",
+          "dom": "f<\"header h5\">ti",
           "order": [
 
           ],
@@ -311,16 +333,20 @@
           "serverSide": true,
           "processing": true
         },
+        "callback": "function(table) {\ntable.on('click', 'input[type=\"checkbox\"]', function(){\nvar tblId = $(this).closest('.datatables').attr('id');\nvar cell = table.cell($(this).closest('td'));\nvar rowIdx = table.row($(this).closest('tr')).index();\nvar ids = cell.data().ids;\nvar review = $(this).is(':checked');\nvar info = {review: review, ids: ids, row: tblId + '_row_' + rowIdx};\nShiny.setInputValue(tblId + '_review_selection:CS.reviewInfo', info);\n})\n}",
         "selection": {
-          "mode": "single",
+          "mode": "none",
           "selected": null,
           "target": "row",
           "selectable": null
         }
       },
       "evals": [
+        "options.columnDefs.0.render",
+        "options.createdRow",
         "options.initComplete",
-        "options.ajax.data"
+        "options.ajax.data",
+        "callback"
       ],
       "jsHooks": [
 
@@ -8270,7 +8296,7 @@
           "Scroller",
           "ColReorder"
         ],
-        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Event<\/th>\n      <th>Systolic blood pressure<\/th>\n      <th>Diastolic blood pressure<\/th>\n      <th>Pulse<\/th>\n      <th>Resp<\/th>\n      <th>Temperature<\/th>\n      <th>Weight change since screening<\/th>\n      <th>BMI<\/th>\n      <th>Weight<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
+        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th>o_reviewed<\/th>\n      <th>Event<\/th>\n      <th>Systolic blood pressure<\/th>\n      <th>Diastolic blood pressure<\/th>\n      <th>Pulse<\/th>\n      <th>Resp<\/th>\n      <th>Temperature<\/th>\n      <th>Weight change since screening<\/th>\n      <th>BMI<\/th>\n      <th>Weight<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
         "options": {
           "scrollY": 400,
           "scrollX": true,
@@ -8279,15 +8305,13 @@
           "scrollResize": true,
           "scrollCollapse": true,
           "colReorder": true,
-          "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"\")\n}",
-          "dom": "f<\"header h5\">ti",
           "columnDefs": [
             {
-              "orderable": false,
-              "targets": 0
+              "targets": 0,
+              "render": "function(data, type, row, meta) {\nvar reviewed = data.reviewed;\nreturn `<input type='checkbox' class='${reviewed == null ? 'indeterminate' : reviewed ? 'checked' : 'unchecked'}' ${reviewed ? 'checked' : ''} ${reviewed == null ? 'onclick=\"ts(this)\"' : ''}/>`;\n}"
             },
             {
-              "name": " ",
+              "name": "o_reviewed",
               "targets": 0
             },
             {
@@ -8327,6 +8351,9 @@
               "targets": 9
             }
           ],
+          "createdRow": "function(row, data, dataIndex) {\nif (data[0] == null) {\nlet cb = row.cells[0].getElementsByTagName('input')[0]\ncb.indeterminate = cb.readOnly = true;\n}\n}",
+          "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"\")\n}",
+          "dom": "f<\"header h5\">ti",
           "order": [
 
           ],
@@ -8339,16 +8366,20 @@
           "serverSide": true,
           "processing": true
         },
+        "callback": "function(table) {\ntable.on('click', 'input[type=\"checkbox\"]', function(){\nvar tblId = $(this).closest('.datatables').attr('id');\nvar cell = table.cell($(this).closest('td'));\nvar rowIdx = table.row($(this).closest('tr')).index();\nvar ids = cell.data().ids;\nvar review = $(this).is(':checked');\nvar info = {review: review, ids: ids, row: tblId + '_row_' + rowIdx};\nShiny.setInputValue(tblId + '_review_selection:CS.reviewInfo', info);\n})\n}",
         "selection": {
-          "mode": "single",
+          "mode": "none",
           "selected": null,
           "target": "row",
           "selectable": null
         }
       },
       "evals": [
+        "options.columnDefs.0.render",
+        "options.createdRow",
         "options.initComplete",
-        "options.ajax.data"
+        "options.ajax.data",
+        "callback"
       ],
       "jsHooks": [
 
