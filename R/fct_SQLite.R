@@ -319,63 +319,50 @@ db_upsert <- function(con, data, idx_cols) {
 #' New rows with the new/updated review data will be added to the applicable
 #' database tables.
 #'
-#' @param rv_row A data frame containing the row of the data that needs to be
+#' @param rv_records A data frame containing the rows of data that needs to be
 #'   checked.
 #' @param db_path Character vector. Path to the database.
-#' @param tables Character vector. Names of the tables within the database to
+#' @param table Character vector. Names of the table within the database to
 #'   save the review in.
-#' @param review_by A character vector, containing the key variables to perform
-#'   the review on. For example, the review can be performed on form level
-#'   (writing the same review to all items in a form), or on item level, with a
-#'   different review per item.
 #'
 #' @return Review information will be written in the database. No local objects
 #'   will be returned.
 #' @export
 #' 
 db_save_review <- function(
-    rv_row,
+    rv_records,
     db_path,
-    tables = c("all_review_data"),
-    review_by = c("subject_id", "item_group")
+    table = "all_review_data"
 ){
-  stopifnot(is.data.frame(rv_row))
-  if(nrow(rv_row) != 1){
-    warning("multiple rows detected to save in database. Only the first row will be selected.")
-    rv_row <- rv_row[1, ]
+  stopifnot(is.data.frame(rv_records))
+  stopifnot(is.character(table) && length(table) == 1)
+  if (any(duplicated(rv_records[["id"]]))) {
+    warning("duplicate records detected to save in database. Only the first will be selected.")
+    rv_records <- rv_records[!duplicated(rv_records[["id"]]),]
   }
-  
+
   cols_to_change <- c("reviewed", "comment", "reviewer", "timestamp", "status")
   db_con <- get_db_connection(db_path)
-  new_review_state <- rv_row$reviewed
-  cat("copy row ids into database\n ")
-  dplyr::copy_to(db_con, rv_row[review_by], "row_ids")
-  new_review_rows <-  dplyr::tbl(db_con, "all_review_data") |> 
-    dplyr::inner_join(dplyr::tbl(db_con, "row_ids"), by = review_by) |> 
-    # Filter below prevents unnecessarily overwriting the review status in forms   
-    # with mixed reviewed status (due to an edit by the investigators). 
-    dplyr::filter(reviewed != new_review_state) |> 
-    dplyr::collect()
-  if(nrow(new_review_rows) == 0){return(
+  if(nrow(rv_records) == 0){return(
     warning("Review state unaltered. No review will be saved.")
   )}
-  new_review_rows <- new_review_rows |> 
-    dplyr::select(-dplyr::all_of(cols_to_change)) |> 
-    dplyr::bind_cols(rv_row[cols_to_change]) # bind_cols does not work in a db connection.
+  
   cat("write updated review data to database\n")
-  dplyr::copy_to(db_con, new_review_rows, "row_updates")
+  dplyr::copy_to(db_con, rv_records, "row_updates")
   rs <- DBI::dbSendStatement(db_con, paste(
     "UPDATE",
-    tables,
+    table,
     "SET",
     sprintf("%1$s = row_updates.%1$s", cols_to_change) |> paste(collapse = ", "),
     "FROM",
     "row_updates",
     "WHERE",
-    sprintf("%s.id = row_updates.id", tables)
+    sprintf("%s.id = row_updates.id", table),
+    "AND",
+    sprintf("%s.reviewed <> row_updates.reviewed", table)
   ))
   DBI::dbClearResult(rs)
-  cat("finished writing to the tables:", tables, "\n")
+  cat("finished writing to the table:", table, "\n")
 }
 
 #' Append database table
@@ -473,53 +460,46 @@ db_get_query <- function(
 #' with the given subject id (`subject`) and `form`.
 #'
 #' @param db_path Character vector. Needs to be a valid path to a database.
-#' @param subject Character vector with the subject identifier to select from
-#'   the database.
-#' @param form Character vector with the form identifier to select from the
-#'   database.
+#' @param ... Named arguments specifying which records to retrieve, see
+#'   examples. Note that `...` will be processed with `data.frame()` and thus
+#'   the arguments within `...` should be convertible to a data frame. This is
+#'   chosen so that filters of length one can be used with other filters since
+#'   they will be recycled (for example, when selecting multiple events of one
+#'   subject). 
+#' @param db_table Character string. Name of the table to collect. Will only be
+#'   used if `data` is a character string to a database.
 #'
-#' @inheritParams db_slice_rows
 #' @return A data frame.
-#' @export
-#'
-#' @examples
-#'
-#' local({
-#'   temp_path <- withr::local_tempfile(fileext = ".sqlite")
-#'   con <- get_db_connection(temp_path)
-#'   review_data <- data.frame(
-#'   subject_id = "Test_name",
-#'    event_name = "Visit 1",
-#'    item_group = "Test_group",
-#'    form_repeat = 1,
-#'    item_name = "Test_item",
-#'    edit_date_time = "2023-11-05 01:26:00",
-#'    timestamp = "2024-02-05 01:01:01"
-#'   ) |>
-#'    dplyr::as_tibble()
-#'   DBI::dbWriteTable(con, "all_review_data", review_data)
-#'   db_get_review(temp_path, subject = "Test_name", form = "Test_group")
-#' })
+#' @keywords internal
 #' 
 db_get_review <- function(
     db_path, 
-    subject = review_row$subject_id, 
-    form = review_row$item_group,
-    db_table = "all_review_data",
-    slice_vars = c("timestamp", "edit_date_time"),
-    group_vars = c("subject_id", "event_name", "item_group",
-                   "form_repeat", "item_name")
+    ...,
+    db_table = "all_review_data"
 ){
   stopifnot(file.exists(db_path))
-  stopifnot(is.character(subject))
-  stopifnot(is.character(form))
+  fields <- ...names()
+  if (is.null(fields)) {
+    if (...length() > 0) {
+      warning("Unnamed arguments passed in `...`. Returning full data table.")
+    } else {
+      warning("No arguments passed in `...`. Returning full data table.")
+    }
+    conditionals <- "true"
+  } else {
+    conditionals <- paste0(fields, " = $", fields, collapse = " AND ")
+    parameters <- data.frame(...)
+  }
+  
   db_temp_connect(db_path, {
-    sql <- "SELECT * FROM ?db_table WHERE subject_id = ?id AND item_group = ?group;"
-    query <- DBI::sqlInterpolate(con, sql, db_table = db_table[1], 
-                                 id = subject[1], group = form[1])
-    DBI::dbGetQuery(con, query) |> 
-      db_slice_rows(slice_vars = slice_vars, group_vars = group_vars) |> 
+    sql <- paste("SELECT * FROM ?db_table WHERE", conditionals)
+    query <- DBI::sqlInterpolate(con, sql, db_table = db_table[1])
+    rs <- DBI::dbSendQuery(con, query)
+    if (!is.null(fields)) DBI::dbBind(rs, params = parameters)
+    df <- DBI::dbFetch(rs) |> 
       dplyr::as_tibble()
+    DBI::dbClearResult(rs)
+    df
   })
 }
 

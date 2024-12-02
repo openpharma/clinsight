@@ -265,10 +265,9 @@ describe(
       db_add_log(con, "id")
       
       db_save_review(
-        cbind(df, new_review), 
+        cbind(id = 1, df, new_review), 
         temp_path, 
-        tables = c("all_review_data"),
-        review_by = c("key_col1", "item_group")
+        table = c("all_review_data")
       )
       expect_equal(
         dplyr::collect(dplyr::tbl(con, "all_review_data")), 
@@ -305,6 +304,7 @@ describe(
         status = "old"
       )
       review_row <- data.frame(
+        id = 1:2,
         key_col1 = "9999",
         item_group = "Group 1"
       ) |> 
@@ -317,8 +317,7 @@ describe(
       db_save_review(
         review_row, 
         temp_path, 
-        tables = c("all_review_data"),
-        review_by = c("key_col1", "item_group")
+        table = c("all_review_data")
       )
       expect_true(is.data.frame(dplyr::collect(dplyr::tbl(con, "all_review_data"))))
       results <- dplyr::collect(dplyr::tbl(con, "all_review_data"))
@@ -339,17 +338,16 @@ describe(
     
     
     
-    it("warns with multiple rows in the review_row object", {
+    it("warns with duplicate records in the review_row object", {
       temp_path <- withr::local_tempfile(fileext = ".sqlite")
       con <- get_db_connection(temp_path)
       
       db_add_primary_key(con, "all_review_data", cbind(df, old_review))
       db_add_log(con, "id")
       db_save_review(
-        rbind(cbind(df, new_review), cbind(df, new_review)), 
+        rbind(cbind(id = 1:2, df, new_review), cbind(id = 1:2, df, new_review)), 
         temp_path, 
-        tables = "all_review_data",
-        review_by = c("key_col1", "item_group")
+        table = "all_review_data"
       ) |> expect_warning()
     })
   }
@@ -439,17 +437,41 @@ describe("db_get_review can collect latest review data from a database", {
   db_add_log(con, "id")
 
   it("Can collect the desired data.", {
-    output <- db_get_review(temp_path, subject = "Test_name", form = "Test_group")
+    output <- db_get_review(temp_path, subject_id = "Test_name", item_group = "Test_group")
     expect_equal(output[,-1], review_data)
   })
   
   it("Collects an empty data frame if the requested subject or form are not found", {
-    output <- db_get_review(temp_path, subject = "Non-existent", 
-                                         form = "Test_group")
+    output <- db_get_review(temp_path, subject_id = "Non-existent", 
+                            item_group = "Test_group")
     expect_equal(output[,-1], review_data[0,])
-    output <- db_get_review(temp_path, subject = "Test_name", 
-                                        form = "Non-existent")
+    output <- db_get_review(temp_path, subject_id = "Test_name", 
+                            item_group = "Non-existent")
     expect_equal(output[,-1], review_data[0,])
+  })
+  
+  it("Throws a warning if no filters are specified and returns full table", {
+    expect_warning(output <- db_get_review(temp_path))
+    expect_equal(output[,-1], review_data)
+  })
+  
+  it("Throws a warning if specified filters are unnamed and returns full table", {
+    expect_warning(
+      output <- db_get_review(temp_path, "Test_name"), 
+      "Unnamed arguments passed"
+      )
+    expect_equal(output[,-1], review_data)
+  })
+  
+  it("Errors if provided filters cannot be coerced to a data frame", {
+    expect_error(
+      db_get_review(
+        temp_path, 
+        event_name = c("Visit 1", "Visit 2"), 
+        subject_id = c("Test_name", "another name", "third name")
+        ), 
+      "arguments imply differing number of rows"
+    )
   })
 
 })

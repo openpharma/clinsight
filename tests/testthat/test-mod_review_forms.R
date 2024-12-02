@@ -54,7 +54,8 @@ describe(
              "and [form_reviewed] set to FALSE, ",
              "I expect that I can save a new review properly, ",
              "with the result saved in the application being the same as ", 
-             "the one saved in the database."),
+             "the one saved in the database, ",
+             "and no review error occurring"),
       {
         temp_path <- withr::local_tempfile(fileext = ".sqlite")
         file.copy(test_path("fixtures", "review_testdb.sqlite"), temp_path) 
@@ -97,6 +98,7 @@ describe(
             db_reviewdata <- db_get_table(db_path)
             db_reviewlogdata <- db_get_table(db_path, "all_review_data_log")
             
+            expect_false(review_save_error())
             # app data should be equal to DB data
             expect_equal(r$review_data, db_reviewdata)
             # review table should only have one row in the DB containing the new reviewed = "Yes"
@@ -130,7 +132,7 @@ describe(
               )
             
             updated_rows_db <- db_get_review(
-              db_path, subject = "885", form = "Adverse events"
+              db_path, subject_id = "885", item_group = "Adverse events"
             )
             
             expect_equal(updated_rows_db$comment, c("test review", "test review"))
@@ -145,6 +147,7 @@ describe(
                 dplyr::collect()
             })
             
+            expect_false(review_save_error())
             expect_equal(with(db_reviewdata, comment[subject_id == "885"]), c("test review", "test review"))
             expect_equal(with(db_reviewdata, reviewed[subject_id == "885"]), c("No", "No"))
             r_id <- with(db_reviewdata, id[subject_id == "885"])
@@ -230,7 +233,7 @@ describe(
         expect_true(app$get_js("document.getElementById('test-review_comment').disabled;"))
         
         # review status and reviewer is saved as expected
-        saved_review_row <- db_get_review(temp_path, subject = "885", form = "Adverse events")
+        saved_review_row <- db_get_review(temp_path, subject_id = "885", item_group = "Adverse events")
         expect_equal(saved_review_row$status, c("old", "old"))
         expect_equal(saved_review_row$reviewer, c("Reviewer 1", "test_name (Medical Monitor)"))
       }
@@ -252,7 +255,7 @@ describe(
         and [active_form] set to 'Adverse events',
         and [active_tab] set to 'Common forms',
         and [form_reviewed] set to FALSE,
-        I expect that the data frame [active_review_data] contains one row with 
+        I expect that the data frame [active_review_data] contains two rows with 
         data of participant '885',
         and with the [item_group] set to 'Adverse events',
         and that a message will be displayed containing the text 'Requires review'", 
@@ -279,16 +282,11 @@ describe(
           ns <- session$ns
           session$setInputs(form_reviewed = FALSE)
           expect_equal(
-            review_data_active(), 
-            dplyr::filter(
-              r$review_data, subject_id == "885", 
-              item_group == "Adverse events", 
-              edit_date_time == max(edit_date_time)
-              ) |>
-              dplyr::select(subject_id, item_group, edit_date_time, reviewed, comment, status)
+            review_data_active(),
+            dplyr::filter(r$review_data, subject_id == "885", item_group == "Adverse events")
           )
-          expect_equal(review_data_active()$item_group, "Adverse events")
-          expect_equal(nrow(review_data_active()), 1)
+          expect_equal(review_data_active()$item_group, c("Adverse events", "Adverse events"))
+          expect_equal(nrow(review_data_active()), 2)
           expect_error(output[["save_review_error"]], "Requires review")
         })
       }
