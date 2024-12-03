@@ -496,10 +496,15 @@ describe(
         testServer(
           mod_review_forms_server, args = testargs, {
             ns <- session$ns
+            
+            session$userData$review_records <- reactiveValues()
+            session$userData$update_checkboxes <- reactiveValues()
+            
+            session$setInputs(form_reviewed = NULL)
             db_before_saving <- db_get_table(db_path)
             session$setInputs(form_reviewed = TRUE, save_review = 1)
             db_after_saving <- db_get_table(db_path)
-            
+
             expect_true(review_save_error())
             expect_equal(r$review_data, rev_data)
             expect_equal(db_after_saving, db_before_saving)
