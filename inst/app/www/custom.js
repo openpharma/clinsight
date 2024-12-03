@@ -17,6 +17,9 @@ $.extend(customCheckbox, {
   getValue: function(el) {
     return el.checked;
   },
+  setValue: function(el, value) {
+    el.checked = value;
+  },
   subscribe: function(el, callback) {
     $(el).on("change.checkboxInputBinding", function() {
       Shiny.onInputChange($(this).attr('id'), this.checked, {priority: 'event'});
