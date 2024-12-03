@@ -1,6 +1,11 @@
 function ts(cb) {
-  if (cb.readOnly) cb.checked=cb.readOnly=false;
-  else if (!cb.checked) cb.readOnly=cb.indeterminate=true;
+  if (cb.readOnly) {
+    cb.indeterminate=true;
+    cb.readOnly=cb.checked=false;
+  } else if (!cb.checked) {
+    cb.readOnly=true;
+    cb.indeterminate=false;
+  }
 }
 
 var customCheckbox = new Shiny.InputBinding();
