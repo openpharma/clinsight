@@ -142,7 +142,7 @@ mod_review_forms_server <- function(
     
     observeEvent(input$form_reviewed, {
       session$userData$update_checkboxes[[active_form()]] <- input$form_reviewed
-
+      
       session$userData$review_records[[active_form()]] <-
         review_data_active() |> 
         dplyr::mutate(reviewed = ifelse(input$form_reviewed, "Yes", "No")) |> 

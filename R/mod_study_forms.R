@@ -195,10 +195,13 @@ mod_study_forms_server <- function(
     })
     
     observeEvent(table_data_active(), {
+      session$userData$update_checkboxes[[form]] <- NULL
       session$userData$review_records[[form]] <- data.frame(id = integer(), reviewed = character(), row_index = character())
     })
 
     observeEvent(input$table_review_selection, {
+      session$userData$update_checkboxes[[form]] <- NULL
+      
       session$userData$review_records[[form]] <-
         dplyr::rows_upsert(
           session$userData$review_records[[form]],
@@ -216,7 +219,7 @@ mod_study_forms_server <- function(
     observeEvent(session$userData$update_checkboxes[[form]], {
       checked <- session$userData$update_checkboxes[[form]]
       
-      shinyjs::runjs(sprintf("$(':checkbox', $('#%s .table').DataTable().rows().nodes()).prop('checked', %s)", ns("table"), tolower(checked)))
+      update_cbs(ns("table"), checked)
     })
     
     ############################### Outputs: ###################################
