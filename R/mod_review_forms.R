@@ -294,6 +294,9 @@ mod_review_forms_server <- function(
         names(review_records_db)
       ]
       
+      session$userData$update_checkboxes[[active_form()]] <- NULL
+      session$userData$review_records[[active_form()]] <- data.frame(id = integer(), reviewed = character())
+      
       review_save_error(any(
         !isTRUE(all.equal(review_records_db, review_records, check.attributes = FALSE)),
         !isTRUE(all.equal(updated_records_memory, review_records_db, check.attributes = FALSE))
