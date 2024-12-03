@@ -135,7 +135,7 @@ mod_common_forms_server <- function(
       if(!input$show_all_data) SAE_data$subject_id <- NULL
       datatable_custom(
         SAE_data, 
-        rename_vars = table_names, 
+        rename_vars = c("Review Status" = "o_reviewed", table_names), 
         rownames= FALSE,
         title = "Serious Adverse Events", 
         escape = FALSE,
@@ -207,7 +207,7 @@ mod_common_forms_server <- function(
       if(!input$show_all_data) df$subject_id <- NULL
       datatable_custom(
         df, 
-        rename_vars = table_names, 
+        rename_vars = c("Review Status" = "o_reviewed", table_names), 
         rownames= FALSE,
         title = form, 
         escape = FALSE,

@@ -254,7 +254,7 @@ mod_study_forms_server <- function(
       req(table_data_active())
       datatable_custom(
         table_data_active(), 
-        table_names, 
+        rename_vars = c("Review Status" = "o_reviewed", table_names), 
         rownames= FALSE,
         escape = FALSE,
         selection = "none",
