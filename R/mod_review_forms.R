@@ -137,7 +137,7 @@ mod_review_forms_server <- function(
     
     observeEvent(r$subject_id, {
       session$userData$update_checkboxes[[active_form()]] <- NULL
-      session$userData$review_records[[active_form()]] <- NULL
+      session$userData$review_records[[active_form()]] <- data.frame(id = integer(), reviewed = character())
     })
     
     observeEvent(input$form_reviewed, {
@@ -172,7 +172,7 @@ mod_review_forms_server <- function(
         # probably better to use defensive coding here to ensure the app does not crash in that case. However we need to define which review status we need to select
         # in this case get the reviewed = "No"
         review_status <- unique(review_data_active()[["reviewed"]])
-        review_comment <- unique(review_data_active()[["comment"]])
+        review_comment <- with(review_data_active(), comment[edit_date_time == max(as.POSIXct(edit_date_time))]) |> unique() |> paste(collapse = "; ")
         if(length(review_status) != 1)
           review_indeterminate(TRUE)
       }
@@ -233,7 +233,7 @@ mod_review_forms_server <- function(
         shinyjs::enable("save_review")
         shinyjs::enable("add_comment")
         shinyjs::enable("review_comment")
-      } else{
+      } else {
         shinyjs::disable("save_review")
         shinyjs::disable("add_comment")
         shinyjs::disable("review_comment")
