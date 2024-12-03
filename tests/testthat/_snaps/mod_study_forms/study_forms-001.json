@@ -1243,7 +1243,7 @@
           "Scroller",
           "ColReorder"
         ],
-        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>event_name<\/th>\n      <th>Systolic blood pressure<\/th>\n      <th>Diastolic blood pressure<\/th>\n      <th>Pulse<\/th>\n      <th>Resp<\/th>\n      <th>Temperature<\/th>\n      <th>Weight change since screening<\/th>\n      <th>BMI<\/th>\n      <th>Weight<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
+        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th>Review Status<\/th>\n      <th>event_name<\/th>\n      <th>Systolic blood pressure<\/th>\n      <th>Diastolic blood pressure<\/th>\n      <th>Pulse<\/th>\n      <th>Resp<\/th>\n      <th>Temperature<\/th>\n      <th>Weight change since screening<\/th>\n      <th>BMI<\/th>\n      <th>Weight<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
         "options": {
           "scrollY": 400,
           "scrollX": true,
@@ -1252,15 +1252,13 @@
           "scrollResize": true,
           "scrollCollapse": true,
           "colReorder": true,
-          "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"\")\n}",
-          "dom": "f<\"header h5\">ti",
           "columnDefs": [
             {
-              "orderable": false,
-              "targets": 0
+              "targets": 0,
+              "render": "function(data, type, row, meta) {\nvar reviewed = data.reviewed;\nreturn `<input type='checkbox' class='${reviewed == null ? 'indeterminate' : reviewed ? 'checked' : 'unchecked'}' ${reviewed ? 'checked' : ''} ${reviewed == null ? 'onclick=\"ts(this)\"' : ''}/>`;\n}"
             },
             {
-              "name": " ",
+              "name": "Review Status",
               "targets": 0
             },
             {
@@ -1300,6 +1298,9 @@
               "targets": 9
             }
           ],
+          "createdRow": "function(row, data, dataIndex) {\nif (data[0].reviewed == null) {\nlet cb = row.cells[0].getElementsByTagName('input')[0]\ncb.indeterminate = true;\n}\n}",
+          "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"\")\n}",
+          "dom": "f<\"header h5\">ti",
           "order": [
 
           ],
@@ -1312,16 +1313,20 @@
           "serverSide": true,
           "processing": true
         },
+        "callback": "function(table) {\ntable.on('click', 'input[type=\"checkbox\"]', function(){\nvar tblId = $(this).closest('.datatables').attr('id');\nvar cell = table.cell($(this).closest('td'));\nvar rowIdx = table.row($(this).closest('tr')).index();\nvar ids = cell.data().ids;\nvar review = $(this).is(':indeterminate') ? null : $(this).is(':checked');\nvar info = {review: review, ids: ids, row: tblId + '_row_' + rowIdx};\nShiny.setInputValue(tblId + '_review_selection:CS.reviewInfo', info);\n})\n}",
         "selection": {
-          "mode": "single",
+          "mode": "none",
           "selected": null,
           "target": "row",
           "selectable": null
         }
       },
       "evals": [
+        "options.columnDefs.0.render",
+        "options.createdRow",
         "options.initComplete",
-        "options.ajax.data"
+        "options.ajax.data",
+        "callback"
       ],
       "jsHooks": [
 
@@ -3490,6 +3495,44 @@
       ]
     },
     "test-table_data": {
+      "o_reviewed": [
+        {
+          "reviewed": null,
+          "ids": [
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            440
+          ]
+        },
+        {
+          "reviewed": null,
+          "ids": [
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            441
+          ]
+        },
+        {
+          "reviewed": false,
+          "ids": [
+            92,
+            93,
+            94,
+            95,
+            96
+          ]
+        }
+      ],
       "event_name": [
         "Screening",
         "Visit 1",
