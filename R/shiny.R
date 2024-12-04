@@ -41,3 +41,21 @@ update_cbs <- function(tblId, checked) {
     sprintf(tblId, tolower(checked), tolower(!checked)) |> 
     shinyjs::runjs()
 }
+
+progress_bar <- function(outputId) {
+  div(
+    id = outputId,
+    class = "cs-progress-bar",
+    div(class = c("cs-progress", "completed")),
+    div(class = c("cs-progress", "unmarking")),
+    div(class = c("cs-progress", "marking"))
+  )
+}
+
+render_progress_bar <- function(expr, env = parent.frame(), quoted = FALSE) {
+  func <- exprToFunction(expr, env, quoted)
+  
+  function(){
+    func()
+  }
+}

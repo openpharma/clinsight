@@ -45,6 +45,7 @@ mod_review_forms_ui <- function(id){
             label = NULL
           )
         ),
+        progress_bar(ns("progress_bar")),
         bslib::layout_columns(
           col_widths = c(11, 12),
           shiny::actionButton(
@@ -317,6 +318,21 @@ mod_review_forms_server <- function(
         })
       }
       showNotification("Input saved successfully", duration = 1, type = "message") 
+    })
+    
+    output[["progress_bar"]] <- render_progress_bar({
+      req(
+        review_data_active(),
+        active_form(),
+        session$userData$review_records[[active_form()]]
+        )
+      
+      list(
+        completed = sum(review_data_active()$reviewed == "Yes"),
+        unmarking = sum(session$userData$review_records[[active_form()]]$reviewed == "No"),
+        marking = sum(session$userData$review_records[[active_form()]]$reviewed == "Yes"),
+        total = nrow(review_data_active())
+      )
     })
     
     output[["review_header"]] <- renderText({active_form()})
