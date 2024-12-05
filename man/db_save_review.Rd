@@ -4,26 +4,16 @@
 \alias{db_save_review}
 \title{Save review in database}
 \usage{
-db_save_review(
-  rv_row,
-  db_path,
-  tables = c("all_review_data"),
-  review_by = c("subject_id", "item_group")
-)
+db_save_review(rv_records, db_path, table = "all_review_data")
 }
 \arguments{
-\item{rv_row}{A data frame containing the row of the data that needs to be
+\item{rv_records}{A data frame containing the rows of data that needs to be
 checked.}
 
 \item{db_path}{Character vector. Path to the database.}
 
-\item{tables}{Character vector. Names of the tables within the database to
+\item{table}{Character vector. Names of the table within the database to
 save the review in.}
-
-\item{review_by}{A character vector, containing the key variables to perform
-the review on. For example, the review can be performed on form level
-(writing the same review to all items in a form), or on item level, with a
-different review per item.}
 }
 \value{
 Review information will be written in the database. No local objects
