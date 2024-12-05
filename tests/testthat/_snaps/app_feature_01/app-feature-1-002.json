@@ -21,7 +21,7 @@
           "columnDefs": [
             {
               "targets": 0,
-              "render": "function(data, type, row, meta) {\nvar reviewed = data.reviewed;\nreturn `<input type='checkbox' class='${reviewed == null ? 'indeterminate' : reviewed ? 'checked' : 'unchecked'}' ${reviewed ? 'checked' : ''} ${reviewed == null ? 'onclick=\"ts(this)\"' : ''}/>`;\n}"
+              "render": "function(data, type, row, meta) {\nvar reviewed = data.reviewed;\nreturn `<input type='checkbox' \nclass='${reviewed == null ? 'indeterminate' : reviewed ? 'checked' : 'unchecked'}' \n${reviewed ? 'checked' : ''} \n${reviewed == null ? 'onclick=\"ts(this)\"' : ''}/>`;\n}"
             },
             {
               "className": "dt-right",
@@ -267,7 +267,7 @@
           "columnDefs": [
             {
               "targets": 0,
-              "render": "function(data, type, row, meta) {\nvar reviewed = data.reviewed;\nreturn `<input type='checkbox' class='${reviewed == null ? 'indeterminate' : reviewed ? 'checked' : 'unchecked'}' ${reviewed ? 'checked' : ''} ${reviewed == null ? 'onclick=\"ts(this)\"' : ''}/>`;\n}"
+              "render": "function(data, type, row, meta) {\nvar reviewed = data.reviewed;\nreturn `<input type='checkbox' \nclass='${reviewed == null ? 'indeterminate' : reviewed ? 'checked' : 'unchecked'}' \n${reviewed ? 'checked' : ''} \n${reviewed == null ? 'onclick=\"ts(this)\"' : ''}/>`;\n}"
             },
             {
               "className": "dt-right",
@@ -799,6 +799,12 @@
       ]
     },
     "main_sidebar_1-navigate_forms_1-form_name": "<center><b>Adverse events<\/b><\/center>",
+    "main_sidebar_1-review_forms_1-progress_bar": {
+      "completed": 0,
+      "unmarking": 0,
+      "marking": 0,
+      "total": 45
+    },
     "main_sidebar_1-review_forms_1-save_review_error": {
       "message": "Requires review",
       "call": "NULL",
