@@ -125,6 +125,7 @@ mod_review_forms_server <- function(
     
     observe({
       req(session$userData$review_records[[active_form()]])
+      # browser()
       review_status <-
         review_data_active()[,c("id", "reviewed")] |> 
         dplyr::rows_update(session$userData$review_records[[active_form()]][,c("id", "reviewed")], by = "id") |> 
