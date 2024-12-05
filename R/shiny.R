@@ -20,7 +20,10 @@ checkbox_callback <- DT::JS(
 checkbox_render <- DT::JS(
   "function(data, type, row, meta) {",
   "var reviewed = data.reviewed;",
-  "return `<input type='checkbox' class='${reviewed == null ? 'indeterminate' : reviewed ? 'checked' : 'unchecked'}' ${reviewed ? 'checked' : ''} ${reviewed == null ? 'onclick=\"ts(this)\"' : ''}/>`;",
+  "return `<input type='checkbox' ",
+    "class='${reviewed == null ? 'indeterminate' : reviewed ? 'checked' : 'unchecked'}' ",
+    "${reviewed ? 'checked' : ''} ",
+    "${reviewed == null ? 'onclick=\"ts(this)\"' : ''}/>`;",
   "}"
 )
 
