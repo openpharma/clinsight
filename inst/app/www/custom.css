@@ -84,6 +84,7 @@ div.cs-progress-bar {
   height: 10px;
   overflow: hidden;
   display: flex;
+  margin-bottom: 1rem;
 }
 
 div.cs-progress-bar>div.cs-progress {
