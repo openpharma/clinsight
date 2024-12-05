@@ -76,7 +76,14 @@ tr:has(td input[type="checkbox"].indeterminate:not(:indeterminate))>td {
     border-color: aquamarine;
 }
 
-div.cs-progress-bar {
+div.cs-progress-container {
+  display: flex;
+  margin-bottom: 1rem;
+  align-items: center;
+  gap: 5px;
+}
+
+div.cs-progress-container>.cs-progress-bar {
   width: 100%;
   background-color: #b3b3b3;
   color: #ffffff;
@@ -84,22 +91,25 @@ div.cs-progress-bar {
   height: 10px;
   overflow: hidden;
   display: flex;
-  margin-bottom: 1rem;
 }
 
-div.cs-progress-bar>div.cs-progress {
+div.cs-progress-container>.cs-completed {
+  cursor: default;
+}
+
+div.cs-progress-container>.cs-progress-bar>.cs-progress {
   height: 100%;
   transition: width 1s;
 }
 
-div.cs-progress-bar>div.cs-progress.completed {
+div.cs-progress-container>.cs-progress-bar>.cs-progress.completed {
   background-color: green;
 }
 
-div.cs-progress-bar>div.cs-progress.unmarking {
+div.cs-progress-container>.cs-progress-bar>.cs-progress.unmarking {
   background-color: red;
 }
 
-div.cs-progress-bar>div.cs-progress.marking {
+div.cs-progress-container>.cs-progress-bar>.cs-progress.marking {
   background-color: blue;
 }

@@ -42,15 +42,17 @@ $(document).ready(function() {
   
   $.extend(customProgressBar, {
     find: function(scope) {
-      return $(scope).find("div.cs-progress-bar");
+      return $(scope).find("div.cs-progress-container");
     },
     renderValue: function(el, data) {
       let cmp_pct = (data.completed-data.unmarking)/data.total*100;
       let um_pct = data.unmarking/data.total*100;
       let m_pct = data.marking/data.total*100;
+      let true_cmp_pct = data.completed/data.total*100;
       $('#' + el.id + " .cs-progress.completed").width(cmp_pct.toFixed(2) + "%")
       $('#' + el.id + " .cs-progress.unmarking").width(um_pct.toFixed(2) + "%")
       $('#' + el.id + " .cs-progress.marking").width(m_pct.toFixed(2) + "%")
+      $('#' + el.id + " .cs-completed").html(true_cmp_pct.toFixed(1) + "%")
     }
   });
   

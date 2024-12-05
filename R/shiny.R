@@ -48,10 +48,16 @@ update_cbs <- function(tblId, checked) {
 progress_bar <- function(outputId) {
   div(
     id = outputId,
-    class = "cs-progress-bar",
-    div(class = c("cs-progress", "completed")),
-    div(class = c("cs-progress", "unmarking")),
-    div(class = c("cs-progress", "marking"))
+    class = "cs-progress-container",
+    div(
+      class = "cs-progress-bar",
+      div(class = c("cs-progress", "completed")),
+      div(class = c("cs-progress", "unmarking")),
+      div(class = c("cs-progress", "marking"))
+    ),
+    div(
+      class = "cs-completed"
+    )
   )
 }
 
