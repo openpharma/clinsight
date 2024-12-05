@@ -12,6 +12,7 @@
 
 ## Bug fixes
 
+- The test-coverage GHA workflow is updated so that codecov uploads work again.
 
 ## `devex` changes
 - Added `Excel` download button to Queries table & patient listings that need review.

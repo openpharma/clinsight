@@ -267,7 +267,7 @@ describe(
       db_save_review(
         cbind(id = 1, df, new_review), 
         temp_path, 
-        tables = c("all_review_data")
+        table = c("all_review_data")
       )
       expect_equal(
         dplyr::collect(dplyr::tbl(con, "all_review_data")), 
@@ -317,7 +317,7 @@ describe(
       db_save_review(
         review_row, 
         temp_path, 
-        tables = c("all_review_data")
+        table = c("all_review_data")
       )
       expect_true(is.data.frame(dplyr::collect(dplyr::tbl(con, "all_review_data"))))
       results <- dplyr::collect(dplyr::tbl(con, "all_review_data"))
@@ -347,7 +347,7 @@ describe(
       db_save_review(
         rbind(cbind(id = 1:2, df, new_review), cbind(id = 1:2, df, new_review)), 
         temp_path, 
-        tables = "all_review_data"
+        table = "all_review_data"
       ) |> expect_warning()
     })
   }
@@ -448,6 +448,30 @@ describe("db_get_review can collect latest review data from a database", {
     output <- db_get_review(temp_path, subject_id = "Test_name", 
                             item_group = "Non-existent")
     expect_equal(output[,-1], review_data[0,])
+  })
+  
+  it("Throws a warning if no filters are specified and returns full table", {
+    expect_warning(output <- db_get_review(temp_path))
+    expect_equal(output[,-1], review_data)
+  })
+  
+  it("Throws a warning if specified filters are unnamed and returns full table", {
+    expect_warning(
+      output <- db_get_review(temp_path, "Test_name"), 
+      "Unnamed arguments passed"
+      )
+    expect_equal(output[,-1], review_data)
+  })
+  
+  it("Errors if provided filters cannot be coerced to a data frame", {
+    expect_error(
+      db_get_review(
+        temp_path, 
+        event_name = c("Visit 1", "Visit 2"), 
+        subject_id = c("Test_name", "another name", "third name")
+        ), 
+      "arguments imply differing number of rows"
+    )
   })
 
 })

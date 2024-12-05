@@ -94,6 +94,7 @@ mod_common_forms_server <- function(
     ns <- session$ns
 
     data_active <- reactive({
+      req(!is.null(input$show_all_data))
       shiny::validate(need(
         !is.null(r$filtered_data[[form]]),
         paste0("Warning: no data found in the database for the form '", form, "'.")
@@ -125,23 +126,82 @@ mod_common_forms_server <- function(
       SAE_data <- data_active() |> 
         dplyr::filter(grepl("Yes", `Serious Adverse Event`)) |> 
         dplyr::select(dplyr::any_of(
-          c("subject_id","form_repeat", "Name", "AESI",  "SAE Start date", 
+          c("o_reviewed", "subject_id","form_repeat", "Name", "AESI",  "SAE Start date", 
             "SAE End date", "CTCAE severity", "Treatment related", 
             "Treatment action", "Other action", "SAE Category", 
             "SAE Awareness date", "SAE Date of death", "SAE Death reason")
         )) |> 
         adjust_colnames("^SAE ")
       if(!input$show_all_data) SAE_data$subject_id <- NULL
-      
+
       # determine DT dom / exts / opts
       DT <- dt_config(SAE_data,
         table_name = paste("SAE", ifelse(input$show_all_data,
         "all_patients", r$subject_id), sep = ".")) 
       datatable_custom(
-        SAE_data, rename_vars = table_names, rownames= FALSE,
-        title = "Serious Adverse Events", escape = FALSE,
-        dom = DT$dom, extensions = DT$exts, options = DT$opts
-      )
+        SAE_data, 
+        rename_vars = c("Review Status" = "o_reviewed", table_names), 
+        rownames = FALSE,
+        title = "Serious Adverse Events", 
+        escape = FALSE,
+        dom = DT$dom,
+        extensions = DT$exts,
+        selection = "none",
+        callback = checkbox_callback,
+        options = append(list(
+          columnDefs = list(list(
+            targets = 0,
+            render = checkbox_render
+          )),
+          createdRow = checkbox_create_callback
+        ),
+        DT$opts))
+    })
+    
+    observeEvent(data_active(), {
+      session$userData$update_checkboxes[[form]] <- NULL
+      session$userData$review_records[[form]] <- data.frame(id = integer(), reviewed = character())
+    })
+    
+    observeEvent(input$common_form_table_review_selection, {
+      session$userData$update_checkboxes[[form]] <- NULL
+      
+      session$userData$review_records[[form]] <-
+        dplyr::rows_upsert(
+          session$userData$review_records[[form]],
+          input$common_form_table_review_selection,
+          by = "id"
+        ) |> 
+        dplyr::filter(!is.na(reviewed)) |> 
+        dplyr::anti_join(
+          subset(r$review_data, item_group == form),
+          by = c("id", "reviewed")
+        ) |> 
+        dplyr::arrange(id)
+    })
+    
+    observeEvent(session$userData$update_checkboxes[[form]], {
+      checked <- session$userData$update_checkboxes[[form]]
+      
+      update_cbs(ns("common_form_table"), checked)
+      update_cbs(ns("SAE_table"), checked)
+    })
+    
+    observeEvent(input$SAE_table_review_selection, {
+      session$userData$update_checkboxes[[form]] <- NULL
+      
+      session$userData$review_records[[form]] <-
+        dplyr::rows_upsert(
+          session$userData$review_records[[form]],
+          input$SAE_table_review_selection,
+          by = "id"
+        ) |> 
+        dplyr::filter(!is.na(reviewed)) |> 
+        dplyr::anti_join(
+          subset(r$review_data, item_group == form),
+          by = c("id", "reviewed")
+        ) |> 
+        dplyr::arrange(id)
     })
     
     output[["common_form_table"]] <- DT::renderDT({
@@ -153,14 +213,29 @@ mod_common_forms_server <- function(
           dplyr::select(-dplyr::starts_with("SAE"))
       }
       if(!input$show_all_data) df$subject_id <- NULL
-      
+
       # determine DT dom / exts / opts
       DT <- dt_config(df,
          table_name = paste(form, ifelse(input$show_all_data,
          "all_patients", r$subject_id), sep = ".")) 
       datatable_custom(
-        df, rename_vars = table_names, rownames= FALSE,title = form,
-        escape = FALSE, dom = DT$dom, extensions = DT$exts, options = DT$opts)
+        df, 
+        rename_vars = c("Review Status" = "o_reviewed", table_names), 
+        rownames= FALSE,
+        title = form, 
+        escape = FALSE,
+        dom = DT$dom,
+        extensions = DT$exts,
+        selection = "none",
+        callback = checkbox_callback,
+        options = append(list(
+          columnDefs = list(list(
+            targets = 0,
+            render = checkbox_render
+          )),
+          createdRow = checkbox_create_callback
+        ),
+        DT$opts))
     })
     
   })

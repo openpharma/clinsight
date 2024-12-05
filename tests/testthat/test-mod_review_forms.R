@@ -54,7 +54,8 @@ describe(
              "and [form_reviewed] set to FALSE, ",
              "I expect that I can save a new review properly, ",
              "with the result saved in the application being the same as ", 
-             "the one saved in the database."),
+             "the one saved in the database, ",
+             "and no review error occurring"),
       {
         temp_path <- withr::local_tempfile(fileext = ".sqlite")
         file.copy(test_path("fixtures", "review_testdb.sqlite"), temp_path) 
@@ -78,6 +79,9 @@ describe(
           mod_review_forms_server, args = testargs, {
             ns <- session$ns
             
+            session$userData$review_records <- reactiveValues()
+            session$userData$update_checkboxes <- reactiveValues()
+            
             ## patient has two rows: AF and Cystitis. AF is already reviewed by someone else: 
             expect_equal(
               data.frame(
@@ -93,10 +97,12 @@ describe(
               })
             )
             
+            session$setInputs(form_reviewed = FALSE) # Needs to be initialized to work
             session$setInputs(form_reviewed = TRUE, save_review = 1)
             db_reviewdata <- db_get_table(db_path)
             db_reviewlogdata <- db_get_table(db_path, "all_review_data_log")
             
+            expect_false(review_save_error())
             # app data should be equal to DB data
             expect_equal(r$review_data, db_reviewdata)
             # review table should only have one row in the DB containing the new reviewed = "Yes"
@@ -145,6 +151,7 @@ describe(
                 dplyr::collect()
             })
             
+            expect_false(review_save_error())
             expect_equal(with(db_reviewdata, comment[subject_id == "885"]), c("test review", "test review"))
             expect_equal(with(db_reviewdata, reviewed[subject_id == "885"]), c("No", "No"))
             r_id <- with(db_reviewdata, id[subject_id == "885"])
@@ -180,6 +187,9 @@ describe(
           )
         }
         test_server <- function(input, output, session){
+          session$userData$review_records <- reactiveValues()
+          session$userData$update_checkboxes <- reactiveValues()
+          
           mod_review_forms_server(
             id = "test",
             r = reactiveValues(
@@ -252,7 +262,7 @@ describe(
         and [active_form] set to 'Adverse events',
         and [active_tab] set to 'Common forms',
         and [form_reviewed] set to FALSE,
-        I expect that the data frame [active_review_data] contains one row with 
+        I expect that the data frame [active_review_data] contains two rows with 
         data of participant '885',
         and with the [item_group] set to 'Adverse events',
         and that a message will be displayed containing the text 'Requires review'", 
@@ -280,8 +290,7 @@ describe(
           session$setInputs(form_reviewed = FALSE)
           expect_equal(
             review_data_active(),
-            dplyr::filter(r$review_data, subject_id == "885", item_group == "Adverse events") |> 
-              dplyr::select(id, dplyr::all_of(idx_cols), edit_date_time, reviewed, comment, status)
+            dplyr::filter(r$review_data, subject_id == "885", item_group == "Adverse events")
           )
           expect_equal(review_data_active()$item_group, c("Adverse events", "Adverse events"))
           expect_equal(nrow(review_data_active()), 2)
@@ -487,10 +496,15 @@ describe(
         testServer(
           mod_review_forms_server, args = testargs, {
             ns <- session$ns
+            
+            session$userData$review_records <- reactiveValues()
+            session$userData$update_checkboxes <- reactiveValues()
+            
+            session$setInputs(form_reviewed = NULL)
             db_before_saving <- db_get_table(db_path)
             session$setInputs(form_reviewed = TRUE, save_review = 1)
             db_after_saving <- db_get_table(db_path)
-            
+
             expect_true(review_save_error())
             expect_equal(r$review_data, rev_data)
             expect_equal(db_after_saving, db_before_saving)

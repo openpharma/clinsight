@@ -4,7 +4,7 @@
 \alias{db_save_review}
 \title{Save review in database}
 \usage{
-db_save_review(rv_records, db_path, tables = c("all_review_data"))
+db_save_review(rv_records, db_path, table = "all_review_data")
 }
 \arguments{
 \item{rv_records}{A data frame containing the rows of data that needs to be
@@ -12,7 +12,7 @@ checked.}
 
 \item{db_path}{Character vector. Path to the database.}
 
-\item{tables}{Character vector. Names of the tables within the database to
+\item{table}{Character vector. Names of the table within the database to
 save the review in.}
 }
 \value{

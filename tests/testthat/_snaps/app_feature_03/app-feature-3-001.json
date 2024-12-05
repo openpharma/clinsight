@@ -188,6 +188,12 @@
       ]
     },
     "main_sidebar_1-navigate_forms_1-form_name": "<center><b>Vital signs<\/b><\/center>",
+    "main_sidebar_1-review_forms_1-progress_bar": {
+      "completed": 0,
+      "unmarking": 0,
+      "marking": 0,
+      "total": 8
+    },
     "main_sidebar_1-review_forms_1-save_review_error": {
       "message": "Requires review",
       "call": "NULL",
