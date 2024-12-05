@@ -711,9 +711,10 @@ dblclick_to_form <- function(bttn_ns) {
   DT::JS(
     "table.on('dblclick', 'tbody tr', function(t) {",
     "t.currentTarget.classList.add('selected');",
-    "var tblID = $(t.target).closest('.datatables').attr('id')",
-    "var inputName = tblID + '_rows_selected'",
-    "Shiny.setInputValue(inputName, t.currentTarget.rowIndex)",
+    "var tblID = $(t.target).closest('.datatables').attr('id');",
+    "var inputName = tblID + '_rows_selected';",
+    "var rowIdx = table.row(this).data()[0];",
+    "Shiny.setInputValue(inputName, rowIdx);",
     "document.getElementById(", deparse(NS(bttn_ns, "go_to_form")), ").click();",
     "})"
   )}
