@@ -355,7 +355,7 @@ mod_review_forms_server <- function(
         "No user name found. Cannot save review"
       ))
       validate(need(
-        !unique(with(review_data_active(), reviewed[edit_date_time == max(as.POSIXct(edit_date_time))])) == "Yes",
+        any(review_data_active()[["reviewed"]] != "Yes"),
         "Form already reviewed"
       ))
       validate(need(input$form_reviewed, "Requires review"))
