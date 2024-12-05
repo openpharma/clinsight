@@ -1255,7 +1255,7 @@
           "columnDefs": [
             {
               "targets": 0,
-              "render": "function(data, type, row, meta) {\nvar reviewed = data.reviewed;\nreturn `<input type='checkbox' class='${reviewed == null ? 'indeterminate' : reviewed ? 'checked' : 'unchecked'}' ${reviewed ? 'checked' : ''} ${reviewed == null ? 'onclick=\"ts(this)\"' : ''}/>`;\n}"
+              "render": "function(data, type, row, meta) {\nvar reviewed = data.reviewed;\nreturn `<input type='checkbox' \nclass='${reviewed == null ? 'indeterminate' : reviewed ? 'checked' : 'unchecked'}' \n${reviewed ? 'checked' : ''} \n${reviewed == null ? 'onclick=\"ts(this)\"' : ''}/>`;\n}"
             },
             {
               "name": "Review Status",
