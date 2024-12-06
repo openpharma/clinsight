@@ -118,8 +118,7 @@ mod_review_forms_server <- function(
     observeEvent(c(active_form(), r$subject_id), {
       cat("Update confirm review button\n\n\n")
       req(r$review_data)
-      golem::cat_dev("review_data_active:\n")
-      golem::print_dev(review_data_active())
+      golem::cat_dev("active form:", active_form(), "\n")
       if(nrow(review_data_active()) == 0){ 
         cat("No review data found for Subject id: ", r$subject_id, 
             " and group: ", active_form(), "\n") 
@@ -240,8 +239,10 @@ mod_review_forms_server <- function(
           status      = if(input$form_reviewed) "old" else "new"
         ) 
       
-      golem::cat_dev("review records to add:\n")
-      golem::print_dev(review_records)
+      golem::cat_dev(
+        "adding review status 'reviewed =", review_records$reviewed[1], 
+        "' to the following ids:\n", review_records$id, "\n"
+        )
       
       cat("write review progress to database\n")
       db_save_review(
