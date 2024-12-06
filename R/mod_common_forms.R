@@ -156,8 +156,8 @@ mod_common_forms_server <- function(
           createdRow = checkbox_create_callback
         ),
         DT$opts))
-    })
-    
+    }, server = FALSE)
+
     observeEvent(data_active(), {
       session$userData$update_checkboxes[[form]] <- NULL
       session$userData$review_records[[form]] <- data.frame(id = integer(), reviewed = character())
@@ -173,8 +173,12 @@ mod_common_forms_server <- function(
           by = "id"
         ) |> 
         dplyr::filter(!is.na(reviewed)) |> 
+        dplyr::semi_join(
+          subset(r$review_data, subject_id == r$subject_id & item_group == form),
+          by = "id"
+        ) |> 
         dplyr::anti_join(
-          subset(r$review_data, item_group == form),
+          subset(r$review_data, subject_id == r$subject_id & item_group == form),
           by = c("id", "reviewed")
         ) |> 
         dplyr::arrange(id)
@@ -197,8 +201,12 @@ mod_common_forms_server <- function(
           by = "id"
         ) |> 
         dplyr::filter(!is.na(reviewed)) |> 
+        dplyr::semi_join(
+          subset(r$review_data, subject_id == r$subject_id & item_group == form),
+          by = "id"
+        ) |> 
         dplyr::anti_join(
-          subset(r$review_data, item_group == form),
+          subset(r$review_data, subject_id == r$subject_id & item_group == form),
           by = c("id", "reviewed")
         ) |> 
         dplyr::arrange(id)
@@ -236,8 +244,8 @@ mod_common_forms_server <- function(
           createdRow = checkbox_create_callback
         ),
         DT$opts))
-    })
-    
+    }, server = FALSE)
+
   })
 }
 

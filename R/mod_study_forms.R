@@ -209,8 +209,12 @@ mod_study_forms_server <- function(
           by = "id"
         ) |>
         dplyr::filter(!is.na(reviewed)) |> 
+        dplyr::semi_join(
+          subset(r$review_data, subject_id == r$subject_id & item_group == form),
+          by = "id"
+        ) |> 
         dplyr::anti_join(
-          subset(r$review_data, item_group == form),
+          subset(r$review_data, subject_id == r$subject_id & item_group == form),
           by = c("id", "reviewed")
         ) |> 
         dplyr::arrange(id)
@@ -272,8 +276,8 @@ mod_study_forms_server <- function(
           createdRow = checkbox_create_callback
         ),
         DT$opts))
-    })
-    
+    }, server = FALSE)
+
     if(form %in% c("Vital signs", "Vitals adjusted")){
       shiny::exportTestValues(
         table_data = table_data_active(),

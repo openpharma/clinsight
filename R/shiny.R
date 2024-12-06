@@ -12,6 +12,7 @@ checkbox_callback <- DT::JS(
   "var rowIdx = table.row($(this).closest('tr')).index();",
   "var ids = cell.data().ids;",
   "var review = $(this).is(':indeterminate') ? null : $(this).is(':checked');",
+  "cell.data().updated = review;",
   "var info = {review: review, ids: ids, row: tblId + '_row_' + rowIdx};",
   "Shiny.setInputValue(tblId + '_review_selection:CS.reviewInfo', info);",
   "})"
@@ -20,9 +21,10 @@ checkbox_callback <- DT::JS(
 checkbox_render <- DT::JS(
   "function(data, type, row, meta) {",
   "var reviewed = data.reviewed;",
+  "var updated = data.updated;",
   "return `<input type='checkbox' ",
     "class='${reviewed == null ? 'indeterminate' : reviewed ? 'checked' : 'unchecked'}' ",
-    "${reviewed ? 'checked' : ''} ",
+    "${updated == null ? (reviewed ? 'checked' : '') : (updated ? 'checked' : '')} ",
     "${reviewed == null ? 'onclick=\"ts(this)\"' : ''}/>`;",
   "}"
 )
