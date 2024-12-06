@@ -270,7 +270,7 @@ mod_study_forms_server <- function(
           )),
           createdRow = checkbox_create_callback
         ))
-    }, server = FALSE)
+    })
     
     if(form %in% c("Vital signs", "Vitals adjusted")){
       shiny::exportTestValues(

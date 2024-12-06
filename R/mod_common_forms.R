@@ -148,7 +148,7 @@ mod_common_forms_server <- function(
           )),
           createdRow = checkbox_create_callback
         ))
-    }, server = FALSE)
+    })
     
     observeEvent(data_active(), {
       session$userData$update_checkboxes[[form]] <- NULL
@@ -228,7 +228,7 @@ mod_common_forms_server <- function(
           )),
           createdRow = checkbox_create_callback
         ))
-    }, server = FALSE)
+    })
     
   })
 }
