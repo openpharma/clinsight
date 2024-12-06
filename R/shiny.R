@@ -38,13 +38,10 @@ checkbox_create_callback <- DT::JS(
   "}"
 )
 
-update_cbs <- function(tblId, checked) {
-  "$(':checkbox:not(.indeterminate)', $('#%s .table').DataTable().rows().nodes()).prop('checked', %s)" |> 
-    sprintf(tblId, tolower(checked)) |> 
-    shinyjs::runjs()
-  "$(':checkbox.indeterminate', $('#%s .table').DataTable().rows().nodes()).prop('checked', %s).prop('indeterminate', false).prop('readOnly', %s)" |> 
-    sprintf(tblId, tolower(checked), tolower(!checked)) |> 
-    shinyjs::runjs()
+update_cbs <- function(id, checked, session = getDefaultReactiveDomain()) {
+  tblId <- session$ns(id)
+  params <- list(id = tblId, checked = checked)
+  session$sendCustomMessage('update_checkboxes', params)
 }
 
 progress_bar <- function(outputId) {

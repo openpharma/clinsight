@@ -223,7 +223,7 @@ mod_study_forms_server <- function(
     observeEvent(session$userData$update_checkboxes[[form]], {
       checked <- session$userData$update_checkboxes[[form]]
       
-      update_cbs(ns("table"), checked)
+      update_cbs("table", checked)
     })
     
     ############################### Outputs: ###################################

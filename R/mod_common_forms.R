@@ -179,8 +179,8 @@ mod_common_forms_server <- function(
     observeEvent(session$userData$update_checkboxes[[form]], {
       checked <- session$userData$update_checkboxes[[form]]
       
-      update_cbs(ns("common_form_table"), checked)
-      update_cbs(ns("SAE_table"), checked)
+      update_cbs("common_form_table", checked)
+      update_cbs("SAE_table", checked)
     })
     
     observeEvent(input$SAE_table_review_selection, {
