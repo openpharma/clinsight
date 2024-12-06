@@ -233,10 +233,23 @@ apply_study_specific_fixes <- function(
 #' @param .default A character vector containing the names of the functions to
 #'   apply if none are provided. Default is "identity".
 #' @keywords internal
-apply_custom_functions <- function(data, functions = NULL, .default = "identity") {
-  Reduce(\(x1, x2) do.call(x2, list(x1)), # Apply next function to output of previous
-         functions %||% .default, # Apply default functions if no additional functions provided
-         init = data) # Initialize with the data object
+apply_custom_functions <- function(
+    data, 
+    functions = NULL, 
+    .default = "identity"
+    ) {
+  stopifnot(is.data.frame(data))
+  stopifnot(is.null(functions) || is.character(functions))
+  stopifnot(is.character(.default))
+  
+  Reduce(
+    \(x1, x2) {
+      cat("applying function '", x2, "' to the data\n", sep = "")
+      do.call(x2, list(x1))
+    }, # Apply next function to output of previous
+    functions %||% .default, # Apply default functions if no additional functions provided
+    init = data # Initialize with the data object
+  )
 }
 
 #' Get appdata
