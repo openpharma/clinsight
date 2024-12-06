@@ -163,6 +163,7 @@ mod_study_forms_server <- function(
     })
     
     table_data_active <- reactive({
+      req(!is.null(input$show_all))
       validate(need(
         r$filtered_data[[form]],
         paste0("Warning: no data found in database for the form '", form, "'")
@@ -191,6 +192,38 @@ mod_study_forms_server <- function(
       cols <- c("item_scale", "use_unscaled_limits")
       # Ensure no errors even if cols are missing, with FALSE as default:
       lapply(add_missing_columns(item_info, cols)[1, cols], isTRUE)
+    })
+    
+    observeEvent(table_data_active(), {
+      session$userData$update_checkboxes[[form]] <- NULL
+      session$userData$review_records[[form]] <- data.frame(id = integer(), reviewed = character(), row_index = character())
+    })
+
+    observeEvent(input$table_review_selection, {
+      session$userData$update_checkboxes[[form]] <- NULL
+      
+      session$userData$review_records[[form]] <-
+        dplyr::rows_upsert(
+          session$userData$review_records[[form]],
+          input$table_review_selection,
+          by = "id"
+        ) |>
+        dplyr::filter(!is.na(reviewed)) |> 
+        dplyr::semi_join(
+          subset(r$review_data, subject_id == r$subject_id & item_group == form),
+          by = "id"
+        ) |> 
+        dplyr::anti_join(
+          subset(r$review_data, subject_id == r$subject_id & item_group == form),
+          by = c("id", "reviewed")
+        ) |> 
+        dplyr::arrange(id)
+    })
+    
+    observeEvent(session$userData$update_checkboxes[[form]], {
+      checked <- session$userData$update_checkboxes[[form]]
+      
+      update_cbs(ns("table"), checked)
     })
     
     ############################### Outputs: ###################################
@@ -223,14 +256,28 @@ mod_study_forms_server <- function(
     
     output[["table"]] <- DT::renderDT({
       req(table_data_active())
-      # determine DT dom / exts / opts
-      DT <- dt_config(table_data_active(),
-        table_name = paste(form, ifelse(input$show_all, 
-                     "all_patients", r$subject_id), sep = ".")) 
-      datatable_custom(table_data_active(), table_names, escape = FALSE,
-                       dom = DT$dom, extensions = DT$exts, options = DT$opts)
-    })
-    
+        DT <- dt_config(table_data_active(),
+         table_name = paste(form, ifelse(input$show_all, 
+                      "all_patients", r$subject_id), sep = ".")) 
+      datatable_custom(
+        table_data_active(), 
+        rename_vars = c("Review Status" = "o_reviewed", table_names), 
+        rownames= FALSE,
+        escape = FALSE,
+        dom = DT$dom,
+        extensions = DT$exts,
+        selection = "none",
+        callback = checkbox_callback,
+        options = append(list(
+          columnDefs = list(list(
+            targets = 0,
+            render = checkbox_render
+          )),
+          createdRow = checkbox_create_callback
+        ),
+        DT$opts))
+    }, server = FALSE)
+
     if(form %in% c("Vital signs", "Vitals adjusted")){
       shiny::exportTestValues(
         table_data = table_data_active(),
