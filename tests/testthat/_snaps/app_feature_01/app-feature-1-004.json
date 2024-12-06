@@ -9,6 +9,50 @@
           "Scroller",
           "ColReorder"
         ],
+        "data": [
+          [
+
+          ],
+          [
+
+          ],
+          [
+
+          ],
+          [
+
+          ],
+          [
+
+          ],
+          [
+
+          ],
+          [
+
+          ],
+          [
+
+          ],
+          [
+
+          ],
+          [
+
+          ],
+          [
+
+          ],
+          [
+
+          ],
+          [
+
+          ],
+          [
+
+          ]
+        ],
         "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th>Review Status<\/th>\n      <th>N<\/th>\n      <th>Name<\/th>\n      <th>AESI<\/th>\n      <th>Start date<\/th>\n      <th>End date<\/th>\n      <th>CTCAE severity<\/th>\n      <th>Treatment related<\/th>\n      <th>Treatment action<\/th>\n      <th>Other action<\/th>\n      <th>Category<\/th>\n      <th>Awareness date<\/th>\n      <th>Date of death<\/th>\n      <th>Death reason<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
         "options": {
           "scrollY": 400,
@@ -21,7 +65,7 @@
           "columnDefs": [
             {
               "targets": 0,
-              "render": "function(data, type, row, meta) {\nvar reviewed = data.reviewed;\nreturn `<input type='checkbox' \nclass='${reviewed == null ? 'indeterminate' : reviewed ? 'checked' : 'unchecked'}' \n${reviewed ? 'checked' : ''} \n${reviewed == null ? 'onclick=\"ts(this)\"' : ''}/>`;\n}"
+              "render": "function(data, type, row, meta) {\nvar reviewed = data.reviewed;\nvar updated = data.updated;\nreturn `<input type='checkbox' \nclass='${reviewed == null ? 'indeterminate' : reviewed ? 'checked' : 'unchecked'}' \n${updated == null ? (reviewed ? 'checked' : '') : (updated ? 'checked' : '')} \n${reviewed == null ? 'onclick=\"ts(this)\"' : ''}/>`;\n}"
             },
             {
               "className": "dt-right",
@@ -91,15 +135,9 @@
 
           ],
           "autoWidth": false,
-          "orderClasses": false,
-          "ajax": {
-            "type": "POST",
-            "data": "function(d) {\nd.search.caseInsensitive = true;\nd.search.smart = true;\nd.escape = false;\nvar encodeAmp = function(x) { x.value = x.value.replace(/&/g, \"%26\"); }\nencodeAmp(d.search);\n$.each(d.columns, function(i, v) {encodeAmp(v.search);});\n}"
-          },
-          "serverSide": true,
-          "processing": true
+          "orderClasses": false
         },
-        "callback": "function(table) {\ntable.on('click', 'input[type=\"checkbox\"]', function(){\nvar tblId = $(this).closest('.datatables').attr('id');\nvar cell = table.cell($(this).closest('td'));\nvar rowIdx = table.row($(this).closest('tr')).index();\nvar ids = cell.data().ids;\nvar review = $(this).is(':indeterminate') ? null : $(this).is(':checked');\nvar info = {review: review, ids: ids, row: tblId + '_row_' + rowIdx};\nShiny.setInputValue(tblId + '_review_selection:CS.reviewInfo', info);\n})\n}",
+        "callback": "function(table) {\ntable.on('click', 'input[type=\"checkbox\"]', function(){\nvar tblId = $(this).closest('.datatables').attr('id');\nvar cell = table.cell($(this).closest('td'));\nvar rowIdx = table.row($(this).closest('tr')).index();\nvar ids = cell.data().ids;\nvar review = $(this).is(':indeterminate') ? null : $(this).is(':checked');\ncell.data().updated = review;\nvar info = {review: review, ids: ids, row: tblId + '_row_' + rowIdx};\nShiny.setInputValue(tblId + '_review_selection:CS.reviewInfo', info);\n})\n}",
         "selection": {
           "mode": "none",
           "selected": null,
@@ -111,7 +149,6 @@
         "options.columnDefs.0.render",
         "options.createdRow",
         "options.initComplete",
-        "options.ajax.data",
         "callback"
       ],
       "jsHooks": [
@@ -256,6 +293,150 @@
           "Scroller",
           "ColReorder"
         ],
+        "data": [
+          [
+            {
+              "reviewed": false,
+              "ids": [
+                2195,
+                2196,
+                2197,
+                2198,
+                2199,
+                2200,
+                2201,
+                2202,
+                2235
+              ]
+            },
+            {
+              "reviewed": false,
+              "ids": [
+                2203,
+                2204,
+                2205,
+                2206,
+                2207,
+                2208,
+                2209,
+                2210,
+                2236
+              ]
+            },
+            {
+              "reviewed": false,
+              "ids": [
+                2211,
+                2212,
+                2213,
+                2214,
+                2215,
+                2216,
+                2217,
+                2218,
+                2237
+              ]
+            },
+            {
+              "reviewed": false,
+              "ids": [
+                2219,
+                2220,
+                2221,
+                2222,
+                2223,
+                2224,
+                2225,
+                2226,
+                2238
+              ]
+            },
+            {
+              "reviewed": false,
+              "ids": [
+                2227,
+                2228,
+                2229,
+                2230,
+                2231,
+                2232,
+                2233,
+                2234,
+                2239
+              ]
+            }
+          ],
+          [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          [
+            "<b>Hypotension*<\/b>",
+            "<b>Atrial Fibrillation*<\/b>",
+            "<b>Tachycardia*<\/b>",
+            "<b>Urinary Tract Infection*<\/b>",
+            "<b>Atrial Fibrillation*<\/b>"
+          ],
+          [
+            "<b>None*<\/b>",
+            "<b>None*<\/b>",
+            "<b>None*<\/b>",
+            "<b>None*<\/b>",
+            "<b>None*<\/b>"
+          ],
+          [
+            "<b>2023-07-07*<\/b>",
+            "<b>2023-07-05*<\/b>",
+            "<b>2023-07-05*<\/b>",
+            "<b>2023-07-05*<\/b>",
+            "<b>2023-08-16*<\/b>"
+          ],
+          [
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            "<b>Grade 1*<\/b>",
+            "<b>Grade 2*<\/b>",
+            "<b>Grade 2*<\/b>",
+            "<b>Grade 1*<\/b>",
+            "<b>Grade 2*<\/b>"
+          ],
+          [
+            "<b>Not related*<\/b>",
+            "<b>Not related*<\/b>",
+            "<b>Not related*<\/b>",
+            "<b>Not related*<\/b>",
+            "<b>Not related*<\/b>"
+          ],
+          [
+            "<b>Not Applicable*<\/b>",
+            "<b>Not Applicable*<\/b>",
+            "<b>Not Applicable*<\/b>",
+            "<b>Not Applicable*<\/b>",
+            "<b>Not Applicable*<\/b>"
+          ],
+          [
+            "<b>None*<\/b>",
+            "<b>Concomitant therapy/medication*<\/b>",
+            "<b>Concomitant therapy/medication*<\/b>",
+            "<b>Concomitant therapy/medication*<\/b>",
+            "<b>Concomitant therapy/medication*<\/b>"
+          ],
+          [
+            "<b>No*<\/b>",
+            "<b>No*<\/b>",
+            "<b>No*<\/b>",
+            "<b>No*<\/b>",
+            "<b>No*<\/b>"
+          ]
+        ],
         "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th>Review Status<\/th>\n      <th>N<\/th>\n      <th>Name<\/th>\n      <th>AESI<\/th>\n      <th>start date<\/th>\n      <th>end date<\/th>\n      <th>CTCAE severity<\/th>\n      <th>Treatment related<\/th>\n      <th>Treatment action<\/th>\n      <th>Other action<\/th>\n      <th>Serious Adverse Event<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
         "options": {
           "scrollY": 400,
@@ -268,7 +449,7 @@
           "columnDefs": [
             {
               "targets": 0,
-              "render": "function(data, type, row, meta) {\nvar reviewed = data.reviewed;\nreturn `<input type='checkbox' \nclass='${reviewed == null ? 'indeterminate' : reviewed ? 'checked' : 'unchecked'}' \n${reviewed ? 'checked' : ''} \n${reviewed == null ? 'onclick=\"ts(this)\"' : ''}/>`;\n}"
+              "render": "function(data, type, row, meta) {\nvar reviewed = data.reviewed;\nvar updated = data.updated;\nreturn `<input type='checkbox' \nclass='${reviewed == null ? 'indeterminate' : reviewed ? 'checked' : 'unchecked'}' \n${updated == null ? (reviewed ? 'checked' : '') : (updated ? 'checked' : '')} \n${reviewed == null ? 'onclick=\"ts(this)\"' : ''}/>`;\n}"
             },
             {
               "className": "dt-right",
@@ -333,15 +514,9 @@
 
           ],
           "autoWidth": false,
-          "orderClasses": false,
-          "ajax": {
-            "type": "POST",
-            "data": "function(d) {\nd.search.caseInsensitive = true;\nd.search.smart = true;\nd.escape = false;\nvar encodeAmp = function(x) { x.value = x.value.replace(/&/g, \"%26\"); }\nencodeAmp(d.search);\n$.each(d.columns, function(i, v) {encodeAmp(v.search);});\n}"
-          },
-          "serverSide": true,
-          "processing": true
+          "orderClasses": false
         },
-        "callback": "function(table) {\ntable.on('click', 'input[type=\"checkbox\"]', function(){\nvar tblId = $(this).closest('.datatables').attr('id');\nvar cell = table.cell($(this).closest('td'));\nvar rowIdx = table.row($(this).closest('tr')).index();\nvar ids = cell.data().ids;\nvar review = $(this).is(':indeterminate') ? null : $(this).is(':checked');\nvar info = {review: review, ids: ids, row: tblId + '_row_' + rowIdx};\nShiny.setInputValue(tblId + '_review_selection:CS.reviewInfo', info);\n})\n}",
+        "callback": "function(table) {\ntable.on('click', 'input[type=\"checkbox\"]', function(){\nvar tblId = $(this).closest('.datatables').attr('id');\nvar cell = table.cell($(this).closest('td'));\nvar rowIdx = table.row($(this).closest('tr')).index();\nvar ids = cell.data().ids;\nvar review = $(this).is(':indeterminate') ? null : $(this).is(':checked');\ncell.data().updated = review;\nvar info = {review: review, ids: ids, row: tblId + '_row_' + rowIdx};\nShiny.setInputValue(tblId + '_review_selection:CS.reviewInfo', info);\n})\n}",
         "selection": {
           "mode": "none",
           "selected": null,
@@ -353,7 +528,6 @@
         "options.columnDefs.0.render",
         "options.createdRow",
         "options.initComplete",
-        "options.ajax.data",
         "callback"
       ],
       "jsHooks": [
@@ -8345,6 +8519,173 @@
           "Scroller",
           "ColReorder"
         ],
+        "data": [
+          [
+            {
+              "reviewed": false,
+              "ids": [
+                1217,
+                1218,
+                1219,
+                1220,
+                1221,
+                1222,
+                1223,
+                1441
+              ]
+            },
+            {
+              "reviewed": false,
+              "ids": [
+                1224,
+                1225,
+                1226,
+                1227,
+                1228,
+                1229,
+                1230,
+                1442
+              ]
+            },
+            {
+              "reviewed": false,
+              "ids": [
+                1231,
+                1232,
+                1233,
+                1234,
+                1235
+              ]
+            },
+            {
+              "reviewed": false,
+              "ids": [
+                1236,
+                1237,
+                1238,
+                1239,
+                1240,
+                1241,
+                1242,
+                1443
+              ]
+            },
+            {
+              "reviewed": false,
+              "ids": [
+                1243,
+                1244,
+                1245,
+                1246,
+                1247
+              ]
+            },
+            {
+              "reviewed": false,
+              "ids": [
+                1248,
+                1249,
+                1250,
+                1251,
+                1252,
+                1253,
+                1254,
+                1444
+              ]
+            },
+            {
+              "reviewed": false,
+              "ids": [
+                1255,
+                1256,
+                1257,
+                1258,
+                1259
+              ]
+            }
+          ],
+          [
+            "Screening",
+            "Visit 1",
+            "Visit 2",
+            "Visit 3",
+            "Visit 4",
+            "Visit 5",
+            "Visit 6"
+          ],
+          [
+            "<b>131*<\/b> mmHg",
+            "<b>132*<\/b> mmHg",
+            "<b>129*<\/b> mmHg",
+            "<b>117*<\/b> mmHg",
+            "<b>128*<\/b> mmHg",
+            "<b>137*<\/b> mmHg",
+            "<b>131*<\/b> mmHg"
+          ],
+          [
+            "<b>68*<\/b> mmHg",
+            "<b>79*<\/b> mmHg",
+            "<b>73*<\/b> mmHg",
+            "<b>77*<\/b> mmHg",
+            "<b>62*<\/b> mmHg",
+            "<b>76*<\/b> mmHg",
+            "<b>61*<\/b> mmHg"
+          ],
+          [
+            "<b>76*<\/b> beats/min",
+            "<b>63*<\/b> beats/min",
+            "<b>73*<\/b> beats/min",
+            "<b>70*<\/b> beats/min",
+            "<b>70*<\/b> beats/min",
+            "<b>75*<\/b> beats/min",
+            "<b>72*<\/b> beats/min"
+          ],
+          [
+            "<b>17*<\/b> breaths/min",
+            "<b>16*<\/b> breaths/min",
+            "<b>16*<\/b> breaths/min",
+            "<b>18*<\/b> breaths/min",
+            "<b>18*<\/b> breaths/min",
+            "<b>18*<\/b> breaths/min",
+            "<b>19*<\/b> breaths/min"
+          ],
+          [
+            "<b>37*<\/b> °C",
+            "<b>36.7*<\/b> °C",
+            "<b>36.9*<\/b> °C",
+            "<b>36*<\/b> °C",
+            "<b>36.6*<\/b> °C",
+            "<b>36.1*<\/b> °C",
+            "<b>36.9*<\/b> °C"
+          ],
+          [
+            "<b>0.01*<\/b> %",
+            "<b>2*<\/b> %",
+            null,
+            "<b>0.01*<\/b> %",
+            null,
+            "<b>0.01*<\/b> %",
+            null
+          ],
+          [
+            "<b>17.44*<\/b> kg/m2",
+            "<b>17.1*<\/b> kg/m2",
+            null,
+            "<b>17.1*<\/b> kg/m2",
+            null,
+            "<b>24.13*<\/b> kg/m2",
+            null
+          ],
+          [
+            "<b>61*<\/b> kg",
+            "<b>62*<\/b> kg",
+            null,
+            "<b>50*<\/b> kg",
+            null,
+            "<b>50*<\/b> kg",
+            null
+          ]
+        ],
         "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th>Review Status<\/th>\n      <th>Event<\/th>\n      <th>Systolic blood pressure<\/th>\n      <th>Diastolic blood pressure<\/th>\n      <th>Pulse<\/th>\n      <th>Resp<\/th>\n      <th>Temperature<\/th>\n      <th>Weight change since screening<\/th>\n      <th>BMI<\/th>\n      <th>Weight<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
         "options": {
           "scrollY": 400,
@@ -8357,7 +8698,7 @@
           "columnDefs": [
             {
               "targets": 0,
-              "render": "function(data, type, row, meta) {\nvar reviewed = data.reviewed;\nreturn `<input type='checkbox' \nclass='${reviewed == null ? 'indeterminate' : reviewed ? 'checked' : 'unchecked'}' \n${reviewed ? 'checked' : ''} \n${reviewed == null ? 'onclick=\"ts(this)\"' : ''}/>`;\n}"
+              "render": "function(data, type, row, meta) {\nvar reviewed = data.reviewed;\nvar updated = data.updated;\nreturn `<input type='checkbox' \nclass='${reviewed == null ? 'indeterminate' : reviewed ? 'checked' : 'unchecked'}' \n${updated == null ? (reviewed ? 'checked' : '') : (updated ? 'checked' : '')} \n${reviewed == null ? 'onclick=\"ts(this)\"' : ''}/>`;\n}"
             },
             {
               "name": "Review Status",
@@ -8414,15 +8755,9 @@
 
           ],
           "autoWidth": false,
-          "orderClasses": false,
-          "ajax": {
-            "type": "POST",
-            "data": "function(d) {\nd.search.caseInsensitive = true;\nd.search.smart = true;\nd.escape = false;\nvar encodeAmp = function(x) { x.value = x.value.replace(/&/g, \"%26\"); }\nencodeAmp(d.search);\n$.each(d.columns, function(i, v) {encodeAmp(v.search);});\n}"
-          },
-          "serverSide": true,
-          "processing": true
+          "orderClasses": false
         },
-        "callback": "function(table) {\ntable.on('click', 'input[type=\"checkbox\"]', function(){\nvar tblId = $(this).closest('.datatables').attr('id');\nvar cell = table.cell($(this).closest('td'));\nvar rowIdx = table.row($(this).closest('tr')).index();\nvar ids = cell.data().ids;\nvar review = $(this).is(':indeterminate') ? null : $(this).is(':checked');\nvar info = {review: review, ids: ids, row: tblId + '_row_' + rowIdx};\nShiny.setInputValue(tblId + '_review_selection:CS.reviewInfo', info);\n})\n}",
+        "callback": "function(table) {\ntable.on('click', 'input[type=\"checkbox\"]', function(){\nvar tblId = $(this).closest('.datatables').attr('id');\nvar cell = table.cell($(this).closest('td'));\nvar rowIdx = table.row($(this).closest('tr')).index();\nvar ids = cell.data().ids;\nvar review = $(this).is(':indeterminate') ? null : $(this).is(':checked');\ncell.data().updated = review;\nvar info = {review: review, ids: ids, row: tblId + '_row_' + rowIdx};\nShiny.setInputValue(tblId + '_review_selection:CS.reviewInfo', info);\n})\n}",
         "selection": {
           "mode": "none",
           "selected": null,
@@ -8434,7 +8769,6 @@
         "options.columnDefs.0.render",
         "options.createdRow",
         "options.initComplete",
-        "options.ajax.data",
         "callback"
       ],
       "jsHooks": [
