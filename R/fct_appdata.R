@@ -83,7 +83,11 @@ merge_meta_with_data <- function(
     dplyr::filter(!is.na(item_value)) |>
     apply_custom_functions(meta$settings$pre_pivot_fns) |>
     dplyr::mutate(
-      suffix_names = suffix_names %|_|% ifelse(is.na(suffix) | grepl("ORRES$", suffix) | item_group == "General", "VAL", suffix)
+      suffix_names = suffix_names %|_|% ifelse(
+        is.na(suffix) | grepl("ORRES$", suffix) | item_group == "General", 
+        "VAL", 
+        suffix
+      )
     ) |> 
     dplyr::select(-var, -suffix) |> 
     dplyr::mutate(
