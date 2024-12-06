@@ -152,17 +152,16 @@ add_timevars_to_data <- function(
       edit_date_time = as.POSIXct(edit_date_time, tz = "UTC"),
       event_date = as.Date(event_date),
       day = day %|_|% {event_date - min(event_date, na.rm = TRUE)}, 
-      vis_day = ifelse(grepl("^SCR|^VIS|^FU", event_id, ignore.case = TRUE), day, NA),
+      vis_day = ifelse(grepl("^SCR|^VIS|^FU|^EOT$", event_id, ignore.case = TRUE), day, NA),
       vis_num = as.numeric(factor(vis_day))-1,
       event_name = event_name %|_|% dplyr::case_when(
         grepl("^SCR", event_id, ignore.case = TRUE) ~ "Screening",
         grepl("^VIS", event_id, ignore.case = TRUE) ~ paste0("Visit ", vis_num),
-        grepl("^FU[[:digit:]]+", event_id, ignore.case = TRUE) ~ paste0("Visit ", vis_num, "(FU)"),
+        grepl("^FU[[:digit:]]+", event_id, ignore.case = TRUE) ~ paste0("Visit ", vis_num, " (FU)"),
+        grepl("^EOT$", event_id, ignore.case = TRUE) ~ paste0("Visit ", vis_num, " (EoT)"),
         grepl("^UN", event_id, ignore.case = TRUE) ~ paste0("Unscheduled visit ", event_repeat),
-        toupper(event_id) == "EOT"    ~ "EoT",
-        toupper(event_id) == "EXIT"   ~ "Exit",
-        grepl("^AE|^CM|^CP|^MH|^PR|^ST", form_id) ~ "Any visit",
-        .default = paste0("Other (", event_id, ")")
+        grepl("^EXIT$", event_id, ignore.case = TRUE) ~ "Exit",
+        .default = "Any visit"
       ),
       event_label = event_label %|_|% dplyr::case_when(
         !is.na(vis_num)   ~ paste0("V", vis_num),
@@ -175,9 +174,8 @@ add_timevars_to_data <- function(
       factor(site_code, levels = order_string(site_code)),
       factor(subject_id, levels = order_string(subject_id))
     )
-  if(any(is.na(df$event_name) | grepl("^Other ", df$event_name))) warning(
-    "Undefined Events detected. Please verify data before proceeding."
-  )
+  cat("Created the following event_id and event_name combinations:\n")
+  print(unique(df[order(df$event_id), c("event_id", "event_name")]))
   df
 }
 
