@@ -27,7 +27,7 @@ get_timeline_data <- function(
     setNames(
       as.data.frame(matrix(ncol = length(timeline_cols))),
       timeline_cols
-      ) |> 
+    ) |> 
       dplyr::rename("content" = "event_name")
   })
   study_event_data <- if(is.null(data) ){
@@ -43,7 +43,7 @@ get_timeline_data <- function(
       dplyr::distinct(subject_id, event_name, start = event_date) |> 
       dplyr::mutate(
         group = "Visit",
-        title = paste0(start, " | ", event_name)
+        title = paste0(event_name, " (", start, ")")
       )
   }
   
@@ -57,14 +57,18 @@ get_timeline_data <- function(
         event_name = `Name`,
         item_group = "Adverse events",
         group  = "Adverse event",
-        `end date` = ifelse(`end date` == `start date`, NA_character_ , as.character(`end date`)) |> 
+        `end date` = ifelse(
+          `end date` == `start date`, 
+          NA_character_ , 
+          as.character(`end date`)
+        ) |> 
           as.character(),
         start = clean_dates(`start date`),
         end = clean_dates(`end date`),
         style = "background-color: #d47500;",
         title = paste0(
-          start, ifelse(!is.na(end), paste0(" - ", end), ""), 
-          " | ", `Name`
+          `Name`, 
+          "\n(", start, ifelse(!is.na(end), paste0(" - ", end), ""), ")"
         )
       )  
     
@@ -89,7 +93,7 @@ get_timeline_data <- function(
         title = paste0(
           start, 
           ifelse(!is.na(end), paste0(" - ", end), ""), 
-          " | ", 
+          ". ", 
           `Name`
         )
       )
@@ -121,12 +125,12 @@ get_timeline_data <- function(
       data$General$item_name %in% c("DrugDiscontDate"), 
     ] |> 
       dplyr::mutate(
-        event_name = gsub("DrugAdminDate", "Treatment", item_name),
-        event_name = gsub(" date", "", event_name),
+        event_name = "Drug discontinuation",
         group = "Events",
         start = clean_dates(item_value),
         title = paste0(start, " | ", "Treatment discontinued")
       )
+    dplyr::bind_rows(df_drug_admin, df_discont)
   }
   
   df <- dplyr::bind_rows(study_event_data, AE_timedata, SAE_data, drug_data) |> 
@@ -138,7 +142,7 @@ get_timeline_data <- function(
                      "line-height: 0.8; border-radius: 6px;"),
       order = as.numeric(group)
     ) |> 
-    dplyr::filter(!is.na(subject_id)) |> 
+    dplyr::filter(!is.na(subject_id), !is.na(start)) |> 
     dplyr::select(dplyr::all_of(timeline_cols)) |> 
     dplyr::rename("content" = "event_name")
   df
