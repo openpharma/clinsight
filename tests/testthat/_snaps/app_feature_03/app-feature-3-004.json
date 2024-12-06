@@ -6,6 +6,7 @@
         "filter": "none",
         "vertical": false,
         "extensions": [
+          "Buttons",
           "Scroller",
           "ColReorder"
         ],
@@ -18,8 +19,15 @@
           "scrollResize": true,
           "scrollCollapse": true,
           "colReorder": true,
+          "buttons": [
+            {
+              "extend": "excel",
+              "text": "<i class=\"fa-solid fa-download\"><\/i>",
+              "filename": "clinsight.open.queries"
+            }
+          ],
           "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"Open queries\")\n}",
-          "dom": "f<\"header h5\">ti",
+          "dom": "Bf<\"header h5\">ti",
           "columnDefs": [
             {
               "orderable": false,
@@ -145,6 +153,40 @@
           "head": null,
           "attachment": null,
           "all_files": true
+        },
+        {
+          "name": "jszip",
+          "version": "1.13.6",
+          "src": {
+            "href": "jszip-1.13.6"
+          },
+          "meta": null,
+          "script": "jszip.min.js",
+          "stylesheet": null,
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": false
+        },
+        {
+          "name": "dt-ext-buttons-bootstrap5",
+          "version": "1.13.6",
+          "src": {
+            "href": "dt-ext-buttons-bootstrap5-1.13.6"
+          },
+          "meta": null,
+          "script": [
+            "js/dataTables.buttons.min.js",
+            "js/buttons.html5.min.js",
+            "js/buttons.colVis.min.js",
+            "js/buttons.print.min.js",
+            "js/buttons.bootstrap5.min.js"
+          ],
+          "stylesheet": "css/buttons.bootstrap5.min.css",
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": false
         },
         {
           "name": "dt-ext-scroller-bootstrap5",

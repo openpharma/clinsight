@@ -9,11 +9,15 @@
 - Added form type as a class to be used in `create_table()` to display tables.
 - Add a logging table to the DB for reviews.
 - Simplify pulling data from DB for reviews.
-- Review data by records IDs instead of subject & form
 
 ## Bug fixes
 
 - The test-coverage GHA workflow is updated so that codecov uploads work again.
+
+## `devex` changes
+- Added `Excel` download button to Queries table & patient listings that need review.
+- Added helper function to automatically determine when adding said excel button is appropriate.
+- Review data by records IDs instead of subject & form
 
 # clinsight 0.1.1
 
