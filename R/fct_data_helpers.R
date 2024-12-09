@@ -565,7 +565,11 @@ datatable_custom <- function(
     deferRender = TRUE,
     scrollResize = TRUE,
     scrollCollapse = TRUE,
-    colReorder = TRUE
+    colReorder = list(
+      enable = TRUE,
+      realtime = FALSE,
+      fixedColumnsLeft = 1
+    )
   )
   fixed_opts <- list(
     initComplete = DT::JS(

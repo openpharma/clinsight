@@ -146,7 +146,7 @@ mod_common_forms_server <- function(
             targets = 0,
             render = checkbox_render
           )),
-          createdRow = checkbox_create_callback
+          rowCallback = row_callback
         ))
     })
     
@@ -226,7 +226,7 @@ mod_common_forms_server <- function(
             targets = 0,
             render = checkbox_render
           )),
-          createdRow = checkbox_create_callback
+          rowCallback = row_callback
         ))
     })
     

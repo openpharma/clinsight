@@ -18,7 +18,7 @@ $(document).ready(function() {
     $(':checkbox.indeterminate', table.rows().nodes()).
         prop('checked', params.checked).
         prop('indeterminate', false).
-        prop('readOnly', params.checked);
+        prop('readOnly', !params.checked);
   });
   
   /* Define custom Shiny input binding for overall review checkbox. 
