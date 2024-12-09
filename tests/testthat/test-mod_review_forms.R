@@ -79,6 +79,9 @@ describe(
           mod_review_forms_server, args = testargs, {
             ns <- session$ns
             
+            session$userData$review_records <- reactiveValues()
+            session$userData$update_checkboxes <- reactiveValues()
+            
             ## patient has two rows: AF and Cystitis. AF is already reviewed by someone else: 
             expect_equal(
               data.frame(
@@ -94,6 +97,7 @@ describe(
               })
             )
             
+            session$setInputs(form_reviewed = FALSE) # Needs to be initialized to work
             session$setInputs(form_reviewed = TRUE, save_review = 1)
             db_reviewdata <- db_get_table(db_path)
             db_reviewlogdata <- db_get_table(db_path, "all_review_data_log")
@@ -183,6 +187,9 @@ describe(
           )
         }
         test_server <- function(input, output, session){
+          session$userData$review_records <- reactiveValues()
+          session$userData$update_checkboxes <- reactiveValues()
+          
           mod_review_forms_server(
             id = "test",
             r = reactiveValues(
@@ -489,10 +496,15 @@ describe(
         testServer(
           mod_review_forms_server, args = testargs, {
             ns <- session$ns
+            
+            session$userData$review_records <- reactiveValues()
+            session$userData$update_checkboxes <- reactiveValues()
+            
+            session$setInputs(form_reviewed = NULL)
             db_before_saving <- db_get_table(db_path)
             session$setInputs(form_reviewed = TRUE, save_review = 1)
             db_after_saving <- db_get_table(db_path)
-            
+
             expect_true(review_save_error())
             expect_equal(r$review_data, rev_data)
             expect_equal(db_after_saving, db_before_saving)

@@ -45,6 +45,7 @@ describe(
     appdata <- get_appdata(clinsightful_data)
     rev_data <- get_review_data(appdata[["Vital signs"]]) |>
       dplyr::mutate(
+        id = dplyr::row_number(),
         reviewed = sample(c("Yes", "No"), dplyr::n(), replace = TRUE),
         status = sample(c("new", "old", "updated"), dplyr::n(), replace = TRUE)
       )
@@ -98,7 +99,7 @@ describe(
           # only difference between the the data frame is some html tags around
           # some not yet reviewed data. However, because of these tags, we cannot
           # compare expected with actual directly.
-          expect_equal(names(table_data_active()), names(df_expected) )
+          expect_equal(names(table_data_active()), c("o_reviewed", names(df_expected)) )
           expect_equal(table_data_active()$event_name, df_expected$event_name )
 
           expect_true(is.data.frame(table_data_active()))
@@ -142,6 +143,7 @@ describe(
     appdata <- get_appdata(clinsightful_data)
     rev_data <- get_review_data(appdata[["Vital signs"]]) |> 
       dplyr::mutate(
+        id = dplyr::row_number(),
         reviewed = sample(c("Yes", "No"), dplyr::n(), replace = TRUE),
         status = sample(c("new", "old", "updated"), dplyr::n(), replace = TRUE)
       )
