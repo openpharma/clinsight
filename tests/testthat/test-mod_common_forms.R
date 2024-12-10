@@ -52,6 +52,7 @@ describe(
     })
     rev_data <- get_review_data(bind_rows_custom(appdata)) |> 
       dplyr::mutate(
+        id = dplyr::row_number(),
         reviewed = sample(c("Yes", "No"), dplyr::n(), replace = TRUE),
         status = sample(c("new", "old", "updated"), dplyr::n(), replace = TRUE)
       )
