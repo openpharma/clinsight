@@ -16,9 +16,12 @@ get_timeline_data <- function(
     data, 
     table_data, 
     timeline_cols =  c("subject_id", "event_name", "form_repeat", "item_group", 
-                       "start", "group", "end", "title", "style", "id", "order")
+                       "start", "group", "end", "title", "style", "id", "order"),
+    treatment_label = "\U1F48A Tx"
 ){
   stopifnot(is.list(data), is.list(table_data))
+  stopifnot(is.character(timeline_cols), is.character(treatment_label))
+  
   if(all(unlist(lapply(data, is.null)))) return({
     warning("No data found. Returning empty data frame")
     setNames(
@@ -105,7 +108,7 @@ get_timeline_data <- function(
       tidyr::pivot_wider(names_from = item_name, values_from = item_value) |> 
       clinsight::add_missing_columns(c("DrugAdminDate", "DrugAdminDose")) |> 
       dplyr::mutate(
-        event_name = "\U1F48A",
+        event_name = treatment_label,
         group = "Events",
         start = clean_dates(DrugAdminDate),
         title = ifelse(

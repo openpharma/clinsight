@@ -26,13 +26,17 @@ mod_timeline_ui <- function(id){
 #' Currently, only the form 'Adverse events' is supported.
 #'
 #' @seealso [mod_timeline_ui()], [mod_common_forms_ui()], [mod_common_forms_server()]
-mod_timeline_server <- function(id, r, form){
+mod_timeline_server <- function(id, r, form, treatment_label){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     
     timeline_data <- reactive({
       req(form == "Adverse events")
-      get_timeline_data(r$filtered_data, r$filtered_tables)
+      get_timeline_data(
+        r$filtered_data, 
+        r$filtered_tables, 
+        treatment_label = treatment_label
+      )
     })
     timeline_data_active <- reactive({
       req(timeline_data())
