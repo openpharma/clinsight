@@ -67,7 +67,9 @@ create_table.default <- function(
       names_from = {{name_column}}, 
       values_from = {{value_column}}, 
       values_fn = ~paste0(., collapse = "; ")
-      ) 
+      )
+  if ("o_reviewed" %in% names(df))
+    df <- dplyr::mutate(df, o_reviewed = lapply(dplyr::row_number(), \(x) append(o_reviewed[[x]], list(row_id = x))))
   expected_columns <- na.omit(expected_columns) %||% character(0)
   if(length(expected_columns) == 0) return(df)
   add_missing_columns(df, expected_columns)[
@@ -238,7 +240,7 @@ create_table.adverse_events <- function(
                              keep_vars, expected_columns) |> 
     adjust_colnames("^AE ") 
   df[["Number"]] <- NULL
-
+  
   # create new row when an AE gets worse:
   df_worsening <- df[!is.na(df[[worsening_start_column]]), ] |> 
     dplyr::mutate(

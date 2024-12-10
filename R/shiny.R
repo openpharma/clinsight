@@ -1,7 +1,8 @@
 shiny::registerInputHandler('CS.reviewInfo', function(val, ...) {
   with(val, data.frame(
     id = unlist(ids), 
-    reviewed = ifelse(isTRUE(review), "Yes", ifelse(isFALSE(review), "No", NA_character_))
+    reviewed = ifelse(isTRUE(review), "Yes", ifelse(isFALSE(review), "No", NA_character_)),
+    row_id = row_id
     ))
 }, TRUE)
 
@@ -19,11 +20,9 @@ checkbox_callback <- DT::JS(
   "table.on('click', 'input[type=\"checkbox\"]', function(){",
     "var tblId = $(this).closest('.datatables').attr('id');",
     "var cell = table.cell($(this).closest('td'));",
-    "var rowIdx = table.row($(this).closest('tr')).index();",
-    "var ids = cell.data().ids;",
     "var review = $(this).is(':indeterminate') ? null : $(this).is(':checked');",
     "cell.data().updated = review;",
-    "var info = {review: review, ids: ids, row: tblId + '_row_' + rowIdx};",
+    "var info = {review: review, ids: cell.data().ids, row_id: cell.data().row_id};",
     "Shiny.setInputValue(tblId + '_review_selection:CS.reviewInfo', info);",
   "});"
 )

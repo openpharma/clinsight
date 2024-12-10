@@ -205,7 +205,7 @@ mod_study_forms_server <- function(
       session$userData$review_records[[form]] <-
         dplyr::rows_upsert(
           session$userData$review_records[[form]],
-          input$table_review_selection,
+          input$table_review_selection[, c("id", "reviewed")],
           by = "id"
         ) |>
         dplyr::filter(!is.na(reviewed)) |> 

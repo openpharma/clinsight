@@ -161,7 +161,7 @@ mod_common_forms_server <- function(
       session$userData$review_records[[form]] <-
         dplyr::rows_upsert(
           session$userData$review_records[[form]],
-          input$common_form_table_review_selection,
+          input$common_form_table_review_selection[c("id", "reviewed")],
           by = "id"
         ) |> 
         dplyr::filter(!is.na(reviewed)) |> 
@@ -189,7 +189,7 @@ mod_common_forms_server <- function(
       session$userData$review_records[[form]] <-
         dplyr::rows_upsert(
           session$userData$review_records[[form]],
-          input$SAE_table_review_selection,
+          input$SAE_table_review_selection[c("id", "reviewed")],
           by = "id"
         ) |> 
         dplyr::filter(!is.na(reviewed)) |> 
