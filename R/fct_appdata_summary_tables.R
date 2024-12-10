@@ -113,7 +113,7 @@ get_timeline_data <- function(
           NA_character_,
           paste0(
             "Treatment (", DrugAdminDate, ")\n ", 
-            "Dosage: ", ifelse(is.na(DrugAdminDose), "?", DrugAdminDose)
+            "Dose: ", ifelse(is.na(DrugAdminDose), "?", DrugAdminDose)
           )
         )
       ) |> 
