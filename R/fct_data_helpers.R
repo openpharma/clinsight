@@ -550,9 +550,11 @@ datatable_custom <- function(
     ...
     ){
   stopifnot(is.data.frame(data))
+  colnames <- names(data)
   if(!is.null(rename_vars)){
     stopifnot(is.character(rename_vars))
-    data <- dplyr::rename(data, dplyr::any_of(rename_vars))
+    colnames <- dplyr::rename(data[0,], dplyr::any_of(rename_vars)) |> 
+      names()
   }
   stopifnot(is.null(title) | is.character(title))
   stopifnot(grepl("t", dom, fixed = TRUE))
@@ -593,6 +595,7 @@ datatable_custom <- function(
     options = opts,
     extensions = extensions,
     plugins = plugins,
+    colnames = colnames,
     ...
   ) 
 }
