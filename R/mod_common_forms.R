@@ -83,7 +83,8 @@ mod_common_forms_server <- function(
     form_items,
     id_item = c("subject_id", "event_name", "item_group", 
                 "form_repeat", "item_name"),
-    table_names = NULL
+    table_names = NULL,
+    timeline_treatment_label = "\U1F48A Tx"
 ){
   stopifnot(is.reactivevalues(r))
   stopifnot(is.character(form), length(form) == 1)
@@ -148,7 +149,12 @@ mod_common_forms_server <- function(
     if (form == "Adverse events")
       mod_review_form_tbl_server("review_form_SAE_tbl", r, SAE_data, form, reactive(input$show_all_data), table_names, "Serious Adverse Events")
     
-    mod_timeline_server("timeline_fig", r = r, form = form)
+    mod_timeline_server(
+      "timeline_fig", 
+      r = r, 
+      form = form, 
+      treatment_label = timeline_treatment_label
+      )
     
   })
 }
