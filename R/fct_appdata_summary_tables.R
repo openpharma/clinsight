@@ -43,7 +43,7 @@ get_timeline_data <- function(
       dplyr::distinct(subject_id, event_name, start = event_date) |> 
       dplyr::mutate(
         group = "Visit",
-        title = paste0(event_name, " (", start, ")")
+        title = paste0(start, " | ", event_name)
       )
   }
   
@@ -67,8 +67,8 @@ get_timeline_data <- function(
         end = clean_dates(`end date`),
         style = "background-color: #d47500;",
         title = paste0(
-          `Name`, 
-          "\n(", start, ifelse(!is.na(end), paste0(" - ", end), ""), ")"
+          start, ifelse(!is.na(end), paste0(" - ", end), ""), 
+          " | ", `Name`
         )
       )  
     
@@ -93,7 +93,7 @@ get_timeline_data <- function(
         title = paste0(
           start, 
           ifelse(!is.na(end), paste0(" - ", end), ""), 
-          ". ", 
+          " | ", 
           `Name`
         )
       )
@@ -115,7 +115,8 @@ get_timeline_data <- function(
           is.na(DrugAdminDate), 
           NA_character_,
           paste0(
-            "Treatment (", DrugAdminDate, ")\n ", 
+            DrugAdminDate, " | ",
+            "Treatment \n", 
             "Dose: ", ifelse(is.na(DrugAdminDose), "?", DrugAdminDose)
           )
         )
@@ -128,7 +129,7 @@ get_timeline_data <- function(
         event_name = "Drug discontinuation",
         group = "Events",
         start = clean_dates(item_value),
-        title = paste0("Treatment discontinued\n", start)
+        title = paste0(start, " | ", "Treatment discontinued")
       )
     dplyr::bind_rows(df_drug_admin, df_discont)
   }
