@@ -4,7 +4,7 @@
 \alias{mod_timeline_server}
 \title{Interactive timeline - Shiny module Server}
 \usage{
-mod_timeline_server(id, r, form)
+mod_timeline_server(id, r, form, treatment_label = "💊 Tₓ")
 }
 \arguments{
 \item{id}{Character string, used to connect the module UI with the module Server.}
