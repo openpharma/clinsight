@@ -207,12 +207,13 @@ app_server <- function(
       select = (i == common_forms[1])
     )
   })
+  treatment_label <- meta$settings$treatment_label %||% "\U1F48A T\U2093"
   lapply(common_forms, \(x){
     mod_common_forms_server(
       id = paste0("cf_", simplify_string(x)), r = r, form = x,
       form_items = app_vars$items[[x]], 
       table_names = app_vars$table_names, 
-      timeline_treatment_label = meta$settings$treatment_label %||% "\U1F48A Tx"
+      timeline_treatment_label = treatment_label
     ) 
   }) |>
     unlist(recursive = FALSE)

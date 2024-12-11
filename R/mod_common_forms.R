@@ -84,7 +84,7 @@ mod_common_forms_server <- function(
     id_item = c("subject_id", "event_name", "item_group", 
                 "form_repeat", "item_name"),
     table_names = NULL,
-    timeline_treatment_label = "\U1F48A Tx"
+    timeline_treatment_label = "\U1F48A T\U2093"
 ){
   stopifnot(is.reactivevalues(r))
   stopifnot(is.character(form), length(form) == 1)
