@@ -38,7 +38,10 @@ get_timeline_data <- function(
         event_name != "Any visit"
       ) |> 
       dplyr::distinct(subject_id, event_name, start = event_date) |> 
-      dplyr::mutate(group = "Visit")
+      dplyr::mutate(
+        group = "Visit",
+        title = paste0(start, " | ", event_name)
+      )
   }
   
   if(is.null(table_data$`Adverse events`)){
@@ -56,7 +59,10 @@ get_timeline_data <- function(
         start = clean_dates(`start date`),
         end = clean_dates(`end date`),
         style = "background-color: #d47500;",
-        title = `Name`
+        title = paste0(
+          start, ifelse(!is.na(end), paste0(" - ", end), ""), 
+          " | ", `Name`
+        )
       )  
     
     SAE_data <- table_data$`Adverse events` |> 
@@ -77,20 +83,47 @@ get_timeline_data <- function(
         end = clean_dates(`SAE End date`),
         #end = clean_dates(ifelse(end == start, NA , end)),
         style = "background-color: #cd0200;",
-        title = `Name`
+        title = paste0(
+          start, 
+          ifelse(!is.na(end), paste0(" - ", end), ""), 
+          " | ", 
+          `Name`
+        )
       )
   } 
   
   drug_data <- if(is.null(data$General)){
     data.frame()
   } else{
-    data$General |> 
-      dplyr::filter(item_name %in% c("DrugAdminDate", "DrugDiscontDate")) |> 
+    df_drug_admin <- data$General[
+      data$General$item_name %in% c("DrugAdminDate", "DrugAdminDose"), 
+    ] |> 
+      tidyr::pivot_wider(names_from = item_name, values_from = item_value) |> 
+      clinsight::add_missing_columns(c("DrugAdminDate", "DrugAdminDose")) |> 
+      dplyr::mutate(
+        event_name = treatment_label,
+        group = "Events",
+        start = clean_dates(DrugAdminDate),
+        title = ifelse(
+          is.na(DrugAdminDate), 
+          NA_character_,
+          paste0(
+            DrugAdminDate, " | ",
+            "Treatment \n", 
+            "Dose: ", ifelse(is.na(DrugAdminDose), "?", DrugAdminDose)
+          )
+        )
+      ) |> 
+      dplyr::select(-dplyr::all_of(c("DrugAdminDate", "DrugAdminDose")))
+    df_discont <- data$General[
+      data$General$item_name %in% c("DrugDiscontDate"), 
+    ] |> 
       dplyr::mutate(
         event_name = gsub("DrugAdminDate", "Treatment", item_name),
         event_name = gsub(" date", "", event_name),
         group = "Events",
-        start = clean_dates(item_value)
+        start = clean_dates(item_value),
+        title = paste0(start, " | ", "Treatment discontinued")
       )
   }
   
