@@ -8,7 +8,8 @@ get_timeline_data(
   data,
   table_data,
   timeline_cols = c("subject_id", "event_name", "form_repeat", "item_group", "start",
-    "group", "end", "title", "style", "id", "order")
+    "group", "end", "title", "className", "id", "order"),
+  treatment_label = "💊 Tₓ"
 )
 }
 \arguments{
