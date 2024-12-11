@@ -26,7 +26,7 @@ mod_timeline_ui <- function(id){
 #' Currently, only the form 'Adverse events' is supported.
 #'
 #' @seealso [mod_timeline_ui()], [mod_common_forms_ui()], [mod_common_forms_server()]
-mod_timeline_server <- function(id, r, form, treatment_label){
+mod_timeline_server <- function(id, r, form, treatment_label = "\U1F48A T\U2093"){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     

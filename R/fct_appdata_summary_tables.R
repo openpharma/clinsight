@@ -17,7 +17,7 @@ get_timeline_data <- function(
     table_data, 
     timeline_cols =  c("subject_id", "event_name", "form_repeat", "item_group", 
                        "start", "group", "end", "title", "style", "id", "order"),
-    treatment_label = "\U1F48A Tx"
+    treatment_label = "\U1F48A T\U2093"
 ){
   stopifnot(is.list(data), is.list(table_data))
   stopifnot(is.character(timeline_cols), is.character(treatment_label))
