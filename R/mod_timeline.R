@@ -69,6 +69,10 @@ mod_timeline_server <- function(id, r, form, treatment_label = "\U1F48A T\U2093"
       shinyjs::hide("timeline")
     }
     
+    observeEvent(input$timeline_selected, {
+      timevis::centerItem("timeline", input$timeline_selected)
+    })
+    
     output[["timeline"]] <-  timevis::renderTimevis({
       req(form == "Adverse events")
       timevis::timevis(
