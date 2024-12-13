@@ -8,6 +8,54 @@ function ts(cb) {
   }
 }
 
+function checkboxCallback(table) {
+  table.on('column-reorder', function() {
+    table.rows().every(function() {
+      if (this.data()[0].reviewed == null) {
+        $(':checkbox', this.node())
+          .addClass('indeterminate')
+          .prop('indeterminate', this.data()[0].updated == null)
+          .prop('readOnly', this.data()[0].updated == false)
+      }
+    })
+  });
+  table.on('click', 'input[type="checkbox"]', function(){
+    var tblId = $(this).closest('.datatables').attr('id');
+    var cell = table.cell($(this).closest('td'));
+    var review = $(this).is(':indeterminate') ? null : $(this).is(':checked');
+    cell.data().updated = review;
+    var info = {review: review, ids: cell.data().ids, row_id: cell.data().row_id};
+    Shiny.setInputValue(tblId + '_review_selection:CS.reviewInfo', info, {priority: 'event'});
+  })
+  return table;
+}
+
+function checkboxRender(data, type, row, meta) {
+  var reviewed = data.reviewed;
+  var updated = data.updated;
+  var disabled = data.disabled;
+  var cb_class = ''
+  if (reviewed == null) {
+    cb_class = updated == null ? '' : 'indeterminate'
+  } else {
+    cb_class = reviewed ? 'checked' : 'unchecked'
+  }
+  return `<input type='checkbox' 
+    ${disabled ? 'disabled ' : ''}
+    class='${cb_class}' 
+    ${updated == null ? (reviewed ? 'checked' : '') : (updated ? 'checked' : '')} 
+    ${reviewed == null ? 'onclick="ts(this)"' : ''}/>`;
+}
+
+function rowCallback(row, data) {
+  if (data[0].reviewed == null) {
+    $(':checkbox', row)
+      .addClass('indeterminate')
+      .prop('indeterminate', data[0].updated == null)
+      .prop('readOnly', data[0].updated == false)
+  }
+}
+
 $(document).ready(function() {
   
   /* Define custom Shiny input binding for overall review checkbox. 
