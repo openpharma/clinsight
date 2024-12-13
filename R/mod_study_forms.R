@@ -235,6 +235,7 @@ mod_study_forms_server <- function(
     
     observe({
       req(!is.null(input$show_all))
+      req(table_data())
       DT::replaceData(table_proxy, 
                       subset(table_data(), input$show_all | subject_id == r$subject_id), 
                       rownames = FALSE, resetPaging = FALSE)
@@ -253,12 +254,14 @@ mod_study_forms_server <- function(
     })
     
     observeEvent(r$subject_id, {
+      req(table_data())
       df <- table_data() |> 
         dplyr::mutate(o_reviewed = Map(\(x, y) modifyList(x, list(updated = NULL, disabled = y)), o_reviewed, subject_id != r$subject_id))
       table_data(df)
     })
     
     observeEvent(input$show_all, {
+      req(table_data())
       index <- match("subject_id", colnames(table_data())) - 1
       if (input$show_all) {
         DT::showCols(table_proxy, index)
@@ -321,7 +324,7 @@ mod_study_forms_server <- function(
     
     if(form %in% c("Vital signs", "Vitals adjusted")){
       shiny::exportTestValues(
-        table_data = table_data_active(),
+        table_data = table_data(),
         fig_data = fig_data()
       )
     } 

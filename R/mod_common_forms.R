@@ -244,6 +244,7 @@ mod_common_forms_server <- function(
     
     observe({
       req(!is.null(input$show_all_data))
+      req(common_form_data(), SAE_data())
       DT::replaceData(common_form_proxy, 
                       subset(common_form_data(), input$show_all_data | subject_id == r$subject_id), 
                       rownames = FALSE, resetPaging = FALSE)
@@ -278,6 +279,7 @@ mod_common_forms_server <- function(
     })
     
     observeEvent(r$subject_id, {
+      req(common_form_data(), SAE_data())
       df <- common_form_data() |> 
         dplyr::mutate(o_reviewed = Map(\(x, y) modifyList(x, list(updated = NULL, disabled = y)), o_reviewed, subject_id != r$subject_id))
       common_form_data(df)
@@ -289,6 +291,7 @@ mod_common_forms_server <- function(
     })
     
     observeEvent(input$show_all_data, {
+      req(common_form_data(), SAE_data())
       index <- match("subject_id", colnames(common_form_data())) - 1
       if (input$show_all_data) {
         DT::showCols(common_form_proxy, index)
