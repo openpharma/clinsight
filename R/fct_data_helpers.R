@@ -516,7 +516,6 @@ add_missing_columns <- function(
 #' @param title Optional. Character string with the title of the table.
 #' @param selection See [DT::datatable()]. Default set to 'single'. 
 #' @param extensions See [DT::datatable()]. Default set to 'Scroller'.
-#' @param plugins See [DT::datatable()]. Default set to 'scrollResize'.
 #' @param dom See \url{https://datatables.net/reference/option/dom}. A div
 #'   element will be inserted before the table for the table title. Default set
 #'   to 'fti' resulting in 'f<"header h5">ti'.
@@ -544,7 +543,6 @@ datatable_custom <- function(
     title = NULL, 
     selection = "single",
     extensions = c("Scroller", "ColReorder"),
-    plugins = "scrollResize",
     dom = "fti",
     options = list(),
     ...
@@ -565,7 +563,6 @@ datatable_custom <- function(
     scrollX = TRUE,
     scroller = TRUE,
     deferRender = TRUE,
-    scrollResize = TRUE,
     scrollCollapse = TRUE,
     colReorder = list(
       enable = TRUE,
@@ -594,7 +591,6 @@ datatable_custom <- function(
     selection = selection,
     options = opts,
     extensions = extensions,
-    plugins = plugins,
     colnames = colnames,
     ...
   ) 
