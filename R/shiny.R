@@ -23,7 +23,7 @@ checkbox_callback <- DT::JS(
     "var review = $(this).is(':indeterminate') ? null : $(this).is(':checked');",
     "cell.data().updated = review;",
     "var info = {review: review, ids: cell.data().ids, row_id: cell.data().row_id};",
-    "Shiny.setInputValue(tblId + '_review_selection:CS.reviewInfo', info);",
+    "Shiny.setInputValue(tblId + '_review_selection:CS.reviewInfo', info, {priority: 'event'});",
   "});"
 )
 
@@ -31,6 +31,7 @@ checkbox_render <- DT::JS(
   "function(data, type, row, meta) {",
     "var reviewed = data.reviewed;",
     "var updated = data.updated;",
+    "var disabled = data.disabled;",
     "var cb_class = ''",
     "if (reviewed == null) {",
       "cb_class = updated == null ? '' : 'indeterminate'",
@@ -38,6 +39,7 @@ checkbox_render <- DT::JS(
       "cb_class = reviewed ? 'checked' : 'unchecked'",
     "}",
     "return `<input type='checkbox' ",
+      "${disabled ? 'disabled ' : ''}",
       "class='${cb_class}' ",
       "${updated == null ? (reviewed ? 'checked' : '') : (updated ? 'checked' : '')} ",
       "${reviewed == null ? 'onclick=\"ts(this)\"' : ''}/>`;",
@@ -54,12 +56,6 @@ row_callback <- DT::JS(
     "}",
   "}"
 )
-
-update_cbs <- function(id, checked, session = getDefaultReactiveDomain()) {
-  tblId <- session$ns(id)
-  params <- list(id = tblId, checked = checked)
-  session$sendCustomMessage('update_checkboxes', params)
-}
 
 progress_bar <- function(outputId) {
   div(

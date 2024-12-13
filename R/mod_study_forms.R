@@ -162,30 +162,32 @@ mod_study_forms_server <- function(
         dplyr::mutate(item_name = factor(item_name, levels = names(form_items)))
     })
     
-    table_data_active <- reactive({
-      req(!is.null(input$show_all))
-      validate(need(
-        r$filtered_data[[form]],
-        paste0("Warning: no data found in database for the form '", form, "'")
-      ))
-      df <- dplyr::left_join(
-        r$filtered_data[[form]],
-        with(r$review_data, r$review_data[item_group == form, ]) |> 
-          dplyr::select(-dplyr::all_of(c("edit_date_time", "event_date"))), 
-        by = id_item
-      ) |> 
-        dplyr::mutate(
-          item_value = ifelse(
-            reviewed == "No", 
-            paste0("<b>", htmltools::htmlEscape(item_value), "*</b>"), 
-            htmltools::htmlEscape(item_value)
-          )
+    table_data <- reactiveVal()
+    observe({
+      df <- {
+        validate(need(
+          r$filtered_data[[form]],
+          paste0("Warning: no data found in database for the form '", form, "'")
+        ))
+        dplyr::left_join(
+          r$filtered_data[[form]],
+          with(r$review_data, r$review_data[item_group == form, ]) |> 
+            dplyr::select(-dplyr::all_of(c("edit_date_time", "event_date"))), 
+          by = id_item
         ) |> 
-        create_table(expected_columns = names(form_items))
-      req(nrow(df) != 0)
-      if(input$show_all) return(df) 
-      with(df, df[subject_id == r$subject_id, ]) |> 
-        dplyr::select(-dplyr::all_of("subject_id"))
+          dplyr::mutate(
+            item_value = ifelse(
+              reviewed == "No", 
+              paste0("<b>", htmltools::htmlEscape(item_value), "*</b>"), 
+              htmltools::htmlEscape(item_value)
+            )
+          ) |> 
+          create_table(expected_columns = names(form_items)) |> 
+          dplyr::mutate(o_reviewed = Map(\(x, y) append(x, list(row_id = y)), 
+                                         o_reviewed, 
+                                         dplyr::row_number()))
+      }
+      table_data(df)
     })
     
     scaling_data <- reactive({
@@ -194,11 +196,22 @@ mod_study_forms_server <- function(
       lapply(add_missing_columns(item_info, cols)[1, cols], isTRUE)
     })
     
-    observeEvent(table_data_active(), {
+    observe({
       session$userData$update_checkboxes[[form]] <- NULL
-      session$userData$review_records[[form]] <- data.frame(id = integer(), reviewed = character(), row_index = character())
+      session$userData$review_records[[form]] <- data.frame(id = integer(), reviewed = character())
+    }) |> 
+      bindEvent(r$subject_id, r$review_data)
+    
+    observeEvent(session$userData$update_checkboxes[[form]], {
+      checked <- session$userData$update_checkboxes[[form]]
+      
+      df <- table_data() |> 
+        dplyr::mutate(o_reviewed = dplyr::if_else(subject_id == r$subject_id, 
+                                                  lapply(o_reviewed, modifyList, list(updated = checked)),
+                                                  o_reviewed))
+      table_data(df)
     })
-
+    
     observeEvent(input$table_review_selection, {
       session$userData$update_checkboxes[[form]] <- NULL
       
@@ -220,10 +233,38 @@ mod_study_forms_server <- function(
         dplyr::arrange(id)
     })
     
-    observeEvent(session$userData$update_checkboxes[[form]], {
-      checked <- session$userData$update_checkboxes[[form]]
+    observe({
+      req(!is.null(input$show_all))
+      DT::replaceData(table_proxy, 
+                      subset(table_data(), input$show_all | subject_id == r$subject_id), 
+                      rownames = FALSE, resetPaging = FALSE)
+    })
+    
+    observeEvent(input$table_review_selection, {
+      df <- table_data()
       
-      update_cbs("table", checked)
+      update_row <- dplyr::distinct(input$table_review_selection, reviewed, row_id)
+      row_ids <- df$o_reviewed |> lapply(\(x) x[["row_id"]]) |> unlist()
+      df[row_ids == update_row$row_id, "o_reviewed"] <- list(list(
+        modifyList(df[row_ids == update_row$row_id,]$o_reviewed[[1]], 
+                   list(updated = switch(update_row$reviewed, "Yes" = TRUE, "No" = FALSE, NA)))
+      ))
+      table_data(df)
+    })
+    
+    observeEvent(r$subject_id, {
+      df <- table_data() |> 
+        dplyr::mutate(o_reviewed = Map(\(x, y) modifyList(x, list(updated = NULL, disabled = y)), o_reviewed, subject_id != r$subject_id))
+      table_data(df)
+    })
+    
+    observeEvent(input$show_all, {
+      index <- match("subject_id", colnames(table_data())) - 1
+      if (input$show_all) {
+        DT::showCols(table_proxy, index)
+      } else {
+        DT::hideCols(table_proxy, index)
+      }
     })
     
     ############################### Outputs: ###################################
@@ -255,22 +296,28 @@ mod_study_forms_server <- function(
     })
     
     output[["table"]] <- DT::renderDT({
-      req(table_data_active())
       datatable_custom(
-        table_data_active(), 
+        isolate(subset(table_data(), input$show_all | subject_id == r$subject_id)), 
         rename_vars = c("Review Status" = "o_reviewed", table_names), 
         rownames= FALSE,
         escape = FALSE,
         selection = "none",
         callback = checkbox_callback,
         options = list(
-          columnDefs = list(list(
-            targets = 0,
-            render = checkbox_render
-          )),
+          columnDefs = list(
+            list(
+              targets = "o_reviewed",
+              orderable = FALSE,
+              render = checkbox_render
+            ),
+            list(
+              targets = "subject_id",
+              visible = isolate(input$show_all)
+            )),
           rowCallback = row_callback
         ))
     })
+    table_proxy <- DT::dataTableProxy("table")
     
     if(form %in% c("Vital signs", "Vitals adjusted")){
       shiny::exportTestValues(

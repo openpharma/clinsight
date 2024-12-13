@@ -68,8 +68,6 @@ create_table.default <- function(
       values_from = {{value_column}}, 
       values_fn = ~paste0(., collapse = "; ")
       )
-  if ("o_reviewed" %in% names(df))
-    df <- dplyr::mutate(df, o_reviewed = lapply(dplyr::row_number(), \(x) append(o_reviewed[[x]], list(row_id = x))))
   expected_columns <- na.omit(expected_columns) %||% character(0)
   if(length(expected_columns) == 0) return(df)
   add_missing_columns(df, expected_columns)[

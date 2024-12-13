@@ -10,17 +10,6 @@ function ts(cb) {
 
 $(document).ready(function() {
   
-  Shiny.addCustomMessageHandler("update_checkboxes", function(params) {
-    var table = $('#' + params.id + " .table").DataTable()
-    table.column(0).data().each(function(data){data.updated = params.checked})
-    $(':checkbox:not(.indeterminate)', table.rows().nodes()).
-        prop('checked', params.checked);
-    $(':checkbox.indeterminate', table.rows().nodes()).
-        prop('checked', params.checked).
-        prop('indeterminate', false).
-        prop('readOnly', !params.checked);
-  });
-  
   /* Define custom Shiny input binding for overall review checkbox. 
   This is needed to assign an event priority to the checkbox.*/
   var customCheckbox = new Shiny.InputBinding();

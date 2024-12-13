@@ -93,48 +93,62 @@ mod_common_forms_server <- function(
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
-    data_active <- reactive({
-      req(!is.null(input$show_all_data))
-      shiny::validate(need(
-        !is.null(r$filtered_data[[form]]),
-        paste0("Warning: no data found in the database for the form '", form, "'.")
-      ))
-      df <- dplyr::left_join(
-        r$filtered_data[[form]],
-        with(r$review_data, r$review_data[item_group == form, ]) |> 
-          dplyr::select(-dplyr::all_of(c("edit_date_time", "event_date"))), 
-        by = id_item
-      ) |> 
-        dplyr::mutate(
-          item_value = ifelse(
-            reviewed == "No", 
-            paste0("<b>", htmltools::htmlEscape(item_value), "*</b>"), 
-            htmltools::htmlEscape(item_value)
-          )
+    common_form_data <- reactiveVal()
+    SAE_data <- reactiveVal()
+    observe({
+      df <- {
+        shiny::validate(need(
+          !is.null(r$filtered_data[[form]]),
+          paste0("Warning: no data found in the database for the form '", form, "'.")
+        ))
+        dplyr::left_join(
+          r$filtered_data[[form]],
+          with(r$review_data, r$review_data[item_group == form, ]) |> 
+            dplyr::select(-dplyr::all_of(c("edit_date_time", "event_date"))), 
+          by = id_item
         ) |> 
-        create_table(expected_columns = names(form_items))
-      if(!input$show_all_data){ 
-        df <-  with(df, df[subject_id == r$subject_id, ]) 
+          dplyr::mutate(
+            item_value = ifelse(
+              reviewed == "No", 
+              paste0("<b>", htmltools::htmlEscape(item_value), "*</b>"), 
+              htmltools::htmlEscape(item_value)
+            )
+          ) |> 
+          create_table(expected_columns = names(form_items)) |> 
+          dplyr::mutate(o_reviewed = Map(\(x, y) append(x, list(row_id = y)), 
+                                         o_reviewed, 
+                                         dplyr::row_number()))
       }
-      df
+      common_form_data({
+        if(form == "Adverse events") {
+          df |> 
+            dplyr::filter(!grepl("Yes", `Serious Adverse Event`)
+            ) |> 
+            dplyr::select(-dplyr::starts_with("SAE"))
+        } else {
+          df
+        }
+      })
+      if (form == "Adverse events")
+        SAE_data({
+          df |>
+            dplyr::filter(grepl("Yes", `Serious Adverse Event`)) |>
+            dplyr::select(dplyr::any_of(
+              c("o_reviewed", "subject_id","form_repeat", "Name", "AESI",  "SAE Start date",
+                "SAE End date", "CTCAE severity", "Treatment related",
+                "Treatment action", "Other action", "SAE Category",
+                "SAE Awareness date", "SAE Date of death", "SAE Death reason")
+            )) |>
+            adjust_colnames("^SAE ")
+        })
     })
     
     mod_timeline_server("timeline_fig", r = r, form = form)
     
     output[["SAE_table"]] <- DT::renderDT({
       req(form == "Adverse events")
-      SAE_data <- data_active() |> 
-        dplyr::filter(grepl("Yes", `Serious Adverse Event`)) |> 
-        dplyr::select(dplyr::any_of(
-          c("o_reviewed", "subject_id","form_repeat", "Name", "AESI",  "SAE Start date", 
-            "SAE End date", "CTCAE severity", "Treatment related", 
-            "Treatment action", "Other action", "SAE Category", 
-            "SAE Awareness date", "SAE Date of death", "SAE Death reason")
-        )) |> 
-        adjust_colnames("^SAE ")
-      if(!input$show_all_data) SAE_data$subject_id <- NULL
       datatable_custom(
-        SAE_data, 
+        isolate(subset(SAE_data(), input$show_all_data | subject_id == r$subject_id)), 
         rename_vars = c("Review Status" = "o_reviewed", table_names), 
         rownames= FALSE,
         title = "Serious Adverse Events", 
@@ -142,79 +156,24 @@ mod_common_forms_server <- function(
         selection = "none",
         callback = checkbox_callback,
         options = list(
-          columnDefs = list(list(
-            targets = 0,
+          columnDefs = list(
+            list(
+            targets = "o_reviewed",
+            orderable = FALSE,
             render = checkbox_render
+          ),
+          list(
+            targets = "subject_id",
+            visible = isolate(input$show_all_data)
           )),
           rowCallback = row_callback
         ))
     })
-    
-    observeEvent(data_active(), {
-      session$userData$update_checkboxes[[form]] <- NULL
-      session$userData$review_records[[form]] <- data.frame(id = integer(), reviewed = character())
-    })
-    
-    observeEvent(input$common_form_table_review_selection, {
-      session$userData$update_checkboxes[[form]] <- NULL
-      
-      session$userData$review_records[[form]] <-
-        dplyr::rows_upsert(
-          session$userData$review_records[[form]],
-          input$common_form_table_review_selection[c("id", "reviewed")],
-          by = "id"
-        ) |> 
-        dplyr::filter(!is.na(reviewed)) |> 
-        dplyr::semi_join(
-          subset(r$review_data, subject_id == r$subject_id & item_group == form),
-          by = "id"
-        ) |> 
-        dplyr::anti_join(
-          subset(r$review_data, subject_id == r$subject_id & item_group == form),
-          by = c("id", "reviewed")
-        ) |> 
-        dplyr::arrange(id)
-    })
-    
-    observeEvent(session$userData$update_checkboxes[[form]], {
-      checked <- session$userData$update_checkboxes[[form]]
-      
-      update_cbs("common_form_table", checked)
-      update_cbs("SAE_table", checked)
-    })
-    
-    observeEvent(input$SAE_table_review_selection, {
-      session$userData$update_checkboxes[[form]] <- NULL
-      
-      session$userData$review_records[[form]] <-
-        dplyr::rows_upsert(
-          session$userData$review_records[[form]],
-          input$SAE_table_review_selection[c("id", "reviewed")],
-          by = "id"
-        ) |> 
-        dplyr::filter(!is.na(reviewed)) |> 
-        dplyr::semi_join(
-          subset(r$review_data, subject_id == r$subject_id & item_group == form),
-          by = "id"
-        ) |> 
-        dplyr::anti_join(
-          subset(r$review_data, subject_id == r$subject_id & item_group == form),
-          by = c("id", "reviewed")
-        ) |> 
-        dplyr::arrange(id)
-    })
+    SAE_proxy <- DT::dataTableProxy("SAE_table")
     
     output[["common_form_table"]] <- DT::renderDT({
-      df <- data_active()
-      if(form == "Adverse events") {
-        df <- df |> 
-          dplyr::filter(!grepl("Yes", `Serious Adverse Event`)
-          ) |> 
-          dplyr::select(-dplyr::starts_with("SAE"))
-      }
-      if(!input$show_all_data) df$subject_id <- NULL
       datatable_custom(
-        df, 
+        isolate(subset(common_form_data(), input$show_all_data | subject_id == r$subject_id)), 
         rename_vars = c("Review Status" = "o_reviewed", table_names), 
         rownames= FALSE,
         title = form, 
@@ -222,12 +181,128 @@ mod_common_forms_server <- function(
         selection = "none",
         callback = checkbox_callback,
         options = list(
-          columnDefs = list(list(
-            targets = 0,
-            render = checkbox_render
-          )),
+          columnDefs = list(
+            list(
+              targets = "o_reviewed",
+              orderable = FALSE,
+              render = checkbox_render
+            ),
+            list(
+              targets = "subject_id",
+              visible = isolate(input$show_all_data)
+            )),
           rowCallback = row_callback
         ))
+    })
+    common_form_proxy <- DT::dataTableProxy('common_form_table')
+    
+    observe({
+      session$userData$update_checkboxes[[form]] <- NULL
+      session$userData$review_records[[form]] <- data.frame(id = integer(), reviewed = character())
+    }) |> 
+      bindEvent(r$subject_id, r$review_data)
+    
+    observeEvent(session$userData$update_checkboxes[[form]], {
+      checked <- session$userData$update_checkboxes[[form]]
+      
+      df <- common_form_data() |> 
+        dplyr::mutate(o_reviewed = dplyr::if_else(subject_id == r$subject_id, 
+                                                  lapply(o_reviewed, modifyList, list(updated = checked)),
+                                                  o_reviewed))
+      common_form_data(df)
+      if (form == "Adverse events") {
+        df <- SAE_data() |> 
+          dplyr::mutate(o_reviewed = dplyr::if_else(subject_id == r$subject_id, 
+                                                    lapply(o_reviewed, modifyList, list(updated = checked)),
+                                                    o_reviewed))
+        SAE_data(df)
+      }
+    })
+    
+    lapply(c("common_form", if (form == "Adverse events") "SAE"), \(x) {
+      observeEvent(input[[sprintf("%s_table_review_selection", x)]], {
+        session$userData$update_checkboxes[[form]] <- NULL
+        
+        session$userData$review_records[[form]] <-
+          dplyr::rows_upsert(
+            session$userData$review_records[[form]],
+            input[[sprintf("%s_table_review_selection", x)]][c("id", "reviewed")],
+            by = "id"
+          ) |> 
+          dplyr::filter(!is.na(reviewed)) |> 
+          dplyr::semi_join(
+            subset(r$review_data, subject_id == r$subject_id & item_group == form),
+            by = "id"
+          ) |> 
+          dplyr::anti_join(
+            subset(r$review_data, subject_id == r$subject_id & item_group == form),
+            by = c("id", "reviewed")
+          ) |> 
+          dplyr::arrange(id)
+      })
+    })
+    
+    observe({
+      req(!is.null(input$show_all_data))
+      DT::replaceData(common_form_proxy, 
+                      subset(common_form_data(), input$show_all_data | subject_id == r$subject_id), 
+                      rownames = FALSE, resetPaging = FALSE)
+      req(form == "Adverse events")
+      DT::replaceData(SAE_proxy, 
+                      subset(SAE_data(), input$show_all_data | subject_id == r$subject_id), 
+                      rownames = FALSE, resetPaging = FALSE)
+    })
+
+    observeEvent(input$common_form_table_review_selection, {
+      df <- common_form_data()
+
+      update_row <- dplyr::distinct(input$common_form_table_review_selection, reviewed, row_id)
+      row_ids <- df$o_reviewed |> lapply(\(x) x[["row_id"]]) |> unlist()
+      df[row_ids == update_row$row_id, "o_reviewed"] <- list(list(
+        modifyList(df[row_ids == update_row$row_id,]$o_reviewed[[1]], 
+                   list(updated = switch(update_row$reviewed, "Yes" = TRUE, "No" = FALSE, NA)))
+        ))
+      common_form_data(df)
+    })
+    
+    observeEvent(input$SAE_table_review_selection, {
+      df <- SAE_data()
+      
+      update_row <- dplyr::distinct(input$SAE_table_review_selection, reviewed, row_id)
+      row_ids <- df$o_reviewed |> lapply(\(x) x[["row_id"]]) |> unlist()
+      df[row_ids == update_row$row_id, "o_reviewed"] <- list(list(
+        modifyList(df[row_ids == update_row$row_id,]$o_reviewed[[1]], 
+                   list(updated = switch(update_row$reviewed, "Yes" = TRUE, "No" = FALSE, NA)))
+      ))
+      SAE_data(df)
+    })
+    
+    observeEvent(r$subject_id, {
+      df <- common_form_data() |> 
+        dplyr::mutate(o_reviewed = Map(\(x, y) modifyList(x, list(updated = NULL, disabled = y)), o_reviewed, subject_id != r$subject_id))
+      common_form_data(df)
+      if (form == "Adverse events") {
+        df <- SAE_data() |> 
+          dplyr::mutate(o_reviewed = Map(\(x, y) modifyList(x, list(updated = NULL, disabled = y)), o_reviewed, subject_id != r$subject_id))
+        SAE_data(df)
+      }
+    })
+    
+    observeEvent(input$show_all_data, {
+      index <- match("subject_id", colnames(common_form_data())) - 1
+      if (input$show_all_data) {
+        DT::showCols(common_form_proxy, index)
+      } else {
+        DT::hideCols(common_form_proxy, index)
+      }
+      if (form == "Adverse events") {
+        index <- match("subject_id", colnames(SAE_data())) - 1
+        if (input$show_all_data) {
+          DT::showCols(SAE_proxy, index)
+        } else {
+          DT::hideCols(SAE_proxy, index)
+        }
+      }
     })
     
   })
