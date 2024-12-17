@@ -95,6 +95,7 @@ mod_common_forms_server <- function(
 
     common_form_data <- reactiveVal()
     SAE_data <- reactiveVal()
+    reload_data <- reactiveVal(0)
     observe({
       df <- {
         shiny::validate(need(
@@ -145,31 +146,33 @@ mod_common_forms_server <- function(
     
     mod_timeline_server("timeline_fig", r = r, form = form)
     
-    output[["SAE_table"]] <- DT::renderDT({
-      req(form == "Adverse events")
-      datatable_custom(
-        isolate(subset(SAE_data(), input$show_all_data | subject_id == r$subject_id)), 
-        rename_vars = c("Review Status" = "o_reviewed", table_names), 
-        rownames= FALSE,
-        title = "Serious Adverse Events", 
-        escape = FALSE,
-        selection = "none",
-        callback = checkbox_callback,
-        options = list(
-          columnDefs = list(
-            list(
-            targets = "o_reviewed",
-            orderable = FALSE,
-            render = checkbox_render
-          ),
-          list(
-            targets = "subject_id",
-            visible = isolate(input$show_all_data)
-          )),
-          rowCallback = row_callback
-        ))
-    })
-    SAE_proxy <- DT::dataTableProxy("SAE_table")
+    if (form == "Adverse events") {
+      output[["SAE_table"]] <- DT::renderDT({
+        req(form == "Adverse events")
+        datatable_custom(
+          isolate(subset(SAE_data(), input$show_all_data | subject_id == r$subject_id)), 
+          rename_vars = c("Review Status" = "o_reviewed", table_names), 
+          rownames= FALSE,
+          title = "Serious Adverse Events", 
+          escape = FALSE,
+          selection = "none",
+          callback = checkbox_callback,
+          options = list(
+            columnDefs = list(
+              list(
+                targets = "o_reviewed",
+                orderable = FALSE,
+                render = checkbox_render
+              ),
+              list(
+                targets = "subject_id",
+                visible = isolate(input$show_all_data)
+              )),
+            rowCallback = row_callback
+          ))
+      })
+      SAE_proxy <- DT::dataTableProxy("SAE_table")
+    }
     
     output[["common_form_table"]] <- DT::renderDT({
       datatable_custom(
@@ -196,13 +199,18 @@ mod_common_forms_server <- function(
     })
     common_form_proxy <- DT::dataTableProxy('common_form_table')
     
+    # Ensure that review data gets reset whenever the review data or subject
+    # being viewed is changed.
     observe({
+      reload_data(reload_data() + 1)
       session$userData$update_checkboxes[[form]] <- NULL
       session$userData$review_records[[form]] <- data.frame(id = integer(), reviewed = character())
     }) |> 
-      bindEvent(r$subject_id, r$review_data)
+      bindEvent(r$subject_id, r$review_data,
+                ignoreInit = TRUE)
     
     observeEvent(session$userData$update_checkboxes[[form]], {
+      reload_data(reload_data() + 1)
       checked <- session$userData$update_checkboxes[[form]]
       
       df <- common_form_data() |> 
@@ -210,101 +218,110 @@ mod_common_forms_server <- function(
                                                   lapply(o_reviewed, modifyList, list(updated = checked)),
                                                   o_reviewed))
       common_form_data(df)
-      if (form == "Adverse events") {
-        df <- SAE_data() |> 
-          dplyr::mutate(o_reviewed = dplyr::if_else(subject_id == r$subject_id, 
-                                                    lapply(o_reviewed, modifyList, list(updated = checked)),
-                                                    o_reviewed))
-        SAE_data(df)
-      }
+      
+      req(form == "Adverse events")
+      df <- SAE_data() |> 
+        dplyr::mutate(o_reviewed = dplyr::if_else(subject_id == r$subject_id, 
+                                                  lapply(o_reviewed, modifyList, list(updated = checked)),
+                                                  o_reviewed))
+      SAE_data(df)
     })
     
-    lapply(c("common_form", if (form == "Adverse events") "SAE"), \(x) {
-      observeEvent(input[[sprintf("%s_table_review_selection", x)]], {
+    lapply(c("common_form", if (form == "Adverse events") "SAE"), \(tbl) {
+      # Reactive value mimics table name
+      tbl_data <- sprintf("%s_data", tbl)
+      # Get review selection input to observe
+      review_selection <- sprintf("%s_table_review_selection", tbl)
+      observeEvent(input[[review_selection]], {
+        # Update review values for session's user data
         session$userData$update_checkboxes[[form]] <- NULL
-        
         session$userData$review_records[[form]] <-
           dplyr::rows_upsert(
             session$userData$review_records[[form]],
-            input[[sprintf("%s_table_review_selection", x)]][c("id", "reviewed")],
+            input[[review_selection]][c("id", "reviewed")],
             by = "id"
           ) |> 
           dplyr::filter(!is.na(reviewed)) |> 
+          # Ensure that only the current subject is being reviewed
           dplyr::semi_join(
             subset(r$review_data, subject_id == r$subject_id & item_group == form),
             by = "id"
           ) |> 
+          # Only update records where the review status is being changed
           dplyr::anti_join(
             subset(r$review_data, subject_id == r$subject_id & item_group == form),
             by = c("id", "reviewed")
           ) |> 
           dplyr::arrange(id)
+        
+        
+        # Update the table's data reactive
+        df <- do.call(tbl_data, list())
+        
+        update_row <- dplyr::distinct(input[[review_selection]], reviewed, row_id)
+        row_ids <- df$o_reviewed |> lapply(\(x) x[["row_id"]]) |> unlist()
+        df[row_ids == update_row$row_id, "o_reviewed"] <- list(list(
+          modifyList(df[row_ids == update_row$row_id,]$o_reviewed[[1]], 
+                     list(updated = switch(update_row$reviewed, "Yes" = TRUE, "No" = FALSE, NA)))
+        ))
+        do.call(tbl_data, list(df))
       })
     })
     
+    # Any time the data in the form table is updated, "show all" is toggled,
+    # or the subject being viewed is changed, the server data for the datatable
+    # needs to be updated
     observe({
       req(!is.null(input$show_all_data))
-      req(common_form_data(), SAE_data())
-      DT::replaceData(common_form_proxy, 
-                      subset(common_form_data(), input$show_all_data | subject_id == r$subject_id), 
-                      rownames = FALSE, resetPaging = FALSE)
-      req(form == "Adverse events")
-      DT::replaceData(SAE_proxy, 
+      req(common_form_data())
+      DT::dataTableAjax(common_form_proxy$session, 
+                      subset(common_form_data(), input$show_all_data | subject_id == r$subject_id),
+                      rownames = FALSE,
+                      outputId = common_form_proxy$rawId)
+      req(SAE_data())
+      DT::dataTableAjax(SAE_proxy$session, 
                       subset(SAE_data(), input$show_all_data | subject_id == r$subject_id), 
-                      rownames = FALSE, resetPaging = FALSE)
+                      rownames = FALSE,
+                      outputId = SAE_proxy$rawId)
     })
-
-    observeEvent(input$common_form_table_review_selection, {
-      df <- common_form_data()
-
-      update_row <- dplyr::distinct(input$common_form_table_review_selection, reviewed, row_id)
-      row_ids <- df$o_reviewed |> lapply(\(x) x[["row_id"]]) |> unlist()
-      df[row_ids == update_row$row_id, "o_reviewed"] <- list(list(
-        modifyList(df[row_ids == update_row$row_id,]$o_reviewed[[1]], 
-                   list(updated = switch(update_row$reviewed, "Yes" = TRUE, "No" = FALSE, NA)))
-        ))
-      common_form_data(df)
-    })
-    
-    observeEvent(input$SAE_table_review_selection, {
-      df <- SAE_data()
-      
-      update_row <- dplyr::distinct(input$SAE_table_review_selection, reviewed, row_id)
-      row_ids <- df$o_reviewed |> lapply(\(x) x[["row_id"]]) |> unlist()
-      df[row_ids == update_row$row_id, "o_reviewed"] <- list(list(
-        modifyList(df[row_ids == update_row$row_id,]$o_reviewed[[1]], 
-                   list(updated = switch(update_row$reviewed, "Yes" = TRUE, "No" = FALSE, NA)))
-      ))
-      SAE_data(df)
-    })
+    # Any time the review table is updated, "show all" is toggled, or the
+    # subject being viewed is changed, the datatable should be reloaded to show
+    # the new data
+    observeEvent(reload_data(), {
+      req(!is.null(input$show_all_data))
+      req(common_form_data())
+      DT::reloadData(common_form_proxy)
+      req(SAE_data())
+      DT::reloadData(SAE_proxy)
+    }, ignoreInit = TRUE)
     
     observeEvent(r$subject_id, {
-      req(common_form_data(), SAE_data())
+      req(common_form_data())
+      reload_data(reload_data() + 1)
       df <- common_form_data() |> 
         dplyr::mutate(o_reviewed = Map(\(x, y) modifyList(x, list(updated = NULL, disabled = y)), o_reviewed, subject_id != r$subject_id))
       common_form_data(df)
-      if (form == "Adverse events") {
-        df <- SAE_data() |> 
-          dplyr::mutate(o_reviewed = Map(\(x, y) modifyList(x, list(updated = NULL, disabled = y)), o_reviewed, subject_id != r$subject_id))
-        SAE_data(df)
-      }
+      req(SAE_data())
+      df <- SAE_data() |> 
+        dplyr::mutate(o_reviewed = Map(\(x, y) modifyList(x, list(updated = NULL, disabled = y)), o_reviewed, subject_id != r$subject_id))
+      SAE_data(df)
     })
     
     observeEvent(input$show_all_data, {
-      req(common_form_data(), SAE_data())
+      req(common_form_data())
+      reload_data(reload_data() + 1)
       index <- match("subject_id", colnames(common_form_data())) - 1
       if (input$show_all_data) {
         DT::showCols(common_form_proxy, index)
       } else {
         DT::hideCols(common_form_proxy, index)
       }
-      if (form == "Adverse events") {
-        index <- match("subject_id", colnames(SAE_data())) - 1
-        if (input$show_all_data) {
-          DT::showCols(SAE_proxy, index)
-        } else {
-          DT::hideCols(SAE_proxy, index)
-        }
+      req(SAE_data())
+      index <- match("subject_id", colnames(SAE_data())) - 1
+      if (input$show_all_data) {
+        DT::showCols(SAE_proxy, index)
+      } else {
+        DT::hideCols(SAE_proxy, index)
       }
     })
     

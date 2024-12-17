@@ -163,6 +163,7 @@ mod_study_forms_server <- function(
     })
     
     table_data <- reactiveVal()
+    reload_data <- reactiveVal(0)
     observe({
       df <- {
         validate(need(
@@ -197,12 +198,15 @@ mod_study_forms_server <- function(
     })
     
     observe({
+      reload_data(reload_data() + 1)
       session$userData$update_checkboxes[[form]] <- NULL
       session$userData$review_records[[form]] <- data.frame(id = integer(), reviewed = character())
     }) |> 
-      bindEvent(r$subject_id, r$review_data)
+      bindEvent(r$subject_id, r$review_data,
+                ignoreInit = TRUE)
     
     observeEvent(session$userData$update_checkboxes[[form]], {
+      reload_data(reload_data() + 1)
       checked <- session$userData$update_checkboxes[[form]]
       
       df <- table_data() |> 
@@ -213,8 +217,8 @@ mod_study_forms_server <- function(
     })
     
     observeEvent(input$table_review_selection, {
+      # Update review values for session's user data
       session$userData$update_checkboxes[[form]] <- NULL
-      
       session$userData$review_records[[form]] <-
         dplyr::rows_upsert(
           session$userData$review_records[[form]],
@@ -231,17 +235,8 @@ mod_study_forms_server <- function(
           by = c("id", "reviewed")
         ) |> 
         dplyr::arrange(id)
-    })
-    
-    observe({
-      req(!is.null(input$show_all))
-      req(table_data())
-      DT::replaceData(table_proxy, 
-                      subset(table_data(), input$show_all | subject_id == r$subject_id), 
-                      rownames = FALSE, resetPaging = FALSE)
-    })
-    
-    observeEvent(input$table_review_selection, {
+      
+      # Update the table's data reactive
       df <- table_data()
       
       update_row <- dplyr::distinct(input$table_review_selection, reviewed, row_id)
@@ -253,8 +248,29 @@ mod_study_forms_server <- function(
       table_data(df)
     })
     
+    # Any time the data in the form table is updated, "show all" is toggled,
+    # or the subject being viewed is changed, the server data for the datatable
+    # needs to be updated
+    observe({
+      req(!is.null(input$show_all))
+      req(table_data())
+      DT::dataTableAjax(table_proxy$session, 
+                      subset(table_data(), input$show_all | subject_id == r$subject_id), 
+                      rownames = FALSE,
+                      outputId = table_proxy$rawId)
+    })
+    # Any time the review table is updated, "show all" is toggled, or the
+    # subject being viewed is changed, the datatable should be reloaded to show
+    # the new data
+    observeEvent(reload_data(), {
+      req(!is.null(input$show_all))
+      req(table_data())
+      DT::reloadData(table_proxy)
+    }, ignoreInit = TRUE)
+    
     observeEvent(r$subject_id, {
       req(table_data())
+      reload_data(reload_data() + 1)
       df <- table_data() |> 
         dplyr::mutate(o_reviewed = Map(\(x, y) modifyList(x, list(updated = NULL, disabled = y)), o_reviewed, subject_id != r$subject_id))
       table_data(df)
@@ -262,6 +278,7 @@ mod_study_forms_server <- function(
     
     observeEvent(input$show_all, {
       req(table_data())
+      reload_data(reload_data() + 1)
       index <- match("subject_id", colnames(table_data())) - 1
       if (input$show_all) {
         DT::showCols(table_proxy, index)
@@ -324,7 +341,7 @@ mod_study_forms_server <- function(
     
     if(form %in% c("Vital signs", "Vitals adjusted")){
       shiny::exportTestValues(
-        table_data = table_data(),
+        table_data = subset(table_data(), input$show_all | subject_id == r$subject_id),
         fig_data = fig_data()
       )
     } 
