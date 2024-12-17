@@ -9,7 +9,7 @@ datatable_custom(
   rename_vars = NULL,
   title = NULL,
   selection = "single",
-  extensions = "Scroller",
+  extensions = c("Scroller", "ColReorder"),
   plugins = "scrollResize",
   dom = "fti",
   options = list(),
@@ -44,6 +44,7 @@ to 'fti' resulting in 'f<"header h5">ti'.}
 \item \code{deferREnder = TRUE}
 \item \code{scrollResize = TRUE}
 \item \code{scrollCollapse = TRUE}
+\item \code{colReorder = TRUE}
 }
 \item Non-modifiable defaults:
 \itemize{

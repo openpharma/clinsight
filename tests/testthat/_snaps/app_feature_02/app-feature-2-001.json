@@ -7279,7 +7279,8 @@
         "filter": "none",
         "vertical": false,
         "extensions": [
-          "Scroller"
+          "Scroller",
+          "ColReorder"
         ],
         "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Subject<\/th>\n      <th>Status<\/th>\n      <th>Dx<\/th>\n      <th>Age<\/th>\n      <th>Sex<\/th>\n      <th>Event<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
         "options": {
@@ -7289,6 +7290,7 @@
           "deferRender": true,
           "scrollResize": true,
           "scrollCollapse": true,
+          "colReorder": true,
           "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"\")\n}",
           "dom": "f<\"header h5\">ti",
           "columnDefs": [
@@ -7338,6 +7340,7 @@
           "serverSide": true,
           "processing": true
         },
+        "callback": "function(table) {\ntable.on('dblclick', 'tbody tr', function(t) {\nt.currentTarget.classList.add('selected');\nvar tblID = $(t.target).closest('.datatables').attr('id')\nvar inputName = tblID + '_rows_selected'\nShiny.setInputValue(inputName, t.currentTarget.rowIndex)\ndocument.getElementById(\n\"start_page_1-go_to_patient-go_to_form\"\n).click();\n})\n}",
         "selection": {
           "mode": "single",
           "selected": null,
@@ -7348,7 +7351,8 @@
       "evals": [
         "options.initComplete",
         "options.rowCallback",
-        "options.ajax.data"
+        "options.ajax.data",
+        "callback"
       ],
       "jsHooks": [
 
@@ -7429,6 +7433,23 @@
             "js/scroller.bootstrap5.min.js"
           ],
           "stylesheet": "css/scroller.bootstrap5.min.css",
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": false
+        },
+        {
+          "name": "dt-ext-colreorder-bootstrap5",
+          "version": "1.13.6",
+          "src": {
+            "href": "dt-ext-colreorder-bootstrap5-1.13.6"
+          },
+          "meta": null,
+          "script": [
+            "js/dataTables.colReorder.min.js",
+            "js/colReorder.bootstrap5.min.js"
+          ],
+          "stylesheet": "css/colReorder.bootstrap5.min.css",
           "head": null,
           "attachment": null,
           "package": null,

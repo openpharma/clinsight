@@ -1,6 +1,6 @@
 Package: clinsight
 Title: ClinSight
-Version: 0.1.1
+Version: 0.1.1.9012
 Authors@R: c(
     person("Leonard Daniël", "Samson", , "lsamson@gcp-service.com", role = c("cre", "aut"),
            comment = c(ORCID = "0000-0002-6252-7639")),

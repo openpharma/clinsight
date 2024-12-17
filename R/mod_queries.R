@@ -147,7 +147,8 @@ mod_queries_server <- function(id, r, navinfo, all_forms, db_path, table_names){
       datatable_custom(
         initial_queries()[query_cols], 
         table_names, 
-        title = table_title
+        title = table_title,
+        callback = dblclick_to_form(ns("go_to_form"))
       )
     })
     
@@ -172,7 +173,10 @@ mod_queries_server <- function(id, r, navinfo, all_forms, db_path, table_names){
         selected_query_data()[c("query", "reviewer")], 
         rename_vars = table_names,
         dom = 't',
-        options = list(scroller = FALSE),
+        options = list(
+          scroller = FALSE,
+          pageLength = -1
+        ),
         class = "row-border hover",
         rownames = FALSE,
         selection = "none"

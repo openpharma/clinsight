@@ -129,7 +129,8 @@ mod_navigate_review_server <- function(
       df <- modal_rev_data() 
       df[["reviewed"]] <- NULL 
       if(!input$show_all_data) df$subject_id <- NULL
-      datatable_custom(df, table_names)
+      datatable_custom(df, table_names,
+                       callback = dblclick_to_form(ns("go_to_form")))
     }) 
     
     queries_table_data <- reactive({
@@ -152,7 +153,10 @@ mod_navigate_review_server <- function(
       datatable_custom(
         queries_table_data(), 
         rename_vars = table_names,
-        options = list(scroller = FALSE),
+        options = list(
+          scroller = FALSE,
+          pageLength = -1
+          ),
         rownames = FALSE,
         selection = "none"
         )
