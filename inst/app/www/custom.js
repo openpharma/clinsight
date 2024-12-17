@@ -1,0 +1,116 @@
+function ts(cb) {
+  if (cb.readOnly) {
+    cb.indeterminate=true;
+    cb.readOnly=cb.checked=false;
+  } else if (!cb.checked) {
+    cb.readOnly=true;
+    cb.indeterminate=false;
+  }
+}
+
+function checkboxCallback(table) {
+  table.on('column-reorder', function() {
+    table.rows().every(function() {
+      if (this.data()[0].reviewed == null) {
+        $(':checkbox', this.node())
+          .addClass('indeterminate')
+          .prop('indeterminate', this.data()[0].updated == null)
+          .prop('readOnly', this.data()[0].updated == false)
+      }
+    })
+  });
+  table.on('click', 'input[type="checkbox"]', function(){
+    var tblId = $(this).closest('.datatables').attr('id');
+    var cell = table.cell($(this).closest('td'));
+    var review = $(this).is(':indeterminate') ? null : $(this).is(':checked');
+    cell.data().updated = review;
+    var info = {review: review, ids: cell.data().ids, row_id: cell.data().row_id};
+    Shiny.setInputValue(tblId + '_review_selection:CS.reviewInfo', info, {priority: 'event'});
+  })
+  return table;
+}
+
+function checkboxRender(data, type, row, meta) {
+  var reviewed = data.reviewed;
+  var updated = data.updated;
+  var disabled = data.disabled;
+  var cb_class = ''
+  if (reviewed == null) {
+    cb_class = updated == null ? '' : 'indeterminate'
+  } else {
+    cb_class = reviewed ? 'checked' : 'unchecked'
+  }
+  return `<input type='checkbox' 
+    ${disabled ? 'disabled ' : ''}
+    class='${cb_class}' 
+    ${updated == null ? (reviewed ? 'checked' : '') : (updated ? 'checked' : '')} 
+    ${reviewed == null ? 'onclick="ts(this)"' : ''}/>`;
+}
+
+function rowCallback(row, data) {
+  if (data[0].reviewed == null) {
+    $(':checkbox', row)
+      .addClass('indeterminate')
+      .prop('indeterminate', data[0].updated == null)
+      .prop('readOnly', data[0].updated == false)
+  }
+}
+
+$(document).ready(function() {
+  
+  /* Define custom Shiny input binding for overall review checkbox. 
+  This is needed to assign an event priority to the checkbox.*/
+  var customCheckbox = new Shiny.InputBinding();
+  
+  $.extend(customCheckbox, {
+    find: function(scope) {
+      return $(scope).find("input[type='checkbox'].cs_checkbox");
+    },
+    getValue: function(el) {
+      return el.checked;
+    },
+    setValue: function(el, value) {
+      el.checked = value;
+    },
+    subscribe: function(el, callback) {
+      $(el).on("change.checkboxInputBinding", function() {
+        Shiny.onInputChange($(this).attr('id'), this.checked, {priority: 'event'});
+      });
+    },
+    unsubscribe: function(el) {
+      $(el).off(".checkboxInputBinding");
+    }
+  });
+  
+  Shiny.inputBindings.register(customCheckbox);
+  
+  /* Define custom Shiny output binding for review progress bar. 
+  It expects 4 values: completed, unmarking, marking, and total.*/
+  var customProgressBar = new Shiny.OutputBinding();
+  
+  $.extend(customProgressBar, {
+    find: function(scope) {
+      return $(scope).find("div.cs-progress-container");
+    },
+    renderValue: function(el, data) {
+      let cmp_pct = (data.completed-data.unmarking)/data.total*100;
+      let um_pct = data.unmarking/data.total*100;
+      let m_pct = data.marking/data.total*100;
+      let true_cmp_pct = data.completed/data.total*100;
+      if (data.total == 0) {
+        $('#' + el.id + " .cs-progress.completed").width("100%")
+        $('#' + el.id + " .cs-progress.unmarking").width("0%")
+        $('#' + el.id + " .cs-progress.marking").width("0%")
+        $('#' + el.id + " .cs-completed").html("100.0%")
+      } else {
+        $('#' + el.id + " .cs-progress.completed").width(cmp_pct.toFixed(2) + "%")
+        $('#' + el.id + " .cs-progress.unmarking").width(um_pct.toFixed(2) + "%")
+        $('#' + el.id + " .cs-progress.marking").width(m_pct.toFixed(2) + "%")
+        $('#' + el.id + " .cs-completed").html(true_cmp_pct.toFixed(1) + "%")
+      }
+    }
+  });
+  
+  Shiny.outputBindings.register(customProgressBar)
+
+});

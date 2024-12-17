@@ -83,6 +83,12 @@
       ]
     },
     "main_sidebar_1-navigate_forms_1-form_name": "<center>Vital signs<\/center>",
+    "main_sidebar_1-review_forms_1-progress_bar": {
+      "completed": 8,
+      "unmarking": 0,
+      "marking": 0,
+      "total": 8
+    },
     "main_sidebar_1-review_forms_1-save_review_error": {
       "message": "Form already reviewed",
       "call": "NULL",
@@ -7288,9 +7294,12 @@
           "scrollX": true,
           "scroller": true,
           "deferRender": true,
-          "scrollResize": true,
           "scrollCollapse": true,
-          "colReorder": true,
+          "colReorder": {
+            "enable": true,
+            "realtime": false,
+            "fixedColumnsLeft": 1
+          },
           "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"\")\n}",
           "dom": "f<\"header h5\">ti",
           "columnDefs": [
@@ -7303,15 +7312,15 @@
               "targets": 0
             },
             {
-              "name": "Subject",
+              "name": "subject_id",
               "targets": 1
             },
             {
-              "name": "Status",
+              "name": "status",
               "targets": 2
             },
             {
-              "name": "Dx",
+              "name": "WHO.classification",
               "targets": 3
             },
             {
@@ -7323,7 +7332,7 @@
               "targets": 5
             },
             {
-              "name": "Event",
+              "name": "event_name",
               "targets": 6
             }
           ],
@@ -7454,22 +7463,6 @@
           "attachment": null,
           "package": null,
           "all_files": false
-        },
-        {
-          "name": "dt-plugin-scrollresize",
-          "version": "1.13.6",
-          "src": {
-            "href": "dt-plugin-scrollresize-1.13.6"
-          },
-          "meta": null,
-          "script": "source.min.js",
-          "stylesheet": [
-
-          ],
-          "head": null,
-          "attachment": null,
-          "package": null,
-          "all_files": true
         },
         {
           "name": "crosstalk",

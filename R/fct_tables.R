@@ -51,12 +51,23 @@ create_table.default <- function(
   stopifnot(is.character(keep_vars))
   stopifnot(is.character(name_column))
   stopifnot(is.character(value_column))
+  if ("reviewed" %in% names(data)) {
+    data <- dplyr::mutate(
+      data,
+      o_reviewed = dplyr::case_when(
+        any(reviewed == "No") & any(reviewed == "Yes") ~ list(list(reviewed = NA, ids = id)),
+        any(reviewed == "Yes") ~ list(list(reviewed = TRUE, ids = id)),
+        .default = list(list(reviewed = FALSE, ids = id))
+      ),
+      .by = dplyr::all_of(keep_vars))
+    keep_vars <- c("o_reviewed", keep_vars)
+  }
   df <- data[c(keep_vars, name_column, value_column)] |> 
     tidyr::pivot_wider(
       names_from = {{name_column}}, 
       values_from = {{value_column}}, 
       values_fn = ~paste0(., collapse = "; ")
-      ) 
+      )
   expected_columns <- na.omit(expected_columns) %||% character(0)
   if(length(expected_columns) == 0) return(df)
   add_missing_columns(df, expected_columns)[
@@ -227,7 +238,7 @@ create_table.adverse_events <- function(
                              keep_vars, expected_columns) |> 
     adjust_colnames("^AE ") 
   df[["Number"]] <- NULL
-
+  
   # create new row when an AE gets worse:
   df_worsening <- df[!is.na(df[[worsening_start_column]]), ] |> 
     dplyr::mutate(
@@ -298,6 +309,7 @@ create_table.medication <- function(
     ) |> 
     dplyr::arrange(dplyr::desc(in_use), dplyr::desc(`Start Date`)) |> 
     dplyr::select(
+      dplyr::any_of("o_reviewed"),
       dplyr::all_of(c(keep_vars, "Name")), 
       dplyr::everything(),
       -dplyr::all_of(c("in_use", "Active Ingredient", "Trade Name", 

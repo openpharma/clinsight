@@ -10,7 +10,6 @@ datatable_custom(
   title = NULL,
   selection = "single",
   extensions = c("Scroller", "ColReorder"),
-  plugins = "scrollResize",
   dom = "fti",
   options = list(),
   ...
@@ -27,8 +26,6 @@ rename any column names found in this vector to the provided name.}
 \item{selection}{See \code{\link[DT:datatable]{DT::datatable()}}. Default set to 'single'.}
 
 \item{extensions}{See \code{\link[DT:datatable]{DT::datatable()}}. Default set to 'Scroller'.}
-
-\item{plugins}{See \code{\link[DT:datatable]{DT::datatable()}}. Default set to 'scrollResize'.}
 
 \item{dom}{See \url{https://datatables.net/reference/option/dom}. A div
 element will be inserted before the table for the table title. Default set

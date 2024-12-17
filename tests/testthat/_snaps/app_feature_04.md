@@ -25,17 +25,21 @@
     Code
       print(table_data, width = Inf)
     Output
-      # A tibble: 2 x 9
-        event_name `Systolic blood pressure` `Diastolic blood pressure`
-        <chr>      <chr>                     <chr>                     
-      1 Screening  <b>99*</b> mmHg           <b>77*</b> mmHg           
-      2 Visit 2    <b>99*</b> mmHg           <b>77*</b> mmHg           
-        Pulse                Resp                  Temperature    
-        <chr>                <chr>                 <chr>          
-      1 <b>77*</b> beats/min <b>9*</b> breaths/min <b>37.5*</b> °C
-      2 <b>77*</b> beats/min <b>9*</b> breaths/min <b>37.5*</b> °C
-        `Weight change since screening` BMI                 Weight       
-        <chr>                           <chr>               <chr>        
-      1 <NA>                            <b>22.09*</b> kg/m2 <b>70*</b> kg
-      2 <NA>                            <NA>                <NA>         
+      # A tibble: 2 x 11
+        o_reviewed       subject_id event_name `Systolic blood pressure`
+        <list>           <chr>      <chr>      <chr>                    
+      1 <named list [4]> 9600-002   Screening  <b>99*</b> mmHg          
+      2 <named list [4]> 9600-002   Visit 2    <b>99*</b> mmHg          
+        `Diastolic blood pressure` Pulse                Resp                 
+        <chr>                      <chr>                <chr>                
+      1 <b>77*</b> mmHg            <b>77*</b> beats/min <b>9*</b> breaths/min
+      2 <b>77*</b> mmHg            <b>77*</b> beats/min <b>9*</b> breaths/min
+        Temperature     `Weight change since screening` BMI                
+        <chr>           <chr>                           <chr>              
+      1 <b>37.5*</b> °C <NA>                            <b>22.09*</b> kg/m2
+      2 <b>37.5*</b> °C <NA>                            <NA>               
+        Weight       
+        <chr>        
+      1 <b>70*</b> kg
+      2 <NA>         
 
