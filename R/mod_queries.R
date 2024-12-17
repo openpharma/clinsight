@@ -173,7 +173,10 @@ mod_queries_server <- function(id, r, navinfo, all_forms, db_path, table_names){
         selected_query_data()[c("query", "reviewer")], 
         rename_vars = table_names,
         dom = 't',
-        options = list(scroller = FALSE),
+        options = list(
+          scroller = FALSE,
+          pageLength = -1
+        ),
         class = "row-border hover",
         rownames = FALSE,
         selection = "none"
