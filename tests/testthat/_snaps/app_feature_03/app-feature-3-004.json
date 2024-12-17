@@ -237,6 +237,7 @@
           "scrollResize": true,
           "scrollCollapse": true,
           "colReorder": true,
+          "pageLength": -1,
           "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"\")\n}",
           "dom": "<\"header h5\">t",
           "columnDefs": [
@@ -254,6 +255,13 @@
           ],
           "autoWidth": false,
           "orderClasses": false,
+          "lengthMenu": [
+            -1,
+            10,
+            25,
+            50,
+            100
+          ],
           "ajax": {
             "type": "POST",
             "data": "function(d) {\nd.search.caseInsensitive = true;\nd.search.smart = true;\nd.escape = true;\nvar encodeAmp = function(x) { x.value = x.value.replace(/&/g, \"%26\"); }\nencodeAmp(d.search);\n$.each(d.columns, function(i, v) {encodeAmp(v.search);});\n}"

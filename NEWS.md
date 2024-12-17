@@ -14,6 +14,7 @@
 ## Bug fixes
 
 - The test-coverage GHA workflow is updated so that codecov uploads work again.
+- Display all rows for tables where `Scroller` is disabled.
 
 # clinsight 0.1.1
 
