@@ -92,25 +92,25 @@ fig_boxplots <- function(
 #' 
 fig_timeline <- function(
     data, 
-    events
+    min_events = 10
     ){
   stopifnot(is.data.frame(data))
-  stopifnot(is.data.frame(events))
+  stopifnot(is.numeric(min_events))
+  min_events <- min_events %||% 10
   
-  completed_events <- data |> 
-    dplyr::filter(!is.na(event_name), 
-                  event_label %in% events$event_label) |> 
-    dplyr::slice_head(n = 1, by = c(event_name, item_name)) |>  # 051022 LSA ensures only one item per event
-    dplyr::count(event_name, event_label) |> 
-    dplyr::mutate(
-      event_label = factor(event_label, levels = events$event_label)
+  labels_in_data <- unique(data$event_label[!is.na(data$event_label)])
+  event_numbers <- labels_in_data[grepl("^V[[:digit:]]", labels_in_data)] |> 
+    gsub(pattern = "V", replacement = "") |> 
+    unique() |> 
+    as.numeric()
+  max_events <- max(c(min_events, event_numbers), na.rm = TRUE)
+  all_events <- data.frame(
+    event_label = factor(0:max_events, labels = paste0("V", 0:max_events))
     )
-  all_events <- events |> 
-    dplyr::mutate(event_name = factor(event_name, levels = event_name), 
-                  event_label = factor(event_label, levels = event_label))
-  uneven_events   <- all_events[1:length(all_events$event_name) %% 2 == 0, ]
-  even_events     <- all_events[1:length(all_events$event_name) %% 2 != 0, ]
-  
+  completed_events <- all_events[
+    all_events$event_label %in% labels_in_data, , drop = FALSE]
+  uneven_events   <- all_events[1:length(all_events$event_label) %% 2 == 0, , drop = FALSE]
+  even_events     <- all_events[1:length(all_events$event_label) %% 2 != 0, , drop = FALSE]
  fig <- ggplot2::ggplot(
     mapping = ggplot2::aes(x = event_label, y = factor(1))
     ) +
