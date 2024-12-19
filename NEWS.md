@@ -10,6 +10,7 @@
 - Add a logging table to the DB for reviews.
 - Simplify pulling data from DB for reviews.
 - Review data by records IDs instead of subject & form
+- Improved generalization of event names for use in multiple studies.
 
 ## Bug fixes
 
