@@ -339,8 +339,10 @@ get_meta_vars <- function(data = appdata, meta = metadata){
   if(length(data) == 0) stop("Empty list with data provided")
   vars <- list()
   # add metadata variables:
-  vars$events <- setNames(meta$events$event_label, meta$events$event_name)
-  
+  vars$min_events <- c(
+    sum(as.numeric(meta$events[["max_n_events"]]), na.rm = TRUE) - 1, 5
+  ) |> 
+    max()
   vars$items <- meta$items_expanded |> 
     dplyr::distinct(item_name, item_group) |> 
     split(~item_group) |> 
