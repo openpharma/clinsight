@@ -4,7 +4,7 @@
 \alias{fig_timeline}
 \title{Create timeline}
 \usage{
-fig_timeline(data, events)
+fig_timeline(data, min_events = 10)
 }
 \arguments{
 \item{data}{Data frame to use.}
