@@ -137,14 +137,30 @@ rename_raw_data <- function(
 #'
 #' @keywords internal
 add_timevars_to_data <- function(
-    data
+    data,
+    events,
+    label_type = c("hybrid", "derived", "original")
 ){
+  label_type <- match.arg(label_type)
   stopifnot("[data] should be a data frame" = is.data.frame(data))
+  stopifnot("[events] should be a data frame" = is.data.frame(events))
+  
   missing_new_cols <- required_col_names[!required_col_names %in% names(data)] |> 
     paste0(collapse = ", ")
-  if(nchar(missing_new_cols) > 0) stop(
+  if (nchar(missing_new_cols) > 0) stop(
     paste0("The following columns are missing while they are required:\n", 
            missing_new_cols, ".")
+  )
+  required_events_cols <- c("visit_name", "visit_suffix", "event_id_pattern", 
+                            "is_visit_day", "max_n_events")
+  if(!all(required_events_cols %in% names(events))){
+    stop("data in metadata$events needs at least the columns: '", 
+         paste0(required_events_cols, collapse = ","), "'.")
+  }
+  events$is_visit_day <- sapply(as.logical(events$is_visit_day), isTRUE)
+  all_event_patterns <- paste0(
+    with(events, event_id_pattern[is_visit_day]), 
+    collapse = "|"
   )
   
   df <- data |>
@@ -152,28 +168,58 @@ add_timevars_to_data <- function(
       edit_date_time = as.POSIXct(edit_date_time, tz = "UTC"),
       event_date = as.Date(event_date),
       day = day %|_|% {event_date - min(event_date, na.rm = TRUE)}, 
-      vis_day = ifelse(grepl("^SCR|^VIS|^FU|^EOT$", event_id, ignore.case = TRUE), day, NA),
-      vis_num = as.numeric(factor(vis_day))-1,
-      event_name = event_name %|_|% dplyr::case_when(
-        grepl("^SCR", event_id, ignore.case = TRUE) ~ "Screening",
-        grepl("^VIS", event_id, ignore.case = TRUE) ~ paste0("Visit ", vis_num),
-        grepl("^FU[[:digit:]]+", event_id, ignore.case = TRUE) ~ paste0("Visit ", vis_num, " (FU)"),
-        grepl("^EOT$", event_id, ignore.case = TRUE) ~ paste0("Visit ", vis_num, " (EoT)"),
-        grepl("^UN", event_id, ignore.case = TRUE) ~ paste0("Unscheduled visit ", event_repeat),
-        grepl("^EXIT$", event_id, ignore.case = TRUE) ~ "Exit",
-        .default = "Any visit"
-      ),
-      event_label = event_label %|_|% dplyr::case_when(
-        !is.na(vis_num)   ~ paste0("V", vis_num),
-        grepl("^UN", event_id, ignore.case = TRUE)   ~ paste0("UV", event_repeat),
-        .default = event_name
-      ),
+      vis_day = ifelse(grepl(all_event_patterns, event_id, ignore.case = TRUE), day, NA),
+      vis_num = as.numeric(factor(vis_day))-1, 
       .by = subject_id
-    ) |> 
+      ) |> 
     dplyr::arrange(
       factor(site_code, levels = order_string(site_code)),
       factor(subject_id, levels = order_string(subject_id))
     )
+  if ("event_name" %in% names(data)) { return(df) }
+  cols_to_remove <- names(events)
+  all_ids <- unique(data$event_id)
+  
+  #expanding table so that all matching id's are shown:
+  events_table <- events |> 
+    dplyr::mutate(
+      event_id = sapply(
+        event_id_pattern, 
+        \(x){paste0(all_ids[grepl(x, all_ids)], collapse = ",") }
+      ),
+      add_visit_number = is_visit_day & (is.na(max_n_events) | max_n_events > 1 ),
+      add_event_repeat_number = !is_visit_day & (is.na(max_n_events) | max_n_events > 1 )
+    ) |> 
+    expand_columns(columns = "event_id", separator = ",")
+  
+  df <- df |> 
+    dplyr::left_join(events_table, by = "event_id") |> 
+    tidyr::replace_na(
+      list(
+        visit_name = "Any visit", 
+        add_visit_numbers = FALSE, 
+        add_event_repeat_number = FALSE
+      )
+    ) |> 
+    dplyr::mutate(
+      event_name = dplyr::case_when(
+        add_visit_number        ~ paste0(visit_name, " ", vis_num),
+        add_event_repeat_number ~ paste0(visit_name, " ", event_repeat),
+        .default = visit_name
+      ),
+      event_name = ifelse(
+        !is.na(visit_suffix), 
+        paste0(event_name, " (", visit_suffix, ")"), 
+        event_name
+        ),
+      event_label = event_label %|_|% dplyr::case_when(
+        !is.na(vis_num)   ~ paste0("V", vis_num),
+        grepl("^UN", event_id, ignore.case = TRUE)   ~ paste0("UV", event_repeat),
+        .default = event_name
+      )
+    ) |> 
+    dplyr::select(-dplyr::all_of(cols_to_remove))
+  
   cat("Created the following event_id and event_name combinations:\n")
   print(unique(df[order(df$event_id), c("event_id", "event_name")]))
   df
