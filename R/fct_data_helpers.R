@@ -130,7 +130,12 @@ rename_raw_data <- function(
 
 #' Add time vars to raw data
 #'
-#' @param data A data frame 
+#' @param data A data frame
+#' @param events A data frame with events. Needs at least the columns
+#'   `visit_name`, `visit_suffix`, `event_id_pattern`, `is_visit_day`, and
+#'   `max_n_events`.
+#' @param label_type Character vector to control the type of label set. Variable
+#'   not yet in use.
 #'
 #' @return A data frame, with derivative time and event variables, needed for
 #'   ClinSight to function properly.
