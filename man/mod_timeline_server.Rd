@@ -4,7 +4,7 @@
 \alias{mod_timeline_server}
 \title{Interactive timeline - Shiny module Server}
 \usage{
-mod_timeline_server(id, r, form)
+mod_timeline_server(id, r, form, treatment_label = "💊 Tₓ")
 }
 \arguments{
 \item{id}{Character string, used to connect the module UI with the module Server.}
@@ -15,6 +15,8 @@ minimize data points on the timeline that are already reviewed.}
 
 \item{form}{A character vector, the form in which the timeline needs to be embedded.
 Currently, only the form 'Adverse events' is supported.}
+
+\item{treatment_label}{Character with the treatment label to use.}
 }
 \description{
 A shiny module. Creates an interactive timeline.

@@ -33,9 +33,10 @@ describe(
 )
 
 describe(
-"mod_timeline. Feature 1 | As a user, I want to be able to view an interactive timeline 
-that displays study events, such as visits and study drug administration, 
-together with data related to patient monitoring stuch as adverse events. ", 
+"mod_timeline. Feature 1 | View interactive timeline. 
+  As a user, I want to be able to view an interactive timeline 
+  that displays study events, such as visits and study drug administration, 
+  together with data related to patient monitoring stuch as adverse events. ", 
   {
     set.seed(2023)
     appdata <- get_appdata(clinsightful_data)

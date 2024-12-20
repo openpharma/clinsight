@@ -82,7 +82,8 @@ mod_common_forms_server <- function(
     form_items,
     id_item = c("subject_id", "event_name", "item_group", 
                 "form_repeat", "item_name"),
-    table_names = NULL
+    table_names = NULL,
+    timeline_treatment_label = "\U1F48A T\U2093"
 ){
   stopifnot(is.reactivevalues(r))
   stopifnot(is.character(form), length(form) == 1)
@@ -118,7 +119,12 @@ mod_common_forms_server <- function(
       df
     })
     
-    mod_timeline_server("timeline_fig", r = r, form = form)
+    mod_timeline_server(
+      "timeline_fig", 
+      r = r, 
+      form = form, 
+      treatment_label = timeline_treatment_label
+      )
     
     output[["SAE_table"]] <- DT::renderDT({
       req(form == "Adverse events")

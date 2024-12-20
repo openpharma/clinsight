@@ -10,7 +10,8 @@ mod_common_forms_server(
   form,
   form_items,
   id_item = c("subject_id", "event_name", "item_group", "form_repeat", "item_name"),
-  table_names = NULL
+  table_names = NULL,
+  timeline_treatment_label = "💊 Tₓ"
 )
 }
 \arguments{

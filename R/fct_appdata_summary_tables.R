@@ -16,15 +16,18 @@ get_timeline_data <- function(
     data, 
     table_data, 
     timeline_cols =  c("subject_id", "event_name", "form_repeat", "item_group", 
-                       "start", "group", "end", "title", "style", "id", "order")
-    ){
+                       "start", "group", "end", "title", "className", "id", "order"),
+    treatment_label = "\U1F48A T\U2093"
+){
   stopifnot(is.list(data), is.list(table_data))
+  stopifnot(is.character(timeline_cols), is.character(treatment_label))
+  
   if(all(unlist(lapply(data, is.null)))) return({
     warning("No data found. Returning empty data frame")
     setNames(
       as.data.frame(matrix(ncol = length(timeline_cols))),
       timeline_cols
-      ) |> 
+    ) |>
       dplyr::rename("content" = "event_name")
   })
   study_event_data <- if(is.null(data) ){
@@ -38,7 +41,10 @@ get_timeline_data <- function(
         event_name != "Any visit"
       ) |> 
       dplyr::distinct(subject_id, event_name, start = event_date) |> 
-      dplyr::mutate(group = "Visit")
+      dplyr::mutate(
+        group = "Visit",
+        title = paste0(start, " | ", event_name)
+      )
   }
   
   if(is.null(table_data$`Adverse events`)){
@@ -51,12 +57,19 @@ get_timeline_data <- function(
         event_name = `Name`,
         item_group = "Adverse events",
         group  = "Adverse event",
-        `end date` = ifelse(`end date` == `start date`, NA_character_ , as.character(`end date`)) |> 
+        `end date` = ifelse(
+          `end date` == `start date`, 
+          NA_character_ , 
+          as.character(`end date`)
+        ) |> 
           as.character(),
         start = clean_dates(`start date`),
         end = clean_dates(`end date`),
-        style = "background-color: #d47500;",
-        title = `Name`
+        className = "bg-warning",
+        title = paste0(
+          start, ifelse(!is.na(end), paste0(" - ", end), ""), 
+          " | ", `Name`
+        )
       )  
     
     SAE_data <- table_data$`Adverse events` |> 
@@ -76,34 +89,60 @@ get_timeline_data <- function(
           as.Date(),
         end = clean_dates(`SAE End date`),
         #end = clean_dates(ifelse(end == start, NA , end)),
-        style = "background-color: #cd0200;",
-        title = `Name`
+        className = "bg-danger",
+        title = paste0(
+          start, 
+          ifelse(!is.na(end), paste0(" - ", end), ""), 
+          " | ", 
+          `Name`
+        )
       )
   } 
   
   drug_data <- if(is.null(data$General)){
     data.frame()
   } else{
-    data$General |> 
-      dplyr::filter(item_name %in% c("DrugAdminDate", "DrugDiscontDate")) |> 
+    df_drug_admin <- data$General[
+      data$General$item_name %in% c("DrugAdminDate", "DrugAdminDose"), 
+    ] |> 
+      tidyr::pivot_wider(names_from = item_name, values_from = item_value) |> 
+      clinsight::add_missing_columns(c("DrugAdminDate", "DrugAdminDose")) |> 
       dplyr::mutate(
-        event_name = gsub("DrugAdminDate", "Treatment", item_name),
-        event_name = gsub(" date", "", event_name),
+        event_name = treatment_label,
         group = "Events",
-        start = clean_dates(item_value)
+        start = clean_dates(DrugAdminDate),
+        title = ifelse(
+          is.na(DrugAdminDate), 
+          NA_character_,
+          paste0(
+            DrugAdminDate, " | ",
+            "Treatment \n", 
+            "Dose: ", ifelse(is.na(DrugAdminDose), "?", DrugAdminDose)
+          )
+        )
+      ) |> 
+      dplyr::select(-dplyr::all_of(c("DrugAdminDate", "DrugAdminDose")))
+    df_discont <- data$General[
+      data$General$item_name %in% c("DrugDiscontDate"), 
+    ] |> 
+      dplyr::mutate(
+        event_name = "Drug discontinuation",
+        group = "Events",
+        start = clean_dates(item_value),
+        title = paste0(start, " | ", "Treatment discontinued")
       )
+    dplyr::bind_rows(df_drug_admin, df_discont)
   }
   
   df <- dplyr::bind_rows(study_event_data, AE_timedata, SAE_data, drug_data) |> 
     add_missing_columns(timeline_cols) |> 
     dplyr::mutate(
       id = dplyr::row_number(),
+      className = ifelse(is.na(className), "bg-light", className),
       group = factor(group, levels = c("SAE", "Adverse event", "Events", "Visit")),
-      style = ifelse(!is.na(style), paste0(style, "line-height: 0.8; border-radius: 6px;"),
-                     "line-height: 0.8; border-radius: 6px;"),
       order = as.numeric(group)
     ) |> 
-    dplyr::filter(!is.na(subject_id)) |> 
+    dplyr::filter(!is.na(subject_id), !is.na(start)) |> 
     dplyr::select(dplyr::all_of(timeline_cols)) |> 
     dplyr::rename("content" = "event_name")
   df
