@@ -66,6 +66,30 @@
   left: 0;
   }
 
+.vis-item:is(.vis-box, .vis-range).vis-selected {
+  height: auto;
+  color: black;
+  border-width: medium;
+}
+
+.vis-item:is(.vis-box, .vis-range) {
+  line-height: 0.8; 
+  border-radius: 6px !important;
+}
+
+:is(.vis-box, .vis-range).bg-secondary {
+  height: 0.5rem;
+  color: transparent;
+}
+
+.vis-item:is(.vis-box, .vis-range).vis-readonly:hover {
+  font-size: large; 
+  color: black;
+  cursor: pointer;
+  height: auto;
+}
+
+
 div.datatables div.header {
   text-align: center;
   font-weight: bold;

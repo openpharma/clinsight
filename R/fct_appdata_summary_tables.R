@@ -16,7 +16,7 @@ get_timeline_data <- function(
     data, 
     table_data, 
     timeline_cols =  c("subject_id", "event_name", "form_repeat", "item_group", 
-                       "start", "group", "end", "title", "style", "id", "order"),
+                       "start", "group", "end", "title", "className", "id", "order"),
     treatment_label = "\U1F48A T\U2093"
 ){
   stopifnot(is.list(data), is.list(table_data))
@@ -27,7 +27,7 @@ get_timeline_data <- function(
     setNames(
       as.data.frame(matrix(ncol = length(timeline_cols))),
       timeline_cols
-    ) |> 
+    ) |>
       dplyr::rename("content" = "event_name")
   })
   study_event_data <- if(is.null(data) ){
@@ -65,7 +65,7 @@ get_timeline_data <- function(
           as.character(),
         start = clean_dates(`start date`),
         end = clean_dates(`end date`),
-        style = "background-color: #d47500;",
+        className = "bg-warning",
         title = paste0(
           `Name`, 
           "\n(", start, ifelse(!is.na(end), paste0(" - ", end), ""), ")"
@@ -89,7 +89,7 @@ get_timeline_data <- function(
           as.Date(),
         end = clean_dates(`SAE End date`),
         #end = clean_dates(ifelse(end == start, NA , end)),
-        style = "background-color: #cd0200;",
+        className = "bg-danger",
         title = paste0(
           start, 
           ifelse(!is.na(end), paste0(" - ", end), ""), 
@@ -137,9 +137,8 @@ get_timeline_data <- function(
     add_missing_columns(timeline_cols) |> 
     dplyr::mutate(
       id = dplyr::row_number(),
+      className = ifelse(is.na(className), "bg-light", className),
       group = factor(group, levels = c("SAE", "Adverse event", "Events", "Visit")),
-      style = ifelse(!is.na(style), paste0(style, "line-height: 0.8; border-radius: 6px;"),
-                     "line-height: 0.8; border-radius: 6px;"),
       order = as.numeric(group)
     ) |> 
     dplyr::filter(!is.na(subject_id), !is.na(start)) |> 

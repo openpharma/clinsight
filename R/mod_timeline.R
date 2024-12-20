@@ -55,12 +55,11 @@ mod_timeline_server <- function(id, r, form, treatment_label = "\U1F48A T\U2093"
       df <- with(timeline_data(), timeline_data()[subject_id == r$subject_id, ]) |> 
         dplyr::left_join(review_active, by = c("subject_id", "form_repeat", "item_group")) |> 
         dplyr::mutate(
-          content = ifelse(is.na(needs_review), content,
-                           ifelse(needs_review, content, NA_character_)),
-          style = ifelse(is.na(needs_review), style,
-                         ifelse(needs_review, style,
-                                paste0(style, "; line-height: 0.1; border-radius: 20px;")
-                         ))
+          className = ifelse(
+            is.na(needs_review), 
+            className,
+            ifelse(needs_review, className, "bg-secondary")
+            )
         )
       df
     })
