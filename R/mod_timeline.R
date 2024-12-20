@@ -24,6 +24,7 @@ mod_timeline_ui <- function(id){
 #' minimize data points on the timeline that are already reviewed.
 #' @param form A character vector, the form in which the timeline needs to be embedded.
 #' Currently, only the form 'Adverse events' is supported.
+#' @param treatment_label Character with the treatment label to use.
 #'
 #' @seealso [mod_timeline_ui()], [mod_common_forms_ui()], [mod_common_forms_server()]
 mod_timeline_server <- function(id, r, form, treatment_label = "\U1F48A T\U2093"){

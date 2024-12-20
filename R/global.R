@@ -117,7 +117,13 @@ utils::globalVariables(
     "expected_events",
     "event_prefix",
     "event_suffix",
-    "event_name_edc"
+    "event_name_edc",
+    "start",
+    "end",
+    "className",
+    "DrugAdminDate",
+    "DrugAdminDose",
+    "event_id_pattern"
   )
 )
 
