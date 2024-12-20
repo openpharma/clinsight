@@ -84,8 +84,8 @@ fig_boxplots <- function(
 #' Function to create a simple timeline figure using `ggplot2`.
 #'
 #' @param data Data frame to use.
-#' @param events Data frame containing information about all events. Used
-#'   to create the right labels in the timeline figure.
+#' @param min_events Minimum number of events to include in the compact
+#'   timeline. See also [fig_timeline()]. 
 #'
 #' @return A ggplot2 object.
 #' @export

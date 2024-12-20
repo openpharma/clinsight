@@ -9,8 +9,8 @@ fig_timeline(data, min_events = 10)
 \arguments{
 \item{data}{Data frame to use.}
 
-\item{events}{Data frame containing information about all events. Used
-to create the right labels in the timeline figure.}
+\item{min_events}{Minimum number of events to include in the compact
+timeline. See also \code{\link[=fig_timeline]{fig_timeline()}}.}
 }
 \value{
 A ggplot2 object.

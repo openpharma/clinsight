@@ -112,7 +112,11 @@ utils::globalVariables(
     "event_id",
     "region",
     "suffix_names",
-    "form_type"
+    "form_type",
+    "is_scheduled_visit",
+    "expected_events",
+    "event_prefix",
+    "event_suffix"
   )
 )
 

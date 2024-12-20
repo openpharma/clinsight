@@ -132,8 +132,8 @@ rename_raw_data <- function(
 #'
 #' @param data A data frame
 #' @param events A data frame with events. Needs at least the columns
-#'   `visit_name`, `visit_suffix`, `event_id_pattern`, `is_visit_day`, and
-#'   `max_n_events`.
+#'   `event_prefix`, `event_suffix`, `event_id_pattern`, `is_scheduled_visit`,
+#'   and `expected_events`.
 #' @param label_type Character vector to control the type of label set. Variable
 #'   not yet in use.
 #'
@@ -156,15 +156,15 @@ add_timevars_to_data <- function(
     paste0("The following columns are missing while they are required:\n", 
            missing_new_cols, ".")
   )
-  required_events_cols <- c("visit_name", "visit_suffix", "event_id_pattern", 
-                            "is_visit_day", "max_n_events")
+  required_events_cols <- c("event_prefix", "event_suffix", "event_id_pattern", 
+                            "is_scheduled_visit", "expected_events")
   if(!all(required_events_cols %in% names(events))){
     stop("data in metadata$events needs at least the columns: '", 
          paste0(required_events_cols, collapse = ","), "'.")
   }
-  events$is_visit_day <- sapply(as.logical(events$is_visit_day), isTRUE)
+  events$is_scheduled_visit <- sapply(as.logical(events$is_scheduled_visit), isTRUE)
   all_event_patterns <- paste0(
-    with(events, event_id_pattern[is_visit_day]), 
+    with(events, event_id_pattern[is_scheduled_visit]), 
     collapse = "|"
   )
   
@@ -191,8 +191,8 @@ add_timevars_to_data <- function(
         event_id_pattern, 
         \(x){paste0(all_ids[grepl(x, all_ids)], collapse = ",") }
       ),
-      add_visit_number = is_visit_day & (is.na(max_n_events) | max_n_events > 1 ),
-      add_event_repeat_number = !is_visit_day & (is.na(max_n_events) | max_n_events > 1 )
+      add_visit_number = is_scheduled_visit & (is.na(expected_events) | expected_events > 1 ),
+      add_event_repeat_number = !is_scheduled_visit & (is.na(expected_events) | expected_events > 1 )
     ) |> 
     expand_columns(columns = "event_id", separator = ",")
   cols_to_remove <- c(names(events), "add_visit_number", "add_event_repeat_number")
@@ -201,20 +201,20 @@ add_timevars_to_data <- function(
     dplyr::left_join(events_table, by = "event_id") |> 
     tidyr::replace_na(
       list(
-        visit_name = "Any visit", 
+        event_prefix = "Any visit", 
         add_visit_numbers = FALSE, 
         add_event_repeat_number = FALSE
       )
     ) |> 
     dplyr::mutate(
       event_name = dplyr::case_when(
-        add_visit_number        ~ paste0(visit_name, " ", vis_num),
-        add_event_repeat_number ~ paste0(visit_name, " ", event_repeat),
-        .default = visit_name
+        add_visit_number        ~ paste0(event_prefix, " ", vis_num),
+        add_event_repeat_number ~ paste0(event_prefix, " ", event_repeat),
+        .default = event_prefix
       ),
       event_name = ifelse(
-        !is.na(visit_suffix), 
-        paste0(event_name, " (", visit_suffix, ")"), 
+        !is.na(event_suffix), 
+        paste0(event_name, " (", event_suffix, ")"), 
         event_name
         ),
       event_label = event_label %|_|% dplyr::case_when(
@@ -340,7 +340,7 @@ get_meta_vars <- function(data = appdata, meta = metadata){
   vars <- list()
   # add metadata variables:
   vars$min_events <- c(
-    sum(as.numeric(meta$events[["max_n_events"]]), na.rm = TRUE) - 1, 5
+    sum(as.numeric(meta$events[["expected_events"]]), na.rm = TRUE) - 1, 5
   ) |> 
     max()
   vars$items <- meta$items_expanded |> 

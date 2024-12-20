@@ -14,8 +14,8 @@ add_timevars_to_data(
 \item{data}{A data frame}
 
 \item{events}{A data frame with events. Needs at least the columns
-\code{visit_name}, \code{visit_suffix}, \code{event_id_pattern}, \code{is_visit_day}, and
-\code{max_n_events}.}
+\code{event_prefix}, \code{event_suffix}, \code{event_id_pattern}, \code{is_scheduled_visit},
+and \code{expected_events}.}
 
 \item{label_type}{Character vector to control the type of label set. Variable
 not yet in use.}
