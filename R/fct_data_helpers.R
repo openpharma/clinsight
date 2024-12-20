@@ -182,9 +182,8 @@ add_timevars_to_data <- function(
       factor(subject_id, levels = order_string(subject_id))
     )
   if ("event_name" %in% names(data)) { return(df) }
-  cols_to_remove <- names(events)
-  all_ids <- unique(data$event_id)
   
+  all_ids <- unique(data$event_id)
   #expanding table so that all matching id's are shown:
   events_table <- events |> 
     dplyr::mutate(
@@ -196,6 +195,7 @@ add_timevars_to_data <- function(
       add_event_repeat_number = !is_visit_day & (is.na(max_n_events) | max_n_events > 1 )
     ) |> 
     expand_columns(columns = "event_id", separator = ",")
+  cols_to_remove <- c(names(events), "add_visit_number", "add_event_repeat_number")
   
   df <- df |> 
     dplyr::left_join(events_table, by = "event_id") |> 
