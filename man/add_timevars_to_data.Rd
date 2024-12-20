@@ -4,10 +4,21 @@
 \alias{add_timevars_to_data}
 \title{Add time vars to raw data}
 \usage{
-add_timevars_to_data(data)
+add_timevars_to_data(
+  data,
+  events,
+  label_type = c("hybrid", "derived", "original")
+)
 }
 \arguments{
 \item{data}{A data frame}
+
+\item{events}{A data frame with events. Needs at least the columns
+\code{event_prefix}, \code{event_suffix}, \code{event_id_pattern}, \code{is_scheduled_visit},
+and \code{expected_events}.}
+
+\item{label_type}{Character vector to control the type of label set. Variable
+not yet in use.}
 }
 \value{
 A data frame, with derivative time and event variables, needed for
