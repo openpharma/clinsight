@@ -116,7 +116,8 @@ utils::globalVariables(
     "is_scheduled_visit",
     "expected_events",
     "event_prefix",
-    "event_suffix"
+    "event_suffix",
+    "event_name_edc"
   )
 )
 

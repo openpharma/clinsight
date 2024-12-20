@@ -182,7 +182,7 @@ add_timevars_to_data <- function(
       factor(subject_id, levels = order_string(subject_id))
     )
   if ("event_name" %in% names(data)) { return(df) }
-  
+
   all_ids <- unique(data$event_id)
   #expanding table so that all matching id's are shown:
   events_table <- events |> 
@@ -195,13 +195,20 @@ add_timevars_to_data <- function(
       add_event_repeat_number = !is_scheduled_visit & (is.na(expected_events) | expected_events > 1 )
     ) |> 
     expand_columns(columns = "event_id", separator = ",")
-  cols_to_remove <- c(names(events), "add_visit_number", "add_event_repeat_number")
+  cols_to_remove <- c(
+    names(events), 
+    "add_visit_number", 
+    "add_event_repeat_number", 
+    "event_name_edc"
+  )
   
   df <- df |> 
     dplyr::left_join(events_table, by = "event_id") |> 
+    add_missing_columns("event_name_edc") |> 
     tidyr::replace_na(
       list(
         event_prefix = "Any visit", 
+        is_scheduled_visit = FALSE,
         add_visit_numbers = FALSE, 
         add_event_repeat_number = FALSE
       )
@@ -212,10 +219,11 @@ add_timevars_to_data <- function(
         add_event_repeat_number ~ paste0(event_prefix, " ", event_repeat),
         .default = event_prefix
       ),
-      event_name = ifelse(
-        !is.na(event_suffix), 
-        paste0(event_name, " (", event_suffix, ")"), 
-        event_name
+      event_name = dplyr::case_when(
+        !is.na(event_suffix) ~ paste0(event_name, " (", event_suffix, ")"), 
+        !is.na(event_name_edc) & is_scheduled_visit & 
+          event_name != event_name_edc ~ paste0(event_name, " (", event_name_edc, ")"),
+        .default = event_name
         ),
       event_label = event_label %|_|% dplyr::case_when(
         !is.na(vis_num)   ~ paste0("V", vis_num),
