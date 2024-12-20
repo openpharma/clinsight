@@ -24,7 +24,7 @@ describe(
         ), 
         rev_data = reactiveValues(), 
         navinfo = reactiveValues(),
-        events = metadata$events
+        min_events = 10
       ) 
       testServer(mod_header_widgets_server, args = testargs, {
         ns <- session$ns
@@ -89,7 +89,7 @@ describe(
             })
           ), 
           navinfo = reactiveValues(),
-          events = metadata$events
+          min_events = 10
         ) 
         
         testServer(mod_header_widgets_server, args = testargs, {
@@ -146,7 +146,7 @@ describe(
             })
           ), 
           navinfo = reactiveValues(),
-          events = metadata$events
+          min_events = 10
         ) 
         
         testServer(mod_header_widgets_server, args = testargs, {
