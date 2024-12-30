@@ -10,6 +10,7 @@
 - Add a logging table to the DB for reviews.
 - Simplify pulling data from DB for reviews.
 - Review data by records IDs instead of subject & form
+- Make query handling a configurable option
 
 ## Bug fixes
 
