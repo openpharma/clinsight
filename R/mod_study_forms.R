@@ -202,8 +202,7 @@ mod_study_forms_server <- function(
       session$userData$update_checkboxes[[form]] <- NULL
       session$userData$review_records[[form]] <- data.frame(id = integer(), reviewed = character())
     }) |> 
-      bindEvent(r$subject_id, r$review_data,
-                ignoreInit = TRUE)
+      bindEvent(r$subject_id, r$review_data)
     
     observeEvent(session$userData$update_checkboxes[[form]], {
       reload_data(reload_data() + 1)
