@@ -153,7 +153,10 @@ mod_navigate_review_server <- function(
       datatable_custom(
         queries_table_data(), 
         rename_vars = table_names,
-        options = list(scroller = FALSE),
+        options = list(
+          scroller = FALSE,
+          pageLength = -1
+          ),
         rownames = FALSE,
         selection = "none"
         )

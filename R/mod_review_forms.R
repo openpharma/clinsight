@@ -110,14 +110,9 @@ mod_review_forms_server <- function(
     ns <- session$ns
     
     review_data_active <- reactive({
-      df <- r$review_data |>
-        dplyr::filter(subject_id == r$subject_id, 
-                      item_group == active_form()) |> 
-        dplyr::distinct(subject_id, item_group, edit_date_time, reviewed, comment, status)
-      #!! below selects the latest edit_date_time; usually only one row will remain by then since there are no items displayed here.
-      if(nrow(df)== 0) return(df)
-      df |> 
-        dplyr::filter(edit_date_time == max(as.POSIXct(edit_date_time)))
+      with(r$review_data, r$review_data[
+        subject_id == r$subject_id & item_group == active_form(),
+        ])
     }) 
     
     observeEvent(c(active_form(), r$subject_id), {
@@ -136,8 +131,8 @@ mod_review_forms_server <- function(
         # it will give a warning. This would be rare since it would mean a datapoint with the same edit date-time was reviewed but another one was not. 
         # probably better to use defensive coding here to ensure the app does not crash in that case. However we need to define which review status we need to select
         # in this case get the reviewed = "No"
-        review_status  <- unique(review_data_active()$reviewed)
-        review_comment <- unique(review_data_active()$comment)
+        review_status <- with(review_data_active(), reviewed[edit_date_time == max(as.POSIXct(edit_date_time))]) |> unique()
+        review_comment <- with(review_data_active(), comment[edit_date_time == max(as.POSIXct(edit_date_time))]) |> unique()
         if(length(review_status) != 1) warning("multiple variables in review_status, namely: ", 
                                                review_status, "Verify data.")
       }
@@ -191,8 +186,8 @@ mod_review_forms_server <- function(
         ) 
       if(!enable_any_review()) return(FALSE)
       any(c(
-        unique(review_data_active()$reviewed) == "No"  & input$form_reviewed, 
-        unique(review_data_active()$reviewed) == "Yes" & !input$form_reviewed
+        unique(with(review_data_active(), reviewed[edit_date_time == max(as.POSIXct(edit_date_time))])) == "No"  & input$form_reviewed, 
+        unique(with(review_data_active(), reviewed[edit_date_time == max(as.POSIXct(edit_date_time))])) == "Yes" & !input$form_reviewed
       ))
     })
     
@@ -231,8 +226,12 @@ mod_review_forms_server <- function(
       review_save_error(FALSE)
       golem::cat_dev("Save review status reviewed:", input$form_reviewed, "\n")
       
-      review_row <- review_data_active() |> 
-        dplyr::distinct(subject_id, item_group) |> 
+      old_review_status <- if (!input$form_reviewed) "Yes" else "No"
+      review_records <- review_data_active()[
+        review_data_active()$reviewed == old_review_status,
+        "id", 
+        drop = FALSE
+        ] |> 
         dplyr::mutate(
           reviewed    = if(input$form_reviewed) "Yes" else "No",
           comment     = ifelse(is.null(input$review_comment), "", input$review_comment),
@@ -241,35 +240,34 @@ mod_review_forms_server <- function(
           status      = if(input$form_reviewed) "old" else "new"
         ) 
       
-      golem::cat_dev("review row to add:\n")
-      golem::print_dev(review_row)
+      golem::cat_dev("review records to add:\n")
+      golem::print_dev(review_records)
       
       cat("write review progress to database\n")
       db_save_review(
-        review_row, 
+        review_records, 
         db_path = db_path,
-        # More tables can be added here if needed, to track process of 
-        # individual reviewers in individual tables:
-        tables = "all_review_data" 
+        table = "all_review_data" 
       )
       
-      review_row_db <- db_get_review(
-        db_path, subject = review_row$subject_id, form = review_row$item_group
-        )
-      review_row_db <- unique(review_row_db[names(review_row)])
-      if(identical(review_row_db, review_row)){
+      review_records_db <- db_get_review(
+        db_path, id = review_records$id
+      )[, names(review_records)] 
+      
+      if (isTRUE(all.equal(review_records_db, review_records, check.attributes = FALSE))){
         cat("Update review data and status in app\n")
         r$review_data <- r$review_data |> 
-          dplyr::rows_update(review_row, by = c("subject_id", "item_group"))
+          dplyr::rows_update(review_records, by = "id")
       }
       
-      review_row_memory <- review_row |> 
-        dplyr::left_join(r$review_data, by = names(review_row)) 
-      review_row_memory <- unique(review_row_memory[names(review_row)])
+      updated_records_memory <- r$review_data[
+        r$review_data$id %in% review_records$id,
+        names(review_records_db)
+      ]
       
       review_save_error(any(
-        !identical(review_row_db, review_row),
-        !identical(review_row_memory, review_row_db)
+        !isTRUE(all.equal(review_records_db, review_records, check.attributes = FALSE)),
+        !isTRUE(all.equal(updated_records_memory, review_records_db, check.attributes = FALSE))
       ))
       
       if(review_save_error()){
@@ -283,7 +281,7 @@ mod_review_forms_server <- function(
             id = ns("review_save_error"),
             type = "error"
           )
-          r$review_data <- db_slice_rows(db_path, db_table = "all_review_data")
+          r$review_data <- db_get_table(db_path, db_table = "all_review_data")
         })
       }
       showNotification("Input saved successfully", duration = 1, type = "message") 
@@ -309,12 +307,15 @@ mod_review_forms_server <- function(
         "No user name found. Cannot save review"
       ))
       validate(need(
-        !review_data_active()$reviewed == "Yes",
+        !unique(with(review_data_active(), reviewed[edit_date_time == max(as.POSIXct(edit_date_time))])) == "Yes",
         "Form already reviewed"
       ))
       validate(need(input$form_reviewed, "Requires review"))
     })
     
+    shiny::exportTestValues(
+      review_save_error = review_save_error()
+    )
   })
 }
 
