@@ -302,7 +302,7 @@ get_appdata <-  function(
           significance == "CS"                    ~ "out of limits, clinically significant",
           is.na(out_of_lim) & is.na(significance) ~ "limits unknown",
           out_of_lim == 0                         ~ "within limits",
-          is.na(significance) & out_of_lim == 1   ~ "out of limits, significance unknown",
+          is.na(significance) & out_of_lim == 1   ~ "out of limits, significance pending",
           TRUE   ~ significance
         ),
         out_of_lim = factor(out_of_lim), # for vital signs figures

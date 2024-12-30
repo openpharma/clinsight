@@ -47,7 +47,7 @@
 #' A named vector with the following components:
 #' - `within limits` : "#1a9641"
 #' - `out of limits, clinically insignificant`: "#a6d96a"
-#' - `out of limits, significance unknown`: "#fdae61"
+#' - `out of limits, significance pending`: "#fdae61"
 #' - `out of limits, clinically significant`: "#d7191c"
 #' - `limits unknown`: "grey50"
 #' 

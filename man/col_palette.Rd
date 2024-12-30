@@ -11,7 +11,7 @@ A named vector with the following components:
 \itemize{
 \item \verb{within limits} : "#1a9641"
 \item \verb{out of limits, clinically insignificant}: "#a6d96a"
-\item \verb{out of limits, significance unknown}: "#fdae61"
+\item \verb{out of limits, significance pending}: "#fdae61"
 \item \verb{out of limits, clinically significant}: "#d7191c"
 \item \verb{limits unknown}: "grey50"
 }
