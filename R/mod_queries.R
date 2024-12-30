@@ -42,7 +42,8 @@ mod_queries_ui <- function(id){
           ), 
           full_screen = TRUE
         ),
-        mod_query_follow_up_ui(ns("query_follow_up_1"))
+        if (isTRUE(get_golem_config("allow_query_inputs")))
+          mod_query_follow_up_ui(ns("query_follow_up_1"))
       )
     )
   )
@@ -98,8 +99,10 @@ mod_queries_server <- function(id, r, navinfo, all_forms, db_path, table_names){
         dplyr::mutate(reviewer = paste0(reviewer, " ", timestamp))
     })
     
-    mod_query_follow_up_server("query_follow_up_1",  r = r, 
-                               selected_query = selected_query, db_path = db_path)
+    if (isTRUE(get_golem_config("allow_query_inputs")))
+      mod_query_follow_up_server("query_follow_up_1",  r = r, 
+                                 selected_query = selected_query, 
+                                 db_path = db_path)
     
     initial_queries <- reactive({
       df <- with(r$query_data, r$query_data[n == 1, ] )
