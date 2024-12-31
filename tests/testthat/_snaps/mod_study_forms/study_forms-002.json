@@ -1234,7 +1234,7 @@
         }
       ]
     },
-    "test-table": {
+    "test-review_form_tbl-table": {
       "x": {
         "style": "bootstrap5",
         "filter": "none",
@@ -1243,62 +1243,74 @@
           "Scroller",
           "ColReorder"
         ],
-        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th>Review Status<\/th>\n      <th>event_name<\/th>\n      <th>Systolic blood pressure<\/th>\n      <th>Diastolic blood pressure<\/th>\n      <th>Pulse<\/th>\n      <th>Resp<\/th>\n      <th>Temperature<\/th>\n      <th>Weight change since screening<\/th>\n      <th>BMI<\/th>\n      <th>Weight<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
+        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th>Review Status<\/th>\n      <th>subject_id<\/th>\n      <th>event_name<\/th>\n      <th>Systolic blood pressure<\/th>\n      <th>Diastolic blood pressure<\/th>\n      <th>Pulse<\/th>\n      <th>Resp<\/th>\n      <th>Temperature<\/th>\n      <th>Weight change since screening<\/th>\n      <th>BMI<\/th>\n      <th>Weight<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
         "options": {
           "scrollY": 400,
           "scrollX": true,
           "scroller": true,
           "deferRender": true,
-          "scrollResize": true,
           "scrollCollapse": true,
-          "colReorder": true,
+          "colReorder": {
+            "enable": true,
+            "realtime": false,
+            "fixedColumnsLeft": 1
+          },
           "columnDefs": [
             {
               "targets": 0,
-              "render": "function(data, type, row, meta) {\nvar reviewed = data.reviewed;\nreturn `<input type='checkbox' \nclass='${reviewed == null ? 'indeterminate' : reviewed ? 'checked' : 'unchecked'}' \n${reviewed ? 'checked' : ''} \n${reviewed == null ? 'onclick=\"ts(this)\"' : ''}/>`;\n}"
+              "orderable": false,
+              "render": "checkboxRender"
             },
             {
-              "name": "Review Status",
+              "targets": 1,
+              "visible": false
+            },
+            {
+              "name": "o_reviewed",
               "targets": 0
             },
             {
-              "name": "event_name",
+              "name": "subject_id",
               "targets": 1
             },
             {
-              "name": "Systolic blood pressure",
+              "name": "event_name",
               "targets": 2
             },
             {
-              "name": "Diastolic blood pressure",
+              "name": "Systolic blood pressure",
               "targets": 3
             },
             {
-              "name": "Pulse",
+              "name": "Diastolic blood pressure",
               "targets": 4
             },
             {
-              "name": "Resp",
+              "name": "Pulse",
               "targets": 5
             },
             {
-              "name": "Temperature",
+              "name": "Resp",
               "targets": 6
             },
             {
-              "name": "Weight change since screening",
+              "name": "Temperature",
               "targets": 7
             },
             {
-              "name": "BMI",
+              "name": "Weight change since screening",
               "targets": 8
             },
             {
-              "name": "Weight",
+              "name": "BMI",
               "targets": 9
+            },
+            {
+              "name": "Weight",
+              "targets": 10
             }
           ],
-          "createdRow": "function(row, data, dataIndex) {\nif (data[0].reviewed == null) {\nlet cb = row.cells[0].getElementsByTagName('input')[0]\ncb.indeterminate = true;\n}\n}",
+          "rowCallback": "rowCallback",
           "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"\")\n}",
           "dom": "f<\"header h5\">ti",
           "order": [
@@ -1313,7 +1325,7 @@
           "serverSide": true,
           "processing": true
         },
-        "callback": "function(table) {\ntable.on('click', 'input[type=\"checkbox\"]', function(){\nvar tblId = $(this).closest('.datatables').attr('id');\nvar cell = table.cell($(this).closest('td'));\nvar rowIdx = table.row($(this).closest('tr')).index();\nvar ids = cell.data().ids;\nvar review = $(this).is(':indeterminate') ? null : $(this).is(':checked');\nvar info = {review: review, ids: ids, row: tblId + '_row_' + rowIdx};\nShiny.setInputValue(tblId + '_review_selection:CS.reviewInfo', info);\n})\n}",
+        "callback": "function(table) {\ncheckboxCallback(table);\n}",
         "selection": {
           "mode": "none",
           "selected": null,
@@ -1323,7 +1335,7 @@
       },
       "evals": [
         "options.columnDefs.0.render",
-        "options.createdRow",
+        "options.rowCallback",
         "options.initComplete",
         "options.ajax.data",
         "callback"
@@ -1428,22 +1440,6 @@
           "attachment": null,
           "package": null,
           "all_files": false
-        },
-        {
-          "name": "dt-plugin-scrollresize",
-          "version": "1.13.6",
-          "src": {
-            "href": "dt-plugin-scrollresize-1.13.6"
-          },
-          "meta": null,
-          "script": "source.min.js",
-          "stylesheet": [
-
-          ],
-          "head": null,
-          "attachment": null,
-          "package": null,
-          "all_files": true
         },
         {
           "name": "crosstalk",
@@ -3507,7 +3503,9 @@
             83,
             84,
             440
-          ]
+          ],
+          "row_id": 13,
+          "disabled": false
         },
         {
           "reviewed": null,
@@ -3520,7 +3518,9 @@
             90,
             91,
             441
-          ]
+          ],
+          "row_id": 14,
+          "disabled": false
         },
         {
           "reviewed": false,
@@ -3530,8 +3530,15 @@
             94,
             95,
             96
-          ]
+          ],
+          "row_id": 15,
+          "disabled": false
         }
+      ],
+      "subject_id": [
+        "NLD_06_755",
+        "NLD_06_755",
+        "NLD_06_755"
       ],
       "event_name": [
         "Screening",

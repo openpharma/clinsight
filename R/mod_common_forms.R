@@ -144,10 +144,11 @@ mod_common_forms_server <- function(
             adjust_colnames("^SAE ")
         })
     })
-    
-    mod_review_form_tbl_server("review_form_tbl", r, common_form_data, form, reactive(input$show_all_data), table_names, form)
-    if (form == "Adverse events")
-      mod_review_form_tbl_server("review_form_SAE_tbl", r, SAE_data, form, reactive(input$show_all_data), table_names, "Serious Adverse Events")
+    observeEvent(common_form_data(), {
+      mod_review_form_tbl_server("review_form_tbl", r, common_form_data, form, reactive(input$show_all_data), table_names, form)
+      if (form == "Adverse events")
+        mod_review_form_tbl_server("review_form_SAE_tbl", r, SAE_data, form, reactive(input$show_all_data), table_names, "Serious Adverse Events")
+    }, once = TRUE)
     
     mod_timeline_server("timeline_fig", r = r, form = form)
     
