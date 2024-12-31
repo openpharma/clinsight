@@ -83,12 +83,13 @@ describe(
         testServer(mod_common_forms_server, args = testargs, {
           ns <- session$ns
           session$setInputs(show_all_data = FALSE)
-          expect_equal(unique(data_active()$subject_id), "DEU_02_482")
-          expect_true(is.data.frame(data_active()))
+          expect("o_reviewed" %in% names(common_form_data()), "`o_reviewed` is an expected column for form data")
+          enabled_rows <- lapply(common_form_data()[["o_reviewed"]], \(x) isFALSE(x$disabled)) |> unlist()
+          expect_equal(unique(common_form_data()[enabled_rows,"subject_id",drop = TRUE]), "DEU_02_482")
+          expect_true(is.data.frame(common_form_data()))
 
-          expect_true(inherits(output[["common_form_table"]], "json"))
           allergic_ae <- with(
-            data_active(), 
+            common_form_data(), 
             Name[subject_id == "DEU_02_482" & grepl("allergic reaction", tolower(Name))]
             )
           expect_true(length(allergic_ae) != 0 )
@@ -142,11 +143,12 @@ describe(
         testServer(mod_common_forms_server, args = testargs, {
           ns <- session$ns
           session$setInputs(show_all_data = FALSE)
-          expect_equal(unique(data_active()$subject_id), "NLD_06_755")
-          expect_true(is.data.frame(data_active()))
-          expect_true(inherits(output[["common_form_table"]], "json"))
+          expect("o_reviewed" %in% names(common_form_data()), "`o_reviewed` is an expected column for form data")
+          enabled_rows <- lapply(common_form_data()[["o_reviewed"]], \(x) isFALSE(x$disabled)) |> unlist()
+          expect_equal(unique(common_form_data()[enabled_rows,"subject_id",drop = TRUE]), "NLD_06_755")
+          expect_true(is.data.frame(common_form_data()))
           pantoprazole_med <- with(
-            data_active(), 
+            common_form_data(), 
             Name[subject_id == "NLD_06_755" & 
                    grepl("pantoprazole", tolower(Name)) & 
                    Indication == "Adverse event"]
