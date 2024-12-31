@@ -219,21 +219,12 @@ mod_study_forms_server <- function(
       # Update review values for session's user data
       session$userData$update_checkboxes[[form]] <- NULL
       session$userData$review_records[[form]] <-
-        dplyr::rows_upsert(
+        update_review_records(
           session$userData$review_records[[form]],
           input$table_review_selection[, c("id", "reviewed")],
-          by = "id"
-        ) |>
-        dplyr::filter(!is.na(reviewed)) |> 
-        dplyr::semi_join(
-          subset(r$review_data, subject_id == r$subject_id & item_group == form),
-          by = "id"
-        ) |> 
-        dplyr::anti_join(
-          subset(r$review_data, subject_id == r$subject_id & item_group == form),
-          by = c("id", "reviewed")
-        ) |> 
-        dplyr::arrange(id)
+          subset(r$review_data, subject_id == r$subject_id & item_group == form,
+                 c("id", "reviewed"))
+        )
       
       # Update the table's data reactive
       df <- table_data()
