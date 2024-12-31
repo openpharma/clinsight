@@ -14,18 +14,18 @@
 
       ]
     },
-    "cf_adverse_events-SAE_table_cell_clicked": {
+    "cf_adverse_events-review_form_SAE_tbl-table_cell_clicked": {
 
     },
-    "cf_adverse_events-SAE_table_cells_selected": [
+    "cf_adverse_events-review_form_SAE_tbl-table_cells_selected": [
 
     ],
-    "cf_adverse_events-SAE_table_columns_selected": null,
-    "cf_adverse_events-SAE_table_rows_all": null,
-    "cf_adverse_events-SAE_table_rows_current": null,
-    "cf_adverse_events-SAE_table_rows_selected": null,
-    "cf_adverse_events-SAE_table_search": "",
-    "cf_adverse_events-SAE_table_state": {
+    "cf_adverse_events-review_form_SAE_tbl-table_columns_selected": null,
+    "cf_adverse_events-review_form_SAE_tbl-table_rows_all": null,
+    "cf_adverse_events-review_form_SAE_tbl-table_rows_current": null,
+    "cf_adverse_events-review_form_SAE_tbl-table_rows_selected": null,
+    "cf_adverse_events-review_form_SAE_tbl-table_search": "",
+    "cf_adverse_events-review_form_SAE_tbl-table_state": {
       "start": 0,
       "length": 90,
       "order": [
@@ -201,30 +201,30 @@
 
       ]
     },
-    "cf_adverse_events-common_form_table_cell_clicked": {
+    "cf_adverse_events-review_form_tbl-table_cell_clicked": {
 
     },
-    "cf_adverse_events-common_form_table_cells_selected": [
+    "cf_adverse_events-review_form_tbl-table_cells_selected": [
 
     ],
-    "cf_adverse_events-common_form_table_columns_selected": null,
-    "cf_adverse_events-common_form_table_rows_all": [
+    "cf_adverse_events-review_form_tbl-table_columns_selected": null,
+    "cf_adverse_events-review_form_tbl-table_rows_all": [
       1,
       2,
       3,
       4,
       5
     ],
-    "cf_adverse_events-common_form_table_rows_current": [
+    "cf_adverse_events-review_form_tbl-table_rows_current": [
       1,
       2,
       3,
       4,
       5
     ],
-    "cf_adverse_events-common_form_table_rows_selected": null,
-    "cf_adverse_events-common_form_table_search": "",
-    "cf_adverse_events-common_form_table_state": {
+    "cf_adverse_events-review_form_tbl-table_rows_selected": null,
+    "cf_adverse_events-review_form_tbl-table_search": "",
+    "cf_adverse_events-review_form_tbl-table_state": {
       "start": 0,
       "length": 90,
       "order": [
@@ -500,7 +500,7 @@
     "study_data_tabs": "Vital signs"
   },
   "output": {
-    "cf_adverse_events-SAE_table": {
+    "cf_adverse_events-review_form_SAE_tbl-table": {
       "x": {
         "style": "bootstrap5",
         "filter": "none",
@@ -742,7 +742,7 @@
         }
       ]
     },
-    "cf_adverse_events-common_form_table": {
+    "cf_adverse_events-review_form_tbl-table": {
       "x": {
         "style": "bootstrap5",
         "filter": "none",
