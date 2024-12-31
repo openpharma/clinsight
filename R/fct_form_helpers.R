@@ -35,3 +35,31 @@ update_review_records <- function(review_records, review_selection, active_data)
     ) |> 
     dplyr::arrange(id)
 }
+
+#' Overall Reviewed Field
+#'
+#' This field serves as the main communication mechanism between the Shiny
+#' session and the DataTable objects in the browser.
+#'
+#' @format A list with up to five elements:
+#' \describe{
+#'    \item{reviewed}{A logical indicating the current review status of the table row.}
+#'    \item{ids}{A vectors containing the `id`s associated with the table row.}
+#'    \item{row_id}{A numeric value indicating the associated row in the DataTable. (Used to update server data set based on user changes to browser table.)}
+#'    \item{disabled}{A logical indicating whether the table row is part of the active review.}
+#'    \item{updated}{A logical indicating whether the user has changed the review status in the DataTable.}
+#' }
+#'
+#' @details The first three elements, `reviewed`, `ids`, and `row_id`, are
+#'   initialized when the datatable data set is created (via `create_table()`
+#'   etc.). This occurs whenever there is a change with the review data. The
+#'   `disabled` element gets updated whenever there is a change in which subject
+#'   is actively being reviewed. The `updated` field gets changed in one of
+#'   three events: the subject being reviewed is changed and `updated` gets set
+#'   to `NULL`, a user changed review status in the DataTable object and
+#'   `updated` gets set to the user inputted value, and finally when a user
+#'   changes the overall review status in the sidebar and `updated` gets set to
+#'   reflect that inputted value.
+#' 
+#' @noRd
+"o_reviewed"
