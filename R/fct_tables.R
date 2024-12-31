@@ -52,14 +52,7 @@ create_table.default <- function(
   stopifnot(is.character(name_column))
   stopifnot(is.character(value_column))
   if ("reviewed" %in% names(data)) {
-    data <- dplyr::mutate(
-      data,
-      o_reviewed = dplyr::case_when(
-        any(reviewed == "No") & any(reviewed == "Yes") ~ list(list(reviewed = NA, ids = id)),
-        any(reviewed == "Yes") ~ list(list(reviewed = TRUE, ids = id)),
-        .default = list(list(reviewed = FALSE, ids = id))
-      ),
-      .by = dplyr::all_of(keep_vars))
+    data <- add_o_reviewed(data, keep_vars)
     keep_vars <- c("o_reviewed", keep_vars)
   }
   df <- data[c(keep_vars, name_column, value_column)] |> 
@@ -73,6 +66,34 @@ create_table.default <- function(
   add_missing_columns(df, expected_columns)[
     unique(c(keep_vars, expected_columns))
     ]
+}
+
+#' Add Overall Reviewed Field
+#'
+#' Adds a field to the data set summarizing the overall review status over the
+#' rows uniquely defined by the ID columns.
+#'
+#' @param data A data frame to mutate
+#' @param id_cols A set of columns that uniquely identify each observation
+#'
+#' @details This function servers as a helper to `create_table.default()`. If
+#' the field `reviewed` is contained in the data frame, an overall review status
+#' field will be added to the data frame. The field is a list consistent of two
+#' named elements: `reviewed` and `ids`. The `reviewed` field is `TRUE` if all
+#' records are reviewed, `FALSE` if all records are not reviewed, and `NA` if
+#' some records are reviewed and some are not. The `ids` field contains a vector
+#' of the IDs associated with the unique observation defined by `id_cols`.
+#' 
+#' @noRd
+add_o_reviewed <- function(data, id_cols) {
+  dplyr::mutate(
+    data,
+    o_reviewed = dplyr::case_when(
+      any(reviewed == "No") & any(reviewed == "Yes") ~ list(list(reviewed = NA, ids = id)),
+      any(reviewed == "Yes") ~ list(list(reviewed = TRUE, ids = id)),
+      .default = list(list(reviewed = FALSE, ids = id))
+    ),
+    .by = dplyr::all_of(id_cols))
 }
 
 
