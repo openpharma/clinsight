@@ -15,7 +15,7 @@ mod_review_form_tbl_ui <- function(id) {
 #' review_form_tbl Server Functions
 #'
 #' @noRd 
-mod_review_form_tbl_server <- function(id, r, table_data, form, show_all, table_names){
+mod_review_form_tbl_server <- function(id, r, table_data, form, show_all, table_names = NULL, title = NULL){
   moduleServer(id, function(input, output, session){
     ns <- session$ns
     
@@ -106,6 +106,7 @@ mod_review_form_tbl_server <- function(id, r, table_data, form, show_all, table_
         isolate(subset(table_data(), show_all() | subject_id == r$subject_id)), 
         rename_vars = c("Review Status" = "o_reviewed", table_names), 
         rownames= FALSE,
+        title = title,
         escape = FALSE,
         selection = "none",
         callback = checkbox_callback,
