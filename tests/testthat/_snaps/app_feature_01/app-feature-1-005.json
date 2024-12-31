@@ -1,6 +1,6 @@
 {
   "output": {
-    "cf_adverse_events-SAE_table": {
+    "cf_adverse_events-review_form_SAE_tbl-table": {
       "x": {
         "style": "bootstrap5",
         "filter": "none",
@@ -242,7 +242,7 @@
         }
       ]
     },
-    "cf_adverse_events-common_form_table": {
+    "cf_adverse_events-review_form_tbl-table": {
       "x": {
         "style": "bootstrap5",
         "filter": "none",
@@ -8286,7 +8286,7 @@
         }
       ]
     },
-    "sf_vital_signs-table": {
+    "sf_vital_signs-review_form_tbl-table": {
       "x": {
         "style": "bootstrap5",
         "filter": "none",
