@@ -119,9 +119,10 @@ mod_common_forms_server <- function(
             )
           ) |> 
           create_table(expected_columns = names(form_items)) |> 
-          dplyr::mutate(o_reviewed = Map(\(x, y) append(x, list(row_id = y)), 
+          dplyr::mutate(o_reviewed = Map(\(x, y, z) append(x, list(row_id = y, disabled = z)), 
                                          o_reviewed, 
-                                         dplyr::row_number()))
+                                         dplyr::row_number(),
+                                         subject_id != r$subject_id))
       }
       common_form_data({
         if(form == "Adverse events") {
