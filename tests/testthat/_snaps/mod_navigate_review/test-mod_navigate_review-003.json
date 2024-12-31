@@ -17,15 +17,18 @@
           "scrollX": true,
           "scroller": false,
           "deferRender": true,
-          "scrollResize": true,
           "scrollCollapse": true,
-          "colReorder": true,
+          "colReorder": {
+            "enable": true,
+            "realtime": false,
+            "fixedColumnsLeft": 1
+          },
           "pageLength": -1,
           "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"\")\n}",
           "dom": "f<\"header h5\">ti",
           "columnDefs": [
             {
-              "name": "Subject",
+              "name": "subject_id",
               "targets": 0
             },
             {
@@ -169,22 +172,6 @@
           "all_files": false
         },
         {
-          "name": "dt-plugin-scrollresize",
-          "version": "1.13.6",
-          "src": {
-            "href": "dt-plugin-scrollresize-1.13.6"
-          },
-          "meta": null,
-          "script": "source.min.js",
-          "stylesheet": [
-
-          ],
-          "head": null,
-          "attachment": null,
-          "package": null,
-          "all_files": true
-        },
-        {
           "name": "crosstalk",
           "version": "1.2.1",
           "src": {
@@ -214,9 +201,12 @@
           "scrollX": true,
           "scroller": true,
           "deferRender": true,
-          "scrollResize": true,
           "scrollCollapse": true,
-          "colReorder": true,
+          "colReorder": {
+            "enable": true,
+            "realtime": false,
+            "fixedColumnsLeft": 1
+          },
           "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"\")\n}",
           "dom": "f<\"header h5\">ti",
           "columnDefs": [
@@ -229,7 +219,7 @@
               "targets": 0
             },
             {
-              "name": "Subject",
+              "name": "subject_id",
               "targets": 1
             },
             {
@@ -366,22 +356,6 @@
           "attachment": null,
           "package": null,
           "all_files": false
-        },
-        {
-          "name": "dt-plugin-scrollresize",
-          "version": "1.13.6",
-          "src": {
-            "href": "dt-plugin-scrollresize-1.13.6"
-          },
-          "meta": null,
-          "script": "source.min.js",
-          "stylesheet": [
-
-          ],
-          "head": null,
-          "attachment": null,
-          "package": null,
-          "all_files": true
         },
         {
           "name": "crosstalk",
