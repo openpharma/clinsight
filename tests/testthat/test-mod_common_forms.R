@@ -88,6 +88,7 @@ describe(
           expect_equal(unique(common_form_data()[enabled_rows,"subject_id",drop = TRUE]), "DEU_02_482")
           expect_true(is.data.frame(common_form_data()))
 
+          expect_true(inherits(output[["review_form_tbl-table"]], "json"))
           allergic_ae <- with(
             common_form_data(), 
             Name[subject_id == "DEU_02_482" & grepl("allergic reaction", tolower(Name))]
@@ -147,6 +148,7 @@ describe(
           enabled_rows <- lapply(common_form_data()[["o_reviewed"]], \(x) isFALSE(x$disabled)) |> unlist()
           expect_equal(unique(common_form_data()[enabled_rows,"subject_id",drop = TRUE]), "NLD_06_755")
           expect_true(is.data.frame(common_form_data()))
+          expect_true(inherits(output[["review_form_tbl-table"]], "json"))
           pantoprazole_med <- with(
             common_form_data(), 
             Name[subject_id == "NLD_06_755" & 
