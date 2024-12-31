@@ -243,15 +243,14 @@ mod_common_forms_server <- function(
           )
         
         
-        # Update the table's data reactive
-        df <- do.call(tbl_data, list())
-        
-        update_row <- dplyr::distinct(input[[review_selection]], reviewed, row_id)
-        row_ids <- df$o_reviewed |> lapply(\(x) x[["row_id"]]) |> unlist()
-        df[row_ids == update_row$row_id, "o_reviewed"] <- list(list(
-          modifyList(df[row_ids == update_row$row_id,]$o_reviewed[[1]], 
-                     list(updated = switch(update_row$reviewed, "Yes" = TRUE, "No" = FALSE, NA)))
-        ))
+        # Update the table's data reactive. Note that since this observer is
+        # created via an `lapply` that `tbl_data` is a character vector so
+        # `do.call()` is used both to access the reactive value and to update
+        # it.
+        df <- update_tbl_data_from_datatable(
+          do.call(tbl_data, list()), 
+          input[[review_selection]]
+        )
         do.call(tbl_data, list(df))
       })
     })

@@ -227,14 +227,10 @@ mod_study_forms_server <- function(
         )
       
       # Update the table's data reactive
-      df <- table_data()
-      
-      update_row <- dplyr::distinct(input$table_review_selection, reviewed, row_id)
-      row_ids <- df$o_reviewed |> lapply(\(x) x[["row_id"]]) |> unlist()
-      df[row_ids == update_row$row_id, "o_reviewed"] <- list(list(
-        modifyList(df[row_ids == update_row$row_id,]$o_reviewed[[1]], 
-                   list(updated = switch(update_row$reviewed, "Yes" = TRUE, "No" = FALSE, NA)))
-      ))
+      df <- update_tbl_data_from_datatable(
+        table_data(), 
+        input$table_review_selection
+      )
       table_data(df)
     })
     

@@ -6,6 +6,8 @@
 #' @param review_selection The review selection data frame input from the
 #'   datatable.
 #' @param active_data The active review data frame.
+#' 
+#' @return A data frame containing the updated records data.
 #'
 #' @details Three main steps are performed: UPSERT, SUBSET, and ANTI-JOIN The
 #'   UPSERT takes the review selection data frame and upserts it into the review
@@ -34,6 +36,25 @@ update_review_records <- function(review_records, review_selection, active_data)
       by = c("id", "reviewed")
     ) |> 
     dplyr::arrange(id)
+}
+
+#' Update Server Table from Selection
+#' 
+#' Updates the server table object based on the user selection.
+#' 
+#' @param tbl_data A data frame containing the server table.
+#' @param review_selection The review selection data frame input from the
+#'   datatable.
+#' 
+#' @return A data frame containing the updated table data.
+update_tbl_data_from_datatable <- function(tbl_data, review_selection) {
+  update_row <- dplyr::distinct(review_selection, reviewed, row_id)
+  row_ids <- tbl_data$o_reviewed |> lapply(\(x) x[["row_id"]]) |> unlist()
+  tbl_data[row_ids == update_row$row_id, "o_reviewed"] <- list(list(
+    modifyList(tbl_data[row_ids == update_row$row_id,]$o_reviewed[[1]], 
+               list(updated = switch(update_row$reviewed, "Yes" = TRUE, "No" = FALSE, NA)))
+  ))
+  tbl_data
 }
 
 #' Overall Reviewed Field
