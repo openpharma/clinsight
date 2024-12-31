@@ -73,7 +73,8 @@ mod_common_forms_ui <- function(id, form){
 #'   interactive tables.
 #'
 #' @seealso [mod_common_forms_ui()], [mod_timeline_ui()],
-#'   [mod_timeline_server()]
+#'   [mod_timeline_server()], [mod_review_form_tbl_ui()],
+#'   [mod_review_form_tbl_server()]
 #' 
 mod_common_forms_server <- function(
     id, 

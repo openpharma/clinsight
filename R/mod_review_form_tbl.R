@@ -1,21 +1,55 @@
-#' review_form_tbl UI Function
+#' Review forms table - Shiny module UI
 #'
-#' @description A shiny Module.
+#' @inherit mod_review_form_tbl_server
+#' @seealso [mod_review_form_tbl_server()]
 #'
-#' @param id,input,output,session Internal parameters for {shiny}.
-#'
-#' @noRd 
-#'
-#' @importFrom shiny NS tagList 
 mod_review_form_tbl_ui <- function(id) {
   ns <- NS(id)
   DT::dataTableOutput(ns("table"))
 }
 
-#' review_form_tbl Server Functions
+#' Review forms table - Shiny module Server
 #'
-#' @noRd 
-mod_review_form_tbl_server <- function(id, r, table_data, form, show_all, table_names = NULL, title = NULL){
+#' Shiny module. Used to handle the logic and presentation of form review data.
+#'
+#' This module handles the logic associated with the form review tables. It
+#' handles all the logic associated with the table check boxes and the observers
+#' needed to keep the browser table in-synch with the server table.
+#'
+#' @param id Character string, used to connect the module UI with the module
+#'   Server.
+#' @param r Common reactive values. Used to access the data frames
+#'   `review_data`, `filtered_tables`, and the active `subject_id`.
+#'   `review_data` will be used to determine which rows will be displayed in
+#'   bold and, for the form Adverse events, which timeline data should be
+#'   highlighted.
+#' @param table_data Common reactive value. Used to manage the server data
+#'   displayed in the DataTable.
+#' @param form A character string with the name of the form to display.
+#' @param table_names An optional character vector. If provided, will be used
+#'   within [datatable_custom()], to improve the column names in the final
+#'   interactive tables.
+#' @param title An optional character vector. If provided, will be used within
+#'   [datatable_custom()], as the title for the table.
+#'
+#' @seealso [mod_review_form_tbl_ui()], [mod_common_forms_ui()],
+#'   [mod_common_forms_server()], [mod_study_forms_ui()],
+#'   [mod_study_forms_server()]
+#' 
+mod_review_form_tbl_server <- function(
+    id,
+    r,
+    table_data,
+    form,
+    show_all,
+    table_names = NULL,
+    title = NULL
+){
+  stopifnot(is.reactivevalues(r))
+  stopifnot(is.reactive(table_data))
+  stopifnot(is.character(form), length(form) == 1)
+  stopifnot(is.reactive(show_all))
+
   moduleServer(id, function(input, output, session){
     ns <- session$ns
     

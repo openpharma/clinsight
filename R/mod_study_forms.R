@@ -113,7 +113,8 @@ mod_study_forms_ui <- function(id, form, form_items){
 #'   column `item_group`), and the columns `item_scale` `use_unscaled_limits`,
 #'   which are used to customize the way the figures are shown in the page.
 #'
-#' @seealso [mod_study_forms_ui()]
+#' @seealso [mod_study_forms_ui()], [mod_review_form_tbl_ui()],
+#'   [mod_review_form_tbl_server()]
 #' 
 mod_study_forms_server <- function(
     id, 

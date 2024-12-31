@@ -47,6 +47,8 @@ update_review_records <- function(review_records, review_selection, active_data)
 #'   datatable.
 #' 
 #' @return A data frame containing the updated table data.
+#' 
+#' @noRd
 update_tbl_data_from_datatable <- function(tbl_data, review_selection) {
   update_row <- dplyr::distinct(review_selection, reviewed, row_id)
   row_ids <- tbl_data$o_reviewed |> lapply(\(x) x[["row_id"]]) |> unlist()
