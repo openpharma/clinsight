@@ -26,6 +26,8 @@ mod_review_form_tbl_ui <- function(id) {
 #' @param table_data Common reactive value. Used to manage the server data
 #'   displayed in the DataTable.
 #' @param form A character string with the name of the form to display.
+#' @param show_all Common reactive value, a logical indicating whether all
+#'   records should be displayed.
 #' @param table_names An optional character vector. If provided, will be used
 #'   within [datatable_custom()], to improve the column names in the final
 #'   interactive tables.

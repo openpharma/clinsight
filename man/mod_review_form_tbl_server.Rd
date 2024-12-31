@@ -29,6 +29,9 @@ displayed in the DataTable.}
 
 \item{form}{A character string with the name of the form to display.}
 
+\item{show_all}{Common reactive value, a logical indicating whether all
+records should be displayed.}
+
 \item{table_names}{An optional character vector. If provided, will be used
 within \code{\link[=datatable_custom]{datatable_custom()}}, to improve the column names in the final
 interactive tables.}
