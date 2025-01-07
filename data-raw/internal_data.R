@@ -8,7 +8,6 @@ names(col_palette) <- c("within limits",
                         "out of limits, significance pending", 
                         "out of limits, clinically significant", 
                         "limits unknown")
-usethis::use_data(col_palette, overwrite = TRUE)
 
 # Empty data frame used to reset query data frame if needed.
 query_data_skeleton <- dplyr::tibble(

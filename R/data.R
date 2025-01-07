@@ -39,20 +39,6 @@
 
 
 
-#' Custom color palette 
-#' 
-#' A named vector of colors to be used in the figures of the application.
-#'
-#' @format ## `col_palette`
-#' A named vector with the following components:
-#' - `within limits` : "#1a9641"
-#' - `out of limits, clinically insignificant`: "#a6d96a"
-#' - `out of limits, significance pending`: "#fdae61"
-#' - `out of limits, clinically significant`: "#d7191c"
-#' - `limits unknown`: "grey50"
-#' 
-"col_palette"
-
 
 #' Clinical Trial test data
 #'
