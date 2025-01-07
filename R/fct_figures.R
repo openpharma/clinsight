@@ -84,29 +84,40 @@ fig_boxplots <- function(
 #' Function to create a simple timeline figure using `ggplot2`.
 #'
 #' @param data Data frame to use.
-#' @param min_events Minimum number of events to include in the compact
-#'   timeline. See also [fig_timeline()]. 
+#' @param events data frame with events metadata.
 #'
 #' @return A ggplot2 object.
 #' @export
 #' 
 fig_timeline <- function(
     data, 
-    min_events = 10
+    events
     ){
   stopifnot(is.data.frame(data))
-  stopifnot(is.numeric(min_events))
-  min_events <- min_events %||% 10
+  stopifnot(is.data.frame(events))
   
+  generate_labels <- with(
+    events[!is.na(events$min_expected_visits),], 
+    any(is.na(event_id)) | any(min_expected_visits > 1)
+  )
   labels_in_data <- unique(data$event_label[!is.na(data$event_label)])
-  event_numbers <- labels_in_data[grepl("^V[[:digit:]]", labels_in_data)] |> 
-    gsub(pattern = "V", replacement = "") |> 
-    unique() |> 
-    as.numeric()
-  max_events <- max(c(min_events, event_numbers), na.rm = TRUE)
-  all_events <- data.frame(
-    event_label = factor(0:max_events, labels = paste0("V", 0:max_events))
+  
+  if(!generate_labels){
+    all_ids <- events$event_id[!is.na(events$event_id)]
+    all_events <- data.frame(event_label = factor(all_ids, levels = all_ids))
+  } else{
+    min_events <- sum(as.numeric(events[["min_expected_visits"]]), na.rm = TRUE) - 1
+    min_events <- max(min_events, 5)
+    # The regex below should be redundant, but I decided to leave it to be safe:
+    event_numbers <- labels_in_data[grepl("^V[[:digit:]]", labels_in_data)] |> 
+      gsub(pattern = "V", replacement = "") |> 
+      as.numeric()
+    max_events <- max(min_events, event_numbers, na.rm = TRUE)
+    all_events <- data.frame(
+      event_label = factor(0:max_events, labels = paste0("V", 0:max_events))
     )
+  }
+  
   completed_events <- all_events[
     all_events$event_label %in% labels_in_data, , drop = FALSE]
   uneven_events   <- all_events[1:length(all_events$event_label) %% 2 == 0, , drop = FALSE]

@@ -57,12 +57,45 @@ get_metadata <- function(
       unite_with = "var",
       remove_cols = FALSE
     ) 
-  
   # Verify and clean form-level data:
   meta[["form_level_data"]] <- get_form_level_data(
     meta[["form_level_data"]], 
     all_forms = unique(meta$items_expanded$item_group)
   )
+  
+  # Verify and clean event data:
+  required_events_cols <- c("event_prefix", "min_expected_visits")
+  if(!all(required_events_cols %in% names(meta[["events"]]))){
+    stop("data in metadata$events needs at least the columns: '", 
+         paste0(required_events_cols, collapse = ","), "'.")
+  }
+  event_id_cols <- c("event_id", "event_id_pattern")
+  if(!any(event_id_cols %in% names(meta[["events"]])) ){
+    stop("At least one of the columns 'event_id' or 'event_id_pattern' must ",
+         "be available in the metadata 'events' tab")
+  }
+  meta[["events"]] <- add_missing_columns(meta[["events"]], event_id_cols)
+  if (with(meta[["events"]], sum(is.na(event_id) & is.na(event_id_pattern) )) > 0 ){
+    stop("The values in 'event_id' and 'event_id_pattern' cannot both be ",
+         "missing in the 'events' metadata tab.")
+  }
+  #expanding table so that all matching id's are shown:
+  meta[["events"]] <- meta[["events"]] |> 
+    add_missing_columns(c("event_suffix", "add_event_number")) |> 
+    dplyr::mutate(
+      add_event_number = ifelse(is.na(add_event_number), FALSE, add_event_number),
+      # in case event_id_pattern is missing, match with the exact event_id:
+      event_id_pattern = ifelse(
+        is.na(event_id_pattern), 
+        paste0("^", event_id, "$"),
+        event_id_pattern
+      ),
+      min_expected_visits = as.numeric(min_expected_visits),
+      is_expected_visit = !is.na(min_expected_visits) & min_expected_visits >= 1,
+      add_event_number = as.logical(add_event_number),
+      add_visit_number = add_event_number & is_expected_visit,
+      add_event_repeat_number = add_event_number & !is_expected_visit
+    )
   
   # verify if all required columns are available and if not create them:
   missing_cols <- required_meta_cols[!required_meta_cols %in% names(meta$items_expanded)]
@@ -132,7 +165,7 @@ rename_raw_data <- function(
 #'
 #' @param data A data frame
 #' @param events A data frame with events. Needs at least the columns
-#'   `event_prefix`, `event_suffix`, `event_id_pattern`, `is_scheduled_visit`,
+#'   `event_prefix`, `event_suffix`, `event_id`, `event_id_pattern`, 
 #'   and `expected_events`.
 #' @param label_type Character vector to control the type of label set. Variable
 #'   not yet in use.
@@ -156,18 +189,13 @@ add_timevars_to_data <- function(
     paste0("The following columns are missing while they are required:\n", 
            missing_new_cols, ".")
   )
-  required_events_cols <- c("event_prefix", "event_suffix", "event_id_pattern", 
-                            "is_scheduled_visit", "expected_events")
-  if(!all(required_events_cols %in% names(events))){
-    stop("data in metadata$events needs at least the columns: '", 
-         paste0(required_events_cols, collapse = ","), "'.")
-  }
-  events$is_scheduled_visit <- sapply(as.logical(events$is_scheduled_visit), isTRUE)
+  # Below needed to select all expected visits and to decide what should be 
+  # counted as a visit day and what not. 
+  # consider filling event pattern with event_id if event_id_pattern is missing
   all_event_patterns <- paste0(
-    with(events, event_id_pattern[is_scheduled_visit]), 
+    with(events, event_id_pattern[is_expected_visit]), 
     collapse = "|"
   )
-  
   df <- data |>
     dplyr::mutate(
       edit_date_time = as.POSIXct(edit_date_time, tz = "UTC"),
@@ -181,60 +209,69 @@ add_timevars_to_data <- function(
       factor(site_code, levels = order_string(site_code)),
       factor(subject_id, levels = order_string(subject_id))
     )
-  if ("event_name" %in% names(data)) { return(df) }
-
+  if ("event_name" %in% names(data)) { 
+    return(df) 
+  }
   all_ids <- unique(data$event_id)
   #expanding table so that all matching id's are shown:
+  generate_labels <- with(
+    events[!is.na(events$min_expected_visits),], 
+    any(is.na(event_id)) | any(min_expected_visits > 1)
+    )
+  visit_levels <- paste0("V", sort(unique(df$vis_num)))
+  
   events_table <- events |> 
     dplyr::mutate(
-      event_id = sapply(
-        event_id_pattern, 
-        \(x){paste0(all_ids[grepl(x, all_ids)], collapse = ",") }
-      ),
-      add_visit_number = is_scheduled_visit & (is.na(expected_events) | expected_events > 1 ),
-      add_event_repeat_number = !is_scheduled_visit & (is.na(expected_events) | expected_events > 1 )
+      # in case event_id is missing, return all event_id's that match the 
+      # event_id_pattern
+      event_id = ifelse(
+        is.na(event_id), 
+        sapply(
+          event_id_pattern, 
+          \(x){paste0(all_ids[grepl(x, all_ids)], collapse = ",") }
+          ),
+        event_id
+        )
     ) |> 
     expand_columns(columns = "event_id", separator = ",")
-  cols_to_remove <- c(
-    names(events), 
-    "add_visit_number", 
-    "add_event_repeat_number", 
-    "event_name_edc"
-  )
+  cols_to_remove <- c(names(events), "event_name_edc")
   
   df <- df |> 
     dplyr::left_join(events_table, by = "event_id") |> 
     add_missing_columns("event_name_edc") |> 
     tidyr::replace_na(
       list(
-        event_prefix = "Any visit", 
-        is_scheduled_visit = FALSE,
-        add_visit_numbers = FALSE, 
-        add_event_repeat_number = FALSE
+        event_prefix = "Any visit",
+        add_visit_number = FALSE, 
+        add_event_repeat_number = FALSE,
+        generate_event_label = TRUE
       )
     ) |> 
     dplyr::mutate(
       event_name = dplyr::case_when(
-        add_visit_number        ~ paste0(event_prefix, " ", vis_num),
         add_event_repeat_number ~ paste0(event_prefix, " ", event_repeat),
+        add_visit_number        ~ paste0(event_prefix, " ", vis_num),
         .default = event_prefix
       ),
       event_name = dplyr::case_when(
         !is.na(event_suffix) ~ paste0(event_name, " (", event_suffix, ")"), 
-        !is.na(event_name_edc) & is_scheduled_visit & 
-          event_name != event_name_edc ~ paste0(event_name, " (", event_name_edc, ")"),
+        !is.na(event_name_edc) & 
+          add_event_number & 
+          tolower(event_prefix) != tolower(event_name_edc) ~ 
+          paste0(event_name, " (", event_name_edc, ")"),
         .default = event_name
         ),
       event_label = event_label %|_|% dplyr::case_when(
-        !is.na(vis_num)   ~ paste0("V", vis_num),
-        grepl("^UN", event_id, ignore.case = TRUE)   ~ paste0("UV", event_repeat),
-        .default = event_name
+        !generate_labels ~ factor(event_id, levels = unique(events_table$event_id)),
+        !is.na(vis_num) ~ factor(paste0("V", vis_num), levels = visit_levels),
+        #grepl("^UN", event_id, ignore.case = TRUE) ~ paste0("UV", event_repeat),
+        .default = NA_character_
       )
     ) |> 
     dplyr::select(-dplyr::all_of(cols_to_remove))
   
-  cat("Created the following event_id and event_name combinations:\n")
-  print(unique(df[order(df$event_id), c("event_id", "event_name")]))
+  cat("Created the following event_label and event_name combinations:\n")
+  print(unique(df[order(df$event_label), c("event_label", "event_name")]))
   df
 }
 
@@ -348,7 +385,7 @@ get_meta_vars <- function(data = appdata, meta = metadata){
   vars <- list()
   # add metadata variables:
   vars$min_events <- c(
-    sum(as.numeric(meta$events[["expected_events"]]), na.rm = TRUE) - 1, 5
+    sum(as.numeric(meta$events[["min_expected_visits"]]), na.rm = TRUE) - 1, 5
   ) |> 
     max()
   vars$items <- meta$items_expanded |> 
@@ -370,6 +407,7 @@ get_meta_vars <- function(data = appdata, meta = metadata){
   vars$Sites     <- get_unique_vars(data, c("site_code", "region")) |> 
     dplyr::arrange(factor(site_code, levels = order_string(site_code)))
   vars$table_names <- setNames(meta$table_names$raw_name, meta$table_names$table_name) 
+  vars$event_labels <- get_event_labels(data, meta$events)
   # adding form-level data here since it meta vars are already passed through in 
   # the modules that need this information (e.g. mod_main_sidebar):
   vars$form_level_data <- meta$form_level_data

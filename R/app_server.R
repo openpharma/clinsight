@@ -238,7 +238,7 @@ app_server <- function(
     r = r, 
     rev_data = rev_data, 
     navinfo = navinfo, 
-    min_events = app_vars$min_events
+    events = meta$events
   )
   
   
