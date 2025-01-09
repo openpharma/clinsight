@@ -11,6 +11,7 @@
 - Simplify pulling data from DB for reviews.
 - Review data by records IDs instead of subject & form
 - Make query handling a configurable option
+- Changed the legend to display 'significance pending' instead of 'significance unknown'.
 
 ## Bug fixes
 
