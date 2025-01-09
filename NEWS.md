@@ -10,9 +10,11 @@
 - Add a logging table to the DB for reviews.
 - Simplify pulling data from DB for reviews.
 - Review data by records IDs instead of subject & form
+- Make query handling a configurable option
+- Changed the legend to display 'significance pending' instead of 'significance unknown'.
 - Added `Excel` download button to Queries table & patient listings that need review.
 - Added helper function to automatically determine when adding said excel button is appropriate.
-- Changed the legend to display 'significance pending' instead of 'significance unknown'.
+
 
 ## Bug fixes
 
