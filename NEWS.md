@@ -12,6 +12,7 @@
 - Review data by records IDs instead of subject & form
 - Added `Excel` download button to Queries table & patient listings that need review.
 - Added helper function to automatically determine when adding said excel button is appropriate.
+- Changed the legend to display 'significance pending' instead of 'significance unknown'.
 
 ## Bug fixes
 
