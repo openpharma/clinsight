@@ -10,7 +10,8 @@
 - Add a logging table to the DB for reviews.
 - Simplify pulling data from DB for reviews.
 - Review data by records IDs instead of subject & form
-- Changed the legend to display 'significance pending' instead of 'significance pending'.
+- Make query handling a configurable option
+- Changed the legend to display 'significance pending' instead of 'significance unknown'.
 
 ## Bug fixes
 
