@@ -13,7 +13,7 @@ datatable_custom(
   plugins = "scrollResize",
   dom = "fti",
   options = list(),
-  allow_listing_download = get_golem_config("allow_listing_download"),
+  allow_listing_download = NULL,
   table_name = NULL,
   ...
 )
