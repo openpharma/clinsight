@@ -161,7 +161,7 @@ mod_common_forms_server <- function(
         escape = FALSE, 
         table_name = paste(
           simplify_string(form), 
-          ifelse(input$show_all_data, "all_patients", simplify_string(r$subject_id)), 
+          ifelse(input$show_all_data, "all_patients", r$subject_id), 
           sep = "."
         )
       )
