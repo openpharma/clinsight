@@ -138,6 +138,7 @@ mod_review_form_tbl_server <- function(
     ############################### Outputs: ###################################
     
     output[["table"]] <- DT::renderDT({
+      req(r$filtered_data[[form]])
       datatable_custom(
         isolate(subset(table_data(), show_all() | subject_id == r$subject_id)), 
         rename_vars = c("Review Status" = "o_reviewed", table_names), 

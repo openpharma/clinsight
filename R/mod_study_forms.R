@@ -191,9 +191,7 @@ mod_study_forms_server <- function(
       }
       table_data(df)
     })
-    observeEvent(table_data(), {
-      mod_review_form_tbl_server("review_form_tbl", r, table_data, form, reactive(input$show_all), table_names)
-    }, once = TRUE)
+    mod_review_form_tbl_server("review_form_tbl", r, table_data, form, reactive(input$show_all), table_names)
     
     scaling_data <- reactive({
       cols <- c("item_scale", "use_unscaled_limits")
