@@ -706,15 +706,16 @@
           "scrollResize": true,
           "scrollCollapse": true,
           "colReorder": true,
+          "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"Adverse events\")\n}",
+          "dom": "Bf<\"header h5\">ti",
           "buttons": [
             {
               "extend": "excel",
               "text": "<i class=\"fa-solid fa-download\"><\/i>",
-              "filename": "clinsight.Adverse-events.BEL_04_772"
+              "filename": "clinsight.adverse_events.BEL_04_772",
+              "title": "adverse_events.BEL_04_772 | extracted from ClinSight"
             }
           ],
-          "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"Adverse events\")\n}",
-          "dom": "Bf<\"header h5\">ti",
           "columnDefs": [
             {
               "className": "dt-right",
