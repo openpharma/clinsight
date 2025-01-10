@@ -543,7 +543,7 @@ dt_config <- function(data, table_name = "form") {
 #' @param rename_vars An optional named character vector. If provided, it will
 #'   rename any column names found in this vector to the provided name.
 #' @param title Optional. Character string with the title of the table.
-#' @param selection See [DT::datatable()]. Default set to 'single'. 
+#' @param selection See [DT::datatable()]. Default set to 'single'.
 #' @param extensions See [DT::datatable()]. Default set to 'Scroller'.
 #' @param plugins See [DT::datatable()]. Default set to 'scrollResize'.
 #' @param dom See \url{https://datatables.net/reference/option/dom}. A div
@@ -561,6 +561,13 @@ dt_config <- function(data, table_name = "form") {
 #'   * Non-modifiable defaults:
 #'     * `dom`: Defined by the `dom` parameter.
 #'     * `initComplete`: Defaults to a function to insert table title into dataTable container.
+#' @param allow_listing_download Logical, whether to allow the user to download
+#'   the table as an Excel file. Defaults to the `allow_listing_download`
+#'   configuration option in `golem-config.yml`, but can be overwritten here if
+#'   needed.
+#' @param table_name Character string with the table name. Only used for
+#'   downloadable tables and thus only has effect if `allow_listing_download` is
+#'   `TRUE`
 #' @param ... Other optional arguments that will be passed to [DT::datatable()].
 #'
 #' @return A `DT::datatable` object.
@@ -576,6 +583,8 @@ datatable_custom <- function(
     plugins = "scrollResize",
     dom = "fti",
     options = list(),
+    allow_listing_download = NULL,
+    table_name = NULL,
     ...
     ){
   stopifnot(is.data.frame(data))
@@ -586,6 +595,10 @@ datatable_custom <- function(
   stopifnot(is.null(title) | is.character(title))
   stopifnot(grepl("t", dom, fixed = TRUE))
   stopifnot(is.list(options))
+  allow_listing_download <- allow_listing_download %||% 
+    get_golem_config("allow_listing_download")
+  stopifnot(is.null(allow_listing_download) | is.logical(allow_listing_download))
+  stopifnot(is.null(table_name) | is.character(table_name))
   
   default_opts <- list(
     scrollY = 400,
@@ -608,6 +621,20 @@ datatable_custom <- function(
       ),
     dom = gsub(pattern = "(t)", replacement = '<"header h5">\\1', dom)
   )
+  
+  # This will conditionally add a download button to the table
+  if(nrow(data) > 0 & isTRUE(allow_listing_download)) {
+    table_name <- table_name %||% "(table name missing)"
+    extensions <- c("Buttons", extensions)
+    fixed_opts[["buttons"]] <- list(list(
+      extend = 'excel',
+      text = '<i class="fa-solid fa-download"></i>',
+      filename = paste("clinsight", table_name, sep = "."),
+      title = paste0(table_name, " | extracted from ClinSight")
+    ))
+    fixed_opts[["dom"]] <- paste0('B', fixed_opts[["dom"]])
+  }
+  
   opts <- default_opts |>
     modifyList(options) |>
     modifyList(fixed_opts)
