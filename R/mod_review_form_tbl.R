@@ -56,6 +56,7 @@ mod_review_form_tbl_server <- function(
     ns <- session$ns
     
     reload_data <- reactiveVal(0)
+    datatable_rendered <- reactiveVal(FALSE)
     
     ############################### Observers: #################################
     
@@ -101,7 +102,7 @@ mod_review_form_tbl_server <- function(
     # needs to be updated
     observe({
       req(!is.null(show_all()))
-      req(table_data())
+      req(table_data(), datatable_rendered())
       DT::dataTableAjax(table_proxy$session, 
                         subset(table_data(), show_all() | subject_id == r$subject_id), 
                         rownames = FALSE,
@@ -112,7 +113,7 @@ mod_review_form_tbl_server <- function(
     # the new data
     observeEvent(reload_data(), {
       req(!is.null(show_all()))
-      req(table_data())
+      req(table_data(), datatable_rendered())
       DT::reloadData(table_proxy)
     }, ignoreInit = TRUE)
     
@@ -125,7 +126,7 @@ mod_review_form_tbl_server <- function(
     })
     
     observeEvent(show_all(), {
-      req(table_data())
+      req(table_data(), datatable_rendered())
       reload_data(reload_data() + 1)
       index <- match("subject_id", colnames(table_data())) - 1
       if (show_all()) {
@@ -139,6 +140,7 @@ mod_review_form_tbl_server <- function(
     
     output[["table"]] <- DT::renderDT({
       req(r$filtered_data[[form]])
+      datatable_rendered(TRUE)
       datatable_custom(
         isolate(subset(table_data(), show_all() | subject_id == r$subject_id)), 
         rename_vars = c("Review Status" = "o_reviewed", table_names), 
