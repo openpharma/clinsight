@@ -505,35 +505,6 @@ add_missing_columns <- function(
   data
 }
 
-#' Configure DT helper
-#'
-#' Small wrapper that helps handle some messiness preparing the correct `DT`
-#' dom, extensions, & options when needed. Specifically, when & how to add an
-#' Excel download button.
-#'
-#' @param data A data frame used for display in a DT table. Number of rows will
-#'   be assessed
-#' @param table_name character string, usually the form name
-#'
-#' @keywords internal
-#' @return list with three named objects: `dom`, `exts`, and `opts`
-dt_config <- function(data, table_name = "form") {
-  default_args<- formals(datatable_custom)
-  if(nrow(data) > 0 & isTRUE(get_golem_config("allow_listing_download"))) {
-    dt_dom <- 'Bfti'
-    dt_exts <- c("Buttons", eval(default_args$extensions))
-    dt_opts <- list(buttons=list(list(extend = 'excel',
-        text = '<i class="fa-solid fa-download"></i>',
-        filename = paste("clinsight", gsub(" ", "-", table_name), sep = ".")
-        )))
-  } else {
-    dt_dom <- default_args$dom |> eval()
-    dt_exts <- default_args$extensions |> eval()
-    dt_opts <- default_args$options |> eval()
-  }
-  return(list(dom = dt_dom, exts = dt_exts, opts = dt_opts))
-}
-
 #' Custom interactive datatable
 #'
 #' Small wrapper around [DT::datatable()]. Will be used to create tables in a
