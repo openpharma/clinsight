@@ -11,10 +11,13 @@
 - Simplify pulling data from DB for reviews.
 - Review data by records IDs instead of subject & form
 - Improved generalization of event names for use in multiple studies.
+- Make query handling a configurable option
+- Changed the legend to display 'significance pending' instead of 'significance unknown'.
 
 ## Bug fixes
 
 - The test-coverage GHA workflow is updated so that codecov uploads work again.
+- Display all rows for tables where `Scroller` is disabled.
 
 # clinsight 0.1.1
 
