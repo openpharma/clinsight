@@ -151,15 +151,15 @@ mod_queries_server <- function(id, r, navinfo, all_forms, db_path, table_names){
       }
       
       # determine DT dom / exts / opts
-      DT <- dt_config(initial_queries()[query_cols],
-              table_name = paste(ifelse(input$show_resolved, "all", "open"),
-                           "queries", sep = ".")) 
+      
+              
       datatable_custom(
         initial_queries()[query_cols], 
         table_names, 
         title = table_title,
         callback = dblclick_to_form(ns("go_to_form")),
-        dom = DT$dom, extensions = DT$exts, options = DT$opts
+        export_label = paste(ifelse(input$show_resolved, "all", "open"),
+                           "queries", sep = ".")
       )
     })
     
@@ -190,7 +190,8 @@ mod_queries_server <- function(id, r, navinfo, all_forms, db_path, table_names){
         ),
         class = "row-border hover",
         rownames = FALSE,
-        selection = "none"
+        selection = "none",
+        allow_listing_download = FALSE
       )
     })
   })

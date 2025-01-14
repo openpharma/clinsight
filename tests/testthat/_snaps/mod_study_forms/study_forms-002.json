@@ -1253,15 +1253,16 @@
           "scrollResize": true,
           "scrollCollapse": true,
           "colReorder": true,
+          "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"\")\n}",
+          "dom": "Bf<\"header h5\">ti",
           "buttons": [
             {
               "extend": "excel",
               "text": "<i class=\"fa-solid fa-download\"><\/i>",
-              "filename": "clinsight.Vital-signs.NLD_06_755"
+              "filename": "clinsight.vital_signs.NLD_06_755",
+              "title": "vital_signs.NLD_06_755 | extracted from ClinSight"
             }
           ],
-          "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"\")\n}",
-          "dom": "Bf<\"header h5\">ti",
           "columnDefs": [
             {
               "orderable": false,
