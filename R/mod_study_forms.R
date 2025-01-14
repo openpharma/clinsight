@@ -228,10 +228,11 @@ mod_study_forms_server <- function(
         table_data_active(), 
         table_names, 
         escape = FALSE,
-        table_name = paste(
+        export_label = paste(
           simplify_string(form), 
           ifelse(input$show_all, "all_patients", r$subject_id), 
-          sep = ".")
+          sep = "."
+          )
         )
     })
     

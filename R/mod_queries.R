@@ -158,7 +158,7 @@ mod_queries_server <- function(id, r, navinfo, all_forms, db_path, table_names){
         table_names, 
         title = table_title,
         callback = dblclick_to_form(ns("go_to_form")),
-        table_name = paste(ifelse(input$show_resolved, "all", "open"),
+        export_label = paste(ifelse(input$show_resolved, "all", "open"),
                            "queries", sep = ".")
       )
     })

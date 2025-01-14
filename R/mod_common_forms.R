@@ -136,11 +136,12 @@ mod_common_forms_server <- function(
       datatable_custom(
         SAE_data, rename_vars = table_names, rownames= FALSE,
         title = "Serious Adverse Events", escape = FALSE,
-        table_name = paste(
+        export_label = paste(
           "SAE", 
           ifelse(input$show_all_data, "all_patients", r$subject_id), 
-          sep = ".")
-      ) 
+          sep = "."
+          )
+        ) 
     })
     
     output[["common_form_table"]] <- DT::renderDT({
@@ -159,11 +160,11 @@ mod_common_forms_server <- function(
         rownames= FALSE, 
         title = form, 
         escape = FALSE, 
-        table_name = paste(
+        export_label = paste(
           simplify_string(form), 
           ifelse(input$show_all_data, "all_patients", r$subject_id), 
           sep = "."
-        )
+          )
       )
     })
     

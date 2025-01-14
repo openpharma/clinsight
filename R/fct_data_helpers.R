@@ -536,9 +536,8 @@ add_missing_columns <- function(
 #'   the table as an Excel file. Defaults to the `allow_listing_download`
 #'   configuration option in `golem-config.yml`, but can be overwritten here if
 #'   needed.
-#' @param table_name Character string with the table name. Only used for
-#'   downloadable tables and thus only has effect if `allow_listing_download` is
-#'   `TRUE`
+#' @param export_label Character string with the table export label. Only used
+#'   for downloadable tables (if `allow_listing_download` is `TRUE`).
 #' @param ... Other optional arguments that will be passed to [DT::datatable()].
 #'
 #' @return A `DT::datatable` object.
@@ -555,7 +554,7 @@ datatable_custom <- function(
     dom = "fti",
     options = list(),
     allow_listing_download = NULL,
-    table_name = NULL,
+    export_label = NULL,
     ...
     ){
   stopifnot(is.data.frame(data))
@@ -569,7 +568,7 @@ datatable_custom <- function(
   allow_listing_download <- allow_listing_download %||% 
     get_golem_config("allow_listing_download")
   stopifnot(is.null(allow_listing_download) | is.logical(allow_listing_download))
-  stopifnot(is.null(table_name) | is.character(table_name))
+  stopifnot(is.null(export_label) | is.character(export_label))
   
   default_opts <- list(
     scrollY = 400,
@@ -595,13 +594,13 @@ datatable_custom <- function(
   
   # This will conditionally add a download button to the table
   if(nrow(data) > 0 & isTRUE(allow_listing_download)) {
-    table_name <- table_name %||% "(table name missing)"
+    export_label <- export_label %||% "_label missing_"
     extensions <- c("Buttons", extensions)
     fixed_opts[["buttons"]] <- list(list(
       extend = 'excel',
       text = '<i class="fa-solid fa-download"></i>',
-      filename = paste("clinsight", table_name, sep = "."),
-      title = paste0(table_name, " | extracted from ClinSight")
+      filename = paste("clinsight", export_label, sep = "."),
+      title = paste0(export_label, " | extracted from ClinSight")
     ))
     fixed_opts[["dom"]] <- paste0('B', fixed_opts[["dom"]])
   }

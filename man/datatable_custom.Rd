@@ -14,7 +14,7 @@ datatable_custom(
   dom = "fti",
   options = list(),
   allow_listing_download = NULL,
-  table_name = NULL,
+  export_label = NULL,
   ...
 )
 }
@@ -60,9 +60,8 @@ the table as an Excel file. Defaults to the \code{allow_listing_download}
 configuration option in \code{golem-config.yml}, but can be overwritten here if
 needed.}
 
-\item{table_name}{Character string with the table name. Only used for
-downloadable tables and thus only has effect if \code{allow_listing_download} is
-\code{TRUE}}
+\item{export_label}{Character string with the table export label. Only used
+for downloadable tables (if \code{allow_listing_download} is \code{TRUE}).}
 
 \item{...}{Other optional arguments that will be passed to \code{\link[DT:datatable]{DT::datatable()}}.}
 }
