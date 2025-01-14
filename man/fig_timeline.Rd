@@ -4,13 +4,12 @@
 \alias{fig_timeline}
 \title{Create timeline}
 \usage{
-fig_timeline(data, min_events = 10)
+fig_timeline(data, events)
 }
 \arguments{
 \item{data}{Data frame to use.}
 
-\item{min_events}{Minimum number of events to include in the compact
-timeline. See also \code{\link[=fig_timeline]{fig_timeline()}}.}
+\item{events}{data frame with events metadata.}
 }
 \value{
 A ggplot2 object.
