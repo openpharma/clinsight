@@ -146,6 +146,11 @@ mod_review_form_tbl_server <- function(
         rename_vars = c("Review Status" = "o_reviewed", table_names), 
         rownames= FALSE,
         title = title,
+        export_label = paste(
+          simplify_string(form), 
+          ifelse(show_all(), "all_patients", r$subject_id), 
+          sep = "."
+        ),
         escape = FALSE,
         selection = "none",
         callback = checkbox_callback,
