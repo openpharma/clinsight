@@ -13,8 +13,6 @@
 - Make query handling a configurable option
 - Changed the legend to display 'significance pending' instead of 'significance unknown'.
 - Added `Excel` download button to Queries table & patient listings that need review.
-- Added helper function to automatically determine when adding said excel button is appropriate.
-
 
 ## Bug fixes
 
