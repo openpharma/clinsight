@@ -20,7 +20,8 @@ mod_review_forms_ui <- function(id){
               inputId = ns("form_reviewed"),
               label = "Reviewed",
               value = FALSE 
-            ),
+            ) |> 
+              shiny::tagAppendAttributes(class = "cs_checkbox", .cssSelector = "input"),
             "Mark as reviewed",
             placement = "bottom"
           ),
@@ -44,6 +45,7 @@ mod_review_forms_ui <- function(id){
             label = NULL
           )
         ),
+        progress_bar(ns("progress_bar")),
         bslib::layout_columns(
           col_widths = c(11, 12),
           shiny::actionButton(
@@ -113,13 +115,52 @@ mod_review_forms_server <- function(
       with(r$review_data, r$review_data[
         subject_id == r$subject_id & item_group == active_form(),
         ])
-    }) 
+    })
+    
+    review_indeterminate <- reactiveVal()
+    
+    observeEvent(review_indeterminate(), {
+      shinyjs::runjs(sprintf("$('#%s').prop('indeterminate', %s)", ns("form_reviewed"), tolower(review_indeterminate())))
+    })
+    
+    observe({
+      req(session$userData$review_records[[active_form()]])
+      review_status <-
+        review_data_active()[,c("id", "reviewed")] |> 
+        dplyr::rows_update(session$userData$review_records[[active_form()]][,c("id", "reviewed")], by = "id") |> 
+        dplyr::distinct(reviewed) |> 
+        dplyr::pull()
+      
+      shinyjs::runjs(sprintf("$('#%s').prop('checked', %s)", ns("form_reviewed"), tolower(identical(review_status, "Yes"))))
+      review_indeterminate(length(review_status) > 1)
+    }) |>
+      bindEvent(active_form(), session$userData$review_records[[active_form()]])
+    
+    observeEvent(r$subject_id, {
+      session$userData$update_checkboxes[[active_form()]] <- NULL
+      session$userData$review_records[[active_form()]] <- data.frame(id = integer(), reviewed = character())
+    })
+    
+    observeEvent(input$form_reviewed, {
+      session$userData$update_checkboxes[[active_form()]] <- input$form_reviewed
+      
+      session$userData$review_records[[active_form()]] <-
+        review_data_active() |> 
+        dplyr::mutate(reviewed = ifelse(input$form_reviewed, "Yes", "No")) |> 
+        dplyr::select(id, reviewed) |> 
+        dplyr::anti_join(
+          subset(r$review_data, item_group == active_form()),
+          by = c("id", "reviewed")
+        ) |> 
+        dplyr::arrange(id)
+    }, ignoreInit = TRUE)    
     
     observeEvent(c(active_form(), r$subject_id), {
       cat("Update confirm review button\n\n\n")
       req(r$review_data)
       golem::cat_dev("review_data_active:\n")
       golem::print_dev(review_data_active())
+      review_indeterminate(FALSE)
       if(nrow(review_data_active()) == 0){ 
         cat("No review data found for Subject id: ", r$subject_id, 
             " and group: ", active_form(), "\n") 
@@ -131,16 +172,14 @@ mod_review_forms_server <- function(
         # it will give a warning. This would be rare since it would mean a datapoint with the same edit date-time was reviewed but another one was not. 
         # probably better to use defensive coding here to ensure the app does not crash in that case. However we need to define which review status we need to select
         # in this case get the reviewed = "No"
-        review_status <- with(review_data_active(), reviewed[edit_date_time == max(as.POSIXct(edit_date_time))]) |> unique()
-        review_comment <- with(review_data_active(), comment[edit_date_time == max(as.POSIXct(edit_date_time))]) |> unique()
-        if(length(review_status) != 1) warning("multiple variables in review_status, namely: ", 
-                                               review_status, "Verify data.")
+        review_status <- unique(review_data_active()[["reviewed"]])
+        review_comment <- with(review_data_active(), comment[edit_date_time == max(as.POSIXct(edit_date_time))]) |> unique() |> paste(collapse = "; ")
+        if(length(review_status) != 1)
+          review_indeterminate(TRUE)
       }
       
-      updateCheckboxInput(
-        inputId = "form_reviewed",
-        value = identical(review_status, "Yes")
-      )
+      shinyjs::runjs(sprintf("$('#%s').prop('checked', %s)", ns("form_reviewed"), tolower(identical(review_status, "Yes"))))
+      shinyjs::runjs(sprintf("$('#%s').prop('indeterminate', %s)", ns("form_reviewed"), tolower(review_indeterminate())))
       
       shinyWidgets::updatePrettySwitch(
         session = session,
@@ -180,15 +219,12 @@ mod_review_forms_server <- function(
     
     enable_save_review <- reactive({
       req(
-        review_data_active(), 
-        is.logical(input$form_reviewed), 
+        active_form(),
+        session$userData$review_records[[active_form()]], 
         is.logical(enable_any_review())
         ) 
       if(!enable_any_review()) return(FALSE)
-      any(c(
-        unique(with(review_data_active(), reviewed[edit_date_time == max(as.POSIXct(edit_date_time))])) == "No"  & input$form_reviewed, 
-        unique(with(review_data_active(), reviewed[edit_date_time == max(as.POSIXct(edit_date_time))])) == "Yes" & !input$form_reviewed
-      ))
+      nrow(session$userData$review_records[[active_form()]]) != 0
     })
     
     observeEvent(c(enable_any_review(), enable_save_review()), {
@@ -198,7 +234,7 @@ mod_review_forms_server <- function(
         shinyjs::enable("save_review")
         shinyjs::enable("add_comment")
         shinyjs::enable("review_comment")
-      } else{
+      } else {
         shinyjs::disable("save_review")
         shinyjs::disable("add_comment")
         shinyjs::disable("review_comment")
@@ -221,23 +257,17 @@ mod_review_forms_server <- function(
     
     review_save_error <- reactiveVal(FALSE)
     observeEvent(input$save_review, {
-      req(is.logical(input$form_reviewed), review_data_active())
+      req(review_data_active())
       req(enable_save_review())
       review_save_error(FALSE)
-      golem::cat_dev("Save review status reviewed:", input$form_reviewed, "\n")
+      # golem::cat_dev("Save review status reviewed:", input$form_reviewed, "\n")
       
-      old_review_status <- if (!input$form_reviewed) "Yes" else "No"
-      review_records <- review_data_active()[
-        review_data_active()$reviewed == old_review_status,
-        "id", 
-        drop = FALSE
-        ] |> 
+      review_records <- session$userData$review_records[[active_form()]][c("id", "reviewed")] |> 
         dplyr::mutate(
-          reviewed    = if(input$form_reviewed) "Yes" else "No",
           comment     = ifelse(is.null(input$review_comment), "", input$review_comment),
           reviewer    = paste0(r$user_name, " (", r$user_role, ")"),
           timestamp   = time_stamp(),
-          status      = if(input$form_reviewed) "old" else "new"
+          status      = ifelse(reviewed == "Yes", "old", "new")
         ) 
       
       golem::cat_dev("review records to add:\n")
@@ -265,6 +295,9 @@ mod_review_forms_server <- function(
         names(review_records_db)
       ]
       
+      session$userData$update_checkboxes[[active_form()]] <- NULL
+      session$userData$review_records[[active_form()]] <- data.frame(id = integer(), reviewed = character())
+      
       review_save_error(any(
         !isTRUE(all.equal(review_records_db, review_records, check.attributes = FALSE)),
         !isTRUE(all.equal(updated_records_memory, review_records_db, check.attributes = FALSE))
@@ -287,6 +320,20 @@ mod_review_forms_server <- function(
       showNotification("Input saved successfully", duration = 1, type = "message") 
     })
     
+    output[["progress_bar"]] <- render_progress_bar({
+      req(
+        review_data_active(),
+        active_form()
+        )
+      
+      list(
+        completed = sum(review_data_active()$reviewed == "Yes"),
+        unmarking = sum(session$userData$review_records[[active_form()]]$reviewed == "No"),
+        marking = sum(session$userData$review_records[[active_form()]]$reviewed == "Yes"),
+        total = nrow(review_data_active())
+      )
+    })
+    
     output[["review_header"]] <- renderText({active_form()})
     
     output[["save_review_error"]] <- renderPrint({
@@ -307,7 +354,7 @@ mod_review_forms_server <- function(
         "No user name found. Cannot save review"
       ))
       validate(need(
-        !unique(with(review_data_active(), reviewed[edit_date_time == max(as.POSIXct(edit_date_time))])) == "Yes",
+        any(review_data_active()[["reviewed"]] != "Yes"),
         "Form already reviewed"
       ))
       validate(need(input$form_reviewed, "Requires review"))

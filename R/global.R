@@ -112,7 +112,10 @@ utils::globalVariables(
     "event_id",
     "region",
     "suffix_names",
-    "form_type"
+    "form_type",
+    "id",
+    "o_reviewed",
+    "row_id"
   )
 )
 
