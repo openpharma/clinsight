@@ -223,7 +223,17 @@ mod_study_forms_server <- function(
     
     output[["table"]] <- DT::renderDT({
       req(table_data_active())
-      datatable_custom(table_data_active(), table_names, escape = FALSE)
+      
+      datatable_custom(
+        table_data_active(), 
+        table_names, 
+        escape = FALSE,
+        export_label = paste(
+          simplify_string(form), 
+          ifelse(input$show_all, "all_patients", r$subject_id), 
+          sep = "."
+          )
+        )
     })
     
     if(form %in% c("Vital signs", "Vitals adjusted")){

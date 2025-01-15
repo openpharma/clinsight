@@ -6,6 +6,7 @@
         "filter": "none",
         "vertical": false,
         "extensions": [
+          "Buttons",
           "Scroller",
           "ColReorder"
         ],
@@ -19,7 +20,15 @@
           "scrollCollapse": true,
           "colReorder": true,
           "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"All queries\")\n}",
-          "dom": "f<\"header h5\">ti",
+          "dom": "Bf<\"header h5\">ti",
+          "buttons": [
+            {
+              "extend": "excel",
+              "text": "<i class=\"fa-solid fa-download\"><\/i>",
+              "filename": "clinsight.all.queries",
+              "title": "all.queries | extracted from ClinSight"
+            }
+          ],
           "columnDefs": [
             {
               "orderable": false,
@@ -151,6 +160,40 @@
           "all_files": true
         },
         {
+          "name": "jszip",
+          "version": "1.13.6",
+          "src": {
+            "href": "jszip-1.13.6"
+          },
+          "meta": null,
+          "script": "jszip.min.js",
+          "stylesheet": null,
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": false
+        },
+        {
+          "name": "dt-ext-buttons-bootstrap5",
+          "version": "1.13.6",
+          "src": {
+            "href": "dt-ext-buttons-bootstrap5-1.13.6"
+          },
+          "meta": null,
+          "script": [
+            "js/dataTables.buttons.min.js",
+            "js/buttons.html5.min.js",
+            "js/buttons.colVis.min.js",
+            "js/buttons.print.min.js",
+            "js/buttons.bootstrap5.min.js"
+          ],
+          "stylesheet": "css/buttons.bootstrap5.min.css",
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": false
+        },
+        {
           "name": "dt-ext-scroller-bootstrap5",
           "version": "1.13.6",
           "src": {
@@ -241,6 +284,7 @@
           "scrollResize": true,
           "scrollCollapse": true,
           "colReorder": true,
+          "pageLength": -1,
           "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"\")\n}",
           "dom": "<\"header h5\">t",
           "columnDefs": [
@@ -258,6 +302,13 @@
           ],
           "autoWidth": false,
           "orderClasses": false,
+          "lengthMenu": [
+            -1,
+            10,
+            25,
+            50,
+            100
+          ],
           "ajax": {
             "type": "POST",
             "data": "function(d) {\nd.search.caseInsensitive = true;\nd.search.smart = true;\nd.escape = true;\nvar encodeAmp = function(x) { x.value = x.value.replace(/&/g, \"%26\"); }\nencodeAmp(d.search);\n$.each(d.columns, function(i, v) {encodeAmp(v.search);});\n}"

@@ -10,10 +10,14 @@
 - Add a logging table to the DB for reviews.
 - Simplify pulling data from DB for reviews.
 - Review data by records IDs instead of subject & form
+- Make query handling a configurable option
+- Changed the legend to display 'significance pending' instead of 'significance unknown'.
+- Added `Excel` download button to Queries table & patient listings that need review.
 
 ## Bug fixes
 
 - The test-coverage GHA workflow is updated so that codecov uploads work again.
+- Display all rows for tables where `Scroller` is disabled.
 
 # clinsight 0.1.1
 
