@@ -710,11 +710,9 @@ custom_config_path <- function(
 dblclick_to_form <- function(bttn_ns) {
   DT::JS(
     "table.on('dblclick', 'tbody tr', function(t) {",
-    "t.currentTarget.classList.add('selected');",
-    "var tblID = $(t.target).closest('.datatables').attr('id');",
-    "var inputName = tblID + '_rows_selected';",
-    "var rowIdx = table.row(this).data()[0];",
-    "Shiny.setInputValue(inputName, rowIdx);",
+    "var current_index = table.row(this).index();",
+    "var current_rows = table.ajax.json().DT_rows_current;",
+    "table.shinyMethods.selectRows(current_rows[current_index]);",
     "document.getElementById(", deparse(NS(bttn_ns, "go_to_form")), ").click();",
     "})"
   )}
