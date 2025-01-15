@@ -594,7 +594,7 @@ datatable_custom <- function(
   
   # This will conditionally add a download button to the table
   if(nrow(data) > 0 & isTRUE(allow_listing_download)) {
-    export_label <- export_label %||% "_label missing_"
+    export_label <- export_label %||% "_label.missing_"
     extensions <- c("Buttons", extensions)
     fixed_opts[["buttons"]] <- list(list(
       extend = 'excel',
