@@ -22,7 +22,7 @@ mod_study_forms_ui <- function(id, form, form_items){
         conditionalPanel(
           condition = "input.switch_view === 'table'",
           ns = NS(id),
-          DT::dataTableOutput(ns("table"), width = "auto")
+          mod_review_form_tbl_ui(ns("review_form_tbl"))
         ),
         sidebar = bslib::sidebar(
           position = "right", 
@@ -113,7 +113,8 @@ mod_study_forms_ui <- function(id, form, form_items){
 #'   column `item_group`), and the columns `item_scale` `use_unscaled_limits`,
 #'   which are used to customize the way the figures are shown in the page.
 #'
-#' @seealso [mod_study_forms_ui()]
+#' @seealso [mod_study_forms_ui()], [mod_review_form_tbl_ui()],
+#'   [mod_review_form_tbl_server()]
 #' 
 mod_study_forms_server <- function(
     id, 
@@ -162,68 +163,40 @@ mod_study_forms_server <- function(
         dplyr::mutate(item_name = factor(item_name, levels = names(form_items)))
     })
     
-    table_data_active <- reactive({
-      req(!is.null(input$show_all))
-      validate(need(
-        r$filtered_data[[form]],
-        paste0("Warning: no data found in database for the form '", form, "'")
-      ))
-      df <- dplyr::left_join(
-        r$filtered_data[[form]],
-        with(r$review_data, r$review_data[item_group == form, ]) |> 
-          dplyr::select(-dplyr::all_of(c("edit_date_time", "event_date"))), 
-        by = id_item
-      ) |> 
-        dplyr::mutate(
-          item_value = ifelse(
-            reviewed == "No", 
-            paste0("<b>", htmltools::htmlEscape(item_value), "*</b>"), 
-            htmltools::htmlEscape(item_value)
-          )
+    table_data <- reactiveVal()
+    observe({
+      df <- {
+        validate(need(
+          r$filtered_data[[form]],
+          paste0("Warning: no data found in database for the form '", form, "'")
+        ))
+        dplyr::left_join(
+          r$filtered_data[[form]],
+          with(r$review_data, r$review_data[item_group == form, ]) |> 
+            dplyr::select(-dplyr::all_of(c("edit_date_time", "event_date"))), 
+          by = id_item
         ) |> 
-        create_table(expected_columns = names(form_items))
-      req(nrow(df) != 0)
-      if(input$show_all) return(df) 
-      with(df, df[subject_id == r$subject_id, ]) |> 
-        dplyr::select(-dplyr::all_of("subject_id"))
+          dplyr::mutate(
+            item_value = ifelse(
+              reviewed == "No", 
+              paste0("<b>", htmltools::htmlEscape(item_value), "*</b>"), 
+              htmltools::htmlEscape(item_value)
+            )
+          ) |> 
+          create_table(expected_columns = names(form_items)) |> 
+          dplyr::mutate(o_reviewed = Map(\(x, y, z) append(x, list(row_id = y, disabled = z)), 
+                                         o_reviewed, 
+                                         dplyr::row_number(),
+                                         subject_id != r$subject_id))
+      }
+      table_data(df)
     })
+    mod_review_form_tbl_server("review_form_tbl", r, table_data, form, reactive(input$show_all), table_names)
     
     scaling_data <- reactive({
       cols <- c("item_scale", "use_unscaled_limits")
       # Ensure no errors even if cols are missing, with FALSE as default:
       lapply(add_missing_columns(item_info, cols)[1, cols], isTRUE)
-    })
-    
-    observeEvent(table_data_active(), {
-      session$userData$update_checkboxes[[form]] <- NULL
-      session$userData$review_records[[form]] <- data.frame(id = integer(), reviewed = character(), row_index = character())
-    })
-
-    observeEvent(input$table_review_selection, {
-      session$userData$update_checkboxes[[form]] <- NULL
-      
-      session$userData$review_records[[form]] <-
-        dplyr::rows_upsert(
-          session$userData$review_records[[form]],
-          input$table_review_selection,
-          by = "id"
-        ) |>
-        dplyr::filter(!is.na(reviewed)) |> 
-        dplyr::semi_join(
-          subset(r$review_data, subject_id == r$subject_id & item_group == form),
-          by = "id"
-        ) |> 
-        dplyr::anti_join(
-          subset(r$review_data, subject_id == r$subject_id & item_group == form),
-          by = c("id", "reviewed")
-        ) |> 
-        dplyr::arrange(id)
-    })
-    
-    observeEvent(session$userData$update_checkboxes[[form]], {
-      checked <- session$userData$update_checkboxes[[form]]
-      
-      update_cbs(ns("table"), checked)
     })
     
     ############################### Outputs: ###################################
@@ -254,33 +227,9 @@ mod_study_forms_server <- function(
       dynamic_figure()
     })
     
-    output[["table"]] <- DT::renderDT({
-      req(table_data_active())
-        DT <- dt_config(table_data_active(),
-         table_name = paste(form, ifelse(input$show_all, 
-                      "all_patients", r$subject_id), sep = ".")) 
-      datatable_custom(
-        table_data_active(), 
-        rename_vars = c("Review Status" = "o_reviewed", table_names), 
-        rownames= FALSE,
-        escape = FALSE,
-        dom = DT$dom,
-        extensions = DT$exts,
-        selection = "none",
-        callback = checkbox_callback,
-        options = append(list(
-          columnDefs = list(list(
-            targets = 0,
-            render = checkbox_render
-          )),
-          createdRow = checkbox_create_callback
-        ),
-        DT$opts))
-    }, server = FALSE)
-
     if(form %in% c("Vital signs", "Vitals adjusted")){
       shiny::exportTestValues(
-        table_data = table_data_active(),
+        table_data = subset(table_data(), input$show_all | subject_id == r$subject_id),
         fig_data = fig_data()
       )
     } 
