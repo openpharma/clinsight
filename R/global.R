@@ -115,8 +115,8 @@ utils::globalVariables(
     "form_type",
     "is_scheduled_visit",
     "expected_events",
-    "event_prefix",
-    "event_suffix",
+    "event_name_custom",
+    "event_label_custom",
     "event_name_edc"
   )
 )

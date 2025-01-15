@@ -96,27 +96,9 @@ fig_timeline <- function(
   stopifnot(is.data.frame(data))
   stopifnot(is.data.frame(events))
   
-  generate_labels <- with(
-    events[!is.na(events$min_expected_visits),], 
-    any(is.na(event_id)) | any(min_expected_visits > 1)
-  )
-  labels_in_data <- unique(data$event_label[!is.na(data$event_label)])
-  
-  if(!generate_labels){
-    all_ids <- events$event_id[!is.na(events$event_id)]
-    all_events <- data.frame(event_label = factor(all_ids, levels = all_ids))
-  } else{
-    min_events <- sum(as.numeric(events[["min_expected_visits"]]), na.rm = TRUE) - 1
-    min_events <- max(min_events, 5)
-    # The regex below should be redundant, but I decided to leave it to be safe:
-    event_numbers <- labels_in_data[grepl("^V[[:digit:]]", labels_in_data)] |> 
-      gsub(pattern = "V", replacement = "") |> 
-      as.numeric()
-    max_events <- max(min_events, event_numbers, na.rm = TRUE)
-    all_events <- data.frame(
-      event_label = factor(0:max_events, labels = paste0("V", 0:max_events))
-    )
-  }
+  labels_in_data <- unique(na.omit(data$event_label))
+  all_labels <- levels(data$event_label)
+  all_events <- data.frame(event_label = factor(all_labels, levels = all_labels))
   
   completed_events <- all_events[
     all_events$event_label %in% labels_in_data, , drop = FALSE]
