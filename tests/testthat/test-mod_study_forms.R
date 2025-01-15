@@ -45,6 +45,7 @@ describe(
     appdata <- get_appdata(clinsightful_data)
     rev_data <- get_review_data(appdata[["Vital signs"]]) |>
       dplyr::mutate(
+        id = dplyr::row_number(),
         reviewed = sample(c("Yes", "No"), dplyr::n(), replace = TRUE),
         status = sample(c("new", "old", "updated"), dplyr::n(), replace = TRUE)
       )
@@ -92,18 +93,18 @@ describe(
 
           df_expected <- appdata[["Vital signs"]] |>
             dplyr::filter(subject_id == "NLD_05_561") |>
-            create_table(expected_columns = names(form_items)) |>
-            dplyr::select(-subject_id)
+            create_table(expected_columns = names(form_items))
           # Tue Dec 12 10:32:48 2023 LSA ------------------------------
           # only difference between the the data frame is some html tags around
           # some not yet reviewed data. However, because of these tags, we cannot
           # compare expected with actual directly.
-          expect_equal(names(table_data_active()), names(df_expected) )
-          expect_equal(table_data_active()$event_name, df_expected$event_name )
+          expect_equal(names(table_data()), c("o_reviewed", names(df_expected)))
+          enabled_rows <- lapply(table_data()[["o_reviewed"]], \(x) isFALSE(x$disabled)) |> unlist()
+          expect_equal(table_data()[enabled_rows, "event_name", drop = TRUE], df_expected$event_name)
 
-          expect_true(is.data.frame(table_data_active()))
-          expect_equal(nrow(table_data_active()), 2)
-          expect_true(inherits(output[["table"]], "json"))
+          expect_true(is.data.frame(table_data()))
+          expect_equal(sum(enabled_rows), 2)
+          expect_true(inherits(output[["review_form_tbl-table"]], "json"))
         })
       })
     it(
@@ -118,16 +119,17 @@ describe(
                 filter = c("pulse", "BMI"),
                 show_all = TRUE
               )
-              expect_true(is.data.frame(table_data_active()))
-              expect_equal(nrow(table_data_active()), 68)
+              expect_true(is.data.frame(table_data()))
+              enabled_rows <- lapply(table_data()[["o_reviewed"]], \(x) isFALSE(x$disabled)) |> unlist()
+              expect_equal(nrow(table_data()), 68)
 
-              table_ids <- unique(table_data_active()$subject_id)
+              table_ids <- unique(table_data()$subject_id)
               table_ids <- table_ids[order(table_ids)]
               expected_ids <- unique(r$review_data$subject_id)
               expected_ids <- expected_ids[order(expected_ids)]
               expect_equal(table_ids, expected_ids)
-
-              expect_true(inherits(output[["table"]], "json"))
+              
+              expect_true(inherits(output[["review_form_tbl-table"]], "json"))
             })
           })
   }
@@ -142,6 +144,7 @@ describe(
     appdata <- get_appdata(clinsightful_data)
     rev_data <- get_review_data(appdata[["Vital signs"]]) |> 
       dplyr::mutate(
+        id = dplyr::row_number(),
         reviewed = sample(c("Yes", "No"), dplyr::n(), replace = TRUE),
         status = sample(c("new", "old", "updated"), dplyr::n(), replace = TRUE)
       )

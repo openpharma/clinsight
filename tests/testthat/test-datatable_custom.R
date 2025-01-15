@@ -7,8 +7,12 @@ describe("datatable_custom() works", {
     expect_true(inherits(datatable_custom(mtcars), "datatables"))
     expect_equal(
       names(outcome$x$data), 
-      c(" ", "mpg_new", "cyl_new", names(mtcars)[-c(1,2)]) 
+      c(" ", names(mtcars)) 
       )
+    expect_equal(
+      stringr::str_extract_all(outcome$x$container, "<th>.*?</th>")[[1]], 
+      paste0("<th>", c(" ", "mpg_new", "cyl_new", names(mtcars)[-c(1,2)]), "</th>")
+    )
   })
   it("creates a datatable and can add a title to the table", {
     outcome <- datatable_custom(iris, title = "Test title")
