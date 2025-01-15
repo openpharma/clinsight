@@ -13,6 +13,8 @@ datatable_custom(
   plugins = "scrollResize",
   dom = "fti",
   options = list(),
+  allow_listing_download = NULL,
+  export_label = NULL,
   ...
 )
 }
@@ -52,6 +54,14 @@ to 'fti' resulting in 'f<"header h5">ti'.}
 \item \code{initComplete}: Defaults to a function to insert table title into dataTable container.
 }
 }}
+
+\item{allow_listing_download}{Logical, whether to allow the user to download
+the table as an Excel file. Defaults to the \code{allow_listing_download}
+configuration option in \code{golem-config.yml}, but can be overwritten here if
+needed.}
+
+\item{export_label}{Character string with the table export label. Only used
+for downloadable tables (if \code{allow_listing_download} is \code{TRUE}).}
 
 \item{...}{Other optional arguments that will be passed to \code{\link[DT:datatable]{DT::datatable()}}.}
 }

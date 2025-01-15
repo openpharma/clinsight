@@ -1,4 +1,9 @@
 
+.dataTables_wrapper .dt-buttons {
+  padding-left: 0.75em;
+  float: right;  
+}
+
 .bslib-value-box .value-box-area {
   padding: 0.1rem 0rem 0.1rem 1rem;
 }
