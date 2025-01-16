@@ -43,7 +43,7 @@ get_timeline_data <- function(
       dplyr::distinct(subject_id, event_name, start = event_date) |> 
       dplyr::mutate(
         group = "Visit",
-        title = paste0(event_name, " (", start, ")")
+        title = paste0(start, " | ", event_name)
       )
   }
   
@@ -67,8 +67,8 @@ get_timeline_data <- function(
         end = clean_dates(`end date`),
         className = "bg-warning",
         title = paste0(
-          `Name`, 
-          "\n(", start, ifelse(!is.na(end), paste0(" - ", end), ""), ")"
+          start, ifelse(!is.na(end), paste0(" - ", end), ""), 
+          " | ", `Name`
         )
       )  
     
@@ -93,7 +93,7 @@ get_timeline_data <- function(
         title = paste0(
           start, 
           ifelse(!is.na(end), paste0(" - ", end), ""), 
-          ". ", 
+          " | ", 
           `Name`
         )
       )
@@ -115,7 +115,8 @@ get_timeline_data <- function(
           is.na(DrugAdminDate), 
           NA_character_,
           paste0(
-            "Treatment (", DrugAdminDate, ")\n ", 
+            DrugAdminDate, " | ",
+            "Treatment \n", 
             "Dose: ", ifelse(is.na(DrugAdminDose), "?", DrugAdminDose)
           )
         )
@@ -175,7 +176,7 @@ get_available_data <- function(
     tables, 
     all_forms,
     form_repeat_name = "N"
-    ){
+){
   stopifnot(is.list(data), is.list(tables), is.character(form_repeat_name))
   if(identical(form_repeat_name, character(0))){form_repeat_name <- "N"}
   study_event_selectors <- lapply(
@@ -187,7 +188,7 @@ get_available_data <- function(
           dplyr::select(
             dplyr::all_of(c("subject_id", "event_name", "event_label",  
                             "item_group", "item_name", "form_repeat"))
-            )
+          )
       } else {
         if(is.null(tables[[x]])) return(NULL)
         df_x <- tables[[x]] |> 
@@ -200,7 +201,7 @@ get_available_data <- function(
         dplyr::arrange(
           subject_id, 
           factor(event_name, levels = order_string(event_name))
-          )
+        )
     }) |> 
     dplyr::bind_rows()
   # To uniquely identify events with the same name (mostly in common_forms):
@@ -258,7 +259,7 @@ get_static_overview_data <- function(
   create_table.general(
     data[["General"]], 
     expected_columns = expected_general_columns
-    ) |>
+  ) |>
     dplyr::select(tidyr::all_of("subject_id"), tidyr::any_of(c("status", "WHO.classification", "Age", "Sex"))) |>
     dplyr::left_join(visits, by = "subject_id")
 }
