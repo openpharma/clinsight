@@ -9,9 +9,9 @@ add_timevars_to_data(data, events)
 \arguments{
 \item{data}{A data frame}
 
-\item{events}{A data frame with events. Needs at least the columns
-\code{event_name_custom}, \code{event_label_custom}, \code{event_id}, \code{event_id_pattern},
-and \code{expected_events}.}
+\item{events}{A data frame with events. Usually contains the columns
+\code{event_id}, \code{event_id_pattern}, \code{is_expected_visit}, \code{event_label_custom},
+\code{event_name_custom}, and \code{add_sequence_to_name}.}
 }
 \value{
 A data frame, with derivative time and event variables, needed for

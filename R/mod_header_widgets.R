@@ -83,7 +83,7 @@ mod_header_widgets_server <- function(id, r, rev_data, navinfo){
     simple_timeline_data <- reactive({
       bind_rows_custom(r$filtered_data, "item_value") |> 
       dplyr::select(dplyr::all_of(c("subject_id", "event_name", 
-                                    "event_label", "item_name", "day"))) |> 
+                                    "event_label", "item_name"))) |> 
       dplyr::distinct()
     })
     

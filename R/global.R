@@ -113,11 +113,15 @@ utils::globalVariables(
     "region",
     "suffix_names",
     "form_type",
-    "is_scheduled_visit",
-    "expected_events",
+    "is_expected_visit",
+    "add_sequence_to_name",
+    "event_id_pattern",
+    "generate_labels",
     "event_name_custom",
     "event_label_custom",
-    "event_name_edc"
+    "meta_event_order",
+    "event_name_edc",
+    "vis_num"
   )
 )
 

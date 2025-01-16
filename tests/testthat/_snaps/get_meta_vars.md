@@ -3,9 +3,6 @@
     Code
       get_meta_vars(appdata, metadata)
     Output
-      $min_events
-      [1] 18
-      
       $items
       $items$`Adverse events`
                           AE Number                       AE Name 
