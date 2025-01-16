@@ -184,7 +184,6 @@ add_timevars_to_data <- function(
   )
   # Below needed to select all expected visits and to decide what should be 
   # counted as a visit day and what not. 
-  # consider filling event pattern with event_id if event_id_pattern is missing
   all_event_patterns <- paste0(
     with(events, event_id_pattern[is_expected_visit]), 
     collapse = "|"
@@ -205,28 +204,16 @@ add_timevars_to_data <- function(
   if ("event_name" %in% names(data)) { 
     return(df) 
   }
-  # Basic idea: Try to get the visit labels (event_name_edc) in the correct order. 
-  # If any labels are missing (not yet in data), fall back to paste('V', vis_num)
-  #all_labels <- na.omit(unique(df[c("event_id", "vis_num", "event_name_edc")]))
   all_ids <- unique(data$event_id)
   all_labels <- df |> 
     get_unique_vars(c("event_id", "vis_num")) |> 
-    dplyr::filter(!is.na(event_id)) 
-  # for testing purposes, create multiple EoT visits at different time points:
-  #  |> 
-  #  dplyr::bind_rows(
-  #    data.frame(event_id = c("EOT"), vis_num = c(2, 5))   
-  #  )
+    dplyr::filter(!is.na(event_id))
  
   # Expanding table so that all matching id's are shown:
-  # Note: combination of vis_num and event_id should always result in a unique event! 
-  # Ideally event_id should already be unique, but that is not the case in 
-  # some older studies.
-  
+  # Note: combination of vis_num and event_id should always result in a unique event. 
+  # Ideally event_id should already be unique, but that is not always the case.
   events_table <- events |> 
     dplyr::mutate(
-      # in case event_id is missing, return all event_id's that match the 
-      # event_id_pattern
       event_id = ifelse(
         is.na(event_id), 
         sapply(
@@ -245,7 +232,6 @@ add_timevars_to_data <- function(
       .by = c(event_id, meta_event_order)
     ) |> 
     unique() |> 
-    # To get the correct order:
     dplyr::arrange(meta_event_order, vis_num) |> 
     dplyr::mutate(
       event_name_custom = ifelse(
@@ -424,7 +410,6 @@ get_meta_vars <- function(data = appdata, meta = metadata){
   vars$Sites     <- get_unique_vars(data, c("site_code", "region")) |> 
     dplyr::arrange(factor(site_code, levels = order_string(site_code)))
   vars$table_names <- setNames(meta$table_names$raw_name, meta$table_names$table_name) 
-  #vars$event_labels <- get_event_labels(data, meta$events)
   # adding form-level data here since it meta vars are already passed through in 
   # the modules that need this information (e.g. mod_main_sidebar):
   vars$form_level_data <- meta$form_level_data

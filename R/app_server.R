@@ -237,8 +237,7 @@ app_server <- function(
     id = "header_widgets_1", 
     r = r, 
     rev_data = rev_data, 
-    navinfo = navinfo, 
-    events = meta$events
+    navinfo = navinfo
   )
   
   

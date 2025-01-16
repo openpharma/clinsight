@@ -4,12 +4,10 @@
 \alias{fig_timeline}
 \title{Create timeline}
 \usage{
-fig_timeline(data, events)
+fig_timeline(data)
 }
 \arguments{
 \item{data}{Data frame to use.}
-
-\item{events}{data frame with events metadata.}
 }
 \value{
 A ggplot2 object.

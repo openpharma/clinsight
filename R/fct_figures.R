@@ -84,17 +84,14 @@ fig_boxplots <- function(
 #' Function to create a simple timeline figure using `ggplot2`.
 #'
 #' @param data Data frame to use.
-#' @param events data frame with events metadata.
 #'
 #' @return A ggplot2 object.
 #' @export
 #' 
 fig_timeline <- function(
-    data, 
-    events
+    data
     ){
   stopifnot(is.data.frame(data))
-  stopifnot(is.data.frame(events))
   
   labels_in_data <- unique(na.omit(data$event_label))
   all_labels <- levels(data$event_label)
