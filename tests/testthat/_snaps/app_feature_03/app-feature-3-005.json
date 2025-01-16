@@ -16,9 +16,12 @@
           "scrollX": true,
           "scroller": true,
           "deferRender": true,
-          "scrollResize": true,
           "scrollCollapse": true,
-          "colReorder": true,
+          "colReorder": {
+            "enable": true,
+            "realtime": false,
+            "fixedColumnsLeft": 1
+          },
           "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"All queries\")\n}",
           "dom": "Bf<\"header h5\">ti",
           "buttons": [
@@ -39,31 +42,31 @@
               "targets": 0
             },
             {
-              "name": "Resolved",
+              "name": "resolved",
               "targets": 1
             },
             {
-              "name": "Subject",
+              "name": "subject_id",
               "targets": 2
             },
             {
-              "name": "Type",
+              "name": "type",
               "targets": 3
             },
             {
-              "name": "Event",
+              "name": "event_label",
               "targets": 4
             },
             {
-              "name": "Form",
+              "name": "item_group",
               "targets": 5
             },
             {
-              "name": "Query",
+              "name": "query",
               "targets": 6
             },
             {
-              "name": "Time",
+              "name": "timestamp",
               "targets": 7
             }
           ],
@@ -228,22 +231,6 @@
           "all_files": false
         },
         {
-          "name": "dt-plugin-scrollresize",
-          "version": "1.13.6",
-          "src": {
-            "href": "dt-plugin-scrollresize-1.13.6"
-          },
-          "meta": null,
-          "script": "source.min.js",
-          "stylesheet": [
-
-          ],
-          "head": null,
-          "attachment": null,
-          "package": null,
-          "all_files": true
-        },
-        {
           "name": "crosstalk",
           "version": "1.2.1",
           "src": {
@@ -281,19 +268,22 @@
           "scrollX": true,
           "scroller": false,
           "deferRender": true,
-          "scrollResize": true,
           "scrollCollapse": true,
-          "colReorder": true,
+          "colReorder": {
+            "enable": true,
+            "realtime": false,
+            "fixedColumnsLeft": 1
+          },
           "pageLength": -1,
           "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"\")\n}",
           "dom": "<\"header h5\">t",
           "columnDefs": [
             {
-              "name": "Query",
+              "name": "query",
               "targets": 0
             },
             {
-              "name": "Author",
+              "name": "reviewer",
               "targets": 1
             }
           ],
@@ -427,22 +417,6 @@
           "attachment": null,
           "package": null,
           "all_files": false
-        },
-        {
-          "name": "dt-plugin-scrollresize",
-          "version": "1.13.6",
-          "src": {
-            "href": "dt-plugin-scrollresize-1.13.6"
-          },
-          "meta": null,
-          "script": "source.min.js",
-          "stylesheet": [
-
-          ],
-          "head": null,
-          "attachment": null,
-          "package": null,
-          "all_files": true
         },
         {
           "name": "crosstalk",

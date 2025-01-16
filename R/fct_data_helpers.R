@@ -637,7 +637,6 @@ add_missing_columns <- function(
 #' @param title Optional. Character string with the title of the table.
 #' @param selection See [DT::datatable()]. Default set to 'single'.
 #' @param extensions See [DT::datatable()]. Default set to 'Scroller'.
-#' @param plugins See [DT::datatable()]. Default set to 'scrollResize'.
 #' @param dom See \url{https://datatables.net/reference/option/dom}. A div
 #'   element will be inserted before the table for the table title. Default set
 #'   to 'fti' resulting in 'f<"header h5">ti'.
@@ -671,7 +670,6 @@ datatable_custom <- function(
     title = NULL, 
     selection = "single",
     extensions = c("Scroller", "ColReorder"),
-    plugins = "scrollResize",
     dom = "fti",
     options = list(),
     allow_listing_download = NULL,
@@ -679,9 +677,11 @@ datatable_custom <- function(
     ...
     ){
   stopifnot(is.data.frame(data))
+  colnames <- names(data)
   if(!is.null(rename_vars)){
     stopifnot(is.character(rename_vars))
-    data <- dplyr::rename(data, dplyr::any_of(rename_vars))
+    colnames <- dplyr::rename(data[0,], dplyr::any_of(rename_vars)) |> 
+      names()
   }
   stopifnot(is.null(title) | is.character(title))
   stopifnot(grepl("t", dom, fixed = TRUE))
@@ -696,9 +696,12 @@ datatable_custom <- function(
     scrollX = TRUE,
     scroller = TRUE,
     deferRender = TRUE,
-    scrollResize = TRUE,
     scrollCollapse = TRUE,
-    colReorder = TRUE
+    colReorder = list(
+      enable = TRUE,
+      realtime = FALSE,
+      fixedColumnsLeft = 1
+    )
   )
   fixed_opts <- list(
     initComplete = DT::JS(
@@ -735,7 +738,7 @@ datatable_custom <- function(
     selection = selection,
     options = opts,
     extensions = extensions,
-    plugins = plugins,
+    colnames = colnames,
     ...
   ) 
 }

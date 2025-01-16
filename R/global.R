@@ -121,7 +121,10 @@ utils::globalVariables(
     "event_label_custom",
     "meta_event_order",
     "event_name_edc",
-    "vis_num"
+    "vis_num",
+    "id",
+    "o_reviewed",
+    "row_id"
   )
 )
 
