@@ -40,7 +40,7 @@
       5 <NA>      <NA>       <NA>     NA                   NA <NA>             NA
       6 <NA>      <NA>       <NA>     NA                   NA <NA>             NA
       # i 17 more variables: edit_date_time <dttm>, day <drtn>, vis_day <dbl>,
-      #   vis_num <dbl>, event_name <chr>, event_label <chr>, form_type <chr>,
+      #   vis_num <dbl>, event_name <chr>, event_label <fct>, form_type <chr>,
       #   item_name <chr>, item_type <chr>, item_group <chr>, item_unit <chr>,
       #   lower_lim <dbl>, upper_lim <dbl>, item_value <chr>, significance <chr>,
       #   reason_notdone <chr>, region <chr>
@@ -65,7 +65,7 @@
       10 9600      9600-002   SCR      2022-01-01            1 VS                1
       # i 533 more rows
       # i 17 more variables: edit_date_time <dttm>, day <drtn>, vis_day <dbl>,
-      #   vis_num <dbl>, event_name <chr>, event_label <chr>, form_type <chr>,
+      #   vis_num <dbl>, event_name <chr>, event_label <fct>, form_type <chr>,
       #   item_name <chr>, item_type <chr>, item_group <chr>, item_unit <chr>,
       #   lower_lim <dbl>, upper_lim <dbl>, item_value <chr>, significance <chr>,
       #   reason_notdone <chr>, region <chr>
@@ -92,7 +92,7 @@
       # i 789 more rows
       # i 17 more variables: form_repeat <int>, edit_date_time <dttm>,
       #   db_update_time <dttm>, region <chr>, day <drtn>, vis_day <dbl>,
-      #   vis_num <dbl>, event_label <chr>, item_name <chr>, item_type <chr>,
+      #   vis_num <dbl>, event_label <fct>, item_name <chr>, item_type <chr>,
       #   item_group <chr>, item_value <chr>, item_unit <chr>, lower_lim <dbl>,
       #   upper_lim <dbl>, significance <chr>, reason_notdone <chr>
       
@@ -113,7 +113,7 @@
       # i 371 more rows
       # i 20 more variables: form_repeat <int>, edit_date_time <dttm>,
       #   db_update_time <dttm>, region <chr>, day <drtn>, vis_day <dbl>,
-      #   vis_num <dbl>, event_label <chr>, item_name <fct>, item_type <chr>,
+      #   vis_num <dbl>, event_label <fct>, item_name <fct>, item_type <chr>,
       #   item_group <chr>, item_value <dbl>, item_unit <chr>, lower_lim <dbl>,
       #   upper_lim <dbl>, significance <fct>, reason_notdone <chr>,
       #   value_scaled <dbl>, out_of_lim <fct>, text_label <chr>
@@ -135,7 +135,7 @@
       # i 18 more rows
       # i 17 more variables: form_repeat <int>, edit_date_time <dttm>,
       #   db_update_time <dttm>, region <chr>, day <drtn>, vis_day <dbl>,
-      #   vis_num <dbl>, event_label <chr>, item_name <chr>, item_type <chr>,
+      #   vis_num <dbl>, event_label <fct>, item_name <chr>, item_type <chr>,
       #   item_group <chr>, item_value <chr>, item_unit <chr>, lower_lim <dbl>,
       #   upper_lim <dbl>, significance <chr>, reason_notdone <chr>
       
@@ -156,7 +156,7 @@
       # i 265 more rows
       # i 20 more variables: form_repeat <int>, edit_date_time <dttm>,
       #   db_update_time <dttm>, region <chr>, day <drtn>, vis_day <dbl>,
-      #   vis_num <dbl>, event_label <chr>, item_name <fct>, item_type <chr>,
+      #   vis_num <dbl>, event_label <fct>, item_name <fct>, item_type <chr>,
       #   item_group <chr>, item_value <dbl>, item_unit <chr>, lower_lim <dbl>,
       #   upper_lim <dbl>, significance <fct>, reason_notdone <chr>,
       #   value_scaled <dbl>, out_of_lim <fct>, text_label <chr>
@@ -178,7 +178,7 @@
       # i 251 more rows
       # i 17 more variables: form_repeat <int>, edit_date_time <dttm>,
       #   db_update_time <dttm>, region <chr>, day <drtn>, vis_day <dbl>,
-      #   vis_num <dbl>, event_label <chr>, item_name <chr>, item_type <chr>,
+      #   vis_num <dbl>, event_label <fct>, item_name <chr>, item_type <chr>,
       #   item_group <chr>, item_value <chr>, item_unit <chr>, lower_lim <dbl>,
       #   upper_lim <dbl>, significance <chr>, reason_notdone <chr>
       
@@ -199,7 +199,7 @@
       # i 170 more rows
       # i 20 more variables: form_repeat <int>, edit_date_time <dttm>,
       #   db_update_time <dttm>, region <chr>, day <drtn>, vis_day <dbl>,
-      #   vis_num <dbl>, event_label <chr>, item_name <fct>, item_type <chr>,
+      #   vis_num <dbl>, event_label <fct>, item_name <fct>, item_type <chr>,
       #   item_group <chr>, item_value <dbl>, item_unit <chr>, lower_lim <dbl>,
       #   upper_lim <dbl>, significance <fct>, reason_notdone <chr>,
       #   value_scaled <dbl>, out_of_lim <fct>, text_label <chr>
@@ -221,7 +221,7 @@
       # i 747 more rows
       # i 17 more variables: form_repeat <int>, edit_date_time <dttm>,
       #   db_update_time <dttm>, region <chr>, day <drtn>, vis_day <dbl>,
-      #   vis_num <dbl>, event_label <chr>, item_name <chr>, item_type <chr>,
+      #   vis_num <dbl>, event_label <fct>, item_name <chr>, item_type <chr>,
       #   item_group <chr>, item_value <chr>, item_unit <chr>, lower_lim <dbl>,
       #   upper_lim <dbl>, significance <chr>, reason_notdone <chr>
       
@@ -242,7 +242,7 @@
       # i 3,173 more rows
       # i 17 more variables: form_repeat <int>, edit_date_time <dttm>,
       #   db_update_time <dttm>, region <chr>, day <drtn>, vis_day <dbl>,
-      #   vis_num <dbl>, event_label <chr>, item_name <chr>, item_type <chr>,
+      #   vis_num <dbl>, event_label <fct>, item_name <chr>, item_type <chr>,
       #   item_group <chr>, item_value <chr>, item_unit <chr>, lower_lim <dbl>,
       #   upper_lim <dbl>, significance <chr>, reason_notdone <chr>
       
@@ -263,7 +263,7 @@
       # i 125 more rows
       # i 20 more variables: form_repeat <int>, edit_date_time <dttm>,
       #   db_update_time <dttm>, region <chr>, day <drtn>, vis_day <dbl>,
-      #   vis_num <dbl>, event_label <chr>, item_name <fct>, item_type <chr>,
+      #   vis_num <dbl>, event_label <fct>, item_name <fct>, item_type <chr>,
       #   item_group <chr>, item_value <dbl>, item_unit <chr>, lower_lim <dbl>,
       #   upper_lim <dbl>, significance <fct>, reason_notdone <chr>,
       #   value_scaled <dbl>, out_of_lim <fct>, text_label <chr>
@@ -280,7 +280,7 @@
       6 Site 04   BEL_04_772            5 VIS      Visit 5    2023-08-30 RS     
       # i 17 more variables: form_repeat <int>, edit_date_time <dttm>,
       #   db_update_time <dttm>, region <chr>, day <drtn>, vis_day <dbl>,
-      #   vis_num <dbl>, event_label <chr>, item_name <chr>, item_type <chr>,
+      #   vis_num <dbl>, event_label <fct>, item_name <chr>, item_type <chr>,
       #   item_group <chr>, item_value <chr>, item_unit <chr>, lower_lim <dbl>,
       #   upper_lim <dbl>, significance <chr>, reason_notdone <chr>
       
@@ -301,7 +301,7 @@
       # i 468 more rows
       # i 20 more variables: form_repeat <int>, edit_date_time <dttm>,
       #   db_update_time <dttm>, region <chr>, day <drtn>, vis_day <dbl>,
-      #   vis_num <dbl>, event_label <chr>, item_name <fct>, item_type <chr>,
+      #   vis_num <dbl>, event_label <fct>, item_name <fct>, item_type <chr>,
       #   item_group <chr>, item_value <dbl>, item_unit <chr>, lower_lim <dbl>,
       #   upper_lim <dbl>, significance <fct>, reason_notdone <chr>,
       #   value_scaled <dbl>, out_of_lim <fct>, text_label <chr>

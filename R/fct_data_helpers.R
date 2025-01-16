@@ -201,14 +201,36 @@ add_timevars_to_data <- function(
       factor(site_code, levels = order_string(site_code)),
       factor(subject_id, levels = order_string(subject_id))
     )
-  if ("event_name" %in% names(data)) { 
-    return(df) 
+  df
+}
+
+#' Merge event data from study data with metadata
+#'
+#' Collects all available events. Defines the correct order of events, and
+#' creates event labels if needed.
+#'
+#' @param data A data frame with study data. Should contain  columns `event_id`
+#'   and `vis_num` column.
+#' @param events A data frame with events metadata, created with
+#'   [get_metadata()].
+#'
+#' @return A data frame with clean event data, with event_label column as a
+#'   factor with correct event_label levels.
+#' @noRd
+#' 
+add_events_to_data <- function(
+    data,
+    events
+){
+  stopifnot(is.data.frame(data), is.data.frame(events))
+  if (all(c("event_name", "event_label") %in% names(data))) { 
+    return(data) 
   }
   all_ids <- unique(data$event_id)
-  all_labels <- df |> 
+  all_labels <- data |> 
     get_unique_vars(c("event_id", "vis_num")) |> 
     dplyr::filter(!is.na(event_id))
- 
+  
   # Expanding table so that all matching id's are shown:
   # Note: combination of vis_num and event_id should always result in a unique event. 
   # Ideally event_id should already be unique, but that is not always the case.
@@ -250,7 +272,7 @@ add_timevars_to_data <- function(
   
   cols_to_remove <- c(names(events), "event_name_edc")
   cols_to_remove <- cols_to_remove[!cols_to_remove == "event_id"]
-  output <- df |> 
+  output <- data |> 
     dplyr::left_join(events_table, by = c("event_id", "vis_num")) |> 
     add_missing_columns("event_name_edc") |> 
     tidyr::replace_na(
@@ -272,7 +294,7 @@ add_timevars_to_data <- function(
           tolower(event_name_custom) != tolower(event_name_edc) ~ 
           paste0(event_name, " (", event_name_edc, ")"),
         .default = event_name
-        ),
+      ),
       event_label = event_label %|_|% event_label_custom
     ) |> 
     dplyr::select(-dplyr::all_of(cols_to_remove))
