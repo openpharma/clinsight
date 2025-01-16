@@ -164,8 +164,6 @@ rename_raw_data <- function(
 #' @param events A data frame with events. Needs at least the columns
 #'   `event_name_custom`, `event_label_custom`, `event_id`, `event_id_pattern`, 
 #'   and `expected_events`.
-#' @param label_type Character vector to control the type of label set. Variable
-#'   not yet in use.
 #'
 #' @return A data frame, with derivative time and event variables, needed for
 #'   ClinSight to function properly.
@@ -173,10 +171,8 @@ rename_raw_data <- function(
 #' @keywords internal
 add_timevars_to_data <- function(
     data,
-    events,
-    label_type = c("hybrid", "derived", "original")
+    events
 ){
-  label_type <- match.arg(label_type)
   stopifnot("[data] should be a data frame" = is.data.frame(data))
   stopifnot("[events] should be a data frame" = is.data.frame(events))
   
@@ -214,13 +210,14 @@ add_timevars_to_data <- function(
   #all_labels <- na.omit(unique(df[c("event_id", "vis_num", "event_name_edc")]))
   all_ids <- unique(data$event_id)
   all_labels <- df |> 
-    get_unique_vars(c("event_id", "vis_num", "event_name_edc")) |> 
-    dplyr::filter(!is.na(event_id)) |> 
-    dplyr::summarize(
-      vis_num = max(vis_num),
-      .by = c(event_id, event_name_edc)
-      ) 
-  
+    get_unique_vars(c("event_id", "vis_num")) |> 
+    dplyr::filter(!is.na(event_id)) 
+  # for testing purposes, create multiple EoT visits at different time points:
+  #  |> 
+  #  dplyr::bind_rows(
+  #    data.frame(event_id = c("EOT"), vis_num = c(2, 5))   
+  #  )
+ 
   # Expanding table so that all matching id's are shown:
   # Note: combination of vis_num and event_id should always result in a unique event! 
   # Ideally event_id should already be unique, but that is not the case in 
@@ -241,8 +238,15 @@ add_timevars_to_data <- function(
     ) |> 
     expand_columns(columns = "event_id", separator = ",") |> 
     dplyr::left_join(all_labels, by = "event_id") |> 
+    # If visit numbers are flexible, a visit such as 'end of treatment' can 
+    # happen at different visit numbers. These duplicates need to be removed:
+    dplyr::mutate(
+      vis_num = ifelse(generate_labels, vis_num, max(vis_num)),
+      .by = c(event_id, meta_event_order)
+    ) |> 
+    unique() |> 
     # To get the correct order:
-    arrange(meta_event_order, vis_num) |> 
+    dplyr::arrange(meta_event_order, vis_num) |> 
     dplyr::mutate(
       event_name_custom = ifelse(
         is.na(event_name_custom), 
@@ -259,12 +263,12 @@ add_timevars_to_data <- function(
     )
   
   cols_to_remove <- c(names(events), "event_name_edc")
-  browser()
+  cols_to_remove <- cols_to_remove[!cols_to_remove == "event_id"]
   output <- df |> 
-    dplyr::left_join(events_table, by = c("event_id", "vis_num", "event_name_edc")) |> 
+    dplyr::left_join(events_table, by = c("event_id", "vis_num")) |> 
+    add_missing_columns("event_name_edc") |> 
     tidyr::replace_na(
       list(
-        #event_name_custom = "Any visit",
         add_visit_number = FALSE, 
         add_event_repeat_number = FALSE
       )
