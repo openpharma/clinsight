@@ -5,7 +5,7 @@
 col_palette <- c("#1a9641", "#a6d96a", "#fdae61", "#d7191c", "grey50")
 names(col_palette) <- c("within limits", 
                         "out of limits, clinically insignificant", 
-                        "out of limits, significance unknown", 
+                        "out of limits, significance pending", 
                         "out of limits, clinically significant", 
                         "limits unknown")
 

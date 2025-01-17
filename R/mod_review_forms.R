@@ -323,8 +323,7 @@ mod_review_forms_server <- function(
     output[["progress_bar"]] <- render_progress_bar({
       req(
         review_data_active(),
-        active_form(),
-        session$userData$review_records[[active_form()]]
+        active_form()
         )
       
       list(
