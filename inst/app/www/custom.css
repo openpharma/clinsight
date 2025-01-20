@@ -67,6 +67,7 @@
   }
 
 .vis-item:is(.vis-box, .vis-range).vis-selected {
+  font-size: large;
   height: auto;
   color: black;
   border-width: medium;
@@ -78,12 +79,13 @@
 }
 
 :is(.vis-box, .vis-range).bg-secondary {
-  height: 0.5rem;
+  font-size: xx-small;
+  height: 0.75rem;
   color: transparent;
 }
 
 .vis-item:is(.vis-box, .vis-range).vis-readonly:hover {
-  font-size: large; 
+  font-size: large;
   color: black;
   cursor: pointer;
   height: auto;
