@@ -6,8 +6,10 @@
 #' @param data A list of data frames, with compatible clinical trial data.
 #' @param table_data A list of data frames containing clinical trial data in
 #'   wide format. Created with [create_table()].
-#' @param timeline_cols Character vector with the name of the columns of the 
-#'  output data frame.
+#' @param timeline_cols Character vector with the name of the columns of the
+#'   output data frame.
+#' @param treatment_label Character vector with the label to use for the
+#'   treatment item in the timeline.
 #'
 #' @return A data frame with timeline data.
 #' @export

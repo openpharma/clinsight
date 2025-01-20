@@ -41,6 +41,9 @@ that can uniquely identify one item/row.}
 \item{table_names}{An optional character vector. If provided, will be used
 within \code{\link[=datatable_custom]{datatable_custom()}}, to improve the column names in the final
 interactive tables.}
+
+\item{timeline_treatment_label}{Character vector with the label to use for
+the treatment items in the interactive timeline.}
 }
 \description{
 Shiny module. Used to display common form data in the dedicated tab.

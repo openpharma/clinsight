@@ -71,6 +71,8 @@ mod_common_forms_ui <- function(id, form){
 #' @param table_names An optional character vector. If provided, will be used
 #'   within [datatable_custom()], to improve the column names in the final
 #'   interactive tables.
+#' @param timeline_treatment_label Character vector with the label to use for
+#'   the treatment items in the interactive timeline.
 #'
 #' @seealso [mod_common_forms_ui()], [mod_timeline_ui()],
 #'   [mod_timeline_server()], [mod_review_form_tbl_ui()],

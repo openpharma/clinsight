@@ -20,6 +20,9 @@ wide format. Created with \code{\link[=create_table]{create_table()}}.}
 
 \item{timeline_cols}{Character vector with the name of the columns of the
 output data frame.}
+
+\item{treatment_label}{Character vector with the label to use for the
+treatment item in the timeline.}
 }
 \value{
 A data frame with timeline data.
