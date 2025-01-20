@@ -722,9 +722,14 @@
       "evals": [
 
       ],
-      "jsHooks": [
-
-      ],
+      "jsHooks": {
+        "render": [
+          {
+            "code": "timelineRedrawCustom",
+            "data": null
+          }
+        ]
+      },
       "deps": [
         {
           "name": "jquery",
