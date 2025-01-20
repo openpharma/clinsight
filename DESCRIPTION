@@ -30,6 +30,7 @@ Imports:
     ggplot2,
     golem,
     htmltools,
+    htmlwidgets,
     plotly,
     readr,
     readxl,
