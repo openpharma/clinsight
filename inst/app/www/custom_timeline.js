@@ -1,11 +1,7 @@
-$( document ).ready(function() {
-     
-  var timevis = $("#cf_adverse_events-timeline_fig-timeline")
-  /*var timevis = $(".vis-item.vis-box")*/
-  timevis.on("select", function(){
-    console.log("click occurred"); 
-    /* WIP: here I want to trigger the `redraw` timevis method*/
-    /*https://visjs.github.io/vis-timeline/docs/timeline/*/
+// This redraws the timeline widget when selecting/deselecting an item. 
+// Needed in comination with custom timevis CSS in this package.
+function timelineRedrawCustom (el, x){
+  this.timeline.on('select', (event, properties) => {
+    this.timeline.redraw();
     });
-    
-  });
+}

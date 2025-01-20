@@ -84,9 +84,9 @@ mod_timeline_server <- function(id, r, form, treatment_label = "\U1F48A T\U2093"
             "content" = .data[["group"]]) |>
           dplyr::distinct(id, content, order),
         options = list(zoomable = FALSE)
-      )
-    })
-    
+      ) |> 
+        htmlwidgets::onRender("timelineRedrawCustom")
+    }) 
   })
 }
 
