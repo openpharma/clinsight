@@ -74,9 +74,10 @@ mod_review_form_tbl_server <- function(
     }, ignoreInit = TRUE)
     
     observeEvent(session$userData$update_checkboxes[[form]], {
+      req(datatable_rendered())
+      
       reload_data(reload_data() + 1)
       checked <- session$userData$update_checkboxes[[form]]
-      
       df <- table_data() |> 
         dplyr::mutate(o_reviewed = dplyr::if_else(subject_id == r$subject_id, 
                                                   lapply(o_reviewed, modifyList, list(updated = checked)),

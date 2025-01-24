@@ -115,10 +115,14 @@ mod_common_forms_server <- function(
           )
         ) |>
         create_table(expected_columns = names(form_items)) |>
-        dplyr::mutate(o_reviewed = Map(\(x, y, z) append(x, list(row_id = y, disabled = z)),
-                                       o_reviewed,
-                                       dplyr::row_number(),
-                                       subject_id != r$subject_id))
+        dplyr::mutate(o_reviewed = Map(\(x, y, z) append(x, list(
+          row_id = y, 
+          disabled = z,
+          updated = isolate(session$userData$update_checkboxes[[form]]))
+        ), 
+        o_reviewed, 
+        dplyr::row_number(),
+        subject_id != r$subject_id))
       if(form == "Adverse events") {
         df |>
           dplyr::filter(!grepl("Yes", `Serious Adverse Event`)
@@ -148,10 +152,15 @@ mod_common_forms_server <- function(
             )
           ) |>
           create_table(expected_columns = names(form_items)) |>
-          dplyr::mutate(o_reviewed = Map(\(x, y, z) append(x, list(row_id = y, disabled = z)),
-                                         o_reviewed,
-                                         dplyr::row_number(),
-                                         subject_id != r$subject_id)) |>
+          dplyr::mutate(o_reviewed = Map(\(x, y, z) append(x, list(
+            row_id = y, 
+            disabled = z,
+            updated = isolate(session$userData$update_checkboxes[[form]]))
+          ), 
+          o_reviewed, 
+          dplyr::row_number(),
+          subject_id != r$subject_id)
+          ) |> 
           dplyr::filter(grepl("Yes", `Serious Adverse Event`)) |>
           dplyr::select(dplyr::any_of(
             c("o_reviewed", "subject_id","form_repeat", "Name", "AESI",  "SAE Start date",
