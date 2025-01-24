@@ -94,56 +94,74 @@ mod_common_forms_server <- function(
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
-    common_form_data <- reactiveVal()
-    SAE_data <- reactiveVal()
-    observe({
-      df <- {
+    common_form_data <- reactive({
+      cat(form, "data computed \n")
+      shiny::validate(need(
+        !is.null(r$filtered_data[[form]]),
+        paste0("Warning: no data found in the database for the form '", form, "'.")
+      ))
+      df <-
+      dplyr::left_join(
+        r$filtered_data[[form]],
+        with(r$review_data, r$review_data[item_group == form, ]) |>
+          dplyr::select(-dplyr::all_of(c("edit_date_time", "event_date"))),
+        by = id_item
+      ) |>
+        dplyr::mutate(
+          item_value = ifelse(
+            reviewed == "No",
+            paste0("<b>", htmltools::htmlEscape(item_value), "*</b>"),
+            htmltools::htmlEscape(item_value)
+          )
+        ) |>
+        create_table(expected_columns = names(form_items)) |>
+        dplyr::mutate(o_reviewed = Map(\(x, y, z) append(x, list(row_id = y, disabled = z)),
+                                       o_reviewed,
+                                       dplyr::row_number(),
+                                       subject_id != r$subject_id))
+      if(form == "Adverse events") {
+        df |>
+          dplyr::filter(!grepl("Yes", `Serious Adverse Event`)
+          ) |>
+          dplyr::select(-dplyr::starts_with("SAE"))
+      } else {
+        df
+      }
+    })
+    if (form == "Adverse events")
+      SAE_data <- reactive({
         shiny::validate(need(
           !is.null(r$filtered_data[[form]]),
           paste0("Warning: no data found in the database for the form '", form, "'.")
         ))
         dplyr::left_join(
           r$filtered_data[[form]],
-          with(r$review_data, r$review_data[item_group == form, ]) |> 
-            dplyr::select(-dplyr::all_of(c("edit_date_time", "event_date"))), 
+          with(r$review_data, r$review_data[item_group == form, ]) |>
+            dplyr::select(-dplyr::all_of(c("edit_date_time", "event_date"))),
           by = id_item
-        ) |> 
+        ) |>
           dplyr::mutate(
             item_value = ifelse(
-              reviewed == "No", 
-              paste0("<b>", htmltools::htmlEscape(item_value), "*</b>"), 
+              reviewed == "No",
+              paste0("<b>", htmltools::htmlEscape(item_value), "*</b>"),
               htmltools::htmlEscape(item_value)
             )
-          ) |> 
-          create_table(expected_columns = names(form_items)) |> 
-          dplyr::mutate(o_reviewed = Map(\(x, y, z) append(x, list(row_id = y, disabled = z)), 
-                                         o_reviewed, 
+          ) |>
+          create_table(expected_columns = names(form_items)) |>
+          dplyr::mutate(o_reviewed = Map(\(x, y, z) append(x, list(row_id = y, disabled = z)),
+                                         o_reviewed,
                                          dplyr::row_number(),
-                                         subject_id != r$subject_id))
-      }
-      common_form_data({
-        if(form == "Adverse events") {
-          df |> 
-            dplyr::filter(!grepl("Yes", `Serious Adverse Event`)
-            ) |> 
-            dplyr::select(-dplyr::starts_with("SAE"))
-        } else {
-          df
-        }
+                                         subject_id != r$subject_id)) |>
+          dplyr::filter(grepl("Yes", `Serious Adverse Event`)) |>
+          dplyr::select(dplyr::any_of(
+            c("o_reviewed", "subject_id","form_repeat", "Name", "AESI",  "SAE Start date",
+              "SAE End date", "CTCAE severity", "Treatment related",
+              "Treatment action", "Other action", "SAE Category",
+              "SAE Awareness date", "SAE Date of death", "SAE Death reason")
+          )) |>
+          adjust_colnames("^SAE ")
       })
-      if (form == "Adverse events")
-        SAE_data({
-          df |>
-            dplyr::filter(grepl("Yes", `Serious Adverse Event`)) |>
-            dplyr::select(dplyr::any_of(
-              c("o_reviewed", "subject_id","form_repeat", "Name", "AESI",  "SAE Start date",
-                "SAE End date", "CTCAE severity", "Treatment related",
-                "Treatment action", "Other action", "SAE Category",
-                "SAE Awareness date", "SAE Date of death", "SAE Death reason")
-            )) |>
-            adjust_colnames("^SAE ")
-        })
-    })
+    
     mod_review_form_tbl_server("review_form_tbl", r, common_form_data, form, reactive(input$show_all_data), table_names, form)
     if (form == "Adverse events")
       mod_review_form_tbl_server("review_form_SAE_tbl", r, SAE_data, form, reactive(input$show_all_data), table_names, "Serious Adverse Events")

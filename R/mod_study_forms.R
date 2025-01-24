@@ -163,35 +163,32 @@ mod_study_forms_server <- function(
         dplyr::mutate(item_name = factor(item_name, levels = names(form_items)))
     })
     
-    table_data <- reactiveVal()
-    observe({
-      df <- {
-        validate(need(
-          r$filtered_data[[form]],
-          paste0("Warning: no data found in database for the form '", form, "'")
-        ))
-        dplyr::left_join(
-          r$filtered_data[[form]],
-          with(r$review_data, r$review_data[item_group == form, ]) |> 
-            dplyr::select(-dplyr::all_of(c("edit_date_time", "event_date"))), 
-          by = id_item
+    study_form_data <- reactive({
+      cat(form, "data computed \n")
+      validate(need(
+        r$filtered_data[[form]],
+        paste0("Warning: no data found in database for the form '", form, "'")
+      ))
+      dplyr::left_join(
+        r$filtered_data[[form]],
+        with(r$review_data, r$review_data[item_group == form, ]) |> 
+          dplyr::select(-dplyr::all_of(c("edit_date_time", "event_date"))), 
+        by = id_item
+      ) |> 
+        dplyr::mutate(
+          item_value = ifelse(
+            reviewed == "No", 
+            paste0("<b>", htmltools::htmlEscape(item_value), "*</b>"), 
+            htmltools::htmlEscape(item_value)
+          )
         ) |> 
-          dplyr::mutate(
-            item_value = ifelse(
-              reviewed == "No", 
-              paste0("<b>", htmltools::htmlEscape(item_value), "*</b>"), 
-              htmltools::htmlEscape(item_value)
-            )
-          ) |> 
-          create_table(expected_columns = names(form_items)) |> 
-          dplyr::mutate(o_reviewed = Map(\(x, y, z) append(x, list(row_id = y, disabled = z)), 
-                                         o_reviewed, 
-                                         dplyr::row_number(),
-                                         subject_id != r$subject_id))
-      }
-      table_data(df)
+        create_table(expected_columns = names(form_items)) |> 
+        dplyr::mutate(o_reviewed = Map(\(x, y, z) append(x, list(row_id = y, disabled = z)), 
+                                       o_reviewed, 
+                                       dplyr::row_number(),
+                                       subject_id != r$subject_id))
     })
-    mod_review_form_tbl_server("review_form_tbl", r, table_data, form, reactive(input$show_all), table_names)
+    mod_review_form_tbl_server("review_form_tbl", r, study_form_data, form, reactive(input$show_all), table_names)
     
     scaling_data <- reactive({
       cols <- c("item_scale", "use_unscaled_limits")
@@ -229,7 +226,7 @@ mod_study_forms_server <- function(
     
     if(form %in% c("Vital signs", "Vitals adjusted")){
       shiny::exportTestValues(
-        table_data = subset(table_data(), input$show_all | subject_id == r$subject_id),
+        table_data = subset(study_form_data(), input$show_all | subject_id == r$subject_id),
         fig_data = fig_data()
       )
     } 

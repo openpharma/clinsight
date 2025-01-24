@@ -7,7 +7,7 @@
 mod_review_form_tbl_server(
   id,
   r,
-  table_data,
+  reactive_table_data,
   form,
   show_all,
   table_names = NULL,
@@ -24,8 +24,8 @@ Server.}
 bold and, for the form Adverse events, which timeline data should be
 highlighted.}
 
-\item{table_data}{Common reactive value. Used to manage the server data
-displayed in the DataTable.}
+\item{reactive_table_data}{Common reactive value. Used to manage the server
+data displayed in the DataTable.}
 
 \item{form}{A character string with the name of the form to display.}
 
