@@ -10,6 +10,5 @@ library(testthat)
 library(shinytest2)
 pkg_name <- "clinsight"
 library(pkg_name, character.only = TRUE)
-options(chromote.headless = "new")
 
 test_check(pkg_name)
