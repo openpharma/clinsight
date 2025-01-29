@@ -710,6 +710,7 @@ custom_config_path <- function(
 dblclick_to_form <- function(bttn_ns) {
   DT::JS(
     "table.on('dblclick', 'tbody tr', function(t) {",
+    # This processing assumes `server = TRUE`
     "var current_index = table.row(this).index();",
     "var current_rows = table.ajax.json().DT_rows_current;",
     "table.shinyMethods.selectRows(current_rows[current_index]);",
