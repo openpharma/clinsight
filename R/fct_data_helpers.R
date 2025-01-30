@@ -33,7 +33,13 @@ get_metadata <- function(
   meta$settings <- meta$settings |> 
     lapply(\(x) as.character(na.omit(x))) |> 
     Filter(f = length)
-    
+  
+  meta$settings$treatment_label <- meta$settings$treatment_label %||% "\U1F48A T\U2093" |> 
+    # So that raw Unicode will be converted correctly:
+    sprintf(fmt = '"%s"') |>
+    str2expression() |>
+    as.character()
+  
   if(length(expand_tab_items[nchar(expand_tab_items) > 0 ] ) == 0) return(meta)
   if("items_expanded" %in% names(meta)) warning({
     "Table 'items_expanded' already present. The old table will be overwritten."
