@@ -90,7 +90,6 @@ get_timeline_data <- function(
                        clean_dates(`SAE Start date`)) |> 
           as.Date(),
         end = clean_dates(`SAE End date`),
-        #end = clean_dates(ifelse(end == start, NA , end)),
         className = "bg-danger",
         title = paste0(
           start, 
@@ -113,14 +112,10 @@ get_timeline_data <- function(
         event_name = treatment_label,
         group = "Events",
         start = clean_dates(DrugAdminDate),
-        title = ifelse(
-          is.na(DrugAdminDate), 
-          NA_character_,
-          paste0(
-            DrugAdminDate, " | ",
-            "Treatment \n", 
-            "Dose: ", ifelse(is.na(DrugAdminDose), "?", DrugAdminDose)
-          )
+        title = paste0(
+          DrugAdminDate, " | ",
+          "Treatment \n", 
+          "Dose: ", ifelse(is.na(DrugAdminDose), "?", DrugAdminDose)
         )
       ) |> 
       dplyr::select(-dplyr::all_of(c("DrugAdminDate", "DrugAdminDose")))
