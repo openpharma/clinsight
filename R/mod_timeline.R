@@ -11,22 +11,25 @@ mod_timeline_ui <- function(id){
 }
 
 #' Interactive timeline - Shiny module Server
-#' 
-#' A shiny module. Creates an interactive timeline. 
-#' Used to provide a quick overview of adverse events, severe adverse events, 
-#' and study activities such as Investigational Product administration. 
-#' Helpful to judge whether for example an event is related to an Investigational 
-#' Product.
 #'
-#' @param id Character string, used to connect the module UI with the module Server. 
-#' @param r Common reactive values. Used to access the data frames `review_data`, 
-#' `filtered_tables`, and the active `subject_id`. `review_data` will be used to 
-#' minimize data points on the timeline that are already reviewed.
-#' @param form A character vector, the form in which the timeline needs to be embedded.
-#' Currently, only the form 'Adverse events' is supported.
-#' @param treatment_label Character with the treatment label to use.
+#' A shiny module. Creates an interactive timeline. Used to provide a quick
+#' overview of adverse events, severe adverse events, and study activities such
+#' as Investigational Product administration. Helpful to judge whether for
+#' example an event is related to an Investigational Product.
 #'
-#' @seealso [mod_timeline_ui()], [mod_common_forms_ui()], [mod_common_forms_server()]
+#' @param id Character string, used to connect the module UI with the module
+#'   Server.
+#' @param r Common reactive values. Used to access the data frames
+#'   `review_data`, `filtered_tables`, and the active `subject_id`.
+#'   `review_data` will be used to minimize data points on the timeline that are
+#'   already reviewed.
+#' @param form A character vector, the form in which the timeline needs to be
+#'   embedded. Currently, only the form 'Adverse events' is supported.
+#' @param treatment_label Character with the treatment label to use. Defaults to
+#'   "💊 Tₓ" if missing.
+#'
+#' @seealso [mod_timeline_ui()], [mod_common_forms_ui()],
+#'   [mod_common_forms_server()]
 mod_timeline_server <- function(id, r, form, treatment_label = "\U1F48A T\U2093"){
   stopifnot(is.reactivevalues(r))
   stopifnot(is.character(form), length(form) == 1)
