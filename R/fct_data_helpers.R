@@ -33,14 +33,12 @@ get_metadata <- function(
   meta$settings <- meta$settings |> 
     lapply(\(x) as.character(na.omit(x))) |> 
     Filter(f = length)
-    
-  if(!is.null(meta$settings$treatment_label)){
+  
+  meta$settings$treatment_label <- meta$settings$treatment_label %||% "\U1F48A T\U2093" |> 
     # So that raw Unicode will be converted correctly:
-    meta$settings$treatment_label <- meta$settings$treatment_label |>
-      sprintf(fmt = '"%s"') |>
-      str2expression() |>
-      as.character() 
-  }
+    sprintf(fmt = '"%s"') |>
+    str2expression() |>
+    as.character()
   
   if(length(expand_tab_items[nchar(expand_tab_items) > 0 ] ) == 0) return(meta)
   if("items_expanded" %in% names(meta)) warning({

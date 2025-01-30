@@ -28,6 +28,11 @@ mod_timeline_ui <- function(id){
 #'
 #' @seealso [mod_timeline_ui()], [mod_common_forms_ui()], [mod_common_forms_server()]
 mod_timeline_server <- function(id, r, form, treatment_label = "\U1F48A T\U2093"){
+  stopifnot(is.reactivevalues(r))
+  stopifnot(is.character(form), length(form) == 1)
+  stopifnot(is.null(treatment_label) || is.character(treatment_label))
+  treatment_label <- treatment_label %||% "\U1F48A T\U2093"
+  
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     
