@@ -108,7 +108,7 @@ get_timeline_data <- function(
       data$General$item_name %in% c("DrugAdminDate", "DrugAdminDose"), 
     ] |> 
       tidyr::pivot_wider(names_from = item_name, values_from = item_value) |> 
-      clinsight::add_missing_columns(c("DrugAdminDate", "DrugAdminDose")) |> 
+      add_missing_columns(c("DrugAdminDate", "DrugAdminDose")) |> 
       dplyr::mutate(
         event_name = treatment_label,
         group = "Events",
