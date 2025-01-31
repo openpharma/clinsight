@@ -525,7 +525,7 @@
             "group": "Visit",
             "title": "2023-06-05 | Screening",
             "className": "bg-light",
-            "id": "53",
+            "id": "8",
             "order": "4"
           },
           {
@@ -535,7 +535,7 @@
             "group": "Visit",
             "title": "2023-07-05 | Visit 1",
             "className": "bg-light",
-            "id": "54",
+            "id": "9",
             "order": "4"
           },
           {
@@ -545,7 +545,7 @@
             "group": "Visit",
             "title": "2023-07-19 | Visit 2",
             "className": "bg-light",
-            "id": "55",
+            "id": "10",
             "order": "4"
           },
           {
@@ -555,7 +555,7 @@
             "group": "Visit",
             "title": "2023-08-02 | Visit 3",
             "className": "bg-light",
-            "id": "56",
+            "id": "11",
             "order": "4"
           },
           {
@@ -565,7 +565,7 @@
             "group": "Visit",
             "title": "2023-08-16 | Visit 4",
             "className": "bg-light",
-            "id": "57",
+            "id": "12",
             "order": "4"
           },
           {
@@ -575,7 +575,7 @@
             "group": "Visit",
             "title": "2023-08-30 | Visit 5",
             "className": "bg-light",
-            "id": "58",
+            "id": "13",
             "order": "4"
           },
           {
@@ -585,7 +585,7 @@
             "group": "Visit",
             "title": "2023-09-13 | Visit 6",
             "className": "bg-light",
-            "id": "59",
+            "id": "14",
             "order": "4"
           },
           {
@@ -597,7 +597,7 @@
             "group": "Adverse event",
             "title": "2023-07-07 | Hypotension",
             "className": "bg-warning",
-            "id": "85",
+            "id": "84",
             "order": "2",
             "needs_review": true
           },
@@ -662,7 +662,7 @@
             "group": "Events",
             "title": "2023-07-05 | Treatment \nDose: 466.62",
             "className": "bg-light",
-            "id": "198",
+            "id": "176",
             "order": "3"
           },
           {
@@ -674,7 +674,7 @@
             "group": "Events",
             "title": "2023-08-02 | Treatment \nDose: 466.62",
             "className": "bg-light",
-            "id": "199",
+            "id": "177",
             "order": "3"
           },
           {
@@ -686,7 +686,7 @@
             "group": "Events",
             "title": "2023-08-30 | Treatment \nDose: 466.62",
             "className": "bg-light",
-            "id": "200",
+            "id": "178",
             "order": "3"
           }
         ],
