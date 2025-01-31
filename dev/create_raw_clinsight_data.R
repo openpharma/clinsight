@@ -38,6 +38,15 @@ lab_data <- cd_new |>
   mutate(
     var = ifelse(is.na(suffix), var, paste0(var, "_", suffix))
   ) 
+# significance labels need to be checked
+# significance = dplyr::case_when(
+# significance == "NCS"                   ~ "out of limits, clinically insignificant",
+# significance == "CS"                    ~ "out of limits, clinically significant",
+# is.na(out_of_lim) & is.na(significance) ~ "limits unknown",
+# out_of_lim == 0                         ~ "within limits",
+# is.na(significance) & out_of_lim == 1   ~ "out of limits, significance pending",
+# TRUE   ~ significance
+
 
 other_data <- cd_new |> 
   filter(!grepl("_LBORRES$|VSORRES", var)) 
@@ -59,3 +68,25 @@ all_data <- dplyr::bind_rows(other_data, lab_data) |>
 data.frame(name_raw = names(all_data)) |> 
   mutate(missing = ifelse(name_raw %in% clinsight_names$name_raw, FALSE, TRUE)) |> 
   arrange(missing)
+
+load_and_run_app <- function(){
+  temp_folder <- tempfile(tmpdir = tempdir())
+  dir.create(temp_folder)
+  old_golem_config <- Sys.getenv("GOLEM_CONFIG_ACTIVE")
+  Sys.setenv("GOLEM_CONFIG_ACTIVE" = "test")
+  merged_data <- all_data |> 
+    merge_meta_with_data(meta = metadata)
+  saveRDS(merged_data, file.path(temp_folder, "study_data.rds"))
+  saveRDS(metadata, file.path(temp_folder, "metadata.rds"))
+  
+  run_app(
+    data_folder = temp_folder,
+    onStart = \(){onStop(\(){
+      unlink(temp_folder, recursive = TRUE); 
+      Sys.setenv("GOLEM_CONFIG_ACTIVE" = old_golem_config)
+    })}
+  )
+} 
+
+load_and_run_app()
+
