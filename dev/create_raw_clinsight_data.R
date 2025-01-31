@@ -75,7 +75,11 @@ all_data <- dplyr::bind_rows(other_data, lab_data) |>
       "EventName" = "event_name",
       "EventLabel" = "event_label"
     )
-  ) 
+  ) |> 
+  mutate(
+    SiteCode = gsub("_[[:digit:]]+$", "", SubjectId),
+    SiteCode = sub("_", "", SiteCode)
+  )
 
 # check names: 
 data.frame(name_raw = names(all_data)) |> 
