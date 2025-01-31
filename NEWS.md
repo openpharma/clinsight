@@ -14,6 +14,7 @@
 - Changed the legend to display 'significance pending' instead of 'significance unknown'.
 - Added `Excel` download button to Queries table & patient listings that need review.
 - (For developers) From now on,the new Chrome headless browser mode will be used for `shinytest2` tests so that unit tests can be run with Chrome v132. 
+- The interactive timeline now has more consistent labels, will center an item on click, and has customizable treatment labels (by setting `settings$treatment_label` in the metadata).
 
 ## Bug fixes
 
