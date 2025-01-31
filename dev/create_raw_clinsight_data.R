@@ -91,31 +91,38 @@ data.frame(name_raw = names(all_data)) |>
 
 #### Verify if outcome is the same as clinsightful_data after merging:
 merged_data <- all_data |> 
-  merge_meta_with_data(meta = metadata) |> 
-  select(c(any_of(names(clinsightful_data)), "form_type")) |> 
-  # same column order makes comparisons easier
-  arrange(site_code, subject_id, item_group, item_name, event_date, event_repeat)
+  merge_meta_with_data(meta = metadata)
 attr(merged_data, "synch_time") <- "2023-09-15 10:10:00 UTC"
 
-clinsight_data <- clinsightful_data |> 
-  # db_update_tiume is not used anymore and should be removed 
+###### Check what is needed to get exactly the same dataset:
+###### 
+
+old_clinsight_data <- clinsightful_data |> 
+  # db_update_time is not used anymore and should be removed 
   select(-db_update_time) |> 
   # more realistic site codes:
   mutate(
     site_code = simplify_string(gsub("_[[:digit:]]+$", "", simplify_string(subject_id))),
     site_code = toupper(sub("_", "", site_code))
   ) |> 
+  # because day and vis_day are incorrect in the current clinsight_data:
+  select(-day, -vis_day) |> 
+  # because old weight change since screening was incorrect. 
+  # In the new dataset it is actually calculated:
+  filter(item_name != "Weight change since screening") |> 
   arrange(site_code, subject_id, item_group, item_name, event_date, event_repeat)
 
-waldo::compare(
-  # because day and vis_day are incorrect in the current clinsight_data:
-  select(clinsight_data, -day, -vis_day) |> 
-    # because old weight change since screening was incorrect. 
-    # In the new dataset it is actually calculated:
-    filter(item_name != "Weight change since screening"), 
-  select(merged_data, -form_type, -day, -vis_day) |> 
-    filter(item_name != "Weight change since screening")
-  )
+new_clinsight_data <- merged_data |> 
+  select(c(any_of(names(clinsightful_data)), "form_type")) |> 
+  select(-form_type, -day, -vis_day) |> 
+  filter(item_name != "Weight change since screening") |> 
+  # same column order makes comparisons easier
+  arrange(site_code, subject_id, item_group, item_name, event_date, event_repeat)
+
+waldo::compare(old_clinsight_data, new_clinsight_data)
+
+# clinsightful_data <- merged_data 
+# usethis::use_data(clinsightful_data, overwrite = TRUE)
 
 load_and_run_app <- function(){
   temp_folder <- tempfile(tmpdir = tempdir())
