@@ -99,8 +99,15 @@ merge_meta_with_data <- function(
       "item_unit" = unit,
       "item_value" = VAL
     ) |> 
-    dplyr::mutate(region = region %|_|% "Missing") |> 
-    apply_custom_functions(meta$settings$post_merge_fns)
+    apply_custom_functions(meta$settings$post_merge_fns) |> 
+    dplyr::mutate(
+      region = region %|_|% ifelse(
+        is.na(site_code), 
+        "Missing", 
+        gsub("_*[[:digit:]]+$", "", site_code)
+      )
+    ) 
+    
   attr(merged_data, "synch_time") <- synch_time
   merged_data
 }
@@ -212,17 +219,6 @@ apply_study_specific_fixes <- function(
       ),
       .by = c(subject_id, form_repeat)
     ) 
-  
-  # Add regions: 
-  data |> 
-    dplyr::mutate(
-      region = dplyr::case_when(
-        grepl("^AU", site_code)  ~ "AUS",
-        grepl("^DE", site_code)  ~ "GER",
-        grepl("^FR", site_code)  ~ "FRA",
-        TRUE                    ~ NA_character_
-      )
-    )
 }
 
 #' Apply custom modification functions
