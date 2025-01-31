@@ -35,7 +35,12 @@ lab_data <- cd_new |>
     all_of(names(labvars)),
     names_to = "suffix", values_to = "item_value"
     ) |> 
-  filter(!(item_group == "Vital signs" & !suffix %in% c("LBORRES", "LBREASND"))) |> 
+  filter(
+    # since other vars in vital signs do not exist in the data:
+    !(item_group == "Vital signs" & !suffix %in% c("LBORRES", "LBREASND")),
+    # remove derived vars:
+    !var == "VS_WEIGHTCHANGE" 
+    ) |> 
   mutate(
     suffix = ifelse(item_group == "Vital signs" & suffix == "LBORRES", "VSORRES", suffix),
     suffix = ifelse(item_group == "Vital signs" & suffix == "LBREASND", "VSREASND", suffix),
