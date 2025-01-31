@@ -40,7 +40,7 @@ get_raw_csv_data <- function(
   if(identical(synch_time, "")){warning("No synch time provided")}
   cat("Adding synch time '", synch_time, "' as the attribute 'synch_time'",
       "to the data set.\n")
-  attr(raw_data, "synch_time") <- "synch_time"
+  attr(raw_data, "synch_time") <- synch_time
   raw_data
 }
 
