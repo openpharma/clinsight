@@ -16,8 +16,8 @@ cd_new <- dplyr::left_join(varnames, clinsight_data, by = "item_name")
 
 labvars <- c(
   "LBORRES" = "item_value", 
-  "LBORNR_Lower" = "upper_lim", 
-  "LBORNR_Upper" = "lower_lim", 
+  "LBORNR_Lower" = "lower_lim", 
+  "LBORNR_Upper" = "upper_lim", 
   "LBORRESU" = "item_unit", 
   "LBCLSIG"  = "significance", 
   "LBREASND" = "reason_notdone"
