@@ -1,3 +1,4 @@
+### Script to reverse-engineer raw data from the current clinsightful_data object
 devtools::load_all()
 library(dplyr)
 library(tidyr)
@@ -34,7 +35,6 @@ labvars <- c(
   "LBCLSIG"  = "significance", 
   "LBREASND" = "reason_notdone"
 )
-names(labvars)
 
 lab_data <- cd_new |> 
   filter(grepl("_LBORRES$|VSORRES", var)) |> 
@@ -71,6 +71,7 @@ all_data <- dplyr::bind_rows(other_data, lab_data) |>
   mutate(
     item_value = ifelse(item_value == "(unit missing)", NA_character_, item_value),
   ) |> 
+  # revert names
   rename(
     c(
       all_of(setNames(clinsight_names$name_new, clinsight_names$name_raw)),
@@ -79,15 +80,11 @@ all_data <- dplyr::bind_rows(other_data, lab_data) |>
       "EventLabel" = "event_label"
     )
   ) |> 
+  # create more real-world site codes:
   mutate(
     SiteCode = gsub("_[[:digit:]]+$", "", SubjectId),
     SiteCode = sub("_", "", SiteCode)
   )
-
-# check names: 
-data.frame(name_raw = names(all_data)) |> 
-  mutate(missing = ifelse(name_raw %in% clinsight_names$name_raw, FALSE, TRUE)) |> 
-  arrange(missing)
 
 #### Verify if outcome is the same as clinsightful_data after merging:
 merged_data <- all_data |> 
@@ -98,9 +95,10 @@ attr(merged_data, "synch_time") <- "2023-09-15 10:10:00 UTC"
 ###### 
 
 old_clinsight_data <- clinsightful_data |> 
-  # db_update_time is not used anymore and should be removed 
+  ##### db_update_time is not used anymore and should be removed from 
+  ##### clinsightful_data:
   select(-db_update_time) |> 
-  # more realistic site codes:
+  ##### more realistic site codes needed:
   mutate(
     site_code = simplify_string(gsub("_[[:digit:]]+$", "", simplify_string(subject_id))),
     site_code = toupper(sub("_", "", site_code))
@@ -121,25 +119,37 @@ new_clinsight_data <- merged_data |>
 
 waldo::compare(old_clinsight_data, new_clinsight_data)
 
-# clinsightful_data <- merged_data 
-# usethis::use_data(clinsightful_data, overwrite = TRUE)
+raw_data <- split(all_data, ~FormId)
 
-load_and_run_app <- function(){
-  temp_folder <- tempfile(tmpdir = tempdir())
-  dir.create(temp_folder)
-  old_golem_config <- Sys.getenv("GOLEM_CONFIG_ACTIVE")
-  Sys.setenv("GOLEM_CONFIG_ACTIVE" = "test")
-  saveRDS(merged_data, file.path(temp_folder, "study_data.rds"))
-  saveRDS(metadata, file.path(temp_folder, "metadata.rds"))
-  
-  run_app(
-    data_folder = temp_folder,
-    onStart = \(){onStop(\(){
-      unlink(temp_folder, recursive = TRUE); 
-      Sys.setenv("GOLEM_CONFIG_ACTIVE" = old_golem_config)
-    })}
+######### Create raw data files 
+######### 
+
+lapply(
+  names(raw_data), 
+  \(x) {
+    # To mimic data with two name rows (usually a long and a short name)
+    df <- as.data.frame(lapply(raw_data[[x]], as.character))
+    df <- df[c(1, 1:nrow(df)),]
+    df[1,]<- as.list(names(raw_data[[x]]))
+    names(df) <- simplify_string(names(df))
+    readr::write_csv(
+    df, 
+    file = file.path(app_sys("raw_data"), paste0("clinsight_raw_", x, ".csv"))
   )
-} 
+  }
+)
+merged_clinsight_data <- clinsight::get_raw_csv_data(
+  app_sys("raW_data"), 
+  synch_time = "2023-09-15 10:10:00 UTC"
+  ) |> 
+  merge_meta_with_data(metadata)
 
-load_and_run_app()
+# waldo::compare(
+#   merged_clinsight_data |> 
+#     arrange(site_code, subject_id, item_group, item_name, event_date, event_repeat), 
+#   merged_data |> 
+#     arrange(site_code, subject_id, item_group, item_name, event_date, event_repeat)
+#   )
+#   No difference apart from the order
 
+## Use data-raw/clinsightful_data.R for recreating clinsightful_data from raw data
