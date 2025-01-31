@@ -2,7 +2,6 @@ devtools::load_all()
 library(dplyr)
 library(tidyr)
 
-clinsight_data <- clinsightful_data 
 clinsight_names <- metadata$column_names
 
 varnames <- metadata$items_expanded |> 
@@ -12,7 +11,20 @@ varnames <- metadata$items_expanded |>
     .by = item_name
   ) 
 
-cd_new <- dplyr::left_join(varnames, clinsight_data, by = "item_name")
+# Variables not in clinsightful_data but are mentioned in metadata.xlsx:
+# dplyr::anti_join(varnames, clinsightful_data, by = "item_name")
+# var            item_name              
+# 1 AE_AESER_AEOUT SAE outcome            
+# 2 WHO_WHOCAT     WHO.subclassification  
+# 3 DMOD_DAT       DoseModificationDate   
+# 4 DMOD_REAS      DoseModificationReason 
+# 5 DMOD_DOSE      DoseModificationNewDose
+
+# All items in clinsightful_data are also in metadata, as expected:
+# dplyr::anti_join(clinsightful_data, varnames, by = "item_name")
+# # A tibble: 0 × 24
+
+cd_new <- dplyr::left_join(clinsightful_data, varnames, by = "item_name")
 
 labvars <- c(
   "LBORRES" = "item_value", 
@@ -46,15 +58,6 @@ lab_data <- cd_new |>
     suffix = ifelse(item_group == "Vital signs" & suffix == "LBREASND", "VSREASND", suffix),
     var = ifelse(is.na(suffix), var, paste0(var, "_", suffix))
   ) 
-# significance labels need to be checked
-# significance = dplyr::case_when(
-# significance == "NCS"                   ~ "out of limits, clinically insignificant",
-# significance == "CS"                    ~ "out of limits, clinically significant",
-# is.na(out_of_lim) & is.na(significance) ~ "limits unknown",
-# out_of_lim == 0                         ~ "within limits",
-# is.na(significance) & out_of_lim == 1   ~ "out of limits, significance pending",
-# TRUE   ~ significance
-
 
 other_data <- cd_new |> 
   filter(!grepl("_LBORRES$|VSORRES", var)) |> 
@@ -86,13 +89,39 @@ data.frame(name_raw = names(all_data)) |>
   mutate(missing = ifelse(name_raw %in% clinsight_names$name_raw, FALSE, TRUE)) |> 
   arrange(missing)
 
+#### Verify if outcome is the same as clinsightful_data after merging:
+merged_data <- all_data |> 
+  merge_meta_with_data(meta = metadata) |> 
+  select(c(any_of(names(clinsightful_data)), "form_type")) |> 
+  # same column order makes comparisons easier
+  arrange(site_code, subject_id, item_group, item_name, event_date, event_repeat)
+attr(merged_data, "synch_time") <- "2023-09-15 10:10:00 UTC"
+
+clinsight_data <- clinsightful_data |> 
+  # db_update_tiume is not used anymore and should be removed 
+  select(-db_update_time) |> 
+  # more realistic site codes:
+  mutate(
+    site_code = simplify_string(gsub("_[[:digit:]]+$", "", simplify_string(subject_id))),
+    site_code = toupper(sub("_", "", site_code))
+  ) |> 
+  arrange(site_code, subject_id, item_group, item_name, event_date, event_repeat)
+
+waldo::compare(
+  # because day and vis_day are incorrect in the current clinsight_data:
+  select(clinsight_data, -day, -vis_day) |> 
+    # because old weight change since screening was incorrect. 
+    # In the new dataset it is actually calculated:
+    filter(item_name != "Weight change since screening"), 
+  select(merged_data, -form_type, -day, -vis_day) |> 
+    filter(item_name != "Weight change since screening")
+  )
+
 load_and_run_app <- function(){
   temp_folder <- tempfile(tmpdir = tempdir())
   dir.create(temp_folder)
   old_golem_config <- Sys.getenv("GOLEM_CONFIG_ACTIVE")
   Sys.setenv("GOLEM_CONFIG_ACTIVE" = "test")
-  merged_data <- all_data |> 
-    merge_meta_with_data(meta = metadata)
   saveRDS(merged_data, file.path(temp_folder, "study_data.rds"))
   saveRDS(metadata, file.path(temp_folder, "metadata.rds"))
   
