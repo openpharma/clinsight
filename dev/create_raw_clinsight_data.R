@@ -57,12 +57,17 @@ lab_data <- cd_new |>
 
 
 other_data <- cd_new |> 
-  filter(!grepl("_LBORRES$|VSORRES", var)) 
+  filter(!grepl("_LBORRES$|VSORRES", var)) |> 
+  # keep item_value of course, but remove other lab values:
+  select(-all_of(labvars[-1]))
 
 all_data <- dplyr::bind_rows(other_data, lab_data) |> 
   # remove columns that are created during metadata merging:
   select(-region, -suffix, -db_update_time, -day, -vis_day, 
-         -vis_num, -item_type, -item_group) |> 
+         -vis_num, -item_type, -item_group, -region) |> 
+  mutate(
+    item_value = ifelse(item_value == "(unit missing)", NA_character_, item_value),
+  ) |> 
   rename(
     c(
       all_of(setNames(clinsight_names$name_new, clinsight_names$name_raw)),
