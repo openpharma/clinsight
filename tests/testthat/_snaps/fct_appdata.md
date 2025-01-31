@@ -1,9 +1,8 @@
 # get_raw_csv_data works: Produces the expected output.
 
     Code
-      get_raw_csv_data(data_path, synch_time = "2024-01-01 00:00:00")
+      df
     Output
-      Adding synch time ' 2024-01-01 00:00:00 ' as the attribute 'synch_time' to the data set.
       # A tibble: 3,267 x 26
          SiteSeq SiteCode SubjectSeq SubjectId EventSeq EventId   EventName  EventDate
          <chr>   <chr>    <chr>      <chr>     <chr>    <chr>     <chr>      <chr>    
@@ -169,12 +168,12 @@
        2 BEL04     BEL_04_133 SCR      2023-06-05            1 DM                1
        3 BEL04     BEL_04_133 SCR      2023-06-05            1 DM                1
        4 BEL04     BEL_04_133 SCR      2023-06-05            1 DM                1
-       5 BEL04     BEL_04_133 SCR      2023-06-05            1 ECOG              1
-       6 BEL04     BEL_04_133 VIS      2023-07-05            1 EX                1
+       5 BEL04     BEL_04_133 SCR      2023-06-05            1 DM                1
+       6 BEL04     BEL_04_133 SCR      2023-06-05            1 ECOG              1
        7 BEL04     BEL_04_133 VIS      2023-07-05            1 EX                1
-       8 BEL04     BEL_04_133 VIS      2023-08-02            3 EX                2
+       8 BEL04     BEL_04_133 VIS      2023-07-05            1 EX                1
        9 BEL04     BEL_04_133 VIS      2023-08-02            3 EX                2
-      10 BEL04     BEL_04_133 VIS      2023-08-30            5 EX                3
+      10 BEL04     BEL_04_133 VIS      2023-08-02            3 EX                2
       # i 251 more rows
       # i 17 more variables: edit_date_time <dttm>, day <drtn>, vis_day <dbl>,
       #   vis_num <dbl>, event_name <chr>, event_label <chr>, form_type <chr>,
