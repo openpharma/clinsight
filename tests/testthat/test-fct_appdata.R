@@ -38,15 +38,16 @@ describe(
   "merge_meta_with_data. Feature 2 | Recreate clinsightful_data.
   As a user, I want to be able to recreate internal package data with raw data files", 
   {
-    df <- get_raw_csv_data(
-      app_sys("raw_data"), 
-      synch_time = "2023-09-15 10:10:00 UTC"
-    ) |> 
-      merge_meta_with_data(meta = metadata)
-    expect_equal(clinsightful_data, df)
+    it("Scenario 1 | recreate data. clinsightful_data can be recreated as expected", {
+      df <- get_raw_csv_data(
+        app_sys("raw_data"), 
+        synch_time = "2023-09-15 10:10:00 UTC"
+      ) |> 
+        merge_meta_with_data(meta = metadata)
+      expect_equal(clinsightful_data, df)
+    })
   }
 )
-
 
 
 describe(
