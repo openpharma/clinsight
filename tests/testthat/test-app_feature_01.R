@@ -11,7 +11,7 @@ describe(
           and being logged in as test user,
           I expect that I can see the start page,
           and that, by double clicking on clicking on 'BEL_04_772' within 
-          the start page table,
+          the start page table, with and without sorting,
           I can see the adverse event page of the selected patient with all 
           data shown in bold (indicating the need for review),
           and that, by clicking on [Study data],
@@ -47,6 +47,13 @@ describe(
          expect_equal(app$get_value(input = "main_tabs"), "Common events")
          output_names <- names(app$get_values(output = TRUE)$output)
          app$expect_values(output = vector_select(output_names, exclude = "visit_figure"))
+         
+         app$set_inputs(main_tabs = "Start")
+         app$run_js('$("#start_page_1-overview_table th").filter(function() {return $(this).text() == "Status"}).closest("th").trigger("click")')
+         app$run_js('$("#start_page_1-overview_table td").filter(function() {return $(this).text() == "BEL_04_772"}).closest("tr").trigger("dblclick")')
+         app$wait_for_idle()
+         expect_equal(app$get_value(input = "main_tabs"), "Common events")
+         expect_equal(app$get_text("#navigate_participants_1-subject_info .value-box-title"), "BEL_04_772")
          
          app$set_inputs(main_tabs = "Study data")
          app$wait_for_idle()

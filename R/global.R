@@ -124,7 +124,12 @@ utils::globalVariables(
     "vis_num",
     "id",
     "o_reviewed",
-    "row_id"
+    "row_id",
+    "start",
+    "end",
+    "className",
+    "DrugAdminDate",
+    "DrugAdminDose"
   )
 )
 
