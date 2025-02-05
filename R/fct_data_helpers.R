@@ -176,11 +176,9 @@ rename_raw_data <- function(
 #'
 #' @keywords internal
 add_timevars_to_data <- function(
-    data,
-    events
+    data
 ){
   stopifnot("[data] should be a data frame" = is.data.frame(data))
-  stopifnot("[events] should be a data frame" = is.data.frame(events))
   
   missing_new_cols <- required_col_names[!required_col_names %in% names(data)] |> 
     paste0(collapse = ", ")
@@ -188,21 +186,14 @@ add_timevars_to_data <- function(
     paste0("The following columns are missing while they are required:\n", 
            missing_new_cols, ".")
   )
-  # Below needed to select all expected visits and to decide what should be 
-  # counted as a visit day and what not. 
-  all_event_patterns <- paste0(
-    with(events, event_id_pattern[is_expected_visit]), 
-    collapse = "|"
-  )
+  
   df <- data |>
-    dplyr::mutate(
-      edit_date_time = as.POSIXct(edit_date_time, tz = "UTC"),
-      event_date = as.Date(event_date),
-      day = day %|_|% {event_date - min(event_date, na.rm = TRUE)}, 
-      vis_day = ifelse(grepl(all_event_patterns, event_id, ignore.case = TRUE), day, NA),
-      vis_num = as.numeric(factor(vis_day))-1, 
-      .by = subject_id
-      ) |> 
+    # dplyr::mutate(
+    #   edit_date_time = as.POSIXct(edit_date_time, tz = "UTC"),
+    #   event_date = as.Date(event_date),
+    #   day = day %|_|% {event_date - min(event_date, na.rm = TRUE)},
+    #   .by = subject_id
+    #   ) |> 
     dplyr::arrange(
       factor(site_code, levels = order_string(site_code)),
       factor(subject_id, levels = order_string(subject_id))
@@ -228,18 +219,75 @@ add_events_to_data <- function(
     data,
     events
 ){
-  stopifnot(is.data.frame(data), is.data.frame(events))
+  stopifnot("[data] should be a data frame" = is.data.frame(data))
+  stopifnot("[events] should be a data frame" = is.data.frame(events))
   if (all(c("event_name", "event_label") %in% names(data))) { 
+    cat("using pre-existing event_name and event_label\n")
     return(data) 
   }
-  all_ids <- unique(data$event_id)
-  all_labels <- data |> 
-    get_unique_vars(c("event_id", "vis_num")) |> 
-    dplyr::filter(!is.na(event_id))
+  # Below needed to select all expected visits and to decide what should be 
+  # counted as a visit day and what not. 
+  all_event_patterns <- paste0(
+    with(events, event_id_pattern[is_expected_visit]), 
+    collapse = "|"
+  )
+  browser()
+  baseline_id <- with(events, event_id[as.logical(is_baseline_event)])[1]
+  if(is.na(baseline_id)){
+    baseline_id <- events$event_id[1]
+  }
+  # TODO: account for if baseline date is missing! If so, impute with event_date!!!!!
+  baseline_dates <-  data |> 
+    dplyr::mutate(
+      baseline_date = max(event_date[event_id == baseline_id], na.rm = TRUE),
+      .by = subject_id
+    ) |> 
+    dplyr::distinct(subject_id, baseline_date)
+  
+  df <- data |> 
+    dplyr::left_join(baseline_dates, by = "subject_id") |> 
+    dplyr::mutate(
+      edit_date_time = as.POSIXct(edit_date_time, tz = "UTC"),
+      event_date = as.Date(event_date),
+      day = day %|_|% {event_date - baseline_date},
+      .by = subject_id
+    ) |> 
+    dplyr::select(-baseline_date)
+  
+  # This will prevent issues if, for example, screening is performed on multiple days. 
+  # However, it also assumes that event_id is unique, which is probably good! 
+  # Note that this is not the case for all studies in the past and should probably be verified. 
+  # something like: distinct(event_id, form_repeat, event_repeat) gives the same number of rows as distinct event_id
+  # TODO: test that event_id uniquely identifies each event.
+  all_labels <- df[c("subject_id", "event_id", "day")] |> 
+    unique() |> 
+    dplyr::filter(!is.na(event_id)) |> 
+    dplyr::mutate( 
+      # to take care of duplicates (same visits) within one person. 
+      # This is okay since vis_day is only used to calculate vis_num.
+      # Also, visits with is_expected_visit is FALSE will be unaffected and 
+      # thus we can still have multiple unscheduled visits with the same event_id
+    vis_day = ifelse(grepl(all_event_patterns, event_id, ignore.case = TRUE), max(day, na.rm = TRUE), NA),
+    .by = c(subject_id, event_id)
+  ) |> 
+    dplyr::mutate(vis_num = as.numeric(factor(vis_day))-1, .by = subject_id) |> 
+    dplyr::distinct(event_id, vis_num)
+  
+  all_ids <- unique(df$event_id)
+  # all_labels <- df |> 
+  #   get_unique_vars(c("event_id", "vis_num")) |> 
+  #   dplyr::filter(!is.na(event_id)) #|> 
+    # if two visits with the same name are shown, this is already solved in add_timevars_to_data
+    # below aims to solve the problem if two different visits are on the same day (for example, screening and V1 on the same day)
+    # However, it does not solve it yet if this is the case for EVERY patient!!
+    # In that case, we need to fix vis_num later on, by combining it with meta_event_order probably!
+  #  dplyr::slice_max(vis_num, by = event_id)
   
   # Expanding table so that all matching id's are shown:
   # Note: combination of vis_num and event_id should always result in a unique event. 
   # Ideally event_id should already be unique, but that is not always the case.
+  # not anymore. vis_num can be not unique.
+  # if 
   events_table <- events |> 
     dplyr::mutate(
       event_id = ifelse(
@@ -251,12 +299,63 @@ add_events_to_data <- function(
         event_id
       )
     ) |> 
-    expand_columns(columns = "event_id", separator = ",") |> 
-    dplyr::left_join(all_labels, by = "event_id") |> 
+    expand_columns(columns = "event_id", separator = ",")
+  
+  new_events_table  <- events_table |> 
+    dplyr::filter(is_expected_visit) |> 
+    dplyr::left_join(
+      unique(df[c("subject_id", "event_id", "day")]),
+      by = "event_id"
+    ) |> #View() 
+    dplyr::mutate( 
+      # to take care of duplicates (same visits) within one person. 
+      # This is okay since vis_day is only used to calculate vis_num.
+      # Also, visits with is_expected_visit is FALSE will be unaffected and 
+      # thus we can still have multiple unscheduled visits with the same event_id
+      # # REMOVE DUPLICATES WITHIN SUBJECTS:::::::
+      vis_day = ifelse(
+        !is.na(subject_id), 
+        max(day, na.rm = TRUE), 
+        NA
+      ),
+      .by = c(subject_id, event_id)
+    ) |> 
+    dplyr::arrange(meta_event_order, subject_id, vis_day) |> 
+    dplyr::mutate(
+      vis_num = dplyr::row_number() - 1,
+      .by = subject_id
+    ) |> 
     # If visit numbers are flexible, a visit such as 'end of treatment' can 
     # happen at different visit numbers. These duplicates need to be removed:
     dplyr::mutate(
-      vis_num = ifelse(generate_labels, vis_num, max(vis_num)),
+      vis_num = ifelse(any(!is.na(vis_num)), max(vis_num, na.rm = TRUE), vis_num),
+      .by = c(event_id, meta_event_order)
+    ) |> 
+    dplyr::select(-subject_id, -day, -vis_day) |> 
+    distinct() |> 
+    dplyr::arrange(meta_event_order, vis_num) |> 
+    dplyr::mutate(
+      event_name_custom = ifelse(
+        is.na(event_name_custom), 
+        event_id, 
+        event_name_custom
+      ),
+      event_label_custom = dplyr::case_when(
+        generate_labels & !is.na(vis_num) ~ paste0("V", vis_num),
+        !is.na(event_label_custom) ~ event_label_custom,
+        is_expected_visit ~ event_id,
+        .default = NA_character_
+      ),
+      event_label_custom = factor(event_label_custom, levels = unique(event_label_custom))
+    ) |> 
+    dplyr::rename("vis_num_derived" = vis_num)
+  
+old_events_table <- events_table |> 
+    dplyr::left_join(all_labels, by = "event_id") |> 
+  # If visit numbers are flexible, a visit such as 'end of treatment' can 
+  # happen at different visit numbers. These duplicates need to be removed:
+    dplyr::mutate(
+      vis_num = ifelse(any(!is.na(vis_num)), max(vis_num, na.rm = TRUE), vis_num),
       .by = c(event_id, meta_event_order)
     ) |> 
     unique() |> 
@@ -274,12 +373,13 @@ add_events_to_data <- function(
         .default = NA_character_
       ),
       event_label_custom = factor(event_label_custom, levels = unique(event_label_custom))
-    )
+    ) |> 
+    dplyr::rename("vis_num_derived" = vis_num)
   
   cols_to_remove <- c(names(events), "event_name_edc")
   cols_to_remove <- cols_to_remove[!cols_to_remove == "event_id"]
   output <- data |> 
-    dplyr::left_join(events_table, by = c("event_id", "vis_num")) |> 
+    dplyr::left_join(events_table, by = c("event_id")) |> 
     add_missing_columns("event_name_edc") |> 
     tidyr::replace_na(
       list(
@@ -291,7 +391,7 @@ add_events_to_data <- function(
       event_name = dplyr::case_when(
         is.na(event_name_custom) ~ "Any visit",
         add_event_repeat_number ~ paste(event_name_custom, event_repeat),
-        add_visit_number        ~ paste(event_name_custom, vis_num),
+        add_visit_number        ~ paste(event_name_custom, vis_num_derived),
         .default = event_name_custom
       ),
       event_name = dplyr::case_when(
