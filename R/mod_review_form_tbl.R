@@ -62,6 +62,7 @@ mod_review_form_tbl_server <- function(
     ############################### Observers: #################################
     
     observe({
+      golem::cat_dev(form, "| Resetting userData\n")
       reload_data(reload_data() + 1)
       datatable_rendered(NULL)
       session$userData$update_checkboxes[[form]] <- NULL
@@ -75,7 +76,7 @@ mod_review_form_tbl_server <- function(
     
     observeEvent(session$userData$update_checkboxes[[form]], {
       req(datatable_rendered())
-      
+      golem::cat_dev(form, "| Updating checkboxes\n")
       reload_data(reload_data() + 1)
       checked <- session$userData$update_checkboxes[[form]]
       df <- table_data() |> 
@@ -86,6 +87,8 @@ mod_review_form_tbl_server <- function(
     })
     
     observeEvent(input$table_review_selection, {
+      golem::cat_dev(form, "| table review selection changed to:\n")
+      golem::print_dev(input$table_review_selection[c("id", "reviewed")])
       # Update review values for session's user data
       session$userData$update_checkboxes[[form]] <- NULL
       session$userData$review_records[[form]] <-
@@ -110,6 +113,7 @@ mod_review_form_tbl_server <- function(
     observe({
       req(!is.null(show_all()))
       req(table_data(), datatable_rendered())
+      golem::cat_dev(form, "| renewing datatable server data\n")
       DT::dataTableAjax(table_proxy$session, 
                         subset(table_data(), show_all() | subject_id == r$subject_id), 
                         rownames = FALSE,
@@ -121,12 +125,15 @@ mod_review_form_tbl_server <- function(
     observeEvent(reload_data(), {
       req(!is.null(show_all()))
       req(table_data(), datatable_rendered())
+      golem::cat_dev(form, "| reload_data() triggered\n")
       DT::reloadData(table_proxy)
     }, ignoreInit = TRUE)
     
     observeEvent(r$subject_id, {
       req(table_data())
       reload_data(reload_data() + 1)
+      golem::cat_dev(form, "| Update disabled tag to match new subject id\n")
+      #change disabled tag to match the correct subject id:
       df <- table_data() |> 
         dplyr::mutate(o_reviewed = Map(\(x, y) modifyList(x, list(updated = NULL, disabled = y)), o_reviewed, subject_id != r$subject_id))
       table_data(df)
@@ -134,6 +141,10 @@ mod_review_form_tbl_server <- function(
     
     observeEvent(show_all(), {
       req(table_data(), datatable_rendered())
+      golem::cat_dev(
+        form, "| show_all() trigger changed. Incrementing reload_data()",
+        "and toggle showing subject_id column \n"
+      )
       reload_data(reload_data() + 1)
       index <- match("subject_id", colnames(table_data())) - 1
       if (show_all()) {

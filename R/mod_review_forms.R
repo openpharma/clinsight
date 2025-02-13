@@ -137,6 +137,7 @@ mod_review_forms_server <- function(
       bindEvent(active_form(), session$userData$review_records[[active_form()]])
     
     observeEvent(r$subject_id, {
+      golem::cat_dev("mod_review_forms | Reset review records\n")
       session$userData$update_checkboxes[[active_form()]] <- NULL
       session$userData$review_records[[active_form()]] <- data.frame(id = integer(), reviewed = character())
     })
