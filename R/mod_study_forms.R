@@ -194,7 +194,7 @@ mod_study_forms_server <- function(
         dplyr::mutate(o_reviewed = Map(\(x, y, z) append(x, list(
           row_id = y, 
           disabled = z,
-          updated = isolate(session$userData$update_checkboxes[[form]]))
+          updated = session$userData$update_checkboxes[[form]])
         ), 
         o_reviewed, 
         dplyr::row_number(),
