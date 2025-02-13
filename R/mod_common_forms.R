@@ -97,8 +97,16 @@ mod_common_forms_server <- function(
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
+    rev_data_form <- reactiveVal() 
+    observeEvent(r$review_data, {
+      rev_data_form_new <- with(r$review_data, r$review_data[item_group == form, ])
+      if(is.null(rev_data_form()) || !identical(rev_data_form(), rev_data_form_new)){
+        rev_data_form(rev_data_form_new)
+      }
+    })
+
     common_form_data <- reactive({
-      cat(form, "data computed \n")
+      golem::cat_dev(form, "data computed \n")
       shiny::validate(need(
         !is.null(r$filtered_data[[form]]),
         paste0("Warning: no data found in the database for the form '", form, "'.")
@@ -121,7 +129,7 @@ mod_common_forms_server <- function(
         dplyr::mutate(o_reviewed = Map(\(x, y, z) append(x, list(
           row_id = y, 
           disabled = z,
-          updated = isolate(session$userData$update_checkboxes[[form]]))
+          updated = session$userData$update_checkboxes[[form]])
         ), 
         o_reviewed, 
         dplyr::row_number(),
@@ -134,13 +142,16 @@ mod_common_forms_server <- function(
       } else {
         df
       }
-    })
-    if (form == "Adverse events")
+    }) |> 
+      bindEvent(r$filtered_data[[form]], rev_data_form(), r$subject_id)
+    
+    if (form == "Adverse events") {
       SAE_data <- reactive({
         shiny::validate(need(
           !is.null(r$filtered_data[[form]]),
           paste0("Warning: no data found in the database for the form '", form, "'.")
         ))
+        golem::cat_dev("SAE data computed \n")
         dplyr::left_join(
           r$filtered_data[[form]],
           with(r$review_data, r$review_data[item_group == form, ]) |>
@@ -158,7 +169,7 @@ mod_common_forms_server <- function(
           dplyr::mutate(o_reviewed = Map(\(x, y, z) append(x, list(
             row_id = y, 
             disabled = z,
-            updated = isolate(session$userData$update_checkboxes[[form]]))
+            updated = session$userData$update_checkboxes[[form]])
           ), 
           o_reviewed, 
           dplyr::row_number(),
@@ -172,11 +183,13 @@ mod_common_forms_server <- function(
               "SAE Awareness date", "SAE Date of death", "SAE Death reason")
           )) |>
           adjust_colnames("^SAE ")
-      })
-    
-    mod_review_form_tbl_server("review_form_tbl", r, common_form_data, form, reactive(input$show_all_data), table_names, form)
-    if (form == "Adverse events")
+      }) |> 
+        bindEvent(r$filtered_data[[form]], rev_data_form(), r$subject_id)
+      
       mod_review_form_tbl_server("review_form_SAE_tbl", r, SAE_data, form, reactive(input$show_all_data), table_names, "Serious Adverse Events")
+    }
+     
+    mod_review_form_tbl_server("review_form_tbl", r, common_form_data, form, reactive(input$show_all_data), table_names, form)
     
     mod_timeline_server(
       "timeline_fig", 

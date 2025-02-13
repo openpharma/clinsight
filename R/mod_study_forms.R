@@ -146,6 +146,14 @@ mod_study_forms_server <- function(
       shinyjs::disable("switch_view")
     }
     
+    rev_data_form <- reactiveVal() 
+    observeEvent(r$review_data, {
+      rev_data_form_new <- with(r$review_data, r$review_data[item_group == form, ])
+      if(is.null(rev_data_form()) || !identical(rev_data_form(), rev_data_form_new)){
+        rev_data_form(rev_data_form_new)
+      }
+    })
+    
     fig_data <- reactive({
       req(isTRUE(all_continuous))
       validate(need(
@@ -186,12 +194,14 @@ mod_study_forms_server <- function(
         dplyr::mutate(o_reviewed = Map(\(x, y, z) append(x, list(
           row_id = y, 
           disabled = z,
-          updated = isolate(session$userData$update_checkboxes[[form]]))
+          updated = session$userData$update_checkboxes[[form]])
         ), 
         o_reviewed, 
         dplyr::row_number(),
         subject_id != r$subject_id))
-    })
+    }) |> 
+      bindEvent(r$filtered_data[[form]], rev_data_form(), r$subject_id)
+    
     mod_review_form_tbl_server("review_form_tbl", r, study_form_data, form, reactive(input$show_all), table_names)
     
     scaling_data <- reactive({

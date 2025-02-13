@@ -137,6 +137,7 @@ mod_review_forms_server <- function(
       bindEvent(active_form(), session$userData$review_records[[active_form()]])
     
     observeEvent(r$subject_id, {
+      golem::cat_dev("mod_review_forms | Reset review records\n")
       session$userData$update_checkboxes[[active_form()]] <- NULL
       session$userData$review_records[[active_form()]] <- data.frame(id = integer(), reviewed = character())
     })
@@ -158,8 +159,6 @@ mod_review_forms_server <- function(
     observeEvent(c(active_form(), r$subject_id), {
       cat("Update confirm review button\n\n\n")
       req(r$review_data)
-      golem::cat_dev("review_data_active:\n")
-      golem::print_dev(review_data_active())
       review_indeterminate(FALSE)
       if(nrow(review_data_active()) == 0){ 
         cat("No review data found for Subject id: ", r$subject_id, 
@@ -270,10 +269,12 @@ mod_review_forms_server <- function(
           status      = ifelse(reviewed == "Yes", "old", "new")
         ) 
       
-      golem::cat_dev("review records to add:\n")
-      golem::print_dev(review_records)
+      golem::cat_dev(
+        active_form(), "|", "Adjusting review status for", 
+        length(unique(review_records$id)), "ids\n" 
+      )
       
-      cat("write review progress to database\n")
+      cat("Writing review progress to database\n")
       db_save_review(
         review_records, 
         db_path = db_path,
