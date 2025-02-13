@@ -65,6 +65,7 @@ mod_review_form_tbl_server <- function(
     # Alternatively, we can also pass this from the main module as a function argument
     rev_data_form <- reactiveVal() 
     observeEvent(r$review_data, {
+      golem::cat_dev(form, "review data computed \n")
       rev_data_form_new <- with(r$review_data, r$review_data[item_group == form, ])
       if(is.null(rev_data_form()) || !identical(rev_data_form(), rev_data_form_new)){
         rev_data_form(rev_data_form_new)

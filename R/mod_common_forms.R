@@ -99,6 +99,7 @@ mod_common_forms_server <- function(
 
     rev_data_form <- reactiveVal() 
     observeEvent(r$review_data, {
+      golem::cat_dev(form, "review data computed \n")
       rev_data_form_new <- with(r$review_data, r$review_data[item_group == form, ])
       if(is.null(rev_data_form()) || !identical(rev_data_form(), rev_data_form_new)){
         rev_data_form(rev_data_form_new)
