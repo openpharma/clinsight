@@ -139,16 +139,6 @@ mod_review_form_tbl_server <- function(
       DT::reloadData(table_proxy)
     }, ignoreInit = TRUE)
     
-    observeEvent(r$subject_id, {
-      req(table_data())
-      reload_data(reload_data() + 1)
-      golem::cat_dev(form, "| Update disabled tag to match new subject id\n")
-      #change disabled tag to match the correct subject id:
-      df <- table_data() |> 
-        dplyr::mutate(o_reviewed = Map(\(x, y) modifyList(x, list(updated = NULL, disabled = y)), o_reviewed, subject_id != r$subject_id))
-      table_data(df)
-    })
-    
     observeEvent(show_all(), {
       req(table_data(), datatable_rendered())
       golem::cat_dev(
