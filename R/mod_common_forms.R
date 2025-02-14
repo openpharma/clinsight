@@ -105,92 +105,32 @@ mod_common_forms_server <- function(
         rev_data_form(rev_data_form_new)
       }
     })
-
-    common_form_data <- reactive({
-      golem::cat_dev(form, "data computed \n")
-      shiny::validate(need(
-        !is.null(r$filtered_data[[form]]),
-        paste0("Warning: no data found in the database for the form '", form, "'.")
-      ))
-      df <-
-      dplyr::left_join(
-        r$filtered_data[[form]],
-        with(r$review_data, r$review_data[item_group == form, ]) |>
-          dplyr::select(-dplyr::all_of(c("edit_date_time", "event_date"))),
-        by = id_item
-      ) |>
-        dplyr::mutate(
-          item_value = ifelse(
-            reviewed == "No",
-            paste0("<b>", htmltools::htmlEscape(item_value), "*</b>"),
-            htmltools::htmlEscape(item_value)
-          )
-        ) |>
-        create_table(expected_columns = names(form_items)) |>
-        dplyr::mutate(o_reviewed = Map(\(x, y, z) append(x, list(
-          row_id = y, 
-          disabled = z,
-          updated = session$userData$update_checkboxes[[form]])
-        ), 
-        o_reviewed, 
-        dplyr::row_number(),
-        subject_id != r$subject_id))
-      if(form == "Adverse events") {
-        df |>
-          dplyr::filter(!grepl("Yes", `Serious Adverse Event`)
-          ) |>
-          dplyr::select(-dplyr::starts_with("SAE"))
-      } else {
-        df
-      }
-    }) |> 
-      bindEvent(r$filtered_data[[form]], rev_data_form(), r$subject_id)
+     
+    mod_review_form_tbl_server(
+      "review_form_tbl", 
+      form_data = reactive(r$filtered_data[[form]]), 
+      form_review_data = rev_data_form, 
+      active_subject = reactive(r$subject_id),
+      form = form,
+      form_items = form_items,
+      show_all = reactive(input$show_all_data), 
+      table_names = table_names, 
+      title = form
+    )
     
     if (form == "Adverse events") {
-      SAE_data <- reactive({
-        shiny::validate(need(
-          !is.null(r$filtered_data[[form]]),
-          paste0("Warning: no data found in the database for the form '", form, "'.")
-        ))
-        golem::cat_dev("SAE data computed \n")
-        dplyr::left_join(
-          r$filtered_data[[form]],
-          with(r$review_data, r$review_data[item_group == form, ]) |>
-            dplyr::select(-dplyr::all_of(c("edit_date_time", "event_date"))),
-          by = id_item
-        ) |>
-          dplyr::mutate(
-            item_value = ifelse(
-              reviewed == "No",
-              paste0("<b>", htmltools::htmlEscape(item_value), "*</b>"),
-              htmltools::htmlEscape(item_value)
-            )
-          ) |>
-          create_table(expected_columns = names(form_items)) |>
-          dplyr::mutate(o_reviewed = Map(\(x, y, z) append(x, list(
-            row_id = y, 
-            disabled = z,
-            updated = session$userData$update_checkboxes[[form]])
-          ), 
-          o_reviewed, 
-          dplyr::row_number(),
-          subject_id != r$subject_id)
-          ) |> 
-          dplyr::filter(grepl("Yes", `Serious Adverse Event`)) |>
-          dplyr::select(dplyr::any_of(
-            c("o_reviewed", "subject_id","form_repeat", "Name", "AESI",  "SAE Start date",
-              "SAE End date", "CTCAE severity", "Treatment related",
-              "Treatment action", "Other action", "SAE Category",
-              "SAE Awareness date", "SAE Date of death", "SAE Death reason")
-          )) |>
-          adjust_colnames("^SAE ")
-      }) |> 
-        bindEvent(r$filtered_data[[form]], rev_data_form(), r$subject_id)
+      mod_review_form_tbl_server(
+        "review_form_SAE_tbl", 
+        form_data = reactive(r$filtered_data[[form]]), 
+        form_review_data = rev_data_form, 
+        active_subject = reactive(r$subject_id),
+        form = form,
+        form_items = form_items,
+        show_all = reactive(input$show_all_data), 
+        table_names = table_names, 
+        title = "Serious Adverse Events"
+      )
     }
-     
-    mod_review_form_tbl_server("review_form_tbl", r, common_form_data, form, reactive(input$show_all_data), table_names, form)
-    if (form == "Adverse events") 
-      mod_review_form_tbl_server("review_form_SAE_tbl", r, SAE_data, form, reactive(input$show_all_data), table_names, "Serious Adverse Events")
     
     mod_timeline_server(
       "timeline_fig", 

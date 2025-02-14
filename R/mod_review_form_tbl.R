@@ -18,14 +18,13 @@ mod_review_form_tbl_ui <- function(id) {
 #'
 #' @param id Character string, used to connect the module UI with the module
 #'   Server.
-#' @param r Common reactive values. Used to access the data frames
-#'   `review_data`, `filtered_tables`, and the active `subject_id`.
-#'   `review_data` will be used to determine which rows will be displayed in
-#'   bold and, for the form Adverse events, which timeline data should be
-#'   highlighted.
-#' @param reactive_table_data Common reactive value. Used to manage the server
-#'   data displayed in the DataTable.
+#' @param form_data Common reactive value. Used to manage the server data
+#'   displayed in the DataTable.
+#' @param form_review_data Common reactive value containing the review data of
+#'   the form.
+#' @param active_subject Reactive value containing the active subject id.
 #' @param form A character string with the name of the form to display.
+#' @param form_items Named character vector with all form_items to display.
 #' @param show_all Common reactive value, a logical indicating whether all
 #'   records should be displayed.
 #' @param table_names An optional character vector. If provided, will be used
@@ -33,23 +32,23 @@ mod_review_form_tbl_ui <- function(id) {
 #'   interactive tables.
 #' @param title An optional character vector. If provided, will be used within
 #'   [datatable_custom()], as the title for the table.
-#'
+
 #' @seealso [mod_review_form_tbl_ui()], [mod_common_forms_ui()],
 #'   [mod_common_forms_server()], [mod_study_forms_ui()],
 #'   [mod_study_forms_server()]
 #' 
 mod_review_form_tbl_server <- function(
     id,
-    r,
-    reactive_table_data,
+    form_data,
+    form_review_data,
+    active_subject, 
     form,
+    form_items,
     show_all,
     table_names = NULL,
     title = NULL
 ){
-  stopifnot(is.reactivevalues(r))
-  stopifnot(is.reactive(reactive_table_data))
-  stopifnot(is.character(form), length(form) == 1)
+  stopifnot(is.reactive(form_data))
   stopifnot(is.reactive(show_all))
 
   moduleServer(id, function(input, output, session){
@@ -59,18 +58,57 @@ mod_review_form_tbl_server <- function(
     datatable_rendered <- reactiveVal(NULL)
     table_data <- reactiveVal()
     
+    merged_form_data <- reactive({
+      cat(form, "data computed \n")
+      validate(need(
+        form_data(),
+        paste0("Warning: no data found in database for the form '", form, "'")
+      ))
+      df <- dplyr::left_join(
+        form_data(),
+        form_review_data() |> 
+          dplyr::select(-dplyr::all_of(c("edit_date_time", "event_date"))), 
+        by = idx_cols
+      ) |> 
+        dplyr::mutate(
+          item_value = ifelse(
+            reviewed == "No", 
+            paste0("<b>", htmltools::htmlEscape(item_value), "*</b>"), 
+            htmltools::htmlEscape(item_value)
+          )
+        ) |> 
+        create_table(expected_columns = names(form_items)) |> 
+        dplyr::mutate(o_reviewed = Map(\(x, y, z) append(x, list(
+          row_id = y, 
+          disabled = z,
+          updated = session$userData$update_checkboxes[[form]])
+        ), 
+        o_reviewed, 
+        dplyr::row_number(),
+        subject_id != active_subject()))
+      if (form != "Adverse events") {
+        return(df)
+      }
+      if (identical(title, "Serious Adverse Event")){
+        df |> 
+          dplyr::filter(grepl("Yes", `Serious Adverse Event`)) |>
+          dplyr::select(dplyr::any_of(
+            c("o_reviewed", "subject_id","form_repeat", "Name", "AESI",  "SAE Start date",
+              "SAE End date", "CTCAE severity", "Treatment related",
+              "Treatment action", "Other action", "SAE Category",
+              "SAE Awareness date", "SAE Date of death", "SAE Death reason")
+          )) |>
+          adjust_colnames("^SAE ")
+      } else {
+        df |>
+          dplyr::filter(!grepl("Yes", `Serious Adverse Event`)) |>
+          dplyr::select(-dplyr::starts_with("SAE"))
+      }
+    }) |> 
+      bindEvent(form_data(), form_review_data(), active_subject())
+    
     ############################### Observers: #################################
     
-    # table data manipulation code should ideally be here, then we can remove this.
-    # Alternatively, we can also pass this from the main module as a function argument
-    rev_data_form <- reactiveVal() 
-    observeEvent(r$review_data, {
-      golem::cat_dev(form, "review data computed \n")
-      rev_data_form_new <- with(r$review_data, r$review_data[item_group == form, ])
-      if(is.null(rev_data_form()) || !identical(rev_data_form(), rev_data_form_new)){
-        rev_data_form(rev_data_form_new)
-      }
-    })
     
     observe({
       golem::cat_dev(form, "| Resetting userData\n")
@@ -79,10 +117,10 @@ mod_review_form_tbl_server <- function(
       session$userData$update_checkboxes[[form]] <- NULL
       session$userData$review_records[[form]] <- data.frame(id = integer(), reviewed = character())
     }) |> 
-      bindEvent(r$subject_id, rev_data_form(), r$filtered_data[[form]])
+      bindEvent(active_subject(), form_review_data(), form_data())
     
     observeEvent(datatable_rendered(), {
-      table_data(reactive_table_data())
+      table_data(merged_form_data())
     }, ignoreInit = TRUE)
     
     observeEvent(session$userData$update_checkboxes[[form]], {
@@ -91,12 +129,16 @@ mod_review_form_tbl_server <- function(
       reload_data(reload_data() + 1)
       checked <- session$userData$update_checkboxes[[form]]
       df <- table_data() |> 
-        dplyr::mutate(o_reviewed = dplyr::if_else(subject_id == r$subject_id, 
-                                                  lapply(o_reviewed, modifyList, list(updated = checked)),
-                                                  o_reviewed))
+        dplyr::mutate(
+          o_reviewed = dplyr::if_else(
+            subject_id == active_subject(), 
+            lapply(o_reviewed, modifyList, list(updated = checked)),
+            o_reviewed
+          )
+        )
       table_data(df)
     })
-    
+      
     observeEvent(input$table_review_selection, {
       golem::cat_dev(form, "| table review selection changed to:\n")
       golem::print_dev(input$table_review_selection[c("id", "reviewed")])
@@ -106,7 +148,7 @@ mod_review_form_tbl_server <- function(
         update_review_records(
           session$userData$review_records[[form]],
           input$table_review_selection[, c("id", "reviewed")],
-          subset(r$review_data, subject_id == r$subject_id & item_group == form,
+          subset(form_review_data(), subject_id == active_subject(),
                  c("id", "reviewed"))
         )
       
@@ -125,11 +167,14 @@ mod_review_form_tbl_server <- function(
       req(!is.null(show_all()))
       req(table_data(), datatable_rendered())
       golem::cat_dev(form, "| renewing datatable server data\n")
-      DT::dataTableAjax(table_proxy$session, 
-                        subset(table_data(), show_all() | subject_id == r$subject_id), 
-                        rownames = FALSE,
-                        outputId = table_proxy$rawId)
-    })
+      DT::dataTableAjax(
+        table_proxy$session, 
+        subset(table_data(), show_all() | subject_id == active_subject()), 
+        rownames = FALSE,
+        outputId = table_proxy$rawId
+      )
+    }) 
+    
     # Any time the review table is updated, "show all" is toggled, or the
     # subject being viewed is changed, the datatable should be reloaded to show
     # the new data
@@ -160,13 +205,13 @@ mod_review_form_tbl_server <- function(
     output[["table"]] <- DT::renderDT({
       datatable_rendered(TRUE)
       datatable_custom(
-        subset(reactive_table_data(), isolate(show_all() | subject_id == r$subject_id)), 
+        subset(merged_form_data(), isolate(show_all() | subject_id == active_subject())), 
         rename_vars = c("Review Status" = "o_reviewed", table_names), 
         rownames= FALSE,
         title = title,
         export_label = paste(
           simplify_string(form), 
-          ifelse(show_all(), "all_patients", r$subject_id), 
+          ifelse(show_all(), "all_patients", active_subject()), 
           sep = "."
         ),
         escape = FALSE,

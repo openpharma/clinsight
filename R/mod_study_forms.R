@@ -172,38 +172,17 @@ mod_study_forms_server <- function(
         dplyr::mutate(item_name = factor(item_name, levels = names(form_items)))
     })
     
-    study_form_data <- reactive({
-      cat(form, "data computed \n")
-      validate(need(
-        r$filtered_data[[form]],
-        paste0("Warning: no data found in database for the form '", form, "'")
-      ))
-      dplyr::left_join(
-        r$filtered_data[[form]],
-        with(r$review_data, r$review_data[item_group == form, ]) |> 
-          dplyr::select(-dplyr::all_of(c("edit_date_time", "event_date"))), 
-        by = id_item
-      ) |> 
-        dplyr::mutate(
-          item_value = ifelse(
-            reviewed == "No", 
-            paste0("<b>", htmltools::htmlEscape(item_value), "*</b>"), 
-            htmltools::htmlEscape(item_value)
-          )
-        ) |> 
-        create_table(expected_columns = names(form_items)) |> 
-        dplyr::mutate(o_reviewed = Map(\(x, y, z) append(x, list(
-          row_id = y, 
-          disabled = z,
-          updated = session$userData$update_checkboxes[[form]])
-        ), 
-        o_reviewed, 
-        dplyr::row_number(),
-        subject_id != r$subject_id))
-    }) |> 
-      bindEvent(r$filtered_data[[form]], rev_data_form(), r$subject_id)
-    
-    mod_review_form_tbl_server("review_form_tbl", r, study_form_data, form, reactive(input$show_all), table_names)
+    mod_review_form_tbl_server(
+      "review_form_tbl", 
+      form_data = reactive(r$filtered_data[[form]]), 
+      form_review_data = rev_data_form, 
+      active_subject = reactive(r$subject_id),
+      form = form,
+      form_items = form_items,
+      show_all = reactive(input$show_all), 
+      table_names = table_names,
+      title = form
+    )
     
     scaling_data <- reactive({
       cols <- c("item_scale", "use_unscaled_limits")
