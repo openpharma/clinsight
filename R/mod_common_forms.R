@@ -97,15 +97,6 @@ mod_common_forms_server <- function(
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
-    rev_data_form <- reactiveVal() 
-    observeEvent(r$review_data, {
-      golem::cat_dev(form, "review data computed \n")
-      rev_data_form_new <- with(r$review_data, r$review_data[item_group == form, ])
-      if(is.null(rev_data_form()) || !identical(rev_data_form(), rev_data_form_new)){
-        rev_data_form(rev_data_form_new)
-      }
-    })
-
     common_form_data <- reactive({
       golem::cat_dev(form, "data computed \n")
       shiny::validate(need(
@@ -143,8 +134,7 @@ mod_common_forms_server <- function(
       } else {
         df
       }
-    }) |> 
-      bindEvent(r$filtered_data[[form]], rev_data_form(), r$subject_id)
+    })
     
     if (form == "Adverse events") {
       SAE_data <- reactive({
@@ -184,8 +174,7 @@ mod_common_forms_server <- function(
               "SAE Awareness date", "SAE Date of death", "SAE Death reason")
           )) |>
           adjust_colnames("^SAE ")
-      }) |> 
-        bindEvent(r$filtered_data[[form]], rev_data_form(), r$subject_id)
+      })
     }
      
     mod_review_form_tbl_server("review_form_tbl", r, common_form_data, form, reactive(input$show_all_data), table_names, form)
