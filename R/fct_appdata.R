@@ -76,7 +76,7 @@ merge_meta_with_data <- function(
     rename_raw_data(column_names = meta$column_names) |> 
     readr::type_convert(clinsight_col_specs) |>
     apply_custom_functions(meta$settings$pre_merge_fns) |>
-    add_timevars_to_data() |> 
+    add_timevars_to_data(meta$events) |> 
     add_events_to_data(meta$events) |> 
     # fix MC values before merging:
     fix_multiple_choice_vars(expected_vars = meta$items_expanded$var) |> 

@@ -176,7 +176,8 @@ rename_raw_data <- function(
 #'
 #' @keywords internal
 add_timevars_to_data <- function(
-    data
+    data,
+    events
 ){
   stopifnot("[data] should be a data frame" = is.data.frame(data))
   
@@ -187,18 +188,30 @@ add_timevars_to_data <- function(
            missing_new_cols, ".")
   )
   
-  df <- data |>
-    # dplyr::mutate(
-    #   edit_date_time = as.POSIXct(edit_date_time, tz = "UTC"),
-    #   event_date = as.Date(event_date),
-    #   day = day %|_|% {event_date - min(event_date, na.rm = TRUE)},
-    #   .by = subject_id
-    #   ) |> 
+  baseline_id <- events$event_id[1]
+  if (any(isTRUE(as.logical(events[["is_baseline_event"]])))){
+    baseline_id <- with(events, event_id[as.logical(is_baseline_event)])[1] 
+  } 
+  baseline_dates <-  data |> 
+    dplyr::mutate(
+      baseline_date = max(event_date[event_id == baseline_id], na.rm = TRUE),
+      .by = subject_id
+    ) |> 
+    dplyr::distinct(subject_id, baseline_date)
+  
+  data |> 
+    dplyr::left_join(baseline_dates, by = "subject_id") |> 
+    dplyr::mutate(
+      edit_date_time = as.POSIXct(edit_date_time, tz = "UTC"),
+      event_date = as.Date(event_date),
+      day = day %|_|% {event_date - baseline_date},
+      .by = subject_id
+    ) |> 
+    dplyr::select(-baseline_date) |> 
     dplyr::arrange(
       factor(site_code, levels = order_string(site_code)),
       factor(subject_id, levels = order_string(subject_id))
     )
-  df
 }
 
 #' Merge event data from study data with metadata
@@ -232,26 +245,6 @@ add_events_to_data <- function(
     collapse = "|"
   )
   browser()
-  baseline_id <- events$event_id[1]
-  if (any(isTRUE(as.logical(events[["is_baseline_event"]])))){
-    baseline_id <- with(events, event_id[as.logical(is_baseline_event)])[1] 
-  } 
-  baseline_dates <-  data |> 
-    dplyr::mutate(
-      baseline_date = max(event_date[event_id == baseline_id], na.rm = TRUE),
-      .by = subject_id
-    ) |> 
-    dplyr::distinct(subject_id, baseline_date)
-  
-  df <- data |> 
-    dplyr::left_join(baseline_dates, by = "subject_id") |> 
-    dplyr::mutate(
-      edit_date_time = as.POSIXct(edit_date_time, tz = "UTC"),
-      event_date = as.Date(event_date),
-      day = day %|_|% {event_date - baseline_date},
-      .by = subject_id
-    ) |> 
-    dplyr::select(-baseline_date)
   
   # This will prevent issues if, for example, screening is performed on multiple days. 
   # However, it also assumes that event_id is unique, which is probably good! 
@@ -259,7 +252,7 @@ add_events_to_data <- function(
   # something like: distinct(event_id, form_repeat, event_repeat) gives the same number of rows as distinct event_id
   # TODO: test that event_id uniquely identifies each event.
   
-  all_ids <- unique(df$event_id)
+  all_ids <- unique(data$event_id)
 
   # Expanding table so that all matching id's are shown:
   # Note: combination of vis_num and event_id should always result in a unique event. 
@@ -282,7 +275,7 @@ add_events_to_data <- function(
   new_events_table  <- events_table |> 
     dplyr::filter(is_expected_visit) |> 
     dplyr::left_join(
-      unique(df[c("subject_id", "event_id", "day")]),
+      unique(data[c("subject_id", "event_id", "day")]),
       by = "event_id"
     ) |> #View() 
     dplyr::mutate( 
@@ -323,7 +316,7 @@ add_events_to_data <- function(
   
   cols_to_remove <- c(names(events), "event_name_edc")
   cols_to_remove <- cols_to_remove[!cols_to_remove == "event_id"]
-  output <- df |> 
+  output <- data |> 
     dplyr::left_join(new_events_table, by = c("event_id")) |> 
     add_missing_columns("event_name_edc") |> 
     tidyr::replace_na(
