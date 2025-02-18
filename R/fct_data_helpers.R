@@ -232,11 +232,10 @@ add_events_to_data <- function(
     collapse = "|"
   )
   browser()
-  baseline_id <- with(events, event_id[as.logical(is_baseline_event)])[1]
-  if(is.na(baseline_id)){
-    baseline_id <- events$event_id[1]
-  }
-  # TODO: account for if baseline date is missing! If so, impute with event_date!!!!!
+  baseline_id <- events$event_id[1]
+  if (any(isTRUE(as.logical(events[["is_baseline_event"]])))){
+    baseline_id <- with(events, event_id[as.logical(is_baseline_event)])[1] 
+  } 
   baseline_dates <-  data |> 
     dplyr::mutate(
       baseline_date = max(event_date[event_id == baseline_id], na.rm = TRUE),
@@ -748,6 +747,7 @@ datatable_custom <- function(
     scrollX = TRUE,
     scroller = TRUE,
     deferRender = TRUE,
+    autoWidth = FALSE,
     scrollCollapse = TRUE,
     colReorder = list(
       enable = TRUE,
