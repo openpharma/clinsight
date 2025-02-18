@@ -1,0 +1,12 @@
+name: clinsight
+title: clinsight
+username: i2p9kv-leon0samson
+account: i2p9kv-leon0samson
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 14020527
+bundleId: 9817912
+url: https://i2p9kv-leon0samson.shinyapps.io/clinsight/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
