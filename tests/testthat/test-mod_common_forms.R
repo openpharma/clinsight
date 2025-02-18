@@ -153,7 +153,7 @@ describe(
             common_form_data(), 
             Name[subject_id == "NLD_06_755" & 
                    grepl("pantoprazole", tolower(Name)) & 
-                   Indication == "Adverse event"]
+                   grepl("Adverse event", Indication)]
           )
           expect_true(length(pantoprazole_med) != 0 )
           expect_true(grepl("<b>", pantoprazole_med))
