@@ -90,7 +90,7 @@
       10 BEL04     BEL_04_772 COMMON_AE 2023-08-31            2 AE                2
       # i 789 more rows
       # i 17 more variables: edit_date_time <dttm>, day <drtn>, vis_day <dbl>,
-      #   vis_num <dbl>, event_name <chr>, event_label <chr>, form_type <chr>,
+      #   vis_num <dbl>, event_name <chr>, event_label <fct>, form_type <chr>,
       #   item_name <chr>, item_type <chr>, item_group <chr>, item_unit <chr>,
       #   lower_lim <dbl>, upper_lim <dbl>, item_value <chr>, significance <chr>,
       #   reason_notdone <chr>, region <chr>
@@ -110,9 +110,8 @@
        9 BEL04     BEL_04_133 VIS      2023-07-05            1 LBHM              2
       10 BEL04     BEL_04_133 VIS      2023-07-05            1 LBHM              2
       # i 371 more rows
-
       # i 20 more variables: edit_date_time <dttm>, day <drtn>, vis_day <dbl>,
-      #   vis_num <dbl>, event_name <chr>, event_label <chr>, form_type <chr>,
+      #   vis_num <dbl>, event_name <chr>, event_label <fct>, form_type <chr>,
       #   item_name <fct>, item_type <chr>, item_group <chr>, item_unit <chr>,
       #   lower_lim <dbl>, upper_lim <dbl>, item_value <dbl>, significance <fct>,
       #   reason_notdone <chr>, region <chr>, value_scaled <dbl>, out_of_lim <fct>,
@@ -134,7 +133,7 @@
       10 BEL07     BEL_07_645 COMMON_PR 2023-09-14            2 CP                2
       # i 18 more rows
       # i 17 more variables: edit_date_time <dttm>, day <drtn>, vis_day <dbl>,
-      #   vis_num <dbl>, event_name <chr>, event_label <chr>, form_type <chr>,
+      #   vis_num <dbl>, event_name <chr>, event_label <fct>, form_type <chr>,
       #   item_name <chr>, item_type <chr>, item_group <chr>, item_unit <chr>,
       #   lower_lim <dbl>, upper_lim <dbl>, item_value <chr>, significance <chr>,
       #   reason_notdone <chr>, region <chr>
@@ -155,7 +154,7 @@
       10 BEL04     BEL_04_133 VIS      2023-07-05            1 LBSER             2
       # i 265 more rows
       # i 20 more variables: edit_date_time <dttm>, day <drtn>, vis_day <dbl>,
-      #   vis_num <dbl>, event_name <chr>, event_label <chr>, form_type <chr>,
+      #   vis_num <dbl>, event_name <chr>, event_label <fct>, form_type <chr>,
       #   item_name <fct>, item_type <chr>, item_group <chr>, item_unit <chr>,
       #   lower_lim <dbl>, upper_lim <dbl>, item_value <dbl>, significance <fct>,
       #   reason_notdone <chr>, region <chr>, value_scaled <dbl>, out_of_lim <fct>,
@@ -177,7 +176,7 @@
       10 BEL04     BEL_04_133 VIS      2023-08-02            3 EX                2
       # i 251 more rows
       # i 17 more variables: edit_date_time <dttm>, day <drtn>, vis_day <dbl>,
-      #   vis_num <dbl>, event_name <chr>, event_label <chr>, form_type <chr>,
+      #   vis_num <dbl>, event_name <chr>, event_label <fct>, form_type <chr>,
       #   item_name <chr>, item_type <chr>, item_group <chr>, item_unit <chr>,
       #   lower_lim <dbl>, upper_lim <dbl>, item_value <chr>, significance <chr>,
       #   reason_notdone <chr>, region <chr>
@@ -198,7 +197,7 @@
       10 BEL04     BEL_04_133 VIS      2023-08-02            3 LBSER             3
       # i 170 more rows
       # i 20 more variables: edit_date_time <dttm>, day <drtn>, vis_day <dbl>,
-      #   vis_num <dbl>, event_name <chr>, event_label <chr>, form_type <chr>,
+      #   vis_num <dbl>, event_name <chr>, event_label <fct>, form_type <chr>,
       #   item_name <fct>, item_type <chr>, item_group <chr>, item_unit <chr>,
       #   lower_lim <dbl>, upper_lim <dbl>, item_value <dbl>, significance <fct>,
       #   reason_notdone <chr>, region <chr>, value_scaled <dbl>, out_of_lim <fct>,
@@ -220,7 +219,7 @@
       10 BEL04     BEL_04_772 COMMON_MH 2023-07-11            2 MH                2
       # i 747 more rows
       # i 17 more variables: edit_date_time <dttm>, day <drtn>, vis_day <dbl>,
-      #   vis_num <dbl>, event_name <chr>, event_label <chr>, form_type <chr>,
+      #   vis_num <dbl>, event_name <chr>, event_label <fct>, form_type <chr>,
       #   item_name <chr>, item_type <chr>, item_group <chr>, item_unit <chr>,
       #   lower_lim <dbl>, upper_lim <dbl>, item_value <chr>, significance <chr>,
       #   reason_notdone <chr>, region <chr>
@@ -241,7 +240,7 @@
       10 BEL04     BEL_04_772 COMMON_CM 2023-07-11            1 CM                1
       # i 3,173 more rows
       # i 17 more variables: edit_date_time <dttm>, day <drtn>, vis_day <dbl>,
-      #   vis_num <dbl>, event_name <chr>, event_label <chr>, form_type <chr>,
+      #   vis_num <dbl>, event_name <chr>, event_label <fct>, form_type <chr>,
       #   item_name <chr>, item_type <chr>, item_group <chr>, item_unit <chr>,
       #   lower_lim <dbl>, upper_lim <dbl>, item_value <chr>, significance <chr>,
       #   reason_notdone <chr>, region <chr>
@@ -262,7 +261,7 @@
       10 BEL04     BEL_04_133 VIS      2023-08-30            5 LBSER             4
       # i 125 more rows
       # i 20 more variables: edit_date_time <dttm>, day <drtn>, vis_day <dbl>,
-      #   vis_num <dbl>, event_name <chr>, event_label <chr>, form_type <chr>,
+      #   vis_num <dbl>, event_name <chr>, event_label <fct>, form_type <chr>,
       #   item_name <fct>, item_type <chr>, item_group <chr>, item_unit <chr>,
       #   lower_lim <dbl>, upper_lim <dbl>, item_value <dbl>, significance <fct>,
       #   reason_notdone <chr>, region <chr>, value_scaled <dbl>, out_of_lim <fct>,
@@ -279,7 +278,7 @@
       5 NLD06     NLD_06_72  VIS      2023-09-06            5 RS                1
       6 NLD06     NLD_06_72  VIS      2023-09-06            5 RS                1
       # i 17 more variables: edit_date_time <dttm>, day <drtn>, vis_day <dbl>,
-      #   vis_num <dbl>, event_name <chr>, event_label <chr>, form_type <chr>,
+      #   vis_num <dbl>, event_name <chr>, event_label <fct>, form_type <chr>,
       #   item_name <chr>, item_type <chr>, item_group <chr>, item_unit <chr>,
       #   lower_lim <dbl>, upper_lim <dbl>, item_value <chr>, significance <chr>,
       #   reason_notdone <chr>, region <chr>
@@ -300,7 +299,7 @@
       10 BEL04     BEL_04_133 VIS      2023-07-05            1 VS                2
       # i 468 more rows
       # i 20 more variables: edit_date_time <dttm>, day <drtn>, vis_day <dbl>,
-      #   vis_num <dbl>, event_name <chr>, event_label <chr>, form_type <chr>,
+      #   vis_num <dbl>, event_name <chr>, event_label <fct>, form_type <chr>,
       #   item_name <fct>, item_type <chr>, item_group <chr>, item_unit <chr>,
       #   lower_lim <dbl>, upper_lim <dbl>, item_value <dbl>, significance <fct>,
       #   reason_notdone <chr>, region <chr>, value_scaled <dbl>, out_of_lim <fct>,
