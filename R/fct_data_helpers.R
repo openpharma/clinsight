@@ -238,12 +238,6 @@ add_events_to_data <- function(
     cat("using pre-existing event_name and event_label\n")
     return(data) 
   }
-  # Below needed to select all expected visits and to decide what should be 
-  # counted as a visit day and what not. 
-  all_event_patterns <- paste0(
-    with(events, event_id_pattern[is_expected_visit]), 
-    collapse = "|"
-  )
   browser()
   
   # This will prevent issues if, for example, screening is performed on multiple days. 
@@ -254,6 +248,11 @@ add_events_to_data <- function(
   
   all_ids <- unique(data$event_id)
 
+  # Goal below is to create visit numbers in the order they should appear. 
+  # Merging with data is needed because when visits are flexible (using event_id_pattern), 
+  # the order of visits needs to be determined by means of when they occurred first. 
+
+  # 
   # Expanding table so that all matching id's are shown:
   # Note: combination of vis_num and event_id should always result in a unique event. 
   # Ideally event_id should already be unique, but that is not always the case.
@@ -270,9 +269,8 @@ add_events_to_data <- function(
         event_id
       )
     ) |> 
-    expand_columns(columns = "event_id", separator = ",")
-  
-  new_events_table  <- events_table |> 
+    expand_columns(columns = "event_id", separator = ",") |> 
+    # only include visits that should be counted as one:
     dplyr::filter(is_expected_visit) |> 
     dplyr::left_join(
       unique(data[c("subject_id", "event_id", "day")]),
