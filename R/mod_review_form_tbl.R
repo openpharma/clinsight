@@ -89,7 +89,7 @@ mod_review_form_tbl_server <- function(
       if (form != "Adverse events") {
         return(df)
       }
-      if (identical(title, "Serious Adverse Event")){
+      if (identical(title, "Serious Adverse Events")){
         df |> 
           dplyr::filter(grepl("Yes", `Serious Adverse Event`)) |>
           dplyr::select(dplyr::any_of(
