@@ -31,7 +31,11 @@ mod_timeline_server <- function(
     active_subject
     ){
   stopifnot(is.character(form), length(form) == 1)
-  stopifnot(is.reactive(timeline_data))
+  stopifnot(
+    is.reactive(form_review_data), 
+    is.reactive(timeline_data),
+    is.reactive(active_subject)
+    )
   
   moduleServer( id, function(input, output, session){
     ns <- session$ns

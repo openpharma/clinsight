@@ -94,8 +94,12 @@ mod_common_forms_server <- function(
     timeline_data
 ){
   stopifnot(is.character(form), length(form) == 1)
+  stopifnot(is.reactive(form_data), is.reactive(form_review_data))
   stopifnot(is.character(form_items))
+  stopifnot(is.reactive(active_subject))
   stopifnot(is.character(id_item))
+  stopifnot(is.null(table_names) || is.character(table_names))
+  stopifnot(is.reactive(timeline_data))
   names(form_items) <- names(form_items) %||% form_items
   
   moduleServer( id, function(input, output, session){
