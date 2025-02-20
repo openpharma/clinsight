@@ -163,9 +163,7 @@ mod_study_forms_server <- function(
       ))
       df <- r$filtered_data[[form]] 
       
-      status_df <- r$review_data |> 
-        dplyr::filter(item_group == form) |> 
-        dplyr::select(dplyr::all_of(c(id_item, "edit_date_time", "status", "reviewed"))) |> 
+      status_df <- rev_data_form()[c(id_item, "edit_date_time", "status", "reviewed")] |> 
         dplyr::mutate(edit_date_time = as.POSIXct(edit_date_time, tz = "UTC"))
       df[simplify_string(df$item_name) %in% input$filter, ] |>
         dplyr::left_join(status_df, by = c(id_item, "edit_date_time")) |> 
