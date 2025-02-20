@@ -188,9 +188,9 @@ describe(
         and form is set to 'Vital signs',
         and the filter is set to 'temperature',
         I expect that in the [fig_data] only temperature data is shown,
-        with the first measurement being old and the new one not yet reviewed,
+        with the first two measurements being old and the last being new,
         and that in the figure the data of subject 'NLD_06_755' is highlighted,
-        with both the last data point being shown as a bigger dot indicating it 
+        with the last data point being shown as a bigger dot indicating it 
         needs to be reviewed,
         and that, after switching to table view,
         it shows the table with not yet reviewed data highlighted.",
@@ -198,11 +198,17 @@ describe(
         form_items <- with(metadata$study_forms, item_name[item_group == "Vital signs"])
         form_items <- setNames(simplify_string(form_items), form_items)
         test_ui <- function(request){
-          bslib::page_navbar(mod_study_forms_ui(
-            "test", 
-            form = "Vital signs", 
-            form_items = form_items
-          ))
+          tagList(
+            golem_add_external_resources(),
+            shinyjs::useShinyjs(),
+            bslib::page_navbar(
+              mod_study_forms_ui(
+                "test", 
+                form = "Vital signs", 
+                form_items = form_items
+              )
+            ),
+          )
         }
         test_server <- function(input, output, session){
           mod_study_forms_server(
@@ -233,7 +239,7 @@ describe(
         app$expect_values(output = TRUE, export = TRUE)
         df <- app$get_value(export = "test-fig_data")
         expect_equal(as.character(unique(df$item_name)), "Temperature")
-        expect_equal(with(df, reviewed[subject_id == "NLD_06_755"]), c("No", "Yes", "No"))
+        expect_equal(with(df, reviewed[subject_id == "NLD_06_755"]), c("Yes", "Yes", "No"))
         app$set_inputs("test-switch_view" = "table")
         app$wait_for_idle()
         app$expect_values(output = TRUE, export = TRUE)

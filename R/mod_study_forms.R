@@ -183,7 +183,7 @@ mod_study_forms_server <- function(
       table_names = table_names,
       title = form
     )
-    
+
     scaling_data <- reactive({
       cols <- c("item_scale", "use_unscaled_limits")
       # Ensure no errors even if cols are missing, with FALSE as default:
