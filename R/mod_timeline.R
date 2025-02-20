@@ -30,38 +30,30 @@ mod_timeline_ui <- function(id){
 #'
 #' @seealso [mod_timeline_ui()], [mod_common_forms_ui()],
 #'   [mod_common_forms_server()]
-mod_timeline_server <- function(id, r, form, treatment_label = "\U1F48A T\U2093"){
-  stopifnot(is.reactivevalues(r))
+mod_timeline_server <- function(
+    id, 
+    form, 
+    form_review_data, 
+    timeline_data,
+    active_subject
+    ){
   stopifnot(is.character(form), length(form) == 1)
-  stopifnot(is.null(treatment_label) || is.character(treatment_label))
-  treatment_label <- treatment_label %||% "\U1F48A T\U2093"
+  stopifnot(is.reactive(timeline_data))
   
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     
-    timeline_data <- reactive({
-      req(form == "Adverse events")
-      get_timeline_data(
-        r$filtered_data, 
-        r$filtered_tables, 
-        treatment_label = treatment_label
-      )
-    })
     timeline_data_active <- reactive({
-      req(timeline_data())
       # join below is on both form_repeat and item_group. Join by item_group 
       # is to prepare for future timelines when other forms will also be included. 
-      review_active <- with(
-        r$review_data, 
-        r$review_data[item_group == form & subject_id == r$subject_id, ]
-        ) |> 
+      review_active <- form_review_data()[form_review_data()$subject_id == active_subject(), ] |> 
         dplyr::mutate(
           needs_review = any(reviewed == "No"),
           .by = c(form_repeat, item_group)
         ) |> 
         dplyr::distinct(subject_id, form_repeat, item_group, needs_review)
       
-      df <- with(timeline_data(), timeline_data()[subject_id == r$subject_id, ]) |> 
+      df <- with(timeline_data(), timeline_data()[subject_id == active_subject(), ]) |> 
         dplyr::left_join(review_active, by = c("subject_id", "form_repeat", "item_group")) |> 
         dplyr::mutate(
           className = ifelse(
@@ -71,7 +63,8 @@ mod_timeline_server <- function(id, r, form, treatment_label = "\U1F48A T\U2093"
             )
         )
       df
-    })
+    }) |> 
+      bindEvent(form_review_data(), timeline_data(), active_subject())
 
     if(form != "Adverse events"){
       shinyjs::hide("timeline")

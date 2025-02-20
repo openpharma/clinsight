@@ -7,7 +7,7 @@ mod_common_forms_ui <- function(id, form){
   ns <- NS(id)
   bslib::nav_panel(
     title = form, 
-    mod_timeline_ui(ns("timeline_fig")),
+    if (form == "Adverse events") mod_timeline_ui(ns("timeline_fig")),
     bslib::layout_sidebar(
       fillable = FALSE,
       if(form == "Adverse events"){
@@ -71,8 +71,7 @@ mod_common_forms_ui <- function(id, form){
 #' @param table_names An optional character vector. If provided, will be used
 #'   within [datatable_custom()], to improve the column names in the final
 #'   interactive tables.
-#' @param timeline_treatment_label Character vector with the label to use for
-#'   the treatment items in the interactive timeline.
+#' @param timeline_data Reactive with timeline data.
 #'
 #' @seealso [mod_common_forms_ui()], [mod_timeline_ui()],
 #'   [mod_timeline_server()], [mod_review_form_tbl_ui()],
@@ -80,15 +79,16 @@ mod_common_forms_ui <- function(id, form){
 #' 
 mod_common_forms_server <- function(
     id, 
-    r, 
     form,
+    form_data,
+    form_review_data,
     form_items,
+    active_subject,
     id_item = c("subject_id", "event_name", "item_group", 
                 "form_repeat", "item_name"),
     table_names = NULL,
-    timeline_treatment_label = "\U1F48A T\U2093"
+    timeline_data
 ){
-  stopifnot(is.reactivevalues(r))
   stopifnot(is.character(form), length(form) == 1)
   stopifnot(is.character(form_items))
   stopifnot(is.character(id_item))
@@ -96,23 +96,14 @@ mod_common_forms_server <- function(
   
   moduleServer( id, function(input, output, session){
     ns <- session$ns
-
-    rev_data_form <- reactiveVal() 
-    observeEvent(r$review_data, {
-      golem::cat_dev(form, "review data computed \n")
-      rev_data_form_new <- with(r$review_data, r$review_data[item_group == form, ])
-      if(is.null(rev_data_form()) || !identical(rev_data_form(), rev_data_form_new)){
-        rev_data_form(rev_data_form_new)
-      }
-    })
      
     mod_review_form_tbl_server(
       "review_form_tbl", 
-      form_data = reactive(r$filtered_data[[form]]), 
-      form_review_data = rev_data_form, 
-      active_subject = reactive(r$subject_id),
       form = form,
+      form_data = form_data, 
+      form_review_data = form_review_data, 
       form_items = form_items,
+      active_subject = active_subject,
       show_all = reactive(input$show_all_data), 
       table_names = table_names, 
       title = form
@@ -121,23 +112,23 @@ mod_common_forms_server <- function(
     if (form == "Adverse events") {
       mod_review_form_tbl_server(
         "review_form_SAE_tbl", 
-        form_data = reactive(r$filtered_data[[form]]), 
-        form_review_data = rev_data_form, 
-        active_subject = reactive(r$subject_id),
         form = form,
+        form_data = form_data, 
+        form_review_data = form_review_data, 
         form_items = form_items,
+        active_subject = active_subject,
         show_all = reactive(input$show_all_data), 
         table_names = table_names, 
         title = "Serious Adverse Events"
       )
+      mod_timeline_server(
+        "timeline_fig", 
+        form = form, 
+        form_review_data = form_review_data,
+        timeline_data = timeline_data,
+        active_subject = active_subject
+      ) 
     }
-    
-    mod_timeline_server(
-      "timeline_fig", 
-      r = r, 
-      form = form, 
-      treatment_label = timeline_treatment_label
-      )
     
   })
 }

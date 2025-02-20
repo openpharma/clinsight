@@ -118,15 +118,16 @@ mod_study_forms_ui <- function(id, form, form_items){
 #' 
 mod_study_forms_server <- function(
     id, 
-    r, 
     form,
+    form_data,
+    form_review_data,
     form_items, 
+    active_subject,
     id_item = c("subject_id", "event_name", "item_group", 
                 "form_repeat", "item_name"),
     table_names = NULL,
     item_info
 ){
-  stopifnot(is.reactivevalues(r))
   stopifnot(is.character(form), length(form) == 1)
   stopifnot(is.character(form_items))
   stopifnot(is.character(id_item))
@@ -136,7 +137,7 @@ mod_study_forms_server <- function(
   moduleServer(id, function(input, output, session){
     ns <- session$ns
     
-    data_types <- isolate(unique(r$filtered_data[[form]]$item_type))
+    data_types <- isolate(unique(form_data()$item_type))
     all_continuous <- (!is.null(data_types) && all(data_types == "continuous") )
     if(!all_continuous){
       shinyWidgets::updateRadioGroupButtons(
@@ -146,24 +147,15 @@ mod_study_forms_server <- function(
       shinyjs::disable("switch_view")
     }
     
-    rev_data_form <- reactiveVal() 
-    observeEvent(r$review_data, {
-      golem::cat_dev(form, "review data computed \n")
-      rev_data_form_new <- with(r$review_data, r$review_data[item_group == form, ])
-      if(is.null(rev_data_form()) || !identical(rev_data_form(), rev_data_form_new)){
-        rev_data_form(rev_data_form_new)
-      }
-    })
-    
     fig_data <- reactive({
       req(isTRUE(all_continuous))
       validate(need(
-        r$filtered_data[[form]],
+        form_data(),
         paste0("Warning: no data found in the database for the form '", form, "'.")
       ))
-      df <- r$filtered_data[[form]] 
+      df <- form_data() 
       
-      status_df <- rev_data_form()[c(id_item, "edit_date_time", "status", "reviewed")] |> 
+      status_df <- form_review_data()[c(id_item, "edit_date_time", "status", "reviewed")] |> 
         dplyr::mutate(edit_date_time = as.POSIXct(edit_date_time, tz = "UTC"))
       df[simplify_string(df$item_name) %in% input$filter, ] |>
         dplyr::left_join(status_df, by = c(id_item, "edit_date_time")) |> 
@@ -172,9 +164,9 @@ mod_study_forms_server <- function(
     
     mod_review_form_tbl_server(
       "review_form_tbl", 
-      form_data = reactive(r$filtered_data[[form]]), 
-      form_review_data = rev_data_form, 
-      active_subject = reactive(r$subject_id),
+      form_data = form_data, 
+      form_review_data = form_review_data, 
+      active_subject = active_subject,
       form = form,
       form_items = form_items,
       show_all = reactive(input$show_all), 
@@ -204,7 +196,7 @@ mod_study_forms_server <- function(
         fig = "timeseries_fig",
         xval = "day",
         id = "subject_id",
-        id_to_highlight = r$subject_id, 
+        id_to_highlight = active_subject(), 
         point_size = "reviewed",
         height = ceiling(0.5*length(unique(fig_data()$item_name))*125+175),
         scale = scale_yval,
@@ -218,7 +210,7 @@ mod_study_forms_server <- function(
     
     if(form %in% c("Vital signs", "Vitals adjusted")){
       shiny::exportTestValues(
-        table_data = subset(study_form_data(), input$show_all | subject_id == r$subject_id),
+        table_data = subset(study_form_data(), input$show_all | subject_id == active_subject()),
         fig_data = fig_data()
       )
     } 

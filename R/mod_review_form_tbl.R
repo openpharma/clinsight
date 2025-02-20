@@ -18,13 +18,13 @@ mod_review_form_tbl_ui <- function(id) {
 #'
 #' @param id Character string, used to connect the module UI with the module
 #'   Server.
+#' @param form A character string with the name of the form to display.
 #' @param form_data Common reactive value. Used to manage the server data
 #'   displayed in the DataTable.
 #' @param form_review_data Common reactive value containing the review data of
 #'   the form.
-#' @param active_subject Reactive value containing the active subject id.
-#' @param form A character string with the name of the form to display.
 #' @param form_items Named character vector with all form_items to display.
+#' @param active_subject Reactive value containing the active subject id.
 #' @param show_all Common reactive value, a logical indicating whether all
 #'   records should be displayed.
 #' @param table_names An optional character vector. If provided, will be used
@@ -32,18 +32,18 @@ mod_review_form_tbl_ui <- function(id) {
 #'   interactive tables.
 #' @param title An optional character vector. If provided, will be used within
 #'   [datatable_custom()], as the title for the table.
-
+#'   
 #' @seealso [mod_review_form_tbl_ui()], [mod_common_forms_ui()],
 #'   [mod_common_forms_server()], [mod_study_forms_ui()],
 #'   [mod_study_forms_server()]
 #' 
 mod_review_form_tbl_server <- function(
     id,
+    form,
     form_data,
     form_review_data,
-    active_subject, 
-    form,
     form_items,
+    active_subject, 
     show_all,
     table_names = NULL,
     title = NULL
@@ -59,11 +59,11 @@ mod_review_form_tbl_server <- function(
     table_data <- reactiveVal()
     
     merged_form_data <- reactive({
-      cat(form, "data computed \n")
       validate(need(
         form_data(),
         paste0("Warning: no data found in database for the form '", form, "'")
       ))
+      golem::cat_dev(form, "| Computing merged data\n")
       df <- dplyr::left_join(
         form_data(),
         form_review_data() |> 
