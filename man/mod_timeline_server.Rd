@@ -4,13 +4,11 @@
 \alias{mod_timeline_server}
 \title{Interactive timeline - Shiny module Server}
 \usage{
-mod_timeline_server(id, form, form_review_data, timeline_data, active_subject)
+mod_timeline_server(id, form_review_data, timeline_data, active_subject)
 }
 \arguments{
 \item{id}{Character string, used to connect the module UI with the module
 Server.}
-
-\item{form}{A character string with the name of the form to display.}
 
 \item{form_review_data}{A reactive value containing the review data of the
 respective form.}

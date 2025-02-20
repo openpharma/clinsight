@@ -131,7 +131,6 @@ mod_common_forms_server <- function(
       )
       mod_timeline_server(
         "timeline_fig", 
-        form = form, 
         form_review_data = form_review_data,
         timeline_data = timeline_data,
         active_subject = active_subject

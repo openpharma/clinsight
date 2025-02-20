@@ -25,12 +25,10 @@ mod_timeline_ui <- function(id){
 #'   [mod_common_forms_server()]
 mod_timeline_server <- function(
     id, 
-    form, 
     form_review_data, 
     timeline_data,
     active_subject
     ){
-  stopifnot(is.character(form), length(form) == 1)
   stopifnot(
     is.reactive(form_review_data), 
     is.reactive(timeline_data),
@@ -41,17 +39,15 @@ mod_timeline_server <- function(
     ns <- session$ns
     
     timeline_data_active <- reactive({
-      # join below is on both form_repeat and item_group. Join by item_group 
-      # is to prepare for future timelines when other forms will also be included. 
       review_active <- form_review_data()[form_review_data()$subject_id == active_subject(), ] |> 
         dplyr::mutate(
           needs_review = any(reviewed == "No"),
-          .by = c(form_repeat, item_group)
+          .by = c(form_repeat)
         ) |> 
-        dplyr::distinct(subject_id, form_repeat, item_group, needs_review)
+        dplyr::distinct(subject_id, form_repeat, needs_review)
       
       df <- with(timeline_data(), timeline_data()[subject_id == active_subject(), ]) |> 
-        dplyr::left_join(review_active, by = c("subject_id", "form_repeat", "item_group")) |> 
+        dplyr::left_join(review_active, by = c("subject_id", "form_repeat")) |> 
         dplyr::mutate(
           className = ifelse(
             is.na(needs_review), 
@@ -62,17 +58,12 @@ mod_timeline_server <- function(
       df
     }) |> 
       bindEvent(form_review_data(), timeline_data(), active_subject())
-
-    if(form != "Adverse events"){
-      shinyjs::hide("timeline")
-    }
     
     observeEvent(input$timeline_selected, {
       timevis::centerItem("timeline", input$timeline_selected)
     })
     
     output[["timeline"]] <-  timevis::renderTimevis({
-      req(form == "Adverse events")
       timevis::timevis(
         data = timeline_data_active(),
         groups = timeline_data_active() |>
