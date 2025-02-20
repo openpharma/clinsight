@@ -1,6 +1,6 @@
 #' Study forms - Shiny module UI
 #' 
-#' @inherit mod_study_forms_server
+#' @inherit mod_common_forms_server
 #'
 #' @seealso [mod_study_forms_server()]
 #' 
@@ -88,31 +88,11 @@ mod_study_forms_ui <- function(id, form, form_items){
 #'
 #' @param id Character string, used to connect the module UI with the module
 #'   Server.
-#' @param r Common reactive values. Used to access the data frames
-#'   `review_data`, `filtered_data`, and the active `subject_id`. The latter is
-#'   used to show data in the tables of the active subject id, and to highlight
-#'   data in the figures. The data frame filtered data should contain a column
-#'   "item_type". If all values in "item_type" are "continuous", time-series
-#'   figures will be shown.
-#' @param form A character string with the name of the form to display.
-#' @param form_items A named character vector with the names of the expected
-#'   variables defined in the applicable `form`. Used in the UI to create a
-#'   filter with drop-down menu, to select the desired variables in a figure.
-#'   Used in the module Server to make sure that all expected columns are always
-#'   created, even if some variables are implicitly missing (which might occur
-#'   if there are not yet any values available for a specific variable). Also,
-#'   implicitly missing variables might give errors if part of the script relies
-#'   on the variables' presence. See also the parameter `expected_columns` in
-#'   [create_table.default()].
-#' @param table_names An optional character vector. If provided, will be used
-#'   within [datatable_custom()], to improve the column names in the final
-#'   interactive tables.
-#' @param id_item Character vector containing the column names of the columns
-#'   that can uniquely identify one item/row.
 #' @param item_info A data frame containing the names of the study forms (in the
 #'   column `item_group`), and the columns `item_scale` `use_unscaled_limits`,
 #'   which are used to customize the way the figures are shown in the page.
-#'
+#' @inheritParams mod_common_forms_server
+#' 
 #' @seealso [mod_study_forms_ui()], [mod_review_form_tbl_ui()],
 #'   [mod_review_form_tbl_server()]
 #' 

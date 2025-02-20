@@ -52,26 +52,30 @@ mod_common_forms_ui <- function(id, form){
 #'
 #' @param id Character string, used to connect the module UI with the module
 #'   Server.
-#' @param r Common reactive values. Used to access the data frames
-#'   `review_data`, `filtered_tables`, and the active `subject_id`.
-#'   `review_data` will be used to determine which rows will be displayed in
-#'   bold and, for the form Adverse events, which timeline data should be
-#'   highlighted.
 #' @param form A character string with the name of the form to display.
+#' @param form_data A reactive value containing the study data of the respective
+#'   form.
+#' @param form_review_data A reactive value containing the review data of the
+#'   respective form.
 #' @param form_items A named character vector with the names of the expected
-#'   variables defined in the applicable `form`. Used in the module Server to
-#'   make sure that all expected columns are always created, even if some
-#'   variables are implicitly missing (which might occur if there are not yet
-#'   any values available for a specific variable). Also, implicitly missing
-#'   variables might give errors if part of the script relies on the variables'
-#'   presence. See also the parameter `expected_columns` in
+#'   variables defined in the applicable `form`. Used in the UI to create a
+#'   filter with drop-down menu, to select the desired variables in a figure.
+#'   Used in the module Server to make sure that all expected columns are always
+#'   created, even if some variables are implicitly missing (which might occur
+#'   if there are not yet any values available for a specific variable). Also,
+#'   implicitly missing variables might give errors if part of the script relies
+#'   on the variables' presence. See also the parameter `expected_columns` in
 #'   [create_table.default()].
+#' @param active_subject A reactive value containing the active subject ID.
 #' @param id_item Character vector containing the column names of the columns
 #'   that can uniquely identify one item/row.
 #' @param table_names An optional character vector. If provided, will be used
 #'   within [datatable_custom()], to improve the column names in the final
 #'   interactive tables.
-#' @param timeline_data Reactive with timeline data.
+#' @param timeline_data A reactive with a data frame containing the timeline
+#'   data. Used to create the timeline figure. Created with
+#'   [get_timeline_data()].
+#'
 #'
 #' @seealso [mod_common_forms_ui()], [mod_timeline_ui()],
 #'   [mod_timeline_server()], [mod_review_form_tbl_ui()],

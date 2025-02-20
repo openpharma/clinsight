@@ -6,11 +6,11 @@
 \usage{
 mod_review_form_tbl_server(
   id,
+  form,
   form_data,
   form_review_data,
-  active_subject,
-  form,
   form_items,
+  active_subject,
   show_all,
   table_names = NULL,
   title = NULL
@@ -20,17 +20,17 @@ mod_review_form_tbl_server(
 \item{id}{Character string, used to connect the module UI with the module
 Server.}
 
+\item{form}{A character string with the name of the form to display.}
+
 \item{form_data}{Common reactive value. Used to manage the server data
 displayed in the DataTable.}
 
 \item{form_review_data}{Common reactive value containing the review data of
 the form.}
 
-\item{active_subject}{Reactive value containing the active subject id.}
-
-\item{form}{A character string with the name of the form to display.}
-
 \item{form_items}{Named character vector with all form_items to display.}
+
+\item{active_subject}{Reactive value containing the active subject id.}
 
 \item{show_all}{Common reactive value, a logical indicating whether all
 records should be displayed.}
