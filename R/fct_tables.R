@@ -259,7 +259,6 @@ create_table.adverse_events <- function(
                              keep_vars, expected_columns) |> 
     adjust_colnames("^AE ") 
   df[["Number"]] <- NULL
-  
   # create new row when an AE gets worse:
   df_worsening <- df[!is.na(df[[worsening_start_column]]), ] |> 
     dplyr::mutate(
@@ -286,8 +285,11 @@ create_table.adverse_events <- function(
         )
     ) |> 
     dplyr::bind_rows(df_worsening) |> 
-    dplyr::arrange(dplyr::desc(.data[["Serious Adverse Event"]]), 
-                   .data[["form_repeat"]], .data[["start date"]])
+    dplyr::arrange(
+      dplyr::desc(gsub("\\**<\\/*b>", "", .data[["Serious Adverse Event"]])), 
+      .data[["form_repeat"]], 
+      dplyr::desc(gsub("\\**<\\/*b>", "", .data[["start date"]]))
+    )
   df |> 
     dplyr::select(
       -dplyr::all_of(c(worsening_start_column, "CTCAE severity worsening"))
