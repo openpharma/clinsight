@@ -2,14 +2,13 @@ describe(
   "mod_common_forms. Feature 1 | Load application module in isolation.", 
   {
     testargs <- list(
-      r = reactiveValues(
-        filtered_data = "",
-        review_data = data.frame(), 
-        filtered_tables = list(),
-        subject_id = "DEU_02_482"
-      ),
       form = "Adverse events",
-      form_items = "" 
+      form_data = reactiveVal(),
+      form_review_data = reactiveVal(),
+      form_items = "",
+      active_subject = reactiveVal("DEU_02_482"),
+      table_names = NULL,
+      timeline_data = reactiveVal()
     ) 
     
     it("Can load the module UI, with functioning internal parameters.", {
@@ -43,30 +42,29 @@ describe(
     appdata <- clinsightful_data |> 
       dplyr::filter(
         subject_id %in% c("DEU_02_482", "NLD_06_755"),
-        item_group %in% c("Adverse events",  "Medical History", "Medication")
+        item_group %in% c("Adverse events")
       ) |> 
       get_appdata()
     appvars <- get_meta_vars(appdata)
     apptables <- lapply(setNames(names(appdata), names(appdata)), \(x){
       create_table(appdata[[x]], expected_columns = names(appvars$items[[x]]))
     })
-    rev_data <- get_review_data(bind_rows_custom(appdata)) |> 
+    rev_data <- get_review_data(appdata[["Adverse events"]]) |> 
       dplyr::mutate(
         id = dplyr::row_number(),
         reviewed = sample(c("Yes", "No"), dplyr::n(), replace = TRUE),
         status = sample(c("new", "old", "updated"), dplyr::n(), replace = TRUE)
       )
-    form_items <- with(metadata$common_forms, item_name[item_group == "Adverse events"])
-    names(form_items) <- form_items
+    form_items <- appvars$items[["Adverse events"]]
+    timeline_data <- get_timeline_data(appdata, apptables)
     testargs <- list(
-      r = reactiveValues(
-        filtered_data = appdata,
-        review_data = rev_data, 
-        filtered_tables = apptables,
-        subject_id = "DEU_02_482"
-      ),
       form = "Adverse events",
-      form_items = form_items
+      form_data = reactiveVal(appdata[["Adverse events"]]),
+      form_review_data = reactiveVal(rev_data),
+      form_items = form_items,
+      active_subject = reactiveVal("DEU_02_482"),
+      table_names = NULL,
+      timeline_data = reactiveVal(timeline_data)
     ) 
     it(
       "Scenario 1 - View Adverse events table. Given a list of appdata in [filtered_tables],
@@ -83,18 +81,11 @@ describe(
         testServer(mod_common_forms_server, args = testargs, {
           ns <- session$ns
           session$setInputs(show_all_data = FALSE)
-          expect("o_reviewed" %in% names(common_form_data()), "`o_reviewed` is an expected column for form data")
-          enabled_rows <- lapply(common_form_data()[["o_reviewed"]], \(x) isFALSE(x$disabled)) |> unlist()
-          expect_equal(unique(common_form_data()[enabled_rows,"subject_id",drop = TRUE]), "DEU_02_482")
-          expect_true(is.data.frame(common_form_data()))
-
+          
+          ## continue here
+          browser()
+          expect_true(FALSE)
           expect_true(inherits(output[["review_form_tbl-table"]], "json"))
-          allergic_ae <- with(
-            common_form_data(), 
-            Name[subject_id == "DEU_02_482" & grepl("allergic reaction", tolower(Name))]
-            )
-          expect_true(length(allergic_ae) != 0 )
-          expect_true(grepl("<b>", allergic_ae))
         })
       }
     )
