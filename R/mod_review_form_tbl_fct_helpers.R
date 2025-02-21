@@ -5,7 +5,7 @@
 #' @param form_review_data 
 #' @param form 
 #' @param active_subject 
-#' @param updated 
+#' @param is_reviewed 
 #' @param is_SAE 
 #' @param id_cols 
 #'
@@ -16,11 +16,18 @@ get_form_table <- function(
     form,
     form_items,
     active_subject,
-    updated,
-    is_SAE,
+    is_reviewed = NULL,
+    is_SAE = NULL,
     id_cols = idx_cols
 ){
   stopifnot(is.data.frame(form_data), is.data.frame(form_review_data))
+  stopifnot(is.character(form))
+  stopifnot(is.logical(is_reviewed %||% FALSE), is.logical(is_SAE %||% FALSE))
+  is_SAE <- isTRUE(is_SAE)
+  stopifnot(is.character(active_subject %||% ""))
+  if(is.null(active_subject)){
+    warning("No active subject selected")
+  }
   df <- dplyr::left_join(
     form_data,
     form_review_data |> 
@@ -35,14 +42,18 @@ get_form_table <- function(
       )
     ) |> 
     create_table(expected_columns = names(form_items)) |> 
-    dplyr::mutate(o_reviewed = Map(\(x, y, z) append(x, list(
-      row_id = y, 
-      disabled = z,
-      updated = updated)
-    ), 
-    o_reviewed, 
-    dplyr::row_number(),
-    subject_id != active_subject))
+    dplyr::mutate(
+      o_reviewed = Map(
+        \(x, y, z) append(x, list(
+          row_id = y, 
+          disabled = z,
+          updated = is_reviewed)
+        ), 
+        o_reviewed, 
+        dplyr::row_number(),
+        if (is.null(active_subject)) FALSE else subject_id != active_subject
+      )
+    )
   if (form != "Adverse events") {
     return(df)
   }

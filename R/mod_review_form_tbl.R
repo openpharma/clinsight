@@ -70,7 +70,7 @@ mod_review_form_tbl_server <- function(
         form = form, 
         form_items = form_items,
         active_subject = active_subject(),
-        updated = session$userData$update_checkboxes[[form]],
+        is_reviewed = session$userData$update_checkboxes[[form]],
         is_SAE = identical(title, "Serious Adverse Events")
       )
     }) |> 
