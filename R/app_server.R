@@ -126,7 +126,9 @@ app_server <- function(
   review_data <- reactiveValues()
   observeEvent(r$review_data, {
     req(review_data)
-    rev_list_data <- split(r$review_data, ~item_group)
+    rev_list_data <- lapply(setNames(nm = app_vars$all_forms$form), \(x){
+      r$review_data[r$review_data$item_group == x, ]
+    })
     for(i in names(rev_list_data)){
       if(!identical(review_data[[i]], rev_list_data[[i]]) ){
         golem::cat_dev("app_server | refreshing review_data of form ", i, "\n")

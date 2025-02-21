@@ -42,12 +42,12 @@ mod_timeline_server <- function(
       review_active <- form_review_data()[form_review_data()$subject_id == active_subject(), ] |> 
         dplyr::mutate(
           needs_review = any(reviewed == "No"),
-          .by = c(form_repeat)
+          .by = c(form_repeat, item_group)
         ) |> 
-        dplyr::distinct(subject_id, form_repeat, needs_review)
+        dplyr::distinct(subject_id, form_repeat, item_group, needs_review)
       
       df <- with(timeline_data(), timeline_data()[subject_id == active_subject(), ]) |> 
-        dplyr::left_join(review_active, by = c("subject_id", "form_repeat")) |> 
+        dplyr::left_join(review_active, by = c("subject_id", "form_repeat", "item_group")) |> 
         dplyr::mutate(
           className = ifelse(
             is.na(needs_review), 
