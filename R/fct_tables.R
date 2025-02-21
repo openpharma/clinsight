@@ -127,19 +127,35 @@ create_table.continuous <- function(
   }
   data[[unit_column]] <- tidyr::replace_na(data[[unit_column]], "")
   df <- data |> 
+    add_missing_columns("not_reviewed_but_missing") |> 
     dplyr::mutate(
+      not_reviewed_but_missing = ifelse(
+        is.na(not_reviewed_but_missing), 
+        FALSE, 
+        not_reviewed_but_missing
+      ) |> 
+        as.logical(),
       "{unit_column}" := ifelse(
-        is.na(.data[[value_column]]), "", .data[[unit_column]]
-        ),
+        is.na(.data[[value_column]]) | not_reviewed_but_missing, 
+        "", 
+        .data[[unit_column]]
+      ),
       "{value_column}" := as.character(.data[[value_column]]),
       "{value_column}" := dplyr::case_when(
-        is.na(.data[[value_column]]) & !.data[[explanation_column]] == "" ~ 
+        (is.na(.data[[value_column]]) | not_reviewed_but_missing) &
+          !.data[[explanation_column]] == "" ~ 
           paste0("missing (", .data[[explanation_column]], ")"),
         is.na(.data[[value_column]]) & .data[[explanation_column]] == ""  ~ 
           "missing (reason unknown)",
-        TRUE ~ .data[[value_column]]
+        .default =  .data[[value_column]]
+      ),
+      "{value_column}" := ifelse(
+        not_reviewed_but_missing,
+        paste0("<b>", .data[[value_column]], "*</b>"),
+        .data[[value_column]]
       )
-    ) |> 
+    ) |>
+    dplyr::select(-not_reviewed_but_missing) |> 
     tidyr::unite(col = "VAL", dplyr::all_of(c(value_column, unit_column)),  sep = " ") 
   create_table.default(data = df, name_column = name_column, 
                         value_column = "VAL", keep_vars = keep_vars, 

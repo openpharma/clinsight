@@ -38,8 +38,9 @@ get_form_table <- function(
     by = id_cols
   ) |> 
     dplyr::mutate(
+      not_reviewed_but_missing = (reviewed == "No" & is.na(item_value)), 
       item_value = ifelse(
-        reviewed == "No", 
+        (reviewed == "No" & !is.na(item_value)), 
         paste0("<b>", htmltools::htmlEscape(item_value), "*</b>"), 
         htmltools::htmlEscape(item_value)
       )
