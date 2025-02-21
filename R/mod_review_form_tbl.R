@@ -64,46 +64,15 @@ mod_review_form_tbl_server <- function(
         paste0("Warning: no data found in database for the form '", form, "'")
       ))
       golem::cat_dev(form, "| Computing merged data\n")
-      df <- dplyr::left_join(
+      get_form_table(
         form_data(),
-        form_review_data() |> 
-          dplyr::select(-dplyr::all_of(c("edit_date_time", "event_date"))), 
-        by = idx_cols
-      ) |> 
-        dplyr::mutate(
-          item_value = ifelse(
-            reviewed == "No", 
-            paste0("<b>", htmltools::htmlEscape(item_value), "*</b>"), 
-            htmltools::htmlEscape(item_value)
-          )
-        ) |> 
-        create_table(expected_columns = names(form_items)) |> 
-        dplyr::mutate(o_reviewed = Map(\(x, y, z) append(x, list(
-          row_id = y, 
-          disabled = z,
-          updated = session$userData$update_checkboxes[[form]])
-        ), 
-        o_reviewed, 
-        dplyr::row_number(),
-        subject_id != active_subject()))
-      if (form != "Adverse events") {
-        return(df)
-      }
-      if (identical(title, "Serious Adverse Events")){
-        df |> 
-          dplyr::filter(grepl("Yes", `Serious Adverse Event`)) |>
-          dplyr::select(dplyr::any_of(
-            c("o_reviewed", "subject_id","form_repeat", "Name", "AESI",  "SAE Start date",
-              "SAE End date", "CTCAE severity", "Treatment related",
-              "Treatment action", "Other action", "SAE Category",
-              "SAE Awareness date", "SAE Date of death", "SAE Death reason")
-          )) |>
-          adjust_colnames("^SAE ")
-      } else {
-        df |>
-          dplyr::filter(!grepl("Yes", `Serious Adverse Event`)) |>
-          dplyr::select(-dplyr::starts_with("SAE"))
-      }
+        form_review_data(), 
+        form = form, 
+        form_items = form_items,
+        active_subject = active_subject(),
+        updated = session$userData$update_checkboxes[[form]],
+        is_SAE = identical(title, "Serious Adverse Events")
+      )
     }) |> 
       bindEvent(form_data(), form_review_data(), active_subject())
     

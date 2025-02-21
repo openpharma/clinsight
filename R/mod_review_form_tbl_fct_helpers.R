@@ -1,3 +1,67 @@
+
+#' Get form table
+#'
+#' @param form_data 
+#' @param form_review_data 
+#' @param form 
+#' @param active_subject 
+#' @param updated 
+#' @param is_SAE 
+#' @param id_cols 
+#'
+#' @keywords internal
+get_form_table <- function(
+    form_data,
+    form_review_data,
+    form,
+    form_items,
+    active_subject,
+    updated,
+    is_SAE,
+    id_cols = idx_cols
+){
+  stopifnot(is.data.frame(form_data), is.data.frame(form_review_data))
+  df <- dplyr::left_join(
+    form_data,
+    form_review_data |> 
+      dplyr::select(-dplyr::all_of(c("edit_date_time", "event_date"))), 
+    by = id_cols
+  ) |> 
+    dplyr::mutate(
+      item_value = ifelse(
+        reviewed == "No", 
+        paste0("<b>", htmltools::htmlEscape(item_value), "*</b>"), 
+        htmltools::htmlEscape(item_value)
+      )
+    ) |> 
+    create_table(expected_columns = names(form_items)) |> 
+    dplyr::mutate(o_reviewed = Map(\(x, y, z) append(x, list(
+      row_id = y, 
+      disabled = z,
+      updated = updated)
+    ), 
+    o_reviewed, 
+    dplyr::row_number(),
+    subject_id != active_subject))
+  if (form != "Adverse events") {
+    return(df)
+  }
+  if (is_SAE){
+    with(df, df[grepl("Yes", `Serious Adverse Event`),]) |>
+      dplyr::select(dplyr::any_of(
+        c("o_reviewed", "subject_id","form_repeat", "Name", "AESI",  "SAE Start date",
+          "SAE End date", "CTCAE severity", "Treatment related",
+          "Treatment action", "Other action", "SAE Category",
+          "SAE Awareness date", "SAE Date of death", "SAE Death reason")
+      )) |>
+      adjust_colnames("^SAE ")
+  } else {
+    with(df, df[!grepl("Yes", `Serious Adverse Event`),]) |> 
+      dplyr::select(-dplyr::starts_with("SAE"))
+  }
+}
+
+
 #' Update Review Records
 #'
 #' Updates the review records data frame when a datatable checkbox is clicked.
