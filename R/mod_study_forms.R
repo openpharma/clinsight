@@ -193,7 +193,6 @@ mod_study_forms_server <- function(
     
     if(form %in% c("Vital signs", "Vitals adjusted")){
       shiny::exportTestValues(
-        table_data = subset(study_form_data(), input$show_all | subject_id == active_subject()),
         fig_data = fig_data()
       )
     } 

@@ -233,6 +233,11 @@ mod_review_form_tbl_server <- function(
     })
     table_proxy <- DT::dataTableProxy("table")
     
+    if(form %in% c("Vital signs", "Vitals adjusted")){
+      shiny::exportTestValues(
+        table_data = subset(merged_form_data(), show_all() | subject_id == active_subject())
+      )
+    } 
   })
 }
     
