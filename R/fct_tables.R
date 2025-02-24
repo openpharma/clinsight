@@ -339,14 +339,15 @@ create_table.medication <- function(
   
   df |> 
     dplyr::mutate(
-      Name = paste0(tools::toTitleCase(tolower(.data[["Active Ingredient"]])), " (",
-                    tools::toTitleCase(tolower(.data[["Trade Name"]])),
-                    ")"),
+      Name = paste0(.data[["Active Ingredient"]], " (", .data[["Trade Name"]], ")"),
       Dose = paste0(.data[["Dose"]], " ", .data[["Unit"]], " ", 
                     .data[["Frequency"]], "; ", .data[["Route"]]),
       in_use = (is.na(.data[["End Date"]])) 
     ) |> 
-    dplyr::arrange(dplyr::desc(in_use), dplyr::desc(`Start Date`)) |> 
+    dplyr::arrange(
+      dplyr::desc(gsub("\\**<\\/*b>", "", .data[["in_use"]])), 
+      dplyr::desc(gsub("\\**<\\/*b>", "", .data[["Start Date"]]))
+      ) |> 
     dplyr::select(
       dplyr::any_of("o_reviewed"),
       dplyr::all_of(c(keep_vars, "Name")), 
@@ -374,8 +375,7 @@ create_table.medical_history <- function(
     adjust_colnames("^MH ") 
   df[["Number"]] <- NULL
     
-  df |> 
-    dplyr::mutate(Name = tools::toTitleCase(tolower(Name)))
+  df
 }
 
 #' Create Concomitant Procedures Table
