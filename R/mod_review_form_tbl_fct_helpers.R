@@ -1,15 +1,18 @@
 
 #' Get form table
 #'
-#' @param form_data 
-#' @param form_review_data 
-#' @param form 
-#' @param active_subject 
-#' @param is_reviewed 
-#' @param is_SAE 
-#' @param id_cols 
+#' @param form_data A data frame with the study data of the respective form.
+#' @param form_review_data A data frame with he review data of the form.
+#' @param form A character string with the name of the form.
+#' @param active_subject A character string with the active subject id.
+#' @param is_reviewed A logical, indicating whether all items of the entire form
+#'   for the active subject id are reviewed.
+#' @param is_SAE A logical, indicating whether the form is a SAE form. If TRUE,
+#'   will make some adjustments to the columns to display.
+#' @param id_cols Columns that identify a unique row in the data.
 #'
 #' @keywords internal
+#'
 get_form_table <- function(
     form_data,
     form_review_data,
@@ -54,11 +57,30 @@ get_form_table <- function(
         if (is.null(active_subject)) FALSE else subject_id != active_subject
       )
     )
-  if (form != "Adverse events") {
-    return(df)
+  if(form == "Adverse events") {
+    df <- adjust_ae_form_table(df, is_SAE = is_SAE)
   }
+  df
+}
+
+#' Adjust (Serious) Adverse Event form tables
+#'
+#' Needed because AE and SAE items are closely related and are currently
+#' adjusted after pivoting (see [create_table.adverse_events()]). This function
+#' should be phased out in the future.
+#'
+#' @param data 
+#' @inheritParams source
+#' 
+#' @noRd
+#' 
+adjust_ae_form_table <- function(
+    data,
+    is_SAE
+){
+  stopifnot(is.data.frame(data), is.logical(is_SAE))
   if (is_SAE){
-    with(df, df[grepl("Yes", `Serious Adverse Event`),]) |>
+    with(data, data[grepl("Yes", `Serious Adverse Event`),]) |>
       dplyr::select(dplyr::any_of(
         c("o_reviewed", "subject_id","form_repeat", "Name", "AESI",  "SAE Start date",
           "SAE End date", "CTCAE severity", "Treatment related",
@@ -67,7 +89,7 @@ get_form_table <- function(
       )) |>
       adjust_colnames("^SAE ")
   } else {
-    with(df, df[!grepl("Yes", `Serious Adverse Event`),]) |> 
+    with(data, data[!grepl("Yes", `Serious Adverse Event`),]) |> 
       dplyr::select(-dplyr::starts_with("SAE"))
   }
 }

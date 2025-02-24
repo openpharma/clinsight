@@ -10,25 +10,27 @@ get_form_table(
   form,
   form_items,
   active_subject,
-  updated,
-  is_SAE,
+  is_reviewed = NULL,
+  is_SAE = NULL,
   id_cols = idx_cols
 )
 }
 \arguments{
-\item{form_data}{}
+\item{form_data}{A data frame with the study data of the respective form.}
 
-\item{form_review_data}{}
+\item{form_review_data}{A data frame with he review data of the form.}
 
-\item{form}{}
+\item{form}{A character string with the name of the form.}
 
-\item{active_subject}{}
+\item{active_subject}{A character string with the active subject id.}
 
-\item{updated}{}
+\item{is_reviewed}{A logical, indicating whether all items of the entire form
+for the active subject id are reviewed.}
 
-\item{is_SAE}{}
+\item{is_SAE}{A logical, indicating whether the form is a SAE form. If TRUE,
+will make some adjustments to the columns to display.}
 
-\item{id_cols}{}
+\item{id_cols}{Columns that identify a unique row in the data.}
 }
 \description{
 Get form table
