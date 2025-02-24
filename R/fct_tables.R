@@ -286,9 +286,9 @@ create_table.adverse_events <- function(
     ) |> 
     dplyr::bind_rows(df_worsening) |> 
     dplyr::arrange(
-      dplyr::desc(gsub("\\**<\\/*b>", "", .data[["Serious Adverse Event"]])), 
+      dplyr::desc(sub("<b>", "", .data[["Serious Adverse Event"]], perl = TRUE)), 
       .data[["form_repeat"]], 
-      dplyr::desc(gsub("\\**<\\/*b>", "", .data[["start date"]]))
+      dplyr::desc(sub("<b>", "", .data[["start date"]], perl = TRUE))
     )
   df |> 
     dplyr::select(
