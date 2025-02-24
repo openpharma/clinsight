@@ -22,6 +22,8 @@ get_form_table(
 
 \item{form}{A character string with the name of the form.}
 
+\item{form_items}{Named character vector with all form_items to display.}
+
 \item{active_subject}{A character string with the active subject id.}
 
 \item{is_reviewed}{A logical, indicating whether all items of the entire form

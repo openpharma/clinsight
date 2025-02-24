@@ -4,6 +4,7 @@
 #' @param form_data A data frame with the study data of the respective form.
 #' @param form_review_data A data frame with he review data of the form.
 #' @param form A character string with the name of the form.
+#' @param form_items Named character vector with all form_items to display.
 #' @param active_subject A character string with the active subject id.
 #' @param is_reviewed A logical, indicating whether all items of the entire form
 #'   for the active subject id are reviewed.
@@ -24,12 +25,17 @@ get_form_table <- function(
     id_cols = idx_cols
 ){
   stopifnot(is.data.frame(form_data), is.data.frame(form_review_data))
-  stopifnot(is.character(form))
+  stopifnot(is.character(form), is.character(form_items))
   stopifnot(is.logical(is_reviewed %||% FALSE), is.logical(is_SAE %||% FALSE))
   is_SAE <- isTRUE(is_SAE)
   stopifnot(is.character(active_subject %||% ""))
   if(is.null(active_subject)){
     warning("No active subject selected")
+  }
+  required_cols <- c(id_cols, "edit_date_time", "event_date", "item_value")
+  missing_cols <- required_cols[!required_cols %in% names(form_data)]
+  if(length(missing_cols) != 0){
+    stop("the following columns are missing: ", paste0(missing_cols, collapse = ", "))
   }
   df <- dplyr::left_join(
     form_data,
@@ -39,10 +45,11 @@ get_form_table <- function(
   ) |> 
     dplyr::mutate(
       not_reviewed_but_missing = (reviewed == "No" & is.na(item_value)), 
-      item_value = ifelse(
-        (reviewed == "No" & !is.na(item_value)), 
+      item_value = dplyr::case_when(
+        is.na(reviewed) ~ htmltools::htmlEscape(item_value),
+        (reviewed == "No" & !is.na(item_value)) ~
         paste0("<b>", htmltools::htmlEscape(item_value), "*</b>"), 
-        htmltools::htmlEscape(item_value)
+        .default = htmltools::htmlEscape(item_value)
       )
     ) |> 
     create_table(expected_columns = names(form_items)) |> 
