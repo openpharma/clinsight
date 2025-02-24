@@ -127,6 +127,8 @@ app_server <- function(
     summary = reactive({
       req(forms_to_review_data)
       r$review_data |>
+        reactiveValuesToList() |> 
+        do.call(what = rbind) |> 
         dplyr::left_join(forms_to_review_data, by = "item_group") |> 
         dplyr::filter(
           reviewed != "Yes",
