@@ -90,31 +90,31 @@
       # A tibble: 90 x 18
          subject_id form_repeat Name    AESI  `start date` `end date` `CTCAE severity`
          <chr>            <int> <chr>   <chr> <chr>        <chr>      <chr>           
-       1 DEU_02_482           1 Pneumo~ None  2023-07-09   2023-07-18 Grade 3         
-       2 NLD_03_207           1 Sepsis  None  2023-08-02   2023-08-14 Grade 3         
+       1 BEL_07_193           1 Atelec~ None  2023-09-14   <NA>       Grade 3         
+       2 NLD_03_207           1 Sepsis  None  2023-08-14   2023-08-14 Grade 5         
        3 BEL_08_885           1 Seizure None  2023-08-11   <NA>       Grade 3         
-       4 NLD_03_207           1 Sepsis  None  2023-08-14   2023-08-14 Grade 5         
-       5 BEL_07_193           1 Atelec~ None  2023-09-14   <NA>       Grade 3         
-       6 BEL_09_361           2 Seizure None  2023-06-13   <NA>       Grade 3         
+       4 NLD_03_207           1 Sepsis  None  2023-08-02   2023-08-14 Grade 3         
+       5 DEU_02_482           1 Pneumo~ None  2023-07-09   2023-07-18 Grade 3         
+       6 DEU_02_482           2 Pneumo~ None  2023-08-19   2023-08-19 Grade 5         
        7 DEU_02_387           2 Sepsis  None  2023-08-04   2023-08-08 Grade 5         
-       8 DEU_02_482           2 Pneumo~ None  2023-08-19   2023-08-19 Grade 5         
+       8 BEL_09_361           2 Seizure None  2023-06-13   <NA>       Grade 3         
        9 BEL_08_885           3 Seizure None  2023-08-29   2023-09-01 Grade 3         
       10 NLD_06_755           6 Pneumo~ None  2023-08-01   <NA>       Grade 3         
       11 BEL_09_361           7 Sepsis  None  2023-08-03   <NA>       Grade 4         
-      12 NLD_06_755          22 Stroke  None  2023-08-22   2023-08-24 Grade 4         
-      13 NLD_06_755          22 Stroke  None  2023-08-24   2023-08-24 Grade 5         
-      14 BEL_09_361           1 Lower ~ None  2023-06-08   2023-06-08 Grade 2         
-      15 BEL_04_772           1 Hypote~ None  2023-07-07   <NA>       Grade 1         
-      16 DEU_02_387           1 Nausea  None  2023-07-07   2023-07-20 Grade 3         
-      17 NLD_06_755           1 Allerg~ None  2023-07-08   2023-07-18 Grade 3         
-      18 NLD_05_561           1 Joint ~ None  2023-08-06   2023-08-17 Grade 3         
-      19 DEU_02_866           1 Urinar~ None  2023-08-11   <NA>       Grade 1         
-      20 DEU_01_541           1 Anemia  None  2023-08-16   <NA>       <NA>            
-      21 NLD_06_72            1 Lower ~ None  2023-08-18   <NA>       Grade 1         
-      22 DEU_01_977           1 Urinar~ None  2023-08-21   <NA>       Grade 1         
-      23 BEL_08_736           1 Hypote~ None  2023-08-22   <NA>       Grade 4         
-      24 BEL_04_772           2 Atrial~ None  2023-07-05   <NA>       Grade 2         
-      25 NLD_06_755           2 Nausea  None  2023-07-08   2023-08-08 Grade 2         
+      12 NLD_06_755          22 Stroke  None  2023-08-24   2023-08-24 Grade 5         
+      13 NLD_06_755          22 Stroke  None  2023-08-22   2023-08-24 Grade 4         
+      14 BEL_08_736           1 Hypote~ None  2023-08-22   <NA>       Grade 4         
+      15 DEU_01_977           1 Urinar~ None  2023-08-21   <NA>       Grade 1         
+      16 NLD_06_72            1 Lower ~ None  2023-08-18   <NA>       Grade 1         
+      17 DEU_01_541           1 Anemia  None  2023-08-16   <NA>       <NA>            
+      18 DEU_02_866           1 Urinar~ None  2023-08-11   <NA>       Grade 1         
+      19 NLD_05_561           1 Joint ~ None  2023-08-06   2023-08-17 Grade 3         
+      20 NLD_06_755           1 Allerg~ None  2023-07-08   2023-07-18 Grade 3         
+      21 BEL_04_772           1 Hypote~ None  2023-07-07   <NA>       Grade 1         
+      22 DEU_02_387           1 Nausea  None  2023-07-07   2023-07-20 Grade 3         
+      23 BEL_09_361           1 Lower ~ None  2023-06-08   2023-06-08 Grade 2         
+      24 DEU_02_866           2 Anemia  None  2023-08-30   <NA>       Grade 3         
+      25 NLD_05_561           2 Urinar~ None  2023-08-25   <NA>       <NA>            
       # i 65 more rows
       # i 11 more variables: `Treatment related` <chr>, `Treatment action` <chr>,
       #   `Other action` <chr>, `Serious Adverse Event` <chr>,
