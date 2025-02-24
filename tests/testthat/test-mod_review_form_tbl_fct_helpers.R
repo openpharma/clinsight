@@ -103,10 +103,11 @@ describe("get_form_table() works", {
           status = ifelse(reviewed == "No", "old", "new")
         )  
     })
-    # ignore AE/SAE column adjustments:
+    ##### ignore AE/SAE column adjustments in this test:
     testthat::local_mocked_bindings(
       adjust_ae_form_table = function(data, is_SAE){data}
     )
+    
     output <- lapply(table_names, \(x){
       get_form_table(
         form_data = appdata[[x]], 
@@ -124,6 +125,7 @@ describe("get_form_table() works", {
         "o_reviewed" %in% names(output[[x]]), 
         paste0("`o_reviewed` is an expected column for data in form `", x, "`.")
       )
+      expect_true(is.list(output[[!!x]][["o_reviewed"]]))
       enabled_rows <- lapply(output[[x]][["o_reviewed"]], \(i) isFALSE(i$disabled)) |> unlist()
       if(any(enabled_rows)){
         expect_equal(unique(output[[!!x]][enabled_rows,]$subject_id), "BEL_04_772")
@@ -136,18 +138,57 @@ describe("get_form_table() works", {
     output_tables <- lapply(table_names, \(x){
       output[[x]] |> 
         dplyr::select(-o_reviewed) |> 
-        lapply(\(x){if(is.character(x)) gsub("\\**<\\/*b>", "", x) else x}) |> 
-        dplyr::as_tibble() 
+        dplyr::mutate(
+          dplyr::across(
+            # status_label is the exception here since it is expected to have 
+            # html tags, including the tag for a bold font.
+            dplyr::where(is.character) & !dplyr::any_of("status_label"), 
+            \(x) gsub("\\**<\\/*b>", "", x)
+            )
+          )
     })
     original_tables <- lapply(table_names, \(x){
       create_table(appdata[[x]], expected_columns = names(form_items[[x]])) 
     })
     lapply(table_names, \(x){
-      expect_equal(original_tables[[!!x]], output_tables[[!!x]])
+      expect_equal(output_tables[[!!x]], original_tables[[!!x]])
     })
   })
 })
 
 describe("adjust_ae_form_table() works as expected", {
+  it("creates an AE table with only Adverse Events, no SAEs, and the columns starting with prefix SAE removed", {
+    appdata <- clinsightful_data[clinsightful_data$item_group == "Adverse events", ] |> 
+      get_appdata()
+    form_items <- get_meta_vars(appdata)$items[["Adverse events"]]
+    ae_table <- create_table(
+      appdata[["Adverse events"]], 
+      expected_columns = names(form_items)
+      )
+    output <- adjust_ae_form_table(ae_table, is_SAE = FALSE)
+    
+    expect_equal(unique(output$`Serious Adverse Event`), "No")
+    expected_output <- with(ae_table, ae_table[grepl("No", `Serious Adverse Event`),])
+    expected_output <- expected_output[, !grepl("^SAE ", names(expected_output))]
+    expect_equal(output, expected_output)
+  })
+  it("creates an SAE table with expected SAE columns, and the SAE prefix removed from the column names", {
+    appdata <- clinsightful_data[clinsightful_data$item_group == "Adverse events", ] |> 
+      get_appdata()
+    form_items <- get_meta_vars(appdata)$items[["Adverse events"]]
+    ae_table <- create_table(
+      appdata[["Adverse events"]], 
+      expected_columns = names(form_items)
+    )
+    SAE_cols <- c("subject_id","form_repeat", "Name", "AESI",  
+                  "Start date", "End date", "CTCAE severity", 
+                  "Treatment related", "Treatment action", "Other action", 
+                  "Category","Awareness date", "Date of death", 
+                  "Death reason")
+    
+    output <- adjust_ae_form_table(ae_table, is_SAE = TRUE)
   
+    expect_true(is.data.frame(output))
+    expect_equal(names(output)[order(names(output))], SAE_cols[order(SAE_cols)])
+  })
 })
