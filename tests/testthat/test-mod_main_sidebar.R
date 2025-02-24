@@ -57,7 +57,8 @@ describe(
             status = "new",
             comment = "",
             id = dplyr::row_number()
-          )
+          ) |> 
+          {\(x) split(x, x$item_group)}()
         vars <- get_meta_vars(appdata, metadata)
         apptables <- lapply(
           setNames(names(appdata), names(appdata)), \(x){
@@ -134,7 +135,8 @@ describe(
                 "reviewed" = "",
                 "comment" = "",
                 "status" = ""
-              ), 
+              ) |> 
+                {\(x) split(x, x$item_group)}(), 
               subject_id = "NLD_06_755",
               user_name = "Admin",
               user_role = "Medical Monitor"
