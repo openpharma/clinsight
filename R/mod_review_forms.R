@@ -112,7 +112,11 @@ mod_review_forms_server <- function(
     ns <- session$ns
     
     review_data_active <- reactive({
-      subset(r$review_data[[active_form()]], subject_id == r$subject_id)
+      tryCatch(
+        subset(r$review_data[[active_form()]], subject_id == r$subject_id),
+        # Returns expected empty data frame for empty form
+        error = \(e) r$review_data[[1]][0,]
+      )
     })
     
     review_indeterminate <- reactiveVal()
