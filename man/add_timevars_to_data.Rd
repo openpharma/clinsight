@@ -10,7 +10,7 @@ add_timevars_to_data(data, events)
 \item{data}{A data frame}
 
 \item{events}{A data frame with events. Usually contains the columns
-\code{event_id}, \code{event_id_pattern}, \code{is_expected_visit}, \code{event_label_custom},
+\code{event_id}, \code{event_id_pattern}, \code{is_regular_visit}, \code{event_label_custom},
 \code{event_name_custom}, and \code{add_sequence_to_name}.}
 }
 \value{

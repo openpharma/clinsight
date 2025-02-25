@@ -84,7 +84,7 @@ get_metadata <- function(
   # Expanding table so that all matching id's are shown:
   meta[["events"]] <- meta[["events"]] |> 
     add_missing_columns(c("event_name_custom", "event_label_custom", 
-                          "add_sequence_to_name", "is_expected_visit")) |> 
+                          "add_sequence_to_name", "is_regular_visit")) |> 
     dplyr::mutate(
       # Generate labels for compact timeline if not matching on exact event_id:
       generate_labels = !is.na(event_id_pattern),
@@ -96,10 +96,10 @@ get_metadata <- function(
       ),
       meta_event_order = dplyr::row_number(),
       # Only expected visits will show up in the compact timeline
-      is_expected_visit = ifelse(is.na(is_expected_visit), TRUE, as.logical(is_expected_visit)),
+      is_regular_visit = ifelse(is.na(is_regular_visit), TRUE, as.logical(is_regular_visit)),
       add_sequence_to_name = ifelse(is.na(add_sequence_to_name), FALSE, as.logical(add_sequence_to_name)),
-      add_visit_number = add_sequence_to_name & is_expected_visit,
-      add_event_repeat_number = add_sequence_to_name & !is_expected_visit
+      add_visit_number = add_sequence_to_name & is_regular_visit,
+      add_event_repeat_number = add_sequence_to_name & !is_regular_visit
     )
   missing_cols <- required_meta_cols[!required_meta_cols %in% names(meta$items_expanded)]
   if(length(missing_cols) != 0){
@@ -168,7 +168,7 @@ rename_raw_data <- function(
 #'
 #' @param data A data frame
 #' @param events A data frame with events. Usually contains the columns
-#'   `event_id`, `event_id_pattern`, `is_expected_visit`, `event_label_custom`,
+#'   `event_id`, `event_id_pattern`, `is_regular_visit`, `event_label_custom`,
 #'   `event_name_custom`, and `add_sequence_to_name`.
 #'
 #' @return A data frame, with derivative time and event variables, needed for
@@ -238,7 +238,6 @@ add_events_to_data <- function(
     cat("using pre-existing event_name and event_label\n")
     return(data) 
   }
-  browser()
   
   # This will prevent issues if, for example, screening is performed on multiple days. 
   # However, it also assumes that event_id is unique, which is probably good! 
@@ -252,12 +251,22 @@ add_events_to_data <- function(
   # Merging with data is needed because when visits are flexible (using event_id_pattern), 
   # the order of visits needs to be determined by means of when they occurred first. 
 
-  # 
   # Expanding table so that all matching id's are shown:
   # Note: combination of vis_num and event_id should always result in a unique event. 
   # Ideally event_id should already be unique, but that is not always the case.
   # not anymore. vis_num can be not unique.
   # if 
+  
+  browser()
+  expand_events_table <- function(
+    events,
+    all_ids
+    ){
+    
+  }
+  all_ids <- unique(data$event_id)
+  all_ids <- c("V2", "UNV1", "UNV2", all_ids)[order(c("V2", all_ids))]
+    
   events_table <- events |> 
     dplyr::mutate(
       event_id = ifelse(
@@ -270,18 +279,18 @@ add_events_to_data <- function(
       )
     ) |> 
     expand_columns(columns = "event_id", separator = ",") |> 
-    # only include visits that should be counted as one:
-    dplyr::filter(is_expected_visit) |> 
+    # derive order of all events identified by a pattern, by using date of 
+    # first appearance. 
+    # Only include visits that should be counted as one:
+    dplyr::filter(is_regular_visit) |> 
     dplyr::left_join(
       unique(data[c("subject_id", "event_id", "day")]),
       by = "event_id"
-    ) |> #View() 
+    ) |> 
     dplyr::mutate( 
       # to take care of duplicates (same visits) within one person. 
-      # This is okay since vis_day is only used to calculate vis_num.
-      # Also, visits with is_expected_visit is FALSE will be unaffected and 
+      # visits with is_regular_visit is FALSE will be unaffected and 
       # thus we can still have multiple unscheduled visits with the same event_id
-      # # REMOVE DUPLICATES WITHIN SUBJECTS:::::::
       vis_day = ifelse(!is.na(subject_id), max(day, na.rm = TRUE), NA),
       .by = c(subject_id, event_id)
     ) |> 
@@ -305,7 +314,7 @@ add_events_to_data <- function(
       event_label_custom = dplyr::case_when(
         generate_labels & !is.na(vis_num) ~ paste0("V", vis_num),
         !is.na(event_label_custom) ~ event_label_custom,
-        is_expected_visit ~ event_id,
+        is_regular_visit ~ event_id,
         .default = NA_character_
       ),
       event_label_custom = factor(event_label_custom, levels = unique(event_label_custom))

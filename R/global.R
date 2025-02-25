@@ -113,7 +113,7 @@ utils::globalVariables(
     "region",
     "suffix_names",
     "form_type",
-    "is_expected_visit",
+    "is_regular_visit",
     "add_sequence_to_name",
     "event_id_pattern",
     "generate_labels",
