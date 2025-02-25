@@ -301,7 +301,7 @@ add_events_to_data <- function(
       .by = c(event_id, meta_event_order)
     ) |> 
     dplyr::select(-subject_id, -day, -vis_day) |> 
-    distinct() |> 
+    dplyr::distinct() |> 
     dplyr::arrange(meta_event_order, vis_num) |> 
     dplyr::mutate(
       event_name_custom = ifelse(
@@ -322,7 +322,7 @@ add_events_to_data <- function(
   cols_to_remove <- c(names(events), "event_name_edc")
   cols_to_remove <- cols_to_remove[!cols_to_remove == "event_id"]
   output <- data |> 
-    dplyr::left_join(new_events_table, by = c("event_id")) |> 
+    dplyr::left_join(events_table, by = c("event_id")) |> 
     add_missing_columns("event_name_edc") |> 
     tidyr::replace_na(
       list(
