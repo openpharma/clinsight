@@ -5,7 +5,8 @@ describe("add_events_to_data() works", {
     df <- data.frame(
       subject_id = c(rep("S1", times = 7), rep("S1", times = 7)),
       event_id = rep(c("SCR", "START", "UNV1", "V1", "UNV2", "UNV3", "V2"), times = 2),
-      day = rep(c(0, 0, 2, 4, 5, 7, 8), times = 2)
+      day = rep(c(0, 0, 2, 4, 5, 7, 8), times = 2),
+      event_repeat = rep(c(1,1,1,1,2,3,2), times = 2)
     )
     # create an example events table as created with the function get_metadata:
     events <- data.frame(
@@ -21,8 +22,19 @@ describe("add_events_to_data() works", {
       add_visit_number = FALSE,
       add_event_repeat_number = FALSE
     )
-    browser()
-    add_events_to_data(df, events )
+    output <- add_events_to_data(df, events )
+    selected_output <- output[c("event_id", "event_name", "event_label")] |> 
+      dplyr::arrange(event_id, event_name, event_label) |> 
+      dplyr::distinct()
+    expected_output <- data.frame(
+      event_id = c("SCR", "START", "UNV1", "UNV2", "UNV3", "V1", "V2"),
+      event_name = c("SCR", rep("Any visit", times = 4), "V1", "V2"),
+      event_label= factor(
+        c("SCR", NA, NA, NA, NA, "V1", "V2"), 
+        levels = c("SCR", "V1",  "V2",  "FU1", "FU2")
+      )
+    )
+    expect_equal(selected_output, expected_output)
     
   })
   it("handles the visit numbers correctly if one subject has the same event 
