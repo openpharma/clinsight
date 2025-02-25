@@ -98,11 +98,11 @@ describe(
           # only difference between the the data frame is some html tags around
           # some not yet reviewed data. However, because of these tags, we cannot
           # compare expected with actual directly.
-          expect_equal(names(table_data()), c("o_reviewed", names(df_expected)))
-          enabled_rows <- lapply(table_data()[["o_reviewed"]], \(x) isFALSE(x$disabled)) |> unlist()
-          expect_equal(table_data()[enabled_rows, "event_name", drop = TRUE], df_expected$event_name)
+          expect_equal(names(study_form_data()), c("o_reviewed", names(df_expected)))
+          enabled_rows <- lapply(study_form_data()[["o_reviewed"]], \(x) isFALSE(x$disabled)) |> unlist()
+          expect_equal(study_form_data()[enabled_rows, "event_name", drop = TRUE], df_expected$event_name)
 
-          expect_true(is.data.frame(table_data()))
+          expect_true(is.data.frame(study_form_data()))
           expect_equal(sum(enabled_rows), 2)
           expect_true(inherits(output[["review_form_tbl-table"]], "json"))
         })
@@ -119,11 +119,11 @@ describe(
                 filter = c("pulse", "BMI"),
                 show_all = TRUE
               )
-              expect_true(is.data.frame(table_data()))
-              enabled_rows <- lapply(table_data()[["o_reviewed"]], \(x) isFALSE(x$disabled)) |> unlist()
-              expect_equal(nrow(table_data()), 68)
+              expect_true(is.data.frame(study_form_data()))
+              enabled_rows <- lapply(study_form_data()[["o_reviewed"]], \(x) isFALSE(x$disabled)) |> unlist()
+              expect_equal(nrow(study_form_data()), 68)
 
-              table_ids <- unique(table_data()$subject_id)
+              table_ids <- unique(study_form_data()$subject_id)
               table_ids <- table_ids[order(table_ids)]
               expected_ids <- unique(r$review_data$subject_id)
               expected_ids <- expected_ids[order(expected_ids)]
