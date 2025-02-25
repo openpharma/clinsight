@@ -83,8 +83,7 @@ get_metadata <- function(
   }
   # Expanding table so that all matching id's are shown:
   meta[["events"]] <- meta[["events"]] |> 
-    add_missing_columns(c("event_name_custom", "event_label_custom", 
-                          "add_sequence_to_name", "is_regular_visit")) |> 
+    add_missing_columns(c("event_name_custom", "event_label_custom", "is_regular_visit")) |> 
     dplyr::mutate(
       # Generate labels for compact timeline if not matching on exact event_id:
       generate_labels = !is.na(event_id_pattern),
@@ -97,9 +96,8 @@ get_metadata <- function(
       meta_event_order = dplyr::row_number(),
       # Only expected visits will show up in the compact timeline
       is_regular_visit = ifelse(is.na(is_regular_visit), TRUE, as.logical(is_regular_visit)),
-      add_sequence_to_name = ifelse(is.na(add_sequence_to_name), FALSE, as.logical(add_sequence_to_name)),
-      add_visit_number = add_sequence_to_name & is_regular_visit,
-      add_event_repeat_number = add_sequence_to_name & !is_regular_visit
+      add_visit_number = generate_labels & is_regular_visit,
+      add_event_repeat_number = generate_labels & !is_regular_visit
     )
   missing_cols <- required_meta_cols[!required_meta_cols %in% names(meta$items_expanded)]
   if(length(missing_cols) != 0){
