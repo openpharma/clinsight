@@ -3,20 +3,26 @@ describe("add_events_to_data() works", {
   it("adds events to the data as expected",{
     # test that the function add_events_to_data() works as expected)
     df <- data.frame(
-      event_id = c("SCR", "START", "UNV1", "V1", "UNV", "UNV5"),
-      form_id = c("SCR", "START", "UNV1", "V1", "UNV", "UNV5"),
-      form_repeat = c(1, 1, 1, 1, 1, 1),
-      item_value = c("SCR", "START", "UNV1", "V1", "UNV", "UNV5")
+      subject_id = c(rep("S1", times = 7), rep("S1", times = 7)),
+      event_id = rep(c("SCR", "START", "UNV1", "V1", "UNV2", "UNV3", "V2"), times = 2),
+      day = rep(c(0, 0, 2, 4, 5, 7, 8), times = 2)
     )
     # create an example events table as created with the function get_metadata:
     events <- data.frame(
-      event_id = c("SCR", "START", "UNV1", "V1", "UNV", "UNV5"),
-      event_name_edc = c("Screening", "Start", "Unscheduled Visit 1", "Visit 1", "Unscheduled Visit", "Unscheduled Visit 5"),
-      day = c(0, 0, 0, 1, 2, 5),
-      vis_day = c(0, 0, 0, 1, 2, 5),
-      vis_num = c(0, 0, 0, 1, 2, 5)
+      event_id = c("SCR", "START", "V1", "V2", "FU1", "FU2", "EXIT", "UNV1", "UNV2", "UNV3"),
+      event_id_pattern = NA_character_,
+      is_regular_visit= c(TRUE, FALSE, TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE),
+      event_label_custom = NA_character_,
+      event_name_custom = NA_character_,
+      add_sequence_to_name = NA_character_,
+      is_baseline_event = c(TRUE, rep(FALSE, times = 9)),
+      generate_labels = FALSE,
+      meta_event_order = 1:10,
+      add_visit_number = FALSE,
+      add_event_repeat_number = FALSE
     )
-    add_events_to_data(df, )
+    browser()
+    add_events_to_data(df, events )
     
   })
   it("handles the visit numbers correctly if one subject has the same event 
