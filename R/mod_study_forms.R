@@ -136,14 +136,13 @@ mod_study_forms_server <- function(
         form_data(),
         paste0("Warning: no data found in the database for the form '", form, "'.")
       ))
-      df <- form_data() 
-      
       status_df <- form_review_data()[c(id_item, "edit_date_time", "status", "reviewed")] |> 
         dplyr::mutate(edit_date_time = as.POSIXct(edit_date_time, tz = "UTC"))
-      df[simplify_string(df$item_name) %in% input$filter, ] |>
+      form_data()[simplify_string(form_data()$item_name) %in% input$filter, ] |>
         dplyr::left_join(status_df, by = c(id_item, "edit_date_time")) |> 
         dplyr::mutate(item_name = factor(item_name, levels = names(form_items)))
-    })
+    }) |> 
+      debounce(1000)
     
     mod_review_form_tbl_server(
       "review_form_tbl", 

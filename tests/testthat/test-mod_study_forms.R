@@ -205,7 +205,7 @@ describe(
         )
         withr::defer(app$stop())
         app$set_inputs("test-filter" = "temperature")
-        app$wait_for_idle()
+        app$wait_for_idle(1100)
         app$expect_values(output = TRUE, export = TRUE)
         df <- app$get_value(export = "test-fig_data")
         expect_equal(as.character(unique(df$item_name)), "Temperature")
