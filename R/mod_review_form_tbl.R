@@ -98,7 +98,7 @@ mod_review_form_tbl_server <- function(
         update_review_records(
           session$userData$review_records[[form]],
           input$table_review_selection[, c("id", "reviewed")],
-          subset_review_data(r$review_data, form, subject_id == r$subject_id, c("id", "reviewed"))
+          subset(r$review_data[[form]], subject_id == r$subject_id, c("id", "reviewed"))
         )
       
       # Update the table's data reactive

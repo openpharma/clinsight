@@ -756,14 +756,12 @@ decode_base64 <- function(
   rawToChar(decoded)
 }
 
-split_review_data <- function(db_path) {
-  db_get_table(db_path = db_path, db_table = "all_review_data") |> 
-    {\(df) split(df, df$item_group)}()
-}
+split_review_data <- function(db_path, forms) {
+  all_review_data <- db_get_table(db_path = db_path, db_table = "all_review_data")
 
-subset_review_data <- function(x, form, ...) {
-  if (form %in% names(x))
-    subset(x[[form]], ... = ...)
-  else
-    x[[names(x)[1]]][0,]
+  if (missing(forms)) {
+    split(all_review_data, all_review_data$item_group)
+  } else {
+    split(all_review_data, factor(all_review_data$item_group, forms))
+  }
 }

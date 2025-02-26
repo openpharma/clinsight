@@ -61,7 +61,7 @@ app_server <- function(
   )
   # think of using the pool package, but functions such as row_update are not yet supported.
   r <- reactiveValues(
-    review_data       = do.call(reactiveValues, split_review_data(user_db)),
+    review_data       = do.call(reactiveValues, split_review_data(user_db, forms = app_vars$all_forms$form)),
     query_data        = collect_query_data(user_db),
     filtered_subjects = app_vars$subject_id,
     filtered_data     = app_data,
