@@ -246,7 +246,6 @@ describe("clean_event_metadata() works", {
       c(names(df), "generate_labels", "meta_event_order", "add_visit_number", 
         "add_event_repeat_number")
       )
-    browser()
     expect_true(is.logical(output$add_visit_number))
     expect_true(is.logical(output$add_event_repeat_number))
     expect_true(is.logical(output$generate_labels))
