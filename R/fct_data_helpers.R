@@ -134,12 +134,12 @@ clean_event_metadata <- function(
       is_regular_visit = dplyr::coalesce(as.logical(is_regular_visit), TRUE),
       add_visit_number = generate_labels & is_regular_visit,
       add_event_repeat_number = generate_labels & !is_regular_visit,
-      is_baseline_event = dplyr::coalesce(
-        as.logical(is_baseline_event), 
-        ifelse(event_id == event_id[is_regular_visit][1], TRUE, FALSE)
-        )
+      is_baseline_event = dplyr::coalesce(as.logical(is_baseline_event), FALSE)
     ) 
-  if(sum(data$is_baseline_event) > 1){
+  if (all(data$is_baseline_event == FALSE)){
+    data$is_baseline_event[data$is_regular_visit][1] <- TRUE 
+  }
+  if (sum(data$is_baseline_event) > 1){
     stop(" Verify metadata. Only one baseline event allowed.")
   }
   data
@@ -219,7 +219,11 @@ add_timevars_to_data <- function(
   } 
   baseline_dates <-  data |> 
     dplyr::mutate(
-      baseline_date = max(event_date[event_id == baseline_id], na.rm = TRUE),
+      baseline_date = if (!baseline_id %in% event_id){
+        min(event_date, na.rm = T)
+      } else {
+        max(event_date[event_id == baseline_id], na.rm = TRUE)
+      },
       .by = subject_id
     ) |> 
     dplyr::distinct(subject_id, baseline_date)
@@ -291,7 +295,8 @@ add_events_to_data <- function(
       dplyr::mutate(derived_order = as.numeric(factor(day)), .by = subject_id) |> 
       dplyr::distinct(event_id, derived_order)
     if(any(duplicated(derived_event_order$derived_order))){
-      warning("event order is not unique based on event dates. Trying to guess the order.")
+      cat("Event order is not unique based on event dates.",
+          "Making a best guess to create a unique order.\n")
       derived_event_order <- derived_event_order |> 
         # selects the most unique order per event_id:
         dplyr::mutate(order_occurrence = dplyr::n(), .by = derived_order) |> 
@@ -330,7 +335,7 @@ add_events_to_data <- function(
       event_label_custom = factor(event_label_custom, levels = unique(event_label_custom))
     )
 
-  cols_to_remove <- c(names(events), "event_name_edc", "event_repeat_number")
+  cols_to_remove <- c(names(events_table), "event_name_edc", "event_repeat_number")
   cols_to_remove <- cols_to_remove[!cols_to_remove == "event_id"]
   output <- data |> 
     dplyr::left_join(events_table, by = c("event_id")) |> 
