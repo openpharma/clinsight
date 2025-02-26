@@ -227,3 +227,31 @@ describe("add_events_to_data() works", {
     expect_equal(selected_output, expected_output)
   })
 })
+
+
+describe("clean_event_metadata() works", {
+  it("cleans event metadata as expected, adding the required columns if needed", {
+    df <- data.frame(
+      event_id = c("SCR", "START", NA, "FU1", "FU2", "EXIT", NA),
+      event_id_pattern = c(NA, NA, "^V[[:digit:]]+$", NA, NA, NA, "^UNV"),
+      is_regular_visit= c(TRUE, FALSE, TRUE, TRUE, TRUE, FALSE, FALSE),
+      is_baseline_event = c(TRUE, rep(FALSE, times = 6)),
+      event_name_custom = c(NA, NA, "Visit", NA, NA, NA, "UV"),
+      event_label_custom = c(NA, NA, "Vis", NA, NA, NA, NA)
+    )
+    
+    output <- clean_event_metadata(df)
+    expect_equal(
+      names(output), 
+      c(names(df), "generate_labels", "meta_event_order", "add_visit_number", 
+        "add_event_repeat_number")
+      )
+    browser()
+    expect_true(is.logical(output$add_visit_number))
+    expect_true(is.logical(output$add_event_repeat_number))
+    expect_true(is.logical(output$generate_labels))
+    expect_true(is.logical(output$is_baseline_event))
+    expect_equal(output$meta_event_order, 1:7)
+  })
+
+})
