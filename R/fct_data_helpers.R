@@ -757,7 +757,6 @@ datatable_custom <- function(
     scrollX = TRUE,
     scroller = TRUE,
     deferRender = TRUE,
-    autoWidth = FALSE,
     scrollCollapse = TRUE,
     colReorder = list(
       enable = TRUE,
