@@ -70,35 +70,9 @@ get_metadata <- function(
     all_forms = unique(meta$items_expanded$item_group)
   )
   
-  ### Verify and clean event data:
-  event_id_cols <- c("event_id", "event_id_pattern")
-  if(!any(event_id_cols %in% names(meta[["events"]])) ){
-    stop("At least one of the columns 'event_id' or 'event_id_pattern' must ",
-         "be available in the metadata 'events' tab")
-  }
-  meta[["events"]] <- add_missing_columns(meta[["events"]], event_id_cols)
-  if (with(meta[["events"]], sum(is.na(event_id) & is.na(event_id_pattern) )) > 0 ){
-    stop("The values in 'event_id' and 'event_id_pattern' cannot both be ",
-         "missing in the 'events' metadata tab.")
-  }
-  # Expanding table so that all matching id's are shown:
-  meta[["events"]] <- meta[["events"]] |> 
-    add_missing_columns(c("event_name_custom", "event_label_custom", "is_regular_visit")) |> 
-    dplyr::mutate(
-      # Generate labels for compact timeline if not matching on exact event_id:
-      generate_labels = !is.na(event_id_pattern),
-      # Because event_id_pattern will always be used for merging:
-      event_id_pattern = ifelse(
-        is.na(event_id_pattern), 
-        paste0("^", event_id, "$"),
-        event_id_pattern
-      ),
-      meta_event_order = dplyr::row_number(),
-      # Only expected visits will show up in the compact timeline
-      is_regular_visit = ifelse(is.na(is_regular_visit), TRUE, as.logical(is_regular_visit)),
-      add_visit_number = generate_labels & is_regular_visit,
-      add_event_repeat_number = generate_labels & !is_regular_visit
-    )
+  ## Verify and clean event data:
+  meta[["events"]] <- clean_event_metadata(meta[["events"]])
+  
   missing_cols <- required_meta_cols[!required_meta_cols %in% names(meta$items_expanded)]
   if(length(missing_cols) != 0){
     warning(
@@ -116,6 +90,59 @@ get_metadata <- function(
       dplyr::select(-var, -suffix) |> 
       as.data.frame()
   })
+}
+
+#' Clean event metadata
+#' 
+#' Internal function to verify and clean event data.
+#'
+#' @param data A data frame with event data.
+#' @param event_id_cols A character vector with the event_id columns.
+#'
+#' @noRd
+#'
+clean_event_metadata <- function(
+    data, 
+    event_id_cols = c("event_id", "event_id_pattern")
+){
+  ### Verify and clean event data:
+  stopifnot(is.character(event_id_cols))
+  if(!any(event_id_cols %in% names(data)) ){
+    stop("At least one of the columns 'event_id' or 'event_id_pattern' must ",
+         "be available in the metadata 'events' tab")
+  }
+  data <- add_missing_columns(data, event_id_cols)
+  if (with(data, sum(is.na(event_id) & is.na(event_id_pattern) )) > 0 ){
+    stop("The values in 'event_id' and 'event_id_pattern' cannot both be ",
+         "missing in the 'events' metadata tab.")
+  }
+  # Expanding table so that all matching id's are shown:
+  data <- data |> 
+    add_missing_columns(c("event_name_custom", "event_label_custom", 
+                          "is_regular_visit", "is_baseline_event")) |> 
+    dplyr::mutate(
+      # Generate labels for compact timeline if not matching on exact event_id:
+      generate_labels = is.na(event_id),
+      # Because event_id_pattern will always be used for merging:
+      event_id_pattern = ifelse(
+        !is.na(event_id), 
+        paste0("^", event_id, "$"),
+        event_id_pattern
+      ),
+      meta_event_order = dplyr::row_number(),
+      # Only expected visits will show up in the compact timeline
+      is_regular_visit = dplyr::coalesce(as.logical(is_regular_visit), TRUE),
+      add_visit_number = generate_labels & is_regular_visit,
+      add_event_repeat_number = generate_labels & !is_regular_visit,
+      is_baseline_event = dplyr::coalesce(
+        as.logical(is_baseline_event), 
+        ifelse(event_id == event_id[is_regular_visit][1], TRUE, FALSE)
+        )
+    ) 
+  if(sum(data$is_baseline_event) > 1){
+    stop(" Verify metadata. Only one baseline event allowed.")
+  }
+  data
 }
 
 #' Rename raw data
@@ -236,105 +263,88 @@ add_events_to_data <- function(
     cat("using pre-existing event_name and event_label\n")
     return(data) 
   }
-  
-  # This will prevent issues if, for example, screening is performed on multiple days. 
-  # However, it also assumes that event_id is unique, which is probably good! 
-  # Note that this is not the case for all studies in the past and should probably be verified. 
-  # something like: distinct(event_id, form_repeat, event_repeat) gives the same number of rows as distinct event_id
-  # TODO: test that event_id uniquely identifies each event.
-  
-  all_ids <- unique(data$event_id)
-
+  required_cols <- c("subject_id", "event_id", "day")
+  missing_cols <- required_cols[!required_cols %in% names(data)]
+  if(length(missing_cols) != 0) {
+    stop("The following columns are required but are missing: ", 
+         paste0(missing_cols, collapse = ", "), ".")
+  }
   # Goal below is to create visit numbers in the order they should appear. 
   # Merging with data is needed because when visits are flexible (using event_id_pattern), 
   # the order of visits needs to be determined by means of when they occurred first. 
 
-  # Expanding table so that all matching id's are shown:
-  # Note: combination of vis_num and event_id should always result in a unique event. 
-  # Ideally event_id should already be unique, but that is not always the case.
-  # not anymore. vis_num can be not unique.
-  # if 
-  
-  browser()
-  expand_events_table <- function(
-    events,
-    all_ids
-    ){
-    
-  }
+  # Expanding table so that all matching id's are shown.
   all_ids <- unique(data$event_id)
-  all_ids <- c("V2", "UNV1", "UNV2", all_ids)[order(c("V2", all_ids))]
-    
+  event_patterns_to_order <- events |> 
+    with(event_id_pattern[generate_labels & is_regular_visit]) |> 
+    na.omit() |> 
+    paste0(collapse = "|")
+  if (nchar(event_patterns_to_order) == 0){
+    cat("order can be derived from metadata\n")
+    derived_event_order <- data.frame(event_id = character(), derived_order = character())
+  } else {
+    # deriving order by using date of first appearance if needed.
+    derived_event_order <- unique(data[c("subject_id", "event_id", "day")]) |> 
+      dplyr::filter(grepl(event_patterns_to_order, event_id)) |> 
+      # For edge-case: visit occurs on multiple days in one patient (e.g. screening):
+      dplyr::mutate(day = max(day, na.rm = TRUE), .by = c(subject_id, event_id)) |> 
+      dplyr::mutate(derived_order = as.numeric(factor(day)), .by = subject_id) |> 
+      dplyr::distinct(event_id, derived_order)
+    if(any(duplicated(derived_event_order$derived_order))){
+      warning("event order is not unique based on event dates. Trying to guess the order.")
+      derived_event_order <- derived_event_order |> 
+        # selects the most unique order per event_id:
+        dplyr::mutate(order_occurrence = dplyr::n(), .by = derived_order) |> 
+        dplyr::slice_min(order_occurrence, by = event_id, with_ties = FALSE) |> 
+        dplyr::select(-order_occurrence) |> 
+        dplyr::arrange(event_id, derived_order) |> 
+        dplyr::mutate(derived_order = dplyr::row_number())
+    }
+  }
   events_table <- events |> 
     dplyr::mutate(
-      event_id = ifelse(
-        is.na(event_id), 
-        sapply(
-          event_id_pattern, 
-          \(x){paste0(all_ids[grepl(x, all_ids)], collapse = ",") }
-        ),
-        event_id
+      event_id = dplyr::coalesce(
+        event_id, 
+        sapply(event_id_pattern, \(x) paste0(all_ids[grepl(x, all_ids)], collapse = ","))
       )
     ) |> 
     expand_columns(columns = "event_id", separator = ",") |> 
-    # derive order of all events identified by a pattern, by using date of 
-    # first appearance. 
-    # Only include visits that should be counted as one:
-    dplyr::filter(is_regular_visit) |> 
-    dplyr::left_join(
-      unique(data[c("subject_id", "event_id", "day")]),
-      by = "event_id"
-    ) |> 
-    dplyr::mutate( 
-      # to take care of duplicates (same visits) within one person. 
-      # visits with is_regular_visit is FALSE will be unaffected and 
-      # thus we can still have multiple unscheduled visits with the same event_id
-      vis_day = ifelse(!is.na(subject_id), max(day, na.rm = TRUE), NA),
-      .by = c(subject_id, event_id)
-    ) |> 
-    dplyr::arrange(meta_event_order, subject_id, vis_day) |> 
-    dplyr::mutate(vis_num = dplyr::row_number() - 1, .by = subject_id) |> 
-    # If visit numbers are flexible, a visit such as 'end of treatment' can 
-    # happen at different visit numbers. These duplicates need to be removed:
+    dplyr::left_join(derived_event_order, by = "event_id") |> 
+    dplyr::arrange(meta_event_order, derived_order) |> 
+    dplyr::distinct() |> # distinct really needed here? Not sure
     dplyr::mutate(
-      vis_num = ifelse(any(!is.na(vis_num)), max(vis_num, na.rm = TRUE), vis_num),
-      .by = c(event_id, meta_event_order)
-    ) |> 
-    dplyr::select(-subject_id, -day, -vis_day) |> 
-    dplyr::distinct() |> 
-    dplyr::arrange(meta_event_order, vis_num) |> 
+      event_order = dplyr::row_number(), # probably not needed.
+      vis_number = ifelse(is_regular_visit, cumsum(is_regular_visit), NA),
+      vis_number = pmax(vis_number - vis_number[as.logical(is_baseline_event)], 0)
+      ) |> 
     dplyr::mutate(
-      event_name_custom = ifelse(
-        is.na(event_name_custom), 
-        event_id, 
-        event_name_custom
-      ),
-      event_label_custom = dplyr::case_when(
-        generate_labels & !is.na(vis_num) ~ paste0("V", vis_num),
-        !is.na(event_label_custom) ~ event_label_custom,
-        is_regular_visit ~ event_id,
-        .default = NA_character_
+      event_name_custom = dplyr::coalesce(event_name_custom, event_id),
+      # event_label_custom logic is here so that factor can be created with 
+      # correct levels (needed for compact timeline).
+      event_label_custom = ifelse(is_regular_visit, dplyr::coalesce(event_label_custom, event_id), NA),
+      event_label_custom = ifelse(
+        generate_labels & !is.na(event_label_custom),
+        paste0(event_label_custom, vis_number),
+        event_label_custom
       ),
       event_label_custom = factor(event_label_custom, levels = unique(event_label_custom))
-    ) |> 
-    dplyr::rename("vis_num_derived" = vis_num)
-  
-  cols_to_remove <- c(names(events), "event_name_edc")
+    )
+
+  cols_to_remove <- c(names(events), "event_name_edc", "event_repeat_number")
   cols_to_remove <- cols_to_remove[!cols_to_remove == "event_id"]
   output <- data |> 
     dplyr::left_join(events_table, by = c("event_id")) |> 
     add_missing_columns("event_name_edc") |> 
-    tidyr::replace_na(
-      list(
-        add_visit_number = FALSE, 
-        add_event_repeat_number = FALSE
-      )
-    ) |> 
+    tidyr::replace_na(list(add_visit_number = FALSE, add_event_repeat_number = FALSE)) |> 
+    dplyr::mutate(
+      event_repeat_number = as.numeric(factor(day)),
+      .by = c(subject_id, event_name_custom)
+      ) |>
     dplyr::mutate(
       event_name = dplyr::case_when(
         is.na(event_name_custom) ~ "Any visit",
-        add_event_repeat_number ~ paste(event_name_custom, event_repeat),
-        add_visit_number        ~ paste(event_name_custom, vis_num_derived),
+        add_event_repeat_number ~ paste(event_name_custom, event_repeat_number),
+        add_visit_number        ~ paste(event_name_custom, vis_number),
         .default = event_name_custom
       ),
       event_name = dplyr::case_when(
@@ -344,8 +354,10 @@ add_events_to_data <- function(
           paste0(event_name, " (", event_name_edc, ")"),
         .default = event_name
       ),
-      event_label = event_label %|_|% event_label_custom
+      event_label = event_label_custom
     ) |> 
+    # to show events on start page chronologically:
+    dplyr::arrange(subject_id, day, event_order) |> 
     dplyr::select(-dplyr::all_of(cols_to_remove))
   
   cat("Created the following event_label and event_name combinations:\n")
