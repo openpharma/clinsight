@@ -39,7 +39,7 @@ describe(
         expect_true(grepl('"subject_id":"9600-002"', timeline_json))
         expect_true(grepl("Screening", timeline_json))
         expect_true(grepl("Visit 1", timeline_json))
-        expect_true(grepl("Visit 2", timeline_json))
+        expect_true(grepl("Ext. visit 1", timeline_json))
         
         app$set_inputs(main_tabs = "Study data")
         app$wait_for_idle()
@@ -48,7 +48,7 @@ describe(
         fig_vals <- app$get_value(output = "header_widgets_1-visit_figure")
         expect_equal(
           fig_vals$coordmap$panels[[1]]$domain$discrete_limits$x,
-          c("SCR", "V1", "V2", "EoT")
+          c("SCR", "V1", "EoT", "FU")
         )
         
         # Snapshot JSON table output and verify that vital signs are shown:
