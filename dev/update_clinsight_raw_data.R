@@ -5,6 +5,7 @@
 ## When we make it unique, we can catch edge cases such as two different visits 
 ## being on the same day. 
 
+###### 1. Update test data
 devtools::load_all()
 data_path <- app_sys("tests/testthat/fixtures/csvtestdata")
 all_files <- list.files(data_path, pattern = ".csv")
@@ -24,6 +25,27 @@ raw_data <- lapply(setNames(nm = all_files), \(x){
 })
 
 #### Write results back to the files:
+lapply(names(raw_data), \(x){
+  readr::write_csv(raw_data[[x]], file.path(data_path, x))
+})
+
+##### 2. Update second test data
+data_path <- app_sys("tests/testthat/fixtures/testapp-raw/data1pt")
+all_files <- list.files(data_path, pattern = ".csv")
+raw_data <- lapply(setNames(nm = all_files), \(x){
+  readr::read_delim(
+    file.path(data_path, x),  
+    delim = ",", 
+    col_types = readr::cols(.default = readr::col_character()), 
+    show_col_types = FALSE
+  ) |> 
+    dplyr::mutate(
+      `Event Id` = dplyr::case_when(
+        `Event Id` %in% c("VIS", "VISEXT") ~ paste0(`Event Id`, `Event sequence number`),
+        .default = `Event Id`
+      )
+    )
+})
 lapply(names(raw_data), \(x){
   readr::write_csv(raw_data[[x]], file.path(data_path, x))
 })
