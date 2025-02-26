@@ -153,9 +153,8 @@ describe("add_events_to_data() works", {
        )
        expect_equal(selected_output, expected_output)
      })
-  it("warns if two events occur on the same day and event_ids were selected 
-      with event_id_pattern, and selects the least occurring order number 
-      per event.", {
+  it("If event_id_pattern is used and two events occur on the same day, 
+      it will select the least occurring order number per event.", {
     df <- dplyr::tribble(
       ~subject_id, ~event_id,  ~day, 
       "S1",      "SCR",    0, 
@@ -179,10 +178,10 @@ describe("add_events_to_data() works", {
       event_label_custom = c(NA, NA, "Vis", NA, NA, NA, NA)
     ) |> 
       clean_event_metadata()
-    expect_warning(
+    expect_output(
       output <- add_events_to_data(df, events),
-      "event order is not unique based on event dates."
-      )
+      "Event order is not unique based on event dates" 
+    )
     selected_output <- output[c("event_id", "event_name", "event_label")] |> 
       dplyr::arrange(event_id, event_name, event_label) |> 
       dplyr::distinct()
