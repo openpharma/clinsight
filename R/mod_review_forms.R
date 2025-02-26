@@ -113,7 +113,7 @@ mod_review_forms_server <- function(
     
     review_data_active <- reactive({
       tryCatch(
-        subset(r$review_data[[active_form()]], subject_id == r$subject_id),
+        subset_review_data(r$review_data, active_form(), subject_id == r$subject_id),
         # Returns expected empty data frame for empty form
         error = \(e) r$review_data[[names(r$review_data)[1]]][0,]
       )
@@ -293,8 +293,9 @@ mod_review_forms_server <- function(
           dplyr::rows_update(review_records, by = "id")
       }
       
-      updated_records_memory <- subset(
-        r$review_data[[active_form()]], 
+      updated_records_memory <- subset_review_data(
+        r$review_data,
+        active_form(),
         id %in% review_records$id,
         names(review_records_db)
       )

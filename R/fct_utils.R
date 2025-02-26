@@ -760,3 +760,10 @@ split_review_data <- function(db_path) {
   db_get_table(db_path = db_path, db_table = "all_review_data") |> 
     {\(df) split(df, df$item_group)}()
 }
+
+subset_review_data <- function(x, form, ...) {
+  if (form %in% names(x))
+    subset(x[[form]], ... = ...)
+  else
+    x[[names(x)[1]]][0,]
+}
