@@ -301,6 +301,33 @@ describe("merge_item_pairs_by_suffix works", {
     )
     expect_equal(expected_output, output)
   })
+  it("can merge other columns in raw data as expected", {
+    meta <- metadata
+    meta$items_expanded <- metadata$items_expanded |> 
+      dplyr::filter(var != "CM_CMDOSFRQ_OTH") |> 
+      dplyr::mutate(merge_with = ifelse(var == "CM_CMDOSFRQ", "CM_CMDOSFRQ_OTH", NA)) |> 
+      clean_merge_pair_metadata()
+    expect_output(
+      df <- get_raw_csv_data(app_sys("raw_data")) |> 
+        merge_meta_with_data(meta = meta),
+      "merging item 'CM Frequency' with its matched pair"
+    )
+    output <- df |> 
+      dplyr::filter(item_name == "CM Frequency", grepl("Other", item_value)) |> 
+      dplyr::pull(item_value) |> 
+      unique()
+    expected_output <- c(
+      "Other (1 time every 2 months)",
+      "Other (once)",
+      "Other (500-0-1000mg)",
+      "Other (every 6 month)",
+      "Other (-----)",
+      "Other (---)",
+      "Other (na)",
+      "Other (continous)"
+    )
+    expect_equal(output, expected_output)
+  })
   it("returns original data if no suffix was defined", {
     df <- data.frame(
       subject_id = 1,
