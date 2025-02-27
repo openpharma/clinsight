@@ -1,3 +1,89 @@
+describe("clean_event_metadata() works", {
+  it("cleans event metadata as expected", {
+    df <- data.frame(
+      event_id = c("SCR", "START", NA, "FU1", "FU2", "EXIT", NA),
+      event_id_pattern = c(NA, NA, "^V[[:digit:]]+$", NA, NA, NA, "^UNV"),
+      is_regular_visit= c(TRUE, FALSE, TRUE, TRUE, TRUE, FALSE, FALSE),
+      is_baseline_event = c(TRUE, rep(FALSE, times = 6)),
+      event_name_custom = c(NA, NA, "Visit", NA, NA, NA, "UV"),
+      event_label_custom = c(NA, NA, "Vis", NA, NA, NA, NA)
+    )
+    output <- clean_event_metadata(df)
+    expect_equal(
+      names(output), 
+      c(names(df), "generate_labels", "meta_event_order", "add_visit_number", 
+        "add_event_repeat_number")
+    )
+    expect_true(is.logical(output$add_visit_number))
+    expect_true(is.logical(output$add_event_repeat_number))
+    expect_true(is.logical(output$generate_labels))
+    expect_true(is.logical(output$is_baseline_event))
+    expect_equal(output$meta_event_order, 1:7)
+  })
+  it("works with only event_id and adds other required columns", {
+    df <- data.frame(event_id = c("SCR", "START", "EXIT"))
+    output <- dplyr::as_tibble(clean_event_metadata(df))
+    expect_snapshot(print(output, width = Inf))
+  })
+  it("creates event_id_pattern based on event_id if event_id_pattern is missing", {
+    df <- data.frame(event_id = c("SCR", "START", "EXIT"))
+    output <- clean_event_metadata(df)
+    expect_equal(output$event_id_pattern, paste0("^", df$event_id, "$"))
+  })
+  
+  it("marks all visits as regular visit if the column is_regular_visit is missing", {
+    df <- data.frame(event_id = c("SCR", "Vis1", "Vis2"))
+    output <- clean_event_metadata(df)
+    expect_true("is_regular_visit" %in% names(output))
+    expect_equal(output$is_regular_visit, c(TRUE, TRUE, TRUE))
+  })
+  it("marks first regular visit as baseline if the column is_baseline_event is missing", {
+    df <- data.frame(
+      event_id = c("SCR", "Vis1", "Vis2"),
+      is_regular_visit= c(FALSE, TRUE, TRUE)
+    )
+    output <- clean_event_metadata(df)
+    expect_true("is_baseline_event" %in% names(output))
+    expect_equal(output$is_baseline_event, c(FALSE, TRUE, FALSE))
+  })
+  it("errors if more than one baseline event is defined", {
+    df <- data.frame(
+      event_id = c("SCR", "Vis1", "Vis2"),
+      is_regular_visit= TRUE,
+      is_baseline_event = c(TRUE, TRUE, FALSE)
+    )
+    expect_error(
+      clean_event_metadata(df),
+      "Only one baseline event allowed"
+    )
+  })
+  it("errors if both the columns event_id and event_id_pattern are missing", {
+    df <- data.frame(
+      is_regular_visit= TRUE,
+      is_baseline_event = c(TRUE, FALSE)
+    )
+    expect_error(
+      clean_event_metadata(df),
+      "At least one of the columns 'event_id' or 'event_id_pattern' must be available"
+    )
+  })
+  it("errors if values are missing in both event_id and event_id_patttern", {
+    df <- data.frame(event_id = c("SCR", NA, "VIS1"), event_id_pattern = NA)
+    expect_error(
+      clean_event_metadata(df),
+      "values in 'event_id' and 'event_id_pattern' cannot both be missing"
+    )
+    df <- data.frame(
+      event_id = c("SCR", NA, NA),
+      event_id_pattern = c(NA, NA, "^VIS")
+    )
+    expect_error(
+      clean_event_metadata(df),
+      "values in 'event_id' and 'event_id_pattern' cannot both be missing"
+    )
+  })
+})
+
 describe("add_events_to_data() works", {
   
   it("adds events to the data using declared 'event_id' as expected",{
@@ -244,98 +330,3 @@ describe("add_events_to_data() works", {
   })
 })
 
-
-describe("clean_event_metadata() works", {
-  it("cleans event metadata as expected", {
-    df <- data.frame(
-      event_id = c("SCR", "START", NA, "FU1", "FU2", "EXIT", NA),
-      event_id_pattern = c(NA, NA, "^V[[:digit:]]+$", NA, NA, NA, "^UNV"),
-      is_regular_visit= c(TRUE, FALSE, TRUE, TRUE, TRUE, FALSE, FALSE),
-      is_baseline_event = c(TRUE, rep(FALSE, times = 6)),
-      event_name_custom = c(NA, NA, "Visit", NA, NA, NA, "UV"),
-      event_label_custom = c(NA, NA, "Vis", NA, NA, NA, NA)
-    )
-    output <- clean_event_metadata(df)
-    expect_equal(
-      names(output), 
-      c(names(df), "generate_labels", "meta_event_order", "add_visit_number", 
-        "add_event_repeat_number")
-      )
-    expect_true(is.logical(output$add_visit_number))
-    expect_true(is.logical(output$add_event_repeat_number))
-    expect_true(is.logical(output$generate_labels))
-    expect_true(is.logical(output$is_baseline_event))
-    expect_equal(output$meta_event_order, 1:7)
-  })
-  it("works with only event_id and adds other required columns", {
-    df <- data.frame(event_id = c("SCR", "START", "EXIT"))
-    output <- dplyr::as_tibble(clean_event_metadata(df))
-    expect_snapshot(print(output, width = Inf))
-  })
-  it("creates event_id_pattern based on event_id if event_id_pattern is missing", {
-    df <- data.frame(event_id = c("SCR", "START", "EXIT"))
-    output <- clean_event_metadata(df)
-    expect_equal(output$event_id_pattern, paste0("^", df$event_id, "$"))
-  })
-  
-  it("marks all visits as regular visit if the column is_regular_visit is missing", {
-    df <- data.frame(event_id = c("SCR", "Vis1", "Vis2"))
-    output <- clean_event_metadata(df)
-    expect_true("is_regular_visit" %in% names(output))
-    expect_equal(output$is_regular_visit, c(TRUE, TRUE, TRUE))
-  })
-  it("marks first regular visit as baseline if the column is_baseline_event is missing", {
-    df <- data.frame(
-      event_id = c("SCR", "Vis1", "Vis2"),
-      is_regular_visit= c(FALSE, TRUE, TRUE)
-    )
-    output <- clean_event_metadata(df)
-    expect_true("is_baseline_event" %in% names(output))
-    expect_equal(output$is_baseline_event, c(FALSE, TRUE, FALSE))
-  })
-  it("errors if more than one baseline event is defined", {
-    df <- data.frame(
-      event_id = c("SCR", "Vis1", "Vis2"),
-      is_regular_visit= TRUE,
-      is_baseline_event = c(TRUE, TRUE, FALSE)
-    )
-    expect_error(
-      clean_event_metadata(df),
-      "Only one baseline event allowed"
-    )
-  })
-  it("errors if both the columns event_id and event_id_pattern are missing", {
-    df <- data.frame(
-      is_regular_visit= TRUE,
-      is_baseline_event = c(TRUE, FALSE)
-    )
-    expect_error(
-      clean_event_metadata(df),
-      "At least one of the columns 'event_id' or 'event_id_pattern' must be available"
-    )
-  })
-  it("errors if values are missing in both event_id and event_id_patttern", {
-    df <- data.frame(event_id = c("SCR", NA, "VIS1"), event_id_pattern = NA)
-    expect_error(
-      clean_event_metadata(df),
-      "values in 'event_id' and 'event_id_pattern' cannot both be missing"
-    )
-    df <- data.frame(
-      event_id = c("SCR", NA, NA),
-      event_id_pattern = c(NA, NA, "^VIS")
-    )
-    expect_error(
-      clean_event_metadata(df),
-      "values in 'event_id' and 'event_id_pattern' cannot both be missing"
-    )
-  })
-})
-
-
-  
-
-describe("add_timevars_to_data() works", {
-  it("adds time vars as expected", {
-   
-  })
-})
