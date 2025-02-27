@@ -129,7 +129,13 @@ utils::globalVariables(
     "end",
     "className",
     "DrugAdminDate",
-    "DrugAdminDose"
+    "DrugAdminDose",
+    "baseline_date",
+    "derived_order",
+    "event_order",
+    "is_baseline_event",
+    "order_occurrence",
+    "vis_number"
   )
 )
 
