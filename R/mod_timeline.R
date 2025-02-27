@@ -53,7 +53,7 @@ mod_timeline_server <- function(id, r, form, treatment_label = "\U1F48A T\U2093"
       # is to prepare for future timelines when other forms will also be included. 
       review_active <- subset(
         r$review_data[[form]],
-        subject_id == force(r$subject_id)
+        subject_id == r$subject_id
         ) |> 
         dplyr::mutate(
           needs_review = any(reviewed == "No"),
