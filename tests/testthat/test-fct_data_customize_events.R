@@ -449,5 +449,28 @@ describe("add_events_to_data() works", {
     df <- data.frame(event_name = "Screening", event_label = "SCR")
     add_events_to_data(df, data.frame())
   })
+  it("adds event_name_edc to the name in brackets if it exists and differs from the cusomized name", {
+    browser()
+    df <- dplyr::tribble(
+      ~subject_id, ~event_id,  ~day, ~event_name_edc,
+      "S1",            "SCR",    0,  "SCR",
+      "S1",            "SCR",    1,  "SCR",
+      "S1",          "START",    1,  "Study start",
+      "S1",           "UNV1",    2,  "Unscheduled visit",
+      "S1",             "V1",    4,  "C1D1",
+      "S1",             "V2",    5,  "C1D2"
+    )
+    events <- data.frame(
+      event_id = c("SCR", "START", "V1", "V2", "FU1", "FU2", "EXIT", "UNV1"),
+      is_regular_visit= c(TRUE, FALSE, TRUE, TRUE, TRUE, TRUE, FALSE, FALSE),
+      event_name_custom = c(rep(NA, times = 7), "Unscheduled visit")
+    ) |> 
+      clean_event_metadata()
+    output <- add_events_to_data(df, events)
+    expect_equal(
+      unique(output$event_name),
+      c("SCR", "START (Study start)", "Unscheduled visit", "V1 (C1D1)", "V2 (C1D2)")
+    )
+  })
 })
 
