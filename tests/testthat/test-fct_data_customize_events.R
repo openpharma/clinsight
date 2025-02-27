@@ -84,6 +84,116 @@ describe("clean_event_metadata() works", {
   })
 })
 
+describe("add_timevars_to_data() works", {
+  it("Adds time variables as expected", {
+    event_data <- clean_event_metadata(data.frame(event_id = "SCR"))
+    time_data <- data.frame(
+      site_code = c("site1"),
+      subject_id = c("subj1"),
+      event_id = c("SCR", "event2", "event3"),
+      event_date = c("2025-01-01", "2025-01-04", "2025-01-06"),
+      edit_date_time = "2024-01-01"
+    )
+    output <- add_timevars_to_data(time_data, event_data)
+    expected_output <- time_data |> 
+      dplyr::mutate(
+        event_date = as.Date(event_date),
+        edit_date_time = as.POSIXct(edit_date_time, tz = "UTC"),
+        day = event_date - as.Date("2025-01-01")
+      )
+    expect_equal(output, expected_output)
+  })
+  it("uses the oldest date as baseline if no baseline event is found in the data", {
+    event_data <- data.frame(event_id = "SCR", is_baseline_event = TRUE)
+    time_data <- data.frame(
+      site_code = c("site1"),
+      subject_id = c("subj1"),
+      event_id = c("event2", "eventx", "event3"),
+      event_date = c("2025-02-02", "2025-01-01", "2025-01-06"),
+      edit_date_time = "2024-01-01"
+    )
+    output <- add_timevars_to_data(time_data, event_data)
+    expected_output <- time_data |> 
+      dplyr::mutate(
+        event_date = as.Date(event_date),
+        edit_date_time = as.POSIXct(edit_date_time, tz = "UTC"),
+        day = event_date - as.Date("2025-01-01")
+      )
+    expect_equal(output, expected_output)
+  })
+  
+  it("Warns and returns early if empty data frame is provided", {
+    event_data <- data.frame(event_id = "SCR", is_baseline_event = TRUE)
+    df <- data.frame(matrix(nrow = 0, ncol = length(required_col_names))) |> 
+      lapply(as.character) |> as.data.frame()
+    names(df) <- required_col_names
+    expect_warning(
+      add_timevars_to_data(df, event_data),
+      "Empty data frame provided"
+    )
+  })
+  it("errors if required columns are missing", {
+    event_data <- data.frame(event_id = c("SCR", "Vis1", "Vis2")) |>
+      clean_event_metadata()
+    expect_error(
+      add_timevars_to_data(mtcars, event_data),
+      "The following columns are missing while they are required"
+    )
+  })
+  it("errors with incorrect events input", {
+    event_data <- data.frame(event_id = "SCR", is_baseline_event = TRUE)
+    time_data <- data.frame(
+      site_code = c("site1"),
+      subject_id = c("subj1"),
+      event_id = c("SCR", "event2", "event3"),
+      event_date = c("2025-01-01", "2025-01-04", "2025-01-06"),
+      edit_date_time = "2024-01-01"
+    )
+    expect_error(add_timevars_to_data(time_data, c("")))
+    expect_error(add_timevars_to_data(time_data, data.frame()))
+    expect_error(
+      add_timevars_to_data(
+        time_data, 
+        data.frame(event_id = TRUE, is_baseline_event = TRUE)
+      )
+    )
+    expect_error(
+      add_timevars_to_data(
+        time_data, 
+        data.frame(event_id = "SCR", is_baseline_event = " incorrect")
+      )
+    )
+    expect_error(
+      add_timevars_to_data(
+        time_data, 
+        data.frame(event_id = "SCR", is_baseline_event = c(TRUE, TRUE))
+      )
+    )
+    expect_error(
+      add_timevars_to_data(
+        time_data, 
+        data.frame(event_id = "SCR", is_baseline_event = FALSE)
+      )
+    )
+  })
+  it("returns early if a day column already exists in the data", {
+    event_data <- clean_event_metadata(data.frame(event_id = "SCR"))
+    time_data <- data.frame(
+      site_code = c("site1"),
+      subject_id = c("subj1"),
+      event_id = c("SCR", "event2", "event3"),
+      event_date = as.Date(c("2025-01-01", "2025-01-04", "2025-01-06")),
+      edit_date_time = as.POSIXct("2024-01-01", tz = "UTC")
+    ) |> 
+      dplyr::mutate(day = event_date - as.Date("2020-01-01"))
+    expect_output(
+      output <- add_timevars_to_data(time_data, event_data),
+      "Using pre-existing day column"
+      )
+    expect_equal(time_data, output)
+  })
+})
+
 describe("add_events_to_data() works", {
   
   it("adds events to the data using declared 'event_id' as expected",{
@@ -327,6 +437,17 @@ describe("add_events_to_data() works", {
       )
     )
     expect_equal(selected_output, expected_output)
+  })
+  it("errors if required columns are missing", {
+    expect_error(
+      add_events_to_data(data.frame(), data.frame()),
+      "The following columns are required but are missing"
+    )
+  })
+  it("returns early if event_name and event_label already exist in the data, 
+     irrespective of the events dataframe", {
+    df <- data.frame(event_name = "Screening", event_label = "SCR")
+    add_events_to_data(df, data.frame())
   })
 })
 

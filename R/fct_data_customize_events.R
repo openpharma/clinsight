@@ -76,22 +76,40 @@ add_timevars_to_data <- function(
     events
 ){
   stopifnot("[data] should be a data frame" = is.data.frame(data))
-  stopifnot("[events] should be a data frame" = is.data.frame(events))
-  missing_new_cols <- required_col_names[!required_col_names %in% names(data)] |> 
+  required_cols <- c("site_code", "subject_id", "event_id", 
+                     "event_date", "edit_date_time")
+  missing_new_cols <- required_cols[!required_cols %in% names(data)] |> 
     paste0(collapse = ", ")
   if (nchar(missing_new_cols) > 0) stop(
-    paste0("The following columns are missing while they are required:\n", 
-           missing_new_cols, ".")
+    paste0("The following columns are missing while they are required: ", 
+           paste0(missing_new_cols, collapse = ", "), ".")
   )
-  if(nrow(data) == 0){
-    cat("empty data frame provided. Returning early\n")
+  data <- data |> 
+    dplyr::mutate(
+      edit_date_time = as.POSIXct(edit_date_time, tz = "UTC"),
+      event_date = as.Date(event_date)
+    ) |> 
+    dplyr::arrange(
+      factor(site_code, levels = order_string(site_code)),
+      factor(subject_id, levels = order_string(subject_id))
+    )
+  if("day" %in% names(data) && "difftime" %in% class(data$day)){
+    cat("Using pre-existing day column. \n")
     return(data)
   }
+  stopifnot("[events] should be a data frame" = is.data.frame(events))
+  stopifnot(c("event_id", "is_baseline_event") %in% names(events))
+  stopifnot(is.character(events$event_id))
+  stopifnot(is.logical(events$is_baseline_event))
+  stopifnot("Events table cannot be empty" = nrow(events) != 0)
+  stopifnot(sum(events$is_baseline_event) == 1)
   
-  baseline_id <- events$event_id[1]
-  if (any(isTRUE(as.logical(events[["is_baseline_event"]])))){
-    baseline_id <- with(events, event_id[as.logical(is_baseline_event)])[1] 
-  } 
+  if(nrow(data) == 0){
+    warning("Empty data frame provided. Returning early.\n")
+    data[["baseline_date"]] <- as.Date(character())
+    return(data)
+  }
+  baseline_id <- with(events, event_id[is_baseline_event])
   baseline_dates <-  data |> 
     dplyr::mutate(
       baseline_date = if (!baseline_id %in% event_id){
@@ -102,20 +120,13 @@ add_timevars_to_data <- function(
       .by = subject_id
     ) |> 
     dplyr::distinct(subject_id, baseline_date)
-  
   data |> 
     dplyr::left_join(baseline_dates, by = "subject_id") |> 
     dplyr::mutate(
-      edit_date_time = as.POSIXct(edit_date_time, tz = "UTC"),
-      event_date = as.Date(event_date),
-      day = day %|_|% {event_date - baseline_date},
+      day = event_date - baseline_date,
       .by = subject_id
     ) |> 
-    dplyr::select(-baseline_date) |> 
-    dplyr::arrange(
-      factor(site_code, levels = order_string(site_code)),
-      factor(subject_id, levels = order_string(subject_id))
-    )
+    dplyr::select(-baseline_date) 
 }
 
 #' Merge event data from study data with metadata
