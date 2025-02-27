@@ -9,6 +9,7 @@
 #' @param id_cols A character vector with the names of the columns that uniquely identify a row.
 #'
 #' @return A data frame with the merged items.
+#' @keywords internal
 #'
 merge_item_pair <- function(
     data, 
@@ -99,6 +100,7 @@ merge_item_pair <- function(
 #' @param ... Additional arguments passed to [merge_item_pair].
 #'
 #' @return A data frame with the merged items.
+#' @keywords internal
 #'
 merge_item_pairs_by_suffix <- function(
     data, 
