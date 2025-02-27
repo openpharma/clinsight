@@ -334,4 +334,8 @@ describe("clean_event_metadata() works", {
 
   
 
+describe("add_timevars_to_data() works", {
+  it("adds time vars as expected", {
+   
+  })
 })
