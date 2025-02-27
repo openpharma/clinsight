@@ -139,3 +139,42 @@ merge_item_pairs_by_suffix <- function(
   }
   output
 }
+
+#' Clean merge item pair.
+#'
+#' Called in get_metadata to add additional rows with merge item pairs. This is
+#' needed so that all these 'other' columns are preserved when merging data with
+#' metadata.
+#'
+#' @param data A data frame with metadata
+#' @param merge_col A character vector with the column name in which the
+#'   variable to merge with is defined.
+#' @param suffix_to_add A Character vector with the suffix to add to the
+#'   item_name. This is used to detect item pairs and merge them when in
+#'   [merge_meta_with_data()].
+#'
+#' @keywords internal
+#' 
+clean_merge_pair_metadata <- function(
+    data, 
+    merge_col = "merge_with",
+    suffix_to_add = "_ITEM_TO_MERGE_WITH_PAIR"
+){
+  stopifnot(is.data.frame(data))
+  stopifnot(c("var", "item_name") %in% names(data))
+  stopifnot(is.character(merge_col), is.character(suffix_to_add))
+  if (merge_col %in% names(data) && !all(is.na(data[[merge_col]]))){
+    additional_rows <- data[!is.na(data[[merge_col]]),] 
+    if (any(additional_rows[[merge_col]] == additional_rows[["var"]])){
+      stop("variables in column 'var' cannot be the same as in ", merge_col)
+    }
+    additional_rows$var <- additional_rows$merge_with
+    additional_rows$item_name <- paste0(
+      additional_rows$item_name, 
+      suffix_to_add
+    )
+    data <- rbind(data, additional_rows)
+    data$merge_with <- NULL
+  }
+  data
+}

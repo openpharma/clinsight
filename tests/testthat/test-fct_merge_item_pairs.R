@@ -1,3 +1,59 @@
+describe("clean_merge_pair_metadata() works as expected", {
+  it("cleans merge item pairs as expected", {
+    df <- data.frame(
+      var = "main_var", 
+      merge_with = "other_var",
+      item_name = "Main var"
+      )
+    output <- clean_merge_pair_metadata(df)
+    expected_output <- data.frame(
+      var = c("main_var", "other_var"),
+      item_name = c("Main var", "Main var_ITEM_TO_MERGE_WITH_PAIR")
+    )
+    expect_equal(output, expected_output)
+  })
+  it("errors with incorrect input", {
+    expect_error(clean_merge_pair_metadata(c("")))
+    expect_error(clean_merge_pair_metadata(mtcars))
+    df <- data.frame(
+      var = "main_var", 
+      merge_with = "other_var",
+      item_name = "Main var"
+    )
+    expect_error(clean_merge_pair_metadata(df, mtcars))
+    expect_error(
+      clean_merge_pair_metadata(df, merge_col = "merge_other", suffix_to_add = mtcars)
+      )
+  })
+  it("returns the same data frame if the column with merge_col name is not found ", {
+    df <- data.frame(
+      var = "main_var", 
+      item_name = "Main var"
+    )
+    expect_equal(clean_merge_pair_metadata(df), df)
+  })
+  it("errors if merge_col name is the same as the one in var", {
+    df <- data.frame(
+      var = "main_var", 
+      merge_with_col = "main_var",
+      item_name = "Main var"
+    )
+    expect_error(
+      clean_merge_pair_metadata(df, merge_col = "merge_with_col"),
+      "variables in column 'var' cannot be the same as in merge_with_col"
+    )
+    df <- data.frame(
+      var = c("main_var1", "main_var2"), 
+      merge_with_col = c("main_var1", "other_var"),
+      item_name = c("Main var", "Second main var")
+    )
+    expect_error(
+      clean_merge_pair_metadata(df, merge_col = "merge_with_col"),
+      "variables in column 'var' cannot be the same as in merge_with_col"
+    )
+  })
+})
+
 describe("merge_item_pair() works", {
   it("merges two items by combining them as expected", {
     df <- data.frame(

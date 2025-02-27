@@ -81,19 +81,7 @@ get_metadata <- function(
     )
     meta$items_expanded <- add_missing_columns(meta$items_expanded, missing_cols)
   }
-  if ("merge_with" %in% names(meta$items_expanded) && 
-       !all(is.na(meta$items_expanded$merge_with))){
-      additional_rows <- meta$items_expanded[!is.na(meta$items_expanded$merge_with),]  
-      if (length(with(additional_rows, var[var == merge_with])) != 0){
-        stop("variables in column 'var' cannot be the same as in 'merge_with'")
-      }
-      additional_rows$var <- additional_rows$merge_with
-      additional_rows$item_name <- paste0(
-        additional_rows$item_name, "_ITEM_TO_MERGE_WITH_PAIR"
-      )
-      meta$items_expanded <- rbind(meta$items_expanded, additional_rows)
-      meta$items_expanded$merge_with <- NULL
-    }
+  meta[["items_expanded"]] <- clean_merge_pair_metadata(meta[["items_expanded"]])
     
   lapply(setNames(nm = names(meta)), \(x){
     if(!x %in% expand_tab_items) return(meta[[x]])
