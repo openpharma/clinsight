@@ -450,7 +450,6 @@ describe("add_events_to_data() works", {
     add_events_to_data(df, data.frame())
   })
   it("adds event_name_edc to the name in brackets if it exists and differs from the cusomized name", {
-    browser()
     df <- dplyr::tribble(
       ~subject_id, ~event_id,  ~day, ~event_name_edc,
       "S1",            "SCR",    0,  "SCR",
