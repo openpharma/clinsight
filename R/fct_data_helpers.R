@@ -273,11 +273,9 @@ add_events_to_data <- function(
     stop("The following columns are required but are missing: ", 
          paste0(missing_cols, collapse = ", "), ".")
   }
-  # Goal below is to create visit numbers in the order they should appear. 
+  # Goal: to create visit numbers in the order that events appear. 
   # Merging with data is needed because when visits are flexible (using event_id_pattern), 
-  # the order of visits needs to be determined by means of when they occurred first. 
-
-  # Expanding table so that all matching id's are shown.
+  # the order of visits needs to be determined by means of when they occurred first.
   all_ids <- unique(data$event_id)
   event_patterns_to_order <- events |> 
     with(event_id_pattern[generate_labels & is_regular_visit]) |> 
@@ -289,8 +287,8 @@ add_events_to_data <- function(
   } else {
     # deriving order by using date of first appearance if needed.
     derived_event_order <- unique(data[c("subject_id", "event_id", "day")]) |> 
-      dplyr::filter(grepl(event_patterns_to_order, event_id)) |> 
-      # For edge-case: visit occurs on multiple days in one patient (e.g. screening):
+      subset(grepl(event_patterns_to_order, event_id)) |> 
+      # If visit occurs on multiple days in one patient (e.g. screening):
       dplyr::mutate(day = max(day, na.rm = TRUE), .by = c(subject_id, event_id)) |> 
       dplyr::mutate(derived_order = as.numeric(factor(day)), .by = subject_id) |> 
       dplyr::distinct(event_id, derived_order)
@@ -318,14 +316,13 @@ add_events_to_data <- function(
     dplyr::arrange(meta_event_order, derived_order) |> 
     dplyr::distinct() |> # distinct really needed here? Not sure
     dplyr::mutate(
-      event_order = dplyr::row_number(), # probably not needed.
+      event_order = dplyr::row_number(),
       vis_number = ifelse(is_regular_visit, cumsum(is_regular_visit), NA),
       vis_number = pmax(vis_number - vis_number[as.logical(is_baseline_event)], 0)
       ) |> 
     dplyr::mutate(
       event_name_custom = dplyr::coalesce(event_name_custom, event_id),
-      # event_label_custom logic is here so that factor can be created with 
-      # correct levels (needed for compact timeline).
+      # to create factors with correct levels (for compact timeline):
       event_label_custom = ifelse(is_regular_visit, dplyr::coalesce(event_label_custom, event_id), NA),
       event_label_custom = ifelse(
         generate_labels & !is.na(event_label_custom),
@@ -340,7 +337,6 @@ add_events_to_data <- function(
   output <- data |> 
     dplyr::left_join(events_table, by = c("event_id")) |> 
     add_missing_columns("event_name_edc") |> 
-    tidyr::replace_na(list(add_visit_number = FALSE, add_event_repeat_number = FALSE)) |> 
     dplyr::mutate(
       event_repeat_number = as.numeric(factor(day)),
       .by = c(subject_id, event_name_custom)

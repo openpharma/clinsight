@@ -6,13 +6,9 @@ describe("add_events_to_data() works", {
       event_id = rep(c("SCR", "START", "UNV1", "V1", "UNV2", "UNV3", "V2"), times = 2),
       day = rep(c(0, 0, 2, 4, 5, 7, 8), times = 2)
     )
-    # create an example events table as created with the function get_metadata:
     events <- data.frame(
       event_id = c("SCR", "START", "V1", "V2", "FU1", "FU2", "EXIT", "UNV1", "UNV2", "UNV3"),
-      event_id_pattern = NA_character_,
       is_regular_visit= c(TRUE, FALSE, TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE),
-      event_label_custom = NA_character_,
-      event_name_custom = NA_character_,
       is_baseline_event = c(TRUE, rep(FALSE, times = 9))
     ) |> 
       clean_event_metadata()
@@ -41,14 +37,9 @@ describe("add_events_to_data() works", {
           "S1",             "V1",    4, 
           "S1",             "V2",    5
         )
-        # create an example events table as created with the function get_metadata:
         events <- data.frame(
-          event_id = c("SCR", "START", "V1", "V2", "FU1", "FU2", "EXIT", "UNV1", "UNV2", "UNV3"),
-          event_id_pattern = NA_character_,
-          is_regular_visit= c(TRUE, FALSE, TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE),
-          event_label_custom = NA_character_,
-          event_name_custom = NA_character_,
-          is_baseline_event = c(TRUE, rep(FALSE, times = 9))
+          event_id = c("SCR", "START", "V1", "V2", "FU1", "FU2", "EXIT", "UNV1"),
+          is_regular_visit= c(TRUE, FALSE, TRUE, TRUE, TRUE, TRUE, FALSE, FALSE)
         ) |> 
           clean_event_metadata()
         output <- add_events_to_data(df, events)
@@ -84,12 +75,10 @@ describe("add_events_to_data() works", {
                 "S2",      "UNV",    7, 
                 "S2",       "V2",    10
        )
-       # create an example events table as created with the function get_metadata:
        events <- data.frame(
          event_id = c("SCR", "START", NA, "FU1", "FU2", "EXIT", NA),
          event_id_pattern = c(NA, NA, "^V[[:digit:]]+$", NA, NA, NA, "^UNV"),
          is_regular_visit= c(TRUE, FALSE, TRUE, TRUE, TRUE, FALSE, FALSE),
-         is_baseline_event = c(TRUE, rep(FALSE, times = 6)),
          event_name_custom = c(NA, NA, "Visit", NA, NA, NA, "UV"),
          event_label_custom = c(NA, NA, "Vis", NA, NA, NA, NA)
        ) |> 
@@ -134,7 +123,6 @@ describe("add_events_to_data() works", {
          event_id = c("SCR", "START", NA, "FU1", "FU2", "EXIT", NA),
          event_id_pattern = c(NA, NA, "^V[[:digit:]]+$", NA, NA, NA, "^UNV"),
          is_regular_visit= c(TRUE, FALSE, TRUE, TRUE, TRUE, FALSE, FALSE),
-         is_baseline_event = c(TRUE, rep(FALSE, times = 6)),
          event_name_custom = c(NA, NA, "Visit", NA, NA, NA, "UV"),
          event_label_custom = c(NA, NA, "Vis", NA, NA, NA, NA)
        ) |> 
@@ -173,7 +161,6 @@ describe("add_events_to_data() works", {
       event_id = c("SCR", "START", NA, "FU1", "FU2", "EXIT", NA),
       event_id_pattern = c(NA, NA, "^V[[:digit:]]+$", NA, NA, NA, "^UNV"),
       is_regular_visit= c(TRUE, FALSE, TRUE, TRUE, TRUE, FALSE, FALSE),
-      is_baseline_event = c(TRUE, rep(FALSE, times = 6)),
       event_name_custom = c(NA, NA, "Visit", NA, NA, NA, "UV"),
       event_label_custom = c(NA, NA, "Vis", NA, NA, NA, NA)
     ) |> 
@@ -195,7 +182,7 @@ describe("add_events_to_data() works", {
     )
     expect_equal(selected_output, expected_output)
   })
-  it("does not error in the if baseline visit is missing", {
+  it("does not error if baseline visit is missing", {
     df <- dplyr::tribble(
       ~subject_id, ~event_id,  ~day, 
       "S1",    "START",    1, 
@@ -207,7 +194,6 @@ describe("add_events_to_data() works", {
       event_id = c("SCR", "START", NA, "FU1", "FU2", "EXIT", NA),
       event_id_pattern = c(NA, NA, "^V[[:digit:]]+$", NA, NA, NA, "^UNV"),
       is_regular_visit= c(TRUE, FALSE, TRUE, TRUE, TRUE, FALSE, FALSE),
-      is_baseline_event = c(TRUE, rep(FALSE, times = 6)),
       event_name_custom = c(NA, NA, "Visit", NA, NA, NA, "UV"),
       event_label_custom = c(NA, NA, "Vis", NA, NA, NA, NA)
     ) |> 
@@ -226,11 +212,41 @@ describe("add_events_to_data() works", {
     )
     expect_equal(selected_output, expected_output)
   })
+  it("If using event_id_pattern, adds correct visit number if baseline 
+     visit is not the first visit", {
+    df <- dplyr::tribble(
+      ~subject_id, ~event_id,  ~day, 
+      "S1",          "SCR",    -2, 
+      "S1",        "VisBase",     4, 
+      "S1",    "Visregular1",     5
+    )
+    events <- data.frame(
+      event_id           = c("SCR", "VisBase", NA, "EXIT"),
+      event_id_pattern   = c(NA, NA, "^Visregular", NA),
+      is_baseline_event  = c(FALSE, TRUE, FALSE, FALSE),
+      event_name_custom  = c(NA, "Baseline", "Visit", NA),
+      event_label_custom = c(NA, NA, "Vis", NA)
+    ) |> 
+      clean_event_metadata()
+    output <- add_events_to_data(df, events)
+    selected_output <- output[c("event_id", "event_name", "event_label")] |> 
+      dplyr::arrange(event_id, event_name, event_label) |> 
+      dplyr::distinct()
+    expected_output <- dplyr::tibble(
+      event_id = c("SCR", "VisBase", "Visregular1"),
+      event_name = c("SCR", "Baseline", "Visit 1"),
+      event_label= factor(
+        c("SCR", "VisBase", "Vis1"), 
+        levels = c("SCR", "VisBase", "Vis1", "EXIT")
+      )
+    )
+    expect_equal(selected_output, expected_output)
+  })
 })
 
 
 describe("clean_event_metadata() works", {
-  it("cleans event metadata as expected, adding the required columns if needed", {
+  it("cleans event metadata as expected", {
     df <- data.frame(
       event_id = c("SCR", "START", NA, "FU1", "FU2", "EXIT", NA),
       event_id_pattern = c(NA, NA, "^V[[:digit:]]+$", NA, NA, NA, "^UNV"),
@@ -239,7 +255,6 @@ describe("clean_event_metadata() works", {
       event_name_custom = c(NA, NA, "Visit", NA, NA, NA, "UV"),
       event_label_custom = c(NA, NA, "Vis", NA, NA, NA, NA)
     )
-    
     output <- clean_event_metadata(df)
     expect_equal(
       names(output), 
@@ -252,5 +267,71 @@ describe("clean_event_metadata() works", {
     expect_true(is.logical(output$is_baseline_event))
     expect_equal(output$meta_event_order, 1:7)
   })
+  it("works with only event_id and adds other required columns", {
+    df <- data.frame(event_id = c("SCR", "START", "EXIT"))
+    output <- dplyr::as_tibble(clean_event_metadata(df))
+    expect_snapshot(print(output, width = Inf))
+  })
+  it("creates event_id_pattern based on event_id if event_id_pattern is missing", {
+    df <- data.frame(event_id = c("SCR", "START", "EXIT"))
+    output <- clean_event_metadata(df)
+    expect_equal(output$event_id_pattern, paste0("^", df$event_id, "$"))
+  })
+  
+  it("marks all visits as regular visit if the column is_regular_visit is missing", {
+    df <- data.frame(event_id = c("SCR", "Vis1", "Vis2"))
+    output <- clean_event_metadata(df)
+    expect_true("is_regular_visit" %in% names(output))
+    expect_equal(output$is_regular_visit, c(TRUE, TRUE, TRUE))
+  })
+  it("marks first regular visit as baseline if the column is_baseline_event is missing", {
+    df <- data.frame(
+      event_id = c("SCR", "Vis1", "Vis2"),
+      is_regular_visit= c(FALSE, TRUE, TRUE)
+    )
+    output <- clean_event_metadata(df)
+    expect_true("is_baseline_event" %in% names(output))
+    expect_equal(output$is_baseline_event, c(FALSE, TRUE, FALSE))
+  })
+  it("errors if more than one baseline event is defined", {
+    df <- data.frame(
+      event_id = c("SCR", "Vis1", "Vis2"),
+      is_regular_visit= TRUE,
+      is_baseline_event = c(TRUE, TRUE, FALSE)
+    )
+    expect_error(
+      clean_event_metadata(df),
+      "Only one baseline event allowed"
+    )
+  })
+  it("errors if both the columns event_id and event_id_pattern are missing", {
+    df <- data.frame(
+      is_regular_visit= TRUE,
+      is_baseline_event = c(TRUE, FALSE)
+    )
+    expect_error(
+      clean_event_metadata(df),
+      "At least one of the columns 'event_id' or 'event_id_pattern' must be available"
+    )
+  })
+  it("errors if values are missing in both event_id and event_id_patttern", {
+    df <- data.frame(event_id = c("SCR", NA, "VIS1"), event_id_pattern = NA)
+    expect_error(
+      clean_event_metadata(df),
+      "values in 'event_id' and 'event_id_pattern' cannot both be missing"
+    )
+    df <- data.frame(
+      event_id = c("SCR", NA, NA),
+      event_id_pattern = c(NA, NA, "^VIS")
+    )
+    expect_error(
+      clean_event_metadata(df),
+      "values in 'event_id' and 'event_id_pattern' cannot both be missing"
+    )
+  })
+})
+
+
+  
 
 })
