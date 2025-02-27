@@ -2,14 +2,18 @@
 ### They are called within `get_metadata()` and `merge_meta_with_data()`.
 
 #' Clean event metadata
-#' 
+#'
 #' Internal function to verify and clean event data.
 #'
 #' @param data A data frame with event data.
 #' @param event_id_cols A character vector with the event_id columns.
 #'
-#' @noRd
-#'
+#' @keywords internal
+#' @return A data frame with the columns: event_id, event_id_pattern,
+#'   event_name_custom, event_label_custom, is_regular_visit, is_baseline_event,
+#'   generate_labels, meta_event_order, add_visit_number,
+#'   add_event_repeat_number.
+#' 
 clean_event_metadata <- function(
     data, 
     event_id_cols = c("event_id", "event_id_pattern")
@@ -59,26 +63,30 @@ clean_event_metadata <- function(
 #' Add time vars to raw data
 #'
 #' @param data A data frame
-#' @param events A data frame with events. Usually contains the columns
-#'   `event_id`, `event_id_pattern`, `is_regular_visit`, `event_label_custom`,
-#'   `event_name_custom`, and `add_sequence_to_name`.
+#' @param events A data frame with events. Expected to be cleaned with the
+#'   function [clean_event_metadata()].
 #'
 #' @return A data frame, with derivative time and event variables, needed for
 #'   ClinSight to function properly.
 #'
 #' @keywords internal
+#' @seealso [clean_event_metadata()]
 add_timevars_to_data <- function(
     data,
     events
 ){
   stopifnot("[data] should be a data frame" = is.data.frame(data))
-  
+  stopifnot("[events] should be a data frame" = is.data.frame(events))
   missing_new_cols <- required_col_names[!required_col_names %in% names(data)] |> 
     paste0(collapse = ", ")
   if (nchar(missing_new_cols) > 0) stop(
     paste0("The following columns are missing while they are required:\n", 
            missing_new_cols, ".")
   )
+  if(nrow(data) == 0){
+    cat("empty data frame provided. Returning early\n")
+    return(data)
+  }
   
   baseline_id <- events$event_id[1]
   if (any(isTRUE(as.logical(events[["is_baseline_event"]])))){
@@ -122,7 +130,7 @@ add_timevars_to_data <- function(
 #'
 #' @return A data frame with clean event data, with event_label column as a
 #'   factor with correct event_label levels.
-#' @noRd
+#' @keywords internal
 #' 
 add_events_to_data <- function(
     data,
