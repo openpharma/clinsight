@@ -374,6 +374,7 @@ describe(
             active_form("no_data_form")
             data_before_saving <- reactiveValuesToList(r$review_data)
             db_before_saving <- split_review_data(db_path)
+            expect_equal(db_before_saving, data_before_saving)
             
             session$setInputs(save_review = 1)
             expect_error(output[["save_review_error"]], "Nothing to review")
