@@ -99,12 +99,12 @@ describe(
             
             session$setInputs(form_reviewed = FALSE) # Needs to be initialized to work
             session$setInputs(form_reviewed = TRUE, save_review = 1)
-            db_reviewdata <- do.call(reactiveValues, split_review_data(db_path))
+            db_reviewdata <- split_review_data(db_path)
             db_reviewlogdata <- db_get_table(db_path, "all_review_data_log")
             
             expect_false(review_save_error())
             # app data should be equal to DB data
-            expect_equal(reactiveValuesToList(r$review_data), reactiveValuesToList(db_reviewdata))
+            expect_equal(reactiveValuesToList(r$review_data), db_reviewdata)
             # review table should only have one row in the DB containing the new reviewed = "Yes"
             # for the item 'Cystitis'
             expect_equal(
