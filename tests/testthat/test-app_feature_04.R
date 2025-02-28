@@ -42,7 +42,7 @@ describe(
         expect_true(grepl("Visit 2", timeline_json))
         
         app$set_inputs(main_tabs = "Study data")
-        app$wait_for_idle()
+        app$wait_for_idle(1100)
 
         # Expect labels V0-V10 in compact header visit timeline (as defined in custom metadata file):
         fig_vals <- app$get_value(output = "header_widgets_1-visit_figure")
