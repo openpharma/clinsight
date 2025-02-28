@@ -204,7 +204,10 @@ mod_review_form_tbl_server <- function(
     
     if(form %in% c("Vital signs", "Vitals adjusted")){
       shiny::exportTestValues(
-        table_data = subset(merged_form_data(), show_all() | subject_id == active_subject())
+        table_data = tryCatch(
+          subset(merged_form_data(), show_all() | subject_id == active_subject()),
+          error = function(e) e
+        )
       )
     } 
   })

@@ -61,7 +61,7 @@ app_server <- function(
   )
   # think of using the pool package, but functions such as row_update are not yet supported.
   r <- reactiveValues(
-    review_data       = db_get_table(user_db, db_table = "all_review_data"),
+    review_data       = do.call(reactiveValues, split_review_data(user_db, forms = app_vars$all_forms$form)),
     query_data        = collect_query_data(user_db),
     filtered_subjects = app_vars$subject_id,
     filtered_data     = app_data,
@@ -123,24 +123,12 @@ app_server <- function(
     trigger_page_change = 1
   )
   
-  review_data <- reactiveValues()
-  observeEvent(r$review_data, {
-    req(review_data)
-    rev_list_data <- lapply(setNames(nm = app_vars$all_forms$form), \(x){
-      r$review_data[r$review_data$item_group == x, ]
-    })
-    for(i in names(rev_list_data)){
-      if(!identical(review_data[[i]], rev_list_data[[i]]) ){
-        golem::cat_dev("app_server | refreshing review_data of form ", i, "\n")
-        review_data[[i]] <- rev_list_data[[i]]
-      }
-    }
-  })
-  
   rev_data <- reactiveValues(
     summary = reactive({
       req(forms_to_review_data)
       r$review_data |>
+        reactiveValuesToList() |> 
+        do.call(what = rbind) |> 
         dplyr::left_join(forms_to_review_data, by = "item_group") |> 
         dplyr::filter(
           reviewed != "Yes",
@@ -234,7 +222,7 @@ app_server <- function(
       id = paste0("cf_", simplify_string(x)), 
       form = x,
       form_data = reactive(r$filtered_data[[x]]), 
-      form_review_data = reactive(review_data[[x]]), 
+      form_review_data = reactive(r$review_data[[x]]), 
       form_items = app_vars$items[[x]], 
       active_subject = reactive(r$subject_id),
       table_names = app_vars$table_names, 
@@ -258,7 +246,7 @@ app_server <- function(
       id = paste0("sf_", simplify_string(x)), 
       form = x,
       form_data = reactive(r$filtered_data[[x]]), 
-      form_review_data = reactive(review_data[[x]]), 
+      form_review_data = reactive(r$review_data[[x]]), 
       form_items = app_vars$items[[x]], 
       active_subject = reactive(r$subject_id),
       table_names = app_vars$table_names,
