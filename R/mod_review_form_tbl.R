@@ -179,7 +179,7 @@ mod_review_form_tbl_server <- function(
         rownames= FALSE,
         title = title,
         export_label = paste(
-          simplify_string(form), 
+          ifelse(identical(title, "Serious Adverse Events"), "SAEs", simplify_string(form)), 
           ifelse(show_all(), "all_patients", active_subject()), 
           sep = "."
         ),
