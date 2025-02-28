@@ -192,7 +192,7 @@ mod_study_forms_server <- function(
     
     if(form %in% c("Vital signs", "Vitals adjusted")){
       shiny::exportTestValues(
-        fig_data = fig_data()
+        fig_data = tryCatch(fig_data(), error = function(e) e)
       )
     } 
   })
