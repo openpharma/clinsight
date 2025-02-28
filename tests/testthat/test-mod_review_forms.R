@@ -16,7 +16,7 @@ describe(
           user_name = "test_name",
           user_role = "Medical Monitor",
           subject_id = "885",
-          review_data = list()
+          review_data = reactiveValues()
         ),
         active_form = reactiveVal("Adverse events"),
         active_tab = reactiveVal("Common forms"),
@@ -65,7 +65,7 @@ describe(
             user_name = "test_name",
             user_role = "Medical Monitor",
             subject_id = "885",
-            review_data = split_review_data(temp_path)
+            review_data = do.call(reactiveValues, split_review_data(temp_path))
           ),
           active_form = reactiveVal("Adverse events"),
           active_tab = reactiveVal("Common forms"),
@@ -99,12 +99,12 @@ describe(
             
             session$setInputs(form_reviewed = FALSE) # Needs to be initialized to work
             session$setInputs(form_reviewed = TRUE, save_review = 1)
-            db_reviewdata <- split_review_data(db_path)
+            db_reviewdata <- do.call(reactiveValues, split_review_data(db_path))
             db_reviewlogdata <- db_get_table(db_path, "all_review_data_log")
             
             expect_false(review_save_error())
             # app data should be equal to DB data
-            expect_equal(r$review_data, db_reviewdata)
+            expect_equal(reactiveValuesToList(r$review_data), reactiveValuesToList(db_reviewdata))
             # review table should only have one row in the DB containing the new reviewed = "Yes"
             # for the item 'Cystitis'
             expect_equal(
@@ -115,7 +115,8 @@ describe(
             r_id <- with(db_reviewdata[["Adverse events"]], id[subject_id == "885" & item_name == "Cystitis"])
             expect_equal(with(db_reviewlogdata, reviewed[review_id == r_id]), c("No") )
             expect_snapshot({
-              dplyr::select(do.call(rbind, r$review_data), -timestamp)
+              reactiveValuesToList(r$review_data) |> 
+              lapply(\(x){dplyr::select(x, -timestamp)})
             })
             Sys.sleep(2) # because the timestamp only records seconds, 
             # we should add delay here to prevent that the exact same timestamp is 
@@ -157,9 +158,12 @@ describe(
             r_id <- with(db_reviewdata, id[subject_id == "885"])
             expect_equal(with(db_reviewlogdata, comment[review_id %in% r_id]), c("", "test comment", ""))
             expect_equal(with(db_reviewlogdata, reviewed[review_id %in% r_id]), c("No", "Yes", "Yes"))
-            expect_equal(r$review_data, split_review_data(db_path))
-            expect_equal(do.call(rbind, r$review_data), db_reviewdata, ignore_attr = TRUE)
-            expect_snapshot(dplyr::select(do.call(rbind, r$review_data), -timestamp))
+            expect_equal(reactiveValuesToList(r$review_data), split_review_data(db_path))
+            expect_equal(do.call(rbind, reactiveValuesToList(r$review_data)), db_reviewdata, ignore_attr = TRUE)
+            expect_snapshot({
+              reactiveValuesToList(r$review_data) |> 
+                lapply(\(x){dplyr::select(x, -timestamp)})
+            })
           })
       }
     )
@@ -196,7 +200,7 @@ describe(
               user_name = "test_name",
               user_role = "Medical Monitor",
               subject_id = "885",
-              review_data = split_review_data(temp_path)
+              review_data = do.call(reactiveValues, split_review_data(temp_path))
             ),
             active_form = reactiveVal("Adverse events"),
             active_tab = reactiveVal("Common events"),
@@ -274,7 +278,7 @@ describe(
             user_name = "test_name",
             user_role = "Medical Monitor",
             subject_id = "885",
-            review_data = split_review_data(temp_path)
+            review_data = do.call(reactiveValues, split_review_data(temp_path))
           ),
           active_form = reactiveVal("Adverse events"),
           active_tab = reactiveVal("Common forms"),
@@ -315,7 +319,7 @@ describe(
             user_name = "test_name",
             user_role = "Medical Monitor",
             subject_id = "885",
-            review_data = split_review_data(temp_path)
+            review_data = do.call(reactiveValues, split_review_data(temp_path))
           ),
           active_form = reactiveVal("Adverse events"),
           active_tab = reactiveVal("Common forms"),
@@ -354,7 +358,7 @@ describe(
             user_name = "test_name",
             user_role = "Medical Monitor",
             subject_id = "885",
-            review_data = split_review_data(temp_path)
+            review_data = do.call(reactiveValues, split_review_data(temp_path))
           ),
           active_form = reactiveVal("Adverse events"),
           active_tab = reactiveVal("Common forms"),
@@ -368,12 +372,12 @@ describe(
           mod_review_forms_server, args = testargs, {
             ns <- session$ns
             active_form("no_data_form")
-            data_before_saving <- r$review_data
+            data_before_saving <- reactiveValuesToList(r$review_data)
             db_before_saving <- split_review_data(db_path)
             
             session$setInputs(save_review = 1)
             expect_error(output[["save_review_error"]], "Nothing to review")
-            expect_equal(r$review_data, data_before_saving)
+            expect_equal(reactiveValuesToList(r$review_data), data_before_saving)
             db_after_saving <- split_review_data(db_path)
             expect_equal(db_after_saving, data_before_saving)
           })
@@ -414,7 +418,7 @@ describe(
               user_name = NULL,
               user_role = "Medical Monitor",
               subject_id = "885", 
-              review_data = split_review_data(temp_path)
+              review_data = do.call(reactiveValues, split_review_data(temp_path))
             ),
             active_form = reactiveVal("Adverse events"),
             active_tab = reactiveVal("Common events"),
@@ -474,7 +478,7 @@ describe(
       {
         temp_path <- withr::local_tempfile(fileext = ".sqlite")
         file.copy(test_path("fixtures", "review_testdb.sqlite"), temp_path) 
-        rev_data <- split_review_data(temp_path)
+        rev_data <- do.call(reactiveValues, split_review_data(temp_path))
         local_mocked_bindings(
           db_save_review = function(...) "no data saved in database"
         )
@@ -506,7 +510,10 @@ describe(
             db_after_saving <- db_get_table(db_path)
 
             expect_true(review_save_error())
-            expect_equal(r$review_data, rev_data)
+            expect_equal(
+              reactiveValuesToList(r$review_data), 
+              reactiveValuesToList(rev_data)
+              )
             expect_equal(db_after_saving, db_before_saving)
           })
       }
@@ -544,7 +551,7 @@ describe(
               user_name = "test_name",
               user_role = "restricted_role",
               subject_id = "885",
-              review_data = split_review_data(temp_path)
+              review_data = do.call(reactiveValues, split_review_data(temp_path))
             ),
             active_form = reactiveVal("Adverse events"),
             active_tab = reactiveVal("Common events"),

@@ -101,6 +101,7 @@ mod_review_forms_server <- function(
     db_path
 ){
   stopifnot(is.reactivevalues(r))
+  stopifnot(is.reactivevalues(isolate(r$review_data)))
   stopifnot(is.reactive(active_form))
   stopifnot(is.reactive(active_tab))
   stopifnot(is.data.frame(review_required_data))
