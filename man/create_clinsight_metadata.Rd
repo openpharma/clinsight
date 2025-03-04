@@ -4,10 +4,7 @@
 \alias{create_clinsight_metadata}
 \title{Create custom ClinSight metadata}
 \usage{
-create_clinsight_metadata(
-  path = ".",
-  template_path = app_sys("data-raw/metadata.xlsx")
-)
+create_clinsight_metadata(path = ".", template_path = app_sys("metadata.xlsx"))
 }
 \arguments{
 \item{path}{Character string with destination path.}

@@ -10,7 +10,7 @@
 #' 
 create_clinsight_metadata <- function(
     path = ".",
-    template_path = app_sys("data-raw/metadata.xlsx")
+    template_path = app_sys("metadata.xlsx")
 ){
   meta_path <- file.path(path, "clinsight_metadata.xlsx")
   if(file.exists(meta_path)){
