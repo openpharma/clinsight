@@ -2,8 +2,8 @@
 #'
 #' Small helper function to open a new metadata Excel file in a temporary
 #' folder. It will attempt to open it. 
-#' 
-#' @param path Path to the metadata template.
+#' @param path Character string with destination path.
+#' @param template_path Path to the metadata template.
 #'
 #' @return A ClinSight metadata (.xlsx) file.
 #' @export
@@ -34,7 +34,8 @@ create_clinsight_metadata <- function(
 #' Small helper function to create a custom ClinSight configuration file in a
 #' temporary folder. It will attempt to open it.
 #'
-#' @param path Path to the config template.
+#' @param path Character string with destination path.
+#' @param template_path Path to the config template.
 #'
 #' @return A .yml configuration file.
 #' @export 

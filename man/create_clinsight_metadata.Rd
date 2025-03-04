@@ -10,7 +10,9 @@ create_clinsight_metadata(
 )
 }
 \arguments{
-\item{path}{Path to the metadata template.}
+\item{path}{Character string with destination path.}
+
+\item{template_path}{Path to the metadata template.}
 }
 \value{
 A ClinSight metadata (.xlsx) file.

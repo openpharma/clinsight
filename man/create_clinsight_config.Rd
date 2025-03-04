@@ -10,7 +10,9 @@ create_clinsight_config(
 )
 }
 \arguments{
-\item{path}{Path to the config template.}
+\item{path}{Character string with destination path.}
+
+\item{template_path}{Path to the config template.}
 }
 \value{
 A .yml configuration file.
