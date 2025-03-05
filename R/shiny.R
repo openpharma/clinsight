@@ -1,11 +1,3 @@
-shiny::registerInputHandler('CS.reviewInfo', function(val, ...) {
-  with(val, data.frame(
-    id = unlist(ids), 
-    reviewed = ifelse(isTRUE(review), "Yes", ifelse(isFALSE(review), "No", NA_character_)),
-    row_id = row_id
-    ))
-}, TRUE)
-
 checkbox_callback <- DT::JS("checkboxCallback(table);")
 checkbox_render <- DT::JS("checkboxRender")
 row_callback <- DT::JS("rowCallback")
