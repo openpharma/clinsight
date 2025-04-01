@@ -135,7 +135,8 @@ utils::globalVariables(
     "event_order",
     "is_baseline_event",
     "order_occurrence",
-    "vis_number"
+    "vis_number",
+    "not_reviewed_but_missing"
   )
 )
 
