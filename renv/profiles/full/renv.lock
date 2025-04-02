@@ -373,7 +373,7 @@
       "Package": "chromote",
       "Version": "0.5.0",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "RSPM2",
       "Requirements": [
         "R6",
         "cli",
@@ -1643,7 +1643,7 @@
       "Package": "rlang",
       "Version": "1.1.5",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "RSPM2",
       "Requirements": [
         "R",
         "utils"
@@ -2264,7 +2264,7 @@
       "Package": "withr",
       "Version": "3.0.2",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "RSPM2",
       "Requirements": [
         "R",
         "grDevices",
