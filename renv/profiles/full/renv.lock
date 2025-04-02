@@ -1643,7 +1643,7 @@
       "Package": "rlang",
       "Version": "1.1.5",
       "Source": "Repository",
-      "Repository": "https://cran.r-project.org",
+      "Repository": "RSPM",
       "Requirements": [
         "R",
         "utils"
@@ -2264,7 +2264,7 @@
       "Package": "withr",
       "Version": "3.0.2",
       "Source": "Repository",
-      "Repository": "CRAN",
+      "Repository": "RSPM",
       "Requirements": [
         "R",
         "grDevices",
