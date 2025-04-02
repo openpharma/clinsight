@@ -28,7 +28,7 @@ jobs:
 
       - name: Manually add problematic system dependencies
         if: runner.os == 'Linux'
-        run: sudo apt-get install -y libfontconfig1-dev libharfbuzz-dev libfribidi-dev
+        run: sudo apt-get install -y libfontconfig1-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev
 
       - uses: r-lib/actions/setup-tinytex@v2
       - run: tlmgr --version
