@@ -3,8 +3,8 @@
     "Version": "4.4.1",
     "Repositories": [
       {
-        "Name": "RSPM",
-        "URL": "https://packagemanager.posit.co/cran/2024-09-17"
+        "Name": "CRAN",
+        "URL": "https://packagemanager.posit.co/cran/2025-04-01"
       }
     ]
   },
@@ -13,21 +13,21 @@
       "Package": "AsioHeaders",
       "Version": "1.22.1-2",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Hash": "85bf3bd8fa58da21a22d84fd4f4ef0a8"
     },
     "BH": {
       "Package": "BH",
       "Version": "1.84.0-0",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Hash": "a8235afbcd6316e6e91433ea47661013"
     },
     "DBI": {
       "Package": "DBI",
       "Version": "1.2.3",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R",
         "methods"
@@ -38,7 +38,7 @@
       "Package": "DT",
       "Version": "0.33",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "crosstalk",
         "htmltools",
@@ -55,7 +55,7 @@
       "Package": "MASS",
       "Version": "7.3-61",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R",
         "grDevices",
@@ -87,7 +87,7 @@
       "Package": "R.methodsS3",
       "Version": "1.8.2",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R",
         "utils"
@@ -98,7 +98,7 @@
       "Package": "R.oo",
       "Version": "1.26.0",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R",
         "R.methodsS3",
@@ -111,7 +111,7 @@
       "Package": "R.utils",
       "Version": "2.12.3",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R",
         "R.methodsS3",
@@ -146,7 +146,7 @@
       "Package": "RSQLite",
       "Version": "2.3.7",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "DBI",
         "R",
@@ -165,7 +165,7 @@
       "Package": "Rcpp",
       "Version": "1.0.13",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "methods",
         "utils"
@@ -176,7 +176,7 @@
       "Package": "anytime",
       "Version": "0.3.9",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "BH",
         "R",
@@ -198,7 +198,7 @@
       "Package": "attempt",
       "Version": "0.3.1",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "rlang"
       ],
@@ -208,7 +208,7 @@
       "Package": "backports",
       "Version": "1.5.0",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R"
       ],
@@ -270,7 +270,7 @@
       "Package": "blob",
       "Version": "1.2.4",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "methods",
         "rlang",
@@ -299,7 +299,7 @@
       "Package": "bslib",
       "Version": "0.8.0",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R",
         "base64enc",
@@ -321,7 +321,7 @@
       "Package": "cachem",
       "Version": "1.1.0",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "fastmap",
         "rlang"
@@ -357,7 +357,7 @@
       "Package": "checkmate",
       "Version": "2.3.2",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R",
         "backports",
@@ -367,11 +367,12 @@
     },
     "chromote": {
       "Package": "chromote",
-      "Version": "0.3.1",
+      "Version": "0.5.0",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "CRAN",
       "Requirements": [
         "R6",
+        "cli",
         "curl",
         "fastmap",
         "jsonlite",
@@ -381,15 +382,17 @@
         "promises",
         "rlang",
         "utils",
-        "websocket"
+        "websocket",
+        "withr",
+        "zip"
       ],
-      "Hash": "5532726015b620830baae59aa689ea52"
+      "Hash": "11811b9f4279dcd325739b3f4b460b52"
     },
     "cli": {
       "Package": "cli",
       "Version": "3.6.3",
       "Source": "Repository",
-      "Repository": "https://cloud.r-project.org",
+      "Repository": "CRAN",
       "Requirements": [
         "R",
         "utils"
@@ -420,7 +423,7 @@
       "Package": "colorspace",
       "Version": "2.1-1",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R",
         "grDevices",
@@ -441,7 +444,7 @@
       "Package": "config",
       "Version": "0.3.2",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "yaml"
       ],
@@ -451,7 +454,7 @@
       "Package": "covr",
       "Version": "3.6.4",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R",
         "crayon",
@@ -471,7 +474,7 @@
       "Package": "cowplot",
       "Version": "1.1.3",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R",
         "ggplot2",
@@ -488,7 +491,7 @@
       "Package": "cpp11",
       "Version": "0.5.0",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R"
       ],
@@ -498,7 +501,7 @@
       "Package": "crayon",
       "Version": "1.5.3",
       "Source": "Repository",
-      "Repository": "https://cloud.r-project.org",
+      "Repository": "CRAN",
       "Requirements": [
         "grDevices",
         "methods",
@@ -524,7 +527,7 @@
       "Package": "crosstalk",
       "Version": "1.2.1",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R6",
         "htmltools",
@@ -537,7 +540,7 @@
       "Package": "curl",
       "Version": "5.2.2",
       "Source": "Repository",
-      "Repository": "https://cloud.r-project.org",
+      "Repository": "CRAN",
       "Requirements": [
         "R"
       ],
@@ -547,7 +550,7 @@
       "Package": "data.table",
       "Version": "1.16.0",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R",
         "methods"
@@ -558,7 +561,7 @@
       "Package": "dbplyr",
       "Version": "2.5.0",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "DBI",
         "R",
@@ -648,7 +651,7 @@
       "Package": "digest",
       "Version": "0.6.37",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R",
         "utils"
@@ -659,7 +662,7 @@
       "Package": "downlit",
       "Version": "0.4.4",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R",
         "brio",
@@ -713,7 +716,7 @@
       "Package": "evaluate",
       "Version": "0.24.0",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R",
         "methods"
@@ -743,7 +746,7 @@
       "Package": "fastmap",
       "Version": "1.2.0",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Hash": "aa5e1cd11c2d15497494c5292d7ffcc8"
     },
     "fontawesome": {
@@ -784,7 +787,7 @@
       "Package": "gert",
       "Version": "2.1.1",
       "Source": "Repository",
-      "Repository": "https://cloud.r-project.org",
+      "Repository": "CRAN",
       "Requirements": [
         "askpass",
         "credentials",
@@ -852,7 +855,7 @@
       "Package": "globals",
       "Version": "0.16.3",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R",
         "codetools"
@@ -874,7 +877,7 @@
       "Package": "golem",
       "Version": "0.5.1",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R",
         "attempt",
@@ -907,7 +910,7 @@
       "Package": "here",
       "Version": "1.0.1",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "rprojroot"
       ],
@@ -917,7 +920,7 @@
       "Package": "highr",
       "Version": "0.11",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R",
         "xfun"
@@ -1003,7 +1006,7 @@
       "Package": "httr2",
       "Version": "1.0.4",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-17",
       "Requirements": [
         "R",
         "R6",
@@ -1062,7 +1065,7 @@
       "Package": "kableExtra",
       "Version": "1.4.0",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R",
         "digest",
@@ -1087,7 +1090,7 @@
       "Package": "knitr",
       "Version": "1.48",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R",
         "evaluate",
@@ -1140,7 +1143,7 @@
       "Package": "lazyeval",
       "Version": "0.2.2",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R"
       ],
@@ -1234,7 +1237,7 @@
       "Package": "nlme",
       "Version": "3.1-166",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R",
         "graphics",
@@ -1248,7 +1251,7 @@
       "Package": "openssl",
       "Version": "2.2.1",
       "Source": "Repository",
-      "Repository": "https://cloud.r-project.org",
+      "Repository": "CRAN",
       "Requirements": [
         "askpass"
       ],
@@ -1275,7 +1278,7 @@
       "Package": "pingr",
       "Version": "2.0.3",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R",
         "processx",
@@ -1312,7 +1315,7 @@
       "Package": "pkgdown",
       "Version": "2.1.0",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R",
         "bslib",
@@ -1342,7 +1345,7 @@
       "Package": "pkgload",
       "Version": "1.4.0",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R",
         "cli",
@@ -1364,14 +1367,14 @@
       "Package": "plogr",
       "Version": "0.2.0",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Hash": "09eb987710984fc2905c7129c7d85e65"
     },
     "plotly": {
       "Package": "plotly",
       "Version": "4.10.4",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R",
         "RColorBrewer",
@@ -1478,7 +1481,7 @@
       "Package": "ps",
       "Version": "1.8.0",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-17",
       "Requirements": [
         "R",
         "utils"
@@ -1504,7 +1507,7 @@
       "Package": "ragg",
       "Version": "1.3.3",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-12",
       "Requirements": [
         "systemfonts",
         "textshaping"
@@ -1626,7 +1629,7 @@
       "Package": "rex",
       "Version": "1.2.1",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "lazyeval"
       ],
@@ -1634,20 +1637,20 @@
     },
     "rlang": {
       "Package": "rlang",
-      "Version": "1.1.4",
+      "Version": "1.1.5",
       "Source": "Repository",
-      "Repository": "https://cloud.r-project.org",
+      "Repository": "CRAN",
       "Requirements": [
         "R",
         "utils"
       ],
-      "Hash": "3eec01f8b1dee337674b2e34ab1f9bc1"
+      "Hash": "724dcc1490cd7071ee75ca2994a5446e"
     },
     "rmarkdown": {
       "Package": "rmarkdown",
       "Version": "2.28",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R",
         "bslib",
@@ -1670,7 +1673,7 @@
       "Package": "roxygen2",
       "Version": "7.3.2",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R",
         "R6",
@@ -1759,7 +1762,7 @@
       "Package": "scrypt",
       "Version": "0.1.6",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R",
         "Rcpp"
@@ -1783,7 +1786,7 @@
       "Package": "shiny",
       "Version": "1.9.1",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R",
         "R6",
@@ -1816,7 +1819,7 @@
       "Package": "shinyWidgets",
       "Version": "0.8.6",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R",
         "anytime",
@@ -1834,7 +1837,7 @@
       "Package": "shinycssloaders",
       "Version": "1.1.0",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R",
         "digest",
@@ -1849,7 +1852,7 @@
       "Package": "shinyjs",
       "Version": "2.1.0",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R",
         "digest",
@@ -1862,7 +1865,7 @@
       "Package": "shinymanager",
       "Version": "1.0.410",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "DBI",
         "DT",
@@ -1881,7 +1884,7 @@
       "Package": "shinytest2",
       "Version": "0.3.2",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R6",
         "callr",
@@ -1946,7 +1949,7 @@
       "Package": "svglite",
       "Version": "2.1.3",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R",
         "cpp11",
@@ -1965,7 +1968,7 @@
       "Package": "systemfonts",
       "Version": "1.1.0",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R",
         "cpp11",
@@ -2006,7 +2009,7 @@
       "Package": "textshaping",
       "Version": "0.4.0",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R",
         "cpp11",
@@ -2038,7 +2041,7 @@
       "Package": "tidyr",
       "Version": "1.3.1",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R",
         "cli",
@@ -2077,7 +2080,7 @@
       "Package": "timevis",
       "Version": "2.1.0",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R",
         "htmltools",
@@ -2094,7 +2097,7 @@
       "Package": "tinytex",
       "Version": "0.53",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-17",
       "Requirements": [
         "xfun"
       ],
@@ -2129,7 +2132,7 @@
       "Package": "usethis",
       "Version": "3.0.0",
       "Source": "Repository",
-      "Repository": "https://cloud.r-project.org",
+      "Repository": "CRAN",
       "Requirements": [
         "R",
         "cli",
@@ -2220,7 +2223,7 @@
       "Package": "waldo",
       "Version": "0.5.3",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R",
         "cli",
@@ -2237,7 +2240,7 @@
       "Package": "websocket",
       "Version": "1.4.2",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "AsioHeaders",
         "R6",
@@ -2255,21 +2258,21 @@
     },
     "withr": {
       "Package": "withr",
-      "Version": "3.0.1",
+      "Version": "3.0.2",
       "Source": "Repository",
-      "Repository": "https://cloud.r-project.org",
+      "Repository": "CRAN",
       "Requirements": [
         "R",
         "grDevices",
         "graphics"
       ],
-      "Hash": "07909200e8bbe90426fbfeb73e1e27aa"
+      "Hash": "cc2d62c76458d425210d1eb1478b30b4"
     },
     "xfun": {
       "Package": "xfun",
       "Version": "0.47",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-05",
       "Requirements": [
         "R",
         "grDevices",
@@ -2318,7 +2321,7 @@
       "Package": "yaml",
       "Version": "2.3.10",
       "Source": "Repository",
-      "Repository": "https://cloud.r-project.org",
+      "Repository": "CRAN",
       "Hash": "51dab85c6c98e50a18d7551e9d49f76c"
     },
     "zip": {
