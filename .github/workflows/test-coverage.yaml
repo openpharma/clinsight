@@ -30,10 +30,10 @@ jobs:
       - uses: r-lib/actions/setup-tinytex@v2
       - run: tlmgr --version    
       
-      - name: add libcurl Linux dependency
+      - name: Manually add problematic system dependencies
         if: runner.os == 'Linux'
-        run: sudo apt-get install -y libcurl4-openssl-dev
-
+        run: sudo apt-get install -y libfontconfig1-dev
+        
       - uses: r-lib/actions/setup-renv@v2
         with:
           profile: '"full"'

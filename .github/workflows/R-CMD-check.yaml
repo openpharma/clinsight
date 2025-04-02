@@ -26,6 +26,10 @@ jobs:
           r-version: '4.4.1'
           use-public-rspm: false
 
+      - name: Manually add problematic system dependencies
+        if: runner.os == 'Linux'
+        run: sudo apt-get install -y libfontconfig1-dev
+
       - uses: r-lib/actions/setup-tinytex@v2
       - run: tlmgr --version
       
