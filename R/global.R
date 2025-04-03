@@ -1,3 +1,6 @@
+## needed for base R function mocking during test:
+file.show <- NULL
+file.edit <- NULL
 
 # use script below for development purposes, to load data global environment
 # with eval(global)
