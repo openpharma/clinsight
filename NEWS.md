@@ -28,6 +28,10 @@
 - Tables with continuous data now show reason for missing data again when this information is new, instead of showing `NA`. 
 - Fixed ordering for adverse events when bold HTML tags are added. Adverse events now show the newest event first again by default.
 
+## Developer notes
+
+- Added a more recent repo snapshot for `chromote` v0.5.0 used in Shiny tests
+
 # clinsight 0.1.1
 
 ## Changed 
