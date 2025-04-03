@@ -20,10 +20,10 @@ create_clinsight_metadata <- function(
   file.copy(template_path, meta_path)
   message(
     "Creating a customizable ClinSight metadata file in the following location:\n", 
-    meta_path, ".\n",
-    "To use this file, save it in a different location, customize it, and ", 
-    "use the functions `get_metadata()` and 'merge_meta_with_data()' to create ", 
-    "metadata and study_data compatible with ClinSight."
+    meta_path, ".\n\n",
+    "To use it with ClinSight, first create a metadata R object:\n",
+    "  metadata <- get_metadata('", meta_path, "')\n",
+    "Then merge raw study data with the metadata using merge_meta_with_data()."
   )
   file.show(meta_path)
 }
@@ -51,11 +51,10 @@ create_clinsight_config <- function(
   }
   file.copy(template_path, config_path, overwrite = FALSE)
   message(
-    "Creating a customizable ClinSight config file in the following location:\n", 
-    config_path, ".\n",
-    "To use this config file, save it in a custom location and use \n",
-    "    'Sys.setenv('CONFIG_PATH' = '", config_path, "')'\n", 
-    "to specify the config file location so that ClinSight can find it."
+    "Creating a customizable ClinSight config file in the following location:\n'", 
+    config_path, "'.\n\n",
+    "To use it with ClinSight, set the path in the environment variable 'CONFIG_PATH':\n",
+    "    'Sys.setenv('CONFIG_PATH' = '", config_path, "')'\n"
   )
   file.edit(config_path)
 }
