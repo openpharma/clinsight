@@ -19,7 +19,8 @@
 - (For developers) added raw data that can be used to completely recreate the internal dataset (`clinsightful_data`) with the merge functions in the package.
 - (For developers) refactored `mod_study_forms`, `mod_common_forms`, and `mod_review_forms_tbl`, so that they now only need data of one form instead of all study data. Moved some business logic for the form tables to helper functions for `mod_review_forms_tbl`. This reduces unnecessary refreshing of data after saving a review.
 - filters in mod_study_forms are now only triggered after a delay. This way, the filter will only trigger after finishing selecting/deselecting multiple items.
-- Removed some custom logic in `create_table` so that it does not interfere
+- Removed some custom logic in `create_table` so that it does not interfere with item names being displayed in bold (when items are not yet reviewed).
+- Added functionality in metadata to merge item pairs into one item.
 
 ## Bug fixes
 
