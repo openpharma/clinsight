@@ -1,0 +1,47 @@
+---
+title: "ClinSight Configuration"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Deploy}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, echo = FALSE}
+library(clinsight)
+```
+
+There two configuration files where the ClinSight configuration can be customized. [General configuration](#general-config) is stored in a configuration .yml file, while [study-specific configurations](#study-specific-config) is stored in a metadata Excel file. Both will be discussed in this vignette.
+
+## General configuration {#general-config}
+
+Below shows the current `config` file and the different configurations available:
+
+```{r echo = FALSE, results ='markup', comment=""}
+cat(readLines(system.file("golem-config.yml", package = "clinsight")), sep = "\n")
+```
+
+With the standard ('default') settings, internal example data with matching metadata will be used when running ClinSight.
+
+When running with own test data, a different configuration needs to be set
+
+### Shinymanager
+
+### ShinyProxy deployment
+
+### Posit Connect deployment
+
+### Customizing configuration
+
+If the profiles above are insufficient, you can also provide your own configuration file with fully customized settings with the steps described below.
+
+To do so, first create a configuration template. You can use the following helper function to create
+
+## Study-specific configuration {#study-specific-config}
