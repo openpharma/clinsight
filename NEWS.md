@@ -30,6 +30,7 @@
 ## Developer notes
 
 - Added a more recent repo snapshot for `chromote` v0.5.0 used in Shiny tests
+- Added two helper functions (`create_clinsight_metadata()` and `create_clinsight_config`) to create custom `ClinSight` metadata and config files.
 
 # clinsight 0.1.1
 
