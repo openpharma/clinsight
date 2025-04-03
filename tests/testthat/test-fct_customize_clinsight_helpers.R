@@ -30,7 +30,7 @@ describe(
   "create_clinsight_config() creates a config file equal to the clinsight config template.", 
   {
     it("Creates the correct config file.", {
-      local_mocked_bindings(file.show = \(...){""})
+      local_mocked_bindings(file.edit = \(...){""})
       temp_path  <- withr::local_tempdir()
       expect_message(
         create_clinsight_config(path = temp_path),
@@ -50,7 +50,7 @@ describe(
       expect_equal(custom_config, template_config)
     })
     it("Errors if the file already exists.", {
-      local_mocked_bindings(file.show = \(...){})
+      local_mocked_bindings(file.edit = \(...){})
       temp_path  <- withr::local_tempdir()
       temp_file_path <- file.path(temp_path, "clinsight_config.yml")
       file.create(temp_file_path)

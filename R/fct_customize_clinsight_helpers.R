@@ -57,5 +57,5 @@ create_clinsight_config <- function(
     "    'Sys.setenv('CONFIG_PATH' = '", config_path, "')'\n", 
     "to specify the config file location so that ClinSight can find it."
   )
-  file.show(config_path)
+  file.edit(config_path)
 }
