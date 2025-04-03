@@ -30,7 +30,7 @@ shinyproxy:
   study_data: study_data/study_data.rds
   meta_data: study_data/metadata.rds
   user_db: study_data/user_db.sqlite
-shiny_connect:
+posit_connect:
   app_prod: yes
   user_identification: shiny_session
   study_data: study_data.rds
