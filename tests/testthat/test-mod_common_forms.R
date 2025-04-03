@@ -109,7 +109,6 @@ describe(
           dplyr::mutate(id = dplyr::row_number(), reviewed = "No", status = "new")
         form_items <- get_meta_vars(appdata)$items[["Medication"]]
         timeline_data <- timeline_data[0,]
-        
         testargs <- list(
           form = "Medication",
           form_data = reactiveVal(appdata[["Medication"]]),
