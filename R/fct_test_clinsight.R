@@ -1,0 +1,43 @@
+#' Test ClinSight
+#'
+#' Provides a wrapper around [run_app()], to test ClinSight with different
+#' configurations. Unlike the function [run_app()], this function stores any
+#' data in a temporary folder, keeping the environment clean.
+#'
+#' While this function is useful for testing and development purposes, for use
+#' in production the function [run_app()] should be used directly.
+#'
+#' @param clinsight_data A data frame with (ClinSight compatible) study data. If
+#'   not provided, the example study data in the ClinSight package will be used.
+#' @param meta_data A list of data frames with (ClinSight compatible) metadata.
+#'   If not provided, the example metadata in the ClinSight package will be used
+#' @param clinsight_config A character vector with the ClinSight configuration
+#'   to use.
+#'
+#' @return Will start the ClinSight Shiny application
+#' @export
+#'
+test_clinsight <- function(
+    clinsight_data = clinsightful_data, 
+    meta_data = metadata,
+    clinsight_config = "test"
+){
+  temp_folder <- tempfile(tmpdir = tempdir())
+  base_folder <- temp_folder
+  if(identical(clinsight_config, "shinyproxy")){
+    temp_folder <- file.path(temp_folder, "study_data")
+  }
+  dir.create(temp_folder, recursive = TRUE)
+  saveRDS(clinsight_data, file.path(temp_folder, "study_data.rds"))
+  saveRDS(meta_data, file.path(temp_folder, "metadata.rds"))
+  old_config <- Sys.getenv("GOLEM_CONFIG_ACTIVE")
+  Sys.setenv("GOLEM_CONFIG_ACTIVE" = clinsight_config)
+  run_app(
+    data_folder = base_folder, 
+    credentials_pwd = "TEMP_PASSWORD",
+    onStart = \(){onStop(\(){
+      unlink(temp_folder, recursive = TRUE);
+      Sys.setenv("GOLEM_CONFIG_ACTIVE" = old_config)
+    })}
+  )
+}
