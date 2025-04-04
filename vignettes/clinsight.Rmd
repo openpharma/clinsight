@@ -18,4 +18,51 @@ knitr::opts_chunk$set(
 library(clinsight)
 ```
 
-##
+## Running ClinSight for the first time.
+
+### Testing application
+
+The function `clinsight::run_app()` creates databases in the working directory, that will save user actions such as review status of study data. Depending on the settings, a credentials database will be created. 
+When developing ClinSight settings for a specific study, it can be more useful to run ClinSight within a temporary folder, so that the required databases are created every time after closing the application. This makes it easier to prototype the application, and tweak the data/metadata for use with ClinSight. To do so, a wrapper around the `run_app()` function can be used, such as the one below.
+
+```{r }
+test_clinsight <- function(
+    clinsight_data = clinsightful_data, 
+    meta_data = metadata,
+    clinsight_config = "test"
+){
+  temp_folder <- tempfile(tmpdir = tempdir())
+  base_folder <- temp_folder
+  if(identical(clinsight_config, "shinyproxy")){
+    temp_folder <- file.path(temp_folder, "study_data")
+  }
+  dir.create(temp_folder, recursive = TRUE)
+  saveRDS(clinsight_data, file.path(temp_folder, "study_data.rds"))
+  saveRDS(meta_data, file.path(temp_folder, "metadata.rds"))
+  old_config <- Sys.getenv("GOLEM_CONFIG_ACTIVE")
+  Sys.setenv("GOLEM_CONFIG_ACTIVE" = clinsight_config)
+  run_app(
+    data_folder = base_folder, 
+    credentials_pwd = "TEMP_PASSWORD",
+    onStart = \(){onStop(\(){
+      unlink(temp_folder, recursive = TRUE);
+      Sys.setenv("GOLEM_CONFIG_ACTIVE" = old_config)
+    })}
+  )
+}
+```
+
+With this function, ClinSight will run with internal test data:
+
+```{r }
+# Not run:
+if (interactive()){ 
+  # This will run ClinSight with internal test data
+  test_clinsight()
+}
+```
+
+It can also be easily used with custom data and metadata:
+
+
+
