@@ -42,7 +42,7 @@ describe(
         output_names <- names(app$get_values(output = TRUE)$output)
         app$expect_values(output = vector_select(output_names, exclude = "visit_figure"))
         # Check that overall review state is partial
-        expect_true(app$get_value(input = 'main_sidebar_1-review_forms_1-form_reviewed'))
+        expect_false(app$get_value(input = 'main_sidebar_1-review_forms_1-form_reviewed'))
         expect_true(app$get_js('$("#main_sidebar_1-review_forms_1-form_reviewed").prop("indeterminate")'))
         
         user_db <- app$get_value(export = "user_db")
