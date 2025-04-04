@@ -58,13 +58,17 @@ test_clinsight <- function(
     clinsight_config = "test"
 ){
   temp_folder <- tempfile(tmpdir = tempdir())
-  dir.create(temp_folder)
+  base_folder <- temp_folder
+  if(identical(clinsight_config, "shinyproxy")){
+    temp_folder <- file.path(temp_folder, "study_data")
+  }
+  dir.create(temp_folder, recursive = TRUE)
   saveRDS(clinsight_data, file.path(temp_folder, "study_data.rds"))
   saveRDS(meta_data, file.path(temp_folder, "metadata.rds"))
   old_config <- Sys.getenv("GOLEM_CONFIG_ACTIVE")
   Sys.setenv("GOLEM_CONFIG_ACTIVE" = clinsight_config)
   run_app(
-    data_folder = temp_folder, 
+    data_folder = base_folder, 
     credentials_pwd = "TEMP_PASSWORD",
     onStart = \(){onStop(\(){
       unlink(temp_folder, recursive = TRUE);
@@ -97,34 +101,40 @@ if (interactive()){
 }
 ```
 
-Since everything is run from a temporary folder, any databases needed will be fully renewed when running the function, ensuring that everything is always up to date with the study_data and metadata.
+Since everything is run from a temporary folder, clinsight databases be fully renewed when running the function, ensuring that everything is always up to date with the study_data and metadata.
 
 ### Shinymanager
 
-One way of deployment is using `shinymanager`. `Shinymanager` is a flexible way to provide user authentication for `clinsight`. This provide a fast deployment option, since everything can be run on a local machine, while still providing multiple options for user and password management by using a local `credentials.sqlite` database.
+One way of deployment is using [shinymanager](https://datastorm-open.github.io/shinymanager/). The `shinymanager` package provides a user authentication and user management layer and its use is preconfigured for `clinsight`. It provides a fast way of deployment, particularly suited for quick local deployment. User and password management information is stored within a local encrypted `credentials.sqlite` database. This provides a brief overview of how shinymanager can be used with ClinSight. For more details, please visit the [shinymanager website](https://datastorm-open.github.io/shinymanager/).
 
-To use `shinymanager`, first make sure that the `shinymanager` package is installed, then set the configuration accordingly with `Sys.setenv("GOLEM_CONFIG_ACTIVE" = "shinymanager")`. In addition, this configuration expects the files `study_data.rds` and `metadata.rds` to be present in the current working directory. Lastly, a credentials password needs to be provided in the `run_app()` command.
+To use `shinymanager` with ClinSight, first make sure that the `shinymanager` package is installed, then set the configuration accordingly with `Sys.setenv("GOLEM_CONFIG_ACTIVE" = "shinymanager")`. This configuration expects the files `study_data.rds` and `metadata.rds` to be present in the current working directory. Finally, a credentials password needs to be provided in the `run_app()` command; this is used to encrypt/decrypt the database.
 
 ```{r shinymanager-example}
 # Not run:
+# Warning: this will create multiple files in the current working directory.
 if (interactive()){ 
   saveRDS(clinsightful_data, "study_data.rds")
   saveRDS(metadata, "metadata.rds")
   Sys.setenv("GOLEM_CONFIG_ACTIVE" = "shinymanager")
-  run_app(credentials_pwd = "CHANGE_ME")
+  run_app(credentials_pwd = "TEMP_PASSWORD")
 }
 ```
 
+This code will first save the internal package data in the working directory, and then create a `user_db.sqlite` file and a `credentials.sqlite` file in the same directory. Alternatively, you can test it with by using the `test_clinsight` function just created, so that all needed files are only created temporarily:
 
-This code will create a `user_db.sqlite` file and a `credentials.sqlite` file in either the working directory or in the `data_folder`, if this argument is specified, as is the case in this example. Note that the `credentials.sqlite` database is protected for unauthorized access with the password provided in the argument `credentials_pwd` (currently set to "CHANGE_ME"). If the code above is run, a login page will be shown.
+```{r}
+test_clinsight(clinsight_config = "shinymanager")
+```
+
+Note that the `credentials.sqlite` database is protected for unauthorized access with the password provided in the argument `credentials_pwd` (currently set to "TEMP_PASSWORD"). If the code above is run, a login page will be shown.
 
 ![](images/shinymanager_login.png){width="349"}
 
-For the first login, the `credentials.sqlite` database is newly created and the login name will be 'admin', and the password will be `1234`. After first login, a password change and a login with the new password is required before the ClinSight app can be accessed.
+For the first login, the `credentials.sqlite` database is newly created. In this case, the login name will be 'admin' and the password `1234`. After first login, a password change and a login with the new password is required before the ClinSight app can be accessed.
 
 ![](images/shinymanager_change_pw.png){width="336"}
 
-After successful login, new users can be added by going to the Administrator panel:
+After successful login, new users can be added by going to the Administrator panel using the widget in the bottom right of the screen:
 
 ![](images/shinymanager_admin_mode.png)
 
@@ -132,15 +142,49 @@ When creating a new user, make sure that the User field does not contain spaces 
 
 ![](images/shinymanager_add_user.png){width="385"}
 
-More details can be found in the documentation of the `shinymanager` package.
+More details can be found in the documentation of the [shinymanager](https://datastorm-open.github.io/shinymanager/) package.
 
 ### Shinyproxy
 
-Another way of deployment can be with the use of `shinyproxy`.
+Another way of deployment can be with the use of [shinyproxy](https://shinyproxy.io/). `ShinyProxy` is fully open source software and provides multiple options for deploying shiny applications, with built-in support for the latest authentication and authorization technologies such as [OpenID Connect](https://openid.net/developers/how-connect-works/). It serves shiny (or other data science) applications in Docker containers. This provides multiple advantages, among which the possibility to run applications fully isolated, and to deploy multiple versions of an application without any problems. 
+
+This guide provides some brief hints to get started with a `ShinyProxy` deployment. 
+
+First download and install `ShinyProxy` according to the instructions on the [ShinyProxy website](https://shinyproxy.io/). 
+Second step is to store ClinSight in a Docker image. A good place to start are the images from the [Rocker Project](https://rocker-project.org/), which can be fairly quick to setup. Alternatively, smaller Docker images with less dependencies can be created with [Alpine Linux images](https://hub.docker.com/_/alpine). This will probably take longer to set up, since Rstudio Package Manager provides no binaries for Alpine Linux at the time of writing, meaning that all R packages need to be installed from source.
+
+```{yaml}
+proxy:
+  title: "ClinSight Portal"
+  port: 8080
+  authentication: openid
+  container-wait-time: 60000
+  openid:
+    auth-url: ...
+    jwks-url: ...
+    token-url: ...
+    client-id: ...
+    client-secret: ...
+    username-attribute: email
+    roles-claim: roles
+  docker:
+    internal-networking: true
+  admin-groups: admin
+  specs:
+  - id: app_1
+    display-name: "ClinSight - test"
+    container-image: clinsight_image:latest
+    container-volumes: ["${LOCAL_DATA_FOLDER}/study_data:/home/clinsight_user/study_data"]
+    container-network: internal_network
+    http-headers:
+      X_SP_USERNAME: "#{T(java.util.Base64).getEncoder().encodeToString(oidcUser.getFullName().getBytes())}"
+```
 
 ### Posit Connect
 
-There
+Lastly, ClinSight provides a configuration to deploy applications with Posit Connect. 
+
+To use this configuration, use 
 
 ### Customizing configuration
 
