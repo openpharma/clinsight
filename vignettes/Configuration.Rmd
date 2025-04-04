@@ -118,19 +118,19 @@ if (interactive()){
 
 This code will create a `user_db.sqlite` file and a `credentials.sqlite` file in either the working directory or in the `data_folder`, if this argument is specified, as is the case in this example. Note that the `credentials.sqlite` database is protected for unauthorized access with the password provided in the argument `credentials_pwd` (currently set to "CHANGE_ME"). If the code above is run, a login page will be shown.
 
-![](images/clipboard-2310049846.png){width="349"}
+![](images/shinymanager_login.png){width="349"}
 
 For the first login, the `credentials.sqlite` database is newly created and the login name will be 'admin', and the password will be `1234`. After first login, a password change and a login with the new password is required before the ClinSight app can be accessed.
 
-![](images/clipboard-849007084.png){width="336"}
+![](images/shinymanager_change_pw.png){width="336"}
 
 After successful login, new users can be added by going to the Administrator panel:
 
-![](images/clipboard-697948243.png)
+![](images/shinymanager_admin_mode.png)
 
 When creating a new user, make sure that the User field does not contain spaces and that the expiration date and the sites that the user needs to access are entered/selected correctly.
 
-![](images/clipboard-2507341762.png){width="385"}
+![](images/shinymanager_add_user.png){width="385"}
 
 More details can be found in the documentation of the `shinymanager` package.
 
