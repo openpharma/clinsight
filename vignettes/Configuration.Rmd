@@ -2,7 +2,7 @@
 title: "ClinSight Configuration"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Deploy}
+  %\VignetteIndexEntry{ClinSight Configuration}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -22,9 +22,9 @@ ClinSight can be customized using two different configuration files. [General co
 
 ## Study-specific configuration {#study-specific-config}
 
-## metadata
+## Metadata
 
-Metadata file explanation will follow here.
+**Metadata file explanation will follow here.**
 
 ## General configuration {#general-config}
 
@@ -36,45 +36,91 @@ cat(readLines(system.file("golem-config.yml", package = "clinsight")), sep = "\n
 
 ### Setting configurations
 
-There are multiple configuration settings built in ClinSight, of which the most important ones are: `default`, `shinymanager`, `shinyproxy`, and `posit_connect`. Other available settings such as `dev` and `test` are only meant for testing purposes and should not be used.
-
 A configuration can be set by changing the GOLEM_CONFIG_ACTIVE environment variable, for example like this:
 
 `Sys.setenv("GOLEM_CONFIG_ACTIVE" = "shinymanager")`
 
-With the standard ('default') settings, internal example data with matching metadata will be used when running ClinSight. There are the settings used when running \`clinsight::run_app()\` after a fresh installation. A user database named `user_db.sqlite` will be created in the current working directory if it does not yet exist. This database stores user data such as which data points are reviewed, and which queries are raised.
+There are multiple configuration settings built in ClinSight, of which the most important ones are: `default`, `test`, `shinymanager`, `shinyproxy`, and `posit_connect`. The first two are meant for testing purposes, while the other settings are more suited for use in production. 
 
-The default settings are useful for demonstration purposes, but different settings are needed when using ClinSight with clinical trial data. Currently, there are three ways to run and/or deploy ClinSight, which are mentioned below.
+With the standard ('default') settings, internal example data with matching metadata will be used when running `ClinSight` There are the settings used when running `clinsight::run_app()` after a fresh installation. A user database named `user_db.sqlite` will be created in the current working directory if it does not yet exist. This database stores user data such as which data points are reviewed, and which queries are raised.
 
-### Shinymanager
+The default settings are useful for demonstration purposes, but different settings are needed when using `ClinSight` with clinical trial data. Currently, there are three ways to run and/or deploy `ClinSight`, which are mentioned below.
 
-One way of deployment is using `shinymanager`. `Shinymanager` is a flexible way to provide user authentication for clinsight. This provide a fast deployment option, since everything can be run on a local machine, while still providing multiple options for user and password management by using a local `credentials.sqlite` database.
+### Testing application
 
-To use `shinymanager`, first make sure that the `shinymanager` package is installed, then set the configuration accordingly with `Sys.setenv("GOLEM_CONFIG_ACTIVE" = "shinymanager")` and run the application with `clinsight::run_app()`. However, this configuration will not work out of the box, since it expects a `study_data.rds` file and a `metadata.rds` file to be present in the current working directory. With a few lines of code, it is possible to test this setup with \`clinsight\` package data in a temporary folder:
+The function `clinsight::run_app()` creates databases in the working directory, that will save user actions such as review status of study data. Depending on the settings, a credentials database will be created. 
+When developing ClinSight settings for a specific study, it can be more useful to run ClinSight within a temporary folder, so that the required databases are created every time after closing the application. This makes it easier to prototype the application, and tweak the data/metadata for use with ClinSight. To do so, a wrapper around the `run_app()` function can be used, such as the one below.
 
-```{r shinymanager-example}
-# Not run:
-if (interactive()){
-  Sys.setenv("GOLEM_CONFIG_ACTIVE" = "shinymanager")
+```{r }
+test_clinsight <- function(
+    clinsight_data = clinsightful_data, 
+    meta_data = metadata,
+    clinsight_config = "test"
+){
   temp_folder <- tempfile(tmpdir = tempdir())
   dir.create(temp_folder)
-  saveRDS(clinsightful_data, file.path(temp_folder, "study_data.rds"))
-  saveRDS(metadata, file.path(temp_folder, "metadata.rds"))
+  saveRDS(clinsight_data, file.path(temp_folder, "study_data.rds"))
+  saveRDS(meta_data, file.path(temp_folder, "metadata.rds"))
+  old_config <- Sys.getenv("GOLEM_CONFIG_ACTIVE")
+  Sys.setenv("GOLEM_CONFIG_ACTIVE" = clinsight_config)
   run_app(
-    data_folder = temp_folder,
-    credentials_pwd = "CHANGE_ME",
+    data_folder = temp_folder, 
+    credentials_pwd = "TEMP_PASSWORD",
     onStart = \(){onStop(\(){
-      unlink(temp_folder, recursive = TRUE); 
+      unlink(temp_folder, recursive = TRUE);
+      Sys.setenv("GOLEM_CONFIG_ACTIVE" = old_config)
     })}
   )
 }
 ```
 
-This code will create a `user_db.sqlite` file and a `credentials.sqlite` file in either the working directory or in the `data_folder`, if this argument is specified, as is the case in this example. Note that the credentials.sqlite database is protected for unauthorized access with the password provided in the argument \`credentials_pwd\` (currently set to "CHANGE_ME"). If the code above is run, a login page will be shown.
+With this function, ClinSight will run with internal test data:
+
+```{r }
+# Not run:
+if (interactive()){ 
+  # This will run ClinSight with internal test data
+  test_clinsight()
+}
+```
+
+It can also be easily used with custom data and metadata:
+
+```{r }
+# Not run:
+if (interactive()){ 
+  # This will run ClinSight with custom data
+  test_clinsight(
+    clinsight_data = custom_data, 
+    meta_data = custom_metadata
+  )
+}
+```
+
+Since everything is run from a temporary folder, any databases needed will be fully renewed when running the function, ensuring that everything is always up to date with the study_data and metadata.
+
+### Shinymanager
+
+One way of deployment is using `shinymanager`. `Shinymanager` is a flexible way to provide user authentication for `clinsight`. This provide a fast deployment option, since everything can be run on a local machine, while still providing multiple options for user and password management by using a local `credentials.sqlite` database.
+
+To use `shinymanager`, first make sure that the `shinymanager` package is installed, then set the configuration accordingly with `Sys.setenv("GOLEM_CONFIG_ACTIVE" = "shinymanager")`. In addition, this configuration expects the files `study_data.rds` and `metadata.rds` to be present in the current working directory. Lastly, a credentials password needs to be provided in the `run_app()` command.
+
+```{r shinymanager-example}
+# Not run:
+if (interactive()){ 
+  saveRDS(clinsightful_data, "study_data.rds")
+  saveRDS(metadata, "metadata.rds")
+  Sys.setenv("GOLEM_CONFIG_ACTIVE" = "shinymanager")
+  run_app(credentials_pwd = "CHANGE_ME")
+}
+```
+
+
+This code will create a `user_db.sqlite` file and a `credentials.sqlite` file in either the working directory or in the `data_folder`, if this argument is specified, as is the case in this example. Note that the `credentials.sqlite` database is protected for unauthorized access with the password provided in the argument `credentials_pwd` (currently set to "CHANGE_ME"). If the code above is run, a login page will be shown.
 
 ![](images/clipboard-2310049846.png){width="349"}
 
-For the first login, the \`credentials.sqlite\` database is newly created and the login name will be 'admin', and the password will be \`1234\`. After first login, a password change and a login with the new password is required before the ClinSight app can be accessed.
+For the first login, the `credentials.sqlite` database is newly created and the login name will be 'admin', and the password will be `1234`. After first login, a password change and a login with the new password is required before the ClinSight app can be accessed.
 
 ![](images/clipboard-849007084.png){width="336"}
 
@@ -90,7 +136,7 @@ More details can be found in the documentation of the `shinymanager` package.
 
 ### Shinyproxy
 
-Another way of deployment can be with the use of \`shinyproxy\`.
+Another way of deployment can be with the use of `shinyproxy`.
 
 ### Posit Connect
 
@@ -100,4 +146,4 @@ There
 
 If the profiles above are insufficient, you can also provide your own configuration file with fully customized settings with the steps described below.
 
-To do so, first create a configuration template. The function [create_clinsight_config()] can be used to create a copy of the current `clinsight` configuration file in the current working directory. To use this configuration file with `clinsight`, the environment variable named "CONFIG_PATH" needs to be set by using a command similar to the following: \`Sys.setenv("CONFIG_PATH" = "PATH_TO_CONFIG/clinsight_config.yml")\`, where `PATH_TO_CONFIG` is the path to the folder in which the configuration file is located.
+To do so, first create a configuration template. The function [create_clinsight_config()] can be used to create a copy of the current `clinsight` configuration file in the current working directory. To use this configuration file with `clinsight`, the environment variable named "CONFIG_PATH" needs to be set by using a command similar to the following: `Sys.setenv("CONFIG_PATH" = "PATH_TO_CONFIG/clinsight_config.yml")`, where `PATH_TO_CONFIG` is the path to the folder in which the configuration file is located.
