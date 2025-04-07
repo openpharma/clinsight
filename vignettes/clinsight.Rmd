@@ -69,19 +69,19 @@ In order to use study data with ClinSight, the raw data needs to fulfill few spe
 
 Raw study data needs to needs to be in long format in order to use it with ClinSight, with the columns being in character vector format. The following columns are expected to be in the raw data. Note that if the column names differ, they can be adjusted in the metadata if needed:
 
-|                |                                                                                                                 |
-|---------------|---------------------------------------------------------|
-| **Name**       | **Description**                                                                                                 |
-| site_code      | Identifier for study site.                                                                                      |
-| subject_id     | Unique identifier for a subject                                                                                 |
-| event_id       | Identifies events within a study, such as study visits.                                                         |
-| event_date     | The date of the event. Should be convertible from a character vector to a valid date within R.                  |
-| event_repeat   | Counter containing a sequence number that increments if an event_id is repeated within the same subject.        |
-| form_id        | Identifier for each form. Can be mostly ignored, since new form identifiers are set within ClinSight metadata.  |
-| form_repeat    | Counter containing a sequence number that increments if a form is repeated within the same subject.             |
-| var            | Name of the variable to use in ClinSight. Longer/more appropriate names will be specified in metadata.          |
-| item_value     | Value of the variable (\`var\`) in question.                                                                    |
-| edit_date_time | The time at which the value was last edited. Important for efficient reviewing of the data within ClinSight.    |
+|                |                                                                                                                |
+|------------------|------------------------------------------------------|
+| **Name**       | **Description**                                                                                                |
+| site_code      | Identifier for study site.                                                                                     |
+| subject_id     | Unique identifier for a subject                                                                                |
+| event_id       | Identifies events within a study, such as study visits.                                                        |
+| event_date     | The date of the event. Should be convertible from a character vector to a valid date within R.                 |
+| event_repeat   | Counter containing a sequence number that increments if an event_id is repeated within the same subject.       |
+| form_id        | Identifier for each form. Can be mostly ignored, since new form identifiers are set within ClinSight metadata. |
+| form_repeat    | Counter containing a sequence number that increments if a form is repeated within the same subject.            |
+| var            | Name of the variable to use in ClinSight. Longer/more appropriate names will be specified in metadata.         |
+| item_value     | Value of the variable (\`var\`) in question.                                                                   |
+| edit_date_time | The time at which the value was last edited. Important for efficient reviewing of the data within ClinSight.   |
 
 ### Create metadata
 
@@ -125,6 +125,14 @@ This tab contains information about variables that are needed in ClinSight, but 
 
 ### form_level_data
 
-In this tab, settings can be adjusted on form level rather than setting them within 
+In this tab, settings can be adjusted on form level rather than setting them within the `common_forms` or `study_forms` tab.
 
 ### table_names
+
+Can be used to get nicer names in the interactive tables in ClinSight. Current table contains mostly standard ClinSight names, but also other variable names could be included here.
+
+![](images/metadata-table_names.png)
+
+### general
+
+Contains some miscellaneous settings, such as settings for providing custom functions when merging data with the `merge_meta_with_data()` function.
