@@ -22,8 +22,7 @@ library(clinsight)
 
 ### Testing application
 
-The function `clinsight::run_app()` creates databases in the working directory, that will save user actions such as review status of study data. Depending on the settings, a credentials database will be created. 
-When developing ClinSight settings for a specific study, it can be more useful to run ClinSight within a temporary folder, so that the required databases are created every time after closing the application. This makes it easier to prototype the application, and tweak the data/metadata for use with ClinSight. To do so, a wrapper around the `run_app()` function can be used, such as the one below.
+The function `clinsight::run_app()` creates databases in the working directory, that will save user actions such as review status of study data. Depending on the settings, a credentials database will be created. When developing ClinSight settings for a specific study, it can be more useful to run ClinSight within a temporary folder, so that the required databases are created every time after closing the application. This makes it easier to prototype the application, and tweak the data/metadata for use with ClinSight. To do so, a wrapper around the `run_app()` function can be used, such as the one below.
 
 ```{r }
 test_clinsight <- function(
@@ -52,7 +51,7 @@ test_clinsight <- function(
 }
 ```
 
-With this function, ClinSight will run with internal test data:
+With this function, we can test ClinSight with custom data and metadata, as will be explained later. Running it without changing default arguments runs ClinSight with internal test data:
 
 ```{r }
 # Not run:
@@ -62,7 +61,70 @@ if (interactive()){
 }
 ```
 
-It can also be easily used with custom data and metadata:
+### Prepare ClinSight for use with a custom study
 
+In order to use study data with ClinSight, the raw data needs to fulfill few specific requirements and a ClinSight metadata file needs to be customized and created (see `create_clinsight_metadata()` and `get_metadata()]`. Then, if requirements are met, the data can be merged with study-specific `metadata` to create custom `ClinSight`-compatible study data.
 
+### Raw data structure
 
+Raw study data needs to needs to be in long format in order to use it with ClinSight, with the columns being in character vector format. The following columns are expected to be in the raw data. Note that if the column names differ, they can be adjusted in the metadata if needed:
+
+|                |                                                                                                                 |
+|---------------|---------------------------------------------------------|
+| **Name**       | **Description**                                                                                                 |
+| site_code      | Identifier for study site.                                                                                      |
+| subject_id     | Unique identifier for a subject                                                                                 |
+| event_id       | Identifies events within a study, such as study visits.                                                         |
+| event_date     | The date of the event. Should be convertible from a character vector to a valid date within R.                  |
+| event_repeat   | Counter containing a sequence number that increments if an event_id is repeated within the same subject.        |
+| form_id        | Identifier for each form. Can be mostly ignored, since new form identifiers are set within ClinSight metadata.  |
+| form_repeat    | Counter containing a sequence number that increments if a form is repeated within the same subject.             |
+| var            | Name of the variable to use in ClinSight. Longer/more appropriate names will be specified in metadata.          |
+| item_value     | Value of the variable (\`var\`) in question.                                                                    |
+| edit_date_time | The time at which the value was last edited. Important for efficient reviewing of the data within ClinSight.    |
+
+### Create metadata
+
+A metadata file needs to be customized and created for each study. Use the function `create_clinsight_metadata()` to create and open a new template. The Excel template contains multiple tabs which are described below in detail. The orange tabs are mandatory and should not be removed or renamed.
+
+![](images/metadata-tabs.png){width="587" height="35"}
+
+### column_names
+
+Within the first tab, the column names of the raw data need to be specified. The columns with the names within `name_raw` will be renamed to the new name when merging metadata with raw data later. Again, orange fields should not be adjusted.
+
+![](images/metadata-column_names.png)
+
+### events
+
+Next tab contains information about study events.
+
+![](images/metadata-events.png)
+
+All study visits should be entered in the `event_id` column, in order to preserve the correct order of events.
+
+The green-colored column names are optional columns. `is_regular_visit` can be used to mark a specific visit as non-regular/ not planned. Unplanned visits will not show up in the compact timeline and will not be used to increment an internal visit counter for each patient.
+
+If needed, the name of the `event_id` can be customized using two columns. `event_label_custom` changes the event label within the compact timeline in the top right corner of the application. `event_name_custom` will change the standard `event_id` label anywhere else in the application.
+
+Lastly, ClinSight needs to know which is the baseline event to create internal counters of how many days are passed since baseline. It assumes that the first visit in the list (which is `SCR` in the example) is the baseline visit, but this can be changed using the `is_baseline_event` column. Note that only one event can be set as baseline here.
+
+If the number of events cannot be specified correctly beforehand, a user can also provide an `event_id_pattern` matching to create event labels and event names.
+
+### common_forms
+
+This tab contains information about the variables that need to be displayed in the `Common events` tab in `ClinSight`.
+
+### study_forms
+
+This tab contains information about the variables in the `Study data` tab in ClinSight.
+
+### general
+
+This tab contains information about variables that are needed in ClinSight, but do not necessarily need to be displayed in the `Common events` or `Study data` tab.
+
+### form_level_data
+
+In this tab, settings can be adjusted on form level rather than setting them within 
+
+### table_names
