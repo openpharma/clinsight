@@ -93,6 +93,10 @@ clinsightful_data |>
 ## install.package('attachment') # if needed.
 #attachment::att_amend_desc()
 
+## Add packages ----
+# usethis::use_package("")
+remotes::instal
+
 ## Add modules ----
 ## Create a module infrastructure in R/
 golem::add_module(name = "name_of_module1", with_test = TRUE) # Name of the module
