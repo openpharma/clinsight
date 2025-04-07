@@ -18,17 +18,18 @@ not provided, the example study data in the ClinSight package will be used.}
 If not provided, the example metadata in the ClinSight package will be used}
 
 \item{clinsight_config}{A character vector with the ClinSight configuration
-to use.}
+to use. The standard settings should be sufficient for most testing cases.}
 }
 \value{
-Will start the ClinSight Shiny application
+Runs the ClinSight Shiny application.
 }
 \description{
-Provides a wrapper around \code{\link[=run_app]{run_app()}}, to test ClinSight with different
-configurations. Unlike the function \code{\link[=run_app]{run_app()}}, this function stores any
-data in a temporary folder, keeping the environment clean.
+Provides a wrapper around \code{\link[=run_app]{run_app()}}. Unlike the function \code{\link[=run_app]{run_app()}}, this
+function stores data in a temporary folder and cleans up after itself after
+use. Useful during development, when tweaking new study data and metadata for
+use with ClinSight.
 }
 \details{
-While this function is useful for testing and development purposes, for use
-in production the function \code{\link[=run_app]{run_app()}} should be used directly.
+This function is only meant for testing and development purposes. For use in
+production, instead use the function \code{\link[=run_app]{run_app()}} directly.
 }
