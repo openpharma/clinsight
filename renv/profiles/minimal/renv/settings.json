@@ -3,7 +3,7 @@
   "external.libraries": [],
   "ignored.packages": [
     "clinsight",
-    " pak",
+    "pak",
     "pkgdown",
     "kableExtra",
     "usethis",

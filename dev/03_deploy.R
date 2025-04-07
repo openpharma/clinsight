@@ -31,7 +31,7 @@ renv::activate(profile = "minimal")
 
 # ignore certain packages in the 'minimal' renv environment:
 renv::settings$ignored.packages(
-  c("pak", "pkgdown", "kableExtra", "usethis", "cowplot"))
+  c("clinsight","pak", "pkgdown", "kableExtra", "usethis", "cowplot"))
 utils::install.packages("pkgload")
 renv::snapshot()
 # renv::install("pkgload")
