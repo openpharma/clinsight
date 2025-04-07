@@ -9,7 +9,7 @@ options( "golem.app.prod" = TRUE)
 # update manifest file
 # if absolute path is needed for renv profile
 # Sys.setenv(RENV_PROFILE = "full")
-Sys.setenv(RENV_PROFILE = "minimal")
+# Sys.setenv(RENV_PROFILE = "minimal")
 # Install {clinsight}
 # remotes::install_github(
 #   "openpharma/clinsight",
