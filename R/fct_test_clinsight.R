@@ -1,22 +1,23 @@
 #' Test ClinSight
 #'
-#' Provides a wrapper around [run_app()], to test ClinSight with different
-#' configurations. Unlike the function [run_app()], this function stores any
-#' data in a temporary folder, keeping the environment clean.
+#' Provides a wrapper around [run_app()]. Unlike the function [run_app()], this
+#' function stores data in a temporary folder and cleans up after itself after
+#' use. Useful during development, when tweaking new study data and metadata for
+#' use with ClinSight.
 #'
-#' While this function is useful for testing and development purposes, for use
-#' in production the function [run_app()] should be used directly.
+#' This function is only meant for testing and development purposes. For use in
+#' production, instead use the function [run_app()] directly.
 #'
 #' @param clinsight_data A data frame with (ClinSight compatible) study data. If
 #'   not provided, the example study data in the ClinSight package will be used.
 #' @param meta_data A list of data frames with (ClinSight compatible) metadata.
 #'   If not provided, the example metadata in the ClinSight package will be used
 #' @param clinsight_config A character vector with the ClinSight configuration
-#'   to use.
+#'   to use. The standard settings should be sufficient for most testing cases.
 #'
-#' @return Will start the ClinSight Shiny application
+#' @return Runs the ClinSight Shiny application.
 #' @export
-#'
+#' 
 test_clinsight <- function(
     clinsight_data = clinsightful_data, 
     meta_data = metadata,
