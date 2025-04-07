@@ -2,7 +2,8 @@
   "bioconductor.version": null,
   "external.libraries": [],
   "ignored.packages": [
-    "pak",
+    "clinsight",
+    " pak",
     "pkgdown",
     "kableExtra",
     "usethis",
