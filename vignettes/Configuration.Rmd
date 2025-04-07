@@ -123,7 +123,9 @@ if (interactive()){
 This code will first save the internal package data in the working directory, and then create a `user_db.sqlite` file and a `credentials.sqlite` file in the same directory. Alternatively, you can test it with by using the `test_clinsight` function just created, so that all needed files are only created temporarily:
 
 ```{r}
-test_clinsight(clinsight_config = "shinymanager")
+if (interactive()){ 
+  test_clinsight(clinsight_config = "shinymanager")
+}
 ```
 
 Note that the `credentials.sqlite` database is protected for unauthorized access with the password provided in the argument `credentials_pwd` (currently set to "TEMP_PASSWORD"). If the code above is run, a login page will be shown.
@@ -147,11 +149,20 @@ More details can be found in the documentation of the [shinymanager](https://dat
 ### Shinyproxy
 
 Another way of deployment can be with the use of [shinyproxy](https://shinyproxy.io/). `ShinyProxy` is fully open source software and provides multiple options for deploying shiny applications, with built-in support for the latest authentication and authorization technologies such as [OpenID Connect](https://openid.net/developers/how-connect-works/). It serves shiny (or other data science) applications in Docker containers. This provides multiple advantages, among which the possibility to run applications fully isolated, and to deploy multiple versions of an application without any problems. 
-
 This guide provides some brief hints to get started with a `ShinyProxy` deployment. 
 
 First download and install `ShinyProxy` according to the instructions on the [ShinyProxy website](https://shinyproxy.io/). 
 Second step is to store ClinSight in a Docker image. A good place to start are the images from the [Rocker Project](https://rocker-project.org/), which can be fairly quick to setup. Alternatively, smaller Docker images with less dependencies can be created with [Alpine Linux images](https://hub.docker.com/_/alpine). This will probably take longer to set up, since Rstudio Package Manager provides no binaries for Alpine Linux at the time of writing, meaning that all R packages need to be installed from source.
+
+Within the Docker file, install `clinsight`, create a folder named `study_data` in the current user's home directory. 
+Then set the configuration to `shinyproxy` and create a CMD line similar to below:
+
+```{docker, eval=FALSE}
+ENV GOLEM_CONFIG_ACTIVE="shinyproxy"
+CMD R -e "options('shiny.port'=3838, shiny.host='0.0.0.0', golem.app.prod = TRUE); clinsight::run_app()"
+```
+
+Then, ensure that the shinyproxy configuration .yml file is setup correctly. Below is an example to get started. Note that these settings assume that openID Connect is used for authentication. Configuring this properly is outside of the scope of this guide; see the [shinyproxy](https://shinyproxy.io/) documentation for details on this.
 
 ```{yaml}
 proxy:
@@ -171,14 +182,17 @@ proxy:
     internal-networking: true
   admin-groups: admin
   specs:
-  - id: app_1
-    display-name: "ClinSight - test"
+  - id: clinsight
     container-image: clinsight_image:latest
-    container-volumes: ["${LOCAL_DATA_FOLDER}/study_data:/home/clinsight_user/study_data"]
+    container-volumes: ["LOCAL_DATA_FOLDER/study_data:/home/clinsight_user/study_data"]
     container-network: internal_network
     http-headers:
       X_SP_USERNAME: "#{T(java.util.Base64).getEncoder().encodeToString(oidcUser.getFullName().getBytes())}"
 ```
+
+A few more important notes:
+- A data volume needs to be mounted to the docker container in order for the application to run correctly. The Docker container user also needs writing access to this folder.
+- User names are passed through using HTTP headers. Since HTTP headers cannot handle all UTF-8 characters, the user names need to be base64 encoded as shown in the example `.yml` file.
 
 ### Posit Connect
 
