@@ -16,3 +16,4 @@ inst/doc
 /pkgdown/
 /test_data/
 *.rds
+rsconnect/

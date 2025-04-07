@@ -9,6 +9,14 @@ options( "golem.app.prod" = TRUE)
 # update manifest file
 # if absolute path is needed for renv profile
 # Sys.setenv(RENV_PROFILE = "full")
+# Install {clinsight}
+# remotes::install_github(
+#   "openpharma/clinsight",
+#   ref = "dev",
+#   force = TRUE
+# )
+# packageVersion("clinsight") 
+# renv::snapshot()
 # renv::paths$lockfile() # test
 # assignInNamespace(
 #   "renvLockFile",
@@ -16,4 +24,24 @@ options( "golem.app.prod" = TRUE)
 #   "rsconnect"
 # )
 # rsconnect::writeManifest() # run if needed
-clinsight::run_app() # add parameters here (if any)
+# clinsight::run_app() # add parameters here (if any)
+
+# Run the application
+load_and_run_app <- function(){
+  app_data_folder <- "./app/"
+  if(!dir.exists(app_data_folder)) dir.create(app_data_folder)
+  old_golem_config <- Sys.getenv("GOLEM_CONFIG_ACTIVE")
+  Sys.setenv("GOLEM_CONFIG_ACTIVE" = "dev")
+  
+  clinsight::run_app(
+    data_folder = app_data_folder,
+    onStart = \(){
+      onStop(\(){
+    #   unlink(temp_folder, recursive = TRUE); 
+      Sys.setenv("GOLEM_CONFIG_ACTIVE" = old_golem_config)
+      }
+    )}
+  )
+} 
+
+load_and_run_app()
