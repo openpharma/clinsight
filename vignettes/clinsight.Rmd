@@ -53,24 +53,22 @@ test_clinsight <- function(
 
 With this function, we can test ClinSight with custom data and metadata, as will be explained later. Running it without changing default arguments runs ClinSight with internal test data:
 
-```{r }
+```{r eval=FALSE}
 # Not run:
-if (interactive()){ 
-  # This will run ClinSight with internal test data
-  test_clinsight()
-}
+# If evaluated, this will run ClinSight with internal test data
+test_clinsight()
 ```
 
 ### Prepare ClinSight for use with a custom study
 
-In order to use study data with ClinSight, the raw data needs to fulfill few specific requirements and a ClinSight metadata file needs to be customized and created (see `create_clinsight_metadata()` and `get_metadata()]`. Then, if requirements are met, the data can be merged with study-specific `metadata` to create custom `ClinSight`-compatible study data.
+In order to use study data with ClinSight, the raw data needs to fulfill few specific requirements and a ClinSight metadata file needs to be customized and created (see `create_clinsight_metadata()` and `get_metadata()`. Then, if requirements are met, the data can be merged with study-specific `metadata` to create custom `ClinSight`-compatible study data.
 
 ### Raw data structure
 
-Raw study data needs to needs to be in long format in order to use it with ClinSight, with the columns being in character vector format. The following columns are expected to be in the raw data. Note that if the column names differ, they can be adjusted in the metadata if needed:
+Raw study data needs to needs to be in long format in order to use it with ClinSight, with the columns being in character vector format. The following columns are expected to be in the raw data.
 
 |                |                                                                                                                |
-|------------------|------------------------------------------------------|
+|--------------------|----------------------------------------------------|
 | **Name**       | **Description**                                                                                                |
 | site_code      | Identifier for study site.                                                                                     |
 | subject_id     | Unique identifier for a subject                                                                                |
@@ -80,8 +78,15 @@ Raw study data needs to needs to be in long format in order to use it with ClinS
 | form_id        | Identifier for each form. Can be mostly ignored, since new form identifiers are set within ClinSight metadata. |
 | form_repeat    | Counter containing a sequence number that increments if a form is repeated within the same subject.            |
 | var            | Name of the variable to use in ClinSight. Longer/more appropriate names will be specified in metadata.         |
-| item_value     | Value of the variable (\`var\`) in question.                                                                   |
+| item_value     | Value of the variable (`var`) in question.                                                                     |
 | edit_date_time | The time at which the value was last edited. Important for efficient reviewing of the data within ClinSight.   |
+
+As an example, we will use raw data included in the package. Note that if the column names differ, they can be adjusted in the metadata if needed, so that they will show up as in the table above after merging.
+
+```{r}
+raw_data <- get_raw_csv_data(system.file("raw_data", package = "clinsight"))
+head(raw_data)
+```
 
 ### Create metadata
 
@@ -89,13 +94,13 @@ A metadata file needs to be customized and created for each study. Use the funct
 
 ![](images/metadata-tabs.png){width="587" height="35"}
 
-### column_names
+#### column_names
 
 Within the first tab, the column names of the raw data need to be specified. The columns with the names within `name_raw` will be renamed to the new name when merging metadata with raw data later. Again, orange fields should not be adjusted.
 
 ![](images/metadata-column_names.png)
 
-### events
+#### events
 
 Next tab contains information about study events.
 
@@ -111,28 +116,83 @@ Lastly, ClinSight needs to know which is the baseline event to create internal c
 
 If the number of events cannot be specified correctly beforehand, a user can also provide an `event_id_pattern` matching to create event labels and event names.
 
-### common_forms
+#### common_forms
 
-This tab contains information about the variables that need to be displayed in the `Common events` tab in `ClinSight`.
+This tab contains information about the variables that need to be displayed in the `Common events` tab in `ClinSight`. Together with `study_forms` and `general`, this tab contains most of the data that will show up in the app. The column `var` contains the exact name of the variable in the raw data. The item_name column shows how it will show up in the application. For common forms, there are prefixes (AE, CM, MH) that will be stripped from the item_name; these are used to provide a unique name for each variable. The item_group tab is the exact name of the form that will show up in the application. Lastly, `item_type` can either be continuous or other, and it controls whether visualization or only tables will be displayed. This should usually be set to `other` within study_forms. More information on the other implemented options follows in the description for the `study_forms` below.
 
-### study_forms
+![](images/metadata-common_forms.png){width="641"}
+
+#### study_forms
 
 This tab contains information about the variables in the `Study data` tab in ClinSight.
 
-### general
+#### general
 
 This tab contains information about variables that are needed in ClinSight, but do not necessarily need to be displayed in the `Common events` or `Study data` tab.
 
-### form_level_data
+#### form_level_data
 
 In this tab, settings can be adjusted on form level rather than setting them within the `common_forms` or `study_forms` tab.
 
-### table_names
+#### table_names
 
 Can be used to get nicer names in the interactive tables in ClinSight. Current table contains mostly standard ClinSight names, but also other variable names could be included here.
 
 ![](images/metadata-table_names.png)
 
-### general
+#### settings
 
 Contains some miscellaneous settings, such as settings for providing custom functions when merging data with the `merge_meta_with_data()` function.
+
+### Merge and prepare data
+
+When metadata is adjusted to the study_specific needs, create an R object from the Excel file:
+
+```{r }
+meta_custom <- get_metadata(system.file("metadata.xlsx", package = "clinsight"))
+```
+
+Then, merge the metadata with the raw data. This will give some information and will try to throw an informative error if an incompatible change was made:
+
+```{r}
+merged_study_data <- merge_meta_with_data(raw_data, meta_custom)
+```
+
+Finally, we can start clinsight with our custom data and metadata:
+
+```{r, eval=FALSE}
+#Not run
+test_clinsight(merged_study_data, meta_custom)
+```
+
+You will notice that the application shows a warning if some variables defined in the metadata are not available in the actual data, similar to the message below. It is useful to check this output carefully to see if all variable names were entered correctly.
+
+```{r}
+# Warning in check_appdata(app_data, meta) :
+#   Not all variables defined in metadata are present in the data.
+#              var               item_name
+# 1 AE_AESER_AEOUT             SAE outcome
+# 2     WHO_WHOCAT   WHO.subclassification
+# 3       DMOD_DAT    DoseModificationDate
+# 4      DMOD_REAS  DoseModificationReason
+# 5      DMOD_DOSE DoseModificationNewDose
+```
+
+To improve and adjust the application, simply stop the application, adjust the metadata, merge it again with the data, and try again. For example, if we want to change the name of 'Systolic blood pressure' to 'SBP', we can adjust this in the Excel file and use `get_metadata()` again.
+
+We will simulate this behavior here by manually adjusting the metadata file:
+
+```{r}
+# !It is better to adjust the Excel metadata file instead of doing this:
+meta_custom$items_expanded$item_name[grepl("Systolic blood pressure", meta_custom$items_expanded$item_name)]
+adjusted_study_data <- merge_meta_with_data(raw_data, meta_custom)
+```
+
+```{r eval=FALSE}
+#Not run
+test_clinsight(adjusted_study_data, meta_custom) 
+```
+
+If changed correctly, the name of the variable will change accordingly in the application:
+
+![](images/clinsight-var_name_change.png){width="621"}
