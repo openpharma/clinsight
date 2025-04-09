@@ -25,6 +25,17 @@ test_clinsight <- function(
     meta_data = metadata,
     clinsight_config = "test"
 ){
+  stopifnot("Expecting a data frame" = is.data.frame(clinsight_data))
+  stopifnot("Expecting a list" = inherits(meta_data, "list"))
+  stopifnot(is.character(clinsight_config))
+  if (
+    clinsight_config == "default" & 
+    !identical(clinsight_data, clinsightful_data) & 
+    !identical(meta_data, metadata)
+  ){
+    stop("The 'default' config should not be used with custom data.")
+  }
+  
   temp_folder <- tempfile(tmpdir = tempdir())
   dir.create(temp_folder, recursive = TRUE)
   saveRDS(clinsight_data, file.path(temp_folder, "study_data.rds"))
