@@ -68,7 +68,7 @@ In order to use study data with ClinSight, the raw data needs to fulfill few spe
 Raw study data needs to needs to be in long format in order to use it with ClinSight, with the columns being in character vector format. The following columns are expected to be in the raw data.
 
 |                |                                                                                                                |
-|--------------------|----------------------------------------------------|
+|-----------------------|-------------------------------------------------|
 | **Name**       | **Description**                                                                                                |
 | site_code      | Identifier for study site.                                                                                     |
 | subject_id     | Unique identifier for a subject                                                                                |
@@ -118,21 +118,43 @@ If the number of events cannot be specified correctly beforehand, a user can als
 
 #### common_forms
 
-This tab contains information about the variables that need to be displayed in the `Common events` tab in `ClinSight`. Together with `study_forms` and `general`, this tab contains most of the data that will show up in the app. The column `var` contains the exact name of the variable in the raw data. The item_name column shows how it will show up in the application. For common forms, there are prefixes (AE, CM, MH) that will be stripped from the item_name; these are used to provide a unique name for each variable. The item_group tab is the exact name of the form that will show up in the application. Lastly, `item_type` can either be continuous or other, and it controls whether visualization or only tables will be displayed. This should usually be set to `other` within study_forms. More information on the other implemented options follows in the description for the `study_forms` below.
+This tab contains information about the variables that need to be displayed in the `Common events` tab in `ClinSight`. Together with `study_forms` and `general`, this tab contains most of the data that will show up in the app. The column `var` contains the exact name of the variable in the raw data. The item_name column shows how it will show up in the application. For common forms, there are prefixes (AE, CM, MH) that will be stripped from the item_name; these are used to provide a unique name for each variable. The `item_group` tab is the exact name of the form that will show up in the application. Lastly, `item_type` can either be continuous or other, and it controls whether visualization or only tables will be displayed. This should usually be set to `other` within study_forms. More information on the other implemented options follows in the description for the `study_forms` below.
 
-![](images/metadata-common_forms.png){width="641"}
+![](images/metadata-common_forms.png){width="633"}
+
+Note that some of the `item_name`s are colored orange, meaning that ClinSight expect these names to be present. Currently it is not recommended to change these names. If they are missing in your own data, just leave them in the metadata as is. It will be made easier to customize these names and variables in a future update.
 
 #### study_forms
 
-This tab contains information about the variables in the `Study data` tab in ClinSight.
+This tab contains information about the variables in the `Study data` tab in ClinSight. Mandatory columns are here `var`, `item_name`, `item_type`, and `item_group`.
+
+![](images/metadata-study_forms.png)
+
+Data and forms/item_groups entered in the `study_forms` tab will either show up in table form or, if all variables within an `item_group` are of `item_type` 'continuous', in interactive graphs. If all data is 'continuous', units and limits can be provided directly if these do not change within each site.
+
+If limits are provided in the data, and especially if they can vary per study site, then there is an option within ClinSight to scale the values for each analyte to a value between 0 and 1, with 0 being the lower limit and 1 being the upper limit of the normal range, based on the normal ranges of the local laboratory. The formula used for scaling is shown below:
+
+$$x_{scaled} = \frac{x-x_{lower}}{x_{upper}-x_{lower}}$$ *(*$x^{lower}$ is the lower limit of x and $x^{upper}$ the upper limit, according to the site-specific laboratory ranges).
+
+In order to use this functionality, the values `item_scale` and `use_unscaled_limits` in the tab [form_level_data](#form_level_data) should both be set to `FALSE`.
 
 #### general
 
-This tab contains information about variables that are needed in ClinSight, but do not necessarily need to be displayed in the `Common events` or `Study data` tab.
+This tab contains information about variables that are needed in ClinSight, but do not necessarily need to be displayed in the `Common events` or `Study data` tab. Of note that here are also a view mandatory names that are still needed for ClinSight to function. It is not advised to delete these names. If they are missing in your own data, just leave them in the metadata as is.
 
-#### form_level_data
+![](images/metadata-general.png)
 
-In this tab, settings can be adjusted on form level rather than setting them within the `common_forms` or `study_forms` tab.
+#### form_level_data {#form_level_data}
+
+This is an optional tab. If provided, the column `item_group` is mandatory. In this tab, settings can be adjusted on form level rather than setting them within the `common_forms` or `study_forms` tab.
+
+![](images/metadata-form_level_data.png)
+
+If a form is missing here, or one of the values `item_scale`, `use_unscaled_limits`, or `review_required` is not provided, then the defaults will be used for that form:
+
+| item_scale | use_unscaled_limits | review_required |
+|------------|---------------------|-----------------|
+| `NA`       | `NA`                | `TRUE`          |
 
 #### table_names
 
