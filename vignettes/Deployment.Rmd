@@ -1,0 +1,234 @@
+---
+title: "Deployment"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Deployment}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, echo = FALSE}
+library(clinsight)
+```
+
+ClinSight can be customized using two different files.
+[Study-specific configurations](#study-specific-config) are stored in a metadata file that can be created with a metadata Excel template (see `vignette("Metadata")`), while [general configuration](#general-config) is stored in a configuration `.yml` file.
+The latter contains settings more related to deployment, and will be discussed here.
+
+## General configuration {#general-config}
+
+The general ClinSight configuration is set using a `golem-config.yml` file.
+This file mostly contains settings that do not frequently change between studies within an organization, such as organization-specific deployment options.
+The current configuration file is shown below and will be discussed in detail.
+
+```{r echo = FALSE, results ='markup', comment=""}
+cat(readLines(system.file("golem-config.yml", package = "clinsight")), sep = "\n")
+```
+
+### Setting configurations
+
+A configuration can be set by changing the GOLEM_CONFIG_ACTIVE environment variable, for example like this:
+
+`Sys.setenv("GOLEM_CONFIG_ACTIVE" = "shinymanager")`
+
+There are multiple configuration settings built in ClinSight, of which the most important ones are: `default`, `test`, `shinymanager`, `shinyproxy`, and `posit_connect`.
+The first two are meant for testing purposes, while the other settings are more suited for use in production.
+
+With the standard ('default') settings, internal example data with matching metadata will be used when running `ClinSight` There are the settings used when running `clinsight::run_app()` after a fresh installation.
+A user database named `user_db.sqlite` will be created in the current working directory if it does not yet exist.
+This database stores user data such as which data points are reviewed, and which queries are raised.
+
+The default settings are useful for demonstration purposes, but different settings are needed when using `ClinSight` with clinical trial data.
+Currently, there are three ways to run and/or deploy `ClinSight`, which are mentioned below.
+
+### Testing application
+
+The function `clinsight::run_app()` creates databases in the working directory, that will save user actions such as review status of study data.
+Depending on the settings, a credentials database will be created.
+When developing ClinSight settings for a specific study, it can be more useful to run ClinSight within a temporary folder, so that the required databases are created every time after closing the application.
+This makes it easier to prototype the application, and tweak the data/metadata for use with ClinSight.
+To do so, a wrapper around the `run_app()` function can be used, such as the one below.
+
+```{r }
+test_clinsight <- function(
+    clinsight_data = clinsightful_data, 
+    meta_data = metadata,
+    clinsight_config = "test"
+){
+  temp_folder <- tempfile(tmpdir = tempdir())
+  dir.create(temp_folder, recursive = TRUE)
+  saveRDS(clinsight_data, file.path(temp_folder, "study_data.rds"))
+  saveRDS(meta_data, file.path(temp_folder, "metadata.rds"))
+  old_config <- Sys.getenv("GOLEM_CONFIG_ACTIVE")
+  Sys.setenv("GOLEM_CONFIG_ACTIVE" = clinsight_config)
+  run_app(
+    data_folder = temp_folder, 
+    credentials_pwd = "TEMP_PASSWORD",
+    onStart = \(){onStop(\(){
+      unlink(temp_folder, recursive = TRUE);
+      Sys.setenv("GOLEM_CONFIG_ACTIVE" = old_config)
+    })}
+  )
+}
+```
+
+With this function, ClinSight will run with internal test data:
+
+```{r }
+# Not run:
+if (interactive()){ 
+  # This will run ClinSight with internal test data
+  test_clinsight()
+}
+```
+
+It can also be easily used with custom data and metadata:
+
+```{r }
+# Not run:
+if (interactive()){ 
+  # This will run ClinSight with custom data
+  test_clinsight(
+    clinsight_data = custom_data, 
+    meta_data = custom_metadata
+  )
+}
+```
+
+Since everything is run from a temporary folder, clinsight databases be fully renewed when running the function, ensuring that everything is always up to date with the study_data and metadata.
+
+### Shinymanager
+
+One way of deployment is using [shinymanager](https://datastorm-open.github.io/shinymanager/).
+The `shinymanager` package provides a user authentication and user management layer and its use is preconfigured for `clinsight`.
+It provides a fast way of deployment, particularly suited for quick local deployment.
+User and password management information is stored within a local encrypted `credentials.sqlite` database.
+This provides a brief overview of how shinymanager can be used with ClinSight.
+For more details, please visit the [shinymanager website](https://datastorm-open.github.io/shinymanager/).
+
+To use `shinymanager` with ClinSight, first make sure that the `shinymanager` package is installed, then set the configuration accordingly with `Sys.setenv("GOLEM_CONFIG_ACTIVE" = "shinymanager")`.
+This configuration expects the files `study_data.rds` and `metadata.rds` to be present in the current working directory.
+Finally, a credentials password needs to be provided in the `run_app()` command; this is used to encrypt/decrypt the database.
+
+```{r shinymanager-example}
+# Not run:
+# Warning: this will create multiple files in the current working directory.
+if (interactive()){ 
+  saveRDS(clinsightful_data, "study_data.rds")
+  saveRDS(metadata, "metadata.rds")
+  Sys.setenv("GOLEM_CONFIG_ACTIVE" = "shinymanager")
+  run_app(credentials_pwd = "TEMP_PASSWORD")
+}
+```
+
+This code will first save the internal package data in the working directory, and then create a `user_db.sqlite` file and a `credentials.sqlite` file in the same directory.
+Alternatively, you can test it with by using the `test_clinsight` function just created, so that all needed files are only created temporarily:
+
+```{r}
+if (interactive()){ 
+  test_clinsight(clinsight_config = "shinymanager")
+}
+```
+
+Note that the `credentials.sqlite` database is protected for unauthorized access with the password provided in the argument `credentials_pwd` (currently set to "TEMP_PASSWORD").
+If the code above is run, a login page will be shown.
+
+![](images/shinymanager_login.png){width="349"}
+
+For the first login, the `credentials.sqlite` database is newly created.
+In this case, the login name will be 'admin' and the password `1234`.
+After first login, a password change and a login with the new password is required before the ClinSight app can be accessed.
+
+![](images/shinymanager_change_pw.png){width="336"}
+
+After successful login, new users can be added by going to the Administrator panel using the widget in the bottom right of the screen:
+
+![](images/shinymanager_admin_mode.png)
+
+When creating a new user, make sure that the User field does not contain spaces and that the expiration date and the sites that the user needs to access are entered/selected correctly.
+
+![](images/shinymanager_add_user.png){width="385"}
+
+More details can be found in the documentation of the [shinymanager](https://datastorm-open.github.io/shinymanager/) package.
+
+### Shinyproxy
+
+Another way of deployment can be with the use of [shinyproxy](https://shinyproxy.io/).
+`ShinyProxy` is fully open source software and provides multiple options for deploying shiny applications, with built-in support for the latest authentication and authorization technologies such as [OpenID Connect](https://openid.net/developers/how-connect-works/).
+It serves shiny (or other data science) applications in Docker containers.
+This provides multiple advantages, among which the possibility to run applications fully isolated, and to deploy multiple versions of an application without any problems.
+This guide provides some brief hints to get started with a `ShinyProxy` deployment.
+
+First download and install `ShinyProxy` according to the instructions on the [ShinyProxy website](https://shinyproxy.io/).
+Second step is to store ClinSight in a Docker image.
+A good place to start are the images from the [Rocker Project](https://rocker-project.org/), which can be fairly quick to setup.
+Alternatively, smaller Docker images with less dependencies can be created with [Alpine Linux images](https://hub.docker.com/_/alpine).
+This will probably take longer to set up, since Rstudio Package Manager provides no binaries for Alpine Linux at the time of writing, meaning that all R packages need to be installed from source.
+
+Within the Docker file, install `clinsight`, create a folder named `study_data` in the current user's home directory.
+Then set the configuration to `shinyproxy` and create a CMD line similar to below:
+
+```{docker, eval=FALSE}
+ENV GOLEM_CONFIG_ACTIVE="shinyproxy"
+CMD R -e "options('shiny.port'=3838, shiny.host='0.0.0.0', golem.app.prod = TRUE); clinsight::run_app()"
+```
+
+Then, ensure that the shinyproxy configuration .yml file is setup correctly.
+Below is an example to get started.
+Note that these settings assume that openID Connect is used for authentication.
+Configuring this properly is outside of the scope of this guide; see the [shinyproxy](https://shinyproxy.io/) documentation for details on this.
+
+```{yaml}
+proxy:
+  title: "ClinSight Portal"
+  port: 8080
+  authentication: openid
+  container-wait-time: 60000
+  openid:
+    auth-url: ...
+    jwks-url: ...
+    token-url: ...
+    client-id: ...
+    client-secret: ...
+    username-attribute: email
+    roles-claim: roles
+  docker:
+    internal-networking: true
+  admin-groups: admin
+  specs:
+  - id: clinsight
+    container-image: clinsight_image:latest
+    container-volumes: ["LOCAL_DATA_FOLDER/study_data:/home/clinsight_user/study_data"]
+    container-network: internal_network
+    http-headers:
+      X_SP_USERNAME: "#{T(java.util.Base64).getEncoder().encodeToString(oidcUser.getFullName().getBytes())}"
+```
+
+A few more important notes: - A data volume needs to be mounted to the docker container in order for the application to run correctly.
+The Docker container user also needs writing access to this folder.
+- User names are passed through using HTTP headers.
+Since HTTP headers cannot handle all UTF-8 characters, the user names need to be base64 encoded as shown in the example `.yml` file.
+
+### Posit Connect
+
+Lastly, ClinSight provides a configuration to deploy applications with Posit Connect.
+
+To use this configuration, use
+
+### Customizing configuration
+
+If the profiles above are insufficient, you can also provide your own configuration file with fully customized settings with the steps described below.
+
+To do so, first create a configuration template.
+The function [create_clinsight_config()] can be used to create a copy of the current `clinsight` configuration file in the current working directory.
+To use this configuration file with `clinsight`, the environment variable named "CONFIG_PATH" needs to be set by using a command similar to the following: `Sys.setenv("CONFIG_PATH" = "PATH_TO_CONFIG/clinsight_config.yml")`, where `PATH_TO_CONFIG` is the path to the folder in which the configuration file is located.
