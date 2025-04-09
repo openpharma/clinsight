@@ -16,7 +16,7 @@ describe(
       "Scenario 1 - Save row review. 
             Given a fixed random test data set with all data marked as not yet reviewed, 
             and being logged in as test user, 
-            and patient 45 selected as active patient,
+            and patient BEL_08_45 selected as active patient,
             and clicking on [Common events] to browse to the 'Medication' tab,
             and clicking on [Review Status] for rows 1 and 2,
             and clicking on [Save] to save the review,
@@ -60,6 +60,45 @@ describe(
           dplyr::filter(!form_repeat %in% 1:2)
         expect_equal(unique(not_review_data$reviewed), "No")
         expect_equal(unique(not_review_data$reviewer), "")
+      }
+    )
+    it(
+      "Scenario 2 - Undo row review. 
+          Given a fixed random test data set 
+            with the first two medications for subject BEL_08_45 in the 
+            Medications form being reviewed and the rest not,
+            and patient BEL_08_45 selected as active patient,
+            and clicking on [Common events] to browse to the 'Medication' tab,
+            and clicking on [Review Status] for rows 1 and 2,
+            and clicking on [Save] to save the review,
+            I expect that the review status will change,
+            and that the selected data of the selected patient and form (Medication) 
+            is marked as not yet being reviewed.", 
+      {
+        app$run_js('$("#cf_medication-review_form_tbl-table input[type=\'checkbox\']").slice(0, 2).click()')
+        expect_equal(
+          app$get_js('$("#cf_medication-review_form_tbl-table input[type=\'checkbox\']:checked").length'),
+          0
+        )
+        app$click("main_sidebar_1-review_forms_1-save_review")
+        app$wait_for_idle(800)
+        output_names <- names(app$get_values(output = TRUE)$output)
+        app$expect_values(output = vector_select(output_names, exclude = "visit_figure"))
+        expect_false(app$get_js('$("#main_sidebar_1-review_forms_1-form_reviewed").prop("indeterminate")'))
+        expect_false(app$get_js('$("#main_sidebar_1-review_forms_1-form_reviewed").prop("checked")'))
+        
+        user_db <- app$get_value(export = "user_db")
+        active_form_data <- db_get_table(user_db) |> 
+          dplyr::filter(
+            subject_id == app$get_value(export = "active_participant"),
+            item_group == app$get_value(export = "active_form")
+          )
+        expect_equal(unique(active_form_data$reviewed), "No")
+        active_form_data |> dplyr::filter(reviewer != "")
+        expect_equal(
+          unique(active_form_data$reviewer), 
+          c("test user (Administrator)", "")
+        )
       }
     )
   }
