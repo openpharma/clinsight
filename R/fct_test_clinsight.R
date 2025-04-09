@@ -30,8 +30,7 @@ test_clinsight <- function(
   stopifnot(is.character(clinsight_config))
   if (
     clinsight_config == "default" & 
-    !identical(clinsight_data, clinsightful_data) & 
-    !identical(meta_data, metadata)
+    (!identical(clinsight_data, clinsightful_data) | !identical(meta_data, metadata))
   ){
     stop("The 'default' config should not be used with custom data.")
   }
