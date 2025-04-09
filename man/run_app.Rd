@@ -37,7 +37,7 @@ expression in order for the match to be considered successful.}
 
 \item{data_folder}{Character string. The folder in which all data resides is
 usually set in the config.yml file. However, this can be overwritten if a
-path is set in this argument. Useful for testing purposes.}
+path is set in this argument. If used, any path specified in the config.yml for the will be ignored Useful for testing purposes.}
 
 \item{credentials_pwd}{Character string with the credentials' database
 password.}
