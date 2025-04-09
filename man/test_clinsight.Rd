@@ -27,7 +27,9 @@ Runs the ClinSight Shiny application.
 Provides a wrapper around \code{\link[=run_app]{run_app()}}. Unlike the function \code{\link[=run_app]{run_app()}}, this
 function stores data in a temporary folder and cleans up after itself after
 use. Useful during development, when tweaking new study data and metadata for
-use with ClinSight.
+use with ClinSight. Note that, when using this function, any database files
+needed for ClinSight will be renewed and any file path specified in the
+\code{config.yml} file will be ignored.
 }
 \details{
 This function is only meant for testing and development purposes. For use in

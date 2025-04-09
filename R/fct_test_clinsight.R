@@ -3,7 +3,9 @@
 #' Provides a wrapper around [run_app()]. Unlike the function [run_app()], this
 #' function stores data in a temporary folder and cleans up after itself after
 #' use. Useful during development, when tweaking new study data and metadata for
-#' use with ClinSight.
+#' use with ClinSight. Note that, when using this function, any database files
+#' needed for ClinSight will be renewed and any file path specified in the
+#' `config.yml` file will be ignored.
 #'
 #' This function is only meant for testing and development purposes. For use in
 #' production, instead use the function [run_app()] directly.
@@ -24,17 +26,13 @@ test_clinsight <- function(
     clinsight_config = "test"
 ){
   temp_folder <- tempfile(tmpdir = tempdir())
-  base_folder <- temp_folder
-  if(identical(clinsight_config, "shinyproxy")){
-    temp_folder <- file.path(temp_folder, "study_data")
-  }
   dir.create(temp_folder, recursive = TRUE)
   saveRDS(clinsight_data, file.path(temp_folder, "study_data.rds"))
   saveRDS(meta_data, file.path(temp_folder, "metadata.rds"))
   old_config <- Sys.getenv("GOLEM_CONFIG_ACTIVE")
   Sys.setenv("GOLEM_CONFIG_ACTIVE" = clinsight_config)
   run_app(
-    data_folder = base_folder, 
+    data_folder = temp_folder, 
     credentials_pwd = "TEMP_PASSWORD",
     onStart = \(){onStop(\(){
       unlink(temp_folder, recursive = TRUE);
