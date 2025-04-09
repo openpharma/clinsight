@@ -69,7 +69,7 @@ describe(
             Medications form being reviewed and the rest not,
             and patient BEL_08_45 selected as active patient,
             and clicking on [Common events] to browse to the 'Medication' tab,
-            and clicking on [Review Status] for rows 1 and 2,
+            and clicking on [Review Status] for row 2,
             and clicking on [Save] to save the review,
             I expect that the review status will change,
             and that the selected data of the selected patient and form (Medication) 
