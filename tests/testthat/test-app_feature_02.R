@@ -14,7 +14,7 @@ describe(
     withr::defer(app$stop())
     it(
       "Scenario 1 - Save review. 
-            Given a fixed fixed random test data set with all data marked as not yet reviewed, 
+            Given a fixed random test data set with all data marked as not yet reviewed, 
             and being logged in as test user, 
             and patient 45 selected as active patient,
             and the 'Vital signs' tab selected as the first tab in the [Study data] tabs,
