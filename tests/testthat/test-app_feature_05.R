@@ -121,11 +121,11 @@ describe(
         app$wait_for_idle(800)
         expect_equal(
           app$get_js('$("#cf_medication-review_form_tbl-table input[type=\'checkbox\']:checked").length'),
-          2
+          1
         )
         expect_equal(
           app$get_js('$("#cf_medication-review_form_tbl-table input[type=\'checkbox\']:not(:checked)").length'),
-          88
+          89
         )
         
         output_names <- names(app$get_values(output = TRUE)$output)
@@ -136,11 +136,11 @@ describe(
         app$wait_for_idle(800)
         expect_equal(
           app$get_js('$("#cf_medication-review_form_tbl-table input[type=\'checkbox\']:checked").length'),
-          2
+          1
         )
         expect_equal(
           app$get_js('$("#cf_medication-review_form_tbl-table input[type=\'checkbox\']:not(:checked)").length'),
-          5
+          6
         )
       }
     )
