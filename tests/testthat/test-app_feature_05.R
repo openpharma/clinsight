@@ -145,7 +145,7 @@ describe(
       }
     )
     it(
-      "Scenario 4 - Undo partial row review. 
+      "Scenario 4 - Fully remove partial row review. 
           Given a fixed random test data set 
             with some rows for subject BEL_08_45 in the 
             Medications form being reviewed and the rest not,
