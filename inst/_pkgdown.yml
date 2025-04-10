@@ -17,6 +17,7 @@ articles:
   - test_report
 
 - title: Developer Guides
+  navbar: Developer Guides
   contents:
   - Contributions
 
