@@ -103,5 +103,46 @@ describe(
         expect_equal(unique(not_review_data$reviewer), c("test user (Administrator)", ""))
       }
     )
+    it(
+      "Scenario 3 - Undo partial row review. 
+          Given a fixed random test data set 
+            with some rows for subject BEL_08_45 in the 
+            Medications form being reviewed and the rest not,
+            and patient BEL_08_45 selected as active patient,
+            and the [Medication] tab being the active form displayed,
+            and clicking on [Reviewed/form_review] twice in a row,
+            and clicking on [Save] to save the review,
+            I expect that, after the first click on [Reviewed], 
+            all rows in the table are selected as reviewed,
+            and after the second click on [Reviewed], all rows are deselected,
+            and after clicking [Save],
+            all rows are saved as not yet being reviewed.", 
+      {
+        app$run_js('$("#main_sidebar_1-review_forms_1-form_reviewed").click()')
+        app$wait_for_idle(800)
+        output_names <- names(app$get_values(output = TRUE)$output)
+        app$expect_values(output = vector_select(output_names, exclude = "visit_figure"))
+        # somehow app$click doesn't register here, therefore using run_js:
+        app$run_js('$("#main_sidebar_1-review_forms_1-form_reviewed").click()')
+        app$click("main_sidebar_1-review_forms_1-save_review")
+        app$wait_for_idle(800)
+        app$expect_values(output = vector_select(output_names, exclude = "visit_figure"))
+        expect_equal(
+          app$get_js('$("#cf_medication-review_form_tbl-table input[type=\'checkbox\']:checked").length'),
+          0
+        )
+        expect_false(app$get_js('$("#main_sidebar_1-review_forms_1-form_reviewed").prop("indeterminate")'))
+        expect_false(app$get_js('$("#main_sidebar_1-review_forms_1-form_reviewed").prop("checked")'))
+        
+        user_db <- app$get_value(export = "user_db")
+        active_form_data <- db_get_table(user_db) |> 
+          dplyr::filter(
+            subject_id == app$get_value(export = "active_participant"),
+            item_group == app$get_value(export = "active_form")
+          )
+        expect_equal(unique(active_form_data$reviewed), "No")
+        expect_equal(unique(active_form_data$reviewer), c("test user (Administrator)", ""))
+      }
+    )
   }
 )
