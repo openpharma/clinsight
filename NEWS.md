@@ -20,6 +20,9 @@
 - filters in mod_study_forms are now only triggered after a delay. This way, the filter will only trigger after finishing selecting/deselecting multiple items.
 - Removed some custom logic in `create_table` so that it does not interfere with item names being displayed in bold (when items are not yet reviewed).
 - Added functionality in metadata to merge item pairs into one item.
+- Removed some custom logic in `create_table` so that it does not interfere
+- Replaced default ClinSight Logo (displayed in app) to use a company-independent graphic, i.e. the design from the hex logo
+- Added `test_clinsight()` for developing and testing custom data and metadata for use with ClinSight.
 
 ## Bug fixes
 
@@ -32,6 +35,7 @@
 
 - Added a more recent repo snapshot for `chromote` v0.5.0 used in Shiny tests
 - Added two helper functions (`create_clinsight_metadata()` and `create_clinsight_config`) to create custom `ClinSight` metadata and config files.
+- Added a feature test for row level review.
 
 # clinsight 0.1.1
 
