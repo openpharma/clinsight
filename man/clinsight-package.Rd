@@ -14,7 +14,6 @@ Interactive application to monitor patient safety during clinical trials. Goal i
 Useful links:
 \itemize{
   \item \url{https://github.com/openpharma/clinsight}
-  \item \url{https://openpharma.github.io/clinsight}
   \item Report bugs at \url{https://github.com/openpharma/clinsight/issues}
 }
 
