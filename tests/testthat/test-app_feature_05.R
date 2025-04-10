@@ -63,12 +63,12 @@ describe(
       }
     )
     it(
-      "Scenario 2 - Undo row review. 
+      "Scenario 2 - Partially undo row review. 
           Given a fixed random test data set 
             with the first two medications for subject BEL_08_45 in the 
             Medications form being reviewed and the rest not,
             and patient BEL_08_45 selected as active patient,
-            and clicking on [Common events] to browse to the 'Medication' tab,
+            and the [Medication] tab being the active form displayed,
             and clicking on [Review Status] for row 2,
             and clicking on [Save] to save the review,
             I expect that the review status will change,
