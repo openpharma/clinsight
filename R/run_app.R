@@ -1,15 +1,16 @@
 #' Run the Shiny Application
-#' 
+#'
 #' @param data_folder Character string. The folder in which all data resides is
 #'   usually set in the config.yml file. However, this can be overwritten if a
-#'   path is set in this argument. Useful for testing purposes.
+#'   path is set in this argument. If used, any path specified in the config.yml
+#'   will be ignored. Useful for testing purposes.
 #' @param credentials_pwd Character string with the credentials' database
 #'   password.
 #' @param ... arguments to pass to golem_opts. See `?golem::get_golem_options`
 #'   for more details.
 #' @inheritParams shiny::shinyApp
-#' 
-#' 
+#'
+#'
 #'
 #' @export
 #' 
@@ -34,10 +35,16 @@ run_app <- function(
     if(!dir.exists(data_folder)){
       stop("Folder path '", data_folder, "' specified but cannot be created\n")
     }
-    if(is.character(data)) data <- file.path(data_folder, data)
-    if(is.character(meta)) meta <- file.path(data_folder, meta)
-    user_db <-  file.path(data_folder, user_db)
-    credentials_db <- file.path(data_folder, credentials_db)
+    golem::cat_dev(
+      "Custom folder path provided in the 'data_folder' argument.",
+      "File paths specified in the config.yml will be ignored."
+    )
+    if(is.character(data)) data <- file.path(data_folder, basename(data))
+    if(is.character(meta)) meta <- file.path(data_folder, basename(meta))
+    user_db <-  file.path(data_folder, basename(user_db))
+    if(!is.null(credentials_db)){
+      credentials_db <- file.path(data_folder, basename(credentials_db)) 
+    }
   }
   
   ## Verify study data
