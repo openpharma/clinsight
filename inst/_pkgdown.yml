@@ -2,6 +2,24 @@ url: https://openpharma.github.io/clinsight/
 template:
   bootstrap: 5
   bootswatch: spacelab
+
+articles: 
+- title: Articles
+  navbar: ~
+  contents:
+  - Metadata
+  - Deployment
+  - data_spec
+
+- title: Test report
+  navbar: Validation
+  contents:
+  - test_report
+
+- title: Developer Guides
+  contents:
+  - Contributions
+
 reference:
 - title: Main application
   desc:  Top-level functions to run the Shiny application
