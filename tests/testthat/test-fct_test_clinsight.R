@@ -19,7 +19,11 @@ describe("test_clinsight() works", {
     expect_error(test_clinsight(clinsight_config = mtcars))
     expect_error(
       test_clinsight(clinsight_data = mtcars, clinsight_config = "default"),
-      "The 'default' config should not be used with custom data"
+      "The 'default' or 'dev' config cannot be used with custom data"
+    )
+    expect_error(
+      test_clinsight(clinsight_data = mtcars, clinsight_config = "dev"),
+      "The 'default' or 'dev' config cannot be used with custom data"
     )
   })
 })

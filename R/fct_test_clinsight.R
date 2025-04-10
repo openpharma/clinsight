@@ -31,10 +31,12 @@ test_clinsight <- function(
   study_data_path <- get_golem_config("study_data", config = clinsight_config)
   meta_data_path <- get_golem_config("meta_data", config = clinsight_config)
   if (
-    clinsight_config == "default" & 
-    (!identical(clinsight_data, clinsightful_data) | !identical(meta_data, metadata))
+    clinsight_config %in% c("default", "dev") | 
+    !is.character(study_data_path) | !is.character(meta_data_path)
   ){
-    stop("The 'default' config should not be used with custom data.")
+    stop("The 'default' or 'dev' config cannot be used with custom data, ", 
+         "and study_data and meta_data in the config file ", 
+         "should be character vectors.")
   }
   
   temp_folder <- tempfile(tmpdir = tempdir())
