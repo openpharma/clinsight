@@ -1,8 +1,8 @@
 ---
-title: "Getting started"
+title: "Introduction to ClinSight"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Getting started}
+  %\VignetteIndexEntry{Introduction to ClinSight}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -14,15 +14,15 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r setup, echo=FALSE}
 library(clinsight)
 ```
 
-## Running ClinSight for the first time.
+## Test ClinSight
 
-### Testing application
+To get started, you can easily run ClinSight by using the function `clinsight::run_app()`, which is the main function in this package. This will start the application, and you can try out the main features using internal test data.
 
-The function `clinsight::run_app()` creates databases in the working directory, that will save user actions such as review status of study data. Depending on the settings, a credentials database will be created. When developing ClinSight settings for a specific study, it can be more useful to run ClinSight within a temporary folder, so that the required databases are created every time after closing the application. This makes it easier to prototype the application, and tweak the data/metadata for use with ClinSight. To do so, a wrapper around the `run_app()` function can be used, such as the one below.
+However, we will use a wrapper around `clinsight::run_app()` in this vignette. Reason for this is that the function creates databases in the working directory that will save user actions such as review status of study data. This is needed for use in production, but for testing purposes and for developing custom data and metadata, it is better to load all data in a temporary folder that will be cleaned up after use. The wrapper below does exactly that:
 
 ```{r }
 test_clinsight <- function(
@@ -55,16 +55,16 @@ With this function, we can test ClinSight with custom data and metadata, as will
 test_clinsight()
 ```
 
-### Prepare ClinSight for use with a custom study
+## Create custom data and metadata
 
-In order to use study data with ClinSight, the raw data needs to fulfill few specific requirements and a ClinSight metadata file needs to be customized and created (see `create_clinsight_metadata()` and `get_metadata()`. Then, if requirements are met, the data can be merged with study-specific `metadata` to create custom `ClinSight`-compatible study data. All details about the metadata template can be found in the vignette Metadata `vignette("Metadata")`.
+In order to use custom study data with ClinSight, the raw custom data needs to fulfill few specific requirements. Secondly, a ClinSight metadata file needs to be customized and created based on the custom data (see `create_clinsight_metadata()` and `get_metadata()`. If these requirements are met, the data can be merged with the study-specific `metadata` to successfully create custom `ClinSight`-compatible study data. All details about the metadata template can be found in the vignette Metadata `vignette("Metadata")`.
 
 ### Raw data structure
 
 Raw study data needs to needs to be in long format in order to use it with ClinSight, with the columns being in character vector format. The following columns are expected to be in the raw data.
 
 |                |                                                                                                                |
-|-----------------------|-------------------------------------------------|
+|------------------------|-----------------------------------------------|
 | **Name**       | **Description**                                                                                                |
 | site_code      | Identifier for study site.                                                                                     |
 | subject_id     | Unique identifier for a subject                                                                                |
