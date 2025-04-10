@@ -28,6 +28,8 @@ test_clinsight <- function(
   stopifnot("Expecting a data frame" = is.data.frame(clinsight_data))
   stopifnot("Expecting a list" = inherits(meta_data, "list"))
   stopifnot(is.character(clinsight_config))
+  study_data_path <- get_golem_config("study_data", config = clinsight_config)
+  meta_data_path <- get_golem_config("meta_data", config = clinsight_config)
   if (
     clinsight_config == "default" & 
     (!identical(clinsight_data, clinsightful_data) | !identical(meta_data, metadata))
@@ -37,8 +39,8 @@ test_clinsight <- function(
   
   temp_folder <- tempfile(tmpdir = tempdir())
   dir.create(temp_folder, recursive = TRUE)
-  saveRDS(clinsight_data, file.path(temp_folder, "study_data.rds"))
-  saveRDS(meta_data, file.path(temp_folder, "metadata.rds"))
+  saveRDS(clinsight_data, file.path(temp_folder, basename(study_data_path))) 
+  saveRDS(meta_data, file.path(temp_folder, basename(meta_data_path)))
   old_config <- Sys.getenv("GOLEM_CONFIG_ACTIVE")
   Sys.setenv("GOLEM_CONFIG_ACTIVE" = clinsight_config)
   run_app(
