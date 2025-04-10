@@ -104,7 +104,48 @@ describe(
       }
     )
     it(
-      "Scenario 3 - Undo partial row review. 
+      "Scenario 3 - Showing all subjects in table during review. 
+          Given a fixed random test data set 
+            with some rows for subject BEL_08_45 in the 
+            Medications form being reviewed and the rest not,
+            and patient BEL_08_45 selected as active patient,
+            and the [Medication] tab being the active form displayed,
+            and clicking on [Show all participants],
+            I expect that data of all patients will be shown in the table,
+            and that only the previously reviewed rows of subject [BEL_08_45] 
+            are marked as reviewed and the rest is not,
+            and that, after clicking [Show all participants] again,
+            the old state is restored.", 
+      {
+        app$run_js('$("#cf_medication-show_all_data").click()')
+        app$wait_for_idle(800)
+        expect_equal(
+          app$get_js('$("#cf_medication-review_form_tbl-table input[type=\'checkbox\']:checked").length'),
+          2
+        )
+        expect_equal(
+          app$get_js('$("#cf_medication-review_form_tbl-table input[type=\'checkbox\']:not(:checked)").length'),
+          88
+        )
+        
+        output_names <- names(app$get_values(output = TRUE)$output)
+        ## snapshot 003:
+        app$expect_values(output = vector_select(output_names, exclude = "visit_figure"))
+        
+        app$run_js('$("#cf_medication-show_all_data").click()')
+        app$wait_for_idle(800)
+        expect_equal(
+          app$get_js('$("#cf_medication-review_form_tbl-table input[type=\'checkbox\']:checked").length'),
+          2
+        )
+        expect_equal(
+          app$get_js('$("#cf_medication-review_form_tbl-table input[type=\'checkbox\']:not(:checked)").length'),
+          5
+        )
+      }
+    )
+    it(
+      "Scenario 4 - Undo partial row review. 
           Given a fixed random test data set 
             with some rows for subject BEL_08_45 in the 
             Medications form being reviewed and the rest not,
@@ -121,11 +162,13 @@ describe(
         app$run_js('$("#main_sidebar_1-review_forms_1-form_reviewed").click()')
         app$wait_for_idle(800)
         output_names <- names(app$get_values(output = TRUE)$output)
+        ## snapshot 004:
         app$expect_values(output = vector_select(output_names, exclude = "visit_figure"))
         # somehow app$click doesn't register here, therefore using run_js:
         app$run_js('$("#main_sidebar_1-review_forms_1-form_reviewed").click()')
         app$click("main_sidebar_1-review_forms_1-save_review")
         app$wait_for_idle(800)
+        ## snapshot 005:
         app$expect_values(output = vector_select(output_names, exclude = "visit_figure"))
         expect_equal(
           app$get_js('$("#cf_medication-review_form_tbl-table input[type=\'checkbox\']:checked").length'),
