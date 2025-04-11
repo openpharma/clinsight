@@ -1,51 +1,93 @@
+---
+editor_options: 
+  markdown: 
+    wrap: 72
+---
 
-# ClinSight <img src="man/figures/logo.png" align="right" />
+# ClinSight <img src="man/figures/logo.png" align="right"/>
 
 <!-- badges: start -->
+
 [![R-CMD-check](https://github.com/openpharma/clinsight/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/openpharma/clinsight/actions/workflows/R-CMD-check.yaml)
 [![test-coverage](https://github.com/openpharma/clinsight/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/openpharma/clinsight/actions/workflows/test-coverage.yaml)
 [![codecov](https://codecov.io/github/openpharma/clinsight/graph/badge.svg?token=T63MIKBP8L)](https://codecov.io/github/openpharma/clinsight)
+
 <!-- badges: end -->
 
-The goal of `ClinSight` is to provide a consistent platform for monitoring patient safety during clinical
-trials. 
+## Overview
 
-The Shiny application in the `clinsight` package provides  
-visualizations and timelines that simplify comparing multiple related data points 
-within and between patients in a clinical trial. The app highlights new/updated data 
-and shows the clinical significance, as reported by the responsible 
-investigator/clinician, of each data point that is out of range.
+The goal of `ClinSight` is to provide a production-ready and easy to use
+application for medically monitoring patient safety and data integrity
+during clinical trials. It provides smart and interactive
+visualizations, so that a better overview can be created of each patient
+during a trial.
 
-Furthermore, the application contains a query system with audit trail and has an 
-option to create PDF reports of monitoring activities. 
+For example, ClinSight contains an interactive timeline, which makes it
+easy to relate clinical trial procedures such as treatments with adverse
+events that occur within a patient.
 
-The application is modular and can be customized for specific studies using a 
-metadata Excel file, that controls which data will be shown in which 
-tab/form in the application.
+![](images/clipboard-4158535778.png){width="700"}
+
+Furthermore, within the application, data patterns over time within
+patients can be easily visualized with interactive figures, highlighting
+with different colors what data points are out of the normal limits, and
+highlighting with the size of each dot whether a data point is newly
+entered/changed since the last review session.
+
+![](images/clipboard-1746986169.png){width="700"}
+
+Data can be saved as being reviewed either by row, or by the entire form
+that is active:
+
+![](images/clipboard-504659256.png){width="700"}
+
+The application contains a query system, in which queries can be raised
+for the study site.
+
+![](images/clipboard-2558473331.png){width="482"}
+
+Lastly, PDF reports can be created of review activity:
+
+with audit trail and has an option to create PDF reports of monitoring
+activities.
+
+The application is modular and can be customized for specific studies
+using a metadata Excel file, that controls which data will be shown in
+which tab/form in the application.
 
 ## Installation
 
-You can install the development version of ClinSight from 
-[GitHub](https://github.com/) with:
+There are several ways to install `ClinSight`. To run the application
+with the intended R environment, you can git clone the package
+repository, then open the project (`clinsight.Rproj`) and restore the
+project environment with:
 
-```
-# install.packages("devtools")
-remotes::install_github("openpharma/clinsight")
-```
-
-To run the application with the intended R environment, you should first open 
-the project (clinsight.Rproj) and then restore the project environment:
-
-```
+```{r}
 renv::restore()
 ```
 
-After all the required packages are successfully installed, the application can 
-be run in development mode using the following code:
+This will install the packages with their intended version. Note that
+the R version needs to match the R version in the `renv.lock` file,
+otherwise errors might occur during installation.
 
-``` 
-golem::run_dev()
+Alternatively, you can simply install the latest stable version of
+ClinSight directly from [GitHub](https://github.com/) with:
+
+```{r}
+# install.packages("pak")
+pak::pkg_install("openpharma/clinsight")
 ```
 
-More information will follow here.
+Or install the development version with the latest features and updates:
 
+```{r }
+pak::pkg_install("openpharma/clinsight@dev")
+```
+
+After installation, the application can be tested with internal data
+using the function `test_clinsight()`.
+
+```         
+library(clinsight)
+test_clinsight()
+```
