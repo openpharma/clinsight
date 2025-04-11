@@ -1,8 +1,5 @@
----
-editor_options: 
-  markdown: 
-    wrap: 72
----
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # ClinSight <img src="man/figures/logo.png" align="right"/>
 
@@ -26,7 +23,7 @@ For example, ClinSight contains an interactive timeline, which makes it
 easy to relate clinical trial procedures such as treatments with adverse
 events that occur within a patient.
 
-![](images/clipboard-4158535778.png){width="700"}
+<img src="man/figures/README-timeline.png" width="700" />
 
 Furthermore, within the application, data patterns over time within
 patients can be easily visualized with interactive figures, highlighting
@@ -34,26 +31,28 @@ with different colors what data points are out of the normal limits, and
 highlighting with the size of each dot whether a data point is newly
 entered/changed since the last review session.
 
-![](images/clipboard-1746986169.png){width="700"}
+<img src="man/figures/README-fig_timeseries.png" width="700" />
 
 Data can be saved as being reviewed either by row, or by the entire form
 that is active:
 
-![](images/clipboard-504659256.png){width="700"}
+<img src="man/figures/README-row_review.png" width="700" />
 
 The application contains a query system, in which queries can be raised
 for the study site.
 
-![](images/clipboard-2558473331.png){width="482"}
+<img src="man/figures/README-new_query.png" width="389" />
 
-Lastly, PDF reports can be created of review activity:
+Lastly, PDF reports can be created to document a review session:
 
-with audit trail and has an option to create PDF reports of monitoring
-activities.
+<img src="man/figures/README-report_modal.png" width="490" />
 
-The application is modular and can be customized for specific studies
-using a metadata Excel file, that controls which data will be shown in
-which tab/form in the application.
+## ClinSight with custom trial data
+
+The application can be customized for any study using a metadata Excel
+file (see `vignette('Metadata')`), that controls which data will be
+shown in where in the application. For more information on how to fully
+set up ClinSight with custom data, see `vignette('clinsight')`.
 
 ## Installation
 
@@ -62,32 +61,48 @@ with the intended R environment, you can git clone the package
 repository, then open the project (`clinsight.Rproj`) and restore the
 project environment with:
 
-```{r}
+``` r
 renv::restore()
 ```
 
-This will install the packages with their intended version. Note that
-the R version needs to match the R version in the `renv.lock` file,
+This will install the packages with their intended version. Below the R
+version and libraries are shown that were used for ClinSight when
+creating this README file. It is recommended to use the same R version,
 otherwise errors might occur during installation.
 
-Alternatively, you can simply install the latest stable version of
-ClinSight directly from [GitHub](https://github.com/) with:
+``` r
+renv::lockfile_read()$R
+#> $Version
+#> [1] "4.4.1"
+#> 
+#> $Repositories
+#> $Repositories$RSPM
+#> [1] "https://packagemanager.posit.co/cran/2024-09-17"
+#> 
+#> $Repositories$RSPM2
+#> [1] "https://packagemanager.posit.co/cran/2025-04-01"
+```
 
-```{r}
+Another option for installing clinsight is simply directly installing
+the latest stable version from [GitHub](https://github.com/) with:
+
+``` r
 # install.packages("pak")
 pak::pkg_install("openpharma/clinsight")
 ```
 
-Or install the development version with the latest features and updates:
+The development version with the latest features and updates can be
+installed by pointing to the `dev` branch during installation:
 
-```{r }
+``` r
 pak::pkg_install("openpharma/clinsight@dev")
 ```
 
 After installation, the application can be tested with internal data
 using the function `test_clinsight()`.
 
-```         
+``` r
 library(clinsight)
+# Not run:
 test_clinsight()
 ```
