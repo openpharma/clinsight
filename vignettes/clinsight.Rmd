@@ -20,34 +20,7 @@ library(clinsight)
 
 ## Test ClinSight
 
-To get started, you can easily run ClinSight by using the function `clinsight::run_app()`, which is the main function in this package. This will start the application, and you can try out the main features using internal test data.
-
-However, we will use a wrapper around `clinsight::run_app()` in this vignette. Reason for this is that the function creates databases in the working directory that will save user actions such as review status of study data. This is needed for use in production, but for testing purposes and for developing custom data and metadata, it is better to load all data in a temporary folder that will be cleaned up after use. The wrapper below does exactly that:
-
-```{r }
-test_clinsight <- function(
-    clinsight_data = clinsightful_data, 
-    meta_data = metadata,
-    clinsight_config = "test"
-){
-  temp_folder <- tempfile(tmpdir = tempdir())
-  dir.create(temp_folder, recursive = TRUE)
-  saveRDS(clinsight_data, file.path(temp_folder, "study_data.rds"))
-  saveRDS(meta_data, file.path(temp_folder, "metadata.rds"))
-  old_config <- Sys.getenv("GOLEM_CONFIG_ACTIVE")
-  Sys.setenv("GOLEM_CONFIG_ACTIVE" = clinsight_config)
-  run_app(
-    data_folder = temp_folder, 
-    credentials_pwd = "TEMP_PASSWORD",
-    onStart = \(){onStop(\(){
-      unlink(temp_folder, recursive = TRUE);
-      Sys.setenv("GOLEM_CONFIG_ACTIVE" = old_config)
-    })}
-  )
-}
-```
-
-With this function, we can test ClinSight with custom data and metadata, as will be explained later. Running it without changing default arguments runs ClinSight with internal test data:
+To get started, you can easily run and test ClinSight by using the function `clinsight::test_clinsight()`. This function loads all data in a temporary folder that will be cleaned up after use. Note that this function is only meant for testing and development, and is a wrapper around `clinsight::run_app()`, the main function of this package. `clinsight::run_app()` also works, but creates databases in the working directory that will save user actions such as review status of study data, which is needed for deployment in a production environment. 
 
 ```{r eval=FALSE}
 # Not run:
@@ -68,7 +41,7 @@ In order to use custom study data with ClinSight, the raw custom data needs to f
 Raw study data needs to needs to be in long format in order to use it with ClinSight, with the columns being in character vector format. The following columns are expected to be in the raw data.
 
 |                |                                                                                                                |
-|----------------|----------------------------------------------------------------------------------------------------------------|
+|--------------|---------------------------------------------------------|
 | **Name**       | **Description**                                                                                                |
 | site_code      | Identifier for study site.                                                                                     |
 | subject_id     | Unique identifier for a subject                                                                                |
