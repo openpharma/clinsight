@@ -68,7 +68,7 @@ In order to use custom study data with ClinSight, the raw custom data needs to f
 Raw study data needs to needs to be in long format in order to use it with ClinSight, with the columns being in character vector format. The following columns are expected to be in the raw data.
 
 |                |                                                                                                                |
-|-------------------------|-----------------------------------------------|
+|----------------|----------------------------------------------------------------------------------------------------------------|
 | **Name**       | **Description**                                                                                                |
 | site_code      | Identifier for study site.                                                                                     |
 | subject_id     | Unique identifier for a subject                                                                                |
