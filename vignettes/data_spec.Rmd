@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-Note: this page is "under construction" until the `clinsight` package developers create helper functions that transform at least one other EDC data source into the desired format. In the meantime, this page provides useful documentation to the existing data specifications. Eventually, it will also share guidelines about how to combine your input data with metadata sources, etc.
+Note: this page contains the old package documentation and will slowly be replaced by or merged into newer vignettes. Keep in mind that the information in this vignette could be outdated. See vignette('clinsight'), vignette('Metadata') and vignette('Deployment') for the latest information. 
 
 ## Introduction
 
