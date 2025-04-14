@@ -207,8 +207,6 @@ Of note that in this configuration, the user identification will be done by acce
 
 More information about deployment with Posit Connect will follow here.
 
-objects in the shiny session.
-
 ### Customizing configuration
 
 If the profiles above are insufficient, you can also provide your own configuration file with fully customized settings with the steps described below.
