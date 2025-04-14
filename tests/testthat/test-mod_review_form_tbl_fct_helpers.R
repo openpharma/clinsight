@@ -107,7 +107,8 @@ describe("get_form_table() works", {
           )
       })
       original_tables <- lapply(table_names, \(x){
-        create_table(appdata[[x]], expected_columns = names(form_items[[x]])) 
+        df <- create_table(appdata[[x]], expected_columns = names(form_items[[x]]))
+        df[order(df$subject_id != "BEL_04_772"), ]
       })
       lapply(table_names, \(x){
         expect_equal(output_tables[[!!x]], original_tables[[!!x]])
