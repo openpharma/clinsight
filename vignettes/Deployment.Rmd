@@ -185,9 +185,12 @@ proxy:
       X_SP_USERNAME: "#{T(java.util.Base64).getEncoder().encodeToString(oidcUser.getFullName().getBytes())}"
 ```
 
-A few more important notes: - A data volume needs to be mounted to the docker container in order for the application to run correctly.
+A few more important notes:
+
+\- A data volume needs to be mounted to the docker container in order for the application to run correctly.
 The Docker container user also needs writing access to this folder.
-- User names are passed through using HTTP headers.
+
+\- User names are passed through using HTTP headers.
 Since HTTP headers cannot handle all UTF-8 characters, the user names need to be base64 encoded as shown in the example `.yml` file.
 
 ### Posit Connect {#posit_connect-conf}
