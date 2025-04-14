@@ -35,6 +35,21 @@ The current configuration file is shown below and will be discussed in detail.
 cat(readLines(system.file("golem-config.yml", package = "clinsight")), sep = "\n")
 ```
 
+### Config.yml arguments
+
+The following are the most important arguments in the `golem-config.yml` file for `clinsight`:
+
+-   `app_prod`: Controls a few production-related settings, such as whether a warning is shown if the data is not synchronized, or whether the database is always updated. It is recommended to set this to `TRUE` when the application is run in production.
+-   `user_identification`: The way a user can be identified. For testing purposes, it can be set to `test_user`. In production, this can be set to either `shinymanager` (for [Shinymanager](#shinymanager-conf) deployments), `http_headers` (for [ShinyProxy](#shinyproxy-conf) deployments), or `shiny_session` (for [Posit Connect](#posit_connect-conf) deployments).
+-   `study_data`: In the default settings, this path will directly return the internal package data for testing purposes. In production, this argument should contain the file path to the study data `.rds` file.
+-   `meta_data`: In the default settings, this path will return example metadata for testing purposes. In production, this argument should contain the file path to the metadata `.rds` file.
+-   `user_db`: Path to the user database file.
+-   `credentials_db`: Path to the credentials database (a .sqlite file). Only applicable in the `shinymanager` configuration.
+-   `user_roles`: List with roles (in this format: `Role Name: role_id`) that are available in the application.
+-   `allow_to_review`: List with roles which are allowed to review data in the application.
+-   `allow_listing_download`: Logical, whether it is allowed to download Excel tables from the listings shown in each form.
+-   `allow_query_inputs`: Logical, whether it is allowed to create queries within the application.
+
 ### Setting configurations
 
 A configuration can be set by changing the GOLEM_CONFIG_ACTIVE environment variable, for example like this:
@@ -53,11 +68,16 @@ Currently, there are three ways to run and/or deploy `ClinSight`, which are ment
 
 ### Run application
 
-In `vignette('clinsight')` the function `test_clinsight()` was used to run the application, which is a wrapper around `clinsight::run_app()`. `test_clinsight()` ensures that the required databases are created every time after closing the application. This makes it easier to prototype the application, and tweak the data/metadata for use with ClinSight, since the databases will be always up to date with the study_data and metadata.
+In `vignette('clinsight')` the function `test_clinsight()` was used to run the application, which is a wrapper around `clinsight::run_app()`.
+`test_clinsight()` ensures that the required databases are created every time after closing the application.
+This makes it easier to prototype the application, and tweak the data/metadata for use with ClinSight, since the databases will be always up to date with the study_data and metadata.
 
-However, for deployment the function `clinsight::run_app()` should be used. This creates databases in the working directory that will save user actions such as review status of study data. Depending on the settings, a credentials database will be created. In addition, a path study data and metadata can be provided in the configuration file.
+However, for deployment the function `clinsight::run_app()` should be used.
+This creates databases in the working directory that will save user actions such as review status of study data.
+Depending on the settings, a credentials database will be created.
+In addition, a path study data and metadata can be provided in the configuration file.
 
-### Shinymanager
+### Shinymanager {#shinymanager-conf}
 
 One way of deployment is using [shinymanager](https://datastorm-open.github.io/shinymanager/).
 The `shinymanager` package provides a user authentication and user management layer and its use is preconfigured for `clinsight`.
@@ -65,8 +85,6 @@ It provides a fast way of deployment, particularly suited for quick local deploy
 User and password management information is stored within a local encrypted `credentials.sqlite` database.
 This provides a brief overview of how shinymanager can be used with ClinSight.
 For more details, please visit the [shinymanager website](https://datastorm-open.github.io/shinymanager/).
-
-
 
 To use `shinymanager` with ClinSight, first make sure that the `shinymanager` package is installed, then set the configuration accordingly with `Sys.setenv("GOLEM_CONFIG_ACTIVE" = "shinymanager")`.
 This configuration expects the files `study_data.rds` and `metadata.rds` to be present in the current working directory.
@@ -114,7 +132,7 @@ When creating a new user, make sure that the User field does not contain spaces 
 
 More details can be found in the documentation of the [shinymanager](https://datastorm-open.github.io/shinymanager/) package.
 
-### Shinyproxy
+### Shinyproxy {#shinyproxy-conf}
 
 Another way of deployment can be with the use of [shinyproxy](https://shinyproxy.io/).
 `ShinyProxy` is fully open source software and provides multiple options for deploying shiny applications, with built-in support for the latest authentication and authorization technologies such as [OpenID Connect](https://openid.net/developers/how-connect-works/).
@@ -172,7 +190,7 @@ The Docker container user also needs writing access to this folder.
 - User names are passed through using HTTP headers.
 Since HTTP headers cannot handle all UTF-8 characters, the user names need to be base64 encoded as shown in the example `.yml` file.
 
-### Posit Connect
+### Posit Connect {#posit_connect-conf}
 
 Lastly, ClinSight provides a configuration to deploy applications with Posit Connect.
 
@@ -193,5 +211,5 @@ objects in the shiny session.
 If the profiles above are insufficient, you can also provide your own configuration file with fully customized settings with the steps described below.
 
 To do so, first create a configuration template.
-The function [create_clinsight_config()] can be used to create a copy of the current `clinsight` configuration file in the current working directory.
+The function `create_clinsight_config()` can be used to create a copy of the current `clinsight` configuration file in the current working directory.
 To use this configuration file with `clinsight`, the environment variable named "CONFIG_PATH" needs to be set by using a command similar to the following: `Sys.setenv("CONFIG_PATH" = "PATH_TO_CONFIG/clinsight_config.yml")`, where `PATH_TO_CONFIG` is the path to the folder in which the configuration file is located.
