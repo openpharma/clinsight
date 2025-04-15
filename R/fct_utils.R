@@ -40,7 +40,7 @@ time_stamp <- function(
 #' to search for the date object. 
 #'
 #' @return A date-time object of length 1.
-#' @export
+#' @keywords internal
 #'
 #' @examples 
 #' # example data:

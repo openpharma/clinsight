@@ -100,7 +100,6 @@ reference:
   - create_clinsight_metadata
   - filter_data
   - get_base_value
-  - get_max_time
   - get_unique_vars
   - get_test_results
   - is_date
