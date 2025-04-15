@@ -84,8 +84,6 @@ reference:
   - get_metadata
   - metadata
   - clinsightful_data
-- title: Figure functions
-- contents: 
 - title: Report
   desc: Create Review reports.
 - contents: 
