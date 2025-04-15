@@ -36,7 +36,6 @@ reference:
 - title: Credential management
   desc: Functions to manage credentials.
 - contents: 
-  - initialize_credentials
   - authenticate_server 
   - authenticate_ui 
 - title: Application modules
