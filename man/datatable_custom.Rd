@@ -72,3 +72,4 @@ consistent style.
 \examples{
 datatable_custom(mtcars)
 }
+\keyword{internal}

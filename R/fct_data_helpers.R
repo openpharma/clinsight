@@ -546,7 +546,7 @@ add_missing_columns <- function(
 #' @param ... Other optional arguments that will be passed to [DT::datatable()].
 #'
 #' @return A `DT::datatable` object.
-#' @export
+#' @keywords internal
 #'
 #' @examples datatable_custom(mtcars)
 datatable_custom <- function(
