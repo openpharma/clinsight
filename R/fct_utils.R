@@ -8,7 +8,7 @@
 #' @param timezone Timezone to use.
 #'
 #' @return A character string with time stamp in it.
-#' @export
+#' @keywords internal
 #'
 #' @examples
 #' time_stamp()

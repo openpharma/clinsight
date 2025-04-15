@@ -22,3 +22,4 @@ unified timezone and format.
 \examples{
 time_stamp()
 }
+\keyword{internal}
