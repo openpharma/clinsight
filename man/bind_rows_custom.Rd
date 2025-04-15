@@ -33,3 +33,4 @@ character, and then combines the list of data frames into one data frame.
  )
 bind_rows_custom(data_list, "values")
 }
+\keyword{internal}

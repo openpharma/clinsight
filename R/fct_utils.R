@@ -310,7 +310,7 @@ get_unique_vars <- function(data, var
 #' that need to be converted.
 #'
 #' @return A data frame object.
-#' @export
+#' @keywords internal
 #' 
 #' @examples
 #'  data_list <- list(
