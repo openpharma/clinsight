@@ -21,3 +21,4 @@ fig <- ggplot(mtcars, aes(x = cyl, y = mpg, group = cyl)) + geom_boxplot() + geo
 get_ggplot_layer_names(fig)
 
 }
+\keyword{internal}

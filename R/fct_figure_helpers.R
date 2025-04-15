@@ -78,7 +78,7 @@ custom_plot_theme <- function(){
 #' @param fig A ggplot2 object. 
 #'
 #' @return A character vector with all the layer names of the ggplot object.
-#' @export
+#' @keywords internal
 #'
 #' @examples
 #' library(ggplot2)

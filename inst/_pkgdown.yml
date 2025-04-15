@@ -90,7 +90,6 @@ reference:
 - title: Figure functions
 - contents: 
   - plotly_figure
-  - get_ggplot_layer_names
 - title: Report
   desc: Create Review reports.
 - contents: 
