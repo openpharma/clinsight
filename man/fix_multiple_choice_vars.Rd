@@ -50,3 +50,4 @@ consistent.
  )
  fix_multiple_choice_vars(df, common_vars = "ID")
 }
+\keyword{internal}

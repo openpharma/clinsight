@@ -216,7 +216,7 @@ add_timevars_to_data <- function(
 #'   item_value = as.character(c(95, 67, 58, 83, 34))
 #'  )
 #'  fix_multiple_choice_vars(df, common_vars = "ID")
-#' @export
+#' @keywords internal
 #' 
 fix_multiple_choice_vars <- function(
     data,

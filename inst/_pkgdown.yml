@@ -91,7 +91,6 @@ reference:
 - title: Figure functions
 - contents: 
   - plotly_figure
-  - fix_multiple_choice_vars
   - get_ggplot_layer_names
 - title: Report
   desc: Create Review reports.
