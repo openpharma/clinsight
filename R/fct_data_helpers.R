@@ -454,7 +454,9 @@ get_base_value <- function(
 #' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' adjust_colnames(head(iris), "^Sepal", "Flower")
+#' }
 adjust_colnames <- function(
     data,
     pattern,
