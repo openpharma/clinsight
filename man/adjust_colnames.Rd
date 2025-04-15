@@ -28,6 +28,8 @@ to remove common prefixes for better table layout. For example, the prefix
 with this function.
 }
 \examples{
+\dontrun{
 adjust_colnames(head(iris), "^Sepal", "Flower")
+}
 }
 \keyword{internal}
