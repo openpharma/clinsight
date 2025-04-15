@@ -112,7 +112,6 @@ reference:
   - create_clinsight_config
   - create_clinsight_metadata
   - filter_data
-  - cols_to_char
   - create_unique_id
   - datatable_custom
   - date_cols_to_char

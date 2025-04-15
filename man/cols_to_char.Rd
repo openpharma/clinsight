@@ -19,3 +19,4 @@ Convert non-numeric columns to character
 df <- cols_to_char(iris)
 class(df$Species)
 }
+\keyword{internal}

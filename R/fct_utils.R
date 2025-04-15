@@ -416,7 +416,7 @@ is_date <- function(x) {
 #' @param data A data frame with columns that need to be converted.
 #'
 #' @return A data frame with all non-numeric columns converted to character.
-#' @export
+#' @keywords internal
 #'
 #' @examples
 #' df <- cols_to_char(iris)
