@@ -21,3 +21,4 @@ to ensure that the crosstalk widgets stay connected (see also
 \examples{
 create_unique_id(5)
 }
+\keyword{internal}

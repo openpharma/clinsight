@@ -190,7 +190,7 @@ title_case <- function(x) {
 #' @param bytes An integer. Controls the size of the unique id.
 #'
 #' @return A unique character vector.
-#' @export
+#' @keywords internal
 #'
 #' @examples
 #' create_unique_id(5)
