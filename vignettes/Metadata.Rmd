@@ -82,7 +82,7 @@ Then, additional data per variable needs to be provided. As an example, we will 
 
 To keep the metadata compact, the variables can also be provided by only stating the base name `LBSER_SODIUM` in the `var` column, and specifying the suffixes in the `suffix` column (see screenshot above). `ClinSight` will automatically expand the base name with all suffixes provided when reading metadata with `get_metadata()`.
 
-> *Important note: while the base name is flexible and can be anything, currently it is easiest to keep the suffixes as stated above, since that is the format that ClinSight expects: `LBORRES`, `LBORNR_Lower`, `LBORNR_Upper`, `LBORRESU`, `LBORRESUOTH`, `LBCLSIG`, and `LBREASND`. If the `suffix` names differ in the raw data, you can provide the actual names in the metadata tab, and then provide a custom function in the `settings` tab (see below) which renames the variables to the ones mentioned.*
+> *Important note: while the base name is flexible, the suffix names are not. It is easiest to keep the suffixes as stated above, since that is the format that ClinSight expects: `LBORRES`, `LBORNR_Lower`, `LBORNR_Upper`, `LBORRESU`, `LBORRESUOTH`, `LBCLSIG`, and `LBREASND`. If the `suffix` names differ in the raw data, you can provide the actual names in the metadata tab, and then provide a custom function in the `settings` tab (see below) which renames the variables to the ones mentioned.*
 
 #### general
 
