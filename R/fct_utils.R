@@ -439,7 +439,7 @@ cols_to_char <- function(data){
 #'
 #' @return A data frame with all columns with the class `Date` or `POSIXct` 
 #' converted to character.
-#' @export
+#' @keywords internal
 #'
 #' @examples
 #' df <- iris

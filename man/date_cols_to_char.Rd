@@ -26,3 +26,4 @@ converted_df <- date_cols_to_char(df)
 sapply(converted_df, class)
 
 }
+\keyword{internal}
