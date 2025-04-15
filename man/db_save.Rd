@@ -24,3 +24,4 @@ Saves a query to a table in the user database.
 db_save(mtcars, ":memory:", "mtcars_db")
 
 }
+\keyword{internal}

@@ -375,7 +375,7 @@ db_save_review <- function(
 #' needs to be appended.
 #'
 #' @return A table in a database will be appended. No values will be returned. 
-#' @export 
+#' @keywords internal 
 #'
 #' @examples 
 #' db_save(mtcars, ":memory:", "mtcars_db")
