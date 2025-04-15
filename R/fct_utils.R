@@ -88,7 +88,7 @@ get_max_time <- function(
 #' to ensure that the information in `columns` is not lost. Can be a vector of logicals if multiple `columns` are used for expansion. 
 #'
 #' @return A data frame that usually will be longer than the original one.
-#' @export
+#' @keywords internal
 #' 
 #' @examples
 #'  df <- head(iris, n = 6) |> 

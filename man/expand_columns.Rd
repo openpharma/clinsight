@@ -48,3 +48,4 @@ expand_columns(df, c("expansion_1", "expansion_2"),
   unite_with = "Species", remove_cols = c(TRUE, FALSE))
 
 }
+\keyword{internal}
