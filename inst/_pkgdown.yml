@@ -84,9 +84,6 @@ reference:
   - get_metadata
   - metadata
   - clinsightful_data
-- title: Report
-  desc: Create Review reports.
-- contents: 
 - title: Helper functions
 - contents: 
   - create_clinsight_config
