@@ -109,7 +109,6 @@ reference:
   - create_report
 - title: Helper functions
 - contents: 
-  - adjust_colnames
   - bind_rows_custom
   - check_appdata
   - create_clinsight_config

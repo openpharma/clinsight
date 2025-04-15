@@ -30,3 +30,4 @@ with this function.
 \examples{
 adjust_colnames(head(iris), "^Sepal", "Flower")
 }
+\keyword{internal}

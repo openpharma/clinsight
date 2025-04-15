@@ -451,7 +451,7 @@ get_base_value <- function(
 #' removing the pattern from the data frame names).
 #'
 #' @return A data frame with adjusted column names.
-#' @export
+#' @keywords internal
 #'
 #' @examples
 #' adjust_colnames(head(iris), "^Sepal", "Flower")
