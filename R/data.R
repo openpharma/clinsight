@@ -31,7 +31,7 @@
 #' to create custom study data for clinsight.
 #'
 #' @format a data.frame with `r nrow(clinsightful_data)` rows and
-#'   `ncol(clinsightful_data)` variables.
+#'   `r ncol(clinsightful_data)` variables.
 #'  -   `site_code`: character or integer, identifier for study site.
 #'  -   `subject_id`: character, unique identifier for a subject.
 #'  -   `event_id`: character, event identifier in raw data. Replaced by

@@ -5,7 +5,7 @@
 \alias{metadata}
 \title{Application Metadata}
 \format{
-\subsection{\code{metadata} A list with 9 objects: column_names, events, common_forms, study_forms, general, form_level_data, table_names, settings, items_expanded.}{
+\subsection{\code{metadata}: A list with 9 objects.}{
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{str(metadata)
 #> List of 9
@@ -73,11 +73,5 @@ variables will be shown. The goal is that most, if not all, study-specific
 data will be captured in the metadata, leaving the scripts to run the
 application largely unaltered between studies.See \code{vignette("Metadata")} for
 in-depth information.
-}
-\examples{
-# Metadata structure:
-str(metadata)
-
-
 }
 \keyword{datasets}
