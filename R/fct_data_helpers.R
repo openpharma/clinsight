@@ -210,12 +210,14 @@ add_timevars_to_data <- function(
 #'
 #' @return data frame with corrected multiple choice variables
 #' @examples
+#' \dontrun{
 #'  df <- data.frame(
 #'   ID = "Subj1",
 #'   var = c("Age", paste0("MH_TRT", 1:4)),
 #'   item_value = as.character(c(95, 67, 58, 83, 34))
 #'  )
 #'  fix_multiple_choice_vars(df, common_vars = "ID")
+#' }
 #' @keywords internal
 #' 
 fix_multiple_choice_vars <- function(

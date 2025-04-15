@@ -43,11 +43,13 @@ function cleans this specific output so that the variable name remains
 consistent.
 }
 \examples{
+\dontrun{
  df <- data.frame(
   ID = "Subj1",
   var = c("Age", paste0("MH_TRT", 1:4)),
   item_value = as.character(c(95, 67, 58, 83, 34))
  )
  fix_multiple_choice_vars(df, common_vars = "ID")
+}
 }
 \keyword{internal}
