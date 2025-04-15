@@ -76,7 +76,6 @@ reference:
   desc: Create, read or append the app database. 
 - contents:
   - get_db_connection
-  - db_temp_connect
   - db_create
   - db_update
   - update_review_data

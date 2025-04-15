@@ -30,7 +30,7 @@ get_db_connection <- function(
 #' @param drv The DB driver to use. Standard the SQLite driver.
 #'
 #' @return Nothing will be returned by default.
-#' @export
+#' @keywords internal
 #'
 #' @examples
 #'  library(DBI)

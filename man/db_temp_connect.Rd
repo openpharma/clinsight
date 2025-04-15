@@ -24,3 +24,4 @@ Connect temporarily to a database.
  db_temp_connect(tempfile(), DBI::dbWriteTable(con, "test_table", mtcars))
  
 }
+\keyword{internal}
