@@ -83,7 +83,7 @@ select_report_data <- function(
 #' @param query_df Data frame with query data to be used in the report.
 #'
 #' @return A PDF report will be created.
-#' @export 
+#' @keywords internal 
 #'
 create_report <- function(
     fileinput, 

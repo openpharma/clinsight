@@ -106,7 +106,6 @@ reference:
   desc: Create Review reports.
 - contents: 
   - select_report_data
-  - create_report
 - title: Helper functions
 - contents: 
   - create_clinsight_config
