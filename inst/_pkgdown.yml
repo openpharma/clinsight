@@ -9,7 +9,6 @@ articles:
   contents:
   - Metadata
   - Deployment
-  - data_spec
 
 - title: Test report
   navbar: Validation
@@ -20,6 +19,11 @@ articles:
   navbar: Developer Guides
   contents:
   - Contributions
+  
+- title: Legacy instructions
+  desc: contains old (possibly outdated) instructions for reference purposes.
+  contents:
+  - data_spec
 
 reference:
 - title: Main application
