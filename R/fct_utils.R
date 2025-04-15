@@ -352,7 +352,7 @@ bind_rows_custom <- function(
 #'   if levels are not existent.
 #'
 #' @return a factor with newly calculated levels
-#' @export
+#' @keywords internal
 #'
 #' @examples
 #' collapse_fct_levels(

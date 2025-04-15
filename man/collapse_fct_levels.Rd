@@ -32,3 +32,4 @@ x = LETTERS,
 new_levels = list("A-C" = c("A", "B", "C"))
 )
 }
+\keyword{internal}
