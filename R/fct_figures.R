@@ -88,7 +88,7 @@ fig_boxplots <- function(
 #'   to create the right labels in the timeline figure.
 #'
 #' @return A ggplot2 object.
-#' @export
+#' @keywords internal
 #' 
 fig_timeline <- function(
     data, 
