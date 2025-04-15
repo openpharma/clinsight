@@ -68,7 +68,6 @@ reference:
   - get_available_data
   - get_review_data
   - get_static_overview_data
-  - get_timeline_data
   - summarize_review_data
 - title: Database functions
   desc: Create, read or append the app database. 
