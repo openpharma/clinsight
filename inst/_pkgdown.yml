@@ -65,7 +65,6 @@ reference:
   - get_raw_csv_data
   - merge_meta_with_data
   - apply_study_specific_fixes
-  - get_appdata
   - get_available_data
   - get_meta_vars
   - get_review_data
