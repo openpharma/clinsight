@@ -47,7 +47,7 @@ remove_boxplot_outliers <- function(fig){
 #' A custom `ggplot2` theme to be used in the application.
 #'
 #' @return A list with ggplot2 theme layers
-#' @export
+#' @keywords internal
 #'
 #' @examples 
 #' library(ggplot2)

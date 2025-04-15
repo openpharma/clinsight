@@ -18,3 +18,4 @@ ggplot(mtcars, aes(mpg, cyl)) +
   geom_point() + 
   custom_plot_theme()
 }
+\keyword{internal}

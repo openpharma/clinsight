@@ -100,7 +100,6 @@ reference:
   - fig_timeseries
   - plotly_figure
   - fix_multiple_choice_vars
-  - custom_plot_theme
   - get_ggplot_layer_names
 - title: Report
   desc: Create Review reports.
