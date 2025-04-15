@@ -26,3 +26,4 @@ regular expressions.
 vector_select(names(iris), include = "Sepal", exclude = "Width")
 
 }
+\keyword{internal}

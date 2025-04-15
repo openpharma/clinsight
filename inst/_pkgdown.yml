@@ -90,4 +90,3 @@ reference:
   - filter_data
   - get_base_value
   - get_test_results
-  - vector_select

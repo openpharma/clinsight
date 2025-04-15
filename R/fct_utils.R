@@ -504,7 +504,7 @@ clean_dates <- function(
 #'   this regular expression.
 #'
 #' @return A character vector.
-#' @export
+#' @keywords internal
 #'
 #' @examples
 #' vector_select(names(iris), include = "Sepal", exclude = "Width")
