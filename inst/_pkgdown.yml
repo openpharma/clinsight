@@ -91,7 +91,6 @@ reference:
   - filter_data
   - get_base_value
   - get_test_results
-  - simplify_string
   - time_stamp
   - title_case
   - vector_select

@@ -215,7 +215,7 @@ create_unique_id <- function (
 #' to character strings.
 #'
 #' @return character vector of the same length as the input vector.
-#' @export
+#' @keywords internal
 #'
 #' @examples simplify_string(c(" Dirty_name. to Clean.#$", "#$another   complicated. Name"))
 simplify_string <- function(x){

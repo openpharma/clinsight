@@ -21,3 +21,4 @@ uppercase letters to lowercase.
 \examples{
 simplify_string(c(" Dirty_name. to Clean.#$", "#$another   complicated. Name"))
 }
+\keyword{internal}
