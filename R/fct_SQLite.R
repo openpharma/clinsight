@@ -327,7 +327,7 @@ db_upsert <- function(con, data, idx_cols) {
 #'
 #' @return Review information will be written in the database. No local objects
 #'   will be returned.
-#' @export
+#' @keywords internal
 #' 
 db_save_review <- function(
     rv_records,

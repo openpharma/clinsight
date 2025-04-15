@@ -79,7 +79,6 @@ reference:
   - db_temp_connect
   - db_create
   - db_update
-  - db_save_review
   - db_slice_rows 
   - update_review_data
   - collect_query_data
