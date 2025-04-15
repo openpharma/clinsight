@@ -196,7 +196,7 @@ summarize_review_data <- function(
 #' @param separator Character string to collapse the column values with.
 #'
 #' @return A data frame in which the `column` is changed.
-#' @export
+#' @keywords internal
 #'
 #' @examples
 #'  library(dplyr)
