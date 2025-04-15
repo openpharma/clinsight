@@ -403,7 +403,7 @@ collapse_fct_levels <- function(
 #' @param x An atomic object (a vector).
 #'
 #' @return a logical of length one.
-#' @export
+#' @keywords internal
 #'
 #' @examples is_date(as.Date("2023-09-03"))
 is_date <- function(x) {

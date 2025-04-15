@@ -19,3 +19,4 @@ POSIXct.
 \examples{
 is_date(as.Date("2023-09-03"))
 }
+\keyword{internal}
