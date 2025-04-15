@@ -58,3 +58,4 @@ fig_data <- data.frame(
    x_title = "x-axis_title"
    )
 }
+\keyword{internal}

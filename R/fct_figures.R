@@ -17,7 +17,7 @@
 #' @param y_title y axis title.
 #' @param x_title x-axis title.
 #'
-#' @export
+#' @keywords internal
 #'
 #' @examples
 #' fig_data <- data.frame(
