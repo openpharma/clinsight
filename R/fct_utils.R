@@ -473,7 +473,7 @@ date_cols_to_char <- function(data){
 #'   (first day/month).
 #'
 #' @return A `date`-class vector.
-#' @export
+#' @keywords internal
 #'
 #' @examples
 #' clean_dates(c("2023-08-NK", "2023-NK-NK", "NK-08-01"))
