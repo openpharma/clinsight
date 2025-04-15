@@ -22,3 +22,4 @@ title_case("this will be converted to upper case")
 # [1] "This Will Be Converted To Upper Case"
 
 }
+\keyword{internal}

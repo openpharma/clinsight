@@ -90,5 +90,4 @@ reference:
   - filter_data
   - get_base_value
   - get_test_results
-  - title_case
   - vector_select

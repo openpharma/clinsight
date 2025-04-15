@@ -159,7 +159,7 @@ expand_columns <- function(
 #' @param x Character string.
 #'
 #' @return A character string.
-#' @export
+#' @keywords internal
 #'
 #' @examples 
 #' title_case("this will be converted to upper case")
