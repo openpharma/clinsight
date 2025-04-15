@@ -267,7 +267,7 @@ order_string <- function(
 #' @param var Column names to extract the unique variables from
 #'
 #' @return A data frame with unique values.
-#' @export
+#' @keywords internal
 #'
 #' @examples
 #'  list_with_data <- list(

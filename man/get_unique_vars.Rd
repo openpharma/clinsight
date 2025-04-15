@@ -33,3 +33,4 @@ or a list of dataframes.
  get_unique_vars(list_with_data, c("Sites", "ID"))
 
 }
+\keyword{internal}
