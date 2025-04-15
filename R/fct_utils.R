@@ -11,7 +11,9 @@
 #' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' time_stamp()
+#' }
 time_stamp <- function(
     form = "%Y-%m-%d %H:%M:%S %Z", 
     timezone = "UTC"
@@ -43,11 +45,13 @@ time_stamp <- function(
 #' @keywords internal
 #'
 #' @examples 
+#' \dontrun{
 #' # example data:
 #' dfs <- lapply(1:10, \(x){data.frame(
 #'   "edit_date_time" = sample(seq(as.Date('1999/01/01'), as.Date('2000/01/01'), by="day"), 12)
 #'   )})
 #' get_max_time(dfs, "edit_date_time")
+#' }
 #'  
 get_max_time <- function(
     data, 
@@ -91,6 +95,7 @@ get_max_time <- function(
 #' @keywords internal
 #' 
 #' @examples
+#' \dontrun{
 #'  df <- head(iris, n = 6) |> 
 #'   dplyr::mutate(
 #'     expansion_1 = list("feature.1, feature.2"), 
@@ -104,6 +109,7 @@ get_max_time <- function(
 #' # and remove column "expansion_1" but keep column "expansion_2" afterwards:
 #' expand_columns(df, c("expansion_1", "expansion_2"),  
 #'   unite_with = "Species", remove_cols = c(TRUE, FALSE))
+#' }
 #' 
 expand_columns <- function(
     data, 
@@ -162,8 +168,10 @@ expand_columns <- function(
 #' @keywords internal
 #'
 #' @examples 
+#' \dontrun{
 #' title_case("this will be converted to upper case")
 #' # [1] "This Will Be Converted To Upper Case"
+#' }
 #' 
 title_case <- function(x) {
   stopifnot(is.character(x))
@@ -193,7 +201,9 @@ title_case <- function(x) {
 #' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' create_unique_id(5)
+#' }
 create_unique_id <- function (
     bytes = 5
 ) {
@@ -217,7 +227,10 @@ create_unique_id <- function (
 #' @return character vector of the same length as the input vector.
 #' @keywords internal
 #'
-#' @examples simplify_string(c(" Dirty_name. to Clean.#$", "#$another   complicated. Name"))
+#' @examples 
+#' \dontrun{
+#' simplify_string(c(" Dirty_name. to Clean.#$", "#$another   complicated. Name"))
+#' }
 simplify_string <- function(x){
   if(is.factor(x)) x <- as.character(x)
   stopifnot(is.vector(x))
@@ -239,7 +252,9 @@ simplify_string <- function(x){
 #' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' order_string(rownames(mtcars))
+#' }
 #' 
 order_string <- function(
     string = appdata$`CBC regular`$subject_id
@@ -270,6 +285,7 @@ order_string <- function(
 #' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #'  list_with_data <- list(
 #'   data.frame(
 #'     "Sites" = c("site_1", "site_3", "site_4"),
@@ -282,6 +298,7 @@ order_string <- function(
 #'  )
 #'
 #'  get_unique_vars(list_with_data, c("Sites", "ID"))
+#' }
 #' 
 get_unique_vars <- function(data, var
 ){
@@ -313,6 +330,7 @@ get_unique_vars <- function(data, var
 #' @keywords internal
 #' 
 #' @examples
+#' \dontrun{
 #'  data_list <- list(
 #'    data.frame(
 #'       "ID" = c("subj_1", "subj_5", "subj_8"),
@@ -324,6 +342,7 @@ get_unique_vars <- function(data, var
 #'    )
 #'  )
 #' bind_rows_custom(data_list, "values")
+#' }
 bind_rows_custom <- function(
     data, 
     convert = "item_value"
@@ -355,10 +374,12 @@ bind_rows_custom <- function(
 #' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' collapse_fct_levels(
 #' x = LETTERS,
 #' new_levels = list("A-C" = c("A", "B", "C"))
 #' )
+#' }
 collapse_fct_levels <- function(
     x = appdata$ECG$status,
     new_levels = list("old" = "old", "new" = c("new", "updated")),
@@ -405,7 +426,10 @@ collapse_fct_levels <- function(
 #' @return a logical of length one.
 #' @keywords internal
 #'
-#' @examples is_date(as.Date("2023-09-03"))
+#' @examples 
+#' \dontrun{
+#' is_date(as.Date("2023-09-03"))
+#' }
 is_date <- function(x) {
   stopifnot(is.atomic(x))
   inherits(x, c("Date", "POSIXt"))
@@ -419,8 +443,10 @@ is_date <- function(x) {
 #' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' df <- cols_to_char(iris)
 #' class(df$Species)
+#' }
 cols_to_char <- function(data){
   stopifnot(is.data.frame(data))
   lapply(data, \(x){ 
@@ -442,11 +468,13 @@ cols_to_char <- function(data){
 #' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' df <- iris
 #' df$dates <- Sys.Date() + sample(1:1000, size = nrow(iris))
 #' converted_df <- date_cols_to_char(df)
 #' # the date variable is now converted, while all other columns are unchanged:
 #' sapply(converted_df, class)
+#' }
 #' 
 date_cols_to_char <- function(data){
   stopifnot(is.data.frame(data))
@@ -476,7 +504,9 @@ date_cols_to_char <- function(data){
 #' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' clean_dates(c("2023-08-NK", "2023-NK-NK", "NK-08-01"))
+#' }
 clean_dates <- function(
     x,
     unknown_pattern = "NK",
@@ -507,7 +537,9 @@ clean_dates <- function(
 #' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' vector_select(names(iris), include = "Sepal", exclude = "Width")
+#' }
 #' 
 vector_select <- function(
     x,

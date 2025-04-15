@@ -33,8 +33,10 @@ get_db_connection <- function(
 #' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #'  library(DBI)
 #'  db_temp_connect(tempfile(), DBI::dbWriteTable(con, "test_table", mtcars))
+#' }
 #'  
 db_temp_connect <- function(db_path, code, drv = RSQLite::SQLite()){
   withr::with_db_connection(
@@ -378,7 +380,9 @@ db_save_review <- function(
 #' @keywords internal 
 #'
 #' @examples 
+#' \dontrun{
 #' db_save(mtcars, ":memory:", "mtcars_db")
+#' }
 #' 
 db_save <- function(data, db_path, db_table = "query_data"){
   stopifnot(is.data.frame(data), is.character(db_table))

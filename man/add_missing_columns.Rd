@@ -21,6 +21,8 @@ and if not, adds a column with all missing variables in the data. Thus, the
 columns will be made explicitly missing in the data frame.
 }
 \examples{
+\dontrun{
 add_missing_columns(head(iris), c("important_column1", "important_column2"))
+}
 }
 \keyword{internal}

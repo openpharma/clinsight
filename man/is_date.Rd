@@ -17,6 +17,8 @@ Small helper function to verify whether an object is of class Date or
 POSIXct.
 }
 \examples{
+\dontrun{
 is_date(as.Date("2023-09-03"))
+}
 }
 \keyword{internal}

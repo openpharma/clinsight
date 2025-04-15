@@ -21,11 +21,13 @@ Small helper function to extract the latest date-time from a data frame or
 a list of data frames.
 }
 \examples{
+\dontrun{
 # example data:
 dfs <- lapply(1:10, \(x){data.frame(
   "edit_date_time" = sample(seq(as.Date('1999/01/01'), as.Date('2000/01/01'), by="day"), 12)
   )})
 get_max_time(dfs, "edit_date_time")
+}
  
 }
 \keyword{internal}

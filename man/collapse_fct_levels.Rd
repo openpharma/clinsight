@@ -27,9 +27,11 @@ a factor with newly calculated levels
 Small helper function to collapse factors using a Base R syntax
 }
 \examples{
+\dontrun{
 collapse_fct_levels(
 x = LETTERS,
 new_levels = list("A-C" = c("A", "B", "C"))
 )
+}
 }
 \keyword{internal}

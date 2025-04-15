@@ -20,6 +20,8 @@ Simple wrapper around Sys.time to get a time stamp in
 unified timezone and format.
 }
 \examples{
+\dontrun{
 time_stamp()
+}
 }
 \keyword{internal}

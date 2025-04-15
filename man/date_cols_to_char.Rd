@@ -19,11 +19,13 @@ database, since SQL databases do not (always) support date-time classes
 used in R.
 }
 \examples{
+\dontrun{
 df <- iris
 df$dates <- Sys.Date() + sample(1:1000, size = nrow(iris))
 converted_df <- date_cols_to_char(df)
 # the date variable is now converted, while all other columns are unchanged:
 sapply(converted_df, class)
+}
 
 }
 \keyword{internal}

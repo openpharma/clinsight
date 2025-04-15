@@ -480,7 +480,9 @@ adjust_colnames <- function(
 #' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' add_missing_columns(head(iris), c("important_column1", "important_column2"))
+#' }
 add_missing_columns <- function(
     data,
     columns
@@ -548,7 +550,10 @@ add_missing_columns <- function(
 #' @return A `DT::datatable` object.
 #' @keywords internal
 #'
-#' @examples datatable_custom(mtcars)
+#' @examples 
+#' \dontrun{
+#' datatable_custom(mtcars)
+#' }
 datatable_custom <- function(
     data, 
     rename_vars = NULL, 

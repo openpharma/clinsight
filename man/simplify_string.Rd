@@ -19,6 +19,8 @@ Replaces all punctuation and spaces for an underscore, and transforms all
 uppercase letters to lowercase.
 }
 \examples{
+\dontrun{
 simplify_string(c(" Dirty_name. to Clean.#$", "#$another   complicated. Name"))
+}
 }
 \keyword{internal}

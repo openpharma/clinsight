@@ -20,8 +20,10 @@ Nothing will be returned by default.
 Connect temporarily to a database.
 }
 \examples{
+\dontrun{
  library(DBI)
  db_temp_connect(tempfile(), DBI::dbWriteTable(con, "test_table", mtcars))
+}
  
 }
 \keyword{internal}

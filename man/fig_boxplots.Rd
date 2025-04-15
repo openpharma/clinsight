@@ -43,6 +43,7 @@ Creates a faceted \code{ggplot()} figure with boxplots per study site. Ignores
 time/visit dependencies (will group data of all visits together).
 }
 \examples{
+\dontrun{
 fig_data <- data.frame(
  "site_code" = sample(c("Site 1", "Site 2"), 50, replace = TRUE),
  "item_value" = runif(50, 1, 100),
@@ -57,5 +58,6 @@ fig_data <- data.frame(
    y_title = "y-axis_title",
    x_title = "x-axis_title"
    )
+}
 }
 \keyword{internal}
