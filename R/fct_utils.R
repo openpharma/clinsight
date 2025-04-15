@@ -236,7 +236,7 @@ simplify_string <- function(x){
 #' @param string Character string to be used. 
 #'
 #' @return An ordered string.
-#' @export
+#' @keywords internal
 #'
 #' @examples
 #' order_string(rownames(mtcars))

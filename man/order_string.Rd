@@ -21,3 +21,4 @@ Arranges first on all string letters, and then on the numbers.
 order_string(rownames(mtcars))
 
 }
+\keyword{internal}
