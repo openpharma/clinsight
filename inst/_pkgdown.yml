@@ -90,7 +90,6 @@ reference:
   - clinsightful_data
 - title: Figure functions
 - contents: 
-  - fig_timeseries
   - plotly_figure
   - fix_multiple_choice_vars
   - get_ggplot_layer_names

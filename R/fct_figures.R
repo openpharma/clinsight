@@ -179,7 +179,7 @@ fig_timeline <- function(
 #'   the point size in the figure.
 #'
 #' @return A faceted ggplot2 time series figure.
-#' @export
+#' @keywords internal
 #' @seealso [plotly_figure()]
 #' @examples
 #' set.seed(2025)

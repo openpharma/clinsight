@@ -73,3 +73,4 @@ fig_timeseries(mock_data, id_to_highlight = "Subject10")
 \seealso{
 \code{\link[=plotly_figure]{plotly_figure()}}
 }
+\keyword{internal}
