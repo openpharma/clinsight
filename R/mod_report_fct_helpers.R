@@ -15,7 +15,7 @@
 #' should be included. Will be ignored if report_type is not "session".
 #'
 #' @return A data frame with the required report data.
-#' @export
+#' @keywords internal
 #'
 select_report_data <- function(
     data, 
