@@ -66,7 +66,6 @@ reference:
   - merge_meta_with_data
   - apply_study_specific_fixes
   - get_available_data
-  - get_meta_vars
   - get_review_data
   - get_static_overview_data
   - get_timeline_data

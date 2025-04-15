@@ -288,7 +288,7 @@ fix_multiple_choice_vars <- function(
 #' @param meta List. metadata to use.
 #'
 #' @return a list with all important names to be used in a clinical trial.
-#' @export
+#' @keywords internal
 #'
 get_meta_vars <- function(data = appdata, meta = metadata){
   stopifnot(inherits(data, "list"))
