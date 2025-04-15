@@ -284,7 +284,7 @@ fig_timeseries <- function(
 #' @param y_lab Character string with the text on the y-axis.
 #'
 #' @return A ggplot2 object.
-#' @export
+#' @keywords internal
 #'
 #' @examples
 #'  df <- mtcars |>

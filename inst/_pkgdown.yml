@@ -90,7 +90,6 @@ reference:
   - clinsightful_data
 - title: Figure functions
 - contents: 
-  - fig_barplot
   - fig_boxplots
   - fig_timeline
   - fig_timeseries

@@ -31,3 +31,4 @@ Creates a small bar chart.
   )
 fig_barplot(df, cyl, fill_color)
 }
+\keyword{internal}
