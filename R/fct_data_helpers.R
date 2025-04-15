@@ -477,7 +477,7 @@ adjust_colnames <- function(
 #'
 #' @return A data frame with at least all the columns named in `columns`. 
 #' The added columns will be of class `character`. 
-#' @export
+#' @keywords internal
 #'
 #' @examples
 #' add_missing_columns(head(iris), c("important_column1", "important_column2"))

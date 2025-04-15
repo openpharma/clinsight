@@ -23,3 +23,4 @@ columns will be made explicitly missing in the data frame.
 \examples{
 add_missing_columns(head(iris), c("important_column1", "important_column2"))
 }
+\keyword{internal}
