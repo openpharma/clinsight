@@ -323,7 +323,7 @@ fig_barplot <- function(
 #' @param height Height of the plot.
 #' @param ... Other variables, passed onto the figure functions that are called to create the plots.
 #'
-#' @export
+#' @keywords internal
 #' @seealso [fig_timeseries()], [fig_boxplots()]
 plotly_figure <- function(
     data, 

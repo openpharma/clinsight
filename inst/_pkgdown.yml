@@ -86,7 +86,6 @@ reference:
   - clinsightful_data
 - title: Figure functions
 - contents: 
-  - plotly_figure
 - title: Report
   desc: Create Review reports.
 - contents: 
