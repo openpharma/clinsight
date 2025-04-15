@@ -35,3 +35,4 @@ fig
 remove_boxplot_outliers(ggplotly(fig))
 
 }
+\keyword{internal}

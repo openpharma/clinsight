@@ -95,7 +95,6 @@ reference:
   - filter_data
   - get_base_value
   - get_test_results
-  - remove_boxplot_outliers
   - simplify_string
   - time_stamp
   - title_case

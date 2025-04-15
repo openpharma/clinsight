@@ -10,7 +10,7 @@
 #' @param fig A `plotly` object created with [plotly::ggplotly()]. 
 #'
 #' @return The same [plotly::ggplotly()] object, now with outliers in boxplots deleted.
-#' @export 
+#' @keywords internal 
 #'
 #' @examples
 #' library(ggplot2)
