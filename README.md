@@ -47,13 +47,6 @@ Lastly, PDF reports can be created to document a review session:
 
 <img src="man/figures/README-report_modal.png" width="490" />
 
-## ClinSight with custom trial data
-
-The application can be customized for any study using a metadata Excel
-file (see `vignette('Metadata')`), that controls which data will be
-shown in where in the application. For more information on how to fully
-set up ClinSight with custom data, see `vignette('clinsight')`.
-
 ## Installation
 
 There are several ways to install `ClinSight`. To run the application
@@ -106,3 +99,10 @@ library(clinsight)
 # Not run:
 test_clinsight()
 ```
+
+## Learn more
+
+The application can be customized for any study using a metadata Excel
+file (see `vignette('Metadata')`), that controls which data will be
+shown in where in the application. For more information on how to fully
+set up ClinSight with custom data, see `vignette('clinsight')`.
