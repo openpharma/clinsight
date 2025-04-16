@@ -42,12 +42,6 @@ reference:
   - get_raw_csv_data
   - merge_meta_with_data
 
-- title: Credential management
-  desc: Functions to manage credentials.
-- contents: 
-  - authenticate_server 
-  - authenticate_ui 
-
 - title: Application modules
   desc: Modules used in the main Shiny application. 
 - contents:
