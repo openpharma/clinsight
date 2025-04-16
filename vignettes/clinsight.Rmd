@@ -18,8 +18,6 @@ knitr::opts_chunk$set(
 library(clinsight)
 ```
 
-## Test ClinSight
-
 To get started, you can easily run and test ClinSight by using the function `clinsight::test_clinsight()`. This function loads all data in a temporary folder that will be cleaned up after use. Note that this function is only meant for testing and development, and is a wrapper around `clinsight::run_app()`, the main function of this package. `clinsight::run_app()` also works, but creates databases in the working directory that will save user actions such as review status of study data, which is needed for deployment in a production environment.
 
 ```{r eval=FALSE}
