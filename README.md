@@ -11,8 +11,6 @@
 
 <!-- badges: end -->
 
-Small change to test GHA.
-
 `ClinSight` provides a production-ready and easy-to-use application for
 medically monitoring patient safety and data integrity throughout
 clinical trials. The application provides a smart review platform and
