@@ -75,14 +75,14 @@ Then, merge the metadata with the raw data. This will give some information and 
 merged_study_data <- merge_meta_with_data(raw_data, meta_custom)
 ```
 
-Finally, we can start ClinSight with our custom data and metadata:
+Finally, we can test launch ClinSight with our custom data and metadata:
 
 ```{r, eval=FALSE}
 #Not run
 test_clinsight(merged_study_data, meta_custom)
 ```
 
-You will notice that the application shows a warning if some variables defined in the metadata are not available in the actual data, similar to the message below. It is useful to check this output carefully to see if all variable names were entered correctly.
+Notice that the application shows a warning if some variables defined in the metadata are not available in the actual data, similar to the message below. It is useful to check this output carefully to see if any variable names were entered incorrectly.
 
 ```{r}
 # Warning in check_appdata(app_data, meta) :
@@ -95,9 +95,9 @@ You will notice that the application shows a warning if some variables defined i
 # 5      DMOD_DOSE DoseModificationNewDose
 ```
 
-To improve and adjust the application, simply stop the application, adjust the metadata, merge it again with the data, and try again. For example, if we want to change the name of 'Systolic blood pressure' to 'SBP', we can adjust this in the Excel file and use `get_metadata()` again.
+To iteratively improve the metadata, simply stop the application, adjust the metadata, merge it again with the raw data, and re-launch using `test_clinsight()`. For example, if we want to change the name of 'Systolic blood pressure' to 'SBP', we can adjust this in the Excel file and use `get_metadata()` again.
 
-We will simulate this behavior here by manually adjusting the metadata file:
+We will simulate this behavior here by manually adjusting the metadata file here, but normally you would open the Excel file to make the desired change a permanent one:
 
 ```{r}
 # !It is better to adjust the Excel metadata file instead of doing this:
