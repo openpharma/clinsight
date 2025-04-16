@@ -33,6 +33,7 @@ reference:
   - test_clinsight
   - app_ui
   - app_server
+
 - title: Customize ClinSight
   desc: To prepare custom clinical trial data for use with ClinSight
 - contents:
@@ -40,11 +41,13 @@ reference:
   - create_clinsight_metadata
   - get_raw_csv_data
   - merge_meta_with_data
+
 - title: Credential management
   desc: Functions to manage credentials.
 - contents: 
   - authenticate_server 
   - authenticate_ui 
+
 - title: Application modules
   desc: Modules used in the main Shiny application. 
 - contents:
@@ -59,18 +62,21 @@ reference:
   - mod_study_forms_server
   - mod_study_forms_ui
   - starts_with("mod_")
+
 - title: Create wide-form tables
   desc: S3 method for creating wide-form study-specific tables.
 - contents: 
   - create_table
   - create_table.default
   - starts_with("create_table")
+
 - title: Data frame functions
   desc: Create data for use in the application.
 - contents: 
   - get_available_data
   - get_review_data
   - get_static_overview_data
+
 - title: Database functions
   desc: Create, read or append the app database. 
 - contents:
@@ -81,12 +87,14 @@ reference:
   - collect_query_data
   - db_get_review
   - db_get_query
+
 - title: Internal dataset
   desc: Create or describe internal data. 
 - contents: 
   - get_metadata
   - metadata
   - clinsightful_data
+
 - title: Helper functions
 - contents: 
   - filter_data
