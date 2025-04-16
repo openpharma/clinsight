@@ -26,13 +26,10 @@ articles:
   - data_spec
 
 reference:
-- title: Main application
-  desc:  Top-level functions to run the Shiny application
+- title: Test ClinSight
+  desc: To test clinsight with either internal data or with custom data.
 - contents:
-  - run_app
   - test_clinsight
-  - app_ui
-  - app_server
 
 - title: Customize ClinSight
   desc: To prepare custom clinical trial data for use with ClinSight
@@ -42,6 +39,13 @@ reference:
   - get_raw_csv_data
   - merge_meta_with_data
 
+- title: Main application
+  desc: Top-level functions to run the Shiny application
+- contents:
+  - run_app
+  - app_ui
+  - app_server
+  
 - title: Application modules
   desc: Modules used in the main Shiny application. 
 - contents:
