@@ -108,6 +108,7 @@ describe("get_form_table() works", {
       })
       original_tables <- lapply(table_names, \(x){
         df <- create_table(appdata[[x]], expected_columns = names(form_items[[x]]))
+        # To mimic sorting by active subject, as in `get_form_table()`:
         df[order(df$subject_id != "BEL_04_772"), ]
       })
       lapply(table_names, \(x){
