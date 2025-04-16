@@ -6,7 +6,7 @@
 #' @param credentials_pwd Password for the credentials database.
 #'
 #' @return Creates credentials database if needed. No values will be returned.
-#' @export
+#' @keywords internal
 #' 
 initialize_credentials <- function(
     credentials_db = "credentials_db.sqlite",

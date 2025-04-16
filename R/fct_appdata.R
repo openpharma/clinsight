@@ -245,7 +245,7 @@ apply_custom_functions <- function(data, functions = NULL, .default = "identity"
 #' appropriate format.
 #'
 #' @return A list of data frames.
-#' @export
+#' @keywords internal
 #'
 get_appdata <-  function(
     data,
