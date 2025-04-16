@@ -32,35 +32,37 @@ entered/changed in the EDC since the last review session.
 
 <img src="man/figures/README-fig_timeseries.png" width="700" />
 
-Data can be saved as being reviewed either by row, or by the entire form
-that is active:
+Data can be marked as “reviewed” by row or by the entire form that is
+active:
 
 <img src="man/figures/README-row_review.png" width="700" />
 
-The application contains a query system, in which queries can be raised
-for the study site.
+The application integrates an optional “query system”, in which medical
+monitors can submit and track queries raised with the study site.
 
 <img src="man/figures/README-new_query.png" width="389" />
 
-Lastly, PDF reports can be created to document a review session:
+Detailed PDF reports can be generated that document a review session for
+audit purposes:
 
 <img src="man/figures/README-report_modal.png" width="490" />
 
 ## Installation
 
 There are several ways to install `ClinSight`. To run the application
-with the intended R environment, you can git clone the package
-repository, then open the project (`clinsight.Rproj`) and restore the
-project environment with:
+with the R environment as intended by the developers, you can git clone
+the package repository, then open the project (`clinsight.Rproj`) and
+restore the project’s environment with:
 
 ``` r
 renv::restore()
 ```
 
-This will install the packages with their intended version. Below the R
-version and libraries are shown that were used for ClinSight when
-creating this README file. It is recommended to use the same R version,
-otherwise errors might occur during installation.
+This will install all the required packages with their intended
+versions. Below, `renv::lockfile_read()$R` shows the R version and
+libraries used at the time this README file was rendered. It is
+recommended launch the project using the same R version, otherwise
+errors might occur during installation.
 
 ``` r
 renv::lockfile_read()$R
@@ -101,7 +103,8 @@ test_clinsight()
 
 ## Learn more
 
-The application can be customized for any study using a metadata Excel
-file (see `vignette('Metadata')`), that controls which data will be
-shown in where in the application. For more information on how to fully
-set up ClinSight with custom data, see `vignette('clinsight')`.
+The application is easily customized to any study using a metadata file
+(see `vignette('Metadata')`), that configures how the data will be
+presented in the application. For more information on how to fully set
+up `ClinSight` with your organization’s data, see
+`vignette('clinsight')`.
