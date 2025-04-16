@@ -60,7 +60,7 @@ VignetteBuilder:
     knitr
 Config/renv/profiles/full/dependencies: pkgdown, stringr, kableExtra,
     usethis, cowplot, covr, devtools, shinymanager
-Config/renv/profiles/deploy/dependencies: pkgload
+Config/renv/profiles/deploy/dependencies: pkgload, shinymanager
 Config/testthat/edition: 3
 Encoding: UTF-8
 LazyData: true
