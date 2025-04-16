@@ -30,9 +30,16 @@ reference:
   desc:  Top-level functions to run the Shiny application
 - contents:
   - run_app
+  - test_clinsight
   - app_ui
   - app_server
-  - test_clinsight
+- title: Customize ClinSight
+  desc: To prepare custom clinical trial data for use with ClinSight
+- contents:
+  - create_clinsight_config
+  - create_clinsight_metadata
+  - get_raw_csv_data
+  - merge_meta_with_data
 - title: Credential management
   desc: Functions to manage credentials.
 - contents: 
@@ -61,8 +68,6 @@ reference:
 - title: Data frame functions
   desc: Create data for use in the application.
 - contents: 
-  - get_raw_csv_data
-  - merge_meta_with_data
   - apply_study_specific_fixes
   - get_available_data
   - get_review_data
@@ -85,8 +90,6 @@ reference:
   - clinsightful_data
 - title: Helper functions
 - contents: 
-  - create_clinsight_config
-  - create_clinsight_metadata
   - filter_data
   - collapse_column_vals
   - get_base_value
