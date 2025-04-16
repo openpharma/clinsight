@@ -167,11 +167,17 @@ apply_edc_specific_changes <- function(
 #' Apply study-specific fixes
 #'
 #' These changes are probably study-specific and need to be changed accordingly.
+#' The function is still needed for recreating internal data. It mainly fixes
+#' the significance values for ECG data (only if available), and adds a variable
+#' named `Weight change since screening` if the variable named `Weight` is
+#' available.
 #'
 #' @param data A data frame (for example, raw data merged).
 #' @param form_id_vars A character vector with the names of the columns that
 #'   identify a form.
 #' @return A data frame.
+#'
+#' @keywords internal
 #' 
 apply_study_specific_fixes <- function(
     data, 

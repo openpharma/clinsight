@@ -68,7 +68,6 @@ reference:
 - title: Data frame functions
   desc: Create data for use in the application.
 - contents: 
-  - apply_study_specific_fixes
   - get_available_data
   - get_review_data
   - get_static_overview_data
