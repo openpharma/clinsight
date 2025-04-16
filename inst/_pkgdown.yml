@@ -37,6 +37,7 @@ reference:
   - create_clinsight_config
   - create_clinsight_metadata
   - get_raw_csv_data
+  - get_metadata
   - merge_meta_with_data
 
 - title: Main application
@@ -69,7 +70,7 @@ reference:
   - starts_with("create_table")
 
 - title: Data frame functions
-  desc: Create data for use in the application.
+  desc: Can be used on study data compatible with ClinSight
 - contents: 
   - get_available_data
   - get_review_data
@@ -86,10 +87,8 @@ reference:
   - db_get_review
   - db_get_query
 
-- title: Internal dataset
-  desc: Create or describe internal data. 
+- title: Internal data
 - contents: 
-  - get_metadata
   - metadata
   - clinsightful_data
 
