@@ -25,11 +25,11 @@ knitr::opts_chunk$set(
 
 <!-- badges: end -->
 
-## Overview
+`ClinSight` provides a production-ready and easy-to-use application for medically monitoring patient safety and data integrity throughout clinical trials. It provides a smart review platform and  interactive visualizations, creating a patient overview that usually cannot be achieved through native EDC interfaces.
 
-The goal of `ClinSight` is to provide a production-ready and easy to use application for medically monitoring patient safety and data integrity during clinical trials. It provides smart and interactive visualizations, so that a better overview can be created of each patient during a trial.
+## Primary Features
 
-For example, ClinSight contains an interactive timeline, which makes it easy to relate clinical trial procedures such as treatments with adverse events that occur within a patient.
+`ClinSight` contains an interactive timeline, relating clinical trial procedures & treatments with adverse events that occur with a patient.
 
 ![](man/figures/README-timeline.png){width="700"}
 
