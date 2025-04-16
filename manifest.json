@@ -157,6 +157,84 @@
         "Archs": "x64"
       }
     },
+    "R.methodsS3": {
+      "Source": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-17",
+      "description": {
+        "Package": "R.methodsS3",
+        "Version": "1.8.2",
+        "Depends": "R (>= 2.13.0)",
+        "Imports": "utils",
+        "Suggests": "codetools",
+        "Title": "S3 Methods Simplified",
+        "Authors@R": "c(person(\"Henrik\", \"Bengtsson\", role=c(\"aut\", \"cre\", \"cph\"),\n                                          email = \"henrikb@braju.com\"))",
+        "Author": "Henrik Bengtsson [aut, cre, cph]",
+        "Maintainer": "Henrik Bengtsson <henrikb@braju.com>",
+        "Description": "Methods that simplify the setup of S3 generic functions and S3 methods.  Major effort has been made in making definition of methods as simple as possible with a minimum of maintenance for package developers.  For example, generic functions are created automatically, if missing, and naming conflict are automatically solved, if possible.  The method setMethodS3() is a good start for those who in the future may want to migrate to S4.  This is a cross-platform package implemented in pure R that generates standard S3 methods.",
+        "License": "LGPL (>= 2.1)",
+        "LazyLoad": "TRUE",
+        "URL": "https://github.com/HenrikBengtsson/R.methodsS3",
+        "BugReports": "https://github.com/HenrikBengtsson/R.methodsS3/issues",
+        "NeedsCompilation": "no",
+        "Packaged": "2022-06-13 18:23:35 UTC; hb",
+        "Repository": "RSPM",
+        "Date/Publication": "2022-06-13 22:00:14 UTC",
+        "Encoding": "UTF-8",
+        "Built": "R 4.4.0; ; 2024-04-25 19:42:43 UTC; windows"
+      }
+    },
+    "R.oo": {
+      "Source": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-17",
+      "description": {
+        "Package": "R.oo",
+        "Version": "1.26.0",
+        "Depends": "R (>= 2.13.0), R.methodsS3 (>= 1.8.2)",
+        "Imports": "methods, utils",
+        "Suggests": "tools",
+        "Title": "R Object-Oriented Programming with or without References",
+        "Authors@R": "c(person(\"Henrik\", \"Bengtsson\", role=c(\"aut\", \"cre\", \"cph\"),\n                                          email = \"henrikb@braju.com\"))",
+        "Author": "Henrik Bengtsson [aut, cre, cph]",
+        "Maintainer": "Henrik Bengtsson <henrikb@braju.com>",
+        "Description": "Methods and classes for object-oriented programming in R with or without references.  Large effort has been made on making definition of methods as simple as possible with a minimum of maintenance for package developers.  The package has been developed since 2001 and is now considered very stable.  This is a cross-platform package implemented in pure R that defines standard S3 classes without any tricks.",
+        "License": "LGPL (>= 2.1)",
+        "LazyLoad": "TRUE",
+        "URL": "https://github.com/HenrikBengtsson/R.oo",
+        "BugReports": "https://github.com/HenrikBengtsson/R.oo/issues",
+        "NeedsCompilation": "no",
+        "Packaged": "2024-01-24 02:17:13 UTC; henrik",
+        "Repository": "RSPM",
+        "Date/Publication": "2024-01-24 05:12:50 UTC",
+        "Encoding": "UTF-8",
+        "Built": "R 4.4.0; ; 2024-04-25 19:44:10 UTC; windows"
+      }
+    },
+    "R.utils": {
+      "Source": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-17",
+      "description": {
+        "Package": "R.utils",
+        "Version": "2.12.3",
+        "Depends": "R (>= 2.14.0), R.oo",
+        "Imports": "methods, utils, tools, R.methodsS3",
+        "Suggests": "datasets, digest (>= 0.6.10)",
+        "Title": "Various Programming Utilities",
+        "Authors@R": "c(person(\"Henrik\", \"Bengtsson\", role=c(\"aut\", \"cre\", \"cph\"),\n                                          email = \"henrikb@braju.com\"))",
+        "Author": "Henrik Bengtsson [aut, cre, cph]",
+        "Maintainer": "Henrik Bengtsson <henrikb@braju.com>",
+        "Description": "Utility functions useful when programming and developing R packages.",
+        "License": "LGPL (>= 2.1)",
+        "LazyLoad": "TRUE",
+        "URL": "https://henrikbengtsson.github.io/R.utils/,\nhttps://github.com/HenrikBengtsson/R.utils",
+        "BugReports": "https://github.com/HenrikBengtsson/R.utils/issues",
+        "NeedsCompilation": "no",
+        "Packaged": "2023-11-17 05:13:25 UTC; henrik",
+        "Repository": "RSPM",
+        "Date/Publication": "2023-11-18 01:00:02 UTC",
+        "Encoding": "UTF-8",
+        "Built": "R 4.4.0; ; 2024-04-25 19:47:24 UTC; windows"
+      }
+    },
     "R6": {
       "Source": "RSPM",
       "Repository": "https://packagemanager.posit.co/cran/2024-09-17",
@@ -370,6 +448,34 @@
         "Encoding": "UTF-8",
         "Built": "R 4.4.0; x86_64-w64-mingw32; 2024-04-25 19:47:47 UTC; windows",
         "Archs": "x64"
+      }
+    },
+    "billboarder": {
+      "Source": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-17",
+      "description": {
+        "Package": "billboarder",
+        "Title": "Create Interactive Chart with the JavaScript 'Billboard' Library",
+        "Version": "0.5.0",
+        "Authors@R": "c(\n  person(\"Victor\", \"Perrier\", email = \"victor.perrier@dreamrs.fr\", role = c(\"aut\", \"cre\")),\n  person(\"Fanny\", \"Meyer\", role = \"aut\"),\n  person(\"NAVER Corp\", role = \"cph\", comment = \"billboard.js library\"),\n  person(\"Mike\", \"Bostock\", role = \"cph\", comment = \"d3.format library\"))",
+        "Description": "Provides an 'htmlwidgets' interface to 'billboard.js', \n    a re-usable easy interface JavaScript chart library, based on D3 v4+.\n    Chart types include line charts, scatterplots, bar/lollipop charts, histogram/density plots, pie/donut charts and gauge charts.\n    All charts are interactive, and a proxy method is implemented to smoothly update a chart without rendering it again in 'shiny' apps. ",
+        "URL": "https://github.com/dreamRs/billboarder,\nhttps://dreamrs.github.io/billboarder/",
+        "BugReports": "https://github.com/dreamRs/billboarder/issues",
+        "Depends": "R (>= 3.1.0)",
+        "License": "MIT + file LICENSE",
+        "Encoding": "UTF-8",
+        "LazyData": "true",
+        "RoxygenNote": "7.3.2",
+        "Imports": "htmlwidgets, htmltools, magrittr, jsonlite, ggplot2, scales,\nshiny, rlang",
+        "Suggests": "RColorBrewer, testthat, knitr, rmarkdown, covr",
+        "VignetteBuilder": "knitr",
+        "NeedsCompilation": "no",
+        "Packaged": "2024-09-09 12:31:14 UTC; victor",
+        "Author": "Victor Perrier [aut, cre],\n  Fanny Meyer [aut],\n  NAVER Corp [cph] (billboard.js library),\n  Mike Bostock [cph] (d3.format library)",
+        "Maintainer": "Victor Perrier <victor.perrier@dreamrs.fr>",
+        "Repository": "RSPM",
+        "Date/Publication": "2024-09-09 19:00:21 UTC",
+        "Built": "R 4.4.0; ; 2024-09-10 04:30:27 UTC; windows"
       }
     },
     "bit": {
@@ -2592,6 +2698,33 @@
         "Built": "R 4.4.0; ; 2024-04-25 20:09:32 UTC; windows"
       }
     },
+    "scrypt": {
+      "Source": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-17",
+      "description": {
+        "Package": "scrypt",
+        "Type": "Package",
+        "Title": "Key Derivation Functions for R Based on Scrypt",
+        "Version": "0.1.6",
+        "Authors@R": "c(\n    person(\"Bob\", \"Jansen\", email = \"bobjansen@gmail.com\", role = c(\"ctb\", \"cre\")),\n    person(\"Andy\", \"Kipp\", email = \"andy@rstudio.com\", role = c(\"aut\")),\n    person(\"Colin\", \"Percival\", role = c(\"aut\", \"cph\")),\n    person(family = \"RStudio\", role = \"cph\")\n    )",
+        "Copyright": "RStudio, Inc.; Colin Percival",
+        "Maintainer": "Bob Jansen <bobjansen@gmail.com>",
+        "Description": "Functions for working with the scrypt key derivation functions\n    originally described by Colin Percival\n    <https://www.tarsnap.com/scrypt/scrypt.pdf> and in Percival and Josefsson\n    (2016) <doi:10.17487/RFC7914>. Scrypt is a password-based key derivation\n    function created by Colin Percival. The algorithm was specifically designed\n    to make it costly to perform large-scale custom hardware attacks by\n    requiring large amounts of memory.",
+        "License": "FreeBSD",
+        "Depends": "R (>= 3.0.0)",
+        "URL": "https://github.com/bobjansen/rscrypt",
+        "Imports": "Rcpp (>= 0.10.6)",
+        "LinkingTo": "Rcpp",
+        "NeedsCompilation": "yes",
+        "Packaged": "2023-01-29 15:00:34 UTC; brj",
+        "Author": "Bob Jansen [ctb, cre],\n  Andy Kipp [aut],\n  Colin Percival [aut, cph],\n  RStudio [cph]",
+        "Repository": "RSPM",
+        "Date/Publication": "2023-01-29 15:40:02 UTC",
+        "Encoding": "UTF-8",
+        "Built": "R 4.4.0; x86_64-w64-mingw32; 2024-07-18 05:10:37 UTC; windows",
+        "Archs": "x64"
+      }
+    },
     "shiny": {
       "Source": "RSPM",
       "Repository": "https://packagemanager.posit.co/cran/2024-09-17",
@@ -2701,6 +2834,31 @@
         "Repository": "RSPM",
         "Date/Publication": "2021-12-23 10:10:02 UTC",
         "Built": "R 4.4.0; ; 2024-04-25 21:01:34 UTC; windows"
+      }
+    },
+    "shinymanager": {
+      "Source": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/2024-09-17",
+      "description": {
+        "Package": "shinymanager",
+        "Title": "Authentication Management for 'Shiny' Applications",
+        "Version": "1.0.410",
+        "Authors@R": "c(\n    person(\"Benoit\", \"Thieurmel\", email = \"bthieurmel@gmail.com\", role = c(\"aut\", \"cre\")),\n    person(\"Victor\", \"Perrier\", email = \"victor.perrier@dreamRs.fr\", role = c(\"aut\"))\n    )",
+        "Description": "Simple and secure authentification mechanism for single 'Shiny' applications.\n    Credentials are stored in an encrypted 'SQLite' database. Source code of main application\n    is protected until authentication is successful.",
+        "License": "GPL-3",
+        "URL": "https://github.com/datastorm-open/shinymanager",
+        "Encoding": "UTF-8",
+        "RoxygenNote": "7.1.2",
+        "Imports": "R6, shiny, htmltools, DT (>= 0.5), DBI, RSQLite, openssl,\nR.utils, billboarder, scrypt",
+        "Suggests": "keyring, testthat (>= 2.1.0), knitr, rmarkdown",
+        "VignetteBuilder": "knitr",
+        "NeedsCompilation": "no",
+        "Packaged": "2022-09-26 13:41:56 UTC; BenoitThieurmel",
+        "Author": "Benoit Thieurmel [aut, cre],\n  Victor Perrier [aut]",
+        "Maintainer": "Benoit Thieurmel <bthieurmel@gmail.com>",
+        "Repository": "RSPM",
+        "Date/Publication": "2022-09-27 07:00:02 UTC",
+        "Built": "R 4.4.0; ; 2024-04-25 22:46:10 UTC; windows"
       }
     },
     "sourcetools": {
@@ -3246,7 +3404,7 @@
       "checksum": "bf643c50cef96589d5badcc9316bb933"
     },
     "DESCRIPTION": {
-      "checksum": "98b9d1c9d3cda8e055cbb3dc744bf3bf"
+      "checksum": "875e5b820da66f628d459016b64b5121"
     },
     "inst/_pkgdown.yml": {
       "checksum": "9047194aba452189344c1af139c8c1e4"
@@ -3279,7 +3437,7 @@
       "checksum": "a7329b043e34223c6ca36c350682fa5c"
     },
     "inst/golem-config.yml": {
-      "checksum": "ee81471fbaa5335979b3e00d49fa6aeb"
+      "checksum": "4b7e36e58ff47181227815de1bb07a64"
     },
     "inst/metadata.xlsx": {
       "checksum": "7891eee4f50c7fffbeebf21c9e3e1db7"
@@ -3339,7 +3497,7 @@
       "checksum": "903cd037a8ed1210b3cc542999e35399"
     },
     "NEWS.md": {
-      "checksum": "90abc008e702dcf97110fd54e0dfbd5c"
+      "checksum": "7f2fbd29d52456811b93aba7a0996088"
     },
     "R/_dependencies.R": {
       "checksum": "33b62edd4c083c9ad37d63d3a4ecc51b"
@@ -3492,7 +3650,7 @@
       "checksum": "e7975a2758bf3ac193faa01bd9a86b33"
     },
     "renv.lock": {
-      "checksum": "4320d0c696524e04d5d25b1d7375d660"
+      "checksum": "747747cb1cb1c597057480d11e54b6a9"
     }
   },
   "users": null
