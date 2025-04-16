@@ -20,7 +20,7 @@ library(clinsight)
 
 ## Test ClinSight
 
-To get started, you can easily run and test ClinSight by using the function `clinsight::test_clinsight()`. This function loads all data in a temporary folder that will be cleaned up after use. Note that this function is only meant for testing and development, and is a wrapper around `clinsight::run_app()`, the main function of this package. `clinsight::run_app()` also works, but creates databases in the working directory that will save user actions such as review status of study data, which is needed for deployment in a production environment. 
+To get started, you can easily run and test ClinSight by using the function `clinsight::test_clinsight()`. This function loads all data in a temporary folder that will be cleaned up after use. Note that this function is only meant for testing and development, and is a wrapper around `clinsight::run_app()`, the main function of this package. `clinsight::run_app()` also works, but creates databases in the working directory that will save user actions such as review status of study data, which is needed for deployment in a production environment.
 
 ```{r eval=FALSE}
 # Not run:
@@ -41,7 +41,7 @@ In order to use custom study data with ClinSight, the raw custom data needs to f
 Raw study data needs to needs to be in long format in order to use it with ClinSight, with the columns being in character vector format. The following columns are expected to be in the raw data.
 
 |                |                                                                                                                |
-|--------------|---------------------------------------------------------|
+|-----------------|-------------------------------------------------------|
 | **Name**       | **Description**                                                                                                |
 | site_code      | Identifier for study site.                                                                                     |
 | subject_id     | Unique identifier for a subject                                                                                |
@@ -95,18 +95,13 @@ Notice that the application shows a warning if some variables defined in the met
 # 5      DMOD_DOSE DoseModificationNewDose
 ```
 
-To iteratively improve the metadata, simply stop the application, adjust the metadata, merge it again with the raw data, and re-launch using `test_clinsight()`. For example, if we want to change the name of 'Systolic blood pressure' to 'SBP', we can adjust this in the Excel file and use `get_metadata()` again.
+To iteratively improve the metadata, simply stop the application, adjust the metadata, merge it again with the raw data, and re-launch using `test_clinsight()`. For example, if we want to change the name of 'Systolic blood pressure' to 'SBP', we can adjust this in the Excel file, save the metadata and use `get_metadata()` again:
 
-We will simulate this behavior here by manually adjusting the metadata file here, but normally you would open the Excel file to make the desired change a permanent one:
-
-```{r}
-# !It is better to adjust the Excel metadata file instead of doing this:
-meta_custom$items_expanded$item_name[grepl("Systolic blood pressure", meta_custom$items_expanded$item_name)]
-adjusted_study_data <- merge_meta_with_data(raw_data, meta_custom)
-```
+![](images/metadata-change_var_name.png)
 
 ```{r eval=FALSE}
 #Not run
+adjusted_study_data <- merge_meta_with_data(raw_data, meta_custom_adjusted)
 test_clinsight(adjusted_study_data, meta_custom) 
 ```
 
