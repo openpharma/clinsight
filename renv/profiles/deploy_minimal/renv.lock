@@ -253,7 +253,7 @@
       "Package": "cli",
       "Version": "3.6.3",
       "Source": "Repository",
-      "Repository": "https://cloud.r-project.org",
+      "Repository": "RSPM",
       "Requirements": [
         "R",
         "utils"
@@ -315,7 +315,7 @@
       "Package": "crayon",
       "Version": "1.5.3",
       "Source": "Repository",
-      "Repository": "https://cloud.r-project.org",
+      "Repository": "RSPM",
       "Requirements": [
         "grDevices",
         "methods",
@@ -340,7 +340,7 @@
       "Package": "curl",
       "Version": "5.2.2",
       "Source": "Repository",
-      "Repository": "https://cloud.r-project.org",
+      "Repository": "RSPM",
       "Requirements": [
         "R"
       ],
@@ -839,7 +839,7 @@
       "Package": "openssl",
       "Version": "2.2.1",
       "Source": "Repository",
-      "Repository": "https://cloud.r-project.org",
+      "Repository": "RSPM",
       "Requirements": [
         "askpass"
       ],
@@ -1035,7 +1035,7 @@
       "Package": "rlang",
       "Version": "1.1.4",
       "Source": "Repository",
-      "Repository": "https://cloud.r-project.org",
+      "Repository": "RSPM",
       "Requirements": [
         "R",
         "utils"
@@ -1211,6 +1211,23 @@
       ],
       "Hash": "39e1144fd75428983dc3f63aa53dfa91"
     },
+    "stringr": {
+      "Package": "stringr",
+      "Version": "1.5.1",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "R",
+        "cli",
+        "glue",
+        "lifecycle",
+        "magrittr",
+        "rlang",
+        "stringi",
+        "vctrs"
+      ],
+      "Hash": "960e2ae9e09656611e0b8214ad543207"
+    },
     "sys": {
       "Package": "sys",
       "Version": "3.4.2",
@@ -1378,7 +1395,7 @@
       "Package": "withr",
       "Version": "3.0.1",
       "Source": "Repository",
-      "Repository": "https://cloud.r-project.org",
+      "Repository": "RSPM",
       "Requirements": [
         "R",
         "grDevices",
@@ -1415,7 +1432,7 @@
       "Package": "yaml",
       "Version": "2.3.10",
       "Source": "Repository",
-      "Repository": "https://cloud.r-project.org",
+      "Repository": "RSPM",
       "Hash": "51dab85c6c98e50a18d7551e9d49f76c"
     }
   }
