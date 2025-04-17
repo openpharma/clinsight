@@ -5,11 +5,9 @@
     "clinsight",
     "pak",
     "pkgdown",
-    "stringr",
     "kableExtra",
     "usethis",
-    "cowplot",
-    "shinymanager"
+    "cowplot"
   ],
   "package.dependency.fields": [
     "Imports",
