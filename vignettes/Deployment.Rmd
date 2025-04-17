@@ -197,15 +197,9 @@ Since HTTP headers cannot handle all UTF-8 characters, the user names need to be
 
 Lastly, ClinSight provides a configuration to deploy applications with Posit Connect.
 
-To use this configuration, use the `posit_connect` configuration:
+To use it, set the active configuration to `posit_connect`:`Sys.setenv("GOLEM_CONFIG_ACTIVE" = "posit_connect")`. This configuration utilizes Shiny `session` objects to manager user access and credentials. The `user_role` element of `config.yml` will correspond to `session$groups` so that users can be assigned review status by group assignment within Connect. The `session` object `session$user` will be utilized to log user interactions in the application as well.
 
-```{r}
-Sys.setenv("GOLEM_CONFIG_ACTIVE" = "posit_connect")
-```
-
-Of note that in this configuration, the user identification will be done by accessing user and group information in the shiny `session` object (`session$user` and `session$groups`).
-
-More information about deployment with Posit Connect will follow here.
+For ease of deployment, a `manifest.json` file has been included in the root directory. This manifest includes packages not included in the `minimal` profile needed for deployment using the `app.R` file.
 
 ### Customizing configuration
 
