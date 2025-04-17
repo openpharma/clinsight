@@ -22,14 +22,14 @@ library(clinsight)
 ```
 
 ClinSight can be customized using two different files.
-[Study-specific configurations](#study-specific-config) are stored in a metadata file that can be created with a metadata Excel template (see `vignette("Metadata")`), while [general configuration](#general-config) is stored in a configuration `.yml` file.
+Study-specific configurations are stored in a metadata file that can be created with a [metadata Excel template](./Metadata.html), while [general configuration](#general-config) is stored in a configuration `.yml` file.
 The latter contains settings more related to deployment, and will be discussed here.
 
 ## General configuration {#general-config}
 
 The general ClinSight configuration is set using a `golem-config.yml` file.
 This file mostly contains settings that do not frequently change between studies within an organization, such as organization-specific deployment options.
-The current configuration file is shown below and will be discussed in detail.
+A configuration file (the default at the time this vignette was rendered) is shown below and will be discussed in detail.
 
 ```{r echo = FALSE, results ='markup', comment=""}
 cat(readLines(system.file("golem-config.yml", package = "clinsight")), sep = "\n")
@@ -39,7 +39,7 @@ cat(readLines(system.file("golem-config.yml", package = "clinsight")), sep = "\n
 
 The following are the most important arguments in the `golem-config.yml` file for `clinsight`:
 
--   `app_prod`: Controls a few production-related settings, such as whether a warning is shown if the data is not synchronized, or whether the database is always updated. It is recommended to set this to `TRUE` when the application is run in production.
+-   `app_prod`: Controls a few production-related settings, such as whether a warning is shown if the study data is older than one day (and thus possibly outdated), or whether the internal user database is always synchronized when starting ClinSight. It is recommended to set this to `TRUE` when the application is run in production.
 -   `user_identification`: The way a user can be identified. For testing purposes, it can be set to `test_user`. In production, this can be set to either `shinymanager` (for [Shinymanager](#shinymanager-conf) deployments), `http_headers` (for [ShinyProxy](#shinyproxy-conf) deployments), or `shiny_session` (for [Posit Connect](#posit_connect-conf) deployments).
 -   `study_data`: In the default settings, this path will directly return the internal package data for testing purposes. In production, this argument should contain the file path to the study data `.rds` file.
 -   `meta_data`: In the default settings, this path will return example metadata for testing purposes. In production, this argument should contain the file path to the metadata `.rds` file.
@@ -197,9 +197,13 @@ Since HTTP headers cannot handle all UTF-8 characters, the user names need to be
 
 Lastly, ClinSight provides a configuration to deploy applications with Posit Connect.
 
-To use it, set the active configuration to `posit_connect`:`Sys.setenv("GOLEM_CONFIG_ACTIVE" = "posit_connect")`. This configuration utilizes Shiny `session` objects to manager user access and credentials. The `user_role` element of `config.yml` will correspond to `session$groups` so that users can be assigned review status by group assignment within Connect. The `session` object `session$user` will be utilized to log user interactions in the application as well.
+To use it, set the active configuration to `posit_connect`:`Sys.setenv("GOLEM_CONFIG_ACTIVE" = "posit_connect")`.
+This configuration utilizes Shiny `session` objects to manager user access and credentials.
+The `user_role` element of `config.yml` will correspond to `session$groups` so that users can be assigned review status by group assignment within Connect.
+The `session` object `session$user` will be utilized to log user interactions in the application as well.
 
-For ease of deployment, a `manifest.json` file has been included in the root directory. This manifest includes packages not included in the `minimal` profile needed for deployment using the `app.R` file.
+For ease of deployment, a `manifest.json` file has been included in the root directory.
+This manifest includes packages not included in the `minimal` profile needed for deployment using the `app.R` file.
 
 ### Customizing configuration
 
