@@ -41,40 +41,40 @@ The following are the most important arguments in the `golem-config.yml` file fo
 
 -   `app_prod`: Controls a few production-related settings, such as whether a warning is shown if the study data is older than one day (and thus possibly outdated), or whether the internal user database is always synchronized when starting ClinSight. It is recommended to set this to `TRUE` when the application is run in production.
 -   `user_identification`: The way a user can be identified. For testing purposes, it can be set to `test_user`. In production, this can be set to either `shinymanager` (for [Shinymanager](#shinymanager-conf) deployments), `http_headers` (for [ShinyProxy](#shinyproxy-conf) deployments), or `shiny_session` (for [Posit Connect](#posit_connect-conf) deployments).
--   `study_data`: In the default settings, this path will directly return the internal package data for testing purposes. In production, this argument should contain the file path to the study data `.rds` file.
--   `meta_data`: In the default settings, this path will return example metadata for testing purposes. In production, this argument should contain the file path to the metadata `.rds` file.
--   `user_db`: Path to the user database file.
+-   `study_data`: In the default settings, this path will directly return the internal package data for testing purposes. In production, this argument should contain the file path to the study's raw data, prepared in an `.rds` file.
+-   `meta_data`: In the default settings, this path will return example metadata for testing purposes. In production, this argument should contain the file path to the metadata, prepared as an `.rds` file.
+-   `user_db`: Path to the user database SQLite file. If it doesn't already exist, a new database will be automatically generated in this file location.
 -   `credentials_db`: Path to the credentials database (a .sqlite file). Only applicable in the `shinymanager` configuration.
 -   `user_roles`: List with roles (in this format: `Role Name: role_id`) that are available in the application.
--   `allow_to_review`: List with roles which are allowed to review data in the application.
--   `allow_listing_download`: Logical, whether it is allowed to download Excel tables from the listings shown in each form.
+-   `allow_to_review`: List of role names (specified above) which are allowed to review data in the application.
+-   `allow_listing_download`: Logical, `TRUE` if users are permitted to download listings from the ClinSight application directly to Excel for sharing (or other uses).
 -   `allow_query_inputs`: Logical, whether it is allowed to create queries within the application.
 
 ### Setting configurations
 
-A configuration can be set by changing the GOLEM_CONFIG_ACTIVE environment variable, for example like this:
+A configuration can be set by changing the GOLEM_CONFIG_ACTIVE environment variable before calling `run_app()`, for example like this:
 
 `Sys.setenv("GOLEM_CONFIG_ACTIVE" = "shinymanager")`
 
-There are multiple configuration settings built in ClinSight, of which the most important ones are: `default`, `test`, `shinymanager`, `shinyproxy`, and `posit_connect`.
+There are multiple configurations pre-built in ClinSight's `golem-config.yml`, of which the most important ones are: `default`, `test`, `shinymanager`, `shinyproxy`, and `posit_connect`.
 The first two are meant for testing purposes, while the other settings are more suited for use in production.
 
-With the standard ('default') settings, internal example data with matching metadata will be used when running `ClinSight` There are the settings used when running `clinsight::run_app()` after a fresh installation.
+With the standard ('default') configuration, the package's internal "example data" with matching metadata will be used to run `ClinSight`. These are the settings used when running `clinsight::run_app()` after a fresh installation.
 A user database named `user_db.sqlite` will be created in the current working directory if it does not yet exist.
-This database stores user data such as which data points are reviewed, and which queries are raised.
+This database stores user data such as which records are reviewed, and which queries are raised (if any).
 
 The default settings are useful for demonstration purposes, but different settings are needed when using `ClinSight` with clinical trial data.
 Currently, there are three ways to run and/or deploy `ClinSight`, which are mentioned below.
 
 ### Run application
 
-In `vignette('clinsight')` the function `test_clinsight()` was used to run the application, which is a wrapper around `clinsight::run_app()`.
-`test_clinsight()` ensures that the required databases are created every time after closing the application.
+In `vignette('clinsight')` the function `test_clinsight()` was introduced to "test run" the application
+`test_clinsight()` is a thin wrapper around `run_app()` that ensures the required databases are created & destroyed with app launch & exit.
 This makes it easier to prototype the application, and tweak the data/metadata for use with ClinSight, since the databases will be always up to date with the study_data and metadata.
 
 However, for deployment the function `clinsight::run_app()` should be used.
 This creates databases in the working directory that will save user actions such as review status of study data.
-Depending on the settings, a credentials database will be created.
+Depending on the configuration settings chosen, a credentials database will be created (for deployments using `shinymanager`)
 In addition, a path study data and metadata can be provided in the configuration file.
 
 ### Shinymanager {#shinymanager-conf}
