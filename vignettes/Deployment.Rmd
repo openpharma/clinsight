@@ -75,7 +75,7 @@ This makes it easier to prototype the application, and tweak the data/metadata f
 
 For deploying ClinSight, however, the function `clinsight::run_app()` should be used directly.
 This function creates databases in the working directory that will save user actions such as review status of study data.
-Depending on the configuration settings chosen, a credentials database will be created (for deployments using `shinymanager`) In addition, a path study data and metadata can be provided in the configuration file.
+Depending on the configuration settings chosen, a credentials database will be created (for deployments using `shinymanager`) In addition, a path to the study data and metadata (both `.rds` files) can be provided in the configuration file.
 
 ### Shinymanager {#shinymanager-conf}
 
@@ -198,7 +198,7 @@ Since HTTP headers cannot handle all UTF-8 characters, the user names need to be
 Lastly, ClinSight provides a configuration to deploy applications with Posit Connect.
 
 To use it, set the active configuration to `posit_connect`:`Sys.setenv("GOLEM_CONFIG_ACTIVE" = "posit_connect")`.
-This configuration utilizes Shiny `session` objects to manager user access and credentials.
+This configuration utilizes Shiny `session` objects to manage user credentials.
 The `user_role` element of `config.yml` will correspond to `session$groups` so that users can be assigned review status by group assignment within Connect.
 The `session` object `session$user` will be utilized to log user interactions in the application as well.
 
