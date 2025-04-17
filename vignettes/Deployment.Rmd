@@ -48,7 +48,7 @@ The following are the most important arguments in the `golem-config.yml` file fo
 -   `user_roles`: List with roles (in this format: `Role Name: role_id`) that are available in the application.
 -   `allow_to_review`: List of role names (specified above) which are allowed to review data in the application.
 -   `allow_listing_download`: Logical, `TRUE` if users are permitted to download listings from the ClinSight application directly to Excel for sharing (or other uses).
--   `allow_query_inputs`: Logical, whether it is allowed to create queries within the application.
+-   `allow_query_inputs`: Logical, \`TRUE\` to permit users to submit and track queries within the application's database.
 
 ### Setting configurations
 
@@ -59,23 +59,23 @@ A configuration can be set by changing the GOLEM_CONFIG_ACTIVE environment varia
 There are multiple configurations pre-built in ClinSight's `golem-config.yml`, of which the most important ones are: `default`, `test`, `shinymanager`, `shinyproxy`, and `posit_connect`.
 The first two are meant for testing purposes, while the other settings are more suited for use in production.
 
-With the standard ('default') configuration, the package's internal "example data" with matching metadata will be used to run `ClinSight`. These are the settings used when running `clinsight::run_app()` after a fresh installation.
+With the standard ('default') configuration, the package's internal "example data" with matching metadata will be used to run `ClinSight`.
+These are the settings used when running `clinsight::run_app()` after a fresh installation.
 A user database named `user_db.sqlite` will be created in the current working directory if it does not yet exist.
 This database stores user data such as which records are reviewed, and which queries are raised (if any).
 
-The default settings are useful for demonstration purposes, but different settings are needed when using `ClinSight` with clinical trial data.
+The default settings are useful for demonstration purposes, but different settings are required when using `ClinSight` with actual clinical trial data.
 Currently, there are three ways to run and/or deploy `ClinSight`, which are mentioned below.
 
 ### Run application
 
-In `vignette('clinsight')` the function `test_clinsight()` was introduced to "test run" the application
-`test_clinsight()` is a thin wrapper around `run_app()` that ensures the required databases are created & destroyed with app launch & exit.
-This makes it easier to prototype the application, and tweak the data/metadata for use with ClinSight, since the databases will be always up to date with the study_data and metadata.
+For testing ClinSight, the function `test_clinsight()` was [introduced previously](#./clinsight.html).
+This function is a thin wrapper around `run_app()` that ensures the required databases are created and destroyed with app launch & exit.
+This makes it easier to prototype the application, and tweak the data/metadata for use with ClinSight.
 
-However, for deployment the function `clinsight::run_app()` should be used.
-This creates databases in the working directory that will save user actions such as review status of study data.
-Depending on the configuration settings chosen, a credentials database will be created (for deployments using `shinymanager`)
-In addition, a path study data and metadata can be provided in the configuration file.
+For deploying ClinSight, however, the function `clinsight::run_app()` should be used directly.
+This function creates databases in the working directory that will save user actions such as review status of study data.
+Depending on the configuration settings chosen, a credentials database will be created (for deployments using `shinymanager`) In addition, a path study data and metadata can be provided in the configuration file.
 
 ### Shinymanager {#shinymanager-conf}
 
