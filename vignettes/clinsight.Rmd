@@ -61,13 +61,13 @@ head(raw_data)
 
 ### Merge and prepare data
 
-When metadata is adjusted properly to the study-specific needs (see `vignette("Metadata")`), create an R object from the Excel file:
+When metadata in the Excel sheet is adjusted properly for study-specific needs (see `vignette("Metadata")`), it should be converted to an R object with the function `get_metadata()`:
 
 ```{r }
 meta_custom <- get_metadata(system.file("metadata.xlsx", package = "clinsight"))
 ```
 
-Then, merge the metadata with the raw data. This will give some information and will try to throw an informative error if an incompatible change was made:
+Next step in preparing data for ClinSight is merging the metadata object with the raw data using the function `merge_meta_with_data()`. This will output an informative error message if an incompatible change was made.
 
 ```{r}
 merged_study_data <- merge_meta_with_data(raw_data, meta_custom)
