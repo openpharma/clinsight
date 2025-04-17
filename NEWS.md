@@ -34,6 +34,7 @@
 - Added a more recent repo snapshot for `chromote` v0.5.0 used in Shiny tests
 - Added two helper functions (`create_clinsight_metadata()` and `create_clinsight_config`) to create custom `ClinSight` metadata and config files.
 - Added a feature test for row level review.
+- Added a "deploy" profile for deployments. Includes additional dependencies not included in the "deploy_minimal" profile for deployments utilizing `shinymanager` or the `app.R` file, while being more restrictive than the "full" profile.
 
 # clinsight 0.1.1
 
