@@ -5,7 +5,6 @@
     "clinsight",
     "pak",
     "pkgdown",
-    "stringr",
     "kableExtra",
     "usethis",
     "cowplot",
