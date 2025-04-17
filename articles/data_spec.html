@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">clinsight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1.9026</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,13 +29,21 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
+<li class="nav-item"><a class="nav-link" href="../articles/clinsight.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/Contributions.html">Contributions</a></li>
-    <li><a class="dropdown-item" href="../articles/data_spec.html">App Configuration &amp; Input Data Specifications</a></li>
+<li><a class="dropdown-item" href="../articles/Metadata.html">Metadata</a></li>
+    <li><a class="dropdown-item" href="../articles/Deployment.html">Deployment</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Validation</h6></li>
     <li><a class="dropdown-item" href="../articles/test_report.html">Test report</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Developer Guides</h6></li>
+    <li><a class="dropdown-item" href="../articles/Contributions.html">Contributions</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -60,20 +68,19 @@
       <img src="../logo.png" class="logo" alt=""><h1>App Configuration &amp; Input Data Specifications</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/openpharma/clinsight/blob/v0.1.1/vignettes/data_spec.Rmd" class="external-link"><code>vignettes/data_spec.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/openpharma/clinsight/blob/ls_docs_from_dev/vignettes/data_spec.Rmd" class="external-link"><code>vignettes/data_spec.Rmd</code></a></small>
       <div class="d-none name"><code>data_spec.Rmd</code></div>
     </div>
 
     
     
-<p>Note: this page is “under construction” until the
-<code>clinsight</code> package developers create helper functions that
-transform at least one other EDC data source into the desired format. In
-the meantime, this page provides useful documentation to the existing
-data specifications. Eventually, it will also share guidelines about how
-to combine your input data with metadata sources, etc.</p>
+<p>Note: this page contains the old package documentation and will
+slowly be replaced by or merged into newer vignettes. Keep in mind that
+the information in this vignette could be outdated. See
+vignette(‘clinsight’), vignette(‘Metadata’) and vignette(‘Deployment’)
+for the latest information.</p>
 <div class="section level2">
-<h2 id="intro">Intro<a class="anchor" aria-label="anchor" href="#intro"></a>
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p>In order to get started and plug your organizations EDC data into the
 <code>clinsight</code> application, please notice this app is outfitted
@@ -81,22 +88,38 @@ with a <code>./inst/golem-config.yml</code> file to configure several
 elements of deployment. Below is a typical configuration file:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode yml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">default</span><span class="kw">:</span></span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="at">  </span><span class="fu">golem_name</span><span class="kw">:</span><span class="at"> clinsight</span></span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="at">  </span><span class="fu">golem_version</span><span class="kw">:</span><span class="at"> </span><span class="fl">0.0.0.9004</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="at">  </span><span class="fu">golem_version</span><span class="kw">:</span><span class="at"> </span><span class="fl">0.1.1.9022</span></span>
 <span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="at">  </span><span class="fu">app_prod</span><span class="kw">:</span><span class="at"> </span><span class="ch">no</span></span>
 <span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="at">  </span><span class="fu">user_identification</span><span class="kw">:</span><span class="at"> test_user</span></span>
 <span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="at">  </span><span class="fu">study_data</span><span class="kw">:</span><span class="at"> !expr clinsight::clinsightful_data</span></span>
 <span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="at">  </span><span class="fu">meta_data</span><span class="kw">:</span><span class="at"> !expr clinsight::metadata</span></span>
 <span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="at">  </span><span class="fu">user_db</span><span class="kw">:</span><span class="at"> user_db.sqlite</span></span>
 <span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="at">  </span><span class="fu">user_roles</span><span class="kw">:</span></span>
-<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="at">   </span><span class="fu">Administrator</span><span class="kw">:</span><span class="at"> admin</span></span>
-<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="at">   </span><span class="fu">Medical Monitor</span><span class="kw">:</span><span class="at"> medical_monitor</span></span>
-<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a><span class="at">   </span><span class="fu">Data Manager</span><span class="kw">:</span><span class="at"> data_manager</span></span>
-<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a><span class="fu">shinymanager</span><span class="kw">:</span></span>
-<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a><span class="at">  </span><span class="fu">app_prod</span><span class="kw">:</span><span class="at"> </span><span class="ch">yes</span></span>
-<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a><span class="at">  </span><span class="fu">user_identification</span><span class="kw">:</span><span class="at"> shinymanager</span></span>
-<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a><span class="at">  </span><span class="fu">study_data</span><span class="kw">:</span><span class="at"> study_data.rds</span></span>
-<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a><span class="at">  </span><span class="fu">meta_data</span><span class="kw">:</span><span class="at"> metadata.rds</span></span>
-<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a><span class="at">  </span><span class="fu">credentials_db</span><span class="kw">:</span><span class="at"> credentials_db.sqlite</span></span></code></pre></div>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="at">    </span><span class="fu">Administrator</span><span class="kw">:</span><span class="at"> admin</span></span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="at">    </span><span class="fu">Medical Monitor</span><span class="kw">:</span><span class="at"> medical_monitor</span></span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a><span class="at">    </span><span class="fu">Data Manager</span><span class="kw">:</span><span class="at"> data_manager</span></span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a><span class="at">  </span><span class="fu">allow_to_review</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">admin</span><span class="kw">,</span><span class="at"> medical_monitor</span><span class="kw">]</span></span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a><span class="at">  </span><span class="fu">allow_listing_download</span><span class="kw">:</span><span class="at"> </span><span class="ch">TRUE</span></span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a><span class="at">  </span><span class="fu">allow_query_inputs</span><span class="kw">:</span><span class="at"> </span><span class="ch">TRUE</span></span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a><span class="fu">shinymanager</span><span class="kw">:</span></span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a><span class="at">  </span><span class="fu">app_prod</span><span class="kw">:</span><span class="at"> </span><span class="ch">yes</span></span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a><span class="at">  </span><span class="fu">user_identification</span><span class="kw">:</span><span class="at"> shinymanager</span></span>
+<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a><span class="at">  </span><span class="fu">study_data</span><span class="kw">:</span><span class="at"> study_data.rds</span></span>
+<span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a><span class="at">  </span><span class="fu">meta_data</span><span class="kw">:</span><span class="at"> metadata.rds</span></span>
+<span id="cb1-21"><a href="#cb1-21" tabindex="-1"></a><span class="at">  </span><span class="fu">credentials_db</span><span class="kw">:</span><span class="at"> credentials_db.sqlite</span></span>
+<span id="cb1-22"><a href="#cb1-22" tabindex="-1"></a><span class="fu">shinyproxy</span><span class="kw">:</span></span>
+<span id="cb1-23"><a href="#cb1-23" tabindex="-1"></a><span class="at">  </span><span class="fu">app_prod</span><span class="kw">:</span><span class="at"> </span><span class="ch">yes</span></span>
+<span id="cb1-24"><a href="#cb1-24" tabindex="-1"></a><span class="at">  </span><span class="fu">user_identification</span><span class="kw">:</span><span class="at"> http_headers</span></span>
+<span id="cb1-25"><a href="#cb1-25" tabindex="-1"></a><span class="at">  </span><span class="fu">study_data</span><span class="kw">:</span><span class="at"> study_data/study_data.rds</span></span>
+<span id="cb1-26"><a href="#cb1-26" tabindex="-1"></a><span class="at">  </span><span class="fu">meta_data</span><span class="kw">:</span><span class="at"> study_data/metadata.rds</span></span>
+<span id="cb1-27"><a href="#cb1-27" tabindex="-1"></a><span class="at">  </span><span class="fu">user_db</span><span class="kw">:</span><span class="at"> study_data/user_db.sqlite</span></span>
+<span id="cb1-28"><a href="#cb1-28" tabindex="-1"></a><span class="fu">posit_connect</span><span class="kw">:</span></span>
+<span id="cb1-29"><a href="#cb1-29" tabindex="-1"></a><span class="at">  </span><span class="fu">app_prod</span><span class="kw">:</span><span class="at"> </span><span class="ch">yes</span></span>
+<span id="cb1-30"><a href="#cb1-30" tabindex="-1"></a><span class="at">  </span><span class="fu">user_identification</span><span class="kw">:</span><span class="at"> shiny_session</span></span>
+<span id="cb1-31"><a href="#cb1-31" tabindex="-1"></a><span class="at">  </span><span class="fu">study_data</span><span class="kw">:</span><span class="at"> study_data.rds</span></span>
+<span id="cb1-32"><a href="#cb1-32" tabindex="-1"></a><span class="at">  </span><span class="fu">meta_data</span><span class="kw">:</span><span class="at"> metadata.rds</span></span>
+<span id="cb1-33"><a href="#cb1-33" tabindex="-1"></a><span class="at">  </span><span class="fu">user_db</span><span class="kw">:</span><span class="at"> user_db.sqlite</span></span>
+<span id="cb1-34"><a href="#cb1-34" tabindex="-1"></a><span class="at">  </span><span class="fu">allow_to_review</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">admin</span><span class="kw">,</span><span class="at"> medical_monitor</span><span class="kw">,</span><span class="at"> data_manager</span><span class="kw">]</span></span></code></pre></div>
 <p>First and foremost, notice that the configuration can vary depending
 on deployment use case. For example, the above file is designed to run
 (by default) with test data built into the app. Only once in
@@ -145,19 +168,19 @@ that data:</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">clinsight</span><span class="fu">::</span><span class="va"><a href="../reference/clinsightful_data.html">clinsightful_data</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 24</span></span></span>
-<span><span class="co">#&gt;   site_code subject_id event_repeat event_id event_name event_date form_id</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Site 08   BEL_08_885            1 SCR      Screening  2023-06-05 LBHM   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> Site 08   BEL_08_885            1 SCR      Screening  2023-06-05 LBHM   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> Site 08   BEL_08_885            1 SCR      Screening  2023-06-05 LBHM   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Site 08   BEL_08_885            1 SCR      Screening  2023-06-05 LBHM   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> Site 08   BEL_08_885            1 SCR      Screening  2023-06-05 LBHM   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> Site 08   BEL_08_885            1 SCR      Screening  2023-06-05 LBHM   </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 17 more variables: form_repeat &lt;int&gt;, edit_date_time &lt;dttm&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   db_update_time &lt;dttm&gt;, region &lt;chr&gt;, day &lt;drtn&gt;, vis_day &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   vis_num &lt;dbl&gt;, event_label &lt;chr&gt;, item_name &lt;chr&gt;, item_type &lt;chr&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   item_group &lt;chr&gt;, item_value &lt;chr&gt;, item_unit &lt;chr&gt;, lower_lim &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   upper_lim &lt;dbl&gt;, significance &lt;chr&gt;, reason_notdone &lt;chr&gt;</span></span></span></code></pre></div>
+<span><span class="co">#&gt;   site_code subject_id event_id  event_date event_repeat form_id form_repeat</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> BEL04     BEL_04_133 COMMON_CM 2023-06-23            1 CM                1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> BEL04     BEL_04_133 COMMON_CM 2023-06-23            1 CM                1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> BEL04     BEL_04_133 COMMON_CM 2023-06-23            1 CM                1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> BEL04     BEL_04_133 COMMON_CM 2023-06-23            1 CM                1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> BEL04     BEL_04_133 COMMON_CM 2023-06-23            1 CM                1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> BEL04     BEL_04_133 COMMON_CM 2023-06-23            1 CM                1</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 17 more variables: edit_date_time &lt;dttm&gt;, day &lt;drtn&gt;, vis_day &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   vis_num &lt;dbl&gt;, event_name &lt;chr&gt;, event_label &lt;chr&gt;, form_type &lt;chr&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   item_name &lt;chr&gt;, item_type &lt;chr&gt;, item_group &lt;chr&gt;, item_unit &lt;chr&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   lower_lim &lt;dbl&gt;, upper_lim &lt;dbl&gt;, item_value &lt;chr&gt;, significance &lt;chr&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   reason_notdone &lt;chr&gt;, region &lt;chr&gt;</span></span></span></code></pre></div>
 <p>This object is an example of a healthy <code>study_data</code>
 object, that should preferably be stored as an RDS file prior to
 launching the app. let’s inspect it a little more:</p>
@@ -333,8 +356,8 @@ example metadata file, run the following chunk of code:</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> SubjectId subject_id  </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> EventId   event_id    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> EventDate event_date  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> EventName event_name  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> EventSeq  event_repeat</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> EventSeq  event_repeat</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> FormId    form_id     </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $events</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 3</span></span></span>
@@ -401,16 +424,31 @@ example metadata file, run the following chunk of code:</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> eN         event_repeat  </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> Form       item_group    </span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $settings</span></span>
+<span><span class="co">#&gt; $settings$pre_pivot_fns</span></span>
+<span><span class="co">#&gt; [1] "apply_study_specific_suffix_fixes"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $settings$post_pivot_fns</span></span>
+<span><span class="co">#&gt; [1] "apply_edc_specific_changes"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $settings$post_merge_fns</span></span>
+<span><span class="co">#&gt; [1] "apply_study_specific_fixes"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $settings$treatment_label</span></span>
+<span><span class="co">#&gt; [1] "💊 Tₓ"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $items_expanded</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 8</span></span></span>
-<span><span class="co">#&gt;   var        suffix item_name item_type item_group unit  lower_limit upper_limit</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> AE_AESPID  <span style="color: #BB0000;">NA</span>     AE Number other     Adverse e… <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>          <span style="color: #BB0000;">NA</span>         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> AE_AETERM  <span style="color: #BB0000;">NA</span>     AE Name   other     Adverse e… <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>          <span style="color: #BB0000;">NA</span>         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> AE_AESI    <span style="color: #BB0000;">NA</span>     AESI      other     Adverse e… <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>          <span style="color: #BB0000;">NA</span>         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> AE_AESTDAT <span style="color: #BB0000;">NA</span>     AE start… other     Adverse e… <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>          <span style="color: #BB0000;">NA</span>         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> AE_AEENDAT <span style="color: #BB0000;">NA</span>     AE end d… other     Adverse e… <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>          <span style="color: #BB0000;">NA</span>         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> AE_AESTDA… <span style="color: #BB0000;">NA</span>     AE date … other     Adverse e… <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>          <span style="color: #BB0000;">NA</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 9</span></span></span>
+<span><span class="co">#&gt;   form_type    var       suffix item_name item_type item_group unit  lower_limit</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> common_forms AE_AESPID <span style="color: #BB0000;">NA</span>     AE Number other     Adverse e… <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> common_forms AE_AETERM <span style="color: #BB0000;">NA</span>     AE Name   other     Adverse e… <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> common_forms AE_AESI   <span style="color: #BB0000;">NA</span>     AESI      other     Adverse e… <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> common_forms AE_AESTD… <span style="color: #BB0000;">NA</span>     AE start… other     Adverse e… <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> common_forms AE_AEEND… <span style="color: #BB0000;">NA</span>     AE end d… other     Adverse e… <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> common_forms AE_AESTD… <span style="color: #BB0000;">NA</span>     AE date … other     Adverse e… <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>         </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: upper_limit &lt;chr&gt;</span></span></span></code></pre></div>
 <p>Specifications for the list of data.frames include:</p>
 <ul>
 <li>

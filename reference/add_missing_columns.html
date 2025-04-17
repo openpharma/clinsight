@@ -3,7 +3,7 @@
 and if not, adds a column with all missing variables in the data. Thus, the
 columns will be made explicitly missing in the data frame."><meta property="og:description" content="Small helper function. Checks if all expected columns are in the data frame
 and if not, adds a column with all missing variables in the data. Thus, the
-columns will be made explicitly missing in the data frame."><meta property="og:image" content="/logo.png"></head><body>
+columns will be made explicitly missing in the data frame."><meta property="og:image" content="https://openpharma.github.io/clinsight/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -11,7 +11,7 @@ columns will be made explicitly missing in the data frame."><meta property="og:i
 
     <a class="navbar-brand me-2" href="../index.html">clinsight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1.9026</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -19,12 +19,20 @@ columns will be made explicitly missing in the data frame."><meta property="og:i
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/clinsight.html">Get started</a></li>
+<li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Contributions.html">Contributions</a></li>
-    <li><a class="dropdown-item" href="../articles/data_spec.html">App Configuration &amp; Input Data Specifications</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Metadata.html">Metadata</a></li>
+    <li><a class="dropdown-item" href="../articles/Deployment.html">Deployment</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Validation</h6></li>
     <li><a class="dropdown-item" href="../articles/test_report.html">Test report</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Developer Guides</h6></li>
+    <li><a class="dropdown-item" href="../articles/Contributions.html">Contributions</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -38,7 +46,7 @@ columns will be made explicitly missing in the data frame."><meta property="og:i
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Add missing columns</h1>
-      <small class="dont-index">Source: <a href="https://github.com/openpharma/clinsight/blob/v0.1.1/R/fct_data_helpers.R" class="external-link"><code>R/fct_data_helpers.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/openpharma/clinsight/blob/ls_docs_from_dev/R/fct_data_helpers.R" class="external-link"><code>R/fct_data_helpers.R</code></a></small>
       <div class="d-none name"><code>add_missing_columns.Rd</code></div>
     </div>
 
@@ -73,21 +81,9 @@ The added columns will be of class <code>character</code>.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">add_missing_columns</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"important_column1"</span>, <span class="st">"important_column2"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Sepal.Length Sepal.Width Petal.Length Petal.Width Species important_column1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1          5.1         3.5          1.4         0.2  setosa              &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2          4.9         3.0          1.4         0.2  setosa              &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3          4.7         3.2          1.3         0.2  setosa              &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4          4.6         3.1          1.5         0.2  setosa              &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5          5.0         3.6          1.4         0.2  setosa              &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6          5.4         3.9          1.7         0.4  setosa              &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   important_column2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1              &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2              &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3              &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4              &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5              &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6              &lt;NA&gt;</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+<span class="r-in"><span><span class="fu">add_missing_columns</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"important_column1"</span>, <span class="st">"important_column2"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
