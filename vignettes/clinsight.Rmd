@@ -36,10 +36,10 @@ In order to use custom study data with ClinSight, first the raw data needs to be
 
 ### Raw data structure {#raw_data_structure}
 
-Raw study data is expected to be in 'long format' with all columns being of type `character`. Below is a table with the required columns. Note that the column names shown below are flexible since they can be customized (renamed) using the [first tab from the metadata template](./Metadata.html#column_names) as needed.
+Raw study data is expected to be in 'long format' with all columns being of type `character`. Below is a table with the required columns. Note that the column names shown below are flexible since they can be customized (renamed) using the ['column_names' tab](./Metadata.html#column_names) from the metadata template as needed.
 
 |                |                                                                                                                |
-|------------------|------------------------------------------------------|
+|-------------------|-----------------------------------------------------|
 | **Name**       | **Description**                                                                                                |
 | site_code      | Identifier for study site.                                                                                     |
 | subject_id     | Unique identifier for a subject                                                                                |
