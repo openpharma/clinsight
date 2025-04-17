@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 library(clinsight)
 ```
 
-To get started, you can easily run and test ClinSight by using the function `clinsight::test_clinsight()`. This function loads all data in a temporary folder that will be cleaned up after use. If no data is provided, "dummy" data will be used to run the application. Note that this function is only meant for testing and development, and is a wrapper around `clinsight::run_app()`, the primary function to launch the app. Executing `clinsight::run_app()` directly will create a database in the working directory that will record user actions such as the study data's review status. This database is required for deployment in a production environment. 
+To get started, you can easily run and test ClinSight by using the function `clinsight::test_clinsight()`. This function loads all data in a temporary folder that will be cleaned up after use. If no data is provided, "dummy" data will be used to run the application. Note that this function is only meant for testing and development, and is a wrapper around `clinsight::run_app()`, the primary function to launch the app. Executing `clinsight::run_app()` directly will create a database in the working directory that will record user actions such as the study data's review status. This database is required for deployment in a production environment.
 
 ```{r eval=FALSE}
 # Not run:
@@ -32,14 +32,14 @@ Once launched, the `Start` screen will look like the following:
 
 ## Create custom data and metadata
 
-In order to use custom study data with ClinSight, the raw custom data needs to fulfill few specific requirements. Secondly, a ClinSight metadata file needs to be customized and created based on the custom data (see `create_clinsight_metadata()` and `get_metadata()`. If these requirements are met, the data can be merged with the study-specific `metadata` to successfully create custom `ClinSight`-compatible study data. All details about the metadata template can be found in `vignette("Metadata")`.
+In order to use custom study data with ClinSight, first the raw data needs to be in the correct format ([see below](#raw_data_structure)). Secondly, a ClinSight metadata file needs to be prepared so that the app knows how to use the raw data. (see `create_clinsight_metadata()` and `get_metadata()`. Then, the raw data needs to be merged with the metadata file (using merge_meta_with_data()) to create custom `ClinSight`-compatible input data. All details about the metadata template and how to customize it can be found in the `vignette("Metadata")`.
 
-### Raw data structure
+### Raw data structure {#raw_data_structure}
 
-Raw study data needs to needs to be in long format in order to use it with ClinSight, with the columns being in character vector format. The following columns are expected to be in the raw data.
+Raw study data is expected to be in 'long format' with all columns being of type `character`. Below is a table with the required columns. Note that the column names shown below are flexible since they can be customized (renamed) using the [first tab from the metadata template](./Metadata.html#column_names) as needed.
 
 |                |                                                                                                                |
-|-----------------|-------------------------------------------------------|
+|------------------|------------------------------------------------------|
 | **Name**       | **Description**                                                                                                |
 | site_code      | Identifier for study site.                                                                                     |
 | subject_id     | Unique identifier for a subject                                                                                |
@@ -52,7 +52,7 @@ Raw study data needs to needs to be in long format in order to use it with ClinS
 | item_value     | Value of the variable (`var`) in question.                                                                     |
 | edit_date_time | The time at which the value was last edited. Important for efficient reviewing of the data within ClinSight.   |
 
-As an example, we will use raw data included in the package. Note that if the column names differ, they can be adjusted in the metadata if needed, so that they will show up as in the table above after merging.
+As an example, we will show raw data pre-installed with the package that can be converted to `ClinSight`-compatible input data.
 
 ```{r}
 raw_data <- get_raw_csv_data(system.file("raw_data", package = "clinsight"))
