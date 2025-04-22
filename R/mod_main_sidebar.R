@@ -153,7 +153,7 @@ mod_main_sidebar_server <- function(
       if (golem::app_prod()){
         tryCatch(
           # More robust path, independent of golem-config.yml location:
-          paste0("V", pkg_version(path = dirname(app_sys("Description")))),
+          paste0("V", pkg_version(path = dirname(app_sys("DESCRIPTION")))),
           error = \(e) "version unknown"
         )
       } else {

@@ -200,7 +200,7 @@ describe(
         withr::local_options("golem.app.prod" = TRUE)
         actual_version <- paste0(
           "V",
-          golem::pkg_version(path = dirname(app_sys("Description")))
+          golem::pkg_version(path = dirname(app_sys("DESCRIPTION")))
         )
         testServer(mod_main_sidebar_server, args = testargs, {
           ns <- session$ns
