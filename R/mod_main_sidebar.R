@@ -25,9 +25,13 @@ mod_main_sidebar_ui <- function(id){
         )
       )
     ),
-    htmltools::HTML("<br><br><br><br>"),
-    mod_review_config_ui(ns("review_config_1")),
-    mod_db_synch_info_ui(ns("synch_info"))
+    bslib::card_body(),
+    bslib::card_body(
+      fill = FALSE, 
+      mod_review_config_ui(ns("review_config_1")),
+      mod_db_synch_info_ui(ns("synch_info")),
+      textOutput(ns("clinsight_version"))
+      )
   )
 }
 
@@ -144,6 +148,14 @@ mod_main_sidebar_server <- function(
       app_data = app_data,
       db_path = db_path
       )
+    
+    output[["clinsight_version"]] <- renderText({
+      if (golem::app_prod()){
+        paste0("V", golem::pkg_version())
+      } else {
+        "_dev_version_"
+      }
+    })
   })
 }
 
