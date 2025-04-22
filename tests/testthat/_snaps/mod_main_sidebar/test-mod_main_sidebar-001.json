@@ -19,6 +19,7 @@
     "test-write_query-query_text": ""
   },
   "output": {
+    "test-clinsight_version": "_dev_version_",
     "test-navigate_forms_1-form_name": "<center>Adverse events<\/center>",
     "test-review_forms_1-save_review_error": {
       "message": "Requires review",
