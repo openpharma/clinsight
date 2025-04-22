@@ -171,4 +171,50 @@ describe(
   }
 )
 
-
+describe(
+  "Feature 3 | Display ClinSight version. As a user, I want to be able 
+         to see the version of ClinSight currently in use", 
+  {
+    it(
+      "Scenario 1 - View version in production. 
+      Given test a data frame with random data,
+      and golem.app.prod is set to TRUE,
+      I expect that the actual version is shown in the application's sidebar,", 
+      {
+        testargs <- list(
+          r = reactiveValues(create_query = 0, review_data = reactiveValues()),
+          navinfo = reactiveValues(),
+          app_data = list("Form1" = data.frame("site_code" = "", "edit_date_time" = "2023-01-01")), # used by mod_review_config()
+          app_tables = list(),
+          app_vars = list(
+            all_forms = data.frame(),
+            Sites = data.frame(),
+            subject_id = "",
+            form_level_data = data.frame("item_group" = "", "review_required" = TRUE)
+          ),
+          db_path = "",
+          forms_to_review = reactiveVal(),
+          available_data = data.frame()
+        )
+        
+        withr::local_options("golem.app.prod" = TRUE)
+        # Fix the path argument of pkg_version() for use in testing environment:
+        local_mocked_bindings(
+          pkg_version = \(...){
+            golem::pkg_version(
+              path = dirname(app_sys("Description"))
+            )
+          }
+        )
+        actual_version <- paste0(
+          "V",
+          golem::pkg_version(path = dirname(app_sys("Description")))
+        )
+        testServer(mod_main_sidebar_server, args = testargs, {
+          ns <- session$ns
+          expect_equal(output$clinsight_version, actual_version)
+        })
+      }
+    )
+  }
+)
