@@ -151,7 +151,7 @@ mod_main_sidebar_server <- function(
     
     output[["clinsight_version"]] <- renderText({
       if (golem::app_prod()){
-        paste0("V", golem::pkg_version())
+        paste0("V", pkg_version())
       } else {
         "_dev_version_"
       }
