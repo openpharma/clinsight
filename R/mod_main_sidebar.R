@@ -151,7 +151,11 @@ mod_main_sidebar_server <- function(
     
     output[["clinsight_version"]] <- renderText({
       if (golem::app_prod()){
-        paste0("V", pkg_version())
+        tryCatch(
+          # More robust path, independent of golem-config.yml location:
+          paste0("V", pkg_version(path = dirname(app_sys("Description")))),
+          error = \(e) "version unknown"
+        )
       } else {
         "_dev_version_"
       }
