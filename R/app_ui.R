@@ -42,9 +42,7 @@ app_ui <- function(request){
       ),
       bslib::nav_spacer(),
       bslib::nav_item(
-        tags$h2(
-          tagAppendAttributes(textOutput("study_name"), class = "text-secondary")
-        )
+        tags$h2(textOutput("study_name"), class = "text-secondary")
       ),
       bslib::nav_spacer(),
       bslib::nav_panel(
