@@ -54,7 +54,13 @@ mod_review_forms_ui <- function(id){
             icon = icon("floppy-disk"),
             class = "btn-primary m2"
           ),
-          textOutput(ns("save_review_error"))
+          textOutput(ns("save_review_error")),
+          shinyWidgets::radioGroupButtons(
+            inputId = ns("review_type"),
+            choiceNames = list(icon("user"), icon("file-lines")),
+            choiceValues = list("subject", "form"),
+            selected = "subject"
+          ),
         )
       )
     )
@@ -113,12 +119,23 @@ mod_review_forms_server <- function(
     ns <- session$ns
     
     review_data_active <- reactive({
-      tryCatch(
-        subset(r$review_data[[active_form()]], subject_id == r$subject_id),
+      tryCatch({
+        df <- subset(r$review_data[[active_form()]]) 
+        if (input$review_type == "subject"){
+          df <- subset(df, subject_id == r$subject_id)
+        }
+        df
+      }, 
         # Returns expected empty data frame for empty form
         error = \(e) r$review_data[[names(r$review_data)[1]]][0,]
       )
     })
+    
+    observeEvent(input$review_type, {
+      golem::cat_dev(active_form(), " | Update review type to: '", 
+                     input$review_type, "'\n", sep = "")
+      session$userData$review_type(input$review_type)
+    }, ignoreInit = FALSE)
     
     review_indeterminate <- reactiveVal()
     
@@ -127,7 +144,7 @@ mod_review_forms_server <- function(
     })
     
     observe({
-      req(session$userData$review_records[[active_form()]])
+      req(session$userData$review_records[[active_form()]], review_data_active())
       review_status <-
         review_data_active()[,c("id", "reviewed")] |> 
         dplyr::rows_update(session$userData$review_records[[active_form()]][,c("id", "reviewed")], by = "id") |> 
@@ -140,6 +157,7 @@ mod_review_forms_server <- function(
       bindEvent(active_form(), session$userData$review_records[[active_form()]])
     
     observeEvent(r$subject_id, {
+      req(input$review_type == "subject")
       golem::cat_dev("mod_review_forms | Reset review records\n")
       session$userData$update_checkboxes[[active_form()]] <- NULL
       session$userData$review_records[[active_form()]] <- data.frame(id = integer(), reviewed = character())

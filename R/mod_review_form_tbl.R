@@ -69,12 +69,12 @@ mod_review_form_tbl_server <- function(
         form_review_data(), 
         form = form, 
         form_items = form_items,
-        active_subject = active_subject(),
+        active_subject = ifelse(show_all(), "_everyone_", active_subject()),
         is_reviewed = NULL,
         is_SAE = identical(title, "Serious Adverse Events")
       )
     }) |> 
-      bindEvent(form_data(), form_review_data(), active_subject())
+      bindEvent(form_data(), form_review_data(), active_subject(), show_all())
     
     ############################### Observers: #################################
     
@@ -100,7 +100,7 @@ mod_review_form_tbl_server <- function(
       df <- table_data() |> 
         dplyr::mutate(
           o_reviewed = dplyr::if_else(
-            subject_id == active_subject(), 
+            show_all() | subject_id == active_subject(), 
             lapply(o_reviewed, modifyList, list(updated = checked)),
             o_reviewed
           )
@@ -113,11 +113,12 @@ mod_review_form_tbl_server <- function(
       golem::print_dev(input$table_review_selection[c("id", "reviewed")])
       # Update review values for session's user data
       session$userData$update_checkboxes[[form]] <- NULL
+      browser()
       session$userData$review_records[[form]] <-
         update_review_records(
           session$userData$review_records[[form]],
           input$table_review_selection[, c("id", "reviewed")],
-          subset(form_review_data(), subject_id == active_subject(),
+          subset(form_review_data(), show_all() | subject_id == active_subject(),
                  c("id", "reviewed"))
         )
       

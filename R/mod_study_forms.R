@@ -130,6 +130,16 @@ mod_study_forms_server <- function(
       shinyjs::disable("switch_view")
     }
     
+    observeEvent(session$userData$review_type(), {
+      golem::cat_dev(form, "| Updating tables to show '", 
+                     session$userData$review_type(), "' level data\n", sep = "")
+      shinyWidgets::updateMaterialSwitch(
+        session = session,
+        inputId = "show_all",
+        value = identical(session$userData$review_type(), "form")
+        )
+    })
+    
     fig_data <- reactive({
       req(isTRUE(all_continuous))
       validate(need(

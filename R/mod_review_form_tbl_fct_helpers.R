@@ -37,6 +37,7 @@ get_form_table <- function(
   if(length(missing_cols) != 0){
     stop("the following columns are missing: ", paste0(missing_cols, collapse = ", "))
   }
+  browser()
   df <- dplyr::left_join(
     form_data,
     form_review_data |> 
@@ -48,7 +49,7 @@ get_form_table <- function(
       item_value = dplyr::case_when(
         is.na(reviewed) ~ htmltools::htmlEscape(item_value),
         (reviewed == "No" & !is.na(item_value)) ~
-        paste0("<b>", htmltools::htmlEscape(item_value), "*</b>"), 
+          paste0("<b>", htmltools::htmlEscape(item_value), "*</b>"), 
         .default = htmltools::htmlEscape(item_value)
       )
     ) |> 
@@ -62,7 +63,11 @@ get_form_table <- function(
         ), 
         o_reviewed, 
         dplyr::row_number(),
-        if (is.null(active_subject)) FALSE else subject_id != active_subject
+        if (is.null(active_subject) || active_subject == "_everyone_") {
+          FALSE 
+        } else {
+          subject_id != active_subject
+        }
       )
     )
   if(form == "Adverse events") {
