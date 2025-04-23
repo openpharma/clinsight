@@ -29,15 +29,11 @@ get_form_table <- function(
   stopifnot(is.logical(is_reviewed %||% FALSE), is.logical(is_SAE %||% FALSE))
   is_SAE <- isTRUE(is_SAE)
   stopifnot(is.character(active_subject %||% ""))
-  if(is.null(active_subject)){
-    warning("No active subject selected")
-  }
   required_cols <- c(id_cols, "edit_date_time", "event_date", "item_value")
   missing_cols <- required_cols[!required_cols %in% names(form_data)]
   if(length(missing_cols) != 0){
     stop("the following columns are missing: ", paste0(missing_cols, collapse = ", "))
   }
-  browser()
   df <- dplyr::left_join(
     form_data,
     form_review_data |> 
@@ -63,11 +59,7 @@ get_form_table <- function(
         ), 
         o_reviewed, 
         dplyr::row_number(),
-        if (is.null(active_subject) || active_subject == "_everyone_") {
-          FALSE 
-        } else {
-          subject_id != active_subject
-        }
+        if (is.null(active_subject)) FALSE else subject_id != active_subject
       )
     )
   if(form == "Adverse events") {
