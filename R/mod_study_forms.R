@@ -137,7 +137,17 @@ mod_study_forms_server <- function(
         session = session,
         inputId = "show_all",
         value = identical(session$userData$review_type(), "form")
-        )
+      )
+      shinyWidgets::updateRadioGroupButtons(
+        inputId = "switch_view",
+        selected = if(
+          !all_continuous || identical(session$userData$review_type(), "form")
+        ) {
+          "table" 
+        } else {
+          "graph"
+        }
+      )
     })
     
     fig_data <- reactive({
@@ -161,7 +171,7 @@ mod_study_forms_server <- function(
       active_subject = active_subject,
       form = form,
       form_items = form_items,
-      show_all = reactive(input$show_all), 
+      show_all = reactive(input$show_all | identical(session$userData$review_type(), "form")), 
       table_names = table_names,
       title = form
     )
