@@ -69,7 +69,7 @@ mod_review_form_tbl_server <- function(
         form_review_data(), 
         form = form, 
         form_items = form_items,
-        active_subject = ifelse(show_all(), "_everyone_", active_subject()),
+        active_subject = if(identical(session$userData$review_type(), "form")) NULL else active_subject(),
         is_reviewed = NULL,
         is_SAE = identical(title, "Serious Adverse Events")
       )
@@ -77,7 +77,6 @@ mod_review_form_tbl_server <- function(
       bindEvent(form_data(), form_review_data(), active_subject(), show_all())
     
     ############################### Observers: #################################
-    
     
     observe({
       golem::cat_dev(form, "| Resetting userData\n")
@@ -113,7 +112,6 @@ mod_review_form_tbl_server <- function(
       golem::print_dev(input$table_review_selection[c("id", "reviewed")])
       # Update review values for session's user data
       session$userData$update_checkboxes[[form]] <- NULL
-      browser()
       session$userData$review_records[[form]] <-
         update_review_records(
           session$userData$review_records[[form]],
