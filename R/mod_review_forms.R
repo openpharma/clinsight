@@ -60,7 +60,7 @@ mod_review_forms_ui <- function(id){
             choiceNames = list(icon("user"), icon("file-lines")),
             choiceValues = list("subject", "form"),
             selected = "subject"
-          ),
+          )
         )
       )
     )
