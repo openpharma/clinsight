@@ -34,3 +34,4 @@ A data frame with the required report data.
 Helper function for mod_report. Filters the correct report data and renames
 the columns to a more report-friendly name.
 }
+\keyword{internal}

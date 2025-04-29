@@ -41,3 +41,4 @@ will be collapsed into one column separated with a comma, using
 which is then passed to the modules \code{\link[=mod_header_widgets_server]{mod_header_widgets_server()}},
 \code{\link[=mod_navigate_review_server]{mod_navigate_review_server()}}, and \code{\link[=mod_report_server]{mod_report_server()}}.
 }
+\keyword{internal}

@@ -7,7 +7,7 @@
 #' @param required_cols Character vector, containing the column names that are
 #'   required for the application to run appropriately.
 #'
-#' @export
+#' @keywords internal
 #' 
 check_appdata <- function(
     data = appdata,
