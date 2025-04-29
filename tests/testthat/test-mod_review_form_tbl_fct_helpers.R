@@ -1,7 +1,7 @@
 describe("get_form_table() works", {
   it(
     "creates a form table with not yet reviewed data marked bold and with the 
-    o_reviewed list stored in it,in which only the rows for the active_subject 
+    row_review_status list stored in it,in which only the rows for the active_subject 
     are set to disabled=FALSE", 
     {
       appdata <- get_appdata(clinsightful_data)
@@ -33,11 +33,11 @@ describe("get_form_table() works", {
       lapply(table_names, \(x){
         expect_true(is.data.frame(output[[!!x]]))
         expect(
-          "o_reviewed" %in% names(output[[x]]), 
-          paste0("`o_reviewed` is an expected column for data in form `", x, "`.")
+          "row_review_status" %in% names(output[[x]]), 
+          paste0("`row_review_status` is an expected column for data in form `", x, "`.")
         )
-        expect_true(is.list(output[[!!x]][["o_reviewed"]]))
-        enabled_rows <- lapply(output[[x]][["o_reviewed"]], \(i) isFALSE(i$disabled)) |> unlist()
+        expect_true(is.list(output[[!!x]][["row_review_status"]]))
+        enabled_rows <- lapply(output[[x]][["row_review_status"]], \(i) isFALSE(i$disabled)) |> unlist()
         if(any(enabled_rows)){
           expect_equal(unique(output[[!!x]][enabled_rows,]$subject_id), "BEL_04_772")
         } else{
@@ -47,7 +47,7 @@ describe("get_form_table() works", {
         invisible()
       
       ## Verify columns for each table
-      standard_names <- c("o_reviewed", idx_cols, "event_repeat", "event_date")
+      standard_names <- c("row_review_status", idx_cols, "event_repeat", "event_date")
       review_tables <- table_names[table_names != "General"]
       unreviewed_items <- lapply(review_tables, \(x){
         df_x <- output[[x]]
@@ -96,7 +96,7 @@ describe("get_form_table() works", {
       
       output_tables <- lapply(table_names, \(x){
         output[[x]] |> 
-          dplyr::select(-o_reviewed) |> 
+          dplyr::select(-row_review_status) |> 
           dplyr::mutate(
             dplyr::across(
               # remove bold tags. status_label is the exception here since it 

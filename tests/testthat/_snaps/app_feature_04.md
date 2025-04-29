@@ -26,7 +26,7 @@
       print(table_data, width = Inf)
     Output
       # A tibble: 2 x 11
-        o_reviewed       subject_id event_name `Systolic blood pressure`
+        row_review_status       subject_id event_name `Systolic blood pressure`
         <list>           <chr>      <chr>      <chr>                    
       1 <named list [5]> 9600-002   Screening  <b>99*</b> mmHg          
       2 <named list [5]> 9600-002   Visit 2    <b>99*</b> mmHg          

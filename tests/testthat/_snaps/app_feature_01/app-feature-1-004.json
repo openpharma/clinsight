@@ -36,7 +36,7 @@
               "targets": 2
             },
             {
-              "name": "o_reviewed",
+              "name": "row_review_status",
               "targets": 0
             },
             {
@@ -279,7 +279,7 @@
               "targets": 2
             },
             {
-              "name": "o_reviewed",
+              "name": "row_review_status",
               "targets": 0
             },
             {
@@ -8402,7 +8402,7 @@
               "visible": false
             },
             {
-              "name": "o_reviewed",
+              "name": "row_review_status",
               "targets": 0
             },
             {

@@ -35,8 +35,8 @@ function checkboxCallback(table) {
         // Aligns the checkbox with the appropriate state for ts()
         $(':checkbox', this.node())
           .addClass('indeterminate')
-          .prop('indeterminate', this.data()[0].updated == null)
-          .prop('readOnly', this.data()[0].updated == false)
+          .prop('indeterminate', this.data()[0].pending_form_review_status == null)
+          .prop('readOnly', this.data()[0].pending_form_review_status == false)
       }
     })
   });
@@ -47,7 +47,7 @@ function checkboxCallback(table) {
     // This updates the DataTable object itself. This makes sure the updates 
     //  are maintained when a checkbox is re-rendered but the table is not 
     //  re-drawn.
-    cell.data().updated = review;
+    cell.data().pending_form_review_status = review;
     var info = {review: review, ids: cell.data().ids, row_id: cell.data().row_id};
     // Returns the information of which checkbox was clicked to the Shiny session.
     Shiny.setInputValue(tblId + '_review_selection:CS.reviewInfo', info, {priority: 'event'});
@@ -69,12 +69,12 @@ function checkboxCallback(table) {
  */
 function checkboxRender(data, type, row, meta) {
   var reviewed = data.reviewed;
-  var updated = data.updated;
+  var pending_form_review_status = data.pending_form_review_status;
   var disabled = data.disabled;
   var cb_class = ''
   // Note reviewed == null means the row is partially reviewed
   if (reviewed == null) {
-    cb_class = updated == null ? '' : 'indeterminate'
+    cb_class = pending_form_review_status == null ? '' : 'indeterminate'
   } else {
     cb_class = reviewed ? 'checked' : 'unchecked'
   }
@@ -82,8 +82,8 @@ function checkboxRender(data, type, row, meta) {
     ${disabled ? 'disabled ' : ''}
     class='${cb_class}' 
     // If the checkbox has not be clicked, set value to reviewed status, 
-    //  otherwise use clicked/updated status
-    ${updated == null ? (reviewed ? 'checked' : '') : (updated ? 'checked' : '')} 
+    //  otherwise use clicked/pending_form_review_status
+    ${pending_form_review_status == null ? (reviewed ? 'checked' : '') : (pending_form_review_status ? 'checked' : '')} 
     // If the row is partially reviewed. Handle the checkbox state using ts(). 
     //  Using an onclick event is important because we need this to trigger 
     //  before any of the DataTable callbacks.
@@ -103,8 +103,8 @@ function rowCallback(row, data) {
   if (data[0].reviewed == null) {
     $(':checkbox', row)
       .addClass('indeterminate')
-      .prop('indeterminate', data[0].updated == null)
-      .prop('readOnly', data[0].updated == false)
+      .prop('indeterminate', data[0].pending_form_review_status == null)
+      .prop('readOnly', data[0].pending_form_review_status == false)
   }
 }
 

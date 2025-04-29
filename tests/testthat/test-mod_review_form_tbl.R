@@ -89,8 +89,8 @@ describe(
     #     testServer(mod_common_forms_server, args = testargs, {
     #       ns <- session$ns
     #       session$setInputs(show_all_data = FALSE)
-    #       expect("o_reviewed" %in% names(common_form_data()), "`o_reviewed` is an expected column for form data")
-    #       enabled_rows <- lapply(common_form_data()[["o_reviewed"]], \(x) isFALSE(x$disabled)) |> unlist()
+    #       expect("row_review_status" %in% names(common_form_data()), "`row_review_status` is an expected column for form data")
+    #       enabled_rows <- lapply(common_form_data()[["row_review_status"]], \(x) isFALSE(x$disabled)) |> unlist()
     #       expect_equal(unique(common_form_data()[enabled_rows,"subject_id",drop = TRUE]), "NLD_06_755")
     #       expect_true(is.data.frame(common_form_data()))
     #       expect_true(inherits(output[["review_form_tbl-table"]], "json"))
@@ -120,7 +120,7 @@ describe(
     #             show_all = TRUE
     #           )
     #           expect_true(is.data.frame(study_form_data()))
-    #           enabled_rows <- lapply(study_form_data()[["o_reviewed"]], \(x) isFALSE(x$disabled)) |> unlist()
+    #           enabled_rows <- lapply(study_form_data()[["row_review_status"]], \(x) isFALSE(x$disabled)) |> unlist()
     #           expect_equal(nrow(study_form_data()), 68)
     #           
     #           table_ids <- unique(study_form_data()$subject_id)

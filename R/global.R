@@ -117,7 +117,7 @@ utils::globalVariables(
     "suffix_names",
     "form_type",
     "id",
-    "o_reviewed",
+    "row_review_status",
     "row_id",
     "start",
     "end",
