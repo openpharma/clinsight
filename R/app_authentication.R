@@ -6,7 +6,7 @@
 #' @param credentials_pwd Password for the credentials database.
 #'
 #' @return Creates credentials database if needed. No values will be returned.
-#' @export
+#' @keywords internal
 #' 
 initialize_credentials <- function(
     credentials_db = "credentials_db.sqlite",
@@ -68,7 +68,7 @@ initialize_credentials <- function(
 #'
 #' Authentication implementation in the UI, using `shinymanager`.
 #'
-#' 
+#' @keywords internal
 authenticate_ui <- function(){
   shinymanager::secure_app(
     app_ui, 
@@ -112,6 +112,7 @@ authenticate_ui <- function(){
 #' @param session Shiny session. Needed to access user information in case of
 #'   login methods alternative to `shinymanager` are used.
 #' 
+#' @keywords internal
 authenticate_server <- function(
     user_identification = get_golem_config("user_identification"),
     all_sites = NULL,

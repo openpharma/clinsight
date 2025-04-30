@@ -21,6 +21,9 @@ A table in a database will be appended. No values will be returned.
 Saves a query to a table in the user database.
 }
 \examples{
+\dontrun{
 db_save(mtcars, ":memory:", "mtcars_db")
+}
 
 }
+\keyword{internal}

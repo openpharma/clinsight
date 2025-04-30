@@ -20,3 +20,4 @@ Creates credentials database if needed. No values will be returned.
 \description{
 Creates a database with new credentials if it does not yet exist.
 }
+\keyword{internal}
