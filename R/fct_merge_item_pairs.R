@@ -2,15 +2,21 @@
 #'
 #' @param data A data frame.
 #' @param item_name A character string with the name of the item to merge.
-#' @param item_name_other A character string with the name of the item to merge with.
+#' @param item_name_other A character string with the name of the item to merge
+#'   with.
 #' @param merge_action A character string with the action to take when merging.
-#' @param name_column A character string with the name of the column containing the item names.
-#' @param value_column A character string with the name of the column containing the item values.
-#' @param id_cols A character vector with the names of the columns that uniquely identify a row.
+#' @param name_column A character string with the name of the column containing
+#'   the item names.
+#' @param value_column A character string with the name of the column containing
+#'   the item values.
+#' @param id_cols A character vector with the names of the columns that uniquely
+#'   identify a row. Note that the string with name_column will be removed from
+#'   `id_cols`, since it differs for an item pair (`item_name` and
+#'   `item_name_other`) and thus cannot be used to identify a unique pair.
 #'
 #' @return A data frame with the merged items.
 #' @keywords internal
-#'
+#' 
 merge_item_pair <- function(
     data, 
     item_name,

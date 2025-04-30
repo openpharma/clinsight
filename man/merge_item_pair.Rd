@@ -19,15 +19,21 @@ merge_item_pair(
 
 \item{item_name}{A character string with the name of the item to merge.}
 
-\item{item_name_other}{A character string with the name of the item to merge with.}
+\item{item_name_other}{A character string with the name of the item to merge
+with.}
 
 \item{merge_action}{A character string with the action to take when merging.}
 
-\item{name_column}{A character string with the name of the column containing the item names.}
+\item{name_column}{A character string with the name of the column containing
+the item names.}
 
-\item{value_column}{A character string with the name of the column containing the item values.}
+\item{value_column}{A character string with the name of the column containing
+the item values.}
 
-\item{id_cols}{A character vector with the names of the columns that uniquely identify a row.}
+\item{id_cols}{A character vector with the names of the columns that uniquely
+identify a row. Note that the string with name_column will be removed from
+\code{id_cols}, since it differs for an item pair (\code{item_name} and
+\code{item_name_other}) and thus cannot be used to identify a unique pair.}
 }
 \value{
 A data frame with the merged items.
