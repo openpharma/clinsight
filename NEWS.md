@@ -10,6 +10,7 @@
 - Add a logging table to the DB for reviews.
 - Simplify pulling data from DB for reviews.
 - Review data by records IDs instead of subject & form
+- Improved generalization of event names for use in multiple studies.
 - Make query handling a configurable option
 - Changed the legend to display 'significance pending' instead of 'significance unknown'.
 - Added `Excel` download button to Queries table & patient listings that need review.
@@ -21,6 +22,9 @@
 - Removed some custom logic in `create_table` so that it does not interfere
 - Replaced default ClinSight Logo (displayed in app) to use a company-independent graphic, i.e. the design from the hex logo
 - Added `test_clinsight()` for developing and testing custom data and metadata for use with ClinSight.
+- The version of ClinSight will now show up in the application's sidebar.
+- Settings and data/clinsight information in the sidebar is now aligned at the bottom.
+- Tables in all forms now keep showing data of the active subject first by default, even when changing table view to show all subject's data in the table.
 
 ## Bug fixes
 
