@@ -23,7 +23,7 @@ app_ui <- function(request){
         href = "/",
         tags$img(src='www/logo_in_app_w_margin.png', height = '45')
       ), 
-      sidebar = bslib::sidebar(mod_main_sidebar_ui("main_sidebar_1")),
+      sidebar = bslib::sidebar(mod_main_sidebar_ui("main_sidebar_1"), fillable = TRUE),
       header =   conditionalPanel(
         condition = "!['Start', 'Queries', 'Create Report'].includes(input.main_tabs)",
         mod_header_widgets_ui("header_widgets_1")

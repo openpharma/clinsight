@@ -65,6 +65,9 @@ get_form_table <- function(
         if (is.null(active_subject)) FALSE else subject_id != active_subject
       )
     )
+  if(!is.null(active_subject)){
+    df <- df[order(df$subject_id != active_subject), ]
+  }
   if(form == "Adverse events") {
     df <- adjust_ae_form_table(df, is_SAE = is_SAE)
   }
