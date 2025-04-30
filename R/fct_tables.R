@@ -326,7 +326,8 @@ create_table.medication <- function(
     ...
 ){
   expected_columns <- expected_columns |> 
-    c("CM Dose", "CM Frequency", "CM Route", "CM Start Date", "CM End Date", "CM Unit") |> 
+    c("CM Name", "CM Dose", "CM Frequency", "CM Route", "CM Start Date", 
+      "CM End Date", "CM Unit") |> 
     unique()
   df <-  data |> 
     create_table.default(name_column, value_column, keep_vars, expected_columns) |> 
@@ -413,13 +414,3 @@ create_table.bm_cytology <- function(
     )
 }
 
-# TODO: create a function like the one below. Not yet done due to time restrictions.
-# merge_other_category <- function(
-#     data, 
-#     name_column = "item_name",
-#     value_column = "item_value", 
-#     var_name = c(""), 
-#     var_name_other
-# ){
-#   
-# }
