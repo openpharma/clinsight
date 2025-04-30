@@ -22,6 +22,8 @@
 - Removed some custom logic in `create_table` so that it does not interfere
 - Replaced default ClinSight Logo (displayed in app) to use a company-independent graphic, i.e. the design from the hex logo
 - Added `test_clinsight()` for developing and testing custom data and metadata for use with ClinSight.
+- The version of ClinSight will now show up in the application's sidebar.
+- Settings and data/clinsight information in the sidebar is now aligned at the bottom.
 - Tables in all forms now keep showing data of the active subject first by default, even when changing table view to show all subject's data in the table.
 
 ## Bug fixes
