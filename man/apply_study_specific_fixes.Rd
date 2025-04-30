@@ -20,4 +20,9 @@ A data frame.
 }
 \description{
 These changes are probably study-specific and need to be changed accordingly.
+The function is still needed for recreating internal data. It mainly fixes
+the significance values for ECG data (only if available), and adds a variable
+named \verb{Weight change since screening} if the variable named \code{Weight} is
+available.
 }
+\keyword{internal}
