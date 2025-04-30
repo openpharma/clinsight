@@ -9,7 +9,7 @@
           "Scroller",
           "ColReorder"
         ],
-        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th>Review Status<\/th>\n      <th>Subject<\/th>\n      <th>N<\/th>\n      <th>Name<\/th>\n      <th>AESI<\/th>\n      <th>Start date<\/th>\n      <th>End date<\/th>\n      <th>CTCAE severity<\/th>\n      <th>Treatment related<\/th>\n      <th>Treatment action<\/th>\n      <th>Other action<\/th>\n      <th>Category<\/th>\n      <th>Awareness date<\/th>\n      <th>Date of death<\/th>\n      <th>Death reason<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
+        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th>Review Status<\/th>\n      <th>Subject<\/th>\n      <th>N<\/th>\n      <th>Name<\/th>\n      <th>AESI<\/th>\n      <th>Start date<\/th>\n      <th>End date<\/th>\n      <th>CTCAE severity<\/th>\n      <th>Treatment related<\/th>\n      <th>Treatment action<\/th>\n      <th>Category<\/th>\n      <th>Awareness date<\/th>\n      <th>Date of death<\/th>\n      <th>Death reason<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
         "options": {
           "scrollY": 400,
           "scrollX": true,
@@ -76,24 +76,20 @@
               "targets": 9
             },
             {
-              "name": "Other action",
+              "name": "Category",
               "targets": 10
             },
             {
-              "name": "Category",
+              "name": "Awareness date",
               "targets": 11
             },
             {
-              "name": "Awareness date",
+              "name": "Date of death",
               "targets": 12
             },
             {
-              "name": "Date of death",
-              "targets": 13
-            },
-            {
               "name": "Death reason",
-              "targets": 14
+              "targets": 13
             }
           ],
           "rowCallback": "rowCallback",
@@ -251,7 +247,7 @@
           "Scroller",
           "ColReorder"
         ],
-        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th>Review Status<\/th>\n      <th>Subject<\/th>\n      <th>N<\/th>\n      <th>Name<\/th>\n      <th>AESI<\/th>\n      <th>start date<\/th>\n      <th>end date<\/th>\n      <th>CTCAE severity<\/th>\n      <th>Treatment related<\/th>\n      <th>Treatment action<\/th>\n      <th>Other action<\/th>\n      <th>Serious Adverse Event<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
+        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th>Review Status<\/th>\n      <th>Subject<\/th>\n      <th>N<\/th>\n      <th>Name<\/th>\n      <th>AESI<\/th>\n      <th>start date<\/th>\n      <th>end date<\/th>\n      <th>CTCAE severity<\/th>\n      <th>Treatment related<\/th>\n      <th>Treatment action<\/th>\n      <th>Serious Adverse Event<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
         "options": {
           "scrollY": 400,
           "scrollX": true,
@@ -318,12 +314,8 @@
               "targets": 9
             },
             {
-              "name": "Other action",
-              "targets": 10
-            },
-            {
               "name": "Serious Adverse Event",
-              "targets": 11
+              "targets": 10
             }
           ],
           "rowCallback": "rowCallback",
@@ -918,7 +910,7 @@
       "completed": 0,
       "unmarking": 0,
       "marking": 0,
-      "total": 72
+      "total": 65
     },
     "main_sidebar_1-review_forms_1-save_review_error": {
       "message": "Requires review",

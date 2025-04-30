@@ -23,16 +23,14 @@
                 "ae_ctcae_severity" "ae_ctcae_severity_worsening" 
                AE Treatment related           AE Treatment action 
              "ae_treatment_related"         "ae_treatment_action" 
-                    AE Other action         Serious Adverse Event 
-                  "ae_other_action"       "serious_adverse_event" 
-                 SAE Awareness date                SAE Start date 
-               "sae_awareness_date"              "sae_start_date" 
-                       SAE End date                  SAE Category 
-                     "sae_end_date"                "sae_category" 
-                        SAE outcome             SAE Date of death 
-                      "sae_outcome"           "sae_date_of_death" 
-                   SAE Death reason 
-                 "sae_death_reason" 
+              Serious Adverse Event            SAE Awareness date 
+            "serious_adverse_event"          "sae_awareness_date" 
+                     SAE Start date                  SAE End date 
+                   "sae_start_date"                "sae_end_date" 
+                       SAE Category                   SAE outcome 
+                     "sae_category"                 "sae_outcome" 
+                  SAE Date of death              SAE Death reason 
+                "sae_date_of_death"            "sae_death_reason" 
       
       $items$`CBC regular`
         Haemoglobin   Haematocrit     Platelets   Neutrophils   Lymphocytes 
@@ -83,18 +81,14 @@
        "mh_treatment"    "mh_comment" 
       
       $items$Medication
-                         CM Number                CM Trade Name 
-                       "cm_number"              "cm_trade_name" 
-              CM Active Ingredient                CM Indication 
-            "cm_active_ingredient"              "cm_indication" 
-                           CM Dose                      CM Unit 
-                         "cm_dose"                    "cm_unit" 
-                     CM Unit Other                 CM Frequency 
-                   "cm_unit_other"               "cm_frequency" 
-                CM Frequency Other                     CM Route 
-              "cm_frequency_other"                   "cm_route" 
-                    CM Route Other                CM Start Date 
-                  "cm_route_other"              "cm_start_date" 
+                         CM Number                      CM Name 
+                       "cm_number"                    "cm_name" 
+                     CM Indication                      CM Dose 
+                   "cm_indication"                    "cm_dose" 
+                           CM Unit                 CM Frequency 
+                         "cm_unit"               "cm_frequency" 
+                          CM Route                CM Start Date 
+                        "cm_route"              "cm_start_date" 
                         CM Ongoing                  CM End Date 
                       "cm_ongoing"                "cm_end_date" 
         CM Related Medical History                CM Related AE 
