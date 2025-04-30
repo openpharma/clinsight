@@ -285,6 +285,31 @@ settings.",
         expected_output
       )
     })
+    it("correctly selects latest edit_date_time, even if item_name is in the id_cols vector", {
+      # test that it uses the latest edit_date_time if the edit_date_time columns is available:
+      df <- data.frame(
+        subject_id = 1,
+        event = c(1,1,2,2),
+        item_name = rep(c("Administered", "Administered_OTHER"), times = 2),
+        item_value = c("Yes", NA_character_, "No", "Medication expired"),
+        edit_date_time = as.POSIXct(c("2021-01-01 12:00:00", "2021-10-10 12:00:00", 
+                                      "2021-01-01 12:00:00", "2021-11-01 12:00:00"))
+      )
+      expected_output <- data.frame(
+        subject_id = 1, event = 1:2, item_name = "Administered", 
+        item_value = c("Yes", "No (Medication expired)"),
+        edit_date_time = as.POSIXct(c("2021-10-10 12:00:00", "2021-11-01 12:00:00"))
+      )
+      expect_equal(
+        merge_item_pair(
+          data = df, 
+          item_name = "Administered", 
+          item_name_other =  "Administered_OTHER", 
+          id_cols = c("subject_id", "event", "item_name")
+        ),
+        expected_output
+      )
+    })
   }
 )
 

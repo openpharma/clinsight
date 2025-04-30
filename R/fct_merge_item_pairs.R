@@ -38,6 +38,9 @@ merge_item_pair <- function(
   if (item_name == item_name_other){
     stop("item_name cannot be the same as item_name_other")
   }
+  # The name_column should not be used as unique item identifier here 
+  # (gives issues when selecting unique edit_date_time later):
+  id_cols <- id_cols[!id_cols == name_column]
   if (any(duplicated(data[c(id_cols, name_column)]))){
     warning(
       "id_cols (", paste0(id_cols, collapse = ", "), ") and name_column (", 
