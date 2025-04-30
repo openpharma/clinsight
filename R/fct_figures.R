@@ -17,9 +17,10 @@
 #' @param y_title y axis title.
 #' @param x_title x-axis title.
 #'
-#' @export
+#' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' fig_data <- data.frame(
 #'  "site_code" = sample(c("Site 1", "Site 2"), 50, replace = TRUE),
 #'  "item_value" = runif(50, 1, 100),
@@ -34,6 +35,7 @@
 #'    y_title = "y-axis_title",
 #'    x_title = "x-axis_title"
 #'    )
+#' }
 fig_boxplots <- function(
     data, 
     xval = "site_code",
@@ -86,7 +88,7 @@ fig_boxplots <- function(
 #' @param data Data frame to use.
 #'
 #' @return A ggplot2 object.
-#' @export
+#' @keywords internal
 #' 
 fig_timeline <- function(
     data
@@ -169,9 +171,10 @@ fig_timeline <- function(
 #'   the point size in the figure.
 #'
 #' @return A faceted ggplot2 time series figure.
-#' @export
+#' @keywords internal
 #' @seealso [plotly_figure()]
 #' @examples
+#' \dontrun{
 #' set.seed(2025)
 #' mock_data <- lapply(paste0("Subject", 1:10) , \(x){
 #'   data.frame(
@@ -191,6 +194,7 @@ fig_timeline <- function(
 #' }) |>
 #'   dplyr::bind_rows()
 #' fig_timeseries(mock_data, id_to_highlight = "Subject10")
+#' }
 
 fig_timeseries <- function(
     data, 
@@ -274,15 +278,17 @@ fig_timeseries <- function(
 #' @param y_lab Character string with the text on the y-axis.
 #'
 #' @return A ggplot2 object.
-#' @export
+#' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #'  df <- mtcars |>
 #'  dplyr::mutate(
 #'   fill_color = sample(c(TRUE, FALSE), 1),
 #'   .by = cyl
 #'   )
 #' fig_barplot(df, cyl, fill_color)
+#' }
 fig_barplot <- function(
     data, 
     x, 
@@ -313,7 +319,7 @@ fig_barplot <- function(
 #' @param height Height of the plot.
 #' @param ... Other variables, passed onto the figure functions that are called to create the plots.
 #'
-#' @export
+#' @keywords internal
 #' @seealso [fig_timeseries()], [fig_boxplots()]
 plotly_figure <- function(
     data, 

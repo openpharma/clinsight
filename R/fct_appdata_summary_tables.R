@@ -12,7 +12,7 @@
 #'   treatment item in the timeline.
 #'
 #' @return A data frame with timeline data.
-#' @export
+#' @keywords internal
 #' 
 get_timeline_data <- function(
     data, 

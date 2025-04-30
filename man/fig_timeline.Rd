@@ -15,3 +15,4 @@ A ggplot2 object.
 \description{
 Function to create a simple timeline figure using \code{ggplot2}.
 }
+\keyword{internal}

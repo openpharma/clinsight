@@ -157,13 +157,15 @@ rename_raw_data <- function(
 #'
 #' @return data frame with corrected multiple choice variables
 #' @examples
+#' \dontrun{
 #'  df <- data.frame(
 #'   ID = "Subj1",
 #'   var = c("Age", paste0("MH_TRT", 1:4)),
 #'   item_value = as.character(c(95, 67, 58, 83, 34))
 #'  )
 #'  fix_multiple_choice_vars(df, common_vars = "ID")
-#' @export
+#' }
+#' @keywords internal
 #' 
 fix_multiple_choice_vars <- function(
     data,
@@ -235,7 +237,7 @@ fix_multiple_choice_vars <- function(
 #' @param meta List. metadata to use.
 #'
 #' @return a list with all important names to be used in a clinical trial.
-#' @export
+#' @keywords internal
 #'
 get_meta_vars <- function(data = appdata, meta = metadata){
   stopifnot(inherits(data, "list"))
@@ -396,10 +398,12 @@ get_base_value <- function(
 #' removing the pattern from the data frame names).
 #'
 #' @return A data frame with adjusted column names.
-#' @export
+#' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' adjust_colnames(head(iris), "^Sepal", "Flower")
+#' }
 adjust_colnames <- function(
     data,
     pattern,
@@ -422,10 +426,12 @@ adjust_colnames <- function(
 #'
 #' @return A data frame with at least all the columns named in `columns`. 
 #' The added columns will be of class `character`. 
-#' @export
+#' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' add_missing_columns(head(iris), c("important_column1", "important_column2"))
+#' }
 add_missing_columns <- function(
     data,
     columns
@@ -491,9 +497,12 @@ add_missing_columns <- function(
 #' @param ... Other optional arguments that will be passed to [DT::datatable()].
 #'
 #' @return A `DT::datatable` object.
-#' @export
+#' @keywords internal
 #'
-#' @examples datatable_custom(mtcars)
+#' @examples 
+#' \dontrun{
+#' datatable_custom(mtcars)
+#' }
 datatable_custom <- function(
     data, 
     rename_vars = NULL, 

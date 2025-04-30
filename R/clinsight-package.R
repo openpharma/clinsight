@@ -11,6 +11,7 @@
 #' @importFrom utils modifyList
 #' @importFrom golem with_golem_options
 #' @importFrom golem add_resource_path activate_js favicon bundle_resources
+#' @importFrom utils file.edit
 ## usethis namespace: end
 NULL
 

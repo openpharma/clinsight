@@ -33,6 +33,7 @@ A data frame that usually will be longer than the original one.
 Function to expand list columns into additional rows.
 }
 \examples{
+\dontrun{
  df <- head(iris, n = 6) |> 
   dplyr::mutate(
     expansion_1 = list("feature.1, feature.2"), 
@@ -46,5 +47,7 @@ Function to expand list columns into additional rows.
 # and remove column "expansion_1" but keep column "expansion_2" afterwards:
 expand_columns(df, c("expansion_1", "expansion_2"),  
   unite_with = "Species", remove_cols = c(TRUE, FALSE))
+}
 
 }
+\keyword{internal}
