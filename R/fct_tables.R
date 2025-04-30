@@ -325,21 +325,15 @@ create_table.medication <- function(
     expected_columns = NULL,
     ...
 ){
+  expected_columns <- expected_columns |> 
+    c("CM Dose", "CM Frequency", "CM Route", "CM Start Date", "CM End Date", "CM Unit") |> 
+    unique()
   df <-  data |> 
     create_table.default(name_column, value_column, keep_vars, expected_columns) |> 
     adjust_colnames("^CM ") 
   df[["Number"]] <- NULL
-  df <- df |> 
-    dplyr::mutate(
-      `Unit`      = ifelse(!is.na(`Unit Other`), `Unit Other`, `Unit`),
-      `Frequency` = ifelse(!is.na(`Frequency Other`), `Frequency Other`, `Frequency`),
-      `Route`     = ifelse(!is.na(`Route Other`), `Route Other`, `Route`)
-    ) |> 
-    dplyr::select(-dplyr::ends_with("Other"))
-  
   df |> 
     dplyr::mutate(
-      Name = paste0(.data[["Active Ingredient"]], " (", .data[["Trade Name"]], ")"),
       Dose = paste0(.data[["Dose"]], " ", .data[["Unit"]], " ", 
                     .data[["Frequency"]], "; ", .data[["Route"]]),
       in_use = (is.na(.data[["End Date"]])) 
@@ -352,8 +346,7 @@ create_table.medication <- function(
       dplyr::any_of("o_reviewed"),
       dplyr::all_of(c(keep_vars, "Name")), 
       dplyr::everything(),
-      -dplyr::all_of(c("in_use", "Active Ingredient", "Trade Name", 
-                       "Unit", "Frequency", "Route"))
+      -dplyr::all_of(c("in_use", "Unit", "Frequency", "Route"))
     )
 }
 
