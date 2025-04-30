@@ -30,11 +30,13 @@ get_db_connection <- function(
 #' @param drv The DB driver to use. Standard the SQLite driver.
 #'
 #' @return Nothing will be returned by default.
-#' @export
+#' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #'  library(DBI)
 #'  db_temp_connect(tempfile(), DBI::dbWriteTable(con, "test_table", mtcars))
+#' }
 #'  
 db_temp_connect <- function(db_path, code, drv = RSQLite::SQLite()){
   withr::with_db_connection(
@@ -327,7 +329,7 @@ db_upsert <- function(con, data, idx_cols) {
 #'
 #' @return Review information will be written in the database. No local objects
 #'   will be returned.
-#' @export
+#' @keywords internal
 #' 
 db_save_review <- function(
     rv_records,
@@ -375,10 +377,12 @@ db_save_review <- function(
 #' needs to be appended.
 #'
 #' @return A table in a database will be appended. No values will be returned. 
-#' @export 
+#' @keywords internal 
 #'
 #' @examples 
+#' \dontrun{
 #' db_save(mtcars, ":memory:", "mtcars_db")
+#' }
 #' 
 db_save <- function(data, db_path, db_table = "query_data"){
   stopifnot(is.data.frame(data), is.character(db_table))

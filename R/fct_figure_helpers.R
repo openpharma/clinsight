@@ -10,9 +10,10 @@
 #' @param fig A `plotly` object created with [plotly::ggplotly()]. 
 #'
 #' @return The same [plotly::ggplotly()] object, now with outliers in boxplots deleted.
-#' @export 
+#' @keywords internal 
 #'
 #' @examples
+#' \dontrun{
 #' library(ggplot2)
 #' library(plotly)
 #' set.seed(2023) # for reproducible jitter
@@ -26,6 +27,7 @@
 #' 
 #' #The function `remove_boxplot_outliers()` corrects for this:
 #' remove_boxplot_outliers(ggplotly(fig))
+#' }
 #' 
 remove_boxplot_outliers <- function(fig){
   stopifnot("plotly" %in% class(fig))
@@ -47,13 +49,15 @@ remove_boxplot_outliers <- function(fig){
 #' A custom `ggplot2` theme to be used in the application.
 #'
 #' @return A list with ggplot2 theme layers
-#' @export
+#' @keywords internal
 #'
 #' @examples 
+#' \dontrun{
 #' library(ggplot2)
 #' ggplot(mtcars, aes(mpg, cyl)) + 
 #'   geom_point() + 
 #'   custom_plot_theme()
+#' }
 custom_plot_theme <- function(){
   list(
     ggplot2::theme_bw(),
@@ -78,12 +82,14 @@ custom_plot_theme <- function(){
 #' @param fig A ggplot2 object. 
 #'
 #' @return A character vector with all the layer names of the ggplot object.
-#' @export
+#' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' library(ggplot2)
 #' fig <- ggplot(mtcars, aes(x = cyl, y = mpg, group = cyl)) + geom_boxplot() + geom_point()
 #' get_ggplot_layer_names(fig)
+#' }
 #' 
 get_ggplot_layer_names <- function(fig){
   stopifnot(ggplot2::is.ggplot(fig))

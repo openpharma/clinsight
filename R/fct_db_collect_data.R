@@ -35,7 +35,7 @@
 #' @return A data frame with the same or less amount of rows as the data frame
 #'   in the database.
 #'
-#' @export
+#' @keywords internal
 #'
 #' 
 db_slice_rows <- function(

@@ -1,20 +1,52 @@
+url: https://openpharma.github.io/clinsight/
 template:
   bootstrap: 5
   bootswatch: spacelab
+
+articles: 
+- title: Articles
+  navbar: ~
+  contents:
+  - Metadata
+  - Deployment
+
+- title: Test report
+  navbar: Validation
+  contents:
+  - test_report
+
+- title: Developer Guides
+  navbar: Developer Guides
+  contents:
+  - Contributions
+  
+- title: Legacy instructions
+  desc: contains old (possibly outdated) instructions for reference purposes.
+  contents:
+  - data_spec
+
 reference:
+- title: Test ClinSight
+  desc: To test clinsight with either internal data or with custom data.
+- contents:
+  - test_clinsight
+
+- title: Customize ClinSight
+  desc: To prepare custom clinical trial data for use with ClinSight
+- contents:
+  - create_clinsight_config
+  - create_clinsight_metadata
+  - get_raw_csv_data
+  - get_metadata
+  - merge_meta_with_data
+
 - title: Main application
-  desc:  Top-level functions to run the Shiny application
+  desc: Top-level functions to run the Shiny application
 - contents:
   - run_app
   - app_ui
   - app_server
-  - test_clinsight
-- title: Credential management
-  desc: Functions to manage credentials.
-- contents: 
-  - initialize_credentials
-  - authenticate_server 
-  - authenticate_ui 
+  
 - title: Application modules
   desc: Modules used in the main Shiny application. 
 - contents:
@@ -29,86 +61,40 @@ reference:
   - mod_study_forms_server
   - mod_study_forms_ui
   - starts_with("mod_")
+
 - title: Create wide-form tables
   desc: S3 method for creating wide-form study-specific tables.
 - contents: 
   - create_table
   - create_table.default
   - starts_with("create_table")
+
 - title: Data frame functions
-  desc: Create data for use in the application.
+  desc: Can be used on study data compatible with ClinSight
 - contents: 
-  - get_raw_csv_data
-  - merge_meta_with_data
-  - apply_study_specific_fixes
-  - get_appdata
   - get_available_data
-  - get_meta_vars
   - get_review_data
   - get_static_overview_data
-  - get_timeline_data
-  - summarize_review_data
+
 - title: Database functions
   desc: Create, read or append the app database. 
 - contents:
   - get_db_connection
-  - db_temp_connect
   - db_create
   - db_update
-  - db_save
-  - db_save_review
-  - db_slice_rows 
   - update_review_data
   - collect_query_data
   - db_get_review
   - db_get_query
-- title: Internal dataset
-  desc: Create or describe internal data. 
+
+- title: Internal data
 - contents: 
-  - get_metadata
   - metadata
   - clinsightful_data
-- title: Figure functions
-- contents: 
-  - fig_barplot
-  - fig_boxplots
-  - fig_timeline
-  - fig_timeseries
-  - plotly_figure
-  - fix_multiple_choice_vars
-  - custom_plot_theme
-  - get_ggplot_layer_names
-- title: Report
-  desc: Create Review reports.
-- contents: 
-  - select_report_data
-  - create_report
+
 - title: Helper functions
 - contents: 
-  - add_missing_columns
-  - adjust_colnames
-  - bind_rows_custom
-  - check_appdata
-  - create_clinsight_config
-  - create_clinsight_metadata
   - filter_data
-  - clean_dates
   - collapse_column_vals
-  - collapse_fct_levels
-  - cols_to_char
-  - create_unique_id
-  - datatable_custom
-  - date_cols_to_char
-  - expand_columns
   - get_base_value
-  - get_max_time
-  - get_unique_vars
   - get_test_results
-  - is_date
-  - order_string
-  - remove_boxplot_outliers
-  - simplify_string
-  - time_stamp
-  - title_case
-  - vector_select
-  

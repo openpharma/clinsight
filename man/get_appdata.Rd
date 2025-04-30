@@ -24,3 +24,4 @@ Get appdata
 Converts data to a list of data frames in the expected format to be used by the
 the Shiny application.
 }
+\keyword{internal}

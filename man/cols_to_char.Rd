@@ -16,6 +16,9 @@ A data frame with all non-numeric columns converted to character.
 Convert non-numeric columns to character
 }
 \examples{
+\dontrun{
 df <- cols_to_char(iris)
 class(df$Species)
 }
+}
+\keyword{internal}
