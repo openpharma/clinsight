@@ -5,7 +5,7 @@
 \alias{clinsightful_data}
 \title{Clinical Trial test data}
 \format{
-a data.frame with 6483 rows and
+a data.frame with 6076 rows and
 24 variables.
 \itemize{
 \item \code{site_code}: character or integer, identifier for study site.
