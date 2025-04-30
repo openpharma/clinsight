@@ -22,3 +22,4 @@ required for the application to run appropriately.}
 \description{
 Checks data for compatibility with metadata.
 }
+\keyword{internal}
