@@ -13,7 +13,7 @@
        4 BEL_04_133 Renal function  Screening, Visit 1, V~ 2023-08-30~ new/u~ No      
        5 BEL_04_133 Liver function  Screening, Visit 1, V~ 2023-08-30~ new/u~ No      
        6 BEL_04_133 Medical History Any visit              2023-06-23~ updat~ No      
-       7 BEL_04_133 Response        Visit 5                2023-09-13~ old    Yes     
+       7 BEL_04_133 Response        Visit 5                2023-09-13~ updat~ No      
        8 BEL_04_133 Vital signs     Screening, Visit 1, V~ 2023-09-13~ new/u~ No      
        9 BEL_04_772 Adverse events  Any visit              2023-09-13~ new/u~ No      
       10 BEL_04_772 Medication      Any visit              2023-08-31~ new/u~ No      
