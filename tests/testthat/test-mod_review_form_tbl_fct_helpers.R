@@ -198,7 +198,7 @@ describe("adjust_ae_form_table() works as expected", {
     )
     SAE_cols <- c("subject_id","form_repeat", "Name", "AESI",  
                   "Start date", "End date", "CTCAE severity", 
-                  "Treatment related", "Treatment action", "Other action", 
+                  "Treatment related", "Treatment action",  
                   "Category","Awareness date", "Date of death", 
                   "Death reason")
     
