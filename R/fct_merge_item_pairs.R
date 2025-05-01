@@ -123,7 +123,7 @@ merge_item_pairs_by_suffix <- function(
     return(data)
   }
   cat("Using suffix '", suffix, "' to detect item pairs\n", sep = "")
-  other_vars <- unique(data$item_name[grepl(suffix, data$item_name)])
+  other_vars <- unique(grep(suffix, data$item_name, value = TRUE))
   vars_to_merge <- data.frame(
     item_name = gsub(pattern = suffix, replacement = "", other_vars),
     item_name_other = other_vars
