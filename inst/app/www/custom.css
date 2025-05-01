@@ -151,3 +151,7 @@ div.cs-progress-container>.cs-progress-bar>.cs-progress.unmarking {
 div.cs-progress-container>.cs-progress-bar>.cs-progress.marking {
   background-color: var(--cs-marking, #97b0f8);
 }
+
+.bslib-sidebar-layout .sidebar .sidebar-content{
+  height: 100%;
+}
