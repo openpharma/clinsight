@@ -87,7 +87,7 @@
     Code
       print(create_table(df, expected_columns = expected_cols), n = 25)
     Output
-      # A tibble: 90 x 18
+      # A tibble: 90 x 17
          subject_id form_repeat Name    AESI  `start date` `end date` `CTCAE severity`
          <chr>            <int> <chr>   <chr> <chr>        <chr>      <chr>           
        1 BEL_07_193           1 Atelec~ None  2023-09-14   <NA>       Grade 3         
@@ -116,11 +116,10 @@
       24 DEU_02_866           2 Anemia  None  2023-08-30   <NA>       Grade 3         
       25 NLD_05_561           2 Urinar~ None  2023-08-25   <NA>       <NA>            
       # i 65 more rows
-      # i 11 more variables: `Treatment related` <chr>, `Treatment action` <chr>,
-      #   `Other action` <chr>, `Serious Adverse Event` <chr>,
-      #   `SAE Awareness date` <chr>, `SAE Start date` <chr>, `SAE End date` <chr>,
-      #   `SAE Category` <chr>, `SAE outcome` <chr>, `SAE Date of death` <chr>,
-      #   `SAE Death reason` <chr>
+      # i 10 more variables: `Treatment related` <chr>, `Treatment action` <chr>,
+      #   `Serious Adverse Event` <chr>, `SAE Awareness date` <chr>,
+      #   `SAE Start date` <chr>, `SAE End date` <chr>, `SAE Category` <chr>,
+      #   `SAE outcome` <chr>, `SAE Date of death` <chr>, `SAE Death reason` <chr>
 
 # create_table.medication() works: creates expected medication table
 
