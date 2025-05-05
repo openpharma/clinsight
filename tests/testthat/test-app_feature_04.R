@@ -76,7 +76,7 @@ describe(
           dplyr::select(subject_id, event_name, event_date, item_group, item_name, item_value,  
                         item_unit, lower_lim, upper_lim) |> 
           dplyr::arrange(item_name)
-        expect_snapshot(fig_data)
+        expect_snapshot(print(fig_data, width = Inf))
         # Get a snapshot of the raw data in the table:
         table_data  <- app$get_value(export = "sf_vitals_adjusted-review_form_tbl-table_data")
         expect_snapshot(print(table_data, width = Inf))
