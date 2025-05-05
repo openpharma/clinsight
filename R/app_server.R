@@ -281,7 +281,7 @@ app_server <- function(
     output[["study_name"]] <-  renderText({
       study_name <- meta$settings$study_name %||% ""
       if (nchar(study_name) > 40){
-        paste0(substr(study_name, 1, 37), "...")
+        paste0(trimws(substr(study_name, 1, 37)), "...")
       } else {
         study_name
       }
