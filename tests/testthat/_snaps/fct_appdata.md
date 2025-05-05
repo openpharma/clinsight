@@ -48,7 +48,7 @@
     Code
       df
     Output
-      # A tibble: 543 x 22
+      # A tibble: 526 x 22
          site_code subject_id event_id event_date event_repeat form_id form_repeat
          <chr>     <chr>      <chr>    <date>            <int> <chr>         <int>
        1 9600      9600-001   SCR      2022-11-09            1 DM                1
@@ -61,7 +61,7 @@
        8 9600      9600-002   SCR      2022-01-01            1 VS                1
        9 9600      9600-002   SCR      2022-01-01            1 VS                1
       10 9600      9600-002   SCR      2022-01-01            1 VS                1
-      # i 533 more rows
+      # i 516 more rows
       # i 15 more variables: edit_date_time <dttm>, day <drtn>, event_name <chr>,
       #   event_label <fct>, form_type <chr>, item_name <chr>, item_type <chr>,
       #   item_group <chr>, item_unit <chr>, lower_lim <dbl>, upper_lim <dbl>,
@@ -73,7 +73,7 @@
       get_appdata(clinsightful_data, metadata)
     Output
       $`Adverse events`
-      # A tibble: 799 x 22
+      # A tibble: 719 x 22
          site_code subject_id event_id  event_date event_repeat form_id form_repeat
          <chr>     <chr>      <chr>     <date>            <int> <chr>         <int>
        1 BEL04     BEL_04_772 COMMON_AE 2023-08-31            1 AE                1
@@ -86,7 +86,7 @@
        8 BEL04     BEL_04_772 COMMON_AE 2023-08-31            1 AE                1
        9 BEL04     BEL_04_772 COMMON_AE 2023-08-31            2 AE                2
       10 BEL04     BEL_04_772 COMMON_AE 2023-08-31            2 AE                2
-      # i 789 more rows
+      # i 709 more rows
       # i 15 more variables: edit_date_time <dttm>, day <drtn>, event_name <chr>,
       #   event_label <fct>, form_type <chr>, item_name <chr>, item_type <chr>,
       #   item_group <chr>, item_unit <chr>, lower_lim <dbl>, upper_lim <dbl>,
@@ -216,7 +216,7 @@
       #   item_value <chr>, significance <chr>, reason_notdone <chr>, region <chr>
       
       $Medication
-      # A tibble: 3,183 x 22
+      # A tibble: 2,856 x 22
          site_code subject_id event_id  event_date event_repeat form_id form_repeat
          <chr>     <chr>      <chr>     <date>            <int> <chr>         <int>
        1 BEL04     BEL_04_133 COMMON_CM 2023-06-23            1 CM                1
@@ -224,12 +224,12 @@
        3 BEL04     BEL_04_133 COMMON_CM 2023-06-23            1 CM                1
        4 BEL04     BEL_04_133 COMMON_CM 2023-06-23            1 CM                1
        5 BEL04     BEL_04_133 COMMON_CM 2023-06-23            1 CM                1
-       6 BEL04     BEL_04_133 COMMON_CM 2023-06-23            1 CM                1
+       6 BEL04     BEL_04_772 COMMON_CM 2023-07-11            1 CM                1
        7 BEL04     BEL_04_772 COMMON_CM 2023-07-11            1 CM                1
        8 BEL04     BEL_04_772 COMMON_CM 2023-07-11            1 CM                1
        9 BEL04     BEL_04_772 COMMON_CM 2023-07-11            1 CM                1
       10 BEL04     BEL_04_772 COMMON_CM 2023-07-11            1 CM                1
-      # i 3,173 more rows
+      # i 2,846 more rows
       # i 15 more variables: edit_date_time <dttm>, day <drtn>, event_name <chr>,
       #   event_label <fct>, form_type <chr>, item_name <chr>, item_type <chr>,
       #   item_group <chr>, item_unit <chr>, lower_lim <dbl>, upper_lim <dbl>,

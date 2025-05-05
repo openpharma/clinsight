@@ -18,7 +18,7 @@ describe(
     
     it("Produces a data frame without errors", {
       expect_true(is.data.frame(merge_meta_with_data(raw_data, metadata)))
-      expect_equal(nrow(merge_meta_with_data(raw_data, metadata)), 543)
+      expect_equal(nrow(merge_meta_with_data(raw_data, metadata)), 526)
       expect_true(
         all(metadata$raw_column_names$col_new[1:6] %in% 
           names(merge_meta_with_data(raw_data, metadata)))
