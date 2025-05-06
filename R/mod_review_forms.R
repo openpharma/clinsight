@@ -56,7 +56,7 @@ mod_review_forms_ui <- function(id){
           ),
           textOutput(ns("save_review_error"))
         ),
-        HTML("<hr><br>"),
+        HTML("<hr><br>Review Type:"),
         shinyWidgets::radioGroupButtons(
           inputId = ns("review_type"),
           choiceNames = list(paste(icon("user"), "Subject"), paste(icon("file-lines"), "Form")),
