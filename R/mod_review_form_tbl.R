@@ -74,7 +74,7 @@ mod_review_form_tbl_server <- function(
         is_SAE = identical(title, "Serious Adverse Events")
       )
     }) |> 
-      bindEvent(form_data(), form_review_data(), active_subject(), show_all())
+      bindEvent(form_data(), form_review_data(), active_subject())
     
     ############################### Observers: #################################
     
@@ -116,8 +116,7 @@ mod_review_form_tbl_server <- function(
         update_review_records(
           session$userData$review_records[[form]],
           input$table_review_selection[, c("id", "reviewed")],
-          subset(form_review_data(), show_all() | subject_id == active_subject(),
-                 c("id", "reviewed"))
+          form_review_data()
         )
       
       # Update the table's data reactive
