@@ -323,6 +323,7 @@ mod_review_forms_server <- function(
     })
     
     observeEvent(save_review_confirmed(), {
+      req(save_review_confirmed() != 0)
       req(review_data_active())
       req(enable_save_review())
       review_save_error(FALSE)
