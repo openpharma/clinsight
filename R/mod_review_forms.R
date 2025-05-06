@@ -121,7 +121,7 @@ mod_review_forms_server <- function(
     review_data_active <- reactive({
       tryCatch({
         df <- subset(r$review_data[[active_form()]]) 
-        if (input$review_type == "subject"){
+        if (!identical(input$review_type, "form")){
           df <- subset(df, subject_id == r$subject_id)
         }
         df
@@ -157,7 +157,7 @@ mod_review_forms_server <- function(
       bindEvent(active_form(), session$userData$review_records[[active_form()]])
     
     observeEvent(r$subject_id, {
-      req(input$review_type == "subject")
+      req(!identical(input$review_type, "form"))
       golem::cat_dev("mod_review_forms | Reset review records\n")
       session$userData$update_checkboxes[[active_form()]] <- NULL
       session$userData$review_records[[active_form()]] <- data.frame(id = integer(), reviewed = character())

@@ -49,7 +49,8 @@ mod_review_form_tbl_server <- function(
     title = NULL
 ){
   stopifnot(is.reactive(form_data))
-  stopifnot(is.reactive(show_all))
+  stopifnot(is.reactive(show_all), is.logical(show_all()))
+  stopifnot("show_all() cannot be an empty logical" = length(show_all()) == 1)
 
   moduleServer(id, function(input, output, session){
     ns <- session$ns

@@ -32,7 +32,7 @@ app_server <- function(
   
   session$userData$review_records <- reactiveValues()
   session$userData$update_checkboxes <- reactiveValues()
-  session$userData$review_type <- reactiveVal()
+  session$userData$review_type <- reactiveVal("subject")
   
   res_auth <- authenticate_server(
     all_sites = app_vars$Sites$site_code, 

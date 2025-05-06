@@ -134,7 +134,7 @@ mod_common_forms_server <- function(
       form_review_data = form_review_data, 
       form_items = form_items,
       active_subject = active_subject,
-      show_all = reactive(input$show_all_data | identical(session$userData$review_type(), "form") ),
+      show_all = reactive(isTRUE(input$show_all_data) | identical(session$userData$review_type(), "form") ),
       table_names = table_names, 
       title = form
     )
@@ -147,7 +147,7 @@ mod_common_forms_server <- function(
         form_review_data = form_review_data, 
         form_items = form_items,
         active_subject = active_subject,
-        show_all = reactive(input$show_all_data | identical(session$userData$review_type(), "form") ),
+        show_all = reactive(isTRUE(input$show_all_data) | identical(session$userData$review_type(), "form") ),
         table_names = table_names, 
         title = "Serious Adverse Events"
       )
