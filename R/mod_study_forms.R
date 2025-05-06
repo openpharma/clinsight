@@ -175,7 +175,7 @@ mod_study_forms_server <- function(
       form_review_data = form_review_data, 
       active_subject = active_subject,
       form_items = form_items,
-      show_all = reactive(input$show_all | identical(session$userData$review_type(), "form")), 
+      show_all = reactive(isTRUE(input$show_all) | identical(session$userData$review_type(), "form")), 
       table_names = table_names,
       title = form
     )
