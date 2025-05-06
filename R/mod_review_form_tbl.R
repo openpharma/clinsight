@@ -99,7 +99,7 @@ mod_review_form_tbl_server <- function(
       df <- table_data() |> 
         dplyr::mutate(
           o_reviewed = dplyr::if_else(
-            show_all() | subject_id == active_subject(), 
+            identical(session$userData$review_type(), "form") | subject_id == active_subject(), 
             lapply(o_reviewed, modifyList, list(updated = checked)),
             o_reviewed
           )
