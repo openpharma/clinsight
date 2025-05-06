@@ -159,6 +159,20 @@ mod_review_form_tbl_server <- function(
         form, "| show_all() trigger changed. Incrementing reload_data()",
         "and toggle showing subject_id column \n"
       )
+        
+      row_disabled <- rep_len(FALSE, nrow(table_data()))
+      if(identical(session$userData$review_type(), "subject")) {
+        row_disabled <- table_data()$subject_id != active_subject()
+      }
+      df <- table_data()
+      df[["o_reviewed"]] <- lapply(
+        seq_along(table_data()$o_reviewed), \(x){
+          modifyList(
+            table_data()$o_reviewed[[x]], list(disabled = row_disabled[x])
+          )
+        }
+      )
+      table_data(df)
       reload_data(reload_data() + 1)
       index <- match("subject_id", colnames(table_data())) - 1
       if (show_all()) {
