@@ -599,3 +599,63 @@ describe(
     )
   }
 )
+
+describe(
+  "mod_review_forms. Feature 7 | Review on form level. As a user, I want to be 
+    able to switch between form-level and patient-level review.", 
+  {
+    it(
+      "Scenario 1 - Change to form-level review. 
+        Given a test data set, 
+        and clicking on form-level review, 
+        I expect that I can review all data in the currently active form.
+      ", 
+      {
+        temp_path <- withr::local_tempfile(fileext = ".sqlite")
+        file.copy(test_path("fixtures", "review_testdb.sqlite"), temp_path) 
+        
+        testargs <- list(
+          r = reactiveValues(
+            user_name = "test_name",
+            user_role = "Medical Monitor",
+            subject_id = "885",
+            review_data = do.call(reactiveValues, split_review_data(temp_path))
+          ),
+          active_form = reactiveVal("Adverse events"),
+          active_tab = reactiveVal("Common forms"),
+          review_required_data = data.frame(
+            "item_group" = "Adverse events", 
+            "review_required" = TRUE
+          ),
+          db_path = temp_path
+        )
+        testServer(
+          mod_review_forms_server, args = testargs, {
+            ns <- session$ns
+            
+            session$userData$review_records <- reactiveValues()
+            session$userData$update_checkboxes <- reactiveValues()
+            session$userData$review_type <- reactiveVal()
+            
+            # browser()
+            # TODO: change review data so that form-level review can be tested properly
+            # session$setInputs(form_reviewed = FALSE, review_type = "form") # Needs to be initialized to work
+            # session$setInputs(form_reviewed = TRUE, save_review = 1)
+            # expect_equal(
+            #   data.frame(
+            #     item_name = c("Atrial Fibrillation", "Cystitis"),
+            #     status = c("old", "new")
+            #   ),
+            #   db_temp_connect(db_path, {
+            #     DBI::dbGetQuery(
+            #       con, 
+            #       "SELECT * FROM all_review_data "
+            #     )
+            #   })
+            # )
+          })
+      }
+    )
+  }
+)
+
