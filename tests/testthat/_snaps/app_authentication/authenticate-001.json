@@ -29,6 +29,7 @@
           "all_files": true
         }
       ]
-    }
+    },
+    "form_level_review": false
   }
 }
