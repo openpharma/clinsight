@@ -54,14 +54,19 @@ mod_review_forms_ui <- function(id){
             icon = icon("floppy-disk"),
             class = "btn-primary m2"
           ),
-          textOutput(ns("save_review_error")),
-          shinyWidgets::radioGroupButtons(
-            inputId = ns("review_type"),
-            choiceNames = list(icon("user"), icon("file-lines")),
-            choiceValues = list("subject", "form"),
-            selected = "subject"
+          textOutput(ns("save_review_error"))
+        ),
+        HTML("<hr><br>"),
+        shinyWidgets::radioGroupButtons(
+          inputId = ns("review_type"),
+          choiceNames = list(paste(icon("user"), "Subject"), paste(icon("file-lines"), "Form")),
+          choiceValues = list("subject", "form"),
+          selected = "subject"
+        ) |> 
+          bslib::tooltip(
+            "Change between subject- or form-level review",
+            placement = "right"
           )
-        )
       )
     )
   )
@@ -163,6 +168,7 @@ mod_review_forms_server <- function(
       session$userData$review_records[[active_form()]] <- data.frame(id = integer(), reviewed = character())
     })
     
+    confirm_before_saving <- reactiveVal(FALSE)
     observeEvent(input$form_reviewed, {
       session$userData$update_checkboxes[[active_form()]] <- input$form_reviewed
       
@@ -174,6 +180,7 @@ mod_review_forms_server <- function(
           r$review_data[[active_form()]][c("id", "reviewed")]
           )  |> 
         dplyr::arrange(id)
+      confirm_before_saving(identical(session$userData$review_type(), "form"))
     }, ignoreInit = TRUE)    
     
     observeEvent(c(active_form(), r$subject_id), {
@@ -275,11 +282,44 @@ mod_review_forms_server <- function(
     })
     
     review_save_error <- reactiveVal(FALSE)
+    save_review_confirmed <- reactiveVal(0)
+    
+    modal_confirm_saving <- function(){
+      modalDialog(
+        "Warning. This will change the review status of", 
+        " ALL items in this form. Do you want to proceed?", 
+        footer = bslib::layout_columns(
+          col_widths = c(6,6), 
+          shiny::actionButton(
+            inputId = ns("confirm_saving"), 
+            label = "Confirm saving",
+            class = "btn-warning m2"
+          ),
+          modalButton("Cancel")
+        ),
+        easyClose = TRUE,
+        fade = FALSE
+      )
+    }
+    
+    observeEvent(input$confirm_saving, {
+      removeModal()
+      save_review_confirmed(save_review_confirmed() + 1)
+    })
+    
     observeEvent(input$save_review, {
+      if(isFALSE(confirm_before_saving())) return({
+        save_review_confirmed(save_review_confirmed() + 1)
+      })
+      if(isTRUE(confirm_before_saving())){
+        return({showModal(modal_confirm_saving())})
+      }
+    })
+    
+    observeEvent(save_review_confirmed(), {
       req(review_data_active())
       req(enable_save_review())
       review_save_error(FALSE)
-      # golem::cat_dev("Save review status reviewed:", input$form_reviewed, "\n")
       
       review_records <- session$userData$review_records[[active_form()]][c("id", "reviewed")] |> 
         dplyr::mutate(
