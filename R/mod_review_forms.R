@@ -137,10 +137,16 @@ mod_review_forms_server <- function(
     })
     
     observeEvent(input$review_type, {
+      req(!identical(input$review_type, session$userData$review_type()))
       golem::cat_dev(active_form(), " | Update review type to: '", 
                      input$review_type, "'\n", sep = "")
       session$userData$review_type(input$review_type)
-    }, ignoreInit = FALSE)
+      showNotification(
+        paste0("Switching to '", input$review_type, "'-level review"), 
+        duration = 2, 
+        type = "message"
+      )
+    })
     
     review_indeterminate <- reactiveVal()
     
