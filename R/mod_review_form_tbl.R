@@ -85,7 +85,7 @@ mod_review_form_tbl_server <- function(
       session$userData$update_checkboxes[[form]] <- NULL
       session$userData$review_records[[form]] <- data.frame(id = integer(), reviewed = character())
     }) |> 
-      bindEvent(active_subject(), form_review_data(), form_data())
+      bindEvent(active_subject(), form_review_data(), form_data(), session$userData$review_type())
     
     observeEvent(datatable_rendered(), {
       table_data(merged_form_data())
