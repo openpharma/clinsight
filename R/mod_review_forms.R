@@ -171,8 +171,7 @@ mod_review_forms_server <- function(
         dplyr::mutate(reviewed = ifelse(input$form_reviewed, "Yes", "No")) |> 
         dplyr::select(id, reviewed) |> 
         dplyr::anti_join(
-          r$review_data[[active_form()]] |> 
-            dplyr::select("id", "reviewed")
+          r$review_data[[active_form()]][c("id", "reviewed")]
           )  |> 
         dplyr::arrange(id)
     }, ignoreInit = TRUE)    
