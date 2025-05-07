@@ -114,7 +114,7 @@ mod_review_form_tbl_server <- function(
       # Update review values for session's user data
       session$userData$pending_form_review_status[[form]] <- NULL
       session$userData$pending_review_records[[form]] <-
-        update_review_records(
+        update_pending_review_records(
           session$userData$pending_review_records[[form]],
           input$table_review_selection[, c("id", "reviewed")],
           subset(form_review_data(), subject_id == active_subject(),
@@ -122,7 +122,7 @@ mod_review_form_tbl_server <- function(
         )
       
       # Update the table's data reactive
-      df <- update_tbl_data_from_datatable(
+      df <- update_row_review_status(
         table_data(), 
         input$table_review_selection
       )
