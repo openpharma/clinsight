@@ -88,6 +88,7 @@ mod_review_form_tbl_server <- function(
       bindEvent(active_subject(), form_review_data(), form_data(), session$userData$review_type())
     
     observeEvent(datatable_rendered(), {
+      golem::cat_dev(form, "| renewing table_data using merged_form_data()\n\n")
       table_data(merged_form_data())
     }, ignoreInit = TRUE)
     
@@ -185,6 +186,7 @@ mod_review_form_tbl_server <- function(
     
     output[["table"]] <- DT::renderDT({
       datatable_rendered(TRUE)
+      golem::cat_dev(form, "| Rendering table output in renderDT\n")
       datatable_custom(
         subset(merged_form_data(), isolate(show_all() | subject_id == active_subject())), 
         rename_vars = c("Review Status" = "o_reviewed", table_names), 
