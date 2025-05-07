@@ -2,7 +2,7 @@ library(shinytest2)
 
 describe(
   "Feature 6 | Save form level review. As a user, I want to be able to save a review of an entire form.", {
-    chromote::local_chrome_version("134", binary = "chrome-headless-shell")
+    #chromote::local_chrome_version("134", binary = "chrome-headless-shell")
     app <- AppDriver$new(
       app_dir = test_path("fixtures/testapp"),
       name = "app-feature-6",
