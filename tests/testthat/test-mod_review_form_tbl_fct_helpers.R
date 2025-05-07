@@ -26,7 +26,7 @@ describe("get_form_table() works", {
           form = x,
           form_items = form_items[[x]],
           active_subject = "BEL_04_772", 
-          is_reviewed = TRUE
+          pending_form_review_status = TRUE
         )
       })
       
@@ -90,7 +90,7 @@ describe("get_form_table() works", {
           form = x,
           form_items = form_items[[x]],
           active_subject = "BEL_04_772", 
-          is_reviewed = TRUE
+          pending_form_review_status = TRUE
         )
       })
       
@@ -135,7 +135,7 @@ describe("get_form_table() works", {
       form = "Adverse events",
       form_items = form_items,
       active_subject = "BEL_04_772", 
-      is_reviewed = TRUE
+      pending_form_review_status = TRUE
     )
     change_args <- function(x){modifyList(x = args, val = x)}
     expect_error(
@@ -154,7 +154,7 @@ describe("get_form_table() works", {
       do.call("get_form_table", change_args(list(active_subject = data.frame())))
     )
     expect_error(
-      do.call("get_form_table", change_args(list(is_reviewed = "incorrect")))
+      do.call("get_form_table", change_args(list(pending_form_review_status = "incorrect")))
     )
     incorrect_data <- args
     incorrect_data[["form_data"]] <- mtcars
