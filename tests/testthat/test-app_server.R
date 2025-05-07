@@ -136,3 +136,68 @@ describe(
     })
   }
 )
+
+
+describe(
+  "app_server(). Feature 3 | Display Study name. As a user, I want to be able 
+    to set the study name within ClinSight so that it will be displayed in a 
+    prominent place within the application.", 
+  {
+    it(
+      "Scenario 1 - Set a study name. Given standard test data and meta data,
+      and setting [study_name] within the metadata to 'Test Name',
+      I expect that 'Test Name' will be the output within output[['study_name']].", 
+      {
+        withr::local_envvar("GOLEM_CONFIG_ACTIVE" = "default")
+        db_path <- withr::local_tempfile(fileext = ".sqlite")
+        file.copy(testthat::test_path("fixtures/testdb.sqlite"), db_path)
+        meta_data <- metadata
+        meta_data$settings$study_name <- "Test Name"
+        
+        app_session <- MockShinySession$new()
+        app_session$options$golem_options <- list(
+          "meta" = meta_data,
+          "data" = clinsightful_data,
+          "user_db" = db_path
+        )
+        
+        testServer(app_server, {
+          ns <- session$ns
+          session$setInputs(main_tabs = "Common events", common_data_tabs = "Adverse events")
+          expect_equal(output$study_name, "Test Name")
+        }, 
+        session = app_session) |> 
+          suppressWarnings()
+      })
+    
+    it("Scenario 2 - Set a study name that is too long. Given standard test data and meta data,
+        and setting [study_name] within the metadata to a name with more than 
+        40 characters I expect that the study name will be cut off to prevent 
+        issues in the user interface.", {
+          withr::local_envvar("GOLEM_CONFIG_ACTIVE" = "default")
+          db_path <- withr::local_tempfile(fileext = ".sqlite")
+          file.copy(testthat::test_path("fixtures/testdb.sqlite"), db_path)
+          meta_data <- metadata
+          meta_data$settings$study_name <- "Very long test name that is too long to display"
+          
+          app_session <- MockShinySession$new()
+          app_session$options$golem_options <- list(
+            "meta" = meta_data,
+            "data" = clinsightful_data,
+            "user_db" = db_path
+          )
+          
+          testServer(app_server, {
+            ns <- session$ns
+            session$setInputs(main_tabs = "Common events", common_data_tabs = "Adverse events")
+            expect_equal(
+              output$study_name, 
+              "Very long test name that is too long..."
+            )
+          }, 
+          session = app_session) |> 
+            suppressWarnings()
+        }
+    )
+  }
+)
