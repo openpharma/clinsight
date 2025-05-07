@@ -290,15 +290,18 @@ mod_review_forms_server <- function(
     review_save_error <- reactiveVal(FALSE)
     save_review_confirmed <- reactiveVal(0)
     
-    modal_confirm_saving <- function(){
+    modal_confirm_saving <- function(form = active_form(), reviewed = input$form_reviewed){
+      review_status_message <- if(isTRUE(reviewed)) "reviewed" else "not reviewed"
       modalDialog(
-        "Warning. This will change the review status of", 
-        " ALL items in this form. Do you want to proceed?", 
+        title = bslib::card_header(icon("triangle-exclamation"), "Warning"),
+        "This will change the review status of ALL items in the form ", 
+        tags$i(htmltools::htmlEscape(form)), "to ", 
+        tags$b(review_status_message), ".", "Do you want to continue?",
         footer = bslib::layout_columns(
-          col_widths = c(6,6), 
+          fill = FALSE,
           shiny::actionButton(
             inputId = ns("confirm_saving"), 
-            label = "Confirm saving",
+            label = "Save all",
             class = "btn-warning m2"
           ),
           modalButton("Cancel")
