@@ -107,7 +107,9 @@ describe("get_form_table() works", {
           )
       })
       original_tables <- lapply(table_names, \(x){
-        create_table(appdata[[x]], expected_columns = names(form_items[[x]])) 
+        df <- create_table(appdata[[x]], expected_columns = names(form_items[[x]]))
+        # To mimic sorting by active subject, as in `get_form_table()`:
+        df[order(df$subject_id != "BEL_04_772"), ]
       })
       lapply(table_names, \(x){
         expect_equal(output_tables[[!!x]], original_tables[[!!x]])
@@ -196,7 +198,7 @@ describe("adjust_ae_form_table() works as expected", {
     )
     SAE_cols <- c("subject_id","form_repeat", "Name", "AESI",  
                   "Start date", "End date", "CTCAE severity", 
-                  "Treatment related", "Treatment action", "Other action", 
+                  "Treatment related", "Treatment action",  
                   "Category","Awareness date", "Date of death", 
                   "Death reason")
     

@@ -5,10 +5,71 @@
 \alias{clinsightful_data}
 \title{Clinical Trial test data}
 \format{
-a data.frame with 6,483 rows and 24 variables.
+a data.frame with 6076 rows and
+22 variables.
+\itemize{
+\item \code{site_code}: character or integer, identifier for study site.
+\item \code{subject_id}: character, unique identifier for a subject.
+\item \code{event_id}: character, event identifier in raw data. Replaced by
+\code{event_name} and \code{event_label} within ClinSight. An "event" generally
+characterizes some sort of site visit (e.g. "Screening", "Visit 1", "Visit
+2"). Note that some \code{event_id}s track events that could apply outside of
+any visit, like AE, ConMed, Medical History, etc.
+\item \code{event_name}: character, the name of an event identifier used within
+the application. Created after merging raw data with metadata.
+\item \code{event_label}: character, shorter name of an event identifier. Created
+after merging raw data with metadata. Used instead of \code{event_name} for some
+compact visualizations.
+\item \code{event_date}: Date, the date associated with \code{event_name}.
+\item \code{event_repeat}: integer, keeps track of unique \code{event_id} for a
+single \code{subject_id} and \code{event_date}.
+\item \code{form_id}: character, a unique \code{form_id} identifier. Currently unused;
+\code{item_group} is used instead, which is controlled using the metadata.
+\item \code{form_repeat}: integer, keeps track of unique \code{item_name}s collected
+from a specific form for a given \code{subject_id}. \code{form_repeat} is
+particularly helpful when consolidating data like Adverse Events into this
+data format. Specifically, if more than one AE is collected on a patient,
+they'll have more than one \code{form_repeat}.
+\item \code{edit_date_time}: date-time (\code{POSIXct}), the last time this record was
+edited.
+\item \code{region}: character, describing the region code that \code{site_code} falls
+under.
+\item \code{day}: a \code{difftime()} R object, measuring the number of days each visit
+is from screening.
+\item \code{vis_day}: numeric, a numeric representation of \code{day}. Created after
+merging raw data with metadata.
+\item \code{vis_num}: numeric, a numeric representation of \code{event_name}. Created
+after merging raw data with metadata. Only counted for scheduled events
+(can be controlled in the metadata).
+\item \code{item_name}: character, the name of a metric or parameter of interest.
+\item \code{item_type}: character, classifies \code{item_name}s into either
+'continuous' or 'other', where continuous types are those generally
+associated with the CDISC "basic data structure" (BDS). That is, each
+\code{item_name} metric is collected over time at a patient visit
+(\code{event_name}). The 'other' type represents all non-time dependent
+measures, like demographic info, adverse events, Medications, medical
+history, etc.
+\item \code{item_group}: character, defines in which form the items with
+\code{item_name} will appear.
+\item \code{item_value}: character, the measurement collected for a given
+\code{item_name}. The value collected may be a number like 150 (when collecting
+a patient's weight) or a word (such as 'white' for the subject's race).
+\item \code{item_unit}: character, tracking the unit of measurement for
+\code{item_name} and \code{item_value}.
+\item \code{lower_lim}: numeric, some \code{item_name}s (particularly the 'continuous'
+type) have a pre-defined range of values that are considered normal. This
+is the lower limit to that range.
+\item \code{upper_lim}: numeric, some \code{item_name}s (particularly the 'continuous'
+type) have a pre-defined range of values that are considered normal. This
+is the upper limit to that range.
+\item \code{significance}: character, either 'CS' which means
+'Clinically Significant' or 'NCS' which means 'Not Clinically Significant'.
+\item \code{reason_notdone}: character, an effort to describe why the \code{item_value}
+field is \code{NA} / missing.
+}
 }
 \source{
-Created with \code{data-raw/create_random_data.R}
+Can be recreated with  \code{get_metadata(get_raw_csv_data(data_path = system.file("raw_data", package = "clinsight")))}.
 }
 \usage{
 clinsightful_data
@@ -17,6 +78,8 @@ clinsightful_data
 A data.frame containing randomly created clinical trial data. Used for
 testing purposes. It will also be used to run the app with example data when
 executing \code{run_app()} with the default configuration settings, or when
-running \code{golem::run_dev()}.
+running either \code{test_clinsight()} or \code{golem::run_dev()}. See also
+\code{vignette('Metadata')} and \code{vignette('clinsight')} for an explanation on how
+to create custom study data for clinsight.
 }
 \keyword{datasets}

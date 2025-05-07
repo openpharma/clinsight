@@ -10,6 +10,7 @@
 - Add a logging table to the DB for reviews.
 - Simplify pulling data from DB for reviews.
 - Review data by records IDs instead of subject & form
+- Improved generalization of event names for use in multiple studies.
 - Make query handling a configurable option
 - Changed the legend to display 'significance pending' instead of 'significance unknown'.
 - Added `Excel` download button to Queries table & patient listings that need review.
@@ -18,9 +19,14 @@
 - (For developers) added raw data that can be used to completely recreate the internal dataset (`clinsightful_data`) with the merge functions in the package.
 - (For developers) refactored `mod_study_forms`, `mod_common_forms`, and `mod_review_forms_tbl`, so that they now only need data of one form instead of all study data. Moved some business logic for the form tables to helper functions for `mod_review_forms_tbl`. This reduces unnecessary refreshing of data after saving a review.
 - filters in mod_study_forms are now only triggered after a delay. This way, the filter will only trigger after finishing selecting/deselecting multiple items.
+- Removed some custom logic in `create_table` so that it does not interfere with item names being displayed in bold (when items are not yet reviewed).
+- Added functionality in metadata to merge item pairs into one item.
 - Removed some custom logic in `create_table` so that it does not interfere
 - Replaced default ClinSight Logo (displayed in app) to use a company-independent graphic, i.e. the design from the hex logo
 - Added `test_clinsight()` for developing and testing custom data and metadata for use with ClinSight.
+- The version of ClinSight will now show up in the application's sidebar.
+- Settings and data/clinsight information in the sidebar is now aligned at the bottom.
+- Tables in all forms now keep showing data of the active subject first by default, even when changing table view to show all subject's data in the table.
 
 ## Bug fixes
 

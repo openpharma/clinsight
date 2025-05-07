@@ -9,8 +9,9 @@
 #' @importFrom shiny NS tagList shinyApp
 #' @importFrom stats na.omit setNames
 #' @importFrom utils modifyList
-#' @importFrom golem with_golem_options
+#' @importFrom golem with_golem_options pkg_version
 #' @importFrom golem add_resource_path activate_js favicon bundle_resources
+#' @importFrom utils file.edit
 ## usethis namespace: end
 NULL
 

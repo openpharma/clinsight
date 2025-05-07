@@ -55,6 +55,7 @@ get_metadata <- function(
     stop(stop_message)
   }
   
+  ### Verify and clean items_expanded
   meta$items_expanded <- meta[expand_tab_items] |> 
     dplyr::bind_rows(.id = "form_type") |> 
     expand_columns(
@@ -63,14 +64,15 @@ get_metadata <- function(
       unite_with = "var",
       remove_cols = FALSE
     ) 
-  
-  # Verify and clean form-level data:
+  ### Verify and clean form-level data:
   meta[["form_level_data"]] <- get_form_level_data(
     meta[["form_level_data"]], 
     all_forms = unique(meta$items_expanded$item_group)
   )
   
-  # verify if all required columns are available and if not create them:
+  ## Verify and clean event data:
+  meta[["events"]] <- clean_event_metadata(meta[["events"]])
+  
   missing_cols <- required_meta_cols[!required_meta_cols %in% names(meta$items_expanded)]
   if(length(missing_cols) != 0){
     warning(
@@ -81,7 +83,8 @@ get_metadata <- function(
     )
     meta$items_expanded <- add_missing_columns(meta$items_expanded, missing_cols)
   }
-  
+  meta[["items_expanded"]] <- clean_merge_pair_metadata(meta[["items_expanded"]])
+    
   lapply(setNames(nm = names(meta)), \(x){
     if(!x %in% expand_tab_items) return(meta[[x]])
     meta[[x]] |> 
@@ -134,61 +137,6 @@ rename_raw_data <- function(
   df[!is.na(df$subject_id), ]
 }
 
-#' Add time vars to raw data
-#'
-#' @param data A data frame 
-#'
-#' @return A data frame, with derivative time and event variables, needed for
-#'   ClinSight to function properly.
-#'
-#' @keywords internal
-add_timevars_to_data <- function(
-    data
-){
-  stopifnot("[data] should be a data frame" = is.data.frame(data))
-  missing_new_cols <- required_col_names[!required_col_names %in% names(data)] |> 
-    paste0(collapse = ", ")
-  if(nchar(missing_new_cols) > 0) stop(
-    paste0("The following columns are missing while they are required:\n", 
-           missing_new_cols, ".")
-  )
-  
-  df <- data |>
-    dplyr::mutate(
-      edit_date_time = as.POSIXct(edit_date_time, tz = "UTC"),
-      event_date = as.Date(event_date),
-      day = day %|_|% {event_date - min(event_date, na.rm = TRUE)}, 
-      vis_day = ifelse(grepl("^SCR|^VIS|^FU", event_id, ignore.case = TRUE), day, NA),
-      vis_num = as.numeric(factor(vis_day))-1,
-      event_name = event_name %|_|% dplyr::case_when(
-        grepl("^SCR", event_id, ignore.case = TRUE) ~ "Screening",
-        grepl("^VIS", event_id, ignore.case = TRUE) ~ paste0("Visit ", vis_num),
-        grepl("^FU[[:digit:]]+", event_id, ignore.case = TRUE) ~ paste0("Visit ", vis_num, "(FU)"),
-        grepl("^UN", event_id, ignore.case = TRUE) ~ paste0("Unscheduled visit ", event_repeat),
-        toupper(event_id) == "EOT"    ~ "EoT",
-        toupper(event_id) == "EXIT"   ~ "Exit",
-        grepl("^AE|^CM|^CP|^MH|^PR|^ST", form_id) ~ "Any visit",
-        .default = paste0("Other (", event_id, ")")
-      ),
-      event_label = event_label %|_|% dplyr::case_when(
-        !is.na(vis_num)   ~ paste0("V", vis_num),
-        grepl("^UN", event_id, ignore.case = TRUE)   ~ paste0("UV", event_repeat),
-        .default = event_name
-      ),
-      .by = subject_id
-    ) |> 
-    dplyr::arrange(
-      factor(site_code, levels = order_string(site_code)),
-      factor(subject_id, levels = order_string(subject_id))
-    )
-  if(any(is.na(df$event_name) | grepl("^Other ", df$event_name))) warning(
-    "Undefined Events detected. Please verify data before proceeding."
-  )
-  df
-}
-
-
-
 #' Correct multiple choice variables
 #'
 #' In some EDC systems, if there is a multiple choice variable in which multiple
@@ -210,13 +158,15 @@ add_timevars_to_data <- function(
 #'
 #' @return data frame with corrected multiple choice variables
 #' @examples
+#' \dontrun{
 #'  df <- data.frame(
 #'   ID = "Subj1",
 #'   var = c("Age", paste0("MH_TRT", 1:4)),
 #'   item_value = as.character(c(95, 67, 58, 83, 34))
 #'  )
 #'  fix_multiple_choice_vars(df, common_vars = "ID")
-#' @export
+#' }
+#' @keywords internal
 #' 
 fix_multiple_choice_vars <- function(
     data,
@@ -288,7 +238,7 @@ fix_multiple_choice_vars <- function(
 #' @param meta List. metadata to use.
 #'
 #' @return a list with all important names to be used in a clinical trial.
-#' @export
+#' @keywords internal
 #'
 get_meta_vars <- function(data = appdata, meta = metadata){
   stopifnot(inherits(data, "list"))
@@ -296,9 +246,8 @@ get_meta_vars <- function(data = appdata, meta = metadata){
   if(length(data) == 0) stop("Empty list with data provided")
   vars <- list()
   # add metadata variables:
-  vars$events <- setNames(meta$events$event_label, meta$events$event_name)
-  
   vars$items <- meta$items_expanded |> 
+    subset(!grepl("_ITEM_TO_MERGE_WITH_PAIR$", item_name)) |> 
     dplyr::distinct(item_name, item_group) |> 
     split(~item_group) |> 
     lapply(\(x){setNames(simplify_string(x$item_name), x$item_name)})
@@ -451,10 +400,12 @@ get_base_value <- function(
 #' removing the pattern from the data frame names).
 #'
 #' @return A data frame with adjusted column names.
-#' @export
+#' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' adjust_colnames(head(iris), "^Sepal", "Flower")
+#' }
 adjust_colnames <- function(
     data,
     pattern,
@@ -477,10 +428,12 @@ adjust_colnames <- function(
 #'
 #' @return A data frame with at least all the columns named in `columns`. 
 #' The added columns will be of class `character`. 
-#' @export
+#' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' add_missing_columns(head(iris), c("important_column1", "important_column2"))
+#' }
 add_missing_columns <- function(
     data,
     columns
@@ -546,9 +499,12 @@ add_missing_columns <- function(
 #' @param ... Other optional arguments that will be passed to [DT::datatable()].
 #'
 #' @return A `DT::datatable` object.
-#' @export
+#' @keywords internal
 #'
-#' @examples datatable_custom(mtcars)
+#' @examples 
+#' \dontrun{
+#' datatable_custom(mtcars)
+#' }
 datatable_custom <- function(
     data, 
     rename_vars = NULL, 

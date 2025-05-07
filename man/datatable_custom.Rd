@@ -70,5 +70,8 @@ Small wrapper around \code{\link[DT:datatable]{DT::datatable()}}. Will be used t
 consistent style.
 }
 \examples{
+\dontrun{
 datatable_custom(mtcars)
 }
+}
+\keyword{internal}
