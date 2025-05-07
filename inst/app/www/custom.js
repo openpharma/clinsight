@@ -82,7 +82,7 @@ function checkboxRender(data, type, row, meta) {
     ${disabled ? 'disabled ' : ''}
     class='${cb_class}' 
     // If the checkbox has not be clicked, set value to reviewed status, 
-    //  otherwise use clicked/updated
+    //  otherwise use clicked/updated status
     ${updated == null ? (reviewed ? 'checked' : '') : (updated ? 'checked' : '')} 
     // If the row is partially reviewed. Handle the checkbox state using ts(). 
     //  Using an onclick event is important because we need this to trigger 
