@@ -74,7 +74,7 @@ mod_review_form_tbl_server <- function(
         is_SAE = identical(title, "Serious Adverse Events")
       )
     }) |> 
-      bindEvent(form_data(), form_review_data(), active_subject())
+      bindEvent(form_data(), form_review_data(), active_subject(), session$userData$review_type())
     
     ############################### Observers: #################################
     
