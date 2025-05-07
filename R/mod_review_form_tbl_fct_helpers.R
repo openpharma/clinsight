@@ -62,7 +62,8 @@ get_form_table <- function(
       row_review_status = Map(
         \(x, y, z) append(x, list(
           row_id = y, 
-          disabled = z
+          disabled = z,
+          updated = pending_form_review_status
           )
         ), 
         row_review_status, 
