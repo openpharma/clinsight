@@ -9,7 +9,8 @@ describe(
       paste0("Scenario 1 - Load raw data with custom metadata. ", 
       "Given raw CSV data exported from the EDC system from subject [9600-002], ", 
       "and with metadata in which total visits is restricted to V0-V10, ",
-      "and with only the study_forms 'Response' and 'Vitals adjusted' in the metadata",
+      "and with only the study_forms 'Response' and 'Vitals adjusted' in the metadata ",
+      "and with the study name in the metadata settings set to 'Test Study Name'",
       "and with, at both Screening and Visit 2 the [Systolic blood pressure] being 99, ", 
       "[Diastolic Blood Pressure] 77, [Pulse] 77, [Resp] 9, and [Temperature] 37.5, ", 
       "and (only at screening) [Weight] 70kg, ", 
@@ -18,6 +19,7 @@ describe(
       "and when I browser to the 'Study data' tab",
       "I expect that I see the Vital signs page of subject [9600-002]', ", 
       "and that the compact header timeline shows visits all visits available in the data",
+      "and that the study name 'Test Study Name' is displayed in the main bar as a header ",
       "and that I see a figure with the data displayed, ",
       "and that I see a table with the data displayed after clicking on the table view, ", 
       "and that the data for the figure and table in the app is the same as ", 
@@ -67,12 +69,14 @@ describe(
                      "main_sidebar_1-navigate_forms_1-form_name")
           )
         
+        app_study_name <- app$get_value(output = "study_name")
+        expect_equal(app_study_name, "Test Study Name")
         # Get a snapshot of the raw data of the figure:
         fig_data <- app$get_value(export = "sf_vitals_adjusted-fig_data") |> 
           dplyr::select(subject_id, event_name, event_date, item_group, item_name, item_value,  
                         item_unit, lower_lim, upper_lim) |> 
           dplyr::arrange(item_name)
-        expect_snapshot(fig_data)
+        expect_snapshot(print(fig_data, width = Inf))
         # Get a snapshot of the raw data in the table:
         table_data  <- app$get_value(export = "sf_vitals_adjusted-review_form_tbl-table_data")
         expect_snapshot(print(table_data, width = Inf))
