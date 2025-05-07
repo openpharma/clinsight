@@ -41,6 +41,10 @@ app_ui <- function(request){
         bslib::navset_tab(id = "study_data_tabs")
       ),
       bslib::nav_spacer(),
+      bslib::nav_item(
+        tags$h3(textOutput("study_name"), class = "text-secondary")
+      ),
+      bslib::nav_spacer(),
       bslib::nav_panel(
         "Queries", 
         mod_queries_ui("queries_1")

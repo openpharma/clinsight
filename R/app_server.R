@@ -284,6 +284,15 @@ app_server <- function(
       req(with(pwd_mngt, must_change[user == res_auth[["user"]]]) == "FALSE") 
     }
     
+    output[["study_name"]] <-  renderText({
+      study_name <- meta$settings$study_name %||% ""
+      if (nchar(study_name) > 40){
+        paste0(trimws(substr(study_name, 1, 37)), "...")
+      } else {
+        study_name
+      }
+    })
+    
     mod_main_sidebar_server(
       id = "main_sidebar_1",
       r = r,
