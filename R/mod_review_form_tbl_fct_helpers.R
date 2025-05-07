@@ -175,7 +175,7 @@ update_row_review_status <- function(tbl_data, review_selection) {
   tbl_data[row_ids == update_row$row_id, "row_review_status"] <- list(list(
     modifyList(
       tbl_data[row_ids == update_row$row_id,]$row_review_status[[1]], 
-      list(pending_form_review_status = switch(update_row$reviewed, "Yes" = TRUE, "No" = FALSE, NA))
+      list(updated = switch(update_row$reviewed, "Yes" = TRUE, "No" = FALSE, NA))
     )
   ))
   tbl_data
