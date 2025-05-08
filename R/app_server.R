@@ -30,8 +30,8 @@ app_server <- function(
     })
   check_appdata(app_data, meta)
   
-  session$userData$review_records <- reactiveValues()
-  session$userData$update_checkboxes <- reactiveValues()
+  session$userData$pending_review_records <- reactiveValues()
+  session$userData$pending_form_review_status <- reactiveValues()
   session$userData$review_type <- reactiveVal("subject")
   
   res_auth <- authenticate_server(

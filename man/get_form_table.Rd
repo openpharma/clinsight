@@ -10,7 +10,7 @@ get_form_table(
   form,
   form_items,
   active_subject,
-  is_reviewed = NULL,
+  pending_form_review_status = NULL,
   is_SAE = NULL,
   id_cols = idx_cols
 )
@@ -26,8 +26,10 @@ get_form_table(
 
 \item{active_subject}{A character string with the active subject id.}
 
-\item{is_reviewed}{A logical, indicating whether all items of the entire form
-for the active subject id are reviewed.}
+\item{pending_form_review_status}{A logical, indicating whether all items of
+the entire form for the active subject id are reviewed. Note that the
+logical can have three statuses, namely TRUE (=reviewed), FALSE (=not
+reviewed), and indeterminate (=partially reviewed).}
 
 \item{is_SAE}{A logical, indicating whether the form is a SAE form. If TRUE,
 will make some adjustments to the columns to display.}

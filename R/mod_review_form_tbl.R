@@ -70,7 +70,7 @@ mod_review_form_tbl_server <- function(
         form = form, 
         form_items = form_items,
         active_subject = if(identical(session$userData$review_type(), "form")) NULL else active_subject(),
-        is_reviewed = NULL,
+        pending_form_review_status = NULL,
         is_SAE = identical(title, "Serious Adverse Events")
       )
     }) |> 
@@ -82,8 +82,8 @@ mod_review_form_tbl_server <- function(
       golem::cat_dev(form, "| Resetting userData\n")
       reload_data(reload_data() + 1)
       datatable_rendered(NULL)
-      session$userData$update_checkboxes[[form]] <- NULL
-      session$userData$review_records[[form]] <- data.frame(id = integer(), reviewed = character())
+      session$userData$pending_form_review_status[[form]] <- NULL
+      session$userData$pending_review_records[[form]] <- data.frame(id = integer(), reviewed = character())
     }) |> 
       bindEvent(active_subject(), form_review_data(), form_data(), session$userData$review_type())
     
@@ -92,17 +92,17 @@ mod_review_form_tbl_server <- function(
       table_data(merged_form_data())
     }, ignoreInit = TRUE)
     
-    observeEvent(session$userData$update_checkboxes[[form]], {
+    observeEvent(session$userData$pending_form_review_status[[form]], {
       req(datatable_rendered())
       golem::cat_dev(form, "| Updating checkboxes\n")
       reload_data(reload_data() + 1)
-      checked <- session$userData$update_checkboxes[[form]]
+      checked <- session$userData$pending_form_review_status[[form]]
       df <- table_data() |> 
         dplyr::mutate(
-          o_reviewed = dplyr::if_else(
-            identical(session$userData$review_type(), "form") | subject_id == active_subject(), 
-            lapply(o_reviewed, modifyList, list(updated = checked)),
-            o_reviewed
+          row_review_status = dplyr::if_else(
+            identical(session$userData$review_type(), "form") | subject_id == active_subject(),
+            lapply(row_review_status, modifyList, list(updated = checked)),
+            row_review_status
           )
         )
       table_data(df)
@@ -112,16 +112,16 @@ mod_review_form_tbl_server <- function(
       golem::cat_dev(form, "| table review selection changed to:\n")
       golem::print_dev(input$table_review_selection[c("id", "reviewed")])
       # Update review values for session's user data
-      session$userData$update_checkboxes[[form]] <- NULL
-      session$userData$review_records[[form]] <-
-        update_review_records(
-          session$userData$review_records[[form]],
+      session$userData$pending_form_review_status[[form]] <- NULL
+      session$userData$pending_review_records[[form]] <-
+        update_pending_review_records(
+          session$userData$pending_review_records[[form]],
           input$table_review_selection[, c("id", "reviewed")],
           form_review_data()
         )
       
       # Update the table's data reactive
-      df <- update_tbl_data_from_datatable(
+      df <- update_row_review_status(
         table_data(), 
         input$table_review_selection
       )
@@ -189,7 +189,7 @@ mod_review_form_tbl_server <- function(
       golem::cat_dev(form, "| Rendering table output in renderDT\n")
       datatable_custom(
         subset(merged_form_data(), isolate(show_all() | subject_id == active_subject())), 
-        rename_vars = c("Review Status" = "o_reviewed", table_names), 
+        rename_vars = c("Review Status" = "row_review_status", table_names), 
         rownames= FALSE,
         title = title,
         export_label = paste(
@@ -203,7 +203,7 @@ mod_review_form_tbl_server <- function(
         options = list(
           columnDefs = list(
             list(
-              targets = "o_reviewed",
+              targets = "row_review_status",
               orderable = FALSE,
               render = checkbox_render
             ),

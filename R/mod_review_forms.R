@@ -155,30 +155,30 @@ mod_review_forms_server <- function(
     })
     
     observe({
-      req(session$userData$review_records[[active_form()]], review_data_active())
+      req(session$userData$pending_review_records[[active_form()]], review_data_active())
       review_status <-
         review_data_active()[,c("id", "reviewed")] |> 
-        dplyr::rows_update(session$userData$review_records[[active_form()]][,c("id", "reviewed")], by = "id") |> 
+        dplyr::rows_update(session$userData$pending_review_records[[active_form()]][,c("id", "reviewed")], by = "id") |> 
         dplyr::distinct(reviewed) |> 
         dplyr::pull()
       
       shinyjs::runjs(sprintf("$('#%s').prop('checked', %s)", ns("form_reviewed"), tolower(identical(review_status, "Yes"))))
       review_indeterminate(length(review_status) > 1)
     }) |>
-      bindEvent(active_form(), session$userData$review_records[[active_form()]])
+      bindEvent(active_form(), session$userData$pending_review_records[[active_form()]])
     
     observeEvent(r$subject_id, {
       req(!identical(input$review_type, "form"))
       golem::cat_dev("mod_review_forms | Reset review records\n")
-      session$userData$update_checkboxes[[active_form()]] <- NULL
-      session$userData$review_records[[active_form()]] <- data.frame(id = integer(), reviewed = character())
+      session$userData$pending_form_review_status[[active_form()]] <- NULL
+      session$userData$pending_review_records[[active_form()]] <- data.frame(id = integer(), reviewed = character())
     })
     
     confirm_before_saving <- reactiveVal(FALSE)
     observeEvent(input$form_reviewed, {
-      session$userData$update_checkboxes[[active_form()]] <- input$form_reviewed
+      session$userData$pending_form_review_status[[active_form()]] <- input$form_reviewed
       
-      session$userData$review_records[[active_form()]] <-
+      session$userData$pending_review_records[[active_form()]] <-
         review_data_active() |> 
         dplyr::mutate(reviewed = ifelse(input$form_reviewed, "Yes", "No")) |> 
         dplyr::select(id, reviewed) |> 
@@ -252,11 +252,11 @@ mod_review_forms_server <- function(
     enable_save_review <- reactive({
       req(
         active_form(),
-        session$userData$review_records[[active_form()]], 
+        session$userData$pending_review_records[[active_form()]], 
         is.logical(enable_any_review())
         ) 
       if(!enable_any_review()) return(FALSE)
-      nrow(session$userData$review_records[[active_form()]]) != 0
+      nrow(session$userData$pending_review_records[[active_form()]]) != 0
     })
     
     observeEvent(c(enable_any_review(), enable_save_review()), {
@@ -331,7 +331,7 @@ mod_review_forms_server <- function(
       req(enable_save_review())
       review_save_error(FALSE)
       
-      review_records <- session$userData$review_records[[active_form()]][c("id", "reviewed")] |> 
+      review_records <- session$userData$pending_review_records[[active_form()]][c("id", "reviewed")] |> 
         dplyr::mutate(
           comment     = ifelse(is.null(input$review_comment), "", input$review_comment),
           reviewer    = paste0(r$user_name, " (", r$user_role, ")"),
@@ -367,8 +367,8 @@ mod_review_forms_server <- function(
         names(review_records_db)
       )
       
-      session$userData$update_checkboxes[[active_form()]] <- NULL
-      session$userData$review_records[[active_form()]] <- data.frame(id = integer(), reviewed = character())
+      session$userData$pending_form_review_status[[active_form()]] <- NULL
+      session$userData$pending_review_records[[active_form()]] <- data.frame(id = integer(), reviewed = character())
       
       review_save_error(any(
         !isTRUE(all.equal(review_records_db, review_records, check.attributes = FALSE)),
@@ -401,8 +401,8 @@ mod_review_forms_server <- function(
       
       list(
         completed = sum(review_data_active()$reviewed == "Yes"),
-        unmarking = sum(session$userData$review_records[[active_form()]]$reviewed == "No"),
-        marking = sum(session$userData$review_records[[active_form()]]$reviewed == "Yes"),
+        unmarking = sum(session$userData$pending_review_records[[active_form()]]$reviewed == "No"),
+        marking = sum(session$userData$pending_review_records[[active_form()]]$reviewed == "Yes"),
         total = nrow(review_data_active())
       )
     })

@@ -1,7 +1,7 @@
 describe("get_form_table() works", {
   it(
     "creates a form table with not yet reviewed data marked bold and with the 
-    o_reviewed list stored in it,in which only the rows for the active_subject 
+    row_review_status list stored in it,in which only the rows for the active_subject 
     are set to disabled=FALSE", 
     {
       appdata <- get_appdata(clinsightful_data)
@@ -26,18 +26,18 @@ describe("get_form_table() works", {
           form = x,
           form_items = form_items[[x]],
           active_subject = "BEL_04_772", 
-          is_reviewed = TRUE
+          pending_form_review_status = TRUE
         )
       })
       
       lapply(table_names, \(x){
         expect_true(is.data.frame(output[[!!x]]))
         expect(
-          "o_reviewed" %in% names(output[[x]]), 
-          paste0("`o_reviewed` is an expected column for data in form `", x, "`.")
+          "row_review_status" %in% names(output[[x]]), 
+          paste0("`row_review_status` is an expected column for data in form `", x, "`.")
         )
-        expect_true(is.list(output[[!!x]][["o_reviewed"]]))
-        enabled_rows <- lapply(output[[x]][["o_reviewed"]], \(i) isFALSE(i$disabled)) |> unlist()
+        expect_true(is.list(output[[!!x]][["row_review_status"]]))
+        enabled_rows <- lapply(output[[x]][["row_review_status"]], \(i) isFALSE(i$disabled)) |> unlist()
         if(any(enabled_rows)){
           expect_equal(unique(output[[!!x]][enabled_rows,]$subject_id), "BEL_04_772")
         } else{
@@ -47,7 +47,7 @@ describe("get_form_table() works", {
         invisible()
       
       ## Verify columns for each table
-      standard_names <- c("o_reviewed", idx_cols, "event_repeat", "event_date")
+      standard_names <- c("row_review_status", idx_cols, "event_repeat", "event_date")
       review_tables <- table_names[table_names != "General"]
       unreviewed_items <- lapply(review_tables, \(x){
         df_x <- output[[x]]
@@ -90,13 +90,13 @@ describe("get_form_table() works", {
           form = x,
           form_items = form_items[[x]],
           active_subject = "BEL_04_772", 
-          is_reviewed = TRUE
+          pending_form_review_status = TRUE
         )
       })
       
       output_tables <- lapply(table_names, \(x){
         output[[x]] |> 
-          dplyr::select(-o_reviewed) |> 
+          dplyr::select(-row_review_status) |> 
           dplyr::mutate(
             dplyr::across(
               # remove bold tags. status_label is the exception here since it 
@@ -135,7 +135,7 @@ describe("get_form_table() works", {
       form = "Adverse events",
       form_items = form_items,
       active_subject = "BEL_04_772", 
-      is_reviewed = TRUE
+      pending_form_review_status = TRUE
     )
     change_args <- function(x){modifyList(x = args, val = x)}
     expect_error(
@@ -154,7 +154,7 @@ describe("get_form_table() works", {
       do.call("get_form_table", change_args(list(active_subject = data.frame())))
     )
     expect_error(
-      do.call("get_form_table", change_args(list(is_reviewed = "incorrect")))
+      do.call("get_form_table", change_args(list(pending_form_review_status = "incorrect")))
     )
     incorrect_data <- args
     incorrect_data[["form_data"]] <- mtcars

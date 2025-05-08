@@ -79,8 +79,8 @@ describe(
           mod_review_forms_server, args = testargs, {
             ns <- session$ns
             
-            session$userData$review_records <- reactiveValues()
-            session$userData$update_checkboxes <- reactiveValues()
+            session$userData$pending_review_records <- reactiveValues()
+            session$userData$pending_form_review_status <- reactiveValues()
             session$userData$review_type <- reactiveVal()
             
             ## patient has two rows: AF and Cystitis. AF is already reviewed by someone else: 
@@ -191,8 +191,8 @@ describe(
           )
         }
         test_server <- function(input, output, session){
-          session$userData$review_records <- reactiveValues()
-          session$userData$update_checkboxes <- reactiveValues()
+          session$userData$pending_review_records <- reactiveValues()
+          session$userData$pending_form_review_status <- reactiveValues()
           session$userData$review_type <- reactiveVal()
           
           mod_review_forms_server(
@@ -416,8 +416,8 @@ describe(
           )
         }
         test_server <- function(input, output, session){
-          session$userData$review_records <- reactiveValues()
-          session$userData$update_checkboxes <- reactiveValues()
+          session$userData$pending_review_records <- reactiveValues()
+          session$userData$pending_form_review_status <- reactiveValues()
           session$userData$review_type <- reactiveVal()
           
           mod_review_forms_server(
@@ -508,8 +508,8 @@ describe(
           mod_review_forms_server, args = testargs, {
             ns <- session$ns
             
-            session$userData$review_records <- reactiveValues()
-            session$userData$update_checkboxes <- reactiveValues()
+            session$userData$pending_review_records <- reactiveValues()
+            session$userData$pending_form_review_status <- reactiveValues()
             session$userData$review_type <- reactiveVal()
             
             session$setInputs(form_reviewed = NULL, review_type = "subject")
@@ -553,8 +553,8 @@ describe(
           )
         }
         test_server <- function(input, output, session){
-          session$userData$review_records <- reactiveValues()
-          session$userData$update_checkboxes <- reactiveValues()
+          session$userData$pending_review_records <- reactiveValues()
+          session$userData$pending_form_review_status <- reactiveValues()
           session$userData$review_type <- reactiveVal()
           
           mod_review_forms_server(
@@ -660,8 +660,8 @@ describe(
         testServer(
           mod_review_forms_server, args = testargs, {
             ns <- session$ns
-            session$userData$review_records <- reactiveValues()
-            session$userData$update_checkboxes <- reactiveValues()
+            session$userData$pending_review_records <- reactiveValues()
+            session$userData$pending_form_review_status <- reactiveValues()
             session$userData$review_type <- reactiveVal()
             
             db_before_review <- db_temp_connect(db_path, {
