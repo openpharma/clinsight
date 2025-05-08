@@ -2,7 +2,7 @@ library(shinytest2)
 
 describe(
   "Feature 6 | Save form level review. As a user, I want to be able to save a review of an entire form.", {
-    #chromote::local_chrome_version("134", binary = "chrome-headless-shell")
+    chromote::local_chrome_version("134", binary = "chrome-headless-shell")
     app <- AppDriver$new(
       app_dir = test_path("fixtures/testapp"),
       name = "app-feature-6",
@@ -21,16 +21,15 @@ describe(
             and clicking on [Save] to save the review,
             I expect that I see a modal asking to confirm the review of all data.", 
       {
-        #browser()
         app$wait_for_idle(8000)
         app$run_js('$("#start_page_1-overview_table td").filter(function() {return $(this).text() == "BEL_04_772"}).closest("tr").trigger("dblclick")')
         app$wait_for_idle()
-        expect_equal(app$get_value(input = "main_tabs"), "Common events")
+        expect_equal(app$get_value(export = "active_form"), "Adverse events")
+        expect_equal(app$get_value(export = "active_participant"), "BEL_04_772")
         expect_equal(
           app$get_js('$("#cf_adverse_events-review_form_tbl-table input[type=\'checkbox\']").length'),
           5
         )
-        #app$get_values(input = TRUE)
         app$set_inputs("main_sidebar_1-review_forms_1-review_type" = "form")
         app$wait_for_idle(1000)
         expect_equal(
@@ -38,12 +37,24 @@ describe(
           77
         )
         app$wait_for_idle()
+        expect_equal(app$get_value(input = "cf_adverse_events-show_all_data"), TRUE)
+        expect_equal(app$get_value(output = "form_level_review"), TRUE)
+        
         app$set_inputs("main_sidebar_1-review_forms_1-form_reviewed" = TRUE)
         app$click("main_sidebar_1-review_forms_1-save_review")
         app$wait_for_idle()
-        
-        output_names <- names(app$get_values(output = TRUE)$output)
-        app$expect_values(output = vector_select(output_names, exclude = "visit_figure"))
+        input_names <- c(
+          "cf_adverse_events-review_form_tbl-table_review_selection",
+          "cf_adverse_events-review_form_SAE_tbl-table_review_selection"
+        )
+        output_names <-c(
+          "cf_adverse_events-review_form_tbl-table",
+          "main_sidebar_1-navigate_forms_1-form_name",
+          "main_sidebar_1-review_forms_1-form_reviewed",
+          "main_sidebar_1-review_forms_1-progress_bar",
+          "main_sidebar_1-review_forms_1-save_review_error"
+        )
+        app$expect_values(input = input_names, output = output_names)
       }
     )
   }
