@@ -294,9 +294,15 @@ mod_review_forms_server <- function(
       review_status_message <- if(isTRUE(reviewed)) "reviewed" else "not reviewed"
       modalDialog(
         title = bslib::card_header(icon("triangle-exclamation"), "Warning"),
-        "This will change the review status of ALL items in the form ", 
-        tags$i(htmltools::htmlEscape(form)), "to ", 
-        tags$b(review_status_message), ".", "Do you want to continue?",
+        bslib::card_body(
+          id = ns("confirm_save_modal"),
+          fillable = FALSE,
+          "This will change the review status of ALL items in the form ", 
+          tags$i(htmltools::htmlEscape(form)), "to ", 
+          HTML(paste0(tags$b(review_status_message), ".")),
+          tags$br(), tags$br(), 
+          "Do you want to continue?" 
+        ),
         footer = bslib::layout_columns(
           fill = FALSE,
           shiny::actionButton(
