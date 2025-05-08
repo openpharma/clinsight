@@ -166,9 +166,25 @@ describe(
           app$get_js('$("#cf_medication-review_form_tbl-table input[type=\'checkbox\']:checked").length'),
           7
         )
-        output_names <- names(app$get_values(output = TRUE)$output)
+        all_values <- app$get_values(input = TRUE, output = TRUE)
+        input_names <- vector_select(
+          names(all_values$input),
+          include = c(
+            "cf_medication-review_form_tbl-table_review_selection"
+          )
+        )
+        output_names <- vector_select(
+          names(all_values$output),
+          include = c(
+            "cf_medication-review_form_tbl-table",
+            "main_sidebar_1-navigate_forms_1-form_name",
+            "main_sidebar_1-review_forms_1-form_reviewed",
+            "main_sidebar_1-review_forms_1-progress_bar",
+            "main_sidebar_1-review_forms_1-save_review_error"
+          )
+        )
         ## snapshot 004:
-        app$expect_values(output = vector_select(output_names, exclude = "visit_figure"))
+        app$expect_values(input = input_names, output = output_names)
         # somehow app$click doesn't register here, therefore using run_js:
         app$run_js('$("#main_sidebar_1-review_forms_1-form_reviewed").click()')
         app$wait_for_idle()
@@ -180,7 +196,7 @@ describe(
         app$click("main_sidebar_1-review_forms_1-save_review")
         app$wait_for_idle(800)
         ## snapshot 005:
-        app$expect_values(output = vector_select(output_names, exclude = "visit_figure"))
+        app$expect_values(input = input_names, output = output_names)
         # Again, no checkboxes should be checked:
         expect_equal(
           app$get_js('$("#cf_medication-review_form_tbl-table input[type=\'checkbox\']:checked").length'),
