@@ -101,7 +101,7 @@ mod_review_form_tbl_server <- function(
         dplyr::mutate(
           row_review_status = dplyr::if_else(
             subject_id == active_subject(), 
-            lapply(row_review_status, modifyList, list(pending_form_review_status = checked)),
+            lapply(row_review_status, modifyList, list(updated = checked)),
             row_review_status
           )
         )
