@@ -1267,7 +1267,7 @@
               "visible": false
             },
             {
-              "name": "o_reviewed",
+              "name": "row_review_status",
               "targets": 0
             },
             {
@@ -3394,7 +3394,7 @@
       ]
     },
     "test-review_form_tbl-table_data": {
-      "o_reviewed": [
+      "row_review_status": [
         {
           "reviewed": null,
           "ids": [

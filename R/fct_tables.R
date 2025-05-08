@@ -52,8 +52,8 @@ create_table.default <- function(
   stopifnot(is.character(name_column))
   stopifnot(is.character(value_column))
   if ("reviewed" %in% names(data)) {
-    data <- add_o_reviewed(data, keep_vars)
-    keep_vars <- c("o_reviewed", keep_vars)
+    data <- add_row_review_status(data, keep_vars)
+    keep_vars <- c("row_review_status", keep_vars)
   }
   df <- data[c(keep_vars, name_column, value_column)] |> 
     tidyr::pivot_wider(
@@ -85,10 +85,10 @@ create_table.default <- function(
 #' of the IDs associated with the unique observation defined by `id_cols`.
 #' 
 #' @noRd
-add_o_reviewed <- function(data, id_cols) {
+add_row_review_status <- function(data, id_cols) {
   dplyr::mutate(
     data,
-    o_reviewed = dplyr::case_when(
+    row_review_status = dplyr::case_when(
       any(reviewed == "No") & any(reviewed == "Yes") ~ list(list(reviewed = NA, ids = id)),
       any(reviewed == "Yes") ~ list(list(reviewed = TRUE, ids = id)),
       .default = list(list(reviewed = FALSE, ids = id))
@@ -344,7 +344,7 @@ create_table.medication <- function(
       dplyr::desc(gsub("\\**<\\/*b>", "", .data[["Start Date"]]))
       ) |> 
     dplyr::select(
-      dplyr::any_of("o_reviewed"),
+      dplyr::any_of("row_review_status"),
       dplyr::all_of(c(keep_vars, "Name")), 
       dplyr::everything(),
       -dplyr::all_of(c("in_use", "Unit", "Frequency", "Route"))
