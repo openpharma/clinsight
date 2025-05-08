@@ -165,10 +165,10 @@ mod_review_form_tbl_server <- function(
         row_disabled <- table_data()$subject_id != active_subject()
       }
       df <- table_data()
-      df[["o_reviewed"]] <- lapply(
-        seq_along(table_data()$o_reviewed), \(x){
+      df[["row_review_status"]] <- lapply(
+        seq_along(table_data()$row_review_status), \(x){
           modifyList(
-            table_data()$o_reviewed[[x]], list(disabled = row_disabled[x])
+            table_data()$row_review_status[[x]], list(disabled = row_disabled[x])
           )
         }
       )
