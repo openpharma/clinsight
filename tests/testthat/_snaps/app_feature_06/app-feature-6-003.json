@@ -1,6 +1,6 @@
 {
   "input": {
-    "main_sidebar_1-review_forms_1-confirm_saving": 0
+    "main_sidebar_1-review_forms_1-confirm_saving": 1
   },
   "output": {
     "form_level_review": true,
@@ -8,9 +8,16 @@
     "main_sidebar_1-review_forms_1-progress_bar": {
       "completed": 0,
       "unmarking": 0,
-      "marking": 719,
+      "marking": 0,
       "total": 719
     },
-    "main_sidebar_1-review_forms_1-save_review_error": ""
+    "main_sidebar_1-review_forms_1-save_review_error": {
+      "message": "Requires review",
+      "call": "NULL",
+      "type": [
+        "shiny.silent.error",
+        "validation"
+      ]
+    }
   }
 }
