@@ -36,6 +36,7 @@
 - Display all rows for tables where `Scroller` is disabled.
 - Tables with continuous data now show reason for missing data again when this information is new, instead of showing `NA`. 
 - Fixed ordering for adverse events when bold HTML tags are added. Adverse events now show the newest event first again by default.
+- Fixed issue that newly added columns for the SAE table do not show up
 
 ## Developer notes
 
