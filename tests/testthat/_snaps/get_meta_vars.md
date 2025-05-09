@@ -15,14 +15,14 @@
                 "ae_ctcae_severity" "ae_ctcae_severity_worsening" 
                AE Treatment related           AE Treatment action 
              "ae_treatment_related"         "ae_treatment_action" 
-              Serious Adverse Event            SAE Awareness date 
-            "serious_adverse_event"          "sae_awareness_date" 
-                     SAE Start date                  SAE End date 
-                   "sae_start_date"                "sae_end_date" 
-                       SAE Category                   SAE outcome 
-                     "sae_category"                 "sae_outcome" 
-                  SAE Date of death              SAE Death reason 
-                "sae_date_of_death"            "sae_death_reason" 
+              Serious Adverse Event                SAE Start date 
+            "serious_adverse_event"              "sae_start_date" 
+                       SAE End date                  SAE Category 
+                     "sae_end_date"                "sae_category" 
+                 SAE Awareness date             SAE Date of death 
+               "sae_awareness_date"           "sae_date_of_death" 
+                   SAE Death reason 
+                 "sae_death_reason" 
       
       $items$`CBC regular`
         Haemoglobin   Haematocrit     Platelets   Neutrophils   Lymphocytes 
