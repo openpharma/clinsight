@@ -10,6 +10,10 @@ describe(
       height = 955    
     )
     withr::defer(app$stop())
+    # To count checkboxes with specific characteristics with custom JS:
+    count_AE_checkboxes <- "$('#cf_adverse_events-review_form_tbl-table input[type=\"checkbox\"]%s').length"
+    count_SAE_checkboxes <- "$('#cf_adverse_events-review_form_SAE_tbl-table input[type=\"checkbox\"]%s').length"
+    count_VS_checkboxes <- "$('#sf_vital_signs-review_form_tbl-table input[type=\"checkbox\"]%s').length"
     it(
       "Scenario 1 - Save form-level review. 
             Given a fixed random test data set with all data marked as not yet reviewed, 
@@ -26,16 +30,15 @@ describe(
         app$wait_for_idle()
         expect_equal(app$get_value(export = "active_form"), "Adverse events")
         expect_equal(app$get_value(export = "active_participant"), "BEL_04_772")
-        expect_equal(
-          app$get_js('$("#cf_adverse_events-review_form_tbl-table input[type=\'checkbox\']").length'),
-          5
-        )
+        
+        expect_equal(app$get_js(sprintf(count_SAE_checkboxes, "")), 0)
+        expect_equal(app$get_js(sprintf(count_AE_checkboxes, "")), 5)
+
         app$set_inputs("main_sidebar_1-review_forms_1-review_type" = "form")
         app$wait_for_idle(1000)
-        expect_equal(
-          app$get_js('$("#cf_adverse_events-review_form_tbl-table input[type=\'checkbox\']").length'),
-          77
-        )
+        
+        expect_equal(app$get_js(sprintf(count_SAE_checkboxes, "")), 13)
+        expect_equal(app$get_js(sprintf(count_AE_checkboxes, "")), 77)
         app$wait_for_idle()
         expect_equal(app$get_value(input = "cf_adverse_events-show_all_data"), TRUE)
         expect_equal(app$get_value(output = "form_level_review"), TRUE)
@@ -43,10 +46,10 @@ describe(
         app$set_inputs("main_sidebar_1-review_forms_1-form_reviewed" = TRUE)
         app$wait_for_idle()
         #All checkboxes should now be checked:
-        expect_equal(
-          app$get_js('$("#cf_adverse_events-review_form_tbl-table input[type=\'checkbox\']:checked").length'),
-          77
-        )
+        
+        expect_equal(app$get_js(sprintf(count_SAE_checkboxes, ":checked")), 13)
+        expect_equal(app$get_js(sprintf(count_AE_checkboxes, ":checked")), 77)
+        
         app$click("main_sidebar_1-review_forms_1-save_review")
         app$wait_for_idle()
         # Warning/confirmation should show up:
@@ -99,10 +102,9 @@ describe(
         app$run_js('$("#main_sidebar_1-review_forms_1-form_reviewed").click()')
         app$wait_for_idle()
         # No checkboxes should now be checked:
-        expect_equal(
-          app$get_js('$("#cf_adverse_events-review_form_tbl-table input[type=\'checkbox\']:checked").length'),
-          0
-        )
+        expect_equal(app$get_js(sprintf(count_SAE_checkboxes, ":checked")), 0)
+        expect_equal(app$get_js(sprintf(count_AE_checkboxes, ":checked")), 0)
+        
         app$click("main_sidebar_1-review_forms_1-save_review")
         app$wait_for_idle()
         modal_text <- app$get_js('$("#main_sidebar_1-review_forms_1-confirm_save_modal").text()') |> 
