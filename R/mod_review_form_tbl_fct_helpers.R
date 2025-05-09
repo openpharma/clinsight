@@ -101,10 +101,11 @@ adjust_ae_form_table <- function(
       dplyr::select(
         dplyr::any_of(
           c("row_review_status", "subject_id","form_repeat", "Name", "AESI",  
-            "SAE Start date", "SAE End date")),
+            "SAE Start date", "SAE End date")
+        ),
         dplyr::everything(),
         -dplyr::any_of(c("start date", "end date", "Serious Adverse Event"))
-        ) |>
+      ) |>
       adjust_colnames("^SAE ")
   } else {
     with(data, data[!grepl("Yes", `Serious Adverse Event`),]) |> 
