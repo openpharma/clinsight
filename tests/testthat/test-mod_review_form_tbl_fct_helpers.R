@@ -199,8 +199,8 @@ describe("adjust_ae_form_table() works as expected", {
     SAE_cols <- c("subject_id","form_repeat", "Name", "AESI",  
                   "Start date", "End date", "CTCAE severity", 
                   "Treatment related", "Treatment action",  
-                  "Category","Awareness date", "outcome",
-                  "Date of death", "Death reason")
+                  "Category","Awareness date", "Date of death", 
+                  "Death reason")
     
     output <- adjust_ae_form_table(ae_table, is_SAE = TRUE)
   
