@@ -1,0 +1,23 @@
+{
+  "input": {
+    "main_sidebar_1-review_forms_1-confirm_saving": 1
+  },
+  "output": {
+    "form_level_review": true,
+    "main_sidebar_1-navigate_forms_1-form_name": "<center>Vital signs<\/center>",
+    "main_sidebar_1-review_forms_1-progress_bar": {
+      "completed": 478,
+      "unmarking": 0,
+      "marking": 0,
+      "total": 478
+    },
+    "main_sidebar_1-review_forms_1-save_review_error": {
+      "message": "Form already reviewed",
+      "call": "NULL",
+      "type": [
+        "shiny.silent.error",
+        "validation"
+      ]
+    }
+  }
+}
