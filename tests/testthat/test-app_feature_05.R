@@ -127,6 +127,10 @@ describe(
           app$get_js('$("#cf_medication-review_form_tbl-table input[type=\'checkbox\']:not(:checked)").length'),
           89
         )
+        count_checkboxes <- "$('#cf_medication-review_form_tbl-table input[type=\"checkbox\"]%s').length"
+        #Only 7 medications of BEL_08_45 should have enabled checkboxes
+        expect_equal(app$get_js(sprintf(count_checkboxes, ":is(:disabled)")), 83)
+        expect_equal(app$get_js(sprintf(count_checkboxes, ":not(:disabled)")), 7)
         
         output_names <- names(app$get_values(output = TRUE)$output)
         ## snapshot 003:
