@@ -29,6 +29,7 @@
 - Tables in all forms now keep showing data of the active subject first by default, even when changing table view to show all subject's data in the table.
 - Engineered a `study_name` field in `meta$settings` to display an official study name in the app.
 - Renamed some internal review record objects for improved clarity (#202)
+- Added options to review on form level. With form-level review, subject-level graphics and tiles will be hidden, and all data will be shown in the tables, and review is enable on all rows. All data in a form can be reviewed at once; if a user tries to do so, an additional confirmation will be requested.
 
 ## Bug fixes
 
