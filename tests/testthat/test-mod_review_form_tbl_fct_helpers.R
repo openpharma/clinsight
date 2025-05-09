@@ -201,4 +201,26 @@ describe("adjust_ae_form_table() works as expected", {
     expect_true(is.data.frame(output))
     expect_equal(names(output)[order(names(output))], SAE_cols[order(SAE_cols)])
   })
+  it("allows to add additional SAE columns if defined in the metadata", {
+    appdata <- clinsightful_data[clinsightful_data$item_group == "Adverse events", ] |> 
+      get_appdata()
+    form_items <- get_meta_vars(appdata)$items[["Adverse events"]]
+    ##### Add a new item:
+    form_items <- c(form_items, "Additional Item" = "additional_item")
+    
+    ae_table <- create_table(
+      appdata[["Adverse events"]], 
+      expected_columns = names(form_items)
+    )
+    SAE_cols <- c("subject_id","form_repeat", "Name", "AESI",  
+                  "Start date", "End date", "CTCAE severity", 
+                  "Treatment related", "Treatment action",  
+                  "Category","Awareness date", "Date of death", 
+                  "Death reason", "Additional Item")
+    
+    output <- adjust_ae_form_table(ae_table, is_SAE = TRUE)
+    
+    expect_true(is.data.frame(output))
+    expect_equal(names(output)[order(names(output))], SAE_cols[order(SAE_cols)])
+  })
 })
