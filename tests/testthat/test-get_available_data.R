@@ -1,10 +1,11 @@
 describe(
   paste0("get_available_data() creates a data frame with all available ", 
   "data per individual. It summarizes the available data points for each ", 
-  "individual for each time point. For study data forms, the data points ", 
-  "will be taken from event_name. For common forms, the Name column of the pivot ", 
+  "individual for each time point. For forms with a 'Name' column (mostly ",
+  "common_forms but can also be study data forms) the Name column of the pivot ", 
   "table data will be used (for example, the specific adverse event or ", 
-  "concomitant medication)"), 
+  "concomitant medication). For all other forms, the data points ", 
+  "will be taken from event_name."), 
   {
     appdata <- get_appdata(clinsightful_data)
     vars <- get_meta_vars(appdata)
