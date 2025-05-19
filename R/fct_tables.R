@@ -183,36 +183,41 @@ create_table.general <- function(
     data <-  data.frame(matrix(ncol = length(df_names))) |> 
       setNames(df_names)
   }
-
-  df <- data |> 
-    dplyr::filter(!item_name %in% c("DrugAdminDate", "DrugAdminDose")) |>
+  if("status" %in% names(data)){
+    keep_vars <- c(keep_vars, "status")
+  }
+  df <- with(data, data[!item_name %in% c("DrugAdminDate", "DrugAdminDose"),]) |>
     create_table.default(name_column, value_column, keep_vars, expected_columns)
-  
+  if(!"status" %in% names(df)){
+    df <- df |> 
+      dplyr::mutate(
+        status = ifelse(
+          is.na(Eligible), 
+          "Unknown",
+          ifelse(
+            Eligible == "No", 
+            "Screen failure", 
+            ifelse(
+              Eligible == "Yes",
+              "Enrolled",
+              Eligible
+            )
+          )
+        ),
+        status = ifelse(
+          !is.na(DiscontinuationDate),
+          ifelse(
+            is.na(DiscontinuationReason), 
+            "Discontinued", 
+            DiscontinuationReason
+          ),
+          status
+        )
+      )  
+  }
   df |> 
     dplyr::mutate(
-      status = ifelse(
-        is.na(Eligible), 
-        "Unknown",
-        ifelse(
-          Eligible == "No", 
-          "Screen failure", 
-          ifelse(
-            Eligible == "Yes",
-            "Enrolled",
-            Eligible
-          )
-        )
-      ),
-      status = ifelse(
-        !is.na(DiscontinuationDate),
-        ifelse(
-          is.na(DiscontinuationReason), 
-          "Discontinued", 
-          DiscontinuationReason
-          ),
-        status
-        ),
-      status_label = paste0(
+      status_label = status_label %|_|% paste0(
         "<b>", subject_id, "</b><br>",
         "<b>Sex:</b> ",    Sex, "<br>",
         "<b>Age:</b> ",    Age, "yrs.", "<br>",
