@@ -1,49 +1,47 @@
-# clinsight (development version)
+# clinsight 0.2.0
 
 ## Changed 
 
-- Generalized `merge_meta_with_data()` to allow user-defined processing functions.
-- Added a feature where, in applicable tables, a user can navigate to a form by double-clicking a table row.
-- Fixed warnings in `apply_edc_specific_changes` due to the use of a vector within `dplyr::select`.
-- Gave users ability to re-organized the column order in any table.
-- Added form type as a class to be used in `create_table()` to display tables.
-- Add a logging table to the DB for reviews.
-- Simplify pulling data from DB for reviews.
-- Review data by records IDs instead of subject & form
-- Improved generalization of event names for use in multiple studies.
-- Make query handling a configurable option
-- Changed the legend to display 'significance pending' instead of 'significance unknown'.
-- Added `Excel` download button to Queries table & patient listings that need review.
-- (For developers) From now on,the new Chrome headless browser mode will be used for `shinytest2` tests so that unit tests can be run with Chrome v132. 
-- The interactive timeline now has more consistent labels, will center an item on click, and has customizable treatment labels (by setting `settings$treatment_label` in the metadata).
-- (For developers) added raw data that can be used to completely recreate the internal dataset (`clinsightful_data`) with the merge functions in the package.
-- (For developers) refactored `mod_study_forms`, `mod_common_forms`, and `mod_review_forms_tbl`, so that they now only need data of one form instead of all study data. Moved some business logic for the form tables to helper functions for `mod_review_forms_tbl`. This reduces unnecessary refreshing of data after saving a review.
-- filters in mod_study_forms are now only triggered after a delay. This way, the filter will only trigger after finishing selecting/deselecting multiple items.
-- Removed some custom logic in `create_table` so that it does not interfere with item names being displayed in bold (when items are not yet reviewed).
-- Added functionality in metadata to merge item pairs into one item.
-- Removed some custom logic in `create_table` so that it does not interfere
-- Replaced default ClinSight Logo (displayed in app) to use a company-independent graphic, i.e. the design from the hex logo
-- Added `test_clinsight()` for developing and testing custom data and metadata for use with ClinSight.
-- The version of ClinSight will now show up in the application's sidebar.
-- Settings and data/clinsight information in the sidebar is now aligned at the bottom.
-- Tables in all forms now keep showing data of the active subject first by default, even when changing table view to show all subject's data in the table.
-- Engineered a `study_name` field in `meta$settings` to display an official study name in the app.
-- Renamed some internal review record objects for improved clarity (#202)
+- Added a feature where, in applicable tables, a user can navigate to a form by double-clicking a table row (#103).
+- Merging raw study data with metadata is made more flexible. It is now possible to run multiple user-defined, custom functions during the process of creating clinsight-compatible user data. These custom functions can be declared in the metadata's `settings` tab (#119, #120).
+- Functionality is added to declare item pairs in metadata that will be merged if needed. Useful to add additional information to a variable in a table that is only sometimes available (#171).
+- The standard interactive tables are now more flexible. For example, the columns can now be re-organized by the user (#124).
+- Added form type as a class to be used in `create_table()` to display tables, enabling more flexibility in creating study data tables.
+- The way data is stored and pulled from the database is simplified by leveraging native SQL table update logging mechanisms (#115, #135), and by reviewing records by IDs instead of subject and form    
+- Reviewing data is simplified by reviewing data by records IDs instead of subject & form (#135).
+- It is now much easier to select which event names should show up in the application and in which order. In addition, it is easier to edit the event's short and long labels (#140).
+- Query handling is now a configurable option (#156).
+- Figure legend is improved to display 'significance pending' instead of 'significance unknown' (#154).
+- It is now possible to enable a button for downloading tables in ClinSight (#153). 
+- The interactive timeline now has more consistent labels, will center an item on click, and has customizable treatment labels (by setting `settings$treatment_label` in the metadata) (#152).
+- Filters in mod_study_forms are now only triggered after a delay, improving the user experience when trying to select/deselect multiple items (#168).
+- A company-independent graphic is now shown as a logo in the top left corner (#184).
+- The version of ClinSight will now show up in the application's sidebar (#194).
+- Settings and data/clinsight information in the sidebar is now aligned at the bottom (#194).
+- Tables in all forms now keep showing data of the active subject first by default, even when changing table view to show all subject's data in the table (#190).
+- Engineered a `study_name` field in `meta$settings` to display an official study name in the app (#197).
 
 ## Bug fixes
 
-- The test-coverage GHA workflow is updated so that codecov uploads work again.
-- Display all rows for tables where `Scroller` is disabled.
-- Tables with continuous data now show reason for missing data again when this information is new, instead of showing `NA`. 
-- Fixed ordering for adverse events when bold HTML tags are added. Adverse events now show the newest event first again by default.
-- Fixed issue that newly added columns for the SAE table do not show up
+- The test-coverage GHA workflow is updated so that codecov uploads work again (#139).
+- Display all rows for tables where `Scroller` is disabled (#150).
+- Tables with continuous data now show reason for missing data again when this information is new, instead of showing `NA` (#168). 
+- Fixed ordering for adverse events when bold HTML tags are added. Adverse events now show the newest event first again by default (#168).
+- Fixed issue that newly added columns for the SAE table do not show up (#206).
+- Items that are not yet reviewed and are displayed in bold will now again show up as intended, by removing some custom logic in `create_table` (#168). 
+
 
 ## Developer notes
 
-- Added a more recent repo snapshot for `chromote` v0.5.0 used in Shiny tests
-- Added two helper functions (`create_clinsight_metadata()` and `create_clinsight_config`) to create custom `ClinSight` metadata and config files.
-- Added a feature test for row level review.
-- Added a "deploy" profile for deployments. Includes additional dependencies not included in the "deploy_minimal" profile for deployments utilizing `shinymanager` or the `app.R` file, while being more restrictive than the "full" profile.
+- Added a more recent repo snapshot for `chromote` v0.5.0 used in Shiny tests (#180). This [resolves errors](https://github.com/rstudio/chromote/issues/204) when using the latest version of Chrome (v135 or later) for shinytest2 tests. 
+- Added the `test_clinsight()` function for developing and testing custom data and metadata for use with ClinSight (#185).
+- From now on,the new Chrome headless browser mode will be used for `shinytest2` tests so that unit tests can be run with Chrome v132 or later (#161). 
+- Added raw data that can be used to completely recreate the internal dataset (`clinsightful_data`) with the merge functions in the package (#162).
+- Refactored `mod_study_forms`, `mod_common_forms`, and `mod_review_forms_tbl`, so that they now only need data of one form instead of all study data. Moved some business logic for the form tables to helper functions for `mod_review_forms_tbl`. This reduces unnecessary refreshing of data after saving a review.
+- Added two helper functions (`create_clinsight_metadata()` and `create_clinsight_config`) to create custom `ClinSight` metadata and config files (#175).
+- Added a feature test for row level review (#182).
+- Added a "deploy" profile for deployments. Includes additional dependencies not included in the "deploy_minimal" profile for deployments utilizing `shinymanager` or the `app.R` file, while being more restrictive than the "full" profile (#191).
+- Renamed some internal review record objects for improved clarity (#202).
 
 # clinsight 0.1.1
 
