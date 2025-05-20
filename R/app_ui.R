@@ -5,8 +5,9 @@
 #' @export
 #'
 app_ui <- function(request){
+  meta <- golem::get_golem_options("meta")
   tagList(
-    golem_add_external_resources(),
+    golem_add_external_resources(study_name = meta$settings$study_name %||% "Study"),
     shinyjs::useShinyjs(),
     bslib::page_navbar(
       id = "main_tabs",
@@ -20,8 +21,9 @@ app_ui <- function(request){
         ),
       bg = "#43464c",
       title = tags$a(
-        href = "/",
-        tags$img(src='www/logo_in_app_w_margin.png', height = '45')
+        href = "https://openpharma.github.io/clinsight/",
+        target = "_blank",
+        tags$img(src='www/logo_in_app_w_margin_wide.png', height = '40')
       ), 
       sidebar = bslib::sidebar(mod_main_sidebar_ui("main_sidebar_1"), fillable = TRUE),
       header =   conditionalPanel(
@@ -64,7 +66,7 @@ app_ui <- function(request){
 #' resources inside the Shiny application.
 #'
 #' @noRd
-golem_add_external_resources <- function() {
+golem_add_external_resources <- function(study_name) {
   add_resource_path(
     "www",
     app_sys("app/www")
@@ -73,7 +75,7 @@ golem_add_external_resources <- function() {
     favicon(),
     bundle_resources(
       path = app_sys("app/www"),
-      app_title = "clinsight"
+      app_title = paste("ClinSight", study_name)
     )
     # Add here other external resources
     # for example, you can add shinyalert::useShinyalert()

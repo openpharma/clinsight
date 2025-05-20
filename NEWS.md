@@ -29,6 +29,7 @@
 - Tables in all forms now keep showing data of the active subject first by default, even when changing table view to show all subject's data in the table.
 - Engineered a `study_name` field in `meta$settings` to display an official study name in the app.
 - Renamed some internal review record objects for improved clarity (#202)
+- Improved branding with new ClinSight Logo, added favicon, and allowed for study logos, when available
 
 ## Bug fixes
 
