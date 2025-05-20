@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">clinsight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1.9026</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,45 +42,52 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/openpharma/clinsight/blob/ls_docs_from_dev/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/openpharma/clinsight/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="development version" id="clinsight-development-version">clinsight (development version)<a class="anchor" aria-label="anchor" href="#clinsight-development-version"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.2.0" id="clinsight-020">clinsight 0.2.0<a class="anchor" aria-label="anchor" href="#clinsight-020"></a></h2>
 <div class="section level3">
-<h3 id="changed-development-version">Changed<a class="anchor" aria-label="anchor" href="#changed-development-version"></a></h3>
-<ul><li>Generalized <code><a href="../reference/merge_meta_with_data.html">merge_meta_with_data()</a></code> to allow user-defined processing functions.</li>
-<li>Added a feature where, in applicable tables, a user can navigate to a form by double-clicking a table row.</li>
-<li>Fixed warnings in <code>apply_edc_specific_changes</code> due to the use of a vector within <code><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">dplyr::select</a></code>.</li>
-<li>Gave users ability to re-organized the column order in any table.</li>
-<li>Added form type as a class to be used in <code><a href="../reference/create_table.html">create_table()</a></code> to display tables.</li>
-<li>Add a logging table to the DB for reviews.</li>
-<li>Simplify pulling data from DB for reviews.</li>
-<li>Review data by records IDs instead of subject &amp; form</li>
-<li>Make query handling a configurable option</li>
-<li>Changed the legend to display ‘significance pending’ instead of ‘significance unknown’.</li>
-<li>Added <code>Excel</code> download button to Queries table &amp; patient listings that need review.</li>
-<li>(For developers) From now on,the new Chrome headless browser mode will be used for <code>shinytest2</code> tests so that unit tests can be run with Chrome v132.</li>
-<li>The interactive timeline now has more consistent labels, will center an item on click, and has customizable treatment labels (by setting <code>settings$treatment_label</code> in the metadata).</li>
-<li>(For developers) added raw data that can be used to completely recreate the internal dataset (<code>clinsightful_data</code>) with the merge functions in the package.</li>
-<li>(For developers) refactored <code>mod_study_forms</code>, <code>mod_common_forms</code>, and <code>mod_review_forms_tbl</code>, so that they now only need data of one form instead of all study data. Moved some business logic for the form tables to helper functions for <code>mod_review_forms_tbl</code>. This reduces unnecessary refreshing of data after saving a review.</li>
-<li>filters in mod_study_forms are now only triggered after a delay. This way, the filter will only trigger after finishing selecting/deselecting multiple items.</li>
-<li>Removed some custom logic in <code>create_table</code> so that it does not interfere</li>
-<li>Replaced default ClinSight Logo (displayed in app) to use a company-independent graphic, i.e. the design from the hex logo</li>
-<li>Added <code><a href="../reference/test_clinsight.html">test_clinsight()</a></code> for developing and testing custom data and metadata for use with ClinSight.</li>
+<h3 id="changed-0-2-0">Changed<a class="anchor" aria-label="anchor" href="#changed-0-2-0"></a></h3>
+<ul><li>Added a feature where, in applicable tables, a user can navigate to a form by double-clicking a table row (<a href="https://github.com/openpharma/clinsight/issues/103" class="external-link">#103</a>).</li>
+<li>Merging raw study data with metadata is made more flexible. It is now possible to run multiple user-defined, custom functions during the process of creating clinsight-compatible user data. These custom functions can be declared in the metadata’s <code>settings</code> tab (<a href="https://github.com/openpharma/clinsight/issues/119" class="external-link">#119</a>, <a href="https://github.com/openpharma/clinsight/issues/120" class="external-link">#120</a>).</li>
+<li>Functionality is added to declare item pairs in metadata that will be merged if needed. Useful to add additional information to a variable in a table that is only sometimes available (<a href="https://github.com/openpharma/clinsight/issues/171" class="external-link">#171</a>).</li>
+<li>The standard interactive tables are now more flexible. For example, the columns can now be re-organized by the user (<a href="https://github.com/openpharma/clinsight/issues/124" class="external-link">#124</a>).</li>
+<li>Added form type as a class to be used in <code><a href="../reference/create_table.html">create_table()</a></code> to display tables, enabling more flexibility in creating study data tables.</li>
+<li>The way data is stored and pulled from the database is simplified by leveraging native SQL table update logging mechanisms (<a href="https://github.com/openpharma/clinsight/issues/115" class="external-link">#115</a>, <a href="https://github.com/openpharma/clinsight/issues/135" class="external-link">#135</a>), and by reviewing records by IDs instead of subject and form<br></li>
+<li>Reviewing data is simplified by reviewing data by records IDs instead of subject &amp; form (<a href="https://github.com/openpharma/clinsight/issues/135" class="external-link">#135</a>).</li>
+<li>It is now much easier to select which event names should show up in the application and in which order. In addition, it is easier to edit the event’s short and long labels (<a href="https://github.com/openpharma/clinsight/issues/140" class="external-link">#140</a>).</li>
+<li>Query handling is now a configurable option (<a href="https://github.com/openpharma/clinsight/issues/156" class="external-link">#156</a>).</li>
+<li>Figure legend is improved to display ‘significance pending’ instead of ‘significance unknown’ (<a href="https://github.com/openpharma/clinsight/issues/154" class="external-link">#154</a>).</li>
+<li>It is now possible to enable a button for downloading tables in ClinSight (<a href="https://github.com/openpharma/clinsight/issues/153" class="external-link">#153</a>).</li>
+<li>The interactive timeline now has more consistent labels, will center an item on click, and has customizable treatment labels (by setting <code>settings$treatment_label</code> in the metadata) (<a href="https://github.com/openpharma/clinsight/issues/152" class="external-link">#152</a>).</li>
+<li>Filters in mod_study_forms are now only triggered after a delay, improving the user experience when trying to select/deselect multiple items (<a href="https://github.com/openpharma/clinsight/issues/168" class="external-link">#168</a>).</li>
+<li>A company-independent graphic is now shown as a logo in the top left corner (<a href="https://github.com/openpharma/clinsight/issues/184" class="external-link">#184</a>).</li>
+<li>The version of ClinSight will now show up in the application’s sidebar (<a href="https://github.com/openpharma/clinsight/issues/194" class="external-link">#194</a>).</li>
+<li>Settings and data/clinsight information in the sidebar is now aligned at the bottom (<a href="https://github.com/openpharma/clinsight/issues/194" class="external-link">#194</a>).</li>
+<li>Tables in all forms now keep showing data of the active subject first by default, even when changing table view to show all subject’s data in the table (<a href="https://github.com/openpharma/clinsight/issues/190" class="external-link">#190</a>).</li>
+<li>Engineered a <code>study_name</code> field in <code>meta$settings</code> to display an official study name in the app (<a href="https://github.com/openpharma/clinsight/issues/197" class="external-link">#197</a>).</li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
-<ul><li>The test-coverage GHA workflow is updated so that codecov uploads work again.</li>
-<li>Display all rows for tables where <code>Scroller</code> is disabled.</li>
-<li>Tables with continuous data now show reason for missing data again when this information is new, instead of showing <code>NA</code>.</li>
-<li>Fixed ordering for adverse events when bold HTML tags are added. Adverse events now show the newest event first again by default.</li>
+<h3 id="bug-fixes-0-2-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-2-0"></a></h3>
+<ul><li>The test-coverage GHA workflow is updated so that codecov uploads work again (<a href="https://github.com/openpharma/clinsight/issues/139" class="external-link">#139</a>).</li>
+<li>Display all rows for tables where <code>Scroller</code> is disabled (<a href="https://github.com/openpharma/clinsight/issues/150" class="external-link">#150</a>).</li>
+<li>Tables with continuous data now show reason for missing data again when this information is new, instead of showing <code>NA</code> (<a href="https://github.com/openpharma/clinsight/issues/168" class="external-link">#168</a>).</li>
+<li>Fixed ordering for adverse events when bold HTML tags are added. Adverse events now show the newest event first again by default (<a href="https://github.com/openpharma/clinsight/issues/168" class="external-link">#168</a>).</li>
+<li>Fixed issue that newly added columns for the SAE table do not show up (<a href="https://github.com/openpharma/clinsight/issues/206" class="external-link">#206</a>).</li>
+<li>Items that are not yet reviewed and are displayed in bold will now again show up as intended, by removing some custom logic in <code>create_table</code> (<a href="https://github.com/openpharma/clinsight/issues/168" class="external-link">#168</a>).</li>
 </ul></div>
 <div class="section level3">
-<h3 id="developer-notes-development-version">Developer notes<a class="anchor" aria-label="anchor" href="#developer-notes-development-version"></a></h3>
-<ul><li>Added a more recent repo snapshot for <code>chromote</code> v0.5.0 used in Shiny tests</li>
-<li>Added two helper functions (<code><a href="../reference/create_clinsight_metadata.html">create_clinsight_metadata()</a></code> and <code>create_clinsight_config</code>) to create custom <code>ClinSight</code> metadata and config files.</li>
-<li>Added a feature test for row level review.</li>
+<h3 id="developer-notes-0-2-0">Developer notes<a class="anchor" aria-label="anchor" href="#developer-notes-0-2-0"></a></h3>
+<ul><li>Added a more recent repo snapshot for <code>chromote</code> v0.5.0 used in Shiny tests (<a href="https://github.com/openpharma/clinsight/issues/180" class="external-link">#180</a>). This <a href="https://github.com/rstudio/chromote/issues/204" class="external-link">resolves errors</a> when using the latest version of Chrome (v135 or later) for shinytest2 tests.</li>
+<li>Added the <code><a href="../reference/test_clinsight.html">test_clinsight()</a></code> function for developing and testing custom data and metadata for use with ClinSight (<a href="https://github.com/openpharma/clinsight/issues/185" class="external-link">#185</a>).</li>
+<li>From now on,the new Chrome headless browser mode will be used for <code>shinytest2</code> tests so that unit tests can be run with Chrome v132 or later (<a href="https://github.com/openpharma/clinsight/issues/161" class="external-link">#161</a>).</li>
+<li>Added raw data that can be used to completely recreate the internal dataset (<code>clinsightful_data</code>) with the merge functions in the package (<a href="https://github.com/openpharma/clinsight/issues/162" class="external-link">#162</a>).</li>
+<li>Refactored <code>mod_study_forms</code>, <code>mod_common_forms</code>, and <code>mod_review_forms_tbl</code>, so that they now only need data of one form instead of all study data. Moved some business logic for the form tables to helper functions for <code>mod_review_forms_tbl</code>. This reduces unnecessary refreshing of data after saving a review.</li>
+<li>Added two helper functions (<code><a href="../reference/create_clinsight_metadata.html">create_clinsight_metadata()</a></code> and <code>create_clinsight_config</code>) to create custom <code>ClinSight</code> metadata and config files (<a href="https://github.com/openpharma/clinsight/issues/175" class="external-link">#175</a>).</li>
+<li>Added a feature test for row level review (<a href="https://github.com/openpharma/clinsight/issues/182" class="external-link">#182</a>).</li>
+<li>Added a “deploy” profile for deployments. Includes additional dependencies not included in the “deploy_minimal” profile for deployments utilizing <code>shinymanager</code> or the <code>app.R</code> file, while being more restrictive than the “full” profile (<a href="https://github.com/openpharma/clinsight/issues/191" class="external-link">#191</a>).</li>
+<li>Renamed some internal review record objects for improved clarity (<a href="https://github.com/openpharma/clinsight/issues/202" class="external-link">#202</a>).</li>
 </ul></div>
 </div>
     <div class="section level2">

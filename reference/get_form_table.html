@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">clinsight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1.9026</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,7 +42,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Get form table</h1>
-      <small class="dont-index">Source: <a href="https://github.com/openpharma/clinsight/blob/ls_docs_from_dev/R/mod_review_form_tbl_fct_helpers.R" class="external-link"><code>R/mod_review_form_tbl_fct_helpers.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/openpharma/clinsight/blob/main/R/mod_review_form_tbl_fct_helpers.R" class="external-link"><code>R/mod_review_form_tbl_fct_helpers.R</code></a></small>
       <div class="d-none name"><code>get_form_table.Rd</code></div>
     </div>
 
@@ -58,7 +58,7 @@
 <span>  <span class="va">form</span>,</span>
 <span>  <span class="va">form_items</span>,</span>
 <span>  <span class="va">active_subject</span>,</span>
-<span>  is_reviewed <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  pending_form_review_status <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  is_SAE <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  id_cols <span class="op">=</span> <span class="va">idx_cols</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -88,9 +88,11 @@
 <dd><p>A character string with the active subject id.</p></dd>
 
 
-<dt id="arg-is-reviewed">is_reviewed<a class="anchor" aria-label="anchor" href="#arg-is-reviewed"></a></dt>
-<dd><p>A logical, indicating whether all items of the entire form
-for the active subject id are reviewed.</p></dd>
+<dt id="arg-pending-form-review-status">pending_form_review_status<a class="anchor" aria-label="anchor" href="#arg-pending-form-review-status"></a></dt>
+<dd><p>A logical, indicating whether all items of
+the entire form for the active subject id are reviewed. Note that the
+logical can have three statuses, namely TRUE (=reviewed), FALSE (=not
+reviewed), and indeterminate (=partially reviewed).</p></dd>
 
 
 <dt id="arg-is-sae">is_SAE<a class="anchor" aria-label="anchor" href="#arg-is-sae"></a></dt>

@@ -19,7 +19,7 @@ in-depth information.'><meta property="og:image" content="https://openpharma.git
 
     <a class="navbar-brand me-2" href="../index.html">clinsight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1.9026</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,7 +54,7 @@ in-depth information.'><meta property="og:image" content="https://openpharma.git
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Application Metadata</h1>
-      <small class="dont-index">Source: <a href="https://github.com/openpharma/clinsight/blob/ls_docs_from_dev/R/data.R" class="external-link"><code>R/data.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/openpharma/clinsight/blob/main/R/data.R" class="external-link"><code>R/data.R</code></a></small>
       <div class="d-none name"><code>metadata.Rd</code></div>
     </div>
 
@@ -85,14 +85,22 @@ in-depth information.</p>
 <span><span class="co">#&gt;  $ column_names   : tibble [10 x 2] (S3: tbl_df/tbl/data.frame)</span></span>
 <span><span class="co">#&gt;   ..$ name_raw: chr [1:10] "SiteCode" "SubjectId" "EventId" "EventDate" ...</span></span>
 <span><span class="co">#&gt;   ..$ name_new: chr [1:10] "site_code" "subject_id" "event_id" "event_date" ...</span></span>
-<span><span class="co">#&gt;  $ events         : tibble [19 x 3] (S3: tbl_df/tbl/data.frame)</span></span>
-<span><span class="co">#&gt;   ..$ event_number: chr [1:19] "0" "1" "2" "3" ...</span></span>
-<span><span class="co">#&gt;   ..$ event_name  : chr [1:19] "Screening" "Visit 1" "Visit 2" "Visit 3" ...</span></span>
-<span><span class="co">#&gt;   ..$ event_label : chr [1:19] "V0" "V1" "V2" "V3" ...</span></span>
-<span><span class="co">#&gt;  $ common_forms   :'data.frame':  50 obs. of  3 variables:</span></span>
-<span><span class="co">#&gt;   ..$ item_name : chr [1:50] "AE Number" "AE Name" "AESI" "AE start date" ...</span></span>
-<span><span class="co">#&gt;   ..$ item_type : chr [1:50] "other" "other" "other" "other" ...</span></span>
-<span><span class="co">#&gt;   ..$ item_group: chr [1:50] "Adverse events" "Adverse events" "Adverse events" "Adverse events" ...</span></span>
+<span><span class="co">#&gt;  $ events         : tibble [10 x 10] (S3: tbl_df/tbl/data.frame)</span></span>
+<span><span class="co">#&gt;   ..$ event_id               : chr [1:10] "SCR" "VIS1" "VIS2" "VIS3" ...</span></span>
+<span><span class="co">#&gt;   ..$ event_id_pattern       : chr [1:10] "^SCR$" "^VIS1$" "^VIS2$" "^VIS3$" ...</span></span>
+<span><span class="co">#&gt;   ..$ is_regular_visit       : logi [1:10] TRUE TRUE TRUE TRUE TRUE TRUE ...</span></span>
+<span><span class="co">#&gt;   ..$ event_label_custom     : chr [1:10] NA "V1" "V2" "V3" ...</span></span>
+<span><span class="co">#&gt;   ..$ event_name_custom      : chr [1:10] "Screening" "Visit 1" "Visit 2" "Visit 3" ...</span></span>
+<span><span class="co">#&gt;   ..$ is_baseline_event      : logi [1:10] TRUE FALSE FALSE FALSE FALSE FALSE ...</span></span>
+<span><span class="co">#&gt;   ..$ generate_labels        : logi [1:10] FALSE FALSE FALSE FALSE FALSE FALSE ...</span></span>
+<span><span class="co">#&gt;   ..$ meta_event_order       : int [1:10] 1 2 3 4 5 6 7 8 9 10</span></span>
+<span><span class="co">#&gt;   ..$ add_visit_number       : logi [1:10] FALSE FALSE FALSE FALSE FALSE FALSE ...</span></span>
+<span><span class="co">#&gt;   ..$ add_event_repeat_number: logi [1:10] FALSE FALSE FALSE FALSE FALSE FALSE ...</span></span>
+<span><span class="co">#&gt;  $ common_forms   :'data.frame':  44 obs. of  4 variables:</span></span>
+<span><span class="co">#&gt;   ..$ item_name : chr [1:44] "AE Number" "AE Name" "AESI" "AE start date" ...</span></span>
+<span><span class="co">#&gt;   ..$ item_type : chr [1:44] "other" "other" "other" "other" ...</span></span>
+<span><span class="co">#&gt;   ..$ item_group: chr [1:44] "Adverse events" "Adverse events" "Adverse events" "Adverse events" ...</span></span>
+<span><span class="co">#&gt;   ..$ merge_with: chr [1:44] NA NA NA NA ...</span></span>
 <span><span class="co">#&gt;  $ study_forms    :'data.frame':  29 obs. of  6 variables:</span></span>
 <span><span class="co">#&gt;   ..$ item_name  : chr [1:29] "Systolic blood pressure" "Diastolic blood pressure" "Pulse" "Resp" ...</span></span>
 <span><span class="co">#&gt;   ..$ item_type  : chr [1:29] "continuous" "continuous" "continuous" "continuous" ...</span></span>
@@ -117,16 +125,16 @@ in-depth information.</p>
 <span><span class="co">#&gt;   ..$ post_pivot_fns : chr "apply_edc_specific_changes"</span></span>
 <span><span class="co">#&gt;   ..$ post_merge_fns : chr "apply_study_specific_fixes"</span></span>
 <span><span class="co">#&gt;   ..$ treatment_label: chr "💊 Tₓ"</span></span>
-<span><span class="co">#&gt;  $ items_expanded : tibble [221 x 9] (S3: tbl_df/tbl/data.frame)</span></span>
-<span><span class="co">#&gt;   ..$ form_type  : chr [1:221] "common_forms" "common_forms" "common_forms" "common_forms" ...</span></span>
-<span><span class="co">#&gt;   ..$ var        : chr [1:221] "AE_AESPID" "AE_AETERM" "AE_AESI" "AE_AESTDAT" ...</span></span>
-<span><span class="co">#&gt;   ..$ suffix     : chr [1:221] NA NA NA NA ...</span></span>
-<span><span class="co">#&gt;   ..$ item_name  : chr [1:221] "AE Number" "AE Name" "AESI" "AE start date" ...</span></span>
-<span><span class="co">#&gt;   ..$ item_type  : chr [1:221] "other" "other" "other" "other" ...</span></span>
-<span><span class="co">#&gt;   ..$ item_group : chr [1:221] "Adverse events" "Adverse events" "Adverse events" "Adverse events" ...</span></span>
-<span><span class="co">#&gt;   ..$ unit       : chr [1:221] NA NA NA NA ...</span></span>
-<span><span class="co">#&gt;   ..$ lower_limit: chr [1:221] NA NA NA NA ...</span></span>
-<span><span class="co">#&gt;   ..$ upper_limit: chr [1:221] NA NA NA NA ...</span></span></code></pre><p></p></div>
+<span><span class="co">#&gt;  $ items_expanded : tibble [220 x 9] (S3: tbl_df/tbl/data.frame)</span></span>
+<span><span class="co">#&gt;   ..$ form_type  : chr [1:220] "common_forms" "common_forms" "common_forms" "common_forms" ...</span></span>
+<span><span class="co">#&gt;   ..$ var        : chr [1:220] "AE_AESPID" "AE_AETERM" "AE_AESI" "AE_AESTDAT" ...</span></span>
+<span><span class="co">#&gt;   ..$ suffix     : chr [1:220] NA NA NA NA ...</span></span>
+<span><span class="co">#&gt;   ..$ item_name  : chr [1:220] "AE Number" "AE Name" "AESI" "AE start date" ...</span></span>
+<span><span class="co">#&gt;   ..$ item_type  : chr [1:220] "other" "other" "other" "other" ...</span></span>
+<span><span class="co">#&gt;   ..$ item_group : chr [1:220] "Adverse events" "Adverse events" "Adverse events" "Adverse events" ...</span></span>
+<span><span class="co">#&gt;   ..$ unit       : chr [1:220] NA NA NA NA ...</span></span>
+<span><span class="co">#&gt;   ..$ lower_limit: chr [1:220] NA NA NA NA ...</span></span>
+<span><span class="co">#&gt;   ..$ upper_limit: chr [1:220] NA NA NA NA ...</span></span></code></pre><p></p></div>
 </div>
 
     </div>

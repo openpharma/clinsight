@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">clinsight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1.9026</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,7 +68,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Introduction to ClinSight</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/openpharma/clinsight/blob/ls_docs_from_dev/vignettes/clinsight.Rmd" class="external-link"><code>vignettes/clinsight.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/openpharma/clinsight/blob/main/vignettes/clinsight.Rmd" class="external-link"><code>vignettes/clinsight.Rmd</code></a></small>
       <div class="d-none name"><code>clinsight.Rmd</code></div>
     </div>
 
@@ -175,7 +175,7 @@ that can be converted to <code>ClinSight</code>-compatible input
 data.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">raw_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_raw_csv_data.html">get_raw_csv_data</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"raw_data"</span>, package <span class="op">=</span> <span class="st">"clinsight"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Adding synch time ' 2025-04-17 11:18:46 UTC ' as the attribute 'synch_time' to the data set.</span></span>
+<span><span class="co">#&gt; Adding synch time ' 2025-05-20 16:27:52 UTC ' as the attribute 'synch_time' to the data set.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">raw_data</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 13</span></span></span>
 <span><span class="co">#&gt;   SiteCode SubjectId  EventSeq EventId EventName EventDate FormId SubjectFormSeq</span></span>
@@ -204,7 +204,33 @@ object with the raw data using the function
 error message if an incompatible change was made.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">merged_study_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/merge_meta_with_data.html">merge_meta_with_data</a></span><span class="op">(</span><span class="va">raw_data</span>, <span class="va">meta_custom</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Using user supplied "suffix_names" instead of deriving.</span></span></code></pre></div>
+<span><span class="co">#&gt; applying function 'identity' to the data</span></span>
+<span><span class="co">#&gt; order can be derived from metadata</span></span>
+<span><span class="co">#&gt; Created the following event_label and event_name combinations:</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 9 × 2</span></span></span>
+<span><span class="co">#&gt;   event_label event_name</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> SCR         Screening </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> V1          Visit 1   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> V2          Visit 2   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> V3          Visit 3   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> V4          Visit 4   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> V5          Visit 5   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span> V6          Visit 6   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span> <span style="color: #BB0000;">NA</span>          Any visit </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">9</span> <span style="color: #BB0000;">NA</span>          Exit      </span></span>
+<span><span class="co">#&gt; applying function 'apply_study_specific_suffix_fixes' to the data</span></span>
+<span><span class="co">#&gt; Using user supplied "suffix_names" instead of deriving.</span></span>
+<span><span class="co">#&gt; applying function 'apply_edc_specific_changes' to the data</span></span>
+<span><span class="co">#&gt; Using suffix '_ITEM_TO_MERGE_WITH_PAIR' to detect item pairs</span></span>
+<span><span class="co">#&gt; Verifying if following items need merging with their defined pair: </span></span>
+<span><span class="co">#&gt;   CM Name, CM Frequency, AE Treatment action, CM Unit, CM Route</span></span>
+<span><span class="co">#&gt; merging item 'CM Name' with its matched pair</span></span>
+<span><span class="co">#&gt; merging item 'CM Frequency' with its matched pair</span></span>
+<span><span class="co">#&gt; merging item 'AE Treatment action' with its matched pair</span></span>
+<span><span class="co">#&gt; merging item 'CM Unit' with its matched pair</span></span>
+<span><span class="co">#&gt; merging item 'CM Route' with its matched pair</span></span>
+<span><span class="co">#&gt; applying function 'apply_study_specific_fixes' to the data</span></span></code></pre></div>
 <p>Finally, we can test launch ClinSight with our custom data and
 metadata:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">

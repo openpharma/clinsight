@@ -9,7 +9,7 @@ boxes on the top of the screen."><meta property="og:image" content="https://open
 
     <a class="navbar-brand me-2" href="../index.html">clinsight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1.9026</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,7 +44,7 @@ boxes on the top of the screen."><meta property="og:image" content="https://open
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Header widgets - Shiny module Server</h1>
-      <small class="dont-index">Source: <a href="https://github.com/openpharma/clinsight/blob/ls_docs_from_dev/R/mod_header_widgets.R" class="external-link"><code>R/mod_header_widgets.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/openpharma/clinsight/blob/main/R/mod_header_widgets.R" class="external-link"><code>R/mod_header_widgets.R</code></a></small>
       <div class="d-none name"><code>mod_header_widgets_server.Rd</code></div>
     </div>
 
@@ -55,7 +55,7 @@ boxes on the top of the screen.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mod_header_widgets_server</span><span class="op">(</span><span class="va">id</span>, <span class="va">r</span>, <span class="va">rev_data</span>, <span class="va">navinfo</span>, <span class="va">events</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mod_header_widgets_server</span><span class="op">(</span><span class="va">id</span>, <span class="va">r</span>, <span class="va">rev_data</span>, <span class="va">navinfo</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -79,12 +79,6 @@ Server.</p></dd>
 <dd><p>Reactive values created with <code><a href="https://rdrr.io/pkg/shiny/man/reactiveValues.html" class="external-link">shiny::reactiveValues()</a></code>. Used
 to send back information about the page change to the server, when clicking
 on the adverse event box.</p></dd>
-
-
-<dt id="arg-events">events<a class="anchor" aria-label="anchor" href="#arg-events"></a></dt>
-<dd><p>Data frame containing all events. Used to extract the right
-labels for the visits in the compact timeline in the header_widgets. See
-<code><a href="fig_timeline.html">fig_timeline()</a></code>.</p></dd>
 
 </dl></div>
     <div class="section level2">

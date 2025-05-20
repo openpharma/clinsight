@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">clinsight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1.9026</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,7 +68,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>App Configuration &amp; Input Data Specifications</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/openpharma/clinsight/blob/ls_docs_from_dev/vignettes/data_spec.Rmd" class="external-link"><code>vignettes/data_spec.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/openpharma/clinsight/blob/main/vignettes/data_spec.Rmd" class="external-link"><code>vignettes/data_spec.Rmd</code></a></small>
       <div class="d-none name"><code>data_spec.Rmd</code></div>
     </div>
 
@@ -167,20 +167,19 @@ that data:</p>
 <span><span class="co"># data("clinsightful_data") </span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">clinsight</span><span class="fu">::</span><span class="va"><a href="../reference/clinsightful_data.html">clinsightful_data</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 24</span></span></span>
-<span><span class="co">#&gt;   site_code subject_id event_id  event_date event_repeat form_id form_repeat</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> BEL04     BEL_04_133 COMMON_CM 2023-06-23            1 CM                1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> BEL04     BEL_04_133 COMMON_CM 2023-06-23            1 CM                1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> BEL04     BEL_04_133 COMMON_CM 2023-06-23            1 CM                1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> BEL04     BEL_04_133 COMMON_CM 2023-06-23            1 CM                1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> BEL04     BEL_04_133 COMMON_CM 2023-06-23            1 CM                1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> BEL04     BEL_04_133 COMMON_CM 2023-06-23            1 CM                1</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 17 more variables: edit_date_time &lt;dttm&gt;, day &lt;drtn&gt;, vis_day &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   vis_num &lt;dbl&gt;, event_name &lt;chr&gt;, event_label &lt;chr&gt;, form_type &lt;chr&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   item_name &lt;chr&gt;, item_type &lt;chr&gt;, item_group &lt;chr&gt;, item_unit &lt;chr&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   lower_lim &lt;dbl&gt;, upper_lim &lt;dbl&gt;, item_value &lt;chr&gt;, significance &lt;chr&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   reason_notdone &lt;chr&gt;, region &lt;chr&gt;</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 22</span></span></span>
+<span><span class="co">#&gt;   site_code subject_id event_id event_date event_repeat form_id form_repeat</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> BEL04     BEL_04_133 SCR      2023-06-05            1 DM                1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> BEL04     BEL_04_133 SCR      2023-06-05            1 DM                1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> BEL04     BEL_04_133 SCR      2023-06-05            1 DM                1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> BEL04     BEL_04_133 SCR      2023-06-05            1 DM                1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> BEL04     BEL_04_133 SCR      2023-06-05            1 DM                1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> BEL04     BEL_04_133 SCR      2023-06-05            1 ECOG              1</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 15 more variables: edit_date_time &lt;dttm&gt;, day &lt;drtn&gt;, event_name &lt;chr&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   event_label &lt;fct&gt;, form_type &lt;chr&gt;, item_name &lt;chr&gt;, item_type &lt;chr&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   item_group &lt;chr&gt;, item_unit &lt;chr&gt;, lower_lim &lt;dbl&gt;, upper_lim &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   item_value &lt;chr&gt;, significance &lt;chr&gt;, reason_notdone &lt;chr&gt;, region &lt;chr&gt;</span></span></span></code></pre></div>
 <p>This object is an example of a healthy <code>study_data</code>
 object, that should preferably be stored as an RDS file prior to
 launching the app. let’s inspect it a little more:</p>
@@ -360,24 +359,27 @@ example metadata file, run the following chunk of code:</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> FormId    form_id     </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $events</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 3</span></span></span>
-<span><span class="co">#&gt;   event_number event_name event_label</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 0            Screening  V0         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 1            Visit 1    V1         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 2            Visit 2    V2         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 3            Visit 3    V3         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 4            Visit 4    V4         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 5            Visit 5    V5         </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 10</span></span></span>
+<span><span class="co">#&gt;   event_id event_id_pattern is_regular_visit event_label_custom</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> SCR      ^SCR$            TRUE             <span style="color: #BB0000;">NA</span>                </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> VIS1     ^VIS1$           TRUE             V1                </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> VIS2     ^VIS2$           TRUE             V2                </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> VIS3     ^VIS3$           TRUE             V3                </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> VIS4     ^VIS4$           TRUE             V4                </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> VIS5     ^VIS5$           TRUE             V5                </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 6 more variables: event_name_custom &lt;chr&gt;, is_baseline_event &lt;lgl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   generate_labels &lt;lgl&gt;, meta_event_order &lt;int&gt;, add_visit_number &lt;lgl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   add_event_repeat_number &lt;lgl&gt;</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $common_forms</span></span>
-<span><span class="co">#&gt;              item_name item_type     item_group</span></span>
-<span><span class="co">#&gt; 1            AE Number     other Adverse events</span></span>
-<span><span class="co">#&gt; 2              AE Name     other Adverse events</span></span>
-<span><span class="co">#&gt; 3                 AESI     other Adverse events</span></span>
-<span><span class="co">#&gt; 4        AE start date     other Adverse events</span></span>
-<span><span class="co">#&gt; 5          AE end date     other Adverse events</span></span>
-<span><span class="co">#&gt; 6 AE date of worsening     other Adverse events</span></span>
+<span><span class="co">#&gt;              item_name item_type     item_group merge_with</span></span>
+<span><span class="co">#&gt; 1            AE Number     other Adverse events       &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 2              AE Name     other Adverse events       &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 3                 AESI     other Adverse events       &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 4        AE start date     other Adverse events       &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 5          AE end date     other Adverse events       &lt;NA&gt;</span></span>
+<span><span class="co">#&gt; 6 AE date of worsening     other Adverse events       &lt;NA&gt;</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $study_forms</span></span>
 <span><span class="co">#&gt;                       item_name  item_type  item_group        unit lower_limit</span></span>

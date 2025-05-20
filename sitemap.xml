@@ -12,6 +12,7 @@
 <url><loc>https://openpharma.github.io/clinsight/authors.html</loc></url>
 <url><loc>https://openpharma.github.io/clinsight/index.html</loc></url>
 <url><loc>https://openpharma.github.io/clinsight/news/index.html</loc></url>
+<url><loc>https://openpharma.github.io/clinsight/reference/add_events_to_data.html</loc></url>
 <url><loc>https://openpharma.github.io/clinsight/reference/add_missing_columns.html</loc></url>
 <url><loc>https://openpharma.github.io/clinsight/reference/add_timevars_to_data.html</loc></url>
 <url><loc>https://openpharma.github.io/clinsight/reference/adjust_colnames.html</loc></url>
@@ -26,6 +27,8 @@
 <url><loc>https://openpharma.github.io/clinsight/reference/bind_rows_custom.html</loc></url>
 <url><loc>https://openpharma.github.io/clinsight/reference/check_appdata.html</loc></url>
 <url><loc>https://openpharma.github.io/clinsight/reference/clean_dates.html</loc></url>
+<url><loc>https://openpharma.github.io/clinsight/reference/clean_event_metadata.html</loc></url>
+<url><loc>https://openpharma.github.io/clinsight/reference/clean_merge_pair_metadata.html</loc></url>
 <url><loc>https://openpharma.github.io/clinsight/reference/clinsight-package.html</loc></url>
 <url><loc>https://openpharma.github.io/clinsight/reference/clinsightful_data.html</loc></url>
 <url><loc>https://openpharma.github.io/clinsight/reference/collapse_column_vals.html</loc></url>
@@ -88,6 +91,8 @@
 <url><loc>https://openpharma.github.io/clinsight/reference/index.html</loc></url>
 <url><loc>https://openpharma.github.io/clinsight/reference/initialize_credentials.html</loc></url>
 <url><loc>https://openpharma.github.io/clinsight/reference/is_date.html</loc></url>
+<url><loc>https://openpharma.github.io/clinsight/reference/merge_item_pair.html</loc></url>
+<url><loc>https://openpharma.github.io/clinsight/reference/merge_item_pairs_by_suffix.html</loc></url>
 <url><loc>https://openpharma.github.io/clinsight/reference/merge_meta_with_data.html</loc></url>
 <url><loc>https://openpharma.github.io/clinsight/reference/metadata.html</loc></url>
 <url><loc>https://openpharma.github.io/clinsight/reference/mod_common_forms_server.html</loc></url>
