@@ -278,14 +278,35 @@ app_server <- function(
       req(with(pwd_mngt, must_change[user == res_auth[["user"]]]) == "FALSE") 
     }
     
-    output[["study_name"]] <-  renderText({
+    output[["study_name_display"]] <-  renderUI({
+      # If study_name is NULL, Set it to an empty string
       study_name <- meta$settings$study_name %||% ""
-      if (nchar(study_name) > 40){
-        paste0(trimws(substr(study_name, 1, 37)), "...")
+      
+      # create potential path to study_logo file so we can search for them
+      study_logo <- paste0('www/study_logos/',tolower(meta$settings$study_name %||% "org_logo"),".png")
+      
+      # if logo available - whether for study or org, use that. "org_logo.png"
+      # will show up by default when study_name is NULL.
+      if(file.exists(file.path(app_sys(), "app", study_logo))) {
+        tags$a(tags$img(src=study_logo, height = '40'))
       } else {
-        study_name
+        # no study logo available - use text output
+        study_name_shown <- if (nchar(study_name) > 40){
+          paste0(trimws(substr(study_name, 1, 37)), "...")
+        } else {
+          study_name
+        }
+        tags$h3(study_name_shown, class = "text-secondary")
       }
     })
+      renderText({
+        study_name <- meta$settings$study_name %||% ""
+        if (nchar(study_name) > 40){
+          paste0(trimws(substr(study_name, 1, 37)), "...")
+        } else {
+          study_name
+        }
+      })
     
     mod_main_sidebar_server(
       id = "main_sidebar_1",

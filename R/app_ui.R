@@ -44,7 +44,8 @@ app_ui <- function(request){
       ),
       bslib::nav_spacer(),
       bslib::nav_item(
-        tags$h3(textOutput("study_name"), class = "text-secondary")
+        shiny::uiOutput("study_name_display")
+        # tags$h3(textOutput("study_name"), class = "text-secondary")
       ),
       bslib::nav_spacer(),
       bslib::nav_panel(
