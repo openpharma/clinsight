@@ -21,8 +21,7 @@ app_ui <- function(request){
         ),
       bg = "#43464c",
       title = tags$a(
-        href = "https://openpharma.github.io/clinsight/",
-        target = "_blank",
+        href = "/",
         tags$img(src='www/logo_in_app_w_margin_wide.png', height = '40')
       ), 
       sidebar = bslib::sidebar(mod_main_sidebar_ui("main_sidebar_1"), fillable = TRUE),
