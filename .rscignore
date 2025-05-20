@@ -5,3 +5,5 @@ man
 .Rprofile
 data-raw
 .github
+docs
+pkgdown

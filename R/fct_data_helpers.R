@@ -29,6 +29,17 @@ get_metadata <- function(
   meta <- lapply(sheets, function(x){
     readxl::read_excel(filepath, sheet = x, col_types = "text")
   })
+  
+  meta$settings <- meta$settings |> 
+    lapply(\(x) as.character(na.omit(x))) |> 
+    Filter(f = length)
+  
+  meta$settings$treatment_label <- meta$settings$treatment_label %||% "\U1F48A T\U2093" |> 
+    # So that raw Unicode will be converted correctly:
+    sprintf(fmt = '"%s"') |>
+    str2expression() |>
+    as.character()
+  
   if(length(expand_tab_items[nchar(expand_tab_items) > 0 ] ) == 0) return(meta)
   if("items_expanded" %in% names(meta)) warning({
     "Table 'items_expanded' already present. The old table will be overwritten."
@@ -44,22 +55,24 @@ get_metadata <- function(
     stop(stop_message)
   }
   
+  ### Verify and clean items_expanded
   meta$items_expanded <- meta[expand_tab_items] |> 
-    dplyr::bind_rows() |> 
+    dplyr::bind_rows(.id = "form_type") |> 
     expand_columns(
       columns = expand_cols,
       separator = ",",
       unite_with = "var",
       remove_cols = FALSE
     ) 
-  
-  # Verify and clean form-level data:
+  ### Verify and clean form-level data:
   meta[["form_level_data"]] <- get_form_level_data(
     meta[["form_level_data"]], 
     all_forms = unique(meta$items_expanded$item_group)
   )
   
-  # verify if all required columns are available and if not create them:
+  ## Verify and clean event data:
+  meta[["events"]] <- clean_event_metadata(meta[["events"]])
+  
   missing_cols <- required_meta_cols[!required_meta_cols %in% names(meta$items_expanded)]
   if(length(missing_cols) != 0){
     warning(
@@ -70,7 +83,8 @@ get_metadata <- function(
     )
     meta$items_expanded <- add_missing_columns(meta$items_expanded, missing_cols)
   }
-  
+  meta[["items_expanded"]] <- clean_merge_pair_metadata(meta[["items_expanded"]])
+    
   lapply(setNames(nm = names(meta)), \(x){
     if(!x %in% expand_tab_items) return(meta[[x]])
     meta[[x]] |> 
@@ -123,61 +137,6 @@ rename_raw_data <- function(
   df[!is.na(df$subject_id), ]
 }
 
-#' Add time vars to raw data
-#'
-#' @param data A data frame 
-#'
-#' @return A data frame, with derivative time and event variables, needed for
-#'   ClinSight to function properly.
-#'
-#' @keywords internal
-add_timevars_to_data <- function(
-    data
-){
-  stopifnot("[data] should be a data frame" = is.data.frame(data))
-  missing_new_cols <- required_col_names[!required_col_names %in% names(data)] |> 
-    paste0(collapse = ", ")
-  if(nchar(missing_new_cols) > 0) stop(
-    paste0("The following columns are missing while they are required:\n", 
-           missing_new_cols, ".")
-  )
-  
-  df <- data |>
-    dplyr::mutate(
-      edit_date_time = as.POSIXct(edit_date_time, tz = "UTC"),
-      event_date = as.Date(event_date),
-      day = event_date - min(event_date, na.rm = TRUE), 
-      vis_day = ifelse(event_id %in% c("SCR", "VIS", "VISEXT", "VISVAR", "FU1", "FU2"), day, NA),
-      vis_num = as.numeric(factor(vis_day))-1,
-      event_name = dplyr::case_when(
-        event_id == "SCR"    ~ "Screening",
-        event_id %in% c("VIS", "VISEXT", "VISVAR")    ~ paste0("Visit ", vis_num),
-        grepl("^FU[[:digit:]]+", event_id)  ~ paste0("Visit ", vis_num, "(FU)"),
-        event_id == "UN"     ~ paste0("Unscheduled visit ", event_repeat),
-        event_id == "EOT"    ~ "EoT",
-        event_id == "EXIT"   ~ "Exit",
-        form_id %in% c("AE", "CM", "CP", "MH", "MH", "MHTR", "PR", "ST", "CMTR", "CMHMA") ~ "Any visit",
-        TRUE                ~ paste0("Other (", event_name, ")")
-      ),
-      event_label = dplyr::case_when(
-        !is.na(vis_num)   ~ paste0("V", vis_num),
-        event_id == "UN"   ~ paste0("UV", event_repeat),
-        TRUE              ~ event_name
-      ),
-      .by = subject_id
-    ) |> 
-    dplyr::arrange(
-      factor(site_code, levels = order_string(site_code)),
-      factor(subject_id, levels = order_string(subject_id))
-    )
-  if(any(grepl("^Other ", df$event_name))) warning(
-    "Undefined Events detected. Please verify data before proceeding."
-  )
-  df
-}
-
-
-
 #' Correct multiple choice variables
 #'
 #' In some EDC systems, if there is a multiple choice variable in which multiple
@@ -199,13 +158,15 @@ add_timevars_to_data <- function(
 #'
 #' @return data frame with corrected multiple choice variables
 #' @examples
+#' \dontrun{
 #'  df <- data.frame(
 #'   ID = "Subj1",
 #'   var = c("Age", paste0("MH_TRT", 1:4)),
 #'   item_value = as.character(c(95, 67, 58, 83, 34))
 #'  )
 #'  fix_multiple_choice_vars(df, common_vars = "ID")
-#' @export
+#' }
+#' @keywords internal
 #' 
 fix_multiple_choice_vars <- function(
     data,
@@ -277,7 +238,7 @@ fix_multiple_choice_vars <- function(
 #' @param meta List. metadata to use.
 #'
 #' @return a list with all important names to be used in a clinical trial.
-#' @export
+#' @keywords internal
 #'
 get_meta_vars <- function(data = appdata, meta = metadata){
   stopifnot(inherits(data, "list"))
@@ -285,9 +246,8 @@ get_meta_vars <- function(data = appdata, meta = metadata){
   if(length(data) == 0) stop("Empty list with data provided")
   vars <- list()
   # add metadata variables:
-  vars$events <- setNames(meta$events$event_label, meta$events$event_name)
-  
   vars$items <- meta$items_expanded |> 
+    subset(!grepl("_ITEM_TO_MERGE_WITH_PAIR$", item_name)) |> 
     dplyr::distinct(item_name, item_group) |> 
     split(~item_group) |> 
     lapply(\(x){setNames(simplify_string(x$item_name), x$item_name)})
@@ -440,10 +400,12 @@ get_base_value <- function(
 #' removing the pattern from the data frame names).
 #'
 #' @return A data frame with adjusted column names.
-#' @export
+#' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' adjust_colnames(head(iris), "^Sepal", "Flower")
+#' }
 adjust_colnames <- function(
     data,
     pattern,
@@ -466,10 +428,12 @@ adjust_colnames <- function(
 #'
 #' @return A data frame with at least all the columns named in `columns`. 
 #' The added columns will be of class `character`. 
-#' @export
+#' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' add_missing_columns(head(iris), c("important_column1", "important_column2"))
+#' }
 add_missing_columns <- function(
     data,
     columns
@@ -509,9 +473,8 @@ add_missing_columns <- function(
 #' @param rename_vars An optional named character vector. If provided, it will
 #'   rename any column names found in this vector to the provided name.
 #' @param title Optional. Character string with the title of the table.
-#' @param selection See [DT::datatable()]. Default set to 'single'. 
+#' @param selection See [DT::datatable()]. Default set to 'single'.
 #' @param extensions See [DT::datatable()]. Default set to 'Scroller'.
-#' @param plugins See [DT::datatable()]. Default set to 'scrollResize'.
 #' @param dom See \url{https://datatables.net/reference/option/dom}. A div
 #'   element will be inserted before the table for the table title. Default set
 #'   to 'fti' resulting in 'f<"header h5">ti'.
@@ -523,42 +486,63 @@ add_missing_columns <- function(
 #'     * `deferREnder = TRUE`
 #'     * `scrollResize = TRUE`
 #'     * `scrollCollapse = TRUE`
+#'     * `colReorder = TRUE`
 #'   * Non-modifiable defaults:
 #'     * `dom`: Defined by the `dom` parameter.
 #'     * `initComplete`: Defaults to a function to insert table title into dataTable container.
+#' @param allow_listing_download Logical, whether to allow the user to download
+#'   the table as an Excel file. Defaults to the `allow_listing_download`
+#'   configuration option in `golem-config.yml`, but can be overwritten here if
+#'   needed.
+#' @param export_label Character string with the table export label. Only used
+#'   for downloadable tables (if `allow_listing_download` is `TRUE`).
 #' @param ... Other optional arguments that will be passed to [DT::datatable()].
 #'
 #' @return A `DT::datatable` object.
-#' @export
+#' @keywords internal
 #'
-#' @examples datatable_custom(mtcars)
+#' @examples 
+#' \dontrun{
+#' datatable_custom(mtcars)
+#' }
 datatable_custom <- function(
     data, 
     rename_vars = NULL, 
     title = NULL, 
     selection = "single",
-    extensions = "Scroller",
-    plugins = "scrollResize",
+    extensions = c("Scroller", "ColReorder"),
     dom = "fti",
     options = list(),
+    allow_listing_download = NULL,
+    export_label = NULL,
     ...
     ){
   stopifnot(is.data.frame(data))
+  colnames <- names(data)
   if(!is.null(rename_vars)){
     stopifnot(is.character(rename_vars))
-    data <- dplyr::rename(data, dplyr::any_of(rename_vars))
+    colnames <- dplyr::rename(data[0,], dplyr::any_of(rename_vars)) |> 
+      names()
   }
   stopifnot(is.null(title) | is.character(title))
   stopifnot(grepl("t", dom, fixed = TRUE))
   stopifnot(is.list(options))
+  allow_listing_download <- allow_listing_download %||% 
+    get_golem_config("allow_listing_download")
+  stopifnot(is.null(allow_listing_download) | is.logical(allow_listing_download))
+  stopifnot(is.null(export_label) | is.character(export_label))
   
   default_opts <- list(
     scrollY = 400,
     scrollX = TRUE,
     scroller = TRUE,
     deferRender = TRUE,
-    scrollResize = TRUE,
-    scrollCollapse = TRUE
+    scrollCollapse = TRUE,
+    colReorder = list(
+      enable = TRUE,
+      realtime = FALSE,
+      fixedColumnsLeft = 1
+    )
   )
   fixed_opts <- list(
     initComplete = DT::JS(
@@ -572,6 +556,20 @@ datatable_custom <- function(
       ),
     dom = gsub(pattern = "(t)", replacement = '<"header h5">\\1', dom)
   )
+  
+  # This will conditionally add a download button to the table
+  if(nrow(data) > 0 & isTRUE(allow_listing_download)) {
+    export_label <- export_label %||% "_label.missing_"
+    extensions <- c("Buttons", extensions)
+    fixed_opts[["buttons"]] <- list(list(
+      extend = 'excel',
+      text = '<i class="fa-solid fa-download"></i>',
+      filename = paste("clinsight", export_label, sep = "."),
+      title = paste0(export_label, " | extracted from ClinSight")
+    ))
+    fixed_opts[["dom"]] <- paste0('B', fixed_opts[["dom"]])
+  }
+  
   opts <- default_opts |>
     modifyList(options) |>
     modifyList(fixed_opts)
@@ -581,7 +579,7 @@ datatable_custom <- function(
     selection = selection,
     options = opts,
     extensions = extensions,
-    plugins = plugins,
+    colnames = colnames,
     ...
   ) 
 }

@@ -51,17 +51,49 @@ create_table.default <- function(
   stopifnot(is.character(keep_vars))
   stopifnot(is.character(name_column))
   stopifnot(is.character(value_column))
+  if ("reviewed" %in% names(data)) {
+    data <- add_row_review_status(data, keep_vars)
+    keep_vars <- c("row_review_status", keep_vars)
+  }
   df <- data[c(keep_vars, name_column, value_column)] |> 
     tidyr::pivot_wider(
       names_from = {{name_column}}, 
       values_from = {{value_column}}, 
       values_fn = ~paste0(., collapse = "; ")
-      ) 
+      )
   expected_columns <- na.omit(expected_columns) %||% character(0)
   if(length(expected_columns) == 0) return(df)
   add_missing_columns(df, expected_columns)[
     unique(c(keep_vars, expected_columns))
     ]
+}
+
+#' Add Overall Reviewed Field
+#'
+#' Adds a field to the data set summarizing the overall review status over the
+#' rows uniquely defined by the ID columns.
+#'
+#' @param data A data frame to mutate
+#' @param id_cols A set of columns that uniquely identify each observation
+#'
+#' @details This function servers as a helper to `create_table.default()`. If
+#' the field `reviewed` is contained in the data frame, an overall review status
+#' field will be added to the data frame. The field is a list consistent of two
+#' named elements: `reviewed` and `ids`. The `reviewed` field is `TRUE` if all
+#' records are reviewed, `FALSE` if all records are not reviewed, and `NA` if
+#' some records are reviewed and some are not. The `ids` field contains a vector
+#' of the IDs associated with the unique observation defined by `id_cols`.
+#' 
+#' @noRd
+add_row_review_status <- function(data, id_cols) {
+  dplyr::mutate(
+    data,
+    row_review_status = dplyr::case_when(
+      any(reviewed == "No") & any(reviewed == "Yes") ~ list(list(reviewed = NA, ids = id)),
+      any(reviewed == "Yes") ~ list(list(reviewed = TRUE, ids = id)),
+      .default = list(list(reviewed = FALSE, ids = id))
+    ),
+    .by = dplyr::all_of(id_cols))
 }
 
 
@@ -95,19 +127,35 @@ create_table.continuous <- function(
   }
   data[[unit_column]] <- tidyr::replace_na(data[[unit_column]], "")
   df <- data |> 
+    add_missing_columns("not_reviewed_but_missing") |> 
     dplyr::mutate(
+      not_reviewed_but_missing = ifelse(
+        is.na(not_reviewed_but_missing), 
+        FALSE, 
+        not_reviewed_but_missing
+      ) |> 
+        as.logical(),
       "{unit_column}" := ifelse(
-        is.na(.data[[value_column]]), "", .data[[unit_column]]
-        ),
+        is.na(.data[[value_column]]) | not_reviewed_but_missing, 
+        "", 
+        .data[[unit_column]]
+      ),
       "{value_column}" := as.character(.data[[value_column]]),
       "{value_column}" := dplyr::case_when(
-        is.na(.data[[value_column]]) & !.data[[explanation_column]] == "" ~ 
+        (is.na(.data[[value_column]]) | not_reviewed_but_missing) &
+          !.data[[explanation_column]] == "" ~ 
           paste0("missing (", .data[[explanation_column]], ")"),
         is.na(.data[[value_column]]) & .data[[explanation_column]] == ""  ~ 
           "missing (reason unknown)",
-        TRUE ~ .data[[value_column]]
+        .default =  .data[[value_column]]
+      ),
+      "{value_column}" := ifelse(
+        not_reviewed_but_missing,
+        paste0("<b>", .data[[value_column]], "*</b>"),
+        .data[[value_column]]
       )
-    ) |> 
+    ) |>
+    dplyr::select(-not_reviewed_but_missing) |> 
     tidyr::unite(col = "VAL", dplyr::all_of(c(value_column, unit_column)),  sep = " ") 
   create_table.default(data = df, name_column = name_column, 
                         value_column = "VAL", keep_vars = keep_vars, 
@@ -176,6 +224,23 @@ create_table.general <- function(
 }
 
 
+#' Create Default 'Common Events' Table
+#'
+#' @export
+#' @inherit create_table.default 
+create_table.common_forms <- function(
+    data, 
+    name_column = "item_name",
+    value_column = "item_value",
+    keep_vars = c("subject_id", "form_repeat"),
+    expected_columns = NULL,
+    ...
+){
+  create_table.default(data, name_column, value_column, 
+                       keep_vars, expected_columns)
+}
+
+
 #' Create Adverse Events table
 #'
 #' Function to create an adverse event dataset.
@@ -210,7 +275,6 @@ create_table.adverse_events <- function(
                              keep_vars, expected_columns) |> 
     adjust_colnames("^AE ") 
   df[["Number"]] <- NULL
-
   # create new row when an AE gets worse:
   df_worsening <- df[!is.na(df[[worsening_start_column]]), ] |> 
     dplyr::mutate(
@@ -237,8 +301,11 @@ create_table.adverse_events <- function(
         )
     ) |> 
     dplyr::bind_rows(df_worsening) |> 
-    dplyr::arrange(dplyr::desc(.data[["Serious Adverse Event"]]), 
-                   .data[["form_repeat"]], .data[["start date"]])
+    dplyr::arrange(
+      dplyr::desc(gsub("\\**<\\/*b>", "", .data[["Serious Adverse Event"]])), 
+      .data[["form_repeat"]], 
+      dplyr::desc(gsub("\\**<\\/*b>", "", .data[["start date"]]))
+    )
   df |> 
     dplyr::select(
       -dplyr::all_of(c(worsening_start_column, "CTCAE severity worsening"))
@@ -258,33 +325,29 @@ create_table.medication <- function(
     expected_columns = NULL,
     ...
 ){
+  expected_columns <- expected_columns |> 
+    c("CM Name", "CM Dose", "CM Frequency", "CM Route", "CM Start Date", 
+      "CM End Date", "CM Unit") |> 
+    unique()
   df <-  data |> 
     create_table.default(name_column, value_column, keep_vars, expected_columns) |> 
     adjust_colnames("^CM ") 
   df[["Number"]] <- NULL
-  df <- df |> 
-    dplyr::mutate(
-      `Unit`      = ifelse(!is.na(`Unit Other`), `Unit Other`, `Unit`),
-      `Frequency` = ifelse(!is.na(`Frequency Other`), `Frequency Other`, `Frequency`),
-      `Route`     = ifelse(!is.na(`Route Other`), `Route Other`, `Route`)
-    ) |> 
-    dplyr::select(-dplyr::ends_with("Other"))
-  
   df |> 
     dplyr::mutate(
-      Name = paste0(tools::toTitleCase(tolower(.data[["Active Ingredient"]])), " (",
-                    tools::toTitleCase(tolower(.data[["Trade Name"]])),
-                    ")"),
       Dose = paste0(.data[["Dose"]], " ", .data[["Unit"]], " ", 
                     .data[["Frequency"]], "; ", .data[["Route"]]),
       in_use = (is.na(.data[["End Date"]])) 
     ) |> 
-    dplyr::arrange(dplyr::desc(in_use), dplyr::desc(`Start Date`)) |> 
+    dplyr::arrange(
+      dplyr::desc(gsub("\\**<\\/*b>", "", .data[["in_use"]])), 
+      dplyr::desc(gsub("\\**<\\/*b>", "", .data[["Start Date"]]))
+      ) |> 
     dplyr::select(
+      dplyr::any_of("row_review_status"),
       dplyr::all_of(c(keep_vars, "Name")), 
       dplyr::everything(),
-      -dplyr::all_of(c("in_use", "Active Ingredient", "Trade Name", 
-                       "Unit", "Frequency", "Route"))
+      -dplyr::all_of(c("in_use", "Unit", "Frequency", "Route"))
     )
 }
 
@@ -306,8 +369,7 @@ create_table.medical_history <- function(
     adjust_colnames("^MH ") 
   df[["Number"]] <- NULL
     
-  df |> 
-    dplyr::mutate(Name = tools::toTitleCase(tolower(Name)))
+  df
 }
 
 #' Create Concomitant Procedures Table
@@ -352,13 +414,3 @@ create_table.bm_cytology <- function(
     )
 }
 
-# TODO: create a function like the one below. Not yet done due to time restrictions.
-# merge_other_category <- function(
-#     data, 
-#     name_column = "item_name",
-#     value_column = "item_value", 
-#     var_name = c(""), 
-#     var_name_other
-# ){
-#   
-# }

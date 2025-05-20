@@ -17,9 +17,10 @@
 #' @param y_title y axis title.
 #' @param x_title x-axis title.
 #'
-#' @export
+#' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' fig_data <- data.frame(
 #'  "site_code" = sample(c("Site 1", "Site 2"), 50, replace = TRUE),
 #'  "item_value" = runif(50, 1, 100),
@@ -34,6 +35,7 @@
 #'    y_title = "y-axis_title",
 #'    x_title = "x-axis_title"
 #'    )
+#' }
 fig_boxplots <- function(
     data, 
     xval = "site_code",
@@ -84,33 +86,23 @@ fig_boxplots <- function(
 #' Function to create a simple timeline figure using `ggplot2`.
 #'
 #' @param data Data frame to use.
-#' @param events Data frame containing information about all events. Used
-#'   to create the right labels in the timeline figure.
 #'
 #' @return A ggplot2 object.
-#' @export
+#' @keywords internal
 #' 
 fig_timeline <- function(
-    data, 
-    events
+    data
     ){
   stopifnot(is.data.frame(data))
-  stopifnot(is.data.frame(events))
   
-  completed_events <- data |> 
-    dplyr::filter(!is.na(event_name), 
-                  event_label %in% events$event_label) |> 
-    dplyr::slice_head(n = 1, by = c(event_name, item_name)) |>  # 051022 LSA ensures only one item per event
-    dplyr::count(event_name, event_label) |> 
-    dplyr::mutate(
-      event_label = factor(event_label, levels = events$event_label)
-    )
-  all_events <- events |> 
-    dplyr::mutate(event_name = factor(event_name, levels = event_name), 
-                  event_label = factor(event_label, levels = event_label))
-  uneven_events   <- all_events[1:length(all_events$event_name) %% 2 == 0, ]
-  even_events     <- all_events[1:length(all_events$event_name) %% 2 != 0, ]
+  labels_in_data <- unique(na.omit(data$event_label))
+  all_labels <- levels(data$event_label)
+  all_events <- data.frame(event_label = factor(all_labels, levels = all_labels))
   
+  completed_events <- all_events[
+    all_events$event_label %in% labels_in_data, , drop = FALSE]
+  uneven_events   <- all_events[1:length(all_events$event_label) %% 2 == 0, , drop = FALSE]
+  even_events     <- all_events[1:length(all_events$event_label) %% 2 != 0, , drop = FALSE]
  fig <- ggplot2::ggplot(
     mapping = ggplot2::aes(x = event_label, y = factor(1))
     ) +
@@ -179,24 +171,31 @@ fig_timeline <- function(
 #'   the point size in the figure.
 #'
 #' @return A faceted ggplot2 time series figure.
-#' @export
+#' @keywords internal
 #' @seealso [plotly_figure()]
 #' @examples
-#' set.seed(2023)
+#' \dontrun{
+#' set.seed(2025)
 #' mock_data <- lapply(paste0("Subject", 1:10) , \(x){
 #'   data.frame(
-#'    subject_id = x,
+#'     subject_id = x,
 #'     day = sample(1:25, 10),
 #'     item_name = sample(c("item1", "item2"), 10, replace = TRUE),
 #'     item_value = runif(10, 0 , 50),
-#'     significance = sample(names(col_palette), 10, replace = TRUE),
+#'     significance = sample(
+#'       c("limits unknown", "out of limits, clinically significant", 
+#'         "out of limits, clinically insignificant"), 
+#'       10, 
+#'       replace = TRUE
+#'     ),
 #'     text_label = "test text",
 #'     reviewed = sample(c("Yes", "No"), replace = TRUE)
 #'   )
 #' }) |>
 #'   dplyr::bind_rows()
 #' fig_timeseries(mock_data, id_to_highlight = "Subject10")
-#' 
+#' }
+
 fig_timeseries <- function(
     data, 
     xval = "day",
@@ -279,15 +278,17 @@ fig_timeseries <- function(
 #' @param y_lab Character string with the text on the y-axis.
 #'
 #' @return A ggplot2 object.
-#' @export
+#' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #'  df <- mtcars |>
 #'  dplyr::mutate(
 #'   fill_color = sample(c(TRUE, FALSE), 1),
 #'   .by = cyl
 #'   )
 #' fig_barplot(df, cyl, fill_color)
+#' }
 fig_barplot <- function(
     data, 
     x, 
@@ -318,7 +319,7 @@ fig_barplot <- function(
 #' @param height Height of the plot.
 #' @param ... Other variables, passed onto the figure functions that are called to create the plots.
 #'
-#' @export
+#' @keywords internal
 #' @seealso [fig_timeseries()], [fig_boxplots()]
 plotly_figure <- function(
     data, 

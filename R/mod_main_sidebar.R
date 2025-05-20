@@ -16,14 +16,22 @@ mod_main_sidebar_ui <- function(id){
           bslib::card_header(mod_navigate_forms_ui(ns("navigate_forms_1"))),
           htmltools::HTML("<br><br>"),
           mod_review_forms_ui(ns("review_forms_1")),
-          htmltools::HTML("<hr><br>"),
-          mod_query_add_ui(ns("write_query"))
+          if (isTRUE(get_golem_config("allow_query_inputs"))) {
+            tagList(
+              htmltools::HTML("<hr><br>"),
+              mod_query_add_ui(ns("write_query"))
+            )
+          }
         )
       )
     ),
-    htmltools::HTML("<br><br><br><br>"),
-    mod_review_config_ui(ns("review_config_1")),
-    mod_db_synch_info_ui(ns("synch_info"))
+    bslib::card_body(),
+    bslib::card_body(
+      fill = FALSE, 
+      mod_review_config_ui(ns("review_config_1")),
+      mod_db_synch_info_ui(ns("synch_info")),
+      textOutput(ns("clinsight_version"))
+      )
   )
 }
 
@@ -101,13 +109,15 @@ mod_main_sidebar_server <- function(
       )
     })
     
-    mod_query_add_server(
-      id = "write_query", 
-      r = r, 
-      active_form = reactive(navinfo$active_form), 
-      db_path = db_path, 
-      available_data = available_data
-    )
+    if (isTRUE(get_golem_config("allow_query_inputs"))) {
+      mod_query_add_server(
+        id = "write_query", 
+        r = r, 
+        active_form = reactive(navinfo$active_form), 
+        db_path = db_path, 
+        available_data = available_data
+      )
+    }
     
     mod_review_forms_server(
       id = "review_forms_1", 
@@ -138,6 +148,18 @@ mod_main_sidebar_server <- function(
       app_data = app_data,
       db_path = db_path
       )
+    
+    output[["clinsight_version"]] <- renderText({
+      if (golem::app_prod()){
+        tryCatch(
+          # More robust path, independent of golem-config.yml location:
+          paste0("V", pkg_version(path = dirname(app_sys("DESCRIPTION")))),
+          error = \(e) "version unknown"
+        )
+      } else {
+        "_dev_version_"
+      }
+    })
   })
 }
 

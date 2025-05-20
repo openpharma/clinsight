@@ -1,0 +1,321 @@
+{
+  "input": {
+    "cf_medication-review_form_tbl-table_review_selection": {
+      "id": [
+        891,
+        892,
+        893,
+        894,
+        895,
+        896,
+        897,
+        898,
+        899,
+        942
+      ],
+      "reviewed": [
+        "No",
+        "No",
+        "No",
+        "No",
+        "No",
+        "No",
+        "No",
+        "No",
+        "No",
+        "No"
+      ],
+      "row_id": [
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37,
+        37
+      ]
+    }
+  },
+  "output": {
+    "cf_medication-review_form_tbl-table": {
+      "x": {
+        "style": "bootstrap5",
+        "filter": "none",
+        "vertical": false,
+        "extensions": [
+          "Buttons",
+          "Scroller",
+          "ColReorder"
+        ],
+        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th>Review Status<\/th>\n      <th>Subject<\/th>\n      <th>N<\/th>\n      <th>Name<\/th>\n      <th>Indication<\/th>\n      <th>Dose<\/th>\n      <th>Start Date<\/th>\n      <th>Ongoing<\/th>\n      <th>End Date<\/th>\n      <th>Related Medical History<\/th>\n      <th>Related AE<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
+        "options": {
+          "scrollY": 400,
+          "scrollX": true,
+          "scroller": true,
+          "deferRender": true,
+          "scrollCollapse": true,
+          "colReorder": {
+            "enable": true,
+            "realtime": false,
+            "fixedColumnsLeft": 1
+          },
+          "columnDefs": [
+            {
+              "targets": 0,
+              "orderable": false,
+              "render": "checkboxRender"
+            },
+            {
+              "targets": 1,
+              "visible": false
+            },
+            {
+              "className": "dt-right",
+              "targets": 2
+            },
+            {
+              "name": "row_review_status",
+              "targets": 0
+            },
+            {
+              "name": "subject_id",
+              "targets": 1
+            },
+            {
+              "name": "form_repeat",
+              "targets": 2
+            },
+            {
+              "name": "Name",
+              "targets": 3
+            },
+            {
+              "name": "Indication",
+              "targets": 4
+            },
+            {
+              "name": "Dose",
+              "targets": 5
+            },
+            {
+              "name": "Start Date",
+              "targets": 6
+            },
+            {
+              "name": "Ongoing",
+              "targets": 7
+            },
+            {
+              "name": "End Date",
+              "targets": 8
+            },
+            {
+              "name": "Related Medical History",
+              "targets": 9
+            },
+            {
+              "name": "Related AE",
+              "targets": 10
+            }
+          ],
+          "rowCallback": "rowCallback",
+          "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"Medication\")\n}",
+          "dom": "Bf<\"header h5\">ti",
+          "buttons": [
+            {
+              "extend": "excel",
+              "text": "<i class=\"fa-solid fa-download\"><\/i>",
+              "filename": "clinsight.medication.BEL_08_45",
+              "title": "medication.BEL_08_45 | extracted from ClinSight"
+            }
+          ],
+          "order": [
+
+          ],
+          "autoWidth": false,
+          "orderClasses": false,
+          "ajax": {
+            "type": "POST",
+            "data": "function(d) {\nd.search.caseInsensitive = true;\nd.search.smart = true;\nd.escape = false;\nvar encodeAmp = function(x) { x.value = x.value.replace(/&/g, \"%26\"); }\nencodeAmp(d.search);\n$.each(d.columns, function(i, v) {encodeAmp(v.search);});\n}"
+          },
+          "serverSide": true,
+          "processing": true
+        },
+        "callback": "function(table) {\ncheckboxCallback(table);\n}",
+        "selection": {
+          "mode": "none",
+          "selected": null,
+          "target": "row",
+          "selectable": null
+        }
+      },
+      "evals": [
+        "options.columnDefs.0.render",
+        "options.rowCallback",
+        "options.initComplete",
+        "options.ajax.data",
+        "callback"
+      ],
+      "jsHooks": [
+
+      ],
+      "deps": [
+        {
+          "name": "jquery",
+          "version": "3.6.0",
+          "src": {
+            "href": "jquery-3.6.0"
+          },
+          "meta": null,
+          "script": "jquery-3.6.0.min.js",
+          "stylesheet": null,
+          "head": null,
+          "attachment": null,
+          "all_files": true
+        },
+        {
+          "name": "dt-core-bootstrap5",
+          "version": "1.13.6",
+          "src": {
+            "href": "dt-core-bootstrap5-1.13.6"
+          },
+          "meta": null,
+          "script": [
+            "js/jquery.dataTables.min.js",
+            "js/dataTables.bootstrap5.min.js"
+          ],
+          "stylesheet": "css/dataTables.bootstrap5.min.css",
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": false
+        },
+        {
+          "name": "bootstrap",
+          "version": "5.3.1",
+          "src": {
+            "href": "bootstrap-5.3.1"
+          },
+          "meta": {
+            "viewport": "width=device-width, initial-scale=1, shrink-to-fit=no"
+          },
+          "script": "bootstrap.bundle.min.js",
+          "stylesheet": "bootstrap.min.css",
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": true
+        },
+        {
+          "name": "bs3compat",
+          "version": "0.8.0",
+          "src": {
+            "href": "bs3compat-0.8.0"
+          },
+          "meta": null,
+          "script": [
+            "transition.js",
+            "tabs.js",
+            "bs3compat.js"
+          ],
+          "stylesheet": null,
+          "head": null,
+          "attachment": null,
+          "all_files": true
+        },
+        {
+          "name": "jszip",
+          "version": "1.13.6",
+          "src": {
+            "href": "jszip-1.13.6"
+          },
+          "meta": null,
+          "script": "jszip.min.js",
+          "stylesheet": null,
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": false
+        },
+        {
+          "name": "dt-ext-buttons-bootstrap5",
+          "version": "1.13.6",
+          "src": {
+            "href": "dt-ext-buttons-bootstrap5-1.13.6"
+          },
+          "meta": null,
+          "script": [
+            "js/dataTables.buttons.min.js",
+            "js/buttons.html5.min.js",
+            "js/buttons.colVis.min.js",
+            "js/buttons.print.min.js",
+            "js/buttons.bootstrap5.min.js"
+          ],
+          "stylesheet": "css/buttons.bootstrap5.min.css",
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": false
+        },
+        {
+          "name": "dt-ext-scroller-bootstrap5",
+          "version": "1.13.6",
+          "src": {
+            "href": "dt-ext-scroller-bootstrap5-1.13.6"
+          },
+          "meta": null,
+          "script": [
+            "js/dataTables.scroller.min.js",
+            "js/scroller.bootstrap5.min.js"
+          ],
+          "stylesheet": "css/scroller.bootstrap5.min.css",
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": false
+        },
+        {
+          "name": "dt-ext-colreorder-bootstrap5",
+          "version": "1.13.6",
+          "src": {
+            "href": "dt-ext-colreorder-bootstrap5-1.13.6"
+          },
+          "meta": null,
+          "script": [
+            "js/dataTables.colReorder.min.js",
+            "js/colReorder.bootstrap5.min.js"
+          ],
+          "stylesheet": "css/colReorder.bootstrap5.min.css",
+          "head": null,
+          "attachment": null,
+          "package": null,
+          "all_files": false
+        },
+        {
+          "name": "crosstalk",
+          "version": "1.2.1",
+          "src": {
+            "href": "crosstalk-1.2.1"
+          },
+          "meta": null,
+          "script": "js/crosstalk.min.js",
+          "stylesheet": "css/crosstalk.min.css",
+          "head": null,
+          "attachment": null,
+          "all_files": true
+        }
+      ]
+    },
+    "main_sidebar_1-navigate_forms_1-form_name": "<center><b>Medication<\/b><\/center>",
+    "main_sidebar_1-review_forms_1-progress_bar": {
+      "completed": 10,
+      "unmarking": 0,
+      "marking": 55,
+      "total": 65
+    },
+    "main_sidebar_1-review_forms_1-save_review_error": ""
+  }
+}

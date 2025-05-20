@@ -21,9 +21,9 @@ app_ui <- function(request){
       bg = "#43464c",
       title = tags$a(
         href = "/",
-        tags$img(src='www/gcp_logo.png', height = '40', width ='180')
+        tags$img(src='www/logo_in_app_w_margin.png', height = '45')
       ), 
-      sidebar = bslib::sidebar(mod_main_sidebar_ui("main_sidebar_1")),
+      sidebar = bslib::sidebar(mod_main_sidebar_ui("main_sidebar_1"), fillable = TRUE),
       header =   conditionalPanel(
         condition = "!['Start', 'Queries', 'Create Report'].includes(input.main_tabs)",
         mod_header_widgets_ui("header_widgets_1")
@@ -39,6 +39,10 @@ app_ui <- function(request){
       bslib::nav_panel(
         "Study data", 
         bslib::navset_tab(id = "study_data_tabs")
+      ),
+      bslib::nav_spacer(),
+      bslib::nav_item(
+        tags$h3(textOutput("study_name"), class = "text-secondary")
       ),
       bslib::nav_spacer(),
       bslib::nav_panel(

@@ -8,10 +8,12 @@
 #' @param timezone Timezone to use.
 #'
 #' @return A character string with time stamp in it.
-#' @export
+#' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' time_stamp()
+#' }
 time_stamp <- function(
     form = "%Y-%m-%d %H:%M:%S %Z", 
     timezone = "UTC"
@@ -40,14 +42,16 @@ time_stamp <- function(
 #' to search for the date object. 
 #'
 #' @return A date-time object of length 1.
-#' @export
+#' @keywords internal
 #'
 #' @examples 
+#' \dontrun{
 #' # example data:
 #' dfs <- lapply(1:10, \(x){data.frame(
 #'   "edit_date_time" = sample(seq(as.Date('1999/01/01'), as.Date('2000/01/01'), by="day"), 12)
 #'   )})
 #' get_max_time(dfs, "edit_date_time")
+#' }
 #'  
 get_max_time <- function(
     data, 
@@ -88,9 +92,10 @@ get_max_time <- function(
 #' to ensure that the information in `columns` is not lost. Can be a vector of logicals if multiple `columns` are used for expansion. 
 #'
 #' @return A data frame that usually will be longer than the original one.
-#' @export
+#' @keywords internal
 #' 
 #' @examples
+#' \dontrun{
 #'  df <- head(iris, n = 6) |> 
 #'   dplyr::mutate(
 #'     expansion_1 = list("feature.1, feature.2"), 
@@ -104,6 +109,7 @@ get_max_time <- function(
 #' # and remove column "expansion_1" but keep column "expansion_2" afterwards:
 #' expand_columns(df, c("expansion_1", "expansion_2"),  
 #'   unite_with = "Species", remove_cols = c(TRUE, FALSE))
+#' }
 #' 
 expand_columns <- function(
     data, 
@@ -159,11 +165,13 @@ expand_columns <- function(
 #' @param x Character string.
 #'
 #' @return A character string.
-#' @export
+#' @keywords internal
 #'
 #' @examples 
+#' \dontrun{
 #' title_case("this will be converted to upper case")
 #' # [1] "This Will Be Converted To Upper Case"
+#' }
 #' 
 title_case <- function(x) {
   stopifnot(is.character(x))
@@ -190,10 +198,12 @@ title_case <- function(x) {
 #' @param bytes An integer. Controls the size of the unique id.
 #'
 #' @return A unique character vector.
-#' @export
+#' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' create_unique_id(5)
+#' }
 create_unique_id <- function (
     bytes = 5
 ) {
@@ -215,9 +225,12 @@ create_unique_id <- function (
 #' to character strings.
 #'
 #' @return character vector of the same length as the input vector.
-#' @export
+#' @keywords internal
 #'
-#' @examples simplify_string(c(" Dirty_name. to Clean.#$", "#$another   complicated. Name"))
+#' @examples 
+#' \dontrun{
+#' simplify_string(c(" Dirty_name. to Clean.#$", "#$another   complicated. Name"))
+#' }
 simplify_string <- function(x){
   if(is.factor(x)) x <- as.character(x)
   stopifnot(is.vector(x))
@@ -236,10 +249,12 @@ simplify_string <- function(x){
 #' @param string Character string to be used. 
 #'
 #' @return An ordered string.
-#' @export
+#' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' order_string(rownames(mtcars))
+#' }
 #' 
 order_string <- function(
     string = appdata$`CBC regular`$subject_id
@@ -267,9 +282,10 @@ order_string <- function(
 #' @param var Column names to extract the unique variables from
 #'
 #' @return A data frame with unique values.
-#' @export
+#' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #'  list_with_data <- list(
 #'   data.frame(
 #'     "Sites" = c("site_1", "site_3", "site_4"),
@@ -282,6 +298,7 @@ order_string <- function(
 #'  )
 #'
 #'  get_unique_vars(list_with_data, c("Sites", "ID"))
+#' }
 #' 
 get_unique_vars <- function(data, var
 ){
@@ -310,9 +327,10 @@ get_unique_vars <- function(data, var
 #' that need to be converted.
 #'
 #' @return A data frame object.
-#' @export
+#' @keywords internal
 #' 
 #' @examples
+#' \dontrun{
 #'  data_list <- list(
 #'    data.frame(
 #'       "ID" = c("subj_1", "subj_5", "subj_8"),
@@ -324,6 +342,7 @@ get_unique_vars <- function(data, var
 #'    )
 #'  )
 #' bind_rows_custom(data_list, "values")
+#' }
 bind_rows_custom <- function(
     data, 
     convert = "item_value"
@@ -352,13 +371,15 @@ bind_rows_custom <- function(
 #'   if levels are not existent.
 #'
 #' @return a factor with newly calculated levels
-#' @export
+#' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' collapse_fct_levels(
 #' x = LETTERS,
 #' new_levels = list("A-C" = c("A", "B", "C"))
 #' )
+#' }
 collapse_fct_levels <- function(
     x = appdata$ECG$status,
     new_levels = list("old" = "old", "new" = c("new", "updated")),
@@ -403,9 +424,12 @@ collapse_fct_levels <- function(
 #' @param x An atomic object (a vector).
 #'
 #' @return a logical of length one.
-#' @export
+#' @keywords internal
 #'
-#' @examples is_date(as.Date("2023-09-03"))
+#' @examples 
+#' \dontrun{
+#' is_date(as.Date("2023-09-03"))
+#' }
 is_date <- function(x) {
   stopifnot(is.atomic(x))
   inherits(x, c("Date", "POSIXt"))
@@ -416,11 +440,13 @@ is_date <- function(x) {
 #' @param data A data frame with columns that need to be converted.
 #'
 #' @return A data frame with all non-numeric columns converted to character.
-#' @export
+#' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' df <- cols_to_char(iris)
 #' class(df$Species)
+#' }
 cols_to_char <- function(data){
   stopifnot(is.data.frame(data))
   lapply(data, \(x){ 
@@ -439,14 +465,16 @@ cols_to_char <- function(data){
 #'
 #' @return A data frame with all columns with the class `Date` or `POSIXct` 
 #' converted to character.
-#' @export
+#' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' df <- iris
 #' df$dates <- Sys.Date() + sample(1:1000, size = nrow(iris))
 #' converted_df <- date_cols_to_char(df)
 #' # the date variable is now converted, while all other columns are unchanged:
 #' sapply(converted_df, class)
+#' }
 #' 
 date_cols_to_char <- function(data){
   stopifnot(is.data.frame(data))
@@ -473,10 +501,12 @@ date_cols_to_char <- function(data){
 #'   (first day/month).
 #'
 #' @return A `date`-class vector.
-#' @export
+#' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' clean_dates(c("2023-08-NK", "2023-NK-NK", "NK-08-01"))
+#' }
 clean_dates <- function(
     x,
     unknown_pattern = "NK",
@@ -504,10 +534,12 @@ clean_dates <- function(
 #'   this regular expression.
 #'
 #' @return A character vector.
-#' @export
+#' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' vector_select(names(iris), include = "Sepal", exclude = "Width")
+#' }
 #' 
 vector_select <- function(
     x,
@@ -707,6 +739,17 @@ custom_config_path <- function(
   Sys.getenv("CONFIG_PATH", app_sys("golem-config.yml")) 
 }
 
+dblclick_to_form <- function(bttn_ns) {
+  DT::JS(
+    "table.on('dblclick', 'tbody tr', function(t) {",
+    # This processing assumes `server = TRUE`
+    "var current_index = table.row(this).index();",
+    "var current_rows = table.ajax.json().DT_rows_current;",
+    "table.shinyMethods.selectRows(current_rows[current_index]);",
+    "document.getElementById(", deparse(NS(bttn_ns, "go_to_form")), ").click();",
+    "})"
+  )}
+
 #' Decode a base64 encoded string.
 #'
 #' Used to decode base64-encoded HTTP headers. Encoding these headers
@@ -743,4 +786,14 @@ decode_base64 <- function(
     return({deparse1(rawToChar(decoded))})
   }
   rawToChar(decoded)
+}
+
+split_review_data <- function(db_path, forms) {
+  all_review_data <- db_get_table(db_path = db_path, db_table = "all_review_data")
+
+  if (missing(forms)) {
+    split(all_review_data, all_review_data$item_group)
+  } else {
+    split(all_review_data, factor(all_review_data$item_group, forms))
+  }
 }

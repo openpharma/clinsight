@@ -14,7 +14,7 @@ describe(
     withr::defer(app$stop())
     it(
       "Scenario 1 - Save review. 
-            Given a fixed fixed random test data set with all data marked as not yet reviewed, 
+            Given a fixed random test data set with all data marked as not yet reviewed, 
             and being logged in as test user, 
             and patient 45 selected as active patient,
             and the 'Vital signs' tab selected as the first tab in the [Study data] tabs,
@@ -41,7 +41,7 @@ describe(
         
         user_db <- app$get_value(export = "user_db")
         
-        active_form_data <- db_slice_rows(user_db) |> 
+        active_form_data <- db_get_table(user_db) |> 
           dplyr::filter(
             subject_id == app$get_value(export = "active_participant"),
             item_group == app$get_value(export = "active_form")

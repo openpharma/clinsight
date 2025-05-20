@@ -142,7 +142,7 @@ update_review_data <- function(
 #'
 #' @return A data frame. Required columns are: subject_id, item_group,
 #'   event_name, edit_date_time, status, reviewed.
-#' @export
+#' @keywords internal
 #' 
 summarize_review_data <- function(
     data, 
@@ -177,7 +177,6 @@ summarize_review_data <- function(
         .by = dplyr::all_of(common_vars)
         ) |>
       dplyr::distinct()
-     # db_slice_rows(slice_vars = date_time_vars, group_vars = common_vars)
   }
   data 
 } 

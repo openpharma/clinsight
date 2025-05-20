@@ -2,7 +2,7 @@ library(shinytest2)
 
 describe("mod_main_sidebar. Feature 1 | Load application module in isolation.", {
     testargs <- list(
-      r = reactiveValues(create_query = 0),
+      r = reactiveValues(create_query = 0, review_data = reactiveValues()),
       navinfo = reactiveValues(),
       app_data = list("Form1" = data.frame("site_code" = "", "edit_date_time" = "2023-01-01")), # used by mod_review_config()
       app_tables = list(),
@@ -55,8 +55,10 @@ describe(
           dplyr::mutate(
             reviewed = "No",
             status = "new",
-            comment = ""
-          )
+            comment = "",
+            id = dplyr::row_number()
+          ) |> 
+          {\(x) split(x, x$item_group)}()
         vars <- get_meta_vars(appdata, metadata)
         apptables <- lapply(
           setNames(names(appdata), names(appdata)), \(x){
@@ -76,7 +78,7 @@ describe(
             id = "test", 
             r = reactiveValues(
               create_query = 0, 
-              review_data = rev_data, 
+              review_data = do.call(reactiveValues, rev_data), 
               subject_id = "NLD_06_755",
               user_name = "Admin",
               user_role = "Medical Monitor"
@@ -114,6 +116,19 @@ describe(
           and active_tab set to 'Start' (not 'Common events' or 'Study data'),
           I expect that the review panel will be hidden.", 
       {
+        rev_data <- data.frame(
+          "id" = 1L,
+          "subject_id" = "NLD_06_755", 
+          "event_name" = "Any visit",
+          "item_group" = "Adverse events",
+          "form_repeat" = 1L,
+          "item_name" = "AE item",
+          "edit_date_time" = "2023-01-01",
+          "reviewed" = "",
+          "comment" = "",
+          "status" = ""
+        ) |> 
+          {\(x) split(x, x$item_group)}()
         test_ui <- function(request){
           bslib::page_navbar(sidebar = mod_main_sidebar_ui("test"))
         }
@@ -122,14 +137,7 @@ describe(
             id = "test", 
             r = reactiveValues(
               create_query = 0, 
-              review_data = data.frame(
-                "subject_id" = "NLD_06_755", 
-                "item_group" = "Adverse events",
-                "edit_date_time" = "2023-01-01",
-                "reviewed" = "",
-                "comment" = "",
-                "status" = ""
-              ), 
+              review_data = do.call(reactiveValues, rev_data), 
               subject_id = "NLD_06_755",
               user_name = "Admin",
               user_role = "Medical Monitor"
@@ -163,4 +171,80 @@ describe(
   }
 )
 
-
+describe(
+  "Feature 3 | Display ClinSight version. As a user, I want to be able 
+         to see the version of ClinSight currently in use", 
+  {
+    it(
+      "Scenario 1 - View version in production. 
+      Given test a data frame with random data,
+      and golem.app.prod is set to TRUE,
+      I expect that the actual version is shown in the application's sidebar.", 
+      {
+        testargs <- list(
+          r = reactiveValues(create_query = 0, review_data = reactiveValues()),
+          navinfo = reactiveValues(),
+          app_data = list("Form1" = data.frame("site_code" = "", "edit_date_time" = "2023-01-01")), # used by mod_review_config()
+          app_tables = list(),
+          app_vars = list(
+            all_forms = data.frame(),
+            Sites = data.frame(),
+            subject_id = "",
+            form_level_data = data.frame("item_group" = "", "review_required" = TRUE)
+          ),
+          db_path = "",
+          forms_to_review = reactiveVal(),
+          available_data = data.frame()
+        )
+        
+        withr::local_options("golem.app.prod" = TRUE)
+        actual_version <- paste0(
+          "V",
+          golem::pkg_version(path = dirname(app_sys("DESCRIPTION")))
+        )
+        testServer(mod_main_sidebar_server, args = testargs, {
+          ns <- session$ns
+          expect_equal(output$clinsight_version, actual_version)
+        })
+      }
+    )
+    it(
+      "Scenario 2 - Version error. 
+        Given test a data frame with random data,
+        and golem.app.prod is set to TRUE,
+        and the path to the version is incorrect
+        I expect that the application does not error,
+        and that 'version unknown' is shown in the sidebar instead.", 
+      {
+        testargs <- list(
+          r = reactiveValues(create_query = 0, review_data = reactiveValues()),
+          navinfo = reactiveValues(),
+          app_data = list("Form1" = data.frame("site_code" = "", "edit_date_time" = "2023-01-01")), # used by mod_review_config()
+          app_tables = list(),
+          app_vars = list(
+            all_forms = data.frame(),
+            Sites = data.frame(),
+            subject_id = "",
+            form_level_data = data.frame("item_group" = "", "review_required" = TRUE)
+          ),
+          db_path = "",
+          forms_to_review = reactiveVal(),
+          available_data = data.frame()
+        )
+        
+        withr::local_options("golem.app.prod" = TRUE)
+        # Fix the path argument of pkg_version() for use in testing environment:
+        local_mocked_bindings(
+          pkg_version = \(...){
+            suppressWarnings(golem::pkg_version(path = "incorrect_path"))
+          }
+        )
+        testServer(mod_main_sidebar_server, args = testargs, {
+          ns <- session$ns
+          expect_equal(output$clinsight_version, "version unknown")
+        })
+        
+      }
+    )
+  }
+)

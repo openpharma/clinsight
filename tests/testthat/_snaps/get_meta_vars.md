@@ -3,14 +3,6 @@
     Code
       get_meta_vars(appdata, metadata)
     Output
-      $events
-      Screening   Visit 1   Visit 2   Visit 3   Visit 4   Visit 5   Visit 6   Visit 7 
-           "V0"      "V1"      "V2"      "V3"      "V4"      "V5"      "V6"      "V7" 
-        Visit 8   Visit 9  Visit 10  Visit 11  Visit 12  Visit 13  Visit 14  Visit 15 
-           "V8"      "V9"     "V10"     "V11"     "V12"     "V13"     "V14"     "V15" 
-       Visit 16  Visit 17  Visit 18 
-          "V16"     "V17"     "V18" 
-      
       $items
       $items$`Adverse events`
                           AE Number                       AE Name 
@@ -23,14 +15,12 @@
                 "ae_ctcae_severity" "ae_ctcae_severity_worsening" 
                AE Treatment related           AE Treatment action 
              "ae_treatment_related"         "ae_treatment_action" 
-                    AE Other action         Serious Adverse Event 
-                  "ae_other_action"       "serious_adverse_event" 
-                 SAE Awareness date                SAE Start date 
-               "sae_awareness_date"              "sae_start_date" 
+              Serious Adverse Event                SAE Start date 
+            "serious_adverse_event"              "sae_start_date" 
                        SAE End date                  SAE Category 
                      "sae_end_date"                "sae_category" 
-                        SAE outcome             SAE Date of death 
-                      "sae_outcome"           "sae_date_of_death" 
+                 SAE Awareness date             SAE Date of death 
+               "sae_awareness_date"           "sae_date_of_death" 
                    SAE Death reason 
                  "sae_death_reason" 
       
@@ -83,18 +73,14 @@
        "mh_treatment"    "mh_comment" 
       
       $items$Medication
-                         CM Number                CM Trade Name 
-                       "cm_number"              "cm_trade_name" 
-              CM Active Ingredient                CM Indication 
-            "cm_active_ingredient"              "cm_indication" 
-                           CM Dose                      CM Unit 
-                         "cm_dose"                    "cm_unit" 
-                     CM Unit Other                 CM Frequency 
-                   "cm_unit_other"               "cm_frequency" 
-                CM Frequency Other                     CM Route 
-              "cm_frequency_other"                   "cm_route" 
-                    CM Route Other                CM Start Date 
-                  "cm_route_other"              "cm_start_date" 
+                         CM Number                      CM Name 
+                       "cm_number"                    "cm_name" 
+                     CM Indication                      CM Dose 
+                   "cm_indication"                    "cm_dose" 
+                           CM Unit                 CM Frequency 
+                         "cm_unit"               "cm_frequency" 
+                          CM Route                CM Start Date 
+                        "cm_route"              "cm_start_date" 
                         CM Ongoing                  CM End Date 
                       "cm_ongoing"                "cm_end_date" 
         CM Related Medical History                CM Related AE 
@@ -143,15 +129,15 @@
       # A tibble: 9 x 2
         site_code region
         <chr>     <chr> 
-      1 Site 01   DEU   
-      2 Site 02   DEU   
-      3 Site 03   NLD   
-      4 Site 04   BEL   
-      5 Site 05   NLD   
-      6 Site 06   NLD   
-      7 Site 07   BEL   
-      8 Site 08   BEL   
-      9 Site 09   BEL   
+      1 BEL04     BEL   
+      2 BEL07     BEL   
+      3 BEL08     BEL   
+      4 BEL09     BEL   
+      5 DEU01     DEU   
+      6 DEU02     DEU   
+      7 NLD03     NLD   
+      8 NLD05     NLD   
+      9 NLD06     NLD   
       
       $table_names
                  Edit date                 Date                Event 
