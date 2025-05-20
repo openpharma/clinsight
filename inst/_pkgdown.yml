@@ -3,6 +3,9 @@ template:
   bootstrap: 5
   bootswatch: spacelab
 
+development:
+  mode: auto
+
 articles: 
 - title: Articles
   navbar: ~
