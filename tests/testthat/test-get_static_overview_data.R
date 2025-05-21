@@ -22,7 +22,7 @@ describe(
       expect_true(is.data.frame(test_results))
       expect_equal(
         names(test_results), 
-        c("subject_id", "status", "WHO.classification", 
+        c("subject_id", "study_status", "WHO.classification", 
           "Age", "Sex", "event_name")
       )
     })

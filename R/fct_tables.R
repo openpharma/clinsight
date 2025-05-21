@@ -183,15 +183,16 @@ create_table.general <- function(
     data <-  data.frame(matrix(ncol = length(df_names))) |> 
       setNames(df_names)
   }
-  if("status" %in% names(data)){
-    keep_vars <- c(keep_vars, "status")
+  if("study_status" %in% names(data)){
+    keep_vars <- c(keep_vars, "study_status")
+    browser()
   }
   df <- with(data, data[!item_name %in% c("DrugAdminDate", "DrugAdminDose"),]) |>
     create_table.default(name_column, value_column, keep_vars, expected_columns)
-  if(!"status" %in% names(df)){
+  if(!"study_status" %in% names(df)){
     df <- df |> 
       dplyr::mutate(
-        status = ifelse(
+        study_status = ifelse(
           is.na(Eligible), 
           "Unknown",
           ifelse(
@@ -204,14 +205,14 @@ create_table.general <- function(
             )
           )
         ),
-        status = ifelse(
+        study_status = ifelse(
           !is.na(DiscontinuationDate),
           ifelse(
             is.na(DiscontinuationReason), 
             "Discontinued", 
             DiscontinuationReason
           ),
-          status
+          study_status
         )
       )  
   }
@@ -221,7 +222,7 @@ create_table.general <- function(
         "<b>", subject_id, "</b><br>",
         "<b>Sex:</b> ",    Sex, "<br>",
         "<b>Age:</b> ",    Age, "yrs.", "<br>",
-        "<b>Status:</b> ", status, "<br>",
+        "<b>Status:</b> ", study_status, "<br>",
         "<b>ECOG:</b> ",   ECOG, "<br>",
         "<b>Dx:</b> ",     WHO.classification
       ) 

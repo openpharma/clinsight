@@ -141,7 +141,7 @@ mod_navigate_participants_server <- function(id, r){
         list(
           pt_info = paste0(active_pt_info$Sex, ", ", active_pt_info$Age, "yrs."),
           status_icon = switch(
-            active_pt_info$status, 
+            active_pt_info$study_status, 
             Enrolled = icon("user-check", class = 'fa-2x'),
             Unknown  = icon("circle-question", class = 'fa-2x'),
             `Screen failure` = icon("user-slash", class = 'fa-2x'),
