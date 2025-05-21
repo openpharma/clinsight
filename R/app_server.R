@@ -278,8 +278,8 @@ app_server <- function(
       req(with(pwd_mngt, must_change[user == res_auth[["user"]]]) == "FALSE") 
     }
     
+    
     output[["study_name_display"]] <-  renderUI({
-
       # create potential path to study_logo file so we can search for them
       # note: the 'assets' path is defined in golem_add_external_resources
       study_assets <-
@@ -292,27 +292,30 @@ app_server <- function(
       # Give preference to SVGs first, else grab 1st file
       # if logo available - whether for study or org, use that.
       if(!identical(study_assets, character(0))){
-        message("\nStudy Logo Found\n")
-        study_logo_file <-
-          if("svg" %in% tolower(tools::file_ext(study_assets))) {
-            study_assets[which(tolower(tools::file_ext(study_assets)) == "svg")]
-          } else {
-            study_assets[1]
-          }
-        message("\nStudy Logo File:", study_logo_file, "\n")
-        study_logo <- file.path('assets', study_logo_file)
-        tags$a(tags$img(src=study_logo, height = '40'))
+          message("\nStudy Logo Found\n")
+          study_logo_file <-
+            if("svg" %in% tolower(tools::file_ext(study_assets))) {
+              study_assets[which(tolower(tools::file_ext(study_assets)) == "svg")]
+            } else {
+              study_assets[1]
+            }
+          message(paste0(
+            "\n\nUsing Study Logo File:",
+            file.path(get_golem_config("study_asset_path"), study_logo_file),
+            "\n"))
+          study_logo <- file.path('assets', study_logo_file)
+          tags$a(tags$img(src = study_logo, height = '40'))
       } else {
         # no study logo available - use text output
         # If study_name is NULL, Set it to an empty string
-        study_name <- meta$settings$study_name %||% ""
-        study_name_shown <-
-          if (nchar(study_name) > 40){
-            paste0(trimws(substr(study_name, 1, 37)), "...")
-          } else {
-            study_name
-          }
-        tags$h3(study_name_shown, class = "text-secondary")
+      study_name <- meta$settings$study_name %||% ""
+      study_name_shown <-
+        if (nchar(study_name) > 40){
+          paste0(trimws(substr(study_name, 1, 37)), "...")
+        } else {
+          study_name
+        }
+      tags$h3(study_name_shown, class = "text-secondary")
       }
 
     })

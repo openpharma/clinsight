@@ -66,6 +66,18 @@ app_ui <- function(request){
 #'
 #' @noRd
 golem_add_external_resources <- function(study_name) {
+  
+  # If a study asset path is provided, verify it exists before adding it as a 
+  # resource path
+  asset_path <- get_golem_config("study_asset_path")
+  if(!is.null(asset_path)){
+    if(dir.exists(asset_path)) {
+      add_resource_path("assets", asset_path)
+    } else {
+      warning("The golem config called 'study_asset_path' is a non-existent directory. Please create the directory and re-launch the app.")
+    }
+  }
+  # Add app/www to resource path as simply 'www/'
   add_resource_path(
     "www",
     app_sys("app/www")
@@ -79,14 +91,5 @@ golem_add_external_resources <- function(study_name) {
     # Add here other external resources
     # for example, you can add shinyalert::useShinyalert()
   )
-  # If a study asset path is provided, verify it exists before adding it as a 
-  # resource path
-  asset_path <- get_golem_config("study_asset_path")
-  if(!is.null(asset_path)){
-    if(dir.exists(asset_path)) {
-      add_resource_path("assets", asset_path)
-    } else {
-      warning("The golem config called 'study_asset_path' is a non-existent directory. Please create the directory and re-launch the app.")
-    }
-  }
+  
 }
