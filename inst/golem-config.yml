@@ -13,6 +13,7 @@ default:
   allow_to_review: [admin, medical_monitor]
   allow_listing_download: TRUE
   allow_query_inputs: TRUE
+  study_asset_path:
 dev:
   golem_wd: !expr golem::pkg_path()
 test:

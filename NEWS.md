@@ -1,5 +1,7 @@
 # clinsight (development version)
 
+- Improved branding with new ClinSight Logo, added favicon, and allowed for study logos, when available
+
 # clinsight 0.2.0
 
 ## Changed 
