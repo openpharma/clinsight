@@ -47,7 +47,6 @@ run_app <- function(
     }
   }
   
-  
   ## Verify study data
   if(is.character(data)){
     if(!file.exists(data)) stop(paste0("Cannot find '", data, "'."))

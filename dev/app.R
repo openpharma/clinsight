@@ -37,5 +37,3 @@ run_app(
   # user_db = db_path, # defaults to "user_db.sqlite"
   # onStart = \(){onStop(\(){unlink(data_folder, recursive = TRUE)})} # be careful here
 )
-
-
