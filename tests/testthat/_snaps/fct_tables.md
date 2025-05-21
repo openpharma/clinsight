@@ -80,7 +80,7 @@
       #   DisconDeathDate <chr>, DrugAdminDate <chr>, DrugAdminDose <chr>,
       #   DoseModificationDate <chr>, DoseModificationReason <chr>,
       #   DoseModificationNewDose <chr>, DrugDiscontDate <chr>,
-      #   DrugDiscontReason <chr>, status <chr>, status_label <chr>
+      #   DrugDiscontReason <chr>, study_status <chr>, status_label <chr>
 
 # create_table.adverse_events() works: creates expected AE table
 
