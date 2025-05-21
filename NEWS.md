@@ -1,5 +1,7 @@
 # clinsight (development version)
 
+- Removed the requirement for common_forms to have a 'Name' column. In addition, a 'Name' column can be provided in study data tabs, indicating a common name per row, which will improve the query selector items (#207).
+
 # clinsight 0.2.0
 
 ## Changed 

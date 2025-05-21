@@ -179,7 +179,7 @@ get_available_data <- function(
   study_event_selectors <- lapply(
     all_forms$form, 
     \(x){
-      if(with(all_forms, main_tab[form == x]) == "Study data"){
+      if(isFALSE("Name" %in% names(tables[[x]]))){
         if(is.null(data[[x]])) return(NULL)
         df_x <- data[[x]] |> 
           dplyr::select(
