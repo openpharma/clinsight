@@ -97,7 +97,7 @@ tests <- if(file.exists(params$test_results)){
 # Traceability matrix {#sec-traceability-matrix}
 
 |     | Requirement                             | Feature                                                                                                                                                                                     | Validation                                              |
-|--------------|--------------|-------------------------------|--------------|
+|-----|-----------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
 | 1   | Secure Authentication and Authorization | Restrict access *(using Shinymanager. Not applicable for internal deployment; for use in production, authentication and authorization is validated in the deployment validation document).* | [app_authentication](#app_authentication)               |
 | 2   | File Integration/loading data           | Create app user database                                                                                                                                                                    | [fct_SQLite](#fct_SQLite)                               |
 |     |                                         | Create credentials database                                                                                                                                                                 | [app_authentication](#app_authentication)               |
