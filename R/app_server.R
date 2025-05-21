@@ -279,34 +279,43 @@ app_server <- function(
     }
     
     output[["study_name_display"]] <-  renderUI({
-      # If study_name is NULL, Set it to an empty string
-      study_name <- meta$settings$study_name %||% ""
-      
+
       # create potential path to study_logo file so we can search for them
-      study_logo <- paste0('www/study_logos/',tolower(meta$settings$study_name %||% "org_logo"),".png")
-      
-      # if logo available - whether for study or org, use that. "org_logo.png"
-      # will show up by default when study_name is NULL.
-      if(file.exists(file.path(app_sys(), "app", study_logo))) {
+      # note: the 'assets' path is defined in golem_add_external_resources
+      study_assets <-
+        list.files(
+          path = "assets/",
+          pattern = "^study_logo\\.(jpg|gif|svg|png)$",
+          ignore.case = TRUE
+          )
+
+      # Give preference to SVGs first, else grab 1st file
+      # if logo available - whether for study or org, use that.
+      if(!identical(study_assets, character(0))){
+        message("\nStudy Logo Found\n")
+        study_logo_file <-
+          if("svg" %in% tolower(tools::file_ext(study_assets))) {
+            study_assets[which(tolower(tools::file_ext(study_assets)) == "svg")]
+          } else {
+            study_assets[1]
+          }
+        message("\nStudy Logo File:", study_logo_file, "\n")
+        study_logo <- file.path('assets', study_logo_file)
         tags$a(tags$img(src=study_logo, height = '40'))
       } else {
         # no study logo available - use text output
-        study_name_shown <- if (nchar(study_name) > 40){
-          paste0(trimws(substr(study_name, 1, 37)), "...")
-        } else {
-          study_name
-        }
+        # If study_name is NULL, Set it to an empty string
+        study_name <- meta$settings$study_name %||% ""
+        study_name_shown <-
+          if (nchar(study_name) > 40){
+            paste0(trimws(substr(study_name, 1, 37)), "...")
+          } else {
+            study_name
+          }
         tags$h3(study_name_shown, class = "text-secondary")
       }
+
     })
-      renderText({
-        study_name <- meta$settings$study_name %||% ""
-        if (nchar(study_name) > 40){
-          paste0(trimws(substr(study_name, 1, 37)), "...")
-        } else {
-          study_name
-        }
-      })
     
     mod_main_sidebar_server(
       id = "main_sidebar_1",
