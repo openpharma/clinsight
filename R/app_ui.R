@@ -5,9 +5,12 @@
 #' @export
 #'
 app_ui <- function(request){
-  meta <- golem::get_golem_options("meta")
+  add_study_logo <- !is.null(golem::get_golem_options("study_logo_path"))
   tagList(
-    golem_add_external_resources(study_name = meta$settings$study_name %||% "Study"),
+    golem_add_external_resources(
+      study_name = golem::get_golem_options("meta")$settings$study_name,
+      add_asset_path = add_study_logo
+    ),
     shinyjs::useShinyjs(),
     bslib::page_navbar(
       id = "main_tabs",
@@ -22,7 +25,7 @@ app_ui <- function(request){
       bg = "#43464c",
       title = tags$a(
         href = "/",
-        tags$img(src='www/logo_in_app_w_margin_wide.png', height = '40')
+        tags$img(src='www/clinsightlogo-app.png', height = '40')
       ), 
       sidebar = bslib::sidebar(mod_main_sidebar_ui("main_sidebar_1"), fillable = TRUE),
       header =   conditionalPanel(
@@ -43,7 +46,11 @@ app_ui <- function(request){
       ),
       bslib::nav_spacer(),
       bslib::nav_item(
-        uiOutput("study_name_display")
+        if(add_study_logo){
+          tags$img(src = golem::get_golem_options("study_logo_path"), height = '40')
+        } else{
+          tags$h3(textOutput("study_name"), class = "text-secondary")
+        }
       ),
       bslib::nav_spacer(),
       bslib::nav_panel(
@@ -65,17 +72,16 @@ app_ui <- function(request){
 #' resources inside the Shiny application.
 #'
 #' @noRd
-golem_add_external_resources <- function(study_name) {
+golem_add_external_resources <- function(
+    study_name = NULL, 
+    add_asset_path = FALSE
+) {
   
   # If a study asset path is provided, verify it exists before adding it as a 
   # resource path
   asset_path <- get_golem_config("study_asset_path")
-  if(!is.null(asset_path)){
-    if(dir.exists(asset_path)) {
-      add_resource_path("assets", asset_path)
-    } else {
-      warning("The golem config called 'study_asset_path' is a non-existent directory. Please create the directory and re-launch the app.")
-    }
+  if(add_asset_path && !is.null(asset_path)){
+    add_resource_path("assets", asset_path)
   }
   # Add app/www to resource path as simply 'www/'
   add_resource_path(
@@ -86,7 +92,11 @@ golem_add_external_resources <- function(study_name) {
     favicon(),
     bundle_resources(
       path = app_sys("app/www"),
-      app_title = paste("ClinSight", study_name)
+      app_title = if(is.null(study_name)){
+        "ClinSight"
+      } else {
+        paste("ClinSight |", study_name)
+      }
     )
     # Add here other external resources
     # for example, you can add shinyalert::useShinyalert()
