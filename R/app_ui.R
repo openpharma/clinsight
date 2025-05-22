@@ -5,10 +5,11 @@
 #' @export
 #'
 app_ui <- function(request){
+  add_study_logo <- !is.null(golem::get_golem_options("study_logo_path"))
   tagList(
     golem_add_external_resources(
       study_name = golem::get_golem_options("meta")$settings$study_name,
-      add_asset_path = !is.null(golem::get_golem_options("study_logo_path"))
+      add_asset_path = add_study_logo
     ),
     shinyjs::useShinyjs(),
     bslib::page_navbar(
@@ -45,7 +46,7 @@ app_ui <- function(request){
       ),
       bslib::nav_spacer(),
       bslib::nav_item(
-        if(!is.null(golem::get_golem_options("study_logo_path"))){
+        if(add_study_logo){
           tags$img(src = golem::get_golem_options("study_logo_path"), height = '40')
         } else{
           tags$h3(textOutput("study_name"), class = "text-secondary")
