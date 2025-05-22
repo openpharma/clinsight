@@ -5,9 +5,11 @@
 #' @export
 #'
 app_ui <- function(request){
-  meta <- golem::get_golem_options("meta")
   tagList(
-    golem_add_external_resources(study_name = meta$settings$study_name %||% "Study"),
+    golem_add_external_resources(
+      study_name = golem::get_golem_options("meta")$settings$study_name,
+      add_asset_path = !is.null(golem::get_golem_options("study_logo_path"))
+    ),
     shinyjs::useShinyjs(),
     bslib::page_navbar(
       id = "main_tabs",
@@ -43,7 +45,11 @@ app_ui <- function(request){
       ),
       bslib::nav_spacer(),
       bslib::nav_item(
-        uiOutput("study_name_display")
+        if(!is.null(golem::get_golem_options("study_logo_path"))){
+          tags$img(src = golem::get_golem_options("study_logo_path"), height = '40')
+        } else{
+          tags$h3(textOutput("study_name"), class = "text-secondary")
+        }
       ),
       bslib::nav_spacer(),
       bslib::nav_panel(
@@ -65,17 +71,16 @@ app_ui <- function(request){
 #' resources inside the Shiny application.
 #'
 #' @noRd
-golem_add_external_resources <- function(study_name) {
+golem_add_external_resources <- function(
+    study_name = NULL, 
+    add_asset_path = FALSE
+) {
   
   # If a study asset path is provided, verify it exists before adding it as a 
   # resource path
   asset_path <- get_golem_config("study_asset_path")
-  if(!is.null(asset_path)){
-    if(dir.exists(asset_path)) {
-      add_resource_path("assets", asset_path)
-    } else {
-      warning("The golem config called 'study_asset_path' is a non-existent directory. Please create the directory and re-launch the app.")
-    }
+  if(add_asset_path && !is.null(asset_path)){
+    add_resource_path("assets", asset_path)
   }
   # Add app/www to resource path as simply 'www/'
   add_resource_path(
