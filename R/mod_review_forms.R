@@ -174,7 +174,6 @@ mod_review_forms_server <- function(
       session$userData$pending_review_records[[active_form()]] <- data.frame(id = integer(), reviewed = character())
     })
     
-    confirm_before_saving <- reactiveVal(FALSE)
     observeEvent(input$form_reviewed, {
       session$userData$pending_form_review_status[[active_form()]] <- input$form_reviewed
       
@@ -186,7 +185,6 @@ mod_review_forms_server <- function(
           r$review_data[[active_form()]][c("id", "reviewed")]
           )  |> 
         dplyr::arrange(id)
-      confirm_before_saving(identical(session$userData$review_type(), "form"))
     }, ignoreInit = TRUE)    
     
     observeEvent(c(active_form(), r$subject_id), {
@@ -323,18 +321,20 @@ mod_review_forms_server <- function(
     })
     
     observeEvent(input$save_review, {
-      if(isFALSE(confirm_before_saving())) return({
-        save_review_confirmed(save_review_confirmed() + 1)
-      })
-      if(isTRUE(confirm_before_saving())){
-        return({showModal(modal_confirm_saving())})
+      req(enable_save_review())
+      req(is.logical(review_indeterminate()))
+      if(
+        isFALSE(review_indeterminate()) && 
+        identical(session$userData$review_type(), "form")
+        ){
+        return(showModal(modal_confirm_saving()))
       }
+      save_review_confirmed(save_review_confirmed() + 1)
     })
     
     observeEvent(save_review_confirmed(), {
       req(save_review_confirmed() != 0)
       req(review_data_active())
-      req(enable_save_review())
       review_save_error(FALSE)
       
       review_records <- session$userData$pending_review_records[[active_form()]][c("id", "reviewed")] |> 
