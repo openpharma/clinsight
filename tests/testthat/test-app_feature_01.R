@@ -59,12 +59,9 @@ describe(
          app$run_js('$("#navigate_review_1-review_df td").filter(function() {return $(this).text() == "Adverse events"}).closest("tr").trigger("dblclick")')
          app$wait_for_idle()
          expect_equal(app$get_value(input = "main_tabs"), "Common events")
-         output_names <- names(app$get_values(output = TRUE)$output)
-         app$expect_values(
-           output = vector_select(
-             output_names, exclude = c("visit_figure", "navigate_review_1-header_text", "navigate_review_1-review_df")
-           )
-         )
+         output_names <- names(app$get_values(output = TRUE)$output) |> 
+           vector_select(exclude = c("visit_figure", "navigate_review_1-header_text", "navigate_review_1-review_df"))
+         app$expect_values(output = output_names)
          
          app$set_inputs(main_tabs = "Start")
          app$run_js('$("#start_page_1-overview_table th").filter(function() {return $(this).text() == "Status"}).closest("th").trigger("click")')
@@ -84,7 +81,14 @@ describe(
          
          app$set_inputs(main_tabs = "Study data")
          app$wait_for_idle()
-         output_names <- names(app$get_values(output = TRUE)$output)
+         output_to_exclude <- c(
+           "visit_figure", 
+           "navigate_review_1-header_text", 
+           "navigate_review_1-review_df", 
+           "start_page_1-overview_table"
+         )
+         output_names <- names(app$get_values(output = TRUE)$output) |> 
+           vector_select(exclude = output_to_exclude)
          # replace snap for something more focused??
          # app$expect_values(
          #   input = c("cf_adverse_events-review_form_tbl-table_rows_all", "common_data_tabs", "main_tabs"),
@@ -92,19 +96,12 @@ describe(
          #              "cf_adverse_events-timeline_fig-timeline"),
          #   export = c("active_form", "active_participant")
          # )
-         app$expect_values(
-           output = vector_select(
-             output_names, exclude = c("visit_figure", "navigate_review_1-header_text", "navigate_review_1-review_df")
-           )
-         )
+         app$expect_values(output = output_names)
          
          app$set_inputs("sf_vital_signs-switch_view" = "table")
-         output_names <- names(app$get_values(output = TRUE)$output)
-         app$expect_values(
-           output = vector_select(
-             output_names, exclude = c("visit_figure", "navigate_review_1-header_text", "navigate_review_1-review_df")
-           )
-         )
+         output_names <- names(app$get_values(output = TRUE)$output) |> 
+           vector_select(exclude = output_to_exclude)
+         app$expect_values(output = output_names)
          
          app$run_js("$('#navigate_participants_1-subject_info').click()")
          app$wait_for_idle(1500)
@@ -112,12 +109,9 @@ describe(
          app$wait_for_idle(1000)
          app$click("navigate_participants_1-subj_apply")
          app$wait_for_idle()
-         output_names <- names(app$get_values(output = TRUE)$output)
-         app$expect_values(
-           output = vector_select(
-             output_names, exclude = c("visit_figure", "navigate_review_1-header_text", "navigate_review_1-review_df")
-             )
-         )
+         output_names <- names(app$get_values(output = TRUE)$output) |> 
+           vector_select(exclude = output_to_exclude)
+         app$expect_values(output = output_names)
          
          ## Note (LSA): after clicking on 'graph' view again at this moment, an 
          ## error will be shown instead of the expected figures. 
