@@ -668,7 +668,9 @@ describe(
               DBI::dbGetQuery(con,"SELECT * FROM all_review_data ")
             })
             session$setInputs(form_reviewed = FALSE, review_type = "form")
-            session$setInputs(form_reviewed = TRUE, save_review = 1)
+            # Split up to invalidate reactives in intended order:
+            session$setInputs(form_reviewed = TRUE)
+            session$setInputs(save_review = 1)
             ## for review_type == 'form', a confirmation before saving is required:
             expect_equal(save_review_confirmed(), 0)
             
