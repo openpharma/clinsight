@@ -84,7 +84,7 @@ mod_review_form_tbl_server <- function(
       datatable_rendered(NULL)
       session$userData$pending_form_review_status[[form]] <- NULL
       session$userData$pending_review_records[[form]] <- data.frame(id = integer(), reviewed = character())
-    }, priority = 1) |> 
+    }, priority = 100) |> 
       bindEvent(active_subject(), form_review_data(), form_data(), session$userData$review_type())
     
     observeEvent(datatable_rendered(), {
