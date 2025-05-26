@@ -279,6 +279,7 @@ describe(
         app$click("main_sidebar_1-review_forms_1-save_review")
         app$wait_for_idle()
         # Warning/confirmation should NOT show up:
+        expect_false(app$get_js("$('#shiny-modal').hasClass('show');"))
         expect_equal(
           app$get_js('$("#main_sidebar_1-review_forms_1-confirm_save_modal").text()'), 
           ""
@@ -342,6 +343,7 @@ describe(
         app$click("main_sidebar_1-review_forms_1-save_review")
         app$wait_for_idle()
         # Warning/confirmation should NOT show up:
+        expect_false(app$get_js("$('#shiny-modal').hasClass('show');"))
         expect_equal(
           app$get_js('$("#main_sidebar_1-review_forms_1-confirm_save_modal").text()'), 
           ""
