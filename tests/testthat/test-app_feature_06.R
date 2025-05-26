@@ -256,6 +256,107 @@ describe(
         expect_equal(unique(active_form_data$reviewed), "Yes")
         expect_equal(unique(active_form_data$reviewer), c("test user (Administrator)"))
       }
+    )
+    it(
+      "Scenario 5 - Review of single rows during form level review.
+            Given the state of scenario 4, 
+            and deselecting the review status of first row,
+            and saving the review actions, 
+            I expect that no save confirmation will pop up,
+            and that the review status of the first row is indeed undone.", 
+      {
+        # this indirectly deselects the Vital Signs data of BEL_04_133 of events
+        # 'Screening' and 'Visit 1':
+        app$run_js('$("#sf_vital_signs-review_form_tbl-table input[type=\'checkbox\']").slice(0, 1).click()')
+        app$wait_for_idle()
+        expect_equal(app$get_js(sprintf(count_VS_checkboxes, ":not(:checked)")), 1)
+        expect_equal(app$get_js(sprintf(count_VS_checkboxes, ":checked")), 67)
+        
+        selection_table <- "sf_vital_signs-review_form_tbl-table_review_selection"
+        pending_review_data <- app$get_values(input = selection_table)$input[[selection_table]]
+        expect_equal(unique(pending_review_data$row_id), 1)
+        
+        app$click("main_sidebar_1-review_forms_1-save_review")
+        app$wait_for_idle()
+        # Warning/confirmation should NOT show up:
+        expect_equal(
+          app$get_js('$("#main_sidebar_1-review_forms_1-confirm_save_modal").text()'), 
+          ""
+        )
+        input_names <- c(
+          "sf_vital_signs-review_form_tbl-table_review_selection",
+          "main_sidebar_1-review_forms_1-confirm_saving"
+        )
+        output_names <-c(
+          "form_level_review",
+          "main_sidebar_1-navigate_forms_1-form_name",
+          "main_sidebar_1-review_forms_1-form_reviewed",
+          "main_sidebar_1-review_forms_1-progress_bar",
+          "main_sidebar_1-review_forms_1-save_review_error"
+        )
+        #snapshot 007:
+        app$expect_values(input = input_names, output = output_names)
+        user_db <- app$get_value(export = "user_db")
+        not_reviewed_data <- db_get_table(user_db) |> 
+          subset(
+            id %in% pending_review_data$id, 
+            select = c("subject_id", "event_name", "reviewer")
+          ) |> 
+          unique()
+        expect_equal(not_reviewed_data$event_name, "Screening")
+        expect_equal(unique(not_reviewed_data$subject_id), "BEL_04_133")
+        expect_equal(unique(not_reviewed_data$reviewer), "test user (Administrator)")
+      }
+    ) 
+    it(
+      "Scenario 6 - Revert to subject level review.
+            Given the state of scenario 5, 
+            and that I revert to subject-level review,
+            and that I deselect the rows of subject BEL_04_772 from Visit 2 and 3,
+            I expect that after clicing `save`,
+            no save confirmation will pop up,
+            and that the review status of the respective two rows is indeed undone.", 
+      {
+        app$set_inputs("main_sidebar_1-review_forms_1-review_type" = "subject")
+        app$set_inputs("sf_vital_signs-switch_view" = "table")
+       
+        app$wait_for_idle()
+        # this indirectly deselects the Vital Signs data of BEL_04_772 of events
+        # 'Visit 2' and 'Visit 3'. 
+        #  Split up because only the last click is stored in the review_selection table:
+        app$run_js('$("#sf_vital_signs-review_form_tbl-table input[type=\'checkbox\']").slice(2, 3).click()')
+        app$wait_for_idle()
+        selection_table <- "sf_vital_signs-review_form_tbl-table_review_selection"
+        pending_review_data <- app$get_values(input = selection_table)$input[[selection_table]]
+        expect_equal(unique(pending_review_data$row_id), 10)
+        app$run_js('$("#sf_vital_signs-review_form_tbl-table input[type=\'checkbox\']").slice(3, 4).click()')
+        app$wait_for_idle()
+        pending_review_data <- dplyr::bind_rows(
+          pending_review_data,
+          app$get_values(input = selection_table)$input[[selection_table]]
+        )
+        expect_equal(unique(pending_review_data$row_id), 10:11)
+        expect_equal(app$get_js(sprintf(count_VS_checkboxes, ":not(:checked)")), 2)
+        expect_equal(app$get_js(sprintf(count_VS_checkboxes, ":checked")), 5)
+        
+        app$click("main_sidebar_1-review_forms_1-save_review")
+        app$wait_for_idle()
+        # Warning/confirmation should NOT show up:
+        expect_equal(
+          app$get_js('$("#main_sidebar_1-review_forms_1-confirm_save_modal").text()'), 
+          ""
+        )
+        user_db <- app$get_value(export = "user_db")
+        not_reviewed_data <- db_get_table(user_db) |> 
+          subset(
+            id %in% pending_review_data$id, 
+            select = c("subject_id", "event_name", "reviewer")
+          ) |> 
+          unique()
+        expect_equal(not_reviewed_data$event_name, c("Visit 2", "Visit 3"))
+        expect_equal(unique(not_reviewed_data$subject_id), "BEL_04_772")
+        expect_equal(unique(not_reviewed_data$reviewer), "test user (Administrator)")
+      }
     ) 
   }
 )
