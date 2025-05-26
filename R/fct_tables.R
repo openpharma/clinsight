@@ -185,7 +185,6 @@ create_table.general <- function(
   }
   if("study_status" %in% names(data)){
     keep_vars <- c(keep_vars, "study_status")
-    browser()
   }
   df <- with(data, data[!item_name %in% c("DrugAdminDate", "DrugAdminDose"),]) |>
     create_table.default(name_column, value_column, keep_vars, expected_columns)
