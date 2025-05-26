@@ -1,5 +1,9 @@
 # clinsight (development version)
 
+## Developer notes
+
+- It is now easier to adjust the study status label of each participant (#217).
+
 # clinsight 0.2.0
 
 ## Changed 
