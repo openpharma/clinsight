@@ -28,6 +28,8 @@ describe(
         app$wait_for_idle(8000)
         app$run_js('$("#start_page_1-overview_table td").filter(function() {return $(this).text() == "BEL_04_772"}).closest("tr").trigger("dblclick")')
         app$wait_for_idle()
+        app$run_js('$("#navigate_review_1-review_df td").filter(function() {return $(this).text() == "Adverse events"}).closest("tr").trigger("dblclick")')
+        app$wait_for_idle()
         expect_equal(app$get_value(export = "active_form"), "Adverse events")
         expect_equal(app$get_value(export = "active_participant"), "BEL_04_772")
         
