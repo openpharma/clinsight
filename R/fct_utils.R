@@ -739,14 +739,15 @@ custom_config_path <- function(
   Sys.getenv("CONFIG_PATH", app_sys("golem-config.yml")) 
 }
 
-dblclick_to_form <- function(bttn_ns) {
+dblclick_to_form <- function(bttn_ns, button_id = "go_to_form") {
+  stopifnot(is.character(bttn_ns), is.character(button_id %||% ""))
   DT::JS(
     "table.on('dblclick', 'tbody tr', function(t) {",
     # This processing assumes `server = TRUE`
     "var current_index = table.row(this).index();",
     "var current_rows = table.ajax.json().DT_rows_current;",
     "table.shinyMethods.selectRows(current_rows[current_index]);",
-    "document.getElementById(", deparse(NS(bttn_ns, "go_to_form")), ").click();",
+    "document.getElementById(", deparse(NS(bttn_ns, button_id)), ").click();",
     "})"
   )}
 
