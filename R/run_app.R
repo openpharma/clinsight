@@ -104,6 +104,21 @@ run_app <- function(
     options("shinymanager.pwd_failure_limit" = 5)
   }
   
+  # Verify and look up study logo if available:
+  study_logos <- list.files(
+    path = get_golem_config("study_asset_path"),
+    pattern = "^study_logo\\.(jpg|gif|svg|png)$",
+    ignore.case = TRUE
+  )
+  study_logo_path <- if (!identical(study_logos, character(0))){
+    # Since SVGs are usually highest quality:
+    logo_file <- study_logos[c(which(tolower(tools::file_ext(study_logos)) == "svg"), 1 )][1]
+    cat("\n\nUsing Study Logo File:", logo_file, "\n")
+    file.path("assets", logo_file)
+  } else {
+    NULL
+  }
+  
   with_golem_options(
     app = shinyApp(
       ui =  if(use_shinymanager) authenticate_ui() else app_ui,
@@ -119,6 +134,7 @@ run_app <- function(
       user_db = user_db,
       credentials_db = credentials_db,
       credentials_pwd = credentials_pwd,
+      study_logo_path = study_logo_path,
       ...
     )
   )
