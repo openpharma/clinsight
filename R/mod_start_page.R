@@ -87,7 +87,7 @@ mod_start_page_server <- function(id, r, rev_data, navinfo, all_forms, table_nam
       tab <- datatable_custom(
         dplyr::select(rev_data$overview(), -needs_review), 
         rename_vars = table_names,
-        callback = dblclick_to_form(ns("go_to_patient")), 
+        callback = dblclick_to_form(ns("go_to_nav_review"), button_id = NULL), 
         allow_listing_download = FALSE
       )
       if(length(bold_rows) == 0) return(tab)

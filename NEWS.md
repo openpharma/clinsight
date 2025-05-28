@@ -1,5 +1,10 @@
 # clinsight (development version)
 
+## Changed
+
+- A double click on a row in the start page now shows a modal with all data that needs review instead of directly going to the first page of the patient even if there is no new data on that page (#216).
+
+
 # clinsight 0.2.0
 
 ## Changed 
