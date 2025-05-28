@@ -1,5 +1,9 @@
 # clinsight (development version)
 
+## Changed
+
+- A double click on a row in the start page now shows a modal with all data that needs review instead of directly going to the first page of the patient even if there is no new data on that page (#216).
+- Removed the requirement for common_forms to have a 'Name' column. In addition, a 'Name' column can be provided in study data tabs, indicating a common name per row, which will improve the query selector items (#207).
 - Improved branding with new ClinSight Logo, added favicon, and allowed for study logos, when available
 
 # clinsight 0.2.0
