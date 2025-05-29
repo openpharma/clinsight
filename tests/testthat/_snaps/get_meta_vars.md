@@ -150,6 +150,8 @@
                 "reviewer"             "status"         "subject_id" 
                       Time                   Dx                 Type 
                "timestamp" "WHO.classification"               "type" 
+              Study Status 
+            "study_status" 
       
       $form_level_data
                item_group item_scale use_unscaled_limits review_required

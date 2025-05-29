@@ -183,40 +183,55 @@ create_table.general <- function(
     data <-  data.frame(matrix(ncol = length(df_names))) |> 
       setNames(df_names)
   }
-
-  df <- data |> 
-    dplyr::filter(!item_name %in% c("DrugAdminDate", "DrugAdminDose")) |>
+  if ("study_status" %in% unique(data$item_name)){
+    expected_columns <- c(expected_columns, "study_status")
+    if ("status_label" %in% unique(data$item_name)){
+      expected_columns <- c(expected_columns, "status_label")
+    }
+  } else {
+    if ("study_status" %in% names(data)){
+      keep_vars <- c(keep_vars, "study_status")
+      if ("status_label" %in% names(data)){
+        keep_vars <- c(keep_vars, "status_label")
+      }
+    } 
+  }
+  df <- with(data, data[!item_name %in% c("DrugAdminDate", "DrugAdminDose"),]) |>
     create_table.default(name_column, value_column, keep_vars, expected_columns)
-  
+  if(!"study_status" %in% names(df)){
+    df <- df |> 
+      dplyr::mutate(
+        study_status = ifelse(
+          is.na(Eligible), 
+          "Unknown",
+          ifelse(
+            Eligible == "No", 
+            "Screen failure", 
+            ifelse(
+              Eligible == "Yes",
+              "Enrolled",
+              Eligible
+            )
+          )
+        ),
+        study_status = ifelse(
+          !is.na(DiscontinuationDate),
+          ifelse(
+            is.na(DiscontinuationReason), 
+            "Discontinued", 
+            DiscontinuationReason
+          ),
+          study_status
+        )
+      )  
+  }
   df |> 
     dplyr::mutate(
-      status = ifelse(
-        is.na(Eligible), 
-        "Unknown",
-        ifelse(
-          Eligible == "No", 
-          "Screen failure", 
-          ifelse(
-            Eligible == "Yes",
-            "Enrolled",
-            Eligible
-          )
-        )
-      ),
-      status = ifelse(
-        !is.na(DiscontinuationDate),
-        ifelse(
-          is.na(DiscontinuationReason), 
-          "Discontinued", 
-          DiscontinuationReason
-          ),
-        status
-        ),
-      status_label = paste0(
+      status_label = status_label %|_|% paste0(
         "<b>", subject_id, "</b><br>",
         "<b>Sex:</b> ",    Sex, "<br>",
         "<b>Age:</b> ",    Age, "yrs.", "<br>",
-        "<b>Status:</b> ", status, "<br>",
+        "<b>Status:</b> ", study_status, "<br>",
         "<b>ECOG:</b> ",   ECOG, "<br>",
         "<b>Dx:</b> ",     WHO.classification
       ) 
