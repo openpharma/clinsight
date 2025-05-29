@@ -1,6 +1,8 @@
 # clinsight (development version)
 
 - Added options to review on form level. With form-level review, subject-level graphics and tiles will be hidden, and all data will be shown in the tables, and review is enable on all rows. All data in a form can be reviewed at once; if a user tries to do so, an additional confirmation will be requested (#198).
+- A double click on a row in the start page now shows a modal with all data that needs review instead of directly going to the first page of the patient even if there is no new data on that page (#216).
+- Removed the requirement for common_forms to have a 'Name' column. In addition, a 'Name' column can be provided in study data tabs, indicating a common name per row, which will improve the query selector items (#207).
 
 # clinsight 0.2.0
 
@@ -24,7 +26,6 @@
 - Settings and data/clinsight information in the sidebar is now aligned at the bottom (#194).
 - Tables in all forms now keep showing data of the active subject first by default, even when changing table view to show all subject's data in the table (#190).
 - Engineered a `study_name` field in `meta$settings` to display an official study name in the app (#197).
->>>>>>> dev
 
 ## Bug fixes
 
