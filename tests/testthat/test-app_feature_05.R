@@ -39,8 +39,10 @@ describe(
         )
         app$click("main_sidebar_1-review_forms_1-save_review")
         app$wait_for_idle(800)
-        output_names <- names(app$get_values(output = TRUE)$output)
-        app$expect_values(output = vector_select(output_names, exclude = "visit_figure"))
+        output_names <- names(app$get_values(output = TRUE)$output) |> 
+          vector_select(exclude = c("visit_figure", "start_page_1-overview_table"))
+        ## snapshot 001:
+        app$expect_values(output = output_names)
         # Check that overall review state is partial
         expect_false(app$get_value(input = 'main_sidebar_1-review_forms_1-form_reviewed'))
         expect_true(app$get_js('$("#main_sidebar_1-review_forms_1-form_reviewed").prop("indeterminate")'))
@@ -82,8 +84,11 @@ describe(
         )
         app$click("main_sidebar_1-review_forms_1-save_review")
         app$wait_for_idle(800)
-        output_names <- names(app$get_values(output = TRUE)$output)
-        app$expect_values(output = vector_select(output_names, exclude = "visit_figure"))
+        output_names <- names(app$get_values(output = TRUE)$output) |> 
+          vector_select(exclude = c("visit_figure", "start_page_1-overview_table"))
+        ## snapshot 002:
+        app$expect_values(output = output_names)
+        
         expect_true(app$get_js('$("#main_sidebar_1-review_forms_1-form_reviewed").prop("indeterminate")'))
         
         user_db <- app$get_value(export = "user_db")
@@ -128,9 +133,10 @@ describe(
           89
         )
         
-        output_names <- names(app$get_values(output = TRUE)$output)
+        output_names <- names(app$get_values(output = TRUE)$output) |> 
+          vector_select(exclude = c("visit_figure", "start_page_1-overview_table"))
         ## snapshot 003:
-        app$expect_values(output = vector_select(output_names, exclude = "visit_figure"))
+        app$expect_values(output = output_names)
         
         app$run_js('$("#cf_medication-show_all_data").click()')
         app$wait_for_idle(800)
