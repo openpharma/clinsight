@@ -103,19 +103,14 @@ run_app <- function(
     options("shinymanager.pwd_validity" = 90) 
     options("shinymanager.pwd_failure_limit" = 5)
   }
-  
-  # Verify and look up study logo if available:
-  study_logos <- list.files(
-    path = get_golem_config("study_asset_path"),
-    pattern = "^study_logo\\.(jpg|gif|svg|png)$",
-    ignore.case = TRUE
-  )
-  study_logo_path <- if (!identical(study_logos, character(0))){
-    # Since SVGs are usually highest quality:
-    logo_file <- study_logos[c(which(tolower(tools::file_ext(study_logos)) == "svg"), 1 )][1]
-    cat("\n\nUsing Study Logo File:", logo_file, "\n")
-    file.path("assets", logo_file)
-  } else {
+  logo_path <- get_golem_config("study_logo")
+  study_logo_path <- if (file.exists(logo_path)){
+    if(!tolower(tools::file_ext(logo_path)) %in% c("png", "jpg", "svg")){
+      warning("study logo ignored - only png, jpg or svg files are supported.")
+      return(NULL)
+    }
+    paste0("assets/", basename(logo_path))
+  } else{
     NULL
   }
   

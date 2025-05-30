@@ -10,3 +10,4 @@ test:
   meta_data: metadata.rds
   user_db: user_db.sqlite
   study_asset_path: assets_custom
+  study_logo: assets_custom/study_logo.png

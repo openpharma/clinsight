@@ -9,7 +9,7 @@ app_ui <- function(request){
   tagList(
     golem_add_external_resources(
       study_name = golem::get_golem_options("meta")$settings$study_name,
-      add_asset_path = add_study_logo
+      add_logo = add_study_logo
     ),
     shinyjs::useShinyjs(),
     bslib::page_navbar(
@@ -74,14 +74,18 @@ app_ui <- function(request){
 #' @noRd
 golem_add_external_resources <- function(
     study_name = NULL, 
-    add_asset_path = FALSE
+    add_logo = NULL
 ) {
   
   # If a study asset path is provided, verify it exists before adding it as a 
   # resource path
-  asset_path <- get_golem_config("study_asset_path")
-  if(add_asset_path && !is.null(asset_path)){
-    add_resource_path("assets", asset_path)
+  logo_path <- get_golem_config("study_logo")
+  if(add_logo && !is.null(logo_path)){
+    logo_name <- basename(logo_path)
+    temp_logo_dir <- file.path(tempdir(), "clinsight_assets")
+    dir.create(temp_logo_dir, showWarnings = FALSE)
+    file.copy(logo_path, file.path(temp_logo_dir, logo_name), overwrite = TRUE)
+    add_resource_path("assets", temp_logo_dir)
   }
   # Add app/www to resource path as simply 'www/'
   add_resource_path(
