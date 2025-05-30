@@ -87,9 +87,12 @@ describe(
       paste0(
       "Scenario 2 - Use custom logo and custom config.yml file. Given the same data as in Scenario 1,",
         "and with a custom logo 'study_logo.png' provided in the folder 'assets_custom'",
-        "and using a custom config file config-custom.yml with [study_asset_path] set to 'assets_custom'",
+        "and using a custom config file config-custom.yml with ",
+        "[study_asset_path] set to 'assets_custom' and [user_roles] to 'Custom Role: custom_role'",
+        "and allow_to_review set to 'custom_role'",
         "and the envvar [CONFIG_PATH] set to 'config-custom.yml'",
-        "I expect to see a custom study logo in the navigation bar."
+        "I expect to see a custom study logo in the navigation bar,",
+        "and that the user has the role 'Custom Role' assigned."
       ), 
       {
         withr::local_envvar(c("CONFIG_PATH" = "config-custom.yml"))
@@ -101,16 +104,20 @@ describe(
           height = 955
         )
         withr::defer(app$stop()) 
+        
+        ## Test logo availability:
         expect_equal(
           app$get_js("document.getElementById('study_logo').tagName"), 
           "IMG"
         )
         logo_path <- app$get_js("document.getElementById('study_logo').src")
         expect_equal(basename(logo_path), "study_logo.png")
-        # Test logo availability:
         downloaded_logo <- file.path(withr::local_tempdir(), "downloaded_logo.png")
         download.file(logo_path, destfile = downloaded_logo, mode = "wb", quiet = TRUE)
         expect_snapshot_file(downloaded_logo)
+        
+        ## Verify custom user role:
+        expect_equal(app$get_value(export = c("active_user_role")), "Custom Role")
       }
     )       
   }
