@@ -118,6 +118,12 @@ describe(
         
         ## Verify custom user role:
         expect_equal(app$get_value(export = c("active_user_role")), "Custom Role")
+        
+        # ensure other files in assets folder cannot be accessed:
+        hidden_file_path <- paste0(app$get_url(), "assets/hidden_file.txt")
+        expect_error(
+          suppressWarnings(readLines(hidden_file_path, warn = FALSE))
+        )
       }
     )       
   }
