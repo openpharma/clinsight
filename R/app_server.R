@@ -336,6 +336,7 @@ app_server <- function(
     user_db = user_db,
     active_participant = r$subject_id,
     active_form = navinfo$active_form,
+    active_user_role = r$user_role,
     user_error = user_error()
   )
 }
