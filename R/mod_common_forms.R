@@ -7,7 +7,9 @@ mod_common_forms_ui <- function(id, form){
   ns <- NS(id)
   bslib::nav_panel(
     title = form, 
-    if (form == "Adverse events") mod_timeline_ui(ns("timeline_fig")),
+    if (form == "Adverse events") {
+      bslib::card_body(id = ns("timeline_card"), mod_timeline_ui(ns("timeline_fig")))
+      },
     bslib::layout_sidebar(
       fillable = FALSE,
       if(form == "Adverse events"){
@@ -104,7 +106,27 @@ mod_common_forms_server <- function(
   
   moduleServer( id, function(input, output, session){
     ns <- session$ns
-     
+    
+    observeEvent(session$userData$review_type(), {
+      golem::cat_dev(form, "| Updating tables to show '", 
+                     session$userData$review_type(), "' level data\n", sep = "")
+      shinyWidgets::updateMaterialSwitch(
+        session = session,
+        inputId = "show_all_data",
+        value = identical(session$userData$review_type(), "form")
+      )
+      shinyjs::toggleState(
+        id = "show_all_data",
+        condition = identical(session$userData$review_type(), "subject")
+        )
+      if(form == "Adverse events"){
+        shinyjs::toggleElement(
+          id = "timeline_card", 
+          condition = identical(session$userData$review_type(), "subject")
+        )
+      }
+    })
+    
     mod_review_form_tbl_server(
       "review_form_tbl", 
       form = form,
@@ -112,7 +134,7 @@ mod_common_forms_server <- function(
       form_review_data = form_review_data, 
       form_items = form_items,
       active_subject = active_subject,
-      show_all = reactive(input$show_all_data), 
+      show_all = reactive(isTRUE(input$show_all_data) | identical(session$userData$review_type(), "form") ),
       table_names = table_names, 
       title = form
     )
@@ -125,7 +147,7 @@ mod_common_forms_server <- function(
         form_review_data = form_review_data, 
         form_items = form_items,
         active_subject = active_subject,
-        show_all = reactive(input$show_all_data), 
+        show_all = reactive(isTRUE(input$show_all_data) | identical(session$userData$review_type(), "form") ),
         table_names = table_names, 
         title = "Serious Adverse Events"
       )

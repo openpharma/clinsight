@@ -12,6 +12,8 @@ describe(
       height = 955    
     )
     withr::defer(app$stop())
+    # To count medication form checkboxes with specific characteristics with custom JS:
+    count_med_checkboxes <- "$('#cf_medication-review_form_tbl-table input[type=\"checkbox\"]%s').length"
     it(
       "Scenario 1 - Save row review. 
             Given a fixed random test data set with all data marked as not yet reviewed, 
@@ -28,15 +30,12 @@ describe(
         app$wait_for_idle()
         app$set_inputs(common_data_tabs = "Medication")
         app$wait_for_idle()
-        expect_equal(
-          app$get_js('$("#cf_medication-review_form_tbl-table input[type=\'checkbox\']").length'),
-          7
-        )
+        
+        expect_equal(app$get_js(sprintf(count_med_checkboxes, "")), 7)
+        
         app$run_js('$("#cf_medication-review_form_tbl-table input[type=\'checkbox\']").slice(0, 2).click()')
-        expect_equal(
-          app$get_js('$("#cf_medication-review_form_tbl-table input[type=\'checkbox\']:checked").length'),
-          2
-        )
+        expect_equal(app$get_js(sprintf(count_med_checkboxes, ":checked")), 2)
+        
         app$click("main_sidebar_1-review_forms_1-save_review")
         app$wait_for_idle(800)
         output_names <- names(app$get_values(output = TRUE)$output) |> 
@@ -78,10 +77,8 @@ describe(
             is marked as not yet being reviewed.", 
       {
         app$run_js('$("#cf_medication-review_form_tbl-table input[type=\'checkbox\']").slice(1, 2).click()')
-        expect_equal(
-          app$get_js('$("#cf_medication-review_form_tbl-table input[type=\'checkbox\']:checked").length'),
-          1
-        )
+        expect_equal(app$get_js(sprintf(count_med_checkboxes, ":checked")), 1)
+        
         app$click("main_sidebar_1-review_forms_1-save_review")
         app$wait_for_idle(800)
         output_names <- names(app$get_values(output = TRUE)$output) |> 
@@ -124,14 +121,12 @@ describe(
       {
         app$run_js('$("#cf_medication-show_all_data").click()')
         app$wait_for_idle(800)
-        expect_equal(
-          app$get_js('$("#cf_medication-review_form_tbl-table input[type=\'checkbox\']:checked").length'),
-          1
-        )
-        expect_equal(
-          app$get_js('$("#cf_medication-review_form_tbl-table input[type=\'checkbox\']:not(:checked)").length'),
-          89
-        )
+        expect_equal(app$get_js(sprintf(count_med_checkboxes, ":checked")), 1)
+        expect_equal(app$get_js(sprintf(count_med_checkboxes, ":not(:checked)")), 89)
+
+        #Only 7 medications of BEL_08_45 should have enabled checkboxes
+        expect_equal(app$get_js(sprintf(count_med_checkboxes, ":is(:disabled)")), 83)
+        expect_equal(app$get_js(sprintf(count_med_checkboxes, ":not(:disabled)")), 7)
         
         output_names <- names(app$get_values(output = TRUE)$output) |> 
           vector_select(exclude = c("visit_figure", "start_page_1-overview_table"))
@@ -140,14 +135,8 @@ describe(
         
         app$run_js('$("#cf_medication-show_all_data").click()')
         app$wait_for_idle(800)
-        expect_equal(
-          app$get_js('$("#cf_medication-review_form_tbl-table input[type=\'checkbox\']:checked").length'),
-          1
-        )
-        expect_equal(
-          app$get_js('$("#cf_medication-review_form_tbl-table input[type=\'checkbox\']:not(:checked)").length'),
-          6
-        )
+        expect_equal(app$get_js(sprintf(count_med_checkboxes, ":checked")), 1)
+        expect_equal(app$get_js(sprintf(count_med_checkboxes, ":not(:checked)")), 6)
       }
     )
     it(
@@ -168,10 +157,8 @@ describe(
         app$run_js('$("#main_sidebar_1-review_forms_1-form_reviewed").click()')
         app$wait_for_idle(800)
         # All checkboxes should now be checked:
-        expect_equal(
-          app$get_js('$("#cf_medication-review_form_tbl-table input[type=\'checkbox\']:checked").length'),
-          7
-        )
+        expect_equal(app$get_js(sprintf(count_med_checkboxes, ":checked")), 7)
+        
         all_values <- app$get_values(input = TRUE, output = TRUE)
         input_names <- vector_select(
           names(all_values$input),
@@ -195,19 +182,13 @@ describe(
         app$run_js('$("#main_sidebar_1-review_forms_1-form_reviewed").click()')
         app$wait_for_idle()
         # None of the checkboxes should now be checked:
-        expect_equal(
-          app$get_js('$("#cf_medication-review_form_tbl-table input[type=\'checkbox\']:checked").length'),
-          0
-        )
+        expect_equal(app$get_js(sprintf(count_med_checkboxes, ":checked")), 0)
         app$click("main_sidebar_1-review_forms_1-save_review")
         app$wait_for_idle(800)
         ## snapshot 005:
         app$expect_values(input = input_names, output = output_names)
         # Again, no checkboxes should be checked:
-        expect_equal(
-          app$get_js('$("#cf_medication-review_form_tbl-table input[type=\'checkbox\']:checked").length'),
-          0
-        )
+        expect_equal(app$get_js(sprintf(count_med_checkboxes, ":checked")), 0)
         expect_false(app$get_js('$("#main_sidebar_1-review_forms_1-form_reviewed").prop("indeterminate")'))
         expect_false(app$get_js('$("#main_sidebar_1-review_forms_1-form_reviewed").prop("checked")'))
         

@@ -32,6 +32,7 @@ app_server <- function(
   
   session$userData$pending_review_records <- reactiveValues()
   session$userData$pending_form_review_status <- reactiveValues()
+  session$userData$review_type <- reactiveVal("subject")
   
   res_auth <- authenticate_server(
     all_sites = app_vars$Sites$site_code, 
@@ -200,6 +201,11 @@ app_server <- function(
     bslib::nav_select(id = id_to_change, selected = navinfo$active_form)
   })
   
+  output$form_level_review <- reactive({
+    identical(session$userData$review_type(), "form")
+  })
+  outputOptions(output, "form_level_review", suspendWhenHidden = FALSE)
+
   timeline_data <- reactive({
     get_timeline_data(
       r$filtered_data, 

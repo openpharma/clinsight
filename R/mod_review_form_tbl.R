@@ -69,15 +69,14 @@ mod_review_form_tbl_server <- function(
         form_review_data(), 
         form = form, 
         form_items = form_items,
-        active_subject = active_subject(),
+        active_subject = if(identical(session$userData$review_type(), "form")) NULL else active_subject(),
         pending_form_review_status = NULL,
         is_SAE = identical(title, "Serious Adverse Events")
       )
     }) |> 
-      bindEvent(form_data(), form_review_data(), active_subject())
+      bindEvent(form_data(), form_review_data(), active_subject(), session$userData$review_type())
     
     ############################### Observers: #################################
-    
     
     observe({
       golem::cat_dev(form, "| Resetting userData\n")
@@ -85,10 +84,11 @@ mod_review_form_tbl_server <- function(
       datatable_rendered(NULL)
       session$userData$pending_form_review_status[[form]] <- NULL
       session$userData$pending_review_records[[form]] <- data.frame(id = integer(), reviewed = character())
-    }) |> 
-      bindEvent(active_subject(), form_review_data(), form_data())
+    }, priority = 100) |> 
+      bindEvent(active_subject(), form_review_data(), form_data(), session$userData$review_type())
     
     observeEvent(datatable_rendered(), {
+      golem::cat_dev(form, "| renewing table_data using merged_form_data()\n\n")
       table_data(merged_form_data())
     }, ignoreInit = TRUE)
     
@@ -100,7 +100,7 @@ mod_review_form_tbl_server <- function(
       df <- table_data() |> 
         dplyr::mutate(
           row_review_status = dplyr::if_else(
-            subject_id == active_subject(), 
+            identical(session$userData$review_type(), "form") | subject_id == active_subject(),
             lapply(row_review_status, modifyList, list(updated = checked)),
             row_review_status
           )
@@ -117,8 +117,7 @@ mod_review_form_tbl_server <- function(
         update_pending_review_records(
           session$userData$pending_review_records[[form]],
           input$table_review_selection[, c("id", "reviewed")],
-          subset(form_review_data(), subject_id == active_subject(),
-                 c("id", "reviewed"))
+          form_review_data()
         )
       
       # Update the table's data reactive
@@ -160,6 +159,20 @@ mod_review_form_tbl_server <- function(
         form, "| show_all() trigger changed. Incrementing reload_data()",
         "and toggle showing subject_id column \n"
       )
+        
+      row_disabled <- rep_len(FALSE, nrow(table_data()))
+      if(identical(session$userData$review_type(), "subject")) {
+        row_disabled <- table_data()$subject_id != active_subject()
+      }
+      df <- table_data()
+      df[["row_review_status"]] <- lapply(
+        seq_along(table_data()$row_review_status), \(x){
+          modifyList(
+            table_data()$row_review_status[[x]], list(disabled = row_disabled[x])
+          )
+        }
+      )
+      table_data(df)
       reload_data(reload_data() + 1)
       index <- match("subject_id", colnames(table_data())) - 1
       if (show_all()) {
@@ -173,6 +186,7 @@ mod_review_form_tbl_server <- function(
     
     output[["table"]] <- DT::renderDT({
       datatable_rendered(TRUE)
+      golem::cat_dev(form, "| Rendering table output in renderDT\n")
       datatable_custom(
         subset(merged_form_data(), isolate(show_all() | subject_id == active_subject())), 
         rename_vars = c("Review Status" = "row_review_status", table_names), 
