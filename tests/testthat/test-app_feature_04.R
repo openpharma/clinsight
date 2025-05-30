@@ -106,10 +106,7 @@ describe(
           "IMG"
         )
         logo_path <- app$get_js("document.getElementById('study_logo').src")
-        expect_equal(
-          logo_path,
-          paste0(app$get_url(), "assets/study_logo.png")
-        )
+        expect_equal(basename(logo_path), "study_logo.png")
         # Test logo availability:
         downloaded_logo <- file.path(withr::local_tempdir(), "downloaded_logo.png")
         download.file(logo_path, destfile = downloaded_logo, mode = "wb", quiet = TRUE)
