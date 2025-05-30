@@ -1,0 +1,14 @@
+default:
+  user_identification: test_user
+  user_db: user_db.sqlite
+  user_roles:
+    Administrator: admin
+    Medical Monitor: medical_monitor
+    Data Manager: data_manager
+  allow_to_review: [admin, medical_monitor]
+  allow_query_inputs: TRUE
+test:
+  study_data: study_data.rds
+  meta_data: metadata.rds
+  user_db: user_db.sqlite
+  study_asset_path: assets_custom
