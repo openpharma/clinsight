@@ -47,7 +47,7 @@ app_ui <- function(request){
       bslib::nav_spacer(),
       bslib::nav_item(
         if(add_study_logo){
-          tags$img(src = golem::get_golem_options("study_logo_path"), height = '40')
+          tags$img(id = "study_logo", src = golem::get_golem_options("study_logo_path"), height = '40')
         } else{
           tags$h3(textOutput("study_name"), class = "text-secondary")
         }
