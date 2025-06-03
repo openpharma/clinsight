@@ -148,18 +148,27 @@ mod_review_forms_server <- function(
     review_indeterminate <- reactiveVal()
     
     observeEvent(review_indeterminate(), {
-      shinyjs::runjs(sprintf("$('#%s').prop('indeterminate', %s)", ns("form_reviewed"), tolower(review_indeterminate())))
+      shinyjs::runjs(sprintf(
+        "$('#%s').prop('indeterminate', %s)", 
+        ns("form_reviewed"), 
+        tolower(review_indeterminate())
+      ))
     })
     
     observe({
-      req(session$userData$pending_review_records[[active_form()]], review_data_active())
+      req(session$userData$pending_review_records[[active_form()]])
       review_status <-
         review_data_active()[,c("id", "reviewed")] |> 
-        dplyr::rows_update(session$userData$pending_review_records[[active_form()]][,c("id", "reviewed")], by = "id") |> 
+        dplyr::rows_update(
+          session$userData$pending_review_records[[active_form()]][,c("id", "reviewed")], 
+          by = "id"
+        ) |> 
         dplyr::distinct(reviewed) |> 
         dplyr::pull()
       
-      shinyjs::runjs(sprintf("$('#%s').prop('checked', %s)", ns("form_reviewed"), tolower(identical(review_status, "Yes"))))
+      shinyjs::runjs(sprintf(
+        "$('#%s').prop('checked', %s)", 
+        ns("form_reviewed"), tolower(identical(review_status, "Yes"))))
       review_indeterminate(length(review_status) > 1)
     }) |>
       bindEvent(active_form(), session$userData$pending_review_records[[active_form()]])
@@ -168,7 +177,8 @@ mod_review_forms_server <- function(
       req(!identical(input$review_type, "form"))
       golem::cat_dev("mod_review_forms | Reset review records\n")
       session$userData$pending_form_review_status[[active_form()]] <- NULL
-      session$userData$pending_review_records[[active_form()]] <- data.frame(id = integer(), reviewed = character())
+      session$userData$pending_review_records[[active_form()]] <- 
+        data.frame(id = integer(), reviewed = character())
     })
     
     observeEvent(input$form_reviewed, {
@@ -195,13 +205,23 @@ mod_review_forms_server <- function(
         review_comment <- ""
       } else {
         review_status <- unique(review_data_active()[["reviewed"]])
-        review_comment <- with(review_data_active(), comment[edit_date_time == max(as.POSIXct(edit_date_time))]) |> unique() |> paste(collapse = "; ")
-        if(length(review_status) != 1)
-          review_indeterminate(TRUE)
+        review_comment <- review_data_active() |> 
+          with(comment[edit_date_time == max(as.POSIXct(edit_date_time))]) |> 
+          unique() |> 
+          paste(collapse = "; ")
+        if(length(review_status) != 1) review_indeterminate(TRUE)
       }
       
-      shinyjs::runjs(sprintf("$('#%s').prop('checked', %s)", ns("form_reviewed"), tolower(identical(review_status, "Yes"))))
-      shinyjs::runjs(sprintf("$('#%s').prop('indeterminate', %s)", ns("form_reviewed"), tolower(review_indeterminate())))
+      shinyjs::runjs(sprintf(
+        "$('#%s').prop('checked', %s)", 
+        ns("form_reviewed"), 
+        tolower(identical(review_status, "Yes"))
+      ))
+      shinyjs::runjs(sprintf(
+        "$('#%s').prop('indeterminate', %s)", 
+        ns("form_reviewed"), 
+        tolower(review_indeterminate())
+      ))
       
       shinyWidgets::updatePrettySwitch(
         session = session,
@@ -366,7 +386,8 @@ mod_review_forms_server <- function(
       )
       
       session$userData$pending_form_review_status[[active_form()]] <- NULL
-      session$userData$pending_review_records[[active_form()]] <- data.frame(id = integer(), reviewed = character())
+      session$userData$pending_review_records[[active_form()]] <- 
+        data.frame(id = integer(), reviewed = character())
       
       review_save_error(any(
         !isTRUE(all.equal(review_records_db, review_records, check.attributes = FALSE)),
