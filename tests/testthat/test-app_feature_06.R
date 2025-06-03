@@ -1,7 +1,7 @@
 library(shinytest2)
 
 describe(
-  "Feature 6 | Save form level review. As a user, I want to be able to save a review of an entire form.", {
+  "Feature 6 | Review on form level. As a user, I want to be able to save a review of an entire form.", {
     app <- AppDriver$new(
       app_dir = test_path("fixtures/testapp"),
       name = "app-feature-6",
@@ -32,37 +32,29 @@ describe(
         app$wait_for_idle()
         expect_equal(app$get_value(export = "active_form"), "Adverse events")
         expect_equal(app$get_value(export = "active_participant"), "BEL_04_772")
-        
         expect_equal(app$get_js(sprintf(count_SAE_checkboxes, "")), 0)
         expect_equal(app$get_js(sprintf(count_AE_checkboxes, "")), 5)
 
         app$set_inputs("main_sidebar_1-review_forms_1-review_type" = "form")
         app$wait_for_idle(1000)
-        
-        expect_equal(app$get_js(sprintf(count_SAE_checkboxes, "")), 13)
-        expect_equal(app$get_js(sprintf(count_AE_checkboxes, "")), 77)
-        app$wait_for_idle()
         expect_equal(app$get_value(input = "cf_adverse_events-show_all_data"), TRUE)
         expect_equal(app$get_value(output = "form_level_review"), TRUE)
+        expect_equal(app$get_js(sprintf(count_SAE_checkboxes, "")), 13)
+        expect_equal(app$get_js(sprintf(count_AE_checkboxes, "")), 77)
         
         app$set_inputs("main_sidebar_1-review_forms_1-form_reviewed" = TRUE)
         app$wait_for_idle()
         #All checkboxes should now be checked:
-        
         expect_equal(app$get_js(sprintf(count_SAE_checkboxes, ":checked")), 13)
         expect_equal(app$get_js(sprintf(count_AE_checkboxes, ":checked")), 77)
         
         app$click("main_sidebar_1-review_forms_1-save_review")
         app$wait_for_idle()
         # Warning/confirmation should show up:
-        modal_text <- app$get_js('$("#main_sidebar_1-review_forms_1-confirm_save_modal").text()') |> 
-          gsub(pattern = " *\n +", replacement = " ")
-        expect_true(
-          grepl(
-            "This will change the review status of ALL items in the form Adverse events to reviewed",
-            modal_text
-          )
-        )
+        app$get_js('$("#main_sidebar_1-review_forms_1-confirm_save_modal").text()') |> 
+          gsub(pattern = " *\n +", replacement = " ") |> 
+          grepl(pattern = "This will change the review status of ALL items in the form Adverse events to reviewed") |> 
+          expect_true()
         input_names <- c(
           "cf_adverse_events-review_form_tbl-table_review_selection",
           "cf_adverse_events-review_form_SAE_tbl-table_review_selection",
@@ -77,12 +69,12 @@ describe(
         )
         #snapshot 001:
         app$expect_values(input = input_names, output = output_names)
+        
         app$click("main_sidebar_1-review_forms_1-confirm_saving")
         app$wait_for_idle()
         #snapshot 002:
         app$expect_values(input = input_names, output = output_names)
         user_db <- app$get_value(export = "user_db")
-        
         active_form_data <- db_get_table(user_db) |> 
           dplyr::filter(item_group == app$get_value(export = "active_form"))
         expect_equal(unique(active_form_data$reviewed), "Yes")
@@ -109,14 +101,11 @@ describe(
         
         app$click("main_sidebar_1-review_forms_1-save_review")
         app$wait_for_idle()
-        modal_text <- app$get_js('$("#main_sidebar_1-review_forms_1-confirm_save_modal").text()') |> 
-          gsub(pattern = " *\n +", replacement = " ")
-        expect_true(
-          grepl(
-            "This will change the review status of ALL items in the form Adverse events to not reviewed",
-            modal_text
-          )
-        )
+        app$get_js('$("#main_sidebar_1-review_forms_1-confirm_save_modal").text()') |> 
+          gsub(pattern = " *\n +", replacement = " ") |> 
+          grepl(pattern = "This will change the review status of ALL items in the form Adverse events to not reviewed") |> 
+          expect_true()
+        
         app$click("main_sidebar_1-review_forms_1-confirm_saving")
         app$wait_for_idle()
         input_names <- c(
@@ -146,13 +135,11 @@ describe(
       {
         app$set_inputs("main_sidebar_1-review_forms_1-review_type" = "subject")
         app$wait_for_idle(1000)
-        
+        expect_equal(app$get_value(input = "cf_adverse_events-show_all_data"), FALSE)
+        expect_equal(app$get_value(output = "form_level_review"), FALSE)
         expect_equal(app$get_js(sprintf(count_SAE_checkboxes, "")), 0)
         expect_equal(app$get_js(sprintf(count_AE_checkboxes, "")), 5)
         expect_equal(app$get_js(sprintf(count_AE_checkboxes, ":not(:checked)")), 5)
-        
-        expect_equal(app$get_value(input = "cf_adverse_events-show_all_data"), FALSE)
-        expect_equal(app$get_value(output = "form_level_review"), FALSE)
         
         app$set_inputs("main_sidebar_1-review_forms_1-form_reviewed" = TRUE)
         app$wait_for_idle()
@@ -164,7 +151,6 @@ describe(
         user_db <- app$get_value(export = "user_db")
         active_form_data <- db_get_table(user_db) |> 
           dplyr::filter(item_group == app$get_value(export = "active_form"))
-        
         expect_equal(
           unique(with(active_form_data, reviewed[subject_id == "BEL_04_772"])), 
           "Yes"
@@ -209,31 +195,24 @@ describe(
         app$wait_for_idle(1000)
         app$set_inputs("main_sidebar_1-review_forms_1-review_type" = "form")
         app$wait_for_idle(1000)
-        
+        expect_equal(app$get_value(input = "sf_vital_signs-show_all"), TRUE)
+        expect_equal(app$get_value(output = "form_level_review"), TRUE)
         expect_equal(app$get_js(sprintf(count_VS_checkboxes, "")), 68)
         expect_equal(app$get_js(sprintf(count_VS_checkboxes, ":not(:checked)")), 68)
         expect_equal(app$get_js(sprintf(count_VS_checkboxes, ":not(:disabled)")), 68)
         
-        expect_equal(app$get_value(input = "sf_vital_signs-show_all"), TRUE)
-        expect_equal(app$get_value(output = "form_level_review"), TRUE)
-        
         app$set_inputs("main_sidebar_1-review_forms_1-form_reviewed" = TRUE)
         app$wait_for_idle()
         #All checkboxes should now be checked:
-        
         expect_equal(app$get_js(sprintf(count_VS_checkboxes, ":checked")), 68)
         
         app$click("main_sidebar_1-review_forms_1-save_review")
         app$wait_for_idle()
         # Warning/confirmation should show up:
-        modal_text <- app$get_js('$("#main_sidebar_1-review_forms_1-confirm_save_modal").text()') |> 
-          gsub(pattern = " *\n +", replacement = " ")
-        expect_true(
-          grepl(
-            "This will change the review status of ALL items in the form Vital signs to reviewed",
-            modal_text
-          )
-        )
+        app$get_js('$("#main_sidebar_1-review_forms_1-confirm_save_modal").text()') |> 
+          gsub(pattern = " *\n +", replacement = " ") |> 
+          grepl(pattern = "This will change the review status of ALL items in the form Vital signs to reviewed") |> 
+          expect_true()
         input_names <- c(
           "sf_vital_signs-review_form_tbl-table_review_selection",
           "main_sidebar_1-review_forms_1-confirm_saving"
@@ -247,12 +226,12 @@ describe(
         )
         #snapshot 005:
         app$expect_values(input = input_names, output = output_names)
+        
         app$click("main_sidebar_1-review_forms_1-confirm_saving")
         app$wait_for_idle()
         #snapshot 006:
         app$expect_values(input = input_names, output = output_names)
         user_db <- app$get_value(export = "user_db")
-        
         active_form_data <- db_get_table(user_db) |> 
           dplyr::filter(item_group == app$get_value(export = "active_form"))
         expect_equal(unique(active_form_data$reviewed), "Yes")
@@ -273,7 +252,6 @@ describe(
         app$wait_for_idle()
         expect_equal(app$get_js(sprintf(count_VS_checkboxes, ":not(:checked)")), 1)
         expect_equal(app$get_js(sprintf(count_VS_checkboxes, ":checked")), 67)
-        
         selection_table <- "sf_vital_signs-review_form_tbl-table_review_selection"
         pending_review_data <- app$get_values(input = selection_table)$input[[selection_table]]
         expect_equal(unique(pending_review_data$row_id), 1)
@@ -322,7 +300,6 @@ describe(
       {
         app$set_inputs("main_sidebar_1-review_forms_1-review_type" = "subject")
         app$set_inputs("sf_vital_signs-switch_view" = "table")
-       
         app$wait_for_idle()
         # this indirectly deselects the Vital Signs data of BEL_04_772 of events
         # 'Visit 2' and 'Visit 3'. 
@@ -332,6 +309,7 @@ describe(
         selection_table <- "sf_vital_signs-review_form_tbl-table_review_selection"
         pending_review_data <- app$get_values(input = selection_table)$input[[selection_table]]
         expect_equal(unique(pending_review_data$row_id), 10)
+        
         app$run_js('$("#sf_vital_signs-review_form_tbl-table input[type=\'checkbox\']").slice(3, 4).click()')
         app$wait_for_idle()
         pending_review_data <- dplyr::bind_rows(
