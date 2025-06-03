@@ -125,11 +125,8 @@ mod_review_forms_server <- function(
     
     review_data_active <- reactive({
       tryCatch({
-        df <- subset(r$review_data[[active_form()]]) 
-        if (!identical(input$review_type, "form")){
-          df <- subset(df, subject_id == r$subject_id)
-        }
-        df
+        r$review_data[[active_form()]] |> 
+          subset(identical(input$review_type, "form") | subject_id == r$subject_id) 
       }, 
         # Returns expected empty data frame for empty form
         error = \(e) r$review_data[[names(r$review_data)[1]]][0,]
