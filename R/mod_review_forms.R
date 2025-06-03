@@ -194,11 +194,6 @@ mod_review_forms_server <- function(
         review_status <- "No"
         review_comment <- ""
       } else {
-        # in the rare case of multiple rows selected, the unique reviewed label 
-        # will be selected below. if there are multiple labels ("Yes and No"), 
-        # it will give a warning. This would be rare since it would mean a datapoint with the same edit date-time was reviewed but another one was not. 
-        # probably better to use defensive coding here to ensure the app does not crash in that case. However we need to define which review status we need to select
-        # in this case get the reviewed = "No"
         review_status <- unique(review_data_active()[["reviewed"]])
         review_comment <- with(review_data_active(), comment[edit_date_time == max(as.POSIXct(edit_date_time))]) |> unique() |> paste(collapse = "; ")
         if(length(review_status) != 1)
