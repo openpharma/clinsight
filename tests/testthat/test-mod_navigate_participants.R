@@ -4,7 +4,7 @@ describe("mod_navigate_participants. Feature 1 | Load application module in isol
         filtered_tables = list(
           General = data.frame(
             subject_id = c("Subj1", "Subj2", "Subj3"),
-            study_status = "",
+            subject_status = "",
             status_label = c("lab1", "lab2", "lab3")
           )
         ),
@@ -45,7 +45,7 @@ describe(
         filtered_tables = list(
           General = data.frame(
             subject_id = c("Subj1", "Subj2", "Subj3"),
-            study_status = "",
+            subject_status = "",
             status_label = c("lab1", "lab2", "lab3")
           )
         ),
@@ -160,7 +160,7 @@ describe(
               filtered_tables = list(
                 General = data.frame(
                   subject_id = c("Subj1", "Subj2", "Subj3"),
-                  study_status = "",
+                  subject_status = "",
                   status_label = c("lab1", "lab2", "lab3"), 
                   Sex = c("Male", "Female", "Female"),
                   Age = c(70, 16, 29)

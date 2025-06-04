@@ -132,27 +132,27 @@ describe(
     })
     it("does not create a study status if it already exists", {
       df_with_status <- df |> 
-        dplyr::mutate(study_status = "Enrolled")
+        dplyr::mutate(subject_status = "Enrolled")
       general_table <- create_table(df_with_status, expected_columns = expected_cols)
-      expect_equal(unique(general_table$study_status), "Enrolled")
+      expect_equal(unique(general_table$subject_status), "Enrolled")
       expect_true(all(grepl("Enrolled",general_table$status_label)))
       status_long <- df |> 
         dplyr::slice_head(n = 1, by = subject_id) |> 
-        dplyr::mutate(item_name = "study_status", item_value = "Enrolled")  
+        dplyr::mutate(item_name = "subject_status", item_value = "Enrolled")  
       df_status_long <- rbind(df, status_long)
       general_table <- create_table(df_status_long, expected_columns = expected_cols)
       
-      expect_equal(unique(general_table$study_status), "Enrolled")
+      expect_equal(unique(general_table$subject_status), "Enrolled")
       expect_true(all(grepl("Enrolled",general_table$status_label)))
     })
     it("uses a custom status label if it exists together with a study status column", {
       df_with_status <- df |> 
-        dplyr::mutate(study_status = "Enrolled", status_label = "test_label")
+        dplyr::mutate(subject_status = "Enrolled", status_label = "test_label")
       general_table <- create_table(df_with_status, expected_columns = expected_cols)
       expect_equal(unique(general_table$status_label), "test_label")
       status_long <- df |> 
         dplyr::slice_head(n = 1, by = subject_id) |> 
-        dplyr::mutate(item_name = "study_status", item_value = "Enrolled")  
+        dplyr::mutate(item_name = "subject_status", item_value = "Enrolled")  
       status_label_long <- df |> 
         dplyr::slice_head(n = 1, by = subject_id) |> 
         dplyr::mutate(item_name = "status_label", item_value = "test_label2")  

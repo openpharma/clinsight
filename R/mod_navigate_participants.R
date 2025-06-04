@@ -138,11 +138,11 @@ mod_navigate_participants_server <- function(id, r){
       } else{
         active_pt_info <- r$filtered_tables$General |> 
           subset(subject_id == r$subject_id) |> 
-          add_missing_columns("study_status")
+          add_missing_columns("subject_status")
         list(
           pt_info = paste0(active_pt_info$Sex, ", ", active_pt_info$Age, "yrs."),
           status_icon = switch(
-            active_pt_info$study_status, 
+            active_pt_info$subject_status, 
             Enrolled = icon("user-check", class = 'fa-2x'),
             Unknown  = icon("circle-question", class = 'fa-2x'),
             `Screen failure` = icon("user-slash", class = 'fa-2x'),

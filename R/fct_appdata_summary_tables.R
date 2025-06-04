@@ -256,6 +256,6 @@ get_static_overview_data <- function(
     data[["General"]], 
     expected_columns = expected_general_columns
   ) |>
-    dplyr::select(tidyr::all_of("subject_id"), tidyr::any_of(c("study_status", "WHO.classification", "Age", "Sex"))) |>
+    dplyr::select(tidyr::all_of("subject_id"), tidyr::any_of(c("subject_status", "WHO.classification", "Age", "Sex"))) |>
     dplyr::left_join(visits, by = "subject_id")
 }
