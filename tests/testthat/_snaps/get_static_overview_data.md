@@ -5,7 +5,7 @@
         general$item_name)
     Output
       # A tibble: 25 x 6
-         subject_id study_status          WHO.classification Age   Sex    event_name  
+         subject_id subject_status        WHO.classification Age   Sex    event_name  
          <chr>      <chr>                 <chr>              <chr> <chr>  <chr>       
        1 BEL_04_133 Enrolled              Syndrome K         88    Male   Screening, ~
        2 BEL_04_772 Enrolled              Syndrome O         78    Male   Screening, ~
