@@ -1,0 +1,48 @@
+{
+  "input": {
+    "main_sidebar_1-review_forms_1-confirm_saving": 1,
+    "sf_vital_signs-review_form_tbl-table_review_selection": {
+      "id": [
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        5767
+      ],
+      "reviewed": [
+        "No",
+        "No",
+        "No",
+        "No",
+        "No",
+        "No",
+        "No",
+        "No"
+      ],
+      "row_id": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    }
+  },
+  "output": {
+    "form_level_review": true,
+    "main_sidebar_1-navigate_forms_1-form_name": "<center>Vital signs<\/center>",
+    "main_sidebar_1-review_forms_1-progress_bar": {
+      "completed": 470,
+      "unmarking": 0,
+      "marking": 0,
+      "total": 478
+    },
+    "main_sidebar_1-review_forms_1-save_review_error": ""
+  }
+}

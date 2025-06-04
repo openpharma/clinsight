@@ -34,9 +34,6 @@ get_form_table <- function(
   )
   is_SAE <- isTRUE(is_SAE)
   stopifnot(is.character(active_subject %||% ""))
-  if(is.null(active_subject)){
-    warning("No active subject selected")
-  }
   required_cols <- c(id_cols, "edit_date_time", "event_date", "item_value")
   missing_cols <- required_cols[!required_cols %in% names(form_data)]
   if(length(missing_cols) != 0){
@@ -53,7 +50,7 @@ get_form_table <- function(
       item_value = dplyr::case_when(
         is.na(reviewed) ~ htmltools::htmlEscape(item_value),
         (reviewed == "No" & !is.na(item_value)) ~
-        paste0("<b>", htmltools::htmlEscape(item_value), "*</b>"), 
+          paste0("<b>", htmltools::htmlEscape(item_value), "*</b>"), 
         .default = htmltools::htmlEscape(item_value)
       )
     ) |> 

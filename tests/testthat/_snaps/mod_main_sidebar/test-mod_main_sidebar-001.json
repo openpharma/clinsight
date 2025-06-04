@@ -7,6 +7,7 @@
     "test-review_forms_1-confirm_review_tabs": "show_checkbox",
     "test-review_forms_1-form_reviewed": false,
     "test-review_forms_1-review_comment": "",
+    "test-review_forms_1-review_type": "subject",
     "test-review_forms_1-save_review": 0,
     "test-show_review_controls": "panel_controls",
     "test-write_query-create_query": 1,

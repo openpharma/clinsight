@@ -25,7 +25,7 @@ app_ui <- function(request){
       ), 
       sidebar = bslib::sidebar(mod_main_sidebar_ui("main_sidebar_1"), fillable = TRUE),
       header =   conditionalPanel(
-        condition = "!['Start', 'Queries', 'Create Report'].includes(input.main_tabs)",
+        condition = "!['Start', 'Queries', 'Create Report'].includes(input.main_tabs) && !output.form_level_review",
         mod_header_widgets_ui("header_widgets_1")
       ),
       bslib::nav_panel(
