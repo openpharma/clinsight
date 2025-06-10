@@ -2,7 +2,7 @@
 
 ## Developer notes
 
-- It is now easier to adjust the study status label of each participant (#217).
+- It is now easier to adjust the status label of each participant (#217).
 
 ## Changed
 
