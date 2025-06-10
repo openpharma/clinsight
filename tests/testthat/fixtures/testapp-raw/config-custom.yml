@@ -1,0 +1,13 @@
+default:
+  user_identification: test_user
+  user_db: user_db.sqlite
+  user_roles:
+    Custom Role: custom_role
+  allow_to_review: [custom_role]
+  allow_query_inputs: TRUE
+test:
+  study_data: study_data.rds
+  meta_data: metadata.rds
+  user_db: user_db.sqlite
+  study_asset_path: assets_custom
+  study_logo: assets_custom/study_logo.png

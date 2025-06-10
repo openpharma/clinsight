@@ -103,6 +103,16 @@ run_app <- function(
     options("shinymanager.pwd_validity" = 90) 
     options("shinymanager.pwd_failure_limit" = 5)
   }
+  logo_path <- get_golem_config("study_logo")
+  study_logo_path <- if (file.exists(logo_path)){
+    if(!tolower(tools::file_ext(logo_path)) %in% c("png", "jpg", "svg")){
+      warning("study logo ignored - only png, jpg or svg files are supported.")
+      return(NULL)
+    }
+    paste0("assets/", basename(logo_path))
+  } else{
+    NULL
+  }
   
   with_golem_options(
     app = shinyApp(
@@ -119,6 +129,7 @@ run_app <- function(
       user_db = user_db,
       credentials_db = credentials_db,
       credentials_pwd = credentials_pwd,
+      study_logo_path = study_logo_path,
       ...
     )
   )
