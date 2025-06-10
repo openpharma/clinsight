@@ -80,7 +80,7 @@ golem_add_external_resources <- function(
   # If a study asset path is provided, verify it exists before adding it as a 
   # resource path
   logo_path <- get_golem_config("study_logo")
-  if(add_logo && !is.null(logo_path)){
+  if(isTRUE(add_logo) && !is.null(logo_path)){
     logo_name <- basename(logo_path)
     temp_logo_dir <- file.path(tempdir(), "clinsight_assets")
     dir.create(temp_logo_dir, showWarnings = FALSE)
