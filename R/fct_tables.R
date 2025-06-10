@@ -188,13 +188,6 @@ create_table.general <- function(
     if ("status_label" %in% unique(data$item_name)){
       expected_columns <- c(expected_columns, "status_label")
     }
-  } else {
-    if ("subject_status" %in% names(data)){
-      keep_vars <- c(keep_vars, "subject_status")
-      if ("status_label" %in% names(data)){
-        keep_vars <- c(keep_vars, "status_label")
-      }
-    } 
   }
   df <- with(data, data[!item_name %in% c("DrugAdminDate", "DrugAdminDose"),]) |>
     create_table.default(name_column, value_column, keep_vars, expected_columns)
