@@ -183,40 +183,48 @@ create_table.general <- function(
     data <-  data.frame(matrix(ncol = length(df_names))) |> 
       setNames(df_names)
   }
-
-  df <- data |> 
-    dplyr::filter(!item_name %in% c("DrugAdminDate", "DrugAdminDose")) |>
+  if ("subject_status" %in% unique(data$item_name)){
+    expected_columns <- c(expected_columns, "subject_status")
+    if ("status_label" %in% unique(data$item_name)){
+      expected_columns <- c(expected_columns, "status_label")
+    }
+  }
+  df <- with(data, data[!item_name %in% c("DrugAdminDate", "DrugAdminDose"),]) |>
     create_table.default(name_column, value_column, keep_vars, expected_columns)
-  
+  if(!"subject_status" %in% names(df)){
+    df <- df |> 
+      dplyr::mutate(
+        subject_status = ifelse(
+          is.na(Eligible), 
+          "Unknown",
+          ifelse(
+            Eligible == "No", 
+            "Screen failure", 
+            ifelse(
+              Eligible == "Yes",
+              "Enrolled",
+              Eligible
+            )
+          )
+        ),
+        subject_status = ifelse(
+          !is.na(DiscontinuationDate),
+          ifelse(
+            is.na(DiscontinuationReason), 
+            "Discontinued", 
+            DiscontinuationReason
+          ),
+          subject_status
+        )
+      )  
+  }
   df |> 
     dplyr::mutate(
-      status = ifelse(
-        is.na(Eligible), 
-        "Unknown",
-        ifelse(
-          Eligible == "No", 
-          "Screen failure", 
-          ifelse(
-            Eligible == "Yes",
-            "Enrolled",
-            Eligible
-          )
-        )
-      ),
-      status = ifelse(
-        !is.na(DiscontinuationDate),
-        ifelse(
-          is.na(DiscontinuationReason), 
-          "Discontinued", 
-          DiscontinuationReason
-          ),
-        status
-        ),
-      status_label = paste0(
+      status_label = status_label %|_|% paste0(
         "<b>", subject_id, "</b><br>",
         "<b>Sex:</b> ",    Sex, "<br>",
         "<b>Age:</b> ",    Age, "yrs.", "<br>",
-        "<b>Status:</b> ", status, "<br>",
+        "<b>Status:</b> ", subject_status, "<br>",
         "<b>ECOG:</b> ",   ECOG, "<br>",
         "<b>Dx:</b> ",     WHO.classification
       ) 

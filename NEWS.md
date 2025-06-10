@@ -1,5 +1,31 @@
 # clinsight (development version)
 
+## Developer notes
+
+- It is now easier to adjust the status label of each participant. If a column named subject_status is found in the General metadata tab, this one will be directly used for displaying the subjects status in the study and thus the subject status will not be calculated anymore (#217).
+
+This way, you could also create your own study_status labels by adjusting the study_data with a custom script after merging data with metadata, but before using the data with clinsight. See below for an example script:
+
+```r
+status_items <- c("Eligible", "StudyCompleted", "DiscontinuationDate",
+                  "DiscontinuationReason", "RandomizationDate")
+status_data <- study_data |> 
+  dplyr::select(subject_id, item_group, edit_date_time, item_name, item_value) |> 
+  subset(item_group == "General" & item_name %in% status_items) |> 
+  create_table(
+    keep_vars = c("subject_id", "item_group", "edit_date_time"), 
+    expected_columns = status_items
+  ) |> 
+  calculate_subject_status()
+
+study_data <- study_data |> 
+  dplyr::bind_rows(status_data)
+```
+
+Here is `calculate_subject_status` a function with custom logic that calculates the needed status category per patient, based on other variables in the data. 
+
+## Changed
+
 - Added options to review on form level. With form-level review, subject-level graphics and tiles will be hidden, and all data will be shown in the tables, and review is enable on all rows. All data in a form can be reviewed at once; if a user tries to do so, an additional confirmation will be requested (#198).
 - A double click on a row in the start page now shows a modal with all data that needs review instead of directly going to the first page of the patient even if there is no new data on that page (#216).
 - Removed the requirement for common_forms to have a 'Name' column. In addition, a 'Name' column can be provided in study data tabs, indicating a common name per row, which will improve the query selector items (#207).
