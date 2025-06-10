@@ -75,6 +75,7 @@ describe(
       {
         testServer(mod_common_forms_server, args = testargs, {
           ns <- session$ns
+          session$userData$review_type <- reactiveVal("subject")
           session$setInputs(show_all_data = FALSE)
           expect_true(inherits(output[["review_form_SAE_tbl-table"]], "json"))
           expect_true(inherits(output[["review_form_tbl-table"]], "json"))
@@ -90,6 +91,7 @@ describe(
       {
         testServer(mod_common_forms_server, args = testargs, {
           ns <- session$ns
+          session$userData$review_type <- reactiveVal("subject")
           session$setInputs(show_all_data = FALSE)
           expect_true(inherits(output[["timeline_fig-timeline"]], "json"))
         })
@@ -121,6 +123,7 @@ describe(
         
         testServer(mod_common_forms_server, args = testargs, {
           ns <- session$ns
+          session$userData$review_type <- reactiveVal("subject")
           session$setInputs(show_all_data = FALSE)
           expect_error(output[["timeline_fig-timeline"]])
           expect_error(output[["review_form_SAE_tbl-table"]])

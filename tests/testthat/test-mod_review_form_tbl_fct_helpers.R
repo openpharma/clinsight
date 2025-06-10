@@ -163,12 +163,6 @@ describe("get_form_table() works", {
       paste0("the following columns are missing: subject_id, event_name, ",
              "item_group, form_repeat, item_name, edit_date_time, event_date, item_value")
     )
-    incorrect_data <- args
-    incorrect_data["active_subject"] <- list(NULL)
-    expect_warning(
-      do.call("get_form_table", incorrect_data),
-      "No active subject selected"
-    )
   })
 })
 
