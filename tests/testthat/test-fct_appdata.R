@@ -5,6 +5,17 @@ describe("get_raw_csv_data works", {
     expect_snapshot(df)
     expect_equal(attr(df, "synch_time"),  "2024-01-01 00:00:00")
   })
+  it("errors if no csv files can be found in the folder", {
+    expect_error(get_raw_csv_data("non-existent-folder"), "No files found")
+  })
+  it("warns if an empty synch time is provided", {
+    data_path <- test_path("fixtures", "csvtestdata")
+    expect_warning(
+      df <- get_raw_csv_data(data_path, synch_time = NULL), 
+      "No synch time provided"
+    )
+    expect_equal(attr(df, "synch_time"), "")
+  })
 })
 
 describe(
