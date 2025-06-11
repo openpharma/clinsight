@@ -81,4 +81,19 @@ describe("get_form_level_data() works", {
     )
     expect_equal(output, expected_output)
   })
+  it("warns if no forms with form level data are found, and returns defaults", {
+    df <- data.frame("keycol" = character())#, "newvar" = character())
+    expect_warning({
+      output <- get_form_level_data(
+        df, 
+        all_forms = "form1",
+        form_column = "keycol"
+      )
+    }, 
+    "No forms with form-level data found"
+    )
+    expected_output <- data.frame(keycol = "form1") |> 
+      cbind(form_level_defaults)
+    expect_equal(output, expected_output)
+  })
 })
