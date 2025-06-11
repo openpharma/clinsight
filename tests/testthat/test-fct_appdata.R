@@ -67,6 +67,15 @@ describe(
     it("produces the expected output", {
       expect_snapshot(get_appdata(clinsightful_data, metadata))  
     })
+    it("errors if multiple form types for one item group are found", {
+      meta_adjusted <- metadata$items_expanded
+      meta_adjusted[1:10, "form_type"] <- "incorrect_form"
+      meta <- list(items_expanded = meta_adjusted)
+      expect_error(
+        get_appdata(clinsightful_data, meta = meta),
+        "form_type consists of multipe elements which is not allowed: incorrect_form, common_forms"
+      )
+    })
   }
 )
 
