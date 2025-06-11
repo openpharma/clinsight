@@ -83,6 +83,15 @@ describe(
           "db_version", "query_data", "sqlite_sequence")
       )
     })
+    it("errors if directory cannot be created if needed", {
+      local_mocked_bindings(dir.create = function(...) FALSE )
+      rev_data <- data.frame()
+      temp_path <- file.path(withr::local_tempdir(), "fake_folder/db.sqlite")
+      expect_error(
+        db_create(rev_data, temp_path),
+        "Could not create directory for user database"
+      )
+    })
   }
 )
 
@@ -222,7 +231,21 @@ describe(
         log_old
       )
     })
-    
+    it("aborts synching if data is older than the database update time", {
+      temp_path <- withr::local_tempfile(fileext = ".sqlite") 
+      con <- get_db_connection(temp_path)
+      
+      synch_time <- "2024-01-01 01:01:01 UTC"
+      rev_data <- cbind(old_data, review_cols)
+      attr(rev_data, "synch_time") <- "2023-01-01 01:01:01 UTC"
+      db_add_primary_key(con, "all_review_data", rev_data, comvars)
+      db_add_log(con, c("id", comvars))
+      DBI::dbWriteTable(con, "db_synch_time", data.frame("synch_time" = synch_time))
+      expect_warning(
+        db_update(rev_data, db_path = temp_path, common_vars = comvars),
+        "DB synch time is more recent than data synch time. Aborting synchronization"
+      )
+    })
   }
 )
 
@@ -350,6 +373,20 @@ describe(
         table = "all_review_data"
       ) |> expect_warning()
     })
+    it("warns that database is unaltered when attempting to save zero rows", {
+      temp_path <- withr::local_tempfile(fileext = ".sqlite")
+      con <- get_db_connection(temp_path)
+      db_add_primary_key(con, "all_review_data", cbind(df, old_review))
+      db_add_log(con, "id")
+      expect_warning(
+        db_save_review(data.frame(), temp_path, "all_review_data"),
+        "Review state unaltered. No review will be saved"
+      )
+      expect_equal(
+        dplyr::select(DBI::dbGetQuery(con, "SELECT * FROM all_review_data"), -id),
+        cbind(df, old_review)
+      )
+    })
   }
 )
 
@@ -385,6 +422,26 @@ describe(
   }
 )
 
+
+describe("db_get_version works", {
+  it("collects database version correctly", {
+    temp_path <- withr::local_tempfile(fileext = ".sqlite") 
+    con <- get_db_connection(temp_path)
+    DBI::dbWriteTable(con, "db_version", data.frame("version" = "1.0"))
+    expect_equal(
+      db_get_version(temp_path),
+      "1.0"
+    )
+  })
+  it("returns an empty string if the version is not available", {
+    temp_path <- withr::local_tempfile(fileext = ".sqlite") 
+    con <- get_db_connection(temp_path)
+    expect_equal(db_get_version(temp_path), "")
+  })
+  it("errors if database is uavailable", {
+    expect_error(db_get_version("fake_path/db.sqlite"))
+  })
+})
 
 describe("db_get_query can collect latest query data from a database", {
   temp_path <- withr::local_tempfile(fileext = ".sqlite") 
