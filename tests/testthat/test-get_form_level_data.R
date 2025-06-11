@@ -92,8 +92,7 @@ describe("get_form_level_data() works", {
     }, 
     "No forms with form-level data found"
     )
-    expected_output <- data.frame(keycol = "form1") |> 
-      cbind(form_level_defaults)
+    expected_output <- cbind(data.frame(keycol = "form1", form_level_defaults))
     expect_equal(output, expected_output)
   })
 })
