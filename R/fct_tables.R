@@ -191,10 +191,16 @@ create_table.general <- function(
   }
   df <- with(data, data[!item_name %in% c("DrugAdminDate", "DrugAdminDose"),]) |>
     create_table.default(name_column, value_column, keep_vars, expected_columns)
-  if(!"subject_status" %in% names(df)){
-    df <- df |> 
-      dplyr::mutate(
-        subject_status = ifelse(
+  df |> 
+    dplyr::mutate(
+        subject_status = subject_status %|_|% ifelse(
+        !is.na(DiscontinuationDate),
+        ifelse(
+          is.na(DiscontinuationReason), 
+          "Discontinued", 
+          DiscontinuationReason
+        ),
+        ifelse(
           is.na(Eligible), 
           "Unknown",
           ifelse(
@@ -206,20 +212,8 @@ create_table.general <- function(
               Eligible
             )
           )
-        ),
-        subject_status = ifelse(
-          !is.na(DiscontinuationDate),
-          ifelse(
-            is.na(DiscontinuationReason), 
-            "Discontinued", 
-            DiscontinuationReason
-          ),
-          subject_status
         )
-      )  
-  }
-  df |> 
-    dplyr::mutate(
+      ),
       status_label = status_label %|_|% paste0(
         "<b>", subject_id, "</b><br>",
         "<b>Sex:</b> ",    Sex, "<br>",
