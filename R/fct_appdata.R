@@ -284,14 +284,10 @@ get_appdata <-  function(
   appdata <- lapply(data, \(x){
     if(nrow(x) == 0) return(x)
     item_group_x <- unique(x$item_group)
-    if(length(item_group_x) != 1) stop(
-      "item_group consists of multipe elements which is not allowed: ", 
-      item_group_x
-    )
     form_type_x <- unique(with(var_levels, form_type[item_group == item_group_x]))
     if(length(form_type_x) != 1) stop(
       "form_type consists of multipe elements which is not allowed: ", 
-      form_type_x
+      paste0(form_type_x, collapse = ", ")
     )
     tableclass <- simplify_string(form_type_x)
     if(tableclass %in% tableclasses){

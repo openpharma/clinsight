@@ -308,7 +308,7 @@ get_form_level_data <- function(
     stop(sprintf("'%s' missing in 'form_level_data' table.", form_column))
   }
   
-  missing_forms <- data[!data[[form_column]] %in% all_forms, ][[form_column]]
+  missing_forms <- data[!data[[form_column]] %in% all_forms, , drop = FALSE][[form_column]]
   if(length(missing_forms) != 0){
     warning(
       "Ignoring vars defined in 'form_level_data' but not in metadata:\n",
