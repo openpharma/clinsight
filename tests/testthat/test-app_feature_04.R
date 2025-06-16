@@ -4,7 +4,8 @@ describe(
   paste0("Feature 4 | Load data from CSV files, merge with custom metadata, and start the application.", 
          "As a user, I want to be able ", 
          "to load data from the raw csv file output from the EDC system and use a ", 
-         "different metadata file to customize the application."), {
+         "different metadata file to customize the application."), 
+  {
     it(
       paste0("Scenario 1 - Load raw data with custom metadata. ", 
       "Given raw CSV data exported from the EDC system from subject [9600-002], ", 
@@ -82,5 +83,48 @@ describe(
         expect_snapshot(print(table_data, width = Inf))
       }
     )
+    it(
+      paste0(
+      "Scenario 2 - Use custom logo and custom config.yml file. Given the same data as in Scenario 1,",
+        "and with a custom logo 'study_logo.png' provided in the folder 'assets_custom'",
+        "and using a custom config file config-custom.yml with ",
+        "[study_asset_path] set to 'assets_custom' and [user_roles] to 'Custom Role: custom_role'",
+        "and allow_to_review set to 'custom_role'",
+        "and the envvar [CONFIG_PATH] set to 'config-custom.yml'",
+        "I expect to see a custom study logo in the navigation bar,",
+        "and that the user has the role 'Custom Role' assigned."
+      ), 
+      {
+        withr::local_envvar(c("CONFIG_PATH" = "config-custom.yml"))
+        app <- AppDriver$new(
+          app_dir = testthat::test_path("fixtures", "testapp-raw"),
+          name = "app-feature-4_2",
+          timeout = 20000,
+          width = 1619,
+          height = 955
+        )
+        withr::defer(app$stop()) 
+        
+        ## Test logo availability:
+        expect_equal(
+          app$get_js("document.getElementById('study_logo').tagName"), 
+          "IMG"
+        )
+        logo_path <- app$get_js("document.getElementById('study_logo').src")
+        expect_equal(basename(logo_path), "study_logo.png")
+        downloaded_logo <- file.path(withr::local_tempdir(), "downloaded_logo.png")
+        download.file(logo_path, destfile = downloaded_logo, mode = "wb", quiet = TRUE)
+        expect_snapshot_file(downloaded_logo)
+        
+        ## Verify custom user role:
+        expect_equal(app$get_value(export = c("active_user_role")), "Custom Role")
+        
+        # ensure other files in assets folder cannot be accessed:
+        hidden_file_path <- paste0(app$get_url(), "assets/hidden_file.txt")
+        expect_error(
+          suppressWarnings(readLines(hidden_file_path, warn = FALSE))
+        )
+      }
+    )       
   }
 )
