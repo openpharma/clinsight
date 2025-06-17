@@ -11,6 +11,10 @@
 - Improved branding with new ClinSight Logo, added favicon, and allowed for study logos, when available (#214).
 - Added options to review on form level. With form-level review, subject-level graphics and tiles will be hidden, and all data will be shown in the tables, and review is enable on all rows. All data in a form can be reviewed at once; if a user tries to do so, an additional confirmation will be requested (#198).
 
+## Bug fixes
+
+- The event label order calculation is now calculated as intended in the rare cases where it needs to be estimated (for example when the order of occurrence of the events differs per patient) (#225).
+
 # clinsight 0.2.0
 
 ## Changed 
