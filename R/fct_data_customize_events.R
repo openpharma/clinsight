@@ -215,7 +215,7 @@ add_events_to_data <- function(
         paste0(event_label_custom, vis_number),
         event_label_custom
       ),
-      event_label_custom = factor(event_label_custom, levels = unique(event_label_custom))
+      event_label_custom = factor(event_label_custom, levels = unique(na.omit(event_label_custom)))
     )
   
   cols_to_remove <- c(names(events_table), "event_name_edc", "event_repeat_number")
