@@ -177,17 +177,13 @@ create_table.general <- function(
     expected_columns = NULL,
     ...
     ){
-  expected_columns <- na.omit(expected_columns) %||% character(0)
+  expected_columns <- na.omit(expected_columns) %||% character(0) |> 
+    c(intersect(c("subject_status", "status_label"), data[[name_column]])) |> 
+    unique()
   df_names <- c(keep_vars, name_column, value_column, expected_columns)
   if(is.null(data)) {
     data <-  data.frame(matrix(ncol = length(df_names))) |> 
       setNames(df_names)
-  }
-  if ("subject_status" %in% unique(data$item_name)){
-    expected_columns <- c(expected_columns, "subject_status")
-    if ("status_label" %in% unique(data$item_name)){
-      expected_columns <- c(expected_columns, "status_label")
-    }
   }
   df <- with(data, data[!item_name %in% c("DrugAdminDate", "DrugAdminDose"),]) |>
     create_table.default(name_column, value_column, keep_vars, expected_columns)
