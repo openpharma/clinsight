@@ -185,7 +185,7 @@ create_table.general <- function(
     data <-  data.frame(matrix(ncol = length(df_names))) |> 
       setNames(df_names)
   }
-  df <- with(data, data[!item_name %in% c("DrugAdminDate", "DrugAdminDose"),]) |>
+  df <- data[!data[[name_column]] %in% c("DrugAdminDate", "DrugAdminDose"),] |>
     create_table.default(name_column, value_column, keep_vars, expected_columns)
   df |> 
     dplyr::mutate(
