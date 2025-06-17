@@ -3,7 +3,7 @@
 ## Developer notes
 
 - Added unit tests to cover more edge cases, improve code coverage (#219).
-- It is now easier to adjust the status label of each participant. If a column named subject_status is found in the General metadata tab, this one will be directly used for displaying the subjects status in the study and thus the subject status will not be calculated anymore (#217).
+- It is now easier to adjust the status label of each participant (#217). If a column named subject_status is found in the General metadata tab, this one will be directly used for displaying the subjects status in the study and thus the subject status will not be calculated anymore (#217).
 
 This way, you could also create your own study_status labels by adjusting the study_data with a custom script after merging data with metadata, but before using the data with clinsight. See below for an example script:
 
