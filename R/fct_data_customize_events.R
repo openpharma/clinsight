@@ -186,7 +186,7 @@ add_events_to_data <- function(
         dplyr::mutate(order_occurrence = dplyr::n(), .by = derived_order) |> 
         dplyr::slice_min(order_occurrence, by = event_id, with_ties = FALSE) |> 
         dplyr::select(-order_occurrence) |> 
-        dplyr::arrange(event_id, derived_order) |> 
+        dplyr::arrange(derived_order, event_id) |> 
         dplyr::mutate(derived_order = dplyr::row_number())
     }
   }
