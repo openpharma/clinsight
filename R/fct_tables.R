@@ -177,46 +177,44 @@ create_table.general <- function(
     expected_columns = NULL,
     ...
     ){
-  expected_columns <- na.omit(expected_columns) %||% character(0)
+  expected_columns <- na.omit(expected_columns) %||% character(0) |> 
+    c(intersect(c("subject_status", "status_label"), data[[name_column]])) |> 
+    unique()
   df_names <- c(keep_vars, name_column, value_column, expected_columns)
   if(is.null(data)) {
     data <-  data.frame(matrix(ncol = length(df_names))) |> 
       setNames(df_names)
   }
-
-  df <- data |> 
-    dplyr::filter(!item_name %in% c("DrugAdminDate", "DrugAdminDose")) |>
+  df <- data[!data[[name_column]] %in% c("DrugAdminDate", "DrugAdminDose"),] |>
     create_table.default(name_column, value_column, keep_vars, expected_columns)
-  
   df |> 
     dplyr::mutate(
-      status = ifelse(
-        is.na(Eligible), 
-        "Unknown",
-        ifelse(
-          Eligible == "No", 
-          "Screen failure", 
-          ifelse(
-            Eligible == "Yes",
-            "Enrolled",
-            Eligible
-          )
-        )
-      ),
-      status = ifelse(
+        subject_status = subject_status %|_|% ifelse(
         !is.na(DiscontinuationDate),
         ifelse(
           is.na(DiscontinuationReason), 
           "Discontinued", 
           DiscontinuationReason
-          ),
-        status
         ),
-      status_label = paste0(
+        ifelse(
+          is.na(Eligible), 
+          "Unknown",
+          ifelse(
+            Eligible == "No", 
+            "Screen failure", 
+            ifelse(
+              Eligible == "Yes",
+              "Enrolled",
+              Eligible
+            )
+          )
+        )
+      ),
+      status_label = status_label %|_|% paste0(
         "<b>", subject_id, "</b><br>",
         "<b>Sex:</b> ",    Sex, "<br>",
         "<b>Age:</b> ",    Age, "yrs.", "<br>",
-        "<b>Status:</b> ", status, "<br>",
+        "<b>Status:</b> ", subject_status, "<br>",
         "<b>ECOG:</b> ",   ECOG, "<br>",
         "<b>Dx:</b> ",     WHO.classification
       ) 
