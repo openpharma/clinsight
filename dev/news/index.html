@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">clinsight</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.0.9003</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.0.9004</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,7 +50,24 @@
 <div class="section level3">
 <h3 id="developer-notes-development-version">Developer notes<a class="anchor" aria-label="anchor" href="#developer-notes-development-version"></a></h3>
 <ul><li>Added unit tests to cover more edge cases, improve code coverage (<a href="https://github.com/openpharma/clinsight/issues/219" class="external-link">#219</a>).</li>
-</ul></div>
+<li>It is now easier to adjust the status label of each participant (<a href="https://github.com/openpharma/clinsight/issues/217" class="external-link">#217</a>). If a column named subject_status is found in the General metadata tab, this one will be directly used for displaying the subjects status in the study and thus the subject status will not be calculated anymore (<a href="https://github.com/openpharma/clinsight/issues/217" class="external-link">#217</a>).</li>
+</ul><p>This way, you could also create your own study_status labels by adjusting the study_data with a custom script after merging data with metadata, but before using the data with clinsight. See below for an example script:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">status_items</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Eligible"</span>, <span class="st">"StudyCompleted"</span>, <span class="st">"DiscontinuationDate"</span>,</span>
+<span>                  <span class="st">"DiscontinuationReason"</span>, <span class="st">"RandomizationDate"</span><span class="op">)</span></span>
+<span><span class="va">status_data</span> <span class="op">&lt;-</span> <span class="va">study_data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">subject_id</span>, <span class="va">item_group</span>, <span class="va">edit_date_time</span>, <span class="va">item_name</span>, <span class="va">item_value</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">item_group</span> <span class="op">==</span> <span class="st">"General"</span> <span class="op">&amp;</span> <span class="va">item_name</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">status_items</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/create_table.html">create_table</a></span><span class="op">(</span></span>
+<span>    keep_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"subject_id"</span>, <span class="st">"item_group"</span>, <span class="st">"edit_date_time"</span><span class="op">)</span>, </span>
+<span>    expected_columns <span class="op">=</span> <span class="va">status_items</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">calculate_subject_status</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">study_data</span> <span class="op">&lt;-</span> <span class="va">study_data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="va">status_data</span><span class="op">)</span></span></code></pre></div>
+<p>Here is <code>calculate_subject_status</code> a function with custom logic that calculates the needed status category per patient, based on other variables in the data.</p>
+</div>
 <div class="section level3">
 <h3 id="changed-development-version">Changed<a class="anchor" aria-label="anchor" href="#changed-development-version"></a></h3>
 <ul><li>A double click on a row in the start page now shows a modal with all data that needs review instead of directly going to the first page of the patient even if there is no new data on that page (<a href="https://github.com/openpharma/clinsight/issues/216" class="external-link">#216</a>).</li>
