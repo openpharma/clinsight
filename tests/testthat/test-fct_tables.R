@@ -125,10 +125,77 @@ describe(
       expect_snapshot(print(create_table(df, expected_columns = expected_cols), 
                             n = 25))
     })
+    it("creates subject status label based on eligibility and discontinuation data", {
+      additional_data <- data.frame(
+        subject_id = "BEL_08_736", 
+        item_group = "General", 
+        item_name = "DiscontinuationDate", 
+        item_value = "2023-08-08"
+      )
+      test_status_df <- df |> 
+        dplyr::select(subject_id, item_group, item_name, item_value) |> 
+        rbind(additional_data) |> 
+        dplyr::mutate(
+          item_value = ifelse(
+            item_name == "Eligible" & subject_id == "BEL_07_193", 
+            "No", 
+            item_value
+          )
+        )
+      output <- create_table(test_status_df, expected_columns = expected_cols)
+      # subject status is discontinuation reason if this value exists:
+      expect_equal(
+        with(output, subject_status[!is.na(DiscontinuationReason)]),
+        with(output, DiscontinuationReason[!is.na(DiscontinuationReason)]) 
+      )
+      
+      # subject status is 'Discontinued' if discontinued but reason is missing: 
+      expect_equal(
+        subset(output, is.na(DiscontinuationReason) & !is.na(DiscontinuationDate))$subject_status |> 
+          unique(),
+        "Discontinued"
+      )
+      # subject status is 'Unknown' if Eligibility is missing
+      expect_equal(
+        unique(subset(output, is.na(Eligible))$subject_status),
+        "Unknown"
+      )
+      # subject status is 'Enrolled' if Eligible is Yes and not discontinued
+      expect_equal(
+        unique(subset(output, Eligible == "Yes" & is.na(DiscontinuationDate))$subject_status),
+        "Enrolled"
+      )
+      # subject status is 'Screen failure' if Eligible is No
+      expect_equal(
+        unique(subset(output, Eligible == "No")$subject_status),
+        "Screen failure"
+      )
+    })
     it("does not error with a zero-row data frame input", {
       expect_no_error(create_table(df[0,], expected_columns = expected_cols))
       output <- create_table(df[0,], expected_columns = expected_cols)
       expect_equal(nrow(output), 0)
+    })
+    it("does not create a study status if it already exists", {
+      status_long <- df |> 
+        dplyr::slice_head(n = 1, by = subject_id) |> 
+        dplyr::mutate(item_name = "subject_status", item_value = "Enrolled")  
+      df_status_long <- rbind(df, status_long)
+      general_table <- create_table(df_status_long, expected_columns = expected_cols)
+      
+      expect_equal(unique(general_table$subject_status), "Enrolled")
+      expect_true(all(grepl("Enrolled",general_table$status_label)))
+    })
+    it("uses a custom status label if it exists together with a study status column", {
+      status_long <- df |> 
+        dplyr::slice_head(n = 1, by = subject_id) |> 
+        dplyr::mutate(item_name = "subject_status", item_value = "Enrolled")  
+      status_label_long <- df |> 
+        dplyr::slice_head(n = 1, by = subject_id) |> 
+        dplyr::mutate(item_name = "status_label", item_value = "test_label2")  
+      df_status_long <- rbind(df, status_long, status_label_long)
+      general_table <- create_table(df_status_long, expected_columns = expected_cols)
+      expect_equal(unique(general_table$status_label), "test_label2")
     })
   }
 )
