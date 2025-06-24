@@ -109,7 +109,7 @@ db_get_table <- function(db_path, db_table = "all_review_data") {
 #' @inheritParams db_slice_rows
 #'
 #' @return A data frame collected from a remote database.
-#' @export
+#' @keywords internal
 #' 
 collect_query_data <- function(
     db_path,

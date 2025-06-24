@@ -39,3 +39,4 @@ A data frame collected from a remote database.
 \description{
 Collects query data from a remote database.
 }
+\keyword{internal}

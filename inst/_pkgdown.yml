@@ -86,7 +86,6 @@ reference:
   - db_create
   - db_update
   - update_review_data
-  - collect_query_data
   - db_get_review
   - db_get_query
 
