@@ -82,6 +82,13 @@ db_slice_rows <- function(
   dplyr::slice_tail(df, n = 1, by = dplyr::all_of(c(group_vars, slice_vars)))
 }
 
+#' Collect table from database
+#'
+#' @param db_path Character string. Path to the database.
+#' @param db_table Character string. Name of the table to collect.
+#' 
+#' @keywords internal
+#' 
 db_get_table <- function(db_path, db_table = "all_review_data") {
   stopifnot(is.character(db_path))
   stopifnot(is.character(db_table))
