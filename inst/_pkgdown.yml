@@ -42,6 +42,7 @@ reference:
   - get_raw_csv_data
   - get_metadata
   - merge_meta_with_data
+  - get_appdata
 
 - title: Main application
   desc: Top-level functions to run the Shiny application
