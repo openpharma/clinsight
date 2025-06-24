@@ -71,13 +71,6 @@ reference:
   - create_table.default
   - starts_with("create_table")
 
-- title: Data frame functions
-  desc: Can be used on study data compatible with ClinSight
-- contents: 
-  - get_available_data
-  - get_review_data
-  - get_static_overview_data
-
 - title: Database functions
   desc: Create, read or append the app database. 
 - contents:
