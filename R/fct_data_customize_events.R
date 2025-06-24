@@ -186,7 +186,7 @@ add_events_to_data <- function(
         dplyr::mutate(order_occurrence = dplyr::n(), .by = derived_order) |> 
         dplyr::slice_min(order_occurrence, by = event_id, with_ties = FALSE) |> 
         dplyr::select(-order_occurrence) |> 
-        dplyr::arrange(event_id, derived_order) |> 
+        dplyr::arrange(derived_order, event_id) |> 
         dplyr::mutate(derived_order = dplyr::row_number())
     }
   }
@@ -215,7 +215,7 @@ add_events_to_data <- function(
         paste0(event_label_custom, vis_number),
         event_label_custom
       ),
-      event_label_custom = factor(event_label_custom, levels = unique(event_label_custom))
+      event_label_custom = factor(event_label_custom, levels = unique(na.omit(event_label_custom)))
     )
   
   cols_to_remove <- c(names(events_table), "event_name_edc", "event_repeat_number")
