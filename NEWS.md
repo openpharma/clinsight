@@ -25,6 +25,8 @@ study_data <- study_data |>
 
 Here is `calculate_subject_status` a function with custom logic that calculates the needed status category per patient, based on other variables in the data. 
 
+- Re-assessed export of several package functions (#144).
+
 ## Changed 
 
 - A double click on a row in the start page now shows a modal with all data that needs review instead of directly going to the first page of the patient even if there is no new data on that page (#216).
