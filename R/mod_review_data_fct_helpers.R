@@ -53,7 +53,7 @@ get_review_data <- function(
 #'   Defaults to [time_stamp()].
 #'
 #' @return A data frame containing only the rows with updated review data.
-#' @export
+#' @keywords internal
 #' 
 update_review_data <- function(
     review_df,

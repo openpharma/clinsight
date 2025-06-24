@@ -84,7 +84,6 @@ reference:
   - get_db_connection
   - db_create
   - db_update
-  - update_review_data
   - db_get_review
   - db_get_query
 
