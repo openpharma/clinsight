@@ -12,3 +12,4 @@ app_ui(request)
 \description{
 The application User-Interface
 }
+\keyword{internal}

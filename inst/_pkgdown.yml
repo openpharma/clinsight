@@ -48,7 +48,6 @@ reference:
   desc: Top-level functions to run the Shiny application
 - contents:
   - run_app
-  - app_ui
   - app_server
   
 - title: Application modules
