@@ -12,7 +12,7 @@
 #'   column.
 #'
 #' @return A data frame with review data.
-#' @export
+#' @keywords internal
 #' 
 get_review_data <- function(
     data,
