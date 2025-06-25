@@ -189,7 +189,7 @@ mod_review_form_tbl_server <- function(
       golem::cat_dev(form, "| Rendering table output in renderDT\n")
       datatable_custom(
         subset(merged_form_data(), isolate(show_all() | subject_id == active_subject())), 
-        rename_vars = c("Review Status" = "row_review_status", table_names), 
+        rename_vars = c("Reviewed" = "row_review_status", table_names), 
         rownames= FALSE,
         title = title,
         export_label = paste(
