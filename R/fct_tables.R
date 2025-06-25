@@ -111,7 +111,7 @@ create_table.continuous <- function(
     value_column = "item_value", 
     unit_column = "item_unit",
     explanation_column = "reason_notdone",
-    keep_vars = c("subject_id", "event_name"),
+    keep_vars = c("subject_id", "event_name", "event_date"),
     expected_columns = NULL,
     ...
     ){
