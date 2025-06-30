@@ -30,4 +30,3 @@ A data frame with review data.
 Create a data frame containing all data to be reviewed. Selects the \emph{latest}
 edit date-time for every event/item.
 }
-\keyword{internal}
