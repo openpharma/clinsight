@@ -6,6 +6,7 @@ default:
   study_data: !expr clinsight::clinsightful_data
   meta_data: !expr clinsight::metadata
   user_db: user_db.sqlite
+  query_data: null
   user_roles:
     Administrator: admin
     Medical Monitor: medical_monitor

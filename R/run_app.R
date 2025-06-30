@@ -27,6 +27,7 @@ run_app <- function(
   data <- get_golem_config("study_data")
   meta <- get_golem_config("meta_data")
   user_db <- get_golem_config("user_db")
+  query_path <- get_golem_config("query_data")
   use_shinymanager <- isTRUE(get_golem_config("user_identification") == "shinymanager")
   credentials_db <- get_golem_config("credentials_db")
   
@@ -72,13 +73,13 @@ run_app <- function(
               is.character(user_db))
   if(!file.exists(user_db)){
     warning("No user database found. New database will be created")
-    db_create(get_review_data(data), db_path = user_db)
+    db_create(get_review_data(data), db_path = user_db, query_path = query_path)
   } else{
     stopifnot("user_db version is not up to date" =
                 identical(db_version, db_get_version(user_db)))
     # Skip if not needed for faster testing:
     if(isTRUE(get_golem_config("app_prod"))){
-      db_update(get_review_data(data), db_path = user_db) 
+      db_update(get_review_data(data), db_path = user_db, query_path = query_path)) 
     }
   }
   
