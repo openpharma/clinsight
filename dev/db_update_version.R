@@ -22,7 +22,7 @@ db_update_version <- function(db_path, version = "1.1") {
     "query_data"      = query_data_skeleton
   )
   idx_pk_cols <- list(
-    all_review_data = idx_cols
+    all_review_data = key_columns
   )
   other_data <- list(
     "db_version" = data.frame(version = db_version)

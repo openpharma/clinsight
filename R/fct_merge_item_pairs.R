@@ -24,7 +24,7 @@ merge_item_pair <- function(
     merge_action = c("combine", "replace"),
     name_column = "item_name", 
     value_column = "item_value",
-    id_cols = idx_cols
+    id_cols = key_columns
 ){
   stopifnot(
     is.data.frame(data),
