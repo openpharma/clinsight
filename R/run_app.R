@@ -79,7 +79,7 @@ run_app <- function(
                 identical(db_version, db_get_version(user_db)))
     # Skip if not needed for faster testing:
     if(isTRUE(get_golem_config("app_prod"))){
-      db_update(get_review_data(data), db_path = user_db, query_path = query_path)) 
+      db_update(get_review_data(data), db_path = user_db, query_path = query_path)
     }
   }
   
