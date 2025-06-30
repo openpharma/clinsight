@@ -1,3 +1,54 @@
+#' Check Query Path
+#' 
+#' Verify that the query_path supplied is in the correct format, and if it
+#'   isn't, fall back on the internal query_data_skeleton. If it is, then read
+#'   the rds file in as a data.frame
+#'
+#' @param query_path If it exists, provide a file.path to an RDS file,
+#'   containing data.frame with the same schema as `query_data_skeleton`, used
+#'   to populate a new database with existing queries from the EDC.
+#'   
+#' @keywords internal
+#' @return a data.frame containing EDC queries
+#' 
+check_query_path <- function(query_path) {
+  
+  # verify that the query_path points at something that exists and is usable
+  query_df <- 
+    if(is.null(query_path)) {
+      
+      # when null (the default): use skeleton
+      query_data_skeleton
+      
+    } else if(!file.exists(query_path)) {
+      
+      # when file doesn't exist: use skeleton
+      warning(paste0("Cannot find '", query_path,"'"))
+      query_data_skeleton
+      
+    } else if(tolower(tools::file_ext(query_path)) != "rds") {
+      
+      # when file exists, but it's not an .rds: use skeleton
+      warning("Invalid data format. Expecting a .rds format.")
+      query_data_skeleton
+      
+    } else {
+      
+      # read in the query data found at 'query_path'
+      readRDS(query_path)
+      
+    }
+  
+  # It query_df doesn't follow the same structure as the skeleton, dump it
+  qcols <- colnames(query_data_skeleton)
+  if(!identical(qcols, colnames(query_df))) {
+    warning(paste0("Data.frame read from '", query_path,
+                   "'does match expected columns: ", paste(qcols, collapse = ", ")))
+    query_df <- query_data_skeleton
+  }
+  return(query_df)
+}
+
 #' Connect to database
 #' 
 #' Small helper function to connect to database. This way, the connection 
@@ -59,6 +110,9 @@ db_temp_connect <- function(db_path, code, drv = RSQLite::SQLite()){
 #' @param reviewer Character vector. Sets the reviewer in the review database.
 #' @param status Character vector. Sets the status in the review database.
 #'   Defaults to `new`.
+#' @param query_path If it exists, provide a file.path to an RDS file,
+#'   containing data.frame with the same schema as `query_data_skeleton`, used
+#'   to populate a new database with existing queries from the EDC.
 #'
 #' @return A database will be created. Nothing else will be returned.
 #' @export
@@ -70,7 +124,8 @@ db_create <- function(
     db_path,
     reviewed = "No",
     reviewer = "",
-    status = "new"
+    status = "new",
+    query_path = NULL
 ){
   stopifnot(!file.exists(db_path))
   stopifnot(reviewed %in% c("Yes", "No", ""))
@@ -93,9 +148,14 @@ db_create <- function(
       status = status
     )
   
+  # verify that the query_path points at something that exists and is usable. If
+  # it passes all the checks, read in the data.frame to 'query_df'. If it
+  # doesn't, use the query_data_skeleton
+  query_df <- check_query_path(query_path = query_path)
+  
   new_pk_data <- list(
     "all_review_data" = df,
-    "query_data"      = query_data_skeleton
+    "query_data"      = query_df
   )
   idx_pk_cols <- list(
     all_review_data = idx_cols
@@ -230,6 +290,10 @@ db_add_log <- function(con, keys = c("id", idx_cols)) {
 #' @param common_vars A character vector containing the common key variables.
 #' @param edit_time_var A character vector with the column name of the edit-time
 #'   variable.
+#' @param query_path If it exists, provide a file.path to an RDS file,
+#'   containing data.frame with the same schema as `query_data_skeleton`, used
+#'   to populate a new database with existing queries from the EDC.
+#'
 #'
 #' @return Nothing will be returned.
 #' @export
@@ -239,7 +303,8 @@ db_update <- function(
     db_path,
     common_vars = c("subject_id", "event_name", "item_group", 
                     "form_repeat", "item_name"), 
-    edit_time_var = "edit_date_time"
+    edit_time_var = "edit_date_time",
+    query_path = NULL
 ){
   stopifnot(file.exists(db_path))
   con <- get_db_connection(db_path)
@@ -276,6 +341,20 @@ db_update <- function(
     data.frame("synch_time" = data_synch_time), 
     overwrite = TRUE
   )
+  
+  # If applicable, Dump old query table & inject it with fresh query info
+  query_df <- check_query_path(query_path = query_path)
+  
+  if(nrow(query_df) > 0){
+    con <- get_db_connection(db_path)
+    rs <- DBI::dbSendStatement(con, "DELETE FROM query_data")
+    DBI::dbClearResult(rs)
+    DBI::dbAppendTable(con, "query_data", query_df)
+    cat("Finished updating 'query_data' table in user_db.\n\n")
+  } else {
+    cat("Did not update 'query_data' table in user_db.\n\n")
+  }
+  
   cat("Finished updating review data\n")
 }
 

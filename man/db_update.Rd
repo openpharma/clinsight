@@ -8,7 +8,8 @@ db_update(
   data,
   db_path,
   common_vars = c("subject_id", "event_name", "item_group", "form_repeat", "item_name"),
-  edit_time_var = "edit_date_time"
+  edit_time_var = "edit_date_time",
+  query_path = NULL
 )
 }
 \arguments{
@@ -20,6 +21,10 @@ db_update(
 
 \item{edit_time_var}{A character vector with the column name of the edit-time
 variable.}
+
+\item{query_path}{If it exists, provide a file.path to an RDS file,
+containing data.frame with the same schema as \code{query_data_skeleton}, used
+to populate a new database with existing queries from the EDC.}
 }
 \value{
 Nothing will be returned.

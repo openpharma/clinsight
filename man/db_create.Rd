@@ -4,7 +4,14 @@
 \alias{db_create}
 \title{Create app database}
 \usage{
-db_create(data, db_path, reviewed = "No", reviewer = "", status = "new")
+db_create(
+  data,
+  db_path,
+  reviewed = "No",
+  reviewer = "",
+  status = "new",
+  query_path = NULL
+)
 }
 \arguments{
 \item{data}{A data frame with review data (Usually created with
@@ -20,6 +27,10 @@ database.}
 
 \item{status}{Character vector. Sets the status in the review database.
 Defaults to \code{new}.}
+
+\item{query_path}{If it exists, provide a file.path to an RDS file,
+containing data.frame with the same schema as \code{query_data_skeleton}, used
+to populate a new database with existing queries from the EDC.}
 }
 \value{
 A database will be created. Nothing else will be returned.
