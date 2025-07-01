@@ -98,7 +98,7 @@ db_create <- function(
     "query_data"      = query_data_skeleton
   )
   idx_pk_cols <- list(
-    all_review_data = idx_cols
+    all_review_data = key_columns
   )
   other_data <- list(
     "db_synch_time"   = data.frame(synch_time = data_synch_time),
@@ -164,10 +164,10 @@ db_add_primary_key <- function(con, name, value, keys = NULL) {
 #' @param con A DBI Connection to the SQLite DB
 #' @param keys A character vector specifying which columns should not be updated
 #'   in a table. Defaults to 'id' and the package-defined index columns
-#'   (`idx_cols`).
+#'   (`key_columns`).
 #'
 #' @keywords internal
-db_add_log <- function(con, keys = c("id", idx_cols)) {
+db_add_log <- function(con, keys = c("id", key_columns)) {
   stopifnot(is.character(keys))
   all_keys <- paste(keys, collapse = ", ")
   stopifnot("'keys' parameter cannot be empty" = nchar(all_keys) > 0)
@@ -287,19 +287,19 @@ db_update <- function(
 #' 
 #' @param con A DBI Connection to the SQLite DB
 #' @param data A data frame containing the data to UPSERT into all_review_data
-#' @param idx_cols A character vector specifying which columns define a
+#' @param key_columns A character vector specifying which columns define a
 #'   unique index for a row
 #'   
 #' @return invisibly returns TRUE. Is run for it's side effects on the DB.
 #' 
 #' @keywords internal
-db_upsert <- function(con, data, idx_cols) {
+db_upsert <- function(con, data, key_columns) {
   if ("id" %in% names(data))
     data$id <- NULL
-  cols_to_update <- names(data)[!names(data) %in% idx_cols]
+  cols_to_update <- names(data)[!names(data) %in% key_columns]
   cols_to_insert <- names(data) |> 
     paste(collapse = ", ")
-  constraint_cols <- paste(idx_cols, collapse = ", ")
+  constraint_cols <- paste(key_columns, collapse = ", ")
   dplyr::copy_to(con, data, "row_updates")
   rs <- DBI::dbSendStatement(con, paste(
     "INSERT INTO",

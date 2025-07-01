@@ -23,3 +23,4 @@ the \verb{header widgets} (\code{\link[=mod_header_widgets_server]{mod_header_wi
 \seealso{
 \code{\link[=app_ui]{app_ui()}}, \code{\link[=run_app]{run_app()}}
 }
+\keyword{internal}

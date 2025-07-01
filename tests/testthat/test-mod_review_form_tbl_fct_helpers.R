@@ -47,7 +47,7 @@ describe("get_form_table() works", {
         invisible()
       
       ## Verify columns for each table
-      standard_names <- c("row_review_status", idx_cols, "event_repeat", "event_date")
+      standard_names <- c("row_review_status", key_columns, "event_repeat", "event_date")
       review_tables <- table_names[table_names != "General"]
       unreviewed_items <- lapply(review_tables, \(x){
         df_x <- output[[x]]

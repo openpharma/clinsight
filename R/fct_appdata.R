@@ -261,18 +261,26 @@ apply_custom_functions <- function(
   )
 }
 
-#' Get appdata
-#'  
-#' Converts data to a list of data frames in the expected format to be used by the 
-#' the Shiny application.
+#' Get Appdata
 #'
-#' @param data A data frame, commonly raw data merged with metadata.
-#' @param meta A data frame with metadata. Used to convert the data set to the 
-#' appropriate format.
+#' Converts data to a list of data frames split by `item_group`. It is currently
+#' not needed to provide the application data in this format. However, the
+#' function can be useful for clinsight data customization, especially in
+#' combination with [create_table()]. It creates table classes of the
+#' `item_group` name (in lower case letters, and all punctuation replaced by an
+#' underscore), as long as there is a method available with the corresponding
+#' item_group name for the function [create_table()]. If all data is of type
+#' 'continuous', then laboratory values such as lab limits and units are
+#' cleaned.
+#'
+#' @param data A data frame, commonly raw data merged with metadata using the
+#'   function [merge_meta_with_data()].
+#' @param meta A data frame with metadata. Used to retrieve all expected item
+#'   names and to retrieve the form types (continuous data, other data, ...).
 #'
 #' @return A list of data frames.
-#' @keywords internal
-#'
+#' @export
+#' 
 get_appdata <-  function(
     data,
     meta = metadata

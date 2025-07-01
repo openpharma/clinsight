@@ -12,7 +12,7 @@ get_form_table(
   active_subject,
   pending_form_review_status = NULL,
   is_SAE = NULL,
-  id_cols = idx_cols
+  id_cols = key_columns
 )
 }
 \arguments{

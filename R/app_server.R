@@ -11,6 +11,7 @@
 #'
 #' @param input,output,session Internal parameters for `shiny`.
 #' @seealso [app_ui()], [run_app()]
+#' @keywords internal
 #' 
 app_server <- function(
     input, 

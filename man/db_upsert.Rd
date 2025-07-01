@@ -4,14 +4,14 @@
 \alias{db_upsert}
 \title{UPSERT to all_review_data}
 \usage{
-db_upsert(con, data, idx_cols)
+db_upsert(con, data, key_columns)
 }
 \arguments{
 \item{con}{A DBI Connection to the SQLite DB}
 
 \item{data}{A data frame containing the data to UPSERT into all_review_data}
 
-\item{idx_cols}{A character vector specifying which columns define a
+\item{key_columns}{A character vector specifying which columns define a
 unique index for a row}
 }
 \value{

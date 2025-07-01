@@ -24,7 +24,7 @@ get_form_table <- function(
     active_subject,
     pending_form_review_status = NULL,
     is_SAE = NULL,
-    id_cols = idx_cols
+    id_cols = key_columns
 ){
   stopifnot(is.data.frame(form_data), is.data.frame(form_review_data))
   stopifnot(is.character(form), is.character(form_items))

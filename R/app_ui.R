@@ -1,8 +1,7 @@
 #' The application User-Interface
 #' 
 #' @param request Internal parameter for `{shiny}`.
-#'
-#' @export
+#' @keywords internal
 #'
 app_ui <- function(request){
   add_study_logo <- !is.null(golem::get_golem_options("study_logo_path"))
