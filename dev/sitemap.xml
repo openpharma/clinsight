@@ -57,6 +57,7 @@
 <url><loc>https://openpharma.github.io/clinsight/dev/reference/db_create.html</loc></url>
 <url><loc>https://openpharma.github.io/clinsight/dev/reference/db_get_query.html</loc></url>
 <url><loc>https://openpharma.github.io/clinsight/dev/reference/db_get_review.html</loc></url>
+<url><loc>https://openpharma.github.io/clinsight/dev/reference/db_get_table.html</loc></url>
 <url><loc>https://openpharma.github.io/clinsight/dev/reference/db_save.html</loc></url>
 <url><loc>https://openpharma.github.io/clinsight/dev/reference/db_save_review.html</loc></url>
 <url><loc>https://openpharma.github.io/clinsight/dev/reference/db_slice_rows.html</loc></url>
@@ -90,6 +91,7 @@
 <url><loc>https://openpharma.github.io/clinsight/dev/reference/index.html</loc></url>
 <url><loc>https://openpharma.github.io/clinsight/dev/reference/initialize_credentials.html</loc></url>
 <url><loc>https://openpharma.github.io/clinsight/dev/reference/is_date.html</loc></url>
+<url><loc>https://openpharma.github.io/clinsight/dev/reference/key_columns.html</loc></url>
 <url><loc>https://openpharma.github.io/clinsight/dev/reference/merge_item_pair.html</loc></url>
 <url><loc>https://openpharma.github.io/clinsight/dev/reference/merge_item_pairs_by_suffix.html</loc></url>
 <url><loc>https://openpharma.github.io/clinsight/dev/reference/merge_meta_with_data.html</loc></url>

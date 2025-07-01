@@ -11,7 +11,7 @@ index column constraint."><meta property="og:image" content="https://openpharma.
 
     <a class="navbar-brand me-2" href="../index.html">clinsight</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.0.9005</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.0.9006</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,7 +58,7 @@ index column constraint.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">db_upsert</span><span class="op">(</span><span class="va">con</span>, <span class="va">data</span>, <span class="va">idx_cols</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">db_upsert</span><span class="op">(</span><span class="va">con</span>, <span class="va">data</span>, <span class="va">key_columns</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -73,7 +73,7 @@ index column constraint.</p>
 <dd><p>A data frame containing the data to UPSERT into all_review_data</p></dd>
 
 
-<dt id="arg-idx-cols">idx_cols<a class="anchor" aria-label="anchor" href="#arg-idx-cols"></a></dt>
+<dt id="arg-key-columns">key_columns<a class="anchor" aria-label="anchor" href="#arg-key-columns"></a></dt>
 <dd><p>A character vector specifying which columns define a
 unique index for a row</p></dd>
 
