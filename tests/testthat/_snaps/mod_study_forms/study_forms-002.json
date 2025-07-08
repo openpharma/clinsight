@@ -1244,7 +1244,7 @@
           "Scroller",
           "ColReorder"
         ],
-        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th>Review Status<\/th>\n      <th>subject_id<\/th>\n      <th>event_name<\/th>\n      <th>Systolic blood pressure<\/th>\n      <th>Diastolic blood pressure<\/th>\n      <th>Pulse<\/th>\n      <th>Resp<\/th>\n      <th>Temperature<\/th>\n      <th>Weight change since screening<\/th>\n      <th>BMI<\/th>\n      <th>Weight<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
+        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th>Reviewed<\/th>\n      <th>subject_id<\/th>\n      <th>event_name<\/th>\n      <th>event_date<\/th>\n      <th>Systolic blood pressure<\/th>\n      <th>Diastolic blood pressure<\/th>\n      <th>Pulse<\/th>\n      <th>Resp<\/th>\n      <th>Temperature<\/th>\n      <th>Weight change since screening<\/th>\n      <th>BMI<\/th>\n      <th>Weight<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
         "options": {
           "scrollY": 400,
           "scrollX": true,
@@ -1279,36 +1279,40 @@
               "targets": 2
             },
             {
-              "name": "Systolic blood pressure",
+              "name": "event_date",
               "targets": 3
             },
             {
-              "name": "Diastolic blood pressure",
+              "name": "Systolic blood pressure",
               "targets": 4
             },
             {
-              "name": "Pulse",
+              "name": "Diastolic blood pressure",
               "targets": 5
             },
             {
-              "name": "Resp",
+              "name": "Pulse",
               "targets": 6
             },
             {
-              "name": "Temperature",
+              "name": "Resp",
               "targets": 7
             },
             {
-              "name": "Weight change since screening",
+              "name": "Temperature",
               "targets": 8
             },
             {
-              "name": "BMI",
+              "name": "Weight change since screening",
               "targets": 9
             },
             {
-              "name": "Weight",
+              "name": "BMI",
               "targets": 10
+            },
+            {
+              "name": "Weight",
+              "targets": 11
             }
           ],
           "rowCallback": "rowCallback",
@@ -3450,6 +3454,11 @@
         "Screening",
         "Visit 1",
         "Visit 2"
+      ],
+      "event_date": [
+        "2023-06-05",
+        "2023-07-18",
+        "2023-08-01"
       ],
       "Systolic blood pressure": [
         "<b>121*<\/b> mmHg",
