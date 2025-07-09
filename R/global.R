@@ -140,7 +140,10 @@ utils::globalVariables(
     "is_baseline_event",
     "order_occurrence",
     "vis_number",
-    "not_reviewed_but_missing"
+    "not_reviewed_but_missing",
+    "status_label",
+    "key_columns",
+    "subject_status"
   )
 )
 
