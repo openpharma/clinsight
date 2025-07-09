@@ -23,13 +23,13 @@ describe(
       )
     
     it("outputs a ggplot2 object with a line plot", {
-      expect_true(is.ggplot(fig_timeseries(mock_data, id_to_highlight = "Subject10")))
+      expect_true(is_ggplot(fig_timeseries(mock_data, id_to_highlight = "Subject10")))
       fig <- fig_timeseries(mock_data, id_to_highlight = "Subject10")
       
     })
     it("uses scaled limits and adds limits at y=0  and y=1 if requested", {
       expect_true(
-        is.ggplot(fig_timeseries(mock_data, id_to_highlight = "Subject10", scale = TRUE))
+        is_ggplot(fig_timeseries(mock_data, id_to_highlight = "Subject10", scale = TRUE))
       )
       fig <- fig_timeseries(mock_data, id_to_highlight = "Subject10", scale = TRUE)
       plotlayers <- get_ggplot_layer_names(fig)
@@ -39,7 +39,7 @@ describe(
     
     it("can add two horizontal lines with data-defined limits to the a ggplot2 object", {
       fig <- fig_timeseries(mock_data, id_to_highlight = "Subject9", use_unscaled_limits = TRUE)
-      expect_true(is.ggplot(fig))
+      expect_true(is_ggplot(fig))
       expect_equal(fig$data, mock_data)
       plotlayers <- get_ggplot_layer_names(fig)
       expect_equal(length(plotlayers[plotlayers == "geom_hline"]), 2)

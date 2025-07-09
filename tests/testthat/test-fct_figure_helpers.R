@@ -24,7 +24,7 @@ describe(
       ggplot2::geom_point()
     
     it("renders without error and returns a ggplot2 object", {
-      expect_true(ggplot2::is.ggplot(fig + custom_plot_theme()))
+      expect_true(ggplot2::is_ggplot(fig + custom_plot_theme()))
     })
   }
 )

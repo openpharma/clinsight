@@ -11,8 +11,8 @@ describe(
     )
     
     it("produces a ggplot object", {
-      expect_true(ggplot2::is.ggplot(fig_boxplots(fig_data, sumval = 20)))
-      expect_true(ggplot2::is.ggplot(fig_boxplots(
+      expect_true(ggplot2::is_ggplot(fig_boxplots(fig_data, sumval = 20)))
+      expect_true(ggplot2::is_ggplot(fig_boxplots(
         fig_data, 
         sumval = 20,
         title = "main_title",
@@ -25,7 +25,7 @@ describe(
                    title = "main_title",
                    y_title = "y-axis_title", 
                    x_title = "x-axis_title")
-      expect_true(ggplot2::is.ggplot(fig)) 
+      expect_true(ggplot2::is_ggplot(fig)) 
       expect_equal(fig$labels$x, "x-axis_title")
       expect_equal(fig$labels$y, "y-axis_title")
       expect_equal(fig$labels$title, "main_title")
