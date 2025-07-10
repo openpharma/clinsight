@@ -162,15 +162,16 @@ db_add_primary_key <- function(con, name, value, keys = NULL) {
 #' all_review_data.
 #'
 #' @param con A DBI Connection to the SQLite DB
-#' @param keys A character vector specifying which columns should not be updated
-#'   in a table. Defaults to 'id' and the package-defined index columns
-#'   (`key_columns`).
+#' @param key_cols An optional character vector specifying which columns should not
+#'   be updated in a table. If unset, defaults to 'id' and the package-defined
+#'   index columns (`key_columns`).
 #'
 #' @keywords internal
-db_add_log <- function(con, keys = c("id", key_columns)) {
-  stopifnot(is.character(keys))
-  all_keys <- paste(keys, collapse = ", ")
-  stopifnot("'keys' parameter cannot be empty" = nchar(all_keys) > 0)
+db_add_log <- function(con, key_cols = NULL) {
+  key_cols <- key_cols %||% c("id", key_columns)
+  stopifnot(is.character(key_cols))
+  all_keys <- paste(key_cols, collapse = ", ")
+  stopifnot("'key_cols' parameter cannot be empty" = nchar(all_keys) > 0)
   
   DBI::dbCreateTable(
     con, 
