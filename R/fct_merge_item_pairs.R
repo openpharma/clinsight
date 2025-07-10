@@ -98,7 +98,7 @@ merge_item_pair <- function(
   # 'other' column not needed anymore and would cause duplicates
   data[!data[[name_column]] == item_name_other, , drop = FALSE] |>
     # also add item_names if only the 'other' column was available:
-    dplyr::rows_upsert(selected_data, by = c(id_cols, name_column))
+    dplyr::rows_upsert(selected_data, by = c(key_cols, name_column))
 }
 
 
