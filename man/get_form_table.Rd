@@ -12,7 +12,7 @@ get_form_table(
   active_subject,
   pending_form_review_status = NULL,
   is_SAE = NULL,
-  id_cols = key_columns
+  key_cols = NULL
 )
 }
 \arguments{
@@ -34,7 +34,8 @@ reviewed), and indeterminate (=partially reviewed).}
 \item{is_SAE}{A logical, indicating whether the form is a SAE form. If TRUE,
 will make some adjustments to the columns to display.}
 
-\item{id_cols}{Columns that identify a unique row in the data.}
+\item{key_cols}{Columns that identify a unique row in the data. Defaults to
+\link{key_columns} if unset.}
 }
 \description{
 Get form table

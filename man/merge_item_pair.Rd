@@ -11,7 +11,7 @@ merge_item_pair(
   merge_action = c("combine", "replace"),
   name_column = "item_name",
   value_column = "item_value",
-  id_cols = key_columns
+  key_cols = NULL
 )
 }
 \arguments{
@@ -30,10 +30,11 @@ the item names.}
 \item{value_column}{A character string with the name of the column containing
 the item values.}
 
-\item{id_cols}{A character vector with the names of the columns that uniquely
-identify a row. Note that the string with name_column will be removed from
-\code{id_cols}, since it differs for an item pair (\code{item_name} and
-\code{item_name_other}) and thus cannot be used to identify a unique pair.}
+\item{key_cols}{A character vector with the names of the key columns that
+uniquely identify a row. Defaults to \link{key_columns} is unset. Note that the
+string with \code{name_column} will be removed from \code{key_cols}, since it differs
+for an item pair (\code{item_name} and \code{item_name_other}) and thus cannot be
+used to identify a unique pair.}
 }
 \value{
 A data frame with the merged items.
