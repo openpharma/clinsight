@@ -505,7 +505,8 @@ describe("format_test_results() works", {
     )
   })
   
-  it("returns a list with expected output, and prints a warning if there are failures", {
+  it("returns a list with expected output, prints a warning if there are failures, 
+     and provides information about each test warning/skip/error.", {
     
     res <- list(
       list(
@@ -522,6 +523,17 @@ describe("format_test_results() works", {
           modifyList(expectation("warning", "warning message"), list(test = "test-warning")),
           modifyList(expectation("skip", "skipped test"), list(test = "test-skip"))
         )
+      ),
+      list(
+        file = "test-error-file.R",
+        context = "",
+        test = c("test 2"),
+        user = 0.1234,
+        system = 0,
+        real = 0.145,
+        results = list(
+          modifyList(expectation("error", "test error"), list(test = "test-error"))
+        )
       )
     )
     class(res) <- "testthat_results"
@@ -529,18 +541,23 @@ describe("format_test_results() works", {
     sink(file = temp.sink)
     output <- suppressWarnings(format_test_results(res))
     sink()
-    
     expect_equal(
       readLines(temp.sink),
       c(
         " failed skipped   error warning  passed ",
-        "      2       1       0       1       1 ",
+        "      2       1       1       1       1 ",
         "",
         "Test files with skipped tests:",
         "test-file1.R",
         "$`test-skip`",
         "<expectation_skip/expectation/condition>",
         "skipped test",
+        "",
+        "Test files with errors:",
+        "test-error-file.R",
+        "",
+        "Tests in which error occurred:",
+        '[1] "test 2"',
         "",
         "Test files with failures:",
         "test-file1.R",

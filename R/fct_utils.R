@@ -683,6 +683,19 @@ format_test_results <- function(
       cat("All tests passed successfully\n")
     } else{
       warning("Not all tests passed successfully. Verify the outcome.")
+      error_tests <- unique(with(test_df, file[error]))
+      if(length(error_tests) != 0){
+        cat(
+          "Test files with errors:\n", 
+          paste0(error_tests, collapse = "\n"), "\n\n",
+          sep = ""
+        )
+      cat("Tests in which error occurred:\n")
+      print(with(test_df, test[file %in% error_tests]))
+      cat("\n")
+      ## Note: not printing error messages because it is hard to retrieve them 
+      ## robustly from the current test format
+      }
       failed_tests <- unique(with(test_df, file[failed != 0]))
       if(length(failed_tests) != 0){
         cat(
