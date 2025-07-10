@@ -154,8 +154,7 @@ mod_report_server <- function(id, r, rev_data, db_path, table_names){
       df <- dplyr::tbl(con, "all_review_data") |> 
         summarize_review_data(
           date_time_vars = c("timestamp", "edit_date_time"),
-          common_vars = c("subject_id", "item_group", 
-                          "reviewer", "comment")
+          key_cols = c("subject_id", "item_group", "reviewer", "comment")
         )
       review_data(df)
       
