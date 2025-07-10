@@ -6,7 +6,7 @@
 \usage{
 summarize_review_data(
   data,
-  common_vars = c("subject_id", "item_group"),
+  key_cols = c("subject_id", "item_group"),
   event_var = "event_name",
   date_time_vars = "edit_date_time",
   status_var = "status",
@@ -16,7 +16,7 @@ summarize_review_data(
 \arguments{
 \item{data}{Data frame with review data.}
 
-\item{common_vars}{A character vector containing the common key variables.}
+\item{key_cols}{A character vector containing the common key variables.}
 
 \item{event_var}{A character string containing the name of the column with
 the event names.}
