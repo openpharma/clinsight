@@ -667,7 +667,7 @@ format_test_results <- function(
   error = function(x) "Could not summarize results. Verify results manually"
   )
   tryCatch({
-    skipped_tests <- unique(with(test_df, file[skipped != 0]))
+    skipped_tests <- unique(with(test_df, file[skipped]))
     if(length(skipped_tests) != 0){
       cat(
         "\nTest files with skipped tests:\n", 
