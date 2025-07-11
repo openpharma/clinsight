@@ -103,4 +103,12 @@
 #'
 #' @format A character vector with the following key column names:
 #'   `r key_columns`.
-"key_columns"
+#' 
+#' @export
+key_columns <- c(
+  "subject_id",
+  "event_name",
+  "item_group",
+  "form_repeat",
+  "item_name"
+)
