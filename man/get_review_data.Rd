@@ -16,7 +16,8 @@ get_review_data(
 
 \item{key_cols}{A character vector with the common key variable column names.
 Assumes that these variables can identify a unique data point that needs to
-be reviewed. If unset, will default to \link{key_columns}.}
+be reviewed. Defaults to \code{ClinSight} key columns if unset (see
+\code{vignette("Metadata")}).}
 
 \item{date_var}{A character vector with the name of the date column.}
 

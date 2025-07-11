@@ -11,8 +11,9 @@ db_upsert(con, data, key_cols)
 
 \item{data}{A data frame containing the data to UPSERT into all_review_data}
 
-\item{key_cols}{A character vector specifying which columns define a
-unique index for a row. Defaults to \link{key_columns} if unset.}
+\item{key_cols}{A character vector specifying which columns define a unique
+index for a row. Defaults to \code{ClinSight} key columns if unset (see
+\code{vignette("Metadata")}).}
 }
 \value{
 invisibly returns TRUE. Is run for it's side effects on the DB.

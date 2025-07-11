@@ -11,8 +11,8 @@ db_update(data, db_path, key_cols = NULL, edit_time_var = "edit_date_time")
 
 \item{db_path}{Character vector. Path to the database.}
 
-\item{key_cols}{A character vector containing the common key variables. Defaults
-to \link{key_columns} if unset.}
+\item{key_cols}{A character vector containing the common key variables.
+Defaults to \code{ClinSight} key columns if unset (see \code{vignette("Metadata")}).}
 
 \item{edit_time_var}{A character vector with the column name of the edit-time
 variable.}

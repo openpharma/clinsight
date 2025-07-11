@@ -6,7 +6,8 @@
 #' @param data A data frame, commonly raw data merged with meta data.
 #' @param key_cols A character vector with the common key variable column names.
 #'   Assumes that these variables can identify a unique data point that needs to
-#'   be reviewed. If unset, will default to [key_columns].
+#'   be reviewed. Defaults to `ClinSight` key columns if unset (see
+#'   `vignette("Metadata")`).
 #' @param date_var A character vector with the name of the date column.
 #' @param edit_time_var A character vector with the name of the edit date-time
 #'   column.
@@ -46,8 +47,8 @@ get_review_data <- function(
 #' @param review_df Data frame containing old review data that need to be
 #'   updated.
 #' @param latest_review_data Data frame containing latest review data.
-#' @param key_cols A character vector containing the common key variables. Defaults
-#'   to [key_columns] if unset.
+#' @param key_cols A character vector containing the common key variables.
+#'   Defaults to `ClinSight` key_columns if unset (see `vignette("Metadata")`).
 #' @param edit_time_var A character vector with the column name of the edit-time
 #'   variable.
 #' @param update_time Time stamp given to rows with new rows that are added.

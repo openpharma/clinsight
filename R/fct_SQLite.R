@@ -228,8 +228,8 @@ db_add_log <- function(con, key_cols = NULL) {
 #'
 #' @param data An updated data frame with review data.
 #' @param db_path Character vector. Path to the database.
-#' @param key_cols A character vector containing the common key variables. Defaults
-#'   to [key_columns] if unset.
+#' @param key_cols A character vector containing the common key variables.
+#'   Defaults to `ClinSight` key columns if unset (see `vignette("Metadata")`).
 #' @param edit_time_var A character vector with the column name of the edit-time
 #'   variable.
 #'
@@ -282,18 +282,19 @@ db_update <- function(
 }
 
 #' UPSERT to all_review_data
-#' 
+#'
 #' Performs an UPSERT on all_review_data. New records will be appended to the
 #' table. Changed/updated records will be applied to the table based on the
 #' index column constraint.
-#' 
+#'
 #' @param con A DBI Connection to the SQLite DB
 #' @param data A data frame containing the data to UPSERT into all_review_data
-#' @param key_cols A character vector specifying which columns define a
-#'   unique index for a row. Defaults to [key_columns] if unset.
-#'   
+#' @param key_cols A character vector specifying which columns define a unique
+#'   index for a row. Defaults to `ClinSight` key columns if unset (see
+#'   `vignette("Metadata")`).
+#'
 #' @return invisibly returns TRUE. Is run for it's side effects on the DB.
-#' 
+#'
 #' @keywords internal
 db_upsert <- function(con, data, key_cols) {
   key_cols <- key_cols %||% key_columns

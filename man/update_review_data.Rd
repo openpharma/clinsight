@@ -18,8 +18,8 @@ updated.}
 
 \item{latest_review_data}{Data frame containing latest review data.}
 
-\item{key_cols}{A character vector containing the common key variables. Defaults
-to \link{key_columns} if unset.}
+\item{key_cols}{A character vector containing the common key variables.
+Defaults to \code{ClinSight} key_columns if unset (see \code{vignette("Metadata")}).}
 
 \item{edit_time_var}{A character vector with the column name of the edit-time
 variable.}
