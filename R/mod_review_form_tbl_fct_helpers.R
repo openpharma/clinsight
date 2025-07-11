@@ -13,7 +13,7 @@
 #' @param is_SAE A logical, indicating whether the form is a SAE form. If TRUE,
 #'   will make some adjustments to the columns to display.
 #' @param key_cols Columns that identify a unique row in the data. Defaults to
-#'   [key_columns] if unset.
+#'   `ClinSight` key_columns if unset (see `vignette("Metadata")`).
 #'
 #' @keywords internal
 #' 

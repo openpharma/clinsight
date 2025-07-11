@@ -35,7 +35,7 @@ reviewed), and indeterminate (=partially reviewed).}
 will make some adjustments to the columns to display.}
 
 \item{key_cols}{Columns that identify a unique row in the data. Defaults to
-\link{key_columns} if unset.}
+\code{ClinSight} key_columns if unset (see \code{vignette("Metadata")}).}
 }
 \description{
 Get form table
