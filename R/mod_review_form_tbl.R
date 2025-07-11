@@ -48,8 +48,14 @@ mod_review_form_tbl_server <- function(
     table_names = NULL,
     title = NULL
 ){
+  stopifnot(is.character(form))
   stopifnot(is.reactive(form_data))
+  stopifnot(is.reactive(form_review_data))
+  stopifnot(is.character(form_items))
+  stopifnot(is.reactive(active_subject))
   stopifnot(is.reactive(show_all))
+  stopifnot(is.character(table_names %||% ""))
+  stopifnot(is.character(title %||% ""))
 
   moduleServer(id, function(input, output, session){
     ns <- session$ns
