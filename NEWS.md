@@ -38,7 +38,7 @@ Here is `calculate_subject_status` a function with custom logic that calculates 
 ## Bug fixes
 
 - The event label order calculation is now calculated as intended in the rare cases where it needs to be estimated (for example when the order of occurrence of the events differs per patient) (#225).
-- ClinSight can now run even when calling clinsight::run_app() without loading the package first due to a bug fix (#232).
+- Removed export of ClinSight's `key_columns` object again to prevent hard to detect name spacing errors (#232).
 
 # clinsight 0.2.0
 
