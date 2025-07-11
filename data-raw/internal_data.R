@@ -75,7 +75,18 @@ form_level_default_specs <- c(form_level_defaults, ".default" = "c") |>
   sapply(class) |> 
   readr::as.col_spec()
 
+# The columns required to define unique records are not user defined, they
+# should be captured by an internal object to keep from having to simplify some
+# functions.
+key_columns <- c(
+  "subject_id",
+  "event_name",
+  "item_group",
+  "form_repeat",
+  "item_name"
+)
+
 usethis::use_data(col_palette, query_data_skeleton, required_col_names, 
                   required_meta_cols, clinsight_col_specs, db_version,
-                  form_level_defaults, form_level_default_specs, 
+                  form_level_defaults, form_level_default_specs, key_columns,
                   overwrite = TRUE, internal = TRUE)
