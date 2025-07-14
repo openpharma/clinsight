@@ -89,6 +89,7 @@ reference:
 - contents: 
   - metadata
   - clinsightful_data
+  - key_columns
 
 - title: Helper functions
 - contents: 

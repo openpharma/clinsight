@@ -6,8 +6,7 @@
 #' @param data A data frame, commonly raw data merged with meta data.
 #' @param key_cols A character vector with the common key variable column names.
 #'   Assumes that these variables can identify a unique data point that needs to
-#'   be reviewed. Defaults to `ClinSight` key columns if unset (see
-#'   `vignette("Metadata")`).
+#'   be reviewed. Defaults to `ClinSight` [key_columns()].
 #' @param date_var A character vector with the name of the date column.
 #' @param edit_time_var A character vector with the name of the edit date-time
 #'   column.
@@ -17,11 +16,10 @@
 #' 
 get_review_data <- function(
     data,
-    key_cols = NULL,
+    key_cols = key_columns,
     date_var = "event_date",
     edit_time_var = "edit_date_time"
 ){
-  key_cols <- key_cols %||% key_columns
   stopifnot(inherits(data, c("Pool", "data.frame")), 
             is.character(key_cols), 
             is.character(date_var), is.character(edit_time_var))
@@ -48,7 +46,7 @@ get_review_data <- function(
 #'   updated.
 #' @param latest_review_data Data frame containing latest review data.
 #' @param key_cols A character vector containing the common key variables.
-#'   Defaults to `ClinSight` key_columns if unset (see `vignette("Metadata")`).
+#'   Defaults to `ClinSight` [key_columns()].
 #' @param edit_time_var A character vector with the column name of the edit-time
 #'   variable.
 #' @param update_time Time stamp given to rows with new rows that are added.
@@ -60,11 +58,10 @@ get_review_data <- function(
 update_review_data <- function(
     review_df,
     latest_review_data,
-    key_cols = NULL,
+    key_cols = key_columns,
     edit_time_var = "edit_date_time",
     update_time = time_stamp()
 ){
-  key_cols <- key_cols %||% key_columns
   stopifnot(is.data.frame(latest_review_data), nrow(latest_review_data) > 0 )
   stopifnot(is.data.frame(review_df), nrow(review_df) > 0 )
   stopifnot(is.character(key_cols))

@@ -178,7 +178,6 @@ fix_multiple_choice_vars <- function(
     key_cols = c("subject_id", "event_repeat", "event_date", "form_repeat"),
     collapse_with = "; "
 ){
-  key_cols <- key_cols %||% key_columns[key_columns != "item_name"]
   stopifnot(is.data.frame(data))
   stopifnot(is.character(expected_vars))
   stopifnot("var_column should be a vector of length 1" = {

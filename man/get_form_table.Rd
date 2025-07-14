@@ -12,7 +12,7 @@ get_form_table(
   active_subject,
   pending_form_review_status = NULL,
   is_SAE = NULL,
-  key_cols = NULL
+  key_cols = key_columns
 )
 }
 \arguments{
@@ -35,7 +35,7 @@ reviewed), and indeterminate (=partially reviewed).}
 will make some adjustments to the columns to display.}
 
 \item{key_cols}{Columns that identify a unique row in the data. Defaults to
-\code{ClinSight} key_columns if unset (see \code{vignette("Metadata")}).}
+\code{ClinSight} \code{\link[=key_columns]{key_columns()}}.}
 }
 \description{
 Get form table
