@@ -25,13 +25,9 @@ A metadata file needs to be customized and created for each study. Use the funct
 
 #### column_names
 
-Within the first tab, the column names of the raw data need to be specified. The columns with the names within `name_raw` will be renamed to the new name when merging metadata with raw data later. Again, orange fields should not be adjusted.
+Within the first tab, the column names of the raw data need to be specified. The columns with the names within `name_raw` will be renamed to the new name when merging metadata with raw data later. Again, orange fields should not be adjusted. These field contain `ClinSight` [key_columns()], defining unique records, and other essential variables such as `edit_date_time`, defining the last time a data point was edited.
 
 ![](images/metadata-column_names.png)
-
-##### ClinSight key columns {.key-cols}
-
-Note that the following columns are considered key columns in `ClinSight`, meaning that these are used to distinguish unique records in the data:  `subject_id`,  `event_name`,  `item_group`, `form_repeat`, `item_name`.
 
 #### events
 

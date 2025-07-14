@@ -13,7 +13,7 @@
 #' @param is_SAE A logical, indicating whether the form is a SAE form. If TRUE,
 #'   will make some adjustments to the columns to display.
 #' @param key_cols Columns that identify a unique row in the data. Defaults to
-#'   `ClinSight` key_columns if unset (see `vignette("Metadata")`).
+#'   `ClinSight` [key_columns()].
 #'
 #' @keywords internal
 #' 
@@ -25,9 +25,8 @@ get_form_table <- function(
     active_subject,
     pending_form_review_status = NULL,
     is_SAE = NULL,
-    key_cols = NULL
+    key_cols = key_columns
 ){
-  key_cols <- key_cols %||% key_columns
   stopifnot(is.data.frame(form_data), is.data.frame(form_review_data))
   stopifnot(is.character(form), is.character(form_items))
   stopifnot(

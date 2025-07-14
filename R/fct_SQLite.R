@@ -162,13 +162,12 @@ db_add_primary_key <- function(con, name, value, keys = NULL) {
 #' all_review_data.
 #'
 #' @param con A DBI Connection to the SQLite DB
-#' @param key_cols An optional character vector specifying which columns should not
-#'   be updated in a table. If unset, defaults to 'id' and the package-defined
-#'   index columns (`key_columns`).
+#' @param key_cols An optional character vector specifying which columns should
+#'   not be updated in a table. If unset, defaults to 'id' and the
+#'   package-defined [key_columns()].
 #'
 #' @keywords internal
-db_add_log <- function(con, key_cols = NULL) {
-  key_cols <- key_cols %||% c("id", key_columns)
+db_add_log <- function(con, key_cols = c("id", key_columns)) {
   stopifnot(is.character(key_cols))
   all_keys <- paste(key_cols, collapse = ", ")
   stopifnot("'key_cols' parameter cannot be empty" = nchar(all_keys) > 0)
@@ -229,7 +228,7 @@ db_add_log <- function(con, key_cols = NULL) {
 #' @param data An updated data frame with review data.
 #' @param db_path Character vector. Path to the database.
 #' @param key_cols A character vector containing the common key variables.
-#'   Defaults to `ClinSight` key columns if unset (see `vignette("Metadata")`).
+#'   Defaults to `ClinSight` [key_columns()].
 #' @param edit_time_var A character vector with the column name of the edit-time
 #'   variable.
 #'
@@ -239,10 +238,9 @@ db_add_log <- function(con, key_cols = NULL) {
 db_update <- function(
     data, 
     db_path,
-    key_cols = NULL,
+    key_cols = key_columns,
     edit_time_var = "edit_date_time"
 ){
-  key_cols <- key_cols %||% key_columns
   stopifnot(file.exists(db_path))
   con <- get_db_connection(db_path)
   data_synch_time <- attr(data, "synch_time") %||% ""
@@ -290,14 +288,12 @@ db_update <- function(
 #' @param con A DBI Connection to the SQLite DB
 #' @param data A data frame containing the data to UPSERT into all_review_data
 #' @param key_cols A character vector specifying which columns define a unique
-#'   index for a row. Defaults to `ClinSight` key columns if unset (see
-#'   `vignette("Metadata")`).
+#'   index for a row. Defaults to `ClinSight` [key_columns()].
 #'
 #' @return invisibly returns TRUE. Is run for it's side effects on the DB.
 #'
 #' @keywords internal
-db_upsert <- function(con, data, key_cols) {
-  key_cols <- key_cols %||% key_columns
+db_upsert <- function(con, data, key_cols = key_columns) {
   if ("id" %in% names(data))
     data$id <- NULL
   cols_to_update <- names(data)[!names(data) %in% key_cols]

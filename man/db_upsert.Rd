@@ -4,7 +4,7 @@
 \alias{db_upsert}
 \title{UPSERT to all_review_data}
 \usage{
-db_upsert(con, data, key_cols)
+db_upsert(con, data, key_cols = key_columns)
 }
 \arguments{
 \item{con}{A DBI Connection to the SQLite DB}
@@ -12,8 +12,7 @@ db_upsert(con, data, key_cols)
 \item{data}{A data frame containing the data to UPSERT into all_review_data}
 
 \item{key_cols}{A character vector specifying which columns define a unique
-index for a row. Defaults to \code{ClinSight} key columns if unset (see
-\code{vignette("Metadata")}).}
+index for a row. Defaults to \code{ClinSight} \code{\link[=key_columns]{key_columns()}}.}
 }
 \value{
 invisibly returns TRUE. Is run for it's side effects on the DB.

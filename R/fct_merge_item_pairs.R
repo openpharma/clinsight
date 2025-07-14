@@ -10,10 +10,10 @@
 #' @param value_column A character string with the name of the column containing
 #'   the item values.
 #' @param key_cols A character vector with the names of the key columns that
-#'   uniquely identify a row. Defaults to `ClinSight` key columns if unset (see
-#'   `vignette("Metadata")`). Note that the string with `name_column` will be
-#'   removed from `key_cols`, since it differs for an item pair (`item_name` and
-#'   `item_name_other`) and thus cannot be used to identify a unique pair.
+#'   uniquely identify a row. Defaults to `ClinSight` [key_columns()]. Note that
+#'   the string with `name_column` will be removed from `key_cols`, since it
+#'   differs for an item pair (`item_name` and `item_name_other`) and thus
+#'   cannot be used to identify a unique pair.
 #'
 #' @return A data frame with the merged items.
 #' @keywords internal
@@ -25,9 +25,8 @@ merge_item_pair <- function(
     merge_action = c("combine", "replace"),
     name_column = "item_name", 
     value_column = "item_value",
-    key_cols = NULL
+    key_cols = key_columns
 ){
-  key_cols <- key_cols %||% key_columns
   stopifnot(
     is.data.frame(data),
     is.character(item_name), 

@@ -4,7 +4,12 @@
 \alias{db_update}
 \title{Update app database}
 \usage{
-db_update(data, db_path, key_cols = NULL, edit_time_var = "edit_date_time")
+db_update(
+  data,
+  db_path,
+  key_cols = key_columns,
+  edit_time_var = "edit_date_time"
+)
 }
 \arguments{
 \item{data}{An updated data frame with review data.}
@@ -12,7 +17,7 @@ db_update(data, db_path, key_cols = NULL, edit_time_var = "edit_date_time")
 \item{db_path}{Character vector. Path to the database.}
 
 \item{key_cols}{A character vector containing the common key variables.
-Defaults to \code{ClinSight} key columns if unset (see \code{vignette("Metadata")}).}
+Defaults to \code{ClinSight} \code{\link[=key_columns]{key_columns()}}.}
 
 \item{edit_time_var}{A character vector with the column name of the edit-time
 variable.}
