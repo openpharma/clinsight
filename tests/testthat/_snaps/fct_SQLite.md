@@ -45,7 +45,7 @@
 # db_update(). Feature 2 | Update user data database.: Does not change the database if there are no changes (synch_time is the same)
 
     Code
-      db_update(rev_data, db_path = temp_path, common_vars = comvars)
+      db_update(rev_data, db_path = temp_path, key_cols = comvars)
     Output
       [1] "Database up to date. No update needed"
 
