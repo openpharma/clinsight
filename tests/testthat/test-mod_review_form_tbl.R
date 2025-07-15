@@ -76,7 +76,7 @@ describe(
           ae_rev_status <- ae_rev_status[[1]]
           session$setInputs(
             table_review_selection = data.frame(
-              id = ae_rev_status$id, 
+              id = ae_rev_status$ids, 
               row_id = ae_rev_status$row_id, 
               reviewed = "TRUE"
             )
