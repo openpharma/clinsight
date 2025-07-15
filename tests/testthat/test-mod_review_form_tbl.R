@@ -83,7 +83,7 @@ describe(
           )
           expect_equal(
             session$userData$pending_review_records[[form]],
-            data.frame(id = ae_rev_status$id, reviewed = "TRUE")
+            data.frame(id = ae_rev_status$ids, reviewed = "TRUE")
           )
           expect_true(inherits(output[["table"]], "json"))
         }
