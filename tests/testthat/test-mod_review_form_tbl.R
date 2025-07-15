@@ -38,7 +38,7 @@ describe(
   selected rows passed through internal objects as as expected.", 
   {
     it(
-      "Scenario 1 - Select row for review. Given a test [Adverse events] data set,
+      "Scenario 1 - Mark rows as selected for review. Given a test [Adverse events] data set,
         and the active subject_id set to ID 'DEU_02_482',
         and the subject having an adverse event [Allergic Reaction] that has not yet been reviewed,
         and setting the rows of the event [Allergic Reaction] to be selected in the form table,
