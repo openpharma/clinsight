@@ -78,7 +78,7 @@ describe(
             table_review_selection = data.frame(
               id = ae_rev_status$ids, 
               row_id = ae_rev_status$row_id, 
-              reviewed = "TRUE"
+              reviewed = "Yes"
             )
           )
           expect_equal(
