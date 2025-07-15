@@ -19,7 +19,7 @@ in-depth information.'><meta property="og:image" content="https://openpharma.git
 
     <a class="navbar-brand me-2" href="../index.html">clinsight</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.0.9006</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.0.9007</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,57 +86,55 @@ in-depth information.</p>
 <span><span class="co">#&gt;   ..$ name_raw: chr [1:10] "SiteCode" "SubjectId" "EventId" "EventDate" ...</span></span>
 <span><span class="co">#&gt;   ..$ name_new: chr [1:10] "site_code" "subject_id" "event_id" "event_date" ...</span></span>
 <span><span class="co">#&gt;  $ events         : tibble [10 x 10] (S3: tbl_df/tbl/data.frame)</span></span>
-<span><span class="co">#&gt;   ..$ event_id               : chr [1:10] "SCR" "START" "AF" "CFUEPRO_6M" ...</span></span>
-<span><span class="co">#&gt;   ..$ event_id_pattern       : chr [1:10] "^SCR$" "^START$" "^AF$" "^CFUEPRO_6M$" ...</span></span>
+<span><span class="co">#&gt;   ..$ event_id               : chr [1:10] "SCR" "VIS1" "VIS2" "VIS3" ...</span></span>
+<span><span class="co">#&gt;   ..$ event_id_pattern       : chr [1:10] "^SCR$" "^VIS1$" "^VIS2$" "^VIS3$" ...</span></span>
 <span><span class="co">#&gt;   ..$ is_regular_visit       : logi [1:10] TRUE TRUE TRUE TRUE TRUE TRUE ...</span></span>
-<span><span class="co">#&gt;   ..$ event_label_custom     : chr [1:10] NA "Start" "AF Abl." "CFU 6M" ...</span></span>
-<span><span class="co">#&gt;   ..$ event_name_custom      : chr [1:10] "Screening" "Study Start" "Early AF Ablation" "CFU 6M" ...</span></span>
-<span><span class="co">#&gt;   ..$ is_baseline_event      : logi [1:10] FALSE TRUE FALSE FALSE FALSE FALSE ...</span></span>
+<span><span class="co">#&gt;   ..$ event_label_custom     : chr [1:10] NA "V1" "V2" "V3" ...</span></span>
+<span><span class="co">#&gt;   ..$ event_name_custom      : chr [1:10] "Screening" "Visit 1" "Visit 2" "Visit 3" ...</span></span>
+<span><span class="co">#&gt;   ..$ is_baseline_event      : logi [1:10] TRUE FALSE FALSE FALSE FALSE FALSE ...</span></span>
 <span><span class="co">#&gt;   ..$ generate_labels        : logi [1:10] FALSE FALSE FALSE FALSE FALSE FALSE ...</span></span>
 <span><span class="co">#&gt;   ..$ meta_event_order       : int [1:10] 1 2 3 4 5 6 7 8 9 10</span></span>
 <span><span class="co">#&gt;   ..$ add_visit_number       : logi [1:10] FALSE FALSE FALSE FALSE FALSE FALSE ...</span></span>
 <span><span class="co">#&gt;   ..$ add_event_repeat_number: logi [1:10] FALSE FALSE FALSE FALSE FALSE FALSE ...</span></span>
-<span><span class="co">#&gt;  $ common_forms   :'data.frame':  98 obs. of  4 variables:</span></span>
-<span><span class="co">#&gt;   ..$ item_name : chr [1:98] "AE Number" "AE Name" "AESI" "AE start date" ...</span></span>
-<span><span class="co">#&gt;   ..$ item_type : chr [1:98] "other" "other" "other" "other" ...</span></span>
-<span><span class="co">#&gt;   ..$ item_group: chr [1:98] "Adverse events" "Adverse events" "Adverse events" "Adverse events" ...</span></span>
-<span><span class="co">#&gt;   ..$ merge_with: chr [1:98] NA NA NA NA ...</span></span>
-<span><span class="co">#&gt;  $ study_forms    :'data.frame':  44 obs. of  7 variables:</span></span>
-<span><span class="co">#&gt;   ..$ item_name  : chr [1:44] "Date planned ablation" "Not done" "Hospital admission Date" "Hospital discharge Date" ...</span></span>
-<span><span class="co">#&gt;   ..$ item_type  : chr [1:44] "other" "other" "other" "other" ...</span></span>
-<span><span class="co">#&gt;   ..$ item_group : chr [1:44] "Ablation" "Ablation" "Ablation" "Ablation" ...</span></span>
-<span><span class="co">#&gt;   ..$ merge_with : chr [1:44] NA "ABLA_ND_SPEC" NA NA ...</span></span>
-<span><span class="co">#&gt;   ..$ unit       : chr [1:44] NA NA NA NA ...</span></span>
-<span><span class="co">#&gt;   ..$ lower_limit: chr [1:44] NA NA NA NA ...</span></span>
-<span><span class="co">#&gt;   ..$ upper_limit: chr [1:44] NA NA NA NA ...</span></span>
-<span><span class="co">#&gt;  $ general        :'data.frame':  24 obs. of  3 variables:</span></span>
-<span><span class="co">#&gt;   ..$ item_name : chr [1:24] "Age" "Sex" "ECOG" "Eligible" ...</span></span>
-<span><span class="co">#&gt;   ..$ item_type : chr [1:24] "other" "other" "other" "other" ...</span></span>
-<span><span class="co">#&gt;   ..$ item_group: chr [1:24] "General" "General" "General" "General" ...</span></span>
-<span><span class="co">#&gt;  $ form_level_data:'data.frame':  16 obs. of  4 variables:</span></span>
-<span><span class="co">#&gt;   ..$ item_group         : chr [1:16] "Adverse events" "Medication" "Demographics" "Conc. Procedures" ...</span></span>
-<span><span class="co">#&gt;   ..$ item_scale         : logi [1:16] NA NA NA NA NA NA ...</span></span>
-<span><span class="co">#&gt;   ..$ use_unscaled_limits: logi [1:16] NA NA NA NA NA NA ...</span></span>
-<span><span class="co">#&gt;   ..$ review_required    : logi [1:16] TRUE TRUE TRUE TRUE TRUE TRUE ...</span></span>
+<span><span class="co">#&gt;  $ common_forms   :'data.frame':  44 obs. of  4 variables:</span></span>
+<span><span class="co">#&gt;   ..$ item_name : chr [1:44] "AE Number" "AE Name" "AESI" "AE start date" ...</span></span>
+<span><span class="co">#&gt;   ..$ item_type : chr [1:44] "other" "other" "other" "other" ...</span></span>
+<span><span class="co">#&gt;   ..$ item_group: chr [1:44] "Adverse events" "Adverse events" "Adverse events" "Adverse events" ...</span></span>
+<span><span class="co">#&gt;   ..$ merge_with: chr [1:44] NA NA NA NA ...</span></span>
+<span><span class="co">#&gt;  $ study_forms    :'data.frame':  29 obs. of  6 variables:</span></span>
+<span><span class="co">#&gt;   ..$ item_name  : chr [1:29] "Systolic blood pressure" "Diastolic blood pressure" "Pulse" "Resp" ...</span></span>
+<span><span class="co">#&gt;   ..$ item_type  : chr [1:29] "continuous" "continuous" "continuous" "continuous" ...</span></span>
+<span><span class="co">#&gt;   ..$ item_group : chr [1:29] "Vital signs" "Vital signs" "Vital signs" "Vital signs" ...</span></span>
+<span><span class="co">#&gt;   ..$ unit       : chr [1:29] "mmHg" "mmHg" "beats/min" "breaths/min" ...</span></span>
+<span><span class="co">#&gt;   ..$ lower_limit: chr [1:29] "90" "55" "60" "12" ...</span></span>
+<span><span class="co">#&gt;   ..$ upper_limit: chr [1:29] "160" "90" "100" "20" ...</span></span>
+<span><span class="co">#&gt;  $ general        :'data.frame':  20 obs. of  3 variables:</span></span>
+<span><span class="co">#&gt;   ..$ item_name : chr [1:20] "Age" "Sex" "ECOG" "Eligible" ...</span></span>
+<span><span class="co">#&gt;   ..$ item_type : chr [1:20] "other" "other" "other" "other" ...</span></span>
+<span><span class="co">#&gt;   ..$ item_group: chr [1:20] "General" "General" "General" "General" ...</span></span>
+<span><span class="co">#&gt;  $ form_level_data:'data.frame':  11 obs. of  4 variables:</span></span>
+<span><span class="co">#&gt;   ..$ item_group         : chr [1:11] "Adverse events" "Medication" "Conc. Procedures" "Medical History" ...</span></span>
+<span><span class="co">#&gt;   ..$ item_scale         : logi [1:11] NA NA NA NA FALSE TRUE ...</span></span>
+<span><span class="co">#&gt;   ..$ use_unscaled_limits: logi [1:11] NA NA NA NA TRUE FALSE ...</span></span>
+<span><span class="co">#&gt;   ..$ review_required    : logi [1:11] TRUE TRUE TRUE TRUE TRUE TRUE ...</span></span>
 <span><span class="co">#&gt;  $ table_names    : tibble [16 x 2] (S3: tbl_df/tbl/data.frame)</span></span>
 <span><span class="co">#&gt;   ..$ table_name: chr [1:16] "Edit date" "Date" "Event" "Event" ...</span></span>
 <span><span class="co">#&gt;   ..$ raw_name  : chr [1:16] "edit_date_time" "event_date" "event_label" "event_name" ...</span></span>
-<span><span class="co">#&gt;  $ settings       :List of 5</span></span>
+<span><span class="co">#&gt;  $ settings       :List of 4</span></span>
 <span><span class="co">#&gt;   ..$ pre_pivot_fns  : chr "apply_study_specific_suffix_fixes"</span></span>
 <span><span class="co">#&gt;   ..$ post_pivot_fns : chr "apply_edc_specific_changes"</span></span>
 <span><span class="co">#&gt;   ..$ post_merge_fns : chr "apply_study_specific_fixes"</span></span>
 <span><span class="co">#&gt;   ..$ treatment_label: chr "💊 Tₓ"</span></span>
-<span><span class="co">#&gt;   ..$ study_name     : chr "EASThigh-AFNET 11"</span></span>
-<span><span class="co">#&gt;  $ items_expanded : tibble [204 x 9] (S3: tbl_df/tbl/data.frame)</span></span>
-<span><span class="co">#&gt;   ..$ form_type  : chr [1:204] "common_forms" "common_forms" "common_forms" "common_forms" ...</span></span>
-<span><span class="co">#&gt;   ..$ var        : chr [1:204] "AE_AESPID" "AE_AETERM" "AE_AESI" "AE_AESTDAT" ...</span></span>
-<span><span class="co">#&gt;   ..$ suffix     : chr [1:204] NA NA NA NA ...</span></span>
-<span><span class="co">#&gt;   ..$ item_name  : chr [1:204] "AE Number" "AE Name" "AESI" "AE start date" ...</span></span>
-<span><span class="co">#&gt;   ..$ item_type  : chr [1:204] "other" "other" "other" "other" ...</span></span>
-<span><span class="co">#&gt;   ..$ item_group : chr [1:204] "Adverse events" "Adverse events" "Adverse events" "Adverse events" ...</span></span>
-<span><span class="co">#&gt;   ..$ unit       : chr [1:204] NA NA NA NA ...</span></span>
-<span><span class="co">#&gt;   ..$ lower_limit: chr [1:204] NA NA NA NA ...</span></span>
-<span><span class="co">#&gt;   ..$ upper_limit: chr [1:204] NA NA NA NA ...</span></span></code></pre><p></p></div>
+<span><span class="co">#&gt;  $ items_expanded : tibble [220 x 9] (S3: tbl_df/tbl/data.frame)</span></span>
+<span><span class="co">#&gt;   ..$ form_type  : chr [1:220] "common_forms" "common_forms" "common_forms" "common_forms" ...</span></span>
+<span><span class="co">#&gt;   ..$ var        : chr [1:220] "AE_AESPID" "AE_AETERM" "AE_AESI" "AE_AESTDAT" ...</span></span>
+<span><span class="co">#&gt;   ..$ suffix     : chr [1:220] NA NA NA NA ...</span></span>
+<span><span class="co">#&gt;   ..$ item_name  : chr [1:220] "AE Number" "AE Name" "AESI" "AE start date" ...</span></span>
+<span><span class="co">#&gt;   ..$ item_type  : chr [1:220] "other" "other" "other" "other" ...</span></span>
+<span><span class="co">#&gt;   ..$ item_group : chr [1:220] "Adverse events" "Adverse events" "Adverse events" "Adverse events" ...</span></span>
+<span><span class="co">#&gt;   ..$ unit       : chr [1:220] NA NA NA NA ...</span></span>
+<span><span class="co">#&gt;   ..$ lower_limit: chr [1:220] NA NA NA NA ...</span></span>
+<span><span class="co">#&gt;   ..$ upper_limit: chr [1:220] NA NA NA NA ...</span></span></code></pre><p></p></div>
 </div>
 
     </div>

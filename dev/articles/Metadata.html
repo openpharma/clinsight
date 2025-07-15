@@ -21,7 +21,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">clinsight</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.0.9006</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.0.9007</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,7 +87,10 @@ be removed or renamed.</p>
 <p>Within the first tab, the column names of the raw data need to be
 specified. The columns with the names within <code>name_raw</code> will
 be renamed to the new name when merging metadata with raw data later.
-Again, orange fields should not be adjusted.</p>
+Again, orange fields should not be adjusted. These field contain
+<code>ClinSight</code> [key_columns()], defining unique records, and
+other essential variables such as <code>edit_date_time</code>, defining
+the last time a data point was edited.</p>
 <p><img src="images/metadata-column_names.png"></p>
 </div>
 <div class="section level4">

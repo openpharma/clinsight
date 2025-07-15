@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">clinsight</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.0.9006</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.0.9007</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,7 +60,7 @@
 <span>  <span class="va">active_subject</span>,</span>
 <span>  pending_form_review_status <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  is_SAE <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  id_cols <span class="op">=</span> <span class="va">key_columns</span></span>
+<span>  key_cols <span class="op">=</span> <span class="va">key_columns</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -100,8 +100,9 @@ reviewed), and indeterminate (=partially reviewed).</p></dd>
 will make some adjustments to the columns to display.</p></dd>
 
 
-<dt id="arg-id-cols">id_cols<a class="anchor" aria-label="anchor" href="#arg-id-cols"></a></dt>
-<dd><p>Columns that identify a unique row in the data.</p></dd>
+<dt id="arg-key-cols">key_cols<a class="anchor" aria-label="anchor" href="#arg-key-cols"></a></dt>
+<dd><p>Columns that identify a unique row in the data. Defaults to
+<code>ClinSight</code> <code><a href="key_columns.html">key_columns()</a></code>.</p></dd>
 
 </dl></div>
 

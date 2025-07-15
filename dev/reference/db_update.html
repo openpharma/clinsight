@@ -9,7 +9,7 @@ frame. If the provided data frame is newer, the database will be updated."><meta
 
     <a class="navbar-brand me-2" href="../index.html">clinsight</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.0.9006</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.0.9007</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,7 +58,7 @@ frame. If the provided data frame is newer, the database will be updated.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">db_update</span><span class="op">(</span></span>
 <span>  <span class="va">data</span>,</span>
 <span>  <span class="va">db_path</span>,</span>
-<span>  common_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"subject_id"</span>, <span class="st">"event_name"</span>, <span class="st">"item_group"</span>, <span class="st">"form_repeat"</span>, <span class="st">"item_name"</span><span class="op">)</span>,</span>
+<span>  key_cols <span class="op">=</span> <span class="va">key_columns</span>,</span>
 <span>  edit_time_var <span class="op">=</span> <span class="st">"edit_date_time"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -75,8 +75,9 @@ frame. If the provided data frame is newer, the database will be updated.</p>
 <dd><p>Character vector. Path to the database.</p></dd>
 
 
-<dt id="arg-common-vars">common_vars<a class="anchor" aria-label="anchor" href="#arg-common-vars"></a></dt>
-<dd><p>A character vector containing the common key variables.</p></dd>
+<dt id="arg-key-cols">key_cols<a class="anchor" aria-label="anchor" href="#arg-key-cols"></a></dt>
+<dd><p>A character vector containing the common key variables.
+Defaults to <code>ClinSight</code> <code><a href="key_columns.html">key_columns()</a></code>.</p></dd>
 
 
 <dt id="arg-edit-time-var">edit_time_var<a class="anchor" aria-label="anchor" href="#arg-edit-time-var"></a></dt>

@@ -15,7 +15,7 @@ consistent."><meta property="og:image" content="https://openpharma.github.io/cli
 
     <a class="navbar-brand me-2" href="../index.html">clinsight</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.0.9006</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.0.9007</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,7 +70,7 @@ consistent.</p>
 <span>  var_column <span class="op">=</span> <span class="st">"var"</span>,</span>
 <span>  value_column <span class="op">=</span> <span class="st">"item_value"</span>,</span>
 <span>  suffix <span class="op">=</span> <span class="st">"[[:digit:]]+$"</span>,</span>
-<span>  common_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"subject_id"</span>, <span class="st">"event_repeat"</span>, <span class="st">"event_date"</span>, <span class="st">"form_repeat"</span><span class="op">)</span>,</span>
+<span>  key_cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"subject_id"</span>, <span class="st">"event_repeat"</span>, <span class="st">"event_date"</span>, <span class="st">"form_repeat"</span><span class="op">)</span>,</span>
 <span>  collapse_with <span class="op">=</span> <span class="st">"; "</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -101,8 +101,9 @@ stored</p></dd>
 <dd><p>Multiple choice suffix. Used to define multiple choice values</p></dd>
 
 
-<dt id="arg-common-vars">common_vars<a class="anchor" aria-label="anchor" href="#arg-common-vars"></a></dt>
-<dd><p>variables used for identifying unique rows in the dataset.</p></dd>
+<dt id="arg-key-cols">key_cols<a class="anchor" aria-label="anchor" href="#arg-key-cols"></a></dt>
+<dd><p>Character vector with key columns used for identifying unique
+rows in the data set.</p></dd>
 
 
 <dt id="arg-collapse-with">collapse_with<a class="anchor" aria-label="anchor" href="#arg-collapse-with"></a></dt>
@@ -123,7 +124,7 @@ with. If this value is NULL, the rows will be left as is.</p></dd>
 <span class="r-in"><span>  var <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Age"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"MH_TRT"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  item_value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">95</span>, <span class="fl">67</span>, <span class="fl">58</span>, <span class="fl">83</span>, <span class="fl">34</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span> <span class="op">)</span></span></span>
-<span class="r-in"><span> <span class="fu">fix_multiple_choice_vars</span><span class="op">(</span><span class="va">df</span>, common_vars <span class="op">=</span> <span class="st">"ID"</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="fu">fix_multiple_choice_vars</span><span class="op">(</span><span class="va">df</span>, key_cols <span class="op">=</span> <span class="st">"ID"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
