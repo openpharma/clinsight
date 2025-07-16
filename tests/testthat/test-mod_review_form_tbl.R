@@ -74,12 +74,9 @@ describe(
             ) |> 
             dplyr::pull(row_review_status)
           ae_rev_status <- ae_rev_status[[1]]
+          ae_rev_status$review <- TRUE
           session$setInputs(
-            table_review_selection = data.frame(
-              id = ae_rev_status$ids, 
-              row_id = ae_rev_status$row_id, 
-              reviewed = "Yes"
-            )
+            table_review_selection = review_info_handler(ae_rev_status)
           )
           expect_equal(
             session$userData$pending_review_records[[form]],
