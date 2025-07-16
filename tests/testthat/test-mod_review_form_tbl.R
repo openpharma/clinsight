@@ -38,7 +38,7 @@ describe(
   selected rows passed through internal objects as as expected.", 
   {
     it(
-      "Scenario 1 - Select row for review. Given a test [Adverse events] data set,
+      "Scenario 1 - Mark rows as selected for review. Given a test [Adverse events] data set,
         and the active subject_id set to ID 'DEU_02_482',
         and the subject having an adverse event [Allergic Reaction] that has not yet been reviewed,
         and setting the rows of the event [Allergic Reaction] to be selected in the form table,
@@ -76,14 +76,14 @@ describe(
           ae_rev_status <- ae_rev_status[[1]]
           session$setInputs(
             table_review_selection = data.frame(
-              id = ae_rev_status$id, 
+              id = ae_rev_status$ids, 
               row_id = ae_rev_status$row_id, 
-              reviewed = "TRUE"
+              reviewed = "Yes"
             )
           )
           expect_equal(
             session$userData$pending_review_records[[form]],
-            data.frame(id = ae_rev_status$id, reviewed = "TRUE")
+            data.frame(id = ae_rev_status$ids, reviewed = "Yes")
           )
           expect_true(inherits(output[["table"]], "json"))
         }
