@@ -211,13 +211,17 @@ describe(
         withr::defer(app$stop())
         app$set_inputs("test-filter" = "temperature")
         app$wait_for_idle(1100)
-        app$expect_values(output = TRUE, export = TRUE)
+        export_names <- c(
+          "test-fig_data", 
+          "test-review_form_tbl-table_data"
+        )
+        app$expect_values(output = TRUE, export = export_names)
         df <- app$get_value(export = "test-fig_data")
         expect_equal(as.character(unique(df$item_name)), "Temperature")
         expect_equal(with(df, reviewed[subject_id == "NLD_06_755"]), c("Yes", "Yes", "No"))
         app$set_inputs("test-switch_view" = "table")
         app$wait_for_idle()
-        app$expect_values(output = TRUE, export = TRUE)
+        app$expect_values(output = TRUE, export = export_names)
       }
     )
     

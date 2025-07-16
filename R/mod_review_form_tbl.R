@@ -229,7 +229,14 @@ mod_review_form_tbl_server <- function(
           error = function(e) e
         )
       )
-    } 
+    }
+    
+    shiny::exportTestValues(
+      pending_review_records = tryCatch(
+        session$userData$pending_review_records[[form]],
+        error = function(e) e
+      )
+    )
   })
 }
     

@@ -88,20 +88,31 @@ describe(
       }
     )
     it(
-      "Scenario 2 - View table. Given a test [Adverse events] data set,
-        and the active subject_id set to ID 'DEU_02_482',
+      "Scenario 2 - View table and mark row as review pending. 
+          Given a test [Adverse events] data set,
+          and the active subject_id set to ID 'DEU_02_482',
           I expect that the active data set [data_active] is a data frame object,
           and that this data frame contains only data of subject DEU_02_482,
-          and that the output table is a valid JSON object with the expected number of rows", 
+          and that the output table is a valid JSON object with the expected number of rows,
+          and that, after clicking the check box belonging to the first row,
+          the item ids related to this row are marked as having a review pending.", 
       {
         app_data <- get_appdata(clinsightful_data)
         ae_data <- app_data[["Adverse events"]]
         ae_rev_data <- get_review_data(ae_data) |> 
           dplyr::mutate(id = dplyr::row_number(), reviewed = "No", status = "new")
-        n_expected_rows <- ae_data |> 
-          create_table() |> 
-          dplyr::filter(subject_id == "DEU_02_482", `Serious Adverse Event` == "No") |> 
+        form_table <- get_form_table(
+          ae_data, 
+          ae_rev_data, 
+          form = "Adverse events", 
+          form_items = unique(ae_data$item_name), 
+          active_subject = "DEU_02_482"
+        )
+        n_expected_rows <- form_table |> 
+          dplyr::filter(subject_id == "DEU_02_482") |> 
           nrow()
+        expected_reviewed_ids <- form_table[1,][["row_review_status"]][[1]]$ids
+        
         test_ui <- function(request){
           tagList(
             shinyjs::useShinyjs(),
@@ -140,6 +151,13 @@ describe(
         expect_equal(
           length(app$get_value(input = "test-table_rows_all")),
           n_expected_rows
+        )
+        app$wait_for_js('$("#test-table input[type=\'checkbox\']").slice(0, 1).click()')
+        rev_records <- app$get_values(export = "test-pending_review_records")$export
+        
+        expect_equal(
+          rev_records$`test-pending_review_records`$id,
+          expected_reviewed_ids
         )
       }
     )
