@@ -1,8 +1,8 @@
 # summarize_review_data() works: Scenario 1 - Given a random data set provided, I expect that summary dataframe snapshot will be as expected
 
     Code
-      summarize_review_data(review_df, common_vars = c("subject_id", "Form"),
-      event_var = "Event", date_time_vars = "Edit date")
+      summarize_review_data(review_df, key_cols = c("subject_id", "Form"), event_var = "Event",
+      date_time_vars = "Edit date")
     Output
       # A tibble: 97 x 6
          subject_id Form            Event                  `Edit date` status reviewed

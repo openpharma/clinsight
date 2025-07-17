@@ -19,7 +19,7 @@ describe(
       expect_snapshot(
         summarize_review_data(
           review_df, 
-          common_vars = c("subject_id", "Form"), 
+          key_cols = c("subject_id", "Form"), 
           event_var = "Event", 
           date_time_vars = "Edit date"
         )

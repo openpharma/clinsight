@@ -142,7 +142,6 @@ utils::globalVariables(
     "vis_number",
     "not_reviewed_but_missing",
     "status_label",
-    "key_columns",
     "subject_status"
   )
 )

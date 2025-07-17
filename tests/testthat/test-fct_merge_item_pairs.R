@@ -74,7 +74,7 @@ settings.",
           df, 
           item_name = "Administered", 
           item_name_other =  "Administered_OTHER", 
-          id_cols = c("subject_id", "event")
+          key_cols = c("subject_id", "event")
         )
       })
       expected_output <- data.frame(
@@ -97,7 +97,7 @@ settings.",
            data = df, 
            item_name = "Administered", 
            item_name_other =  "Administered_OTHER", 
-           id_cols = c("subject_id", "event"), 
+           key_cols = c("subject_id", "event"), 
            merge_action = "replace"
          )
        })
@@ -118,7 +118,7 @@ settings.",
         data = df, 
         item_name = "Administered", 
         item_name_other =  "Administered_OTHER", 
-        id_cols = c("subject_id", "event"), 
+        key_cols = c("subject_id", "event"), 
         merge_action = "replace"
       )
       change_args <- function(x){modifyList(x = args, val = x)}
@@ -144,7 +144,7 @@ settings.",
         "item_name cannot be the same as item_name_other"
       )
       expect_error(
-        do.call("merge_item_pair", change_args(list(id_cols = mtcars)))
+        do.call("merge_item_pair", change_args(list(key_cols = mtcars)))
       )
       expect_error(
         do.call("merge_item_pair", change_args(list(merge_action = TRUE)))
@@ -154,7 +154,7 @@ settings.",
       )
     })
     it("returns item_name_other if item_name is missing while 
-     not changing other item_names with the same id_cols", {
+     not changing other item_names with the same key_cols", {
        df <- data.frame(
          subject_id = 1,
          event = c(1,1,2,2),
@@ -172,7 +172,7 @@ settings.",
            data = df, 
            item_name = "non-existing", 
            item_name_other = "Administered_OTHER", 
-           id_cols = c("subject_id", "event"), 
+           key_cols = c("subject_id", "event"), 
            merge_action = "combine"
          ),
          expected_outcome
@@ -182,7 +182,7 @@ settings.",
            data = df, 
            item_name = "non-existing", 
            item_name_other = "Administered_OTHER", 
-           id_cols = c("subject_id", "event"), 
+           key_cols = c("subject_id", "event"), 
            merge_action = "replace"
          ),
          expected_outcome
@@ -201,7 +201,7 @@ settings.",
           data = df, 
           item_name = "Administered", 
           item_name_other =  "Administered_OTHER", 
-          id_cols = c("subject_id", "event")
+          key_cols = c("subject_id", "event")
         )
       })
       expected_output <- data.frame(
@@ -215,7 +215,7 @@ settings.",
           data = df, 
           item_name = "Administered", 
           item_name_other =  "Administered_OTHER", 
-          id_cols = c("subject_id", "event")
+          key_cols = c("subject_id", "event")
         ),
         expected_output
       )
@@ -232,14 +232,14 @@ settings.",
           data = df, 
           item_name = "Administered", 
           item_name_other =  "Administered_OTHER_NOT_FOUND", 
-          id_cols = c("subject_id", "event")
+          key_cols = c("subject_id", "event")
         ),
         df
       )
     })
-    it("warns if all id_cols and the item_name column do not uniquely identify a row
+    it("warns if all key_cols and the item_name column do not uniquely identify a row
      and returns the original dataset", {
-       # test that warns if all id_cols and the item_name column do not uniquely identify a row
+       # test that warns if all key_cols and the item_name column do not uniquely identify a row
        # and returns the original dataset:
        df <- data.frame(
          subject_id = 1,
@@ -253,7 +253,7 @@ settings.",
              data = df, 
              item_name = "Administered", 
              item_name_other =  "Administered_OTHER", 
-             id_cols = c("subject_id")
+             key_cols = c("subject_id")
            )
          }, 
          " do not uniquely identify the rows. Cannot merge 'Administered' with 'Administered_OTHER'."
@@ -280,12 +280,12 @@ settings.",
           data = df, 
           item_name = "Administered", 
           item_name_other =  "Administered_OTHER", 
-          id_cols = c("subject_id", "event")
+          key_cols = c("subject_id", "event")
         ),
         expected_output
       )
     })
-    it("correctly selects latest edit_date_time, even if item_name is in the id_cols vector", {
+    it("correctly selects latest edit_date_time, even if item_name is in the key_cols vector", {
       # test that it uses the latest edit_date_time if the edit_date_time columns is available:
       df <- data.frame(
         subject_id = 1,
@@ -305,7 +305,7 @@ settings.",
           data = df, 
           item_name = "Administered", 
           item_name_other =  "Administered_OTHER", 
-          id_cols = c("subject_id", "event", "item_name")
+          key_cols = c("subject_id", "event", "item_name")
         ),
         expected_output
       )
@@ -325,7 +325,7 @@ describe("merge_item_pairs_by_suffix works", {
       output <- merge_item_pairs_by_suffix(
         data = df, 
         suffix = "_OTHER", 
-        id_cols = c("subject_id", "event")
+        key_cols = c("subject_id", "event")
       )
     })
     expected_output <- data.frame(
@@ -372,7 +372,7 @@ describe("merge_item_pairs_by_suffix works", {
       output <- merge_item_pairs_by_suffix(
         data = df, 
         suffix = "", 
-        id_cols = c("subject_id", "event")
+        key_cols = c("subject_id", "event")
       ),
       "No suffix defined. Skipping merging of items."
     )
@@ -381,7 +381,7 @@ describe("merge_item_pairs_by_suffix works", {
       output <- merge_item_pairs_by_suffix(
         data = df, 
         suffix = NULL, 
-        id_cols = c("subject_id", "event")
+        key_cols = c("subject_id", "event")
       ),
       "No suffix defined. Skipping merging of items."
     )
@@ -397,7 +397,7 @@ describe("merge_item_pairs_by_suffix works", {
     args <- list(
       data = df, 
       suffix = "_OTHER", 
-      id_cols = c("subject_id", "event")
+      key_cols = c("subject_id", "event")
     )
     change_args <- function(x){modifyList(x = args, val = x)}
     expect_error(
@@ -407,7 +407,7 @@ describe("merge_item_pairs_by_suffix works", {
       do.call("merge_item_pairs_by_suffix", change_args(list(suffix = mtcars)))
     )
     expect_error(
-      do.call("merge_item_pairs_by_suffix", change_args(list(id_cols = mtcars)))
+      do.call("merge_item_pairs_by_suffix", change_args(list(key_cols = mtcars)))
     )
   })
   it("returns original data frame if suffix does not match any variables", {
@@ -421,7 +421,7 @@ describe("merge_item_pairs_by_suffix works", {
       output <- merge_item_pairs_by_suffix(
         data = df, 
         suffix = "_NOT_FOUND", 
-        id_cols = c("subject_id", "event")
+        key_cols = c("subject_id", "event")
       ),
       "No variable pairs found for merging. Returning data."
     )

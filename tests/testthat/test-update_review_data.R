@@ -38,7 +38,7 @@ describe(
     it("creates a data frame with the expected result", {
       result <- update_review_data(
         old_review_data, updated_review_data, 
-        common_vars = c("key_col1", "item_group")
+        key_cols = c("key_col1", "item_group")
       )
       expected <- data.frame(
         key_col1 = c(9999, 10000),
@@ -54,20 +54,20 @@ describe(
     it("warns if the updated dataset does not contain 
        any new data, and returns an empty data frame", {
       expect_warning(update_review_data(old_review_data, old_review_data, 
-                         common_vars = c("key_col1", "item_group")))
+                         key_cols = c("key_col1", "item_group")))
       expect_true(
         nrow(suppressWarnings(update_review_data(old_review_data, old_review_data, 
-                             common_vars = c("key_col1", "item_group")))) == 0
+                             key_cols = c("key_col1", "item_group")))) == 0
         )
     })
     it("warns if rows are not found in the updated dataset but still returns a 
     valid data frame; might happen if entries are deleted from the source", {
          missing_row_data <- updated_review_data |> dplyr::filter(key_col1 != 9999) 
          expect_warning(update_review_data(old_review_data, missing_row_data, 
-                                           common_vars = c("key_col1", "item_group")))
+                                           key_cols = c("key_col1", "item_group")))
          expect_true(is.data.frame(suppressWarnings(
            update_review_data(old_review_data, missing_row_data, 
-                              common_vars = c("key_col1", "item_group"))
+                              key_cols = c("key_col1", "item_group"))
            )))
        })
   }

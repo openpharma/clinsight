@@ -135,7 +135,7 @@ describe(
       rev_data <- rbind(old_data, new_data)
       # newer synch_time indicating need for update:
       attr(rev_data, "synch_time") <- "2024-02-02 01:01:01 UTC" 
-      db_update(rev_data, db_path = temp_path, common_vars = comvars)
+      db_update(rev_data, db_path = temp_path, key_cols = comvars)
       expect_equal(
         DBI::dbGetQuery(con, "SELECT * FROM all_review_data")[1,],
         df_old
@@ -160,7 +160,7 @@ describe(
       
       rev_data <- rbind(old_data, new_data)
       attr(rev_data, "synch_time") <- "2024-02-02 01:01:01 UTC" 
-      db_update(rev_data, db_path = temp_path, common_vars = comvars)
+      db_update(rev_data, db_path = temp_path, key_cols = comvars)
       expect_snapshot(DBI::dbGetQuery(con, "SELECT * FROM all_review_data"))
       expect_equal(
         nrow(log_old),
@@ -177,7 +177,7 @@ describe(
       db_add_primary_key(con, "all_review_data", cbind(old_data, review_cols), comvars)
       
       rev_data <- rbind(old_data, new_data) # no synch_time attribute added
-      db_update(rev_data, db_path = temp_path, common_vars = comvars)
+      db_update(rev_data, db_path = temp_path, key_cols = comvars)
       
       # exclude time stamp since it defaults to current date/time when 
       # synch_date is not available:
@@ -198,7 +198,7 @@ describe(
         dplyr::mutate(edit_date_time = "2023-11-13 01:01:01")
       attr(rev_data, "synch_time") <- "2024-02-02 01:01:01 UTC" 
       
-      db_update(rev_data, db_path = temp_path, common_vars = comvars)
+      db_update(rev_data, db_path = temp_path, key_cols = comvars)
       expect_snapshot(DBI::dbGetQuery(con, "SELECT * FROM all_review_data"))
       log_tbl <- DBI::dbGetQuery(con, "SELECT * FROM all_review_data_log")
       # Drop dml_timestamp
@@ -218,7 +218,7 @@ describe(
       log_old <- DBI::dbGetQuery(con, "SELECT * FROM all_review_data_log")
       
       expect_snapshot({
-        db_update(rev_data, db_path = temp_path, common_vars = comvars)
+        db_update(rev_data, db_path = temp_path, key_cols = comvars)
       })
       attr(rev_data, "synch_time") <- NULL
       expect_equal(rev_data, DBI::dbGetQuery(con, "SELECT * FROM all_review_data")[,-1])
@@ -242,7 +242,7 @@ describe(
       db_add_log(con, c("id", comvars))
       DBI::dbWriteTable(con, "db_synch_time", data.frame("synch_time" = synch_time))
       expect_warning(
-        db_update(rev_data, db_path = temp_path, common_vars = comvars),
+        db_update(rev_data, db_path = temp_path, key_cols = comvars),
         "DB synch time is more recent than data synch time. Aborting synchronization"
       )
     })
