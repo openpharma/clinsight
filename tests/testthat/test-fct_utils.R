@@ -505,20 +505,34 @@ describe("format_test_results() works", {
     )
   })
   
-  
-  it("returns a list with expected output, and prints a warning if there are failures", {
+  it("returns a list with expected output, prints a warning if there are failures, 
+     and provides information about each test warning/skip/error.", {
+    
     res <- list(
       list(
         file = c("test-file1.R"),
         context = "",
-        test = c("Test description"),
+        test = c("test to perform"),
         user = 0.1234,
         system = 0,
         real = 0.145,
         results = list(
-          expectation("success", "success message"), 
-          expectation("failure", "first failure message"), 
-          expectation("failure", "second failure message")
+          modifyList(expectation("success", "success message"), list(test = "test1")), 
+          modifyList(expectation("failure", "first failure message"), list(test = "test2")), 
+          modifyList(expectation("failure", "second failure message"), list(test = "test3")),
+          modifyList(expectation("warning", "warning message"), list(test = "test-warning")),
+          modifyList(expectation("skip", "skipped test"), list(test = "test-skip"))
+        )
+      ),
+      list(
+        file = "test-error-file.R",
+        context = "",
+        test = c("test 2"),
+        user = 0.1234,
+        system = 0,
+        real = 0.145,
+        results = list(
+          modifyList(expectation("error", "test error"), list(test = "test-error"))
         )
       )
     )
@@ -531,14 +545,40 @@ describe("format_test_results() works", {
       readLines(temp.sink),
       c(
         " failed skipped   error warning  passed ",
-        "      2       0       0       0       1 ",
-        "There was a failure in the following tests: ",
+        "      2       1       1       1       1 ",
+        "",
+        "Test files with skipped tests:",
+        "test-file1.R",
+        "$`test-skip`",
+        "<expectation_skip/expectation/condition>",
+        "skipped test",
+        "",
+        "Test files with errors:",
+        "test-error-file.R",
+        "",
+        "Tests in which error occurred:",
+        '[1] "test 2"',
+        "",
+        "Test files with failures:",
         "test-file1.R",
         "Failure messages: ",
         "",
+        "$test2",
+        "<expectation_failure/expectation/error/condition>",
         "first failure message",
         "",
-        "second failure message"
+        "$test3",
+        "<expectation_failure/expectation/error/condition>",
+        "second failure message",
+        "",
+        "Test files with warnings:",
+        "test-file1.R",
+        "Warning messages: ",
+        "",
+        "$`test-warning`",
+        "<expectation_warning/expectation/condition>",
+        "warning message",
+        ""
       )
     )
     expect_true(inherits(output, "list"))
@@ -547,6 +587,37 @@ describe("format_test_results() works", {
       names(output), 
       c("results", "time", "session", "sum_results", "test_outcome")
     )
+    expect_equal(output$test_outcome, "fail")
+  })
+  it("Returns test outcome 'pass' with a skipped tests if include_skipped is FALSE", {
+    res <- list(
+      list(
+        file = c("test-file1.R"),
+        context = "",
+        test = c("test to perform"),
+        user = 0.1234,
+        system = 0,
+        real = 0.145,
+        results = list(
+          expectation("success", "success message"), 
+          expectation("skip", "skipped test")
+        )
+      )
+    )
+    
+    class(res) <- "testthat_results"
+    temp.sink <- withr::local_tempfile(fileext = ".txt")
+    sink(file = temp.sink)
+    output <- suppressWarnings(format_test_results(res, include_skipped = FALSE))
+    sink()
+    expect_equal(
+      readLines(temp.sink)[1:2],
+      c(
+        " failed skipped   error warning  passed ",
+        "      0       1       0       0       1 "
+      )
+    )
+    expect_equal(output$test_outcome, "pass")
   })
 })
 
