@@ -91,6 +91,10 @@ update_review_data <- function(
     # including event_date in join by should work, even for Adverse events, since 
     # if event_date changes, the edit date-time also changes, and thus all rows 
     # will be taken into consideration.
+    dplyr::left_join(review_df, by = key_cols, suffix = c("", ".old")) |>
+    dplyr::filter(is.na(.data[[paste0(edit_time_var, ".old")]]) | 
+                    .data[[edit_time_var]] > .data[[paste0(edit_time_var, ".old")]]) |>
+    dplyr::select(dplyr::all_of(names(latest_review_data))) |>
     dplyr::full_join(review_df, by = names(latest_review_data)) |> 
     add_missing_columns(c("timestamp", "reviewed", "comment", "status"))
   
