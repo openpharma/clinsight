@@ -6,7 +6,7 @@
 \usage{
 get_review_data(
   data,
-  common_vars = c("subject_id", "event_name", "item_group", "form_repeat", "item_name"),
+  key_cols = key_columns,
   date_var = "event_date",
   edit_time_var = "edit_date_time"
 )
@@ -14,9 +14,9 @@ get_review_data(
 \arguments{
 \item{data}{A data frame, commonly raw data merged with meta data.}
 
-\item{common_vars}{A character vector with the common variable column names.
+\item{key_cols}{A character vector with the common key variable column names.
 Assumes that these variables can identify a unique data point that needs to
-be reviewed.}
+be reviewed. Defaults to \code{ClinSight} \code{\link[=key_columns]{key_columns()}}.}
 
 \item{date_var}{A character vector with the name of the date column.}
 
