@@ -21,7 +21,7 @@ app_ui <- function(request){
         # see https://github.com/rstudio/bslib/issues/963
         "bslib-value-box-horizontal-break-point" = "1px"
         ),
-      bg = "#43464c",
+      navbar_options = bslib::navbar_options(bg = "#43464c"),
       title = tags$a(
         href = "/",
         tags$img(src='www/clinsightlogo-app.png', height = '40')

@@ -92,7 +92,7 @@ custom_plot_theme <- function(){
 #' }
 #' 
 get_ggplot_layer_names <- function(fig){
-  stopifnot(ggplot2::is.ggplot(fig))
+  stopifnot(ggplot2::is_ggplot(fig))
   lapply(fig[["layers"]], \(x){
     lrs <- toString(x[["constructor"]][[1]]) |> 
       strsplit(", ") |> 
