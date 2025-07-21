@@ -6,9 +6,9 @@
       "deps": [
         {
           "name": "font-awesome",
-          "version": "6.4.2",
+          "version": "6.5.2",
           "src": {
-            "href": "font-awesome-6.4.2"
+            "href": "font-awesome-6.5.2"
           },
           "meta": null,
           "script": null,
@@ -35,9 +35,9 @@
         },
         {
           "name": "bslib-component-js",
-          "version": "0.8.0",
+          "version": "0.9.0",
           "src": {
-            "href": "bslib-component-js-0.8.0"
+            "href": "bslib-component-js-0.9.0"
           },
           "meta": null,
           "script": [
@@ -56,9 +56,9 @@
         },
         {
           "name": "bslib-component-css",
-          "version": "0.8.0",
+          "version": "0.9.0",
           "src": {
-            "href": "bslib-component-css-0.8.0"
+            "href": "bslib-component-css-0.9.0"
           },
           "meta": null,
           "script": null,
@@ -70,9 +70,9 @@
         },
         {
           "name": "bslib-tag-require",
-          "version": "0.8.0",
+          "version": "0.9.0",
           "src": {
-            "href": "bslib-tag-require-0.8.0"
+            "href": "bslib-tag-require-0.9.0"
           },
           "meta": null,
           "script": "tag-require.js",
@@ -105,9 +105,9 @@
       "deps": [
         {
           "name": "font-awesome",
-          "version": "6.4.2",
+          "version": "6.5.2",
           "src": {
-            "href": "font-awesome-6.4.2"
+            "href": "font-awesome-6.5.2"
           },
           "meta": null,
           "script": null,
@@ -134,9 +134,9 @@
         },
         {
           "name": "bslib-component-js",
-          "version": "0.8.0",
+          "version": "0.9.0",
           "src": {
-            "href": "bslib-component-js-0.8.0"
+            "href": "bslib-component-js-0.9.0"
           },
           "meta": null,
           "script": [
@@ -155,9 +155,9 @@
         },
         {
           "name": "bslib-component-css",
-          "version": "0.8.0",
+          "version": "0.9.0",
           "src": {
-            "href": "bslib-component-css-0.8.0"
+            "href": "bslib-component-css-0.9.0"
           },
           "meta": null,
           "script": null,
@@ -169,9 +169,9 @@
         },
         {
           "name": "bslib-tag-require",
-          "version": "0.8.0",
+          "version": "0.9.0",
           "src": {
-            "href": "bslib-tag-require-0.8.0"
+            "href": "bslib-tag-require-0.9.0"
           },
           "meta": null,
           "script": "tag-require.js",
@@ -6456,6 +6456,7 @@
               },
               "yref": "paper",
               "xref": "paper",
+              "layer": "below",
               "x0": 0,
               "x1": 0.47011207970112079,
               "y0": 0.7743531202435312,
@@ -6471,6 +6472,7 @@
               },
               "yref": "paper",
               "xref": "paper",
+              "layer": "below",
               "x0": 0,
               "x1": 0.47011207970112079,
               "y0": 0,
@@ -6488,6 +6490,7 @@
               },
               "yref": "paper",
               "xref": "paper",
+              "layer": "below",
               "x0": 0.52988792029887921,
               "x1": 1,
               "y0": 0.7743531202435312,
@@ -6503,6 +6506,7 @@
               },
               "yref": "paper",
               "xref": "paper",
+              "layer": "below",
               "x0": 0.52988792029887921,
               "x1": 1,
               "y0": 0,
@@ -6520,6 +6524,7 @@
               },
               "yref": "paper",
               "xref": "paper",
+              "layer": "below",
               "x0": 0,
               "x1": 0.47011207970112079,
               "y0": 0.5243531202435312,
@@ -6535,6 +6540,7 @@
               },
               "yref": "paper",
               "xref": "paper",
+              "layer": "below",
               "x0": 0,
               "x1": 0.47011207970112079,
               "y0": 0,
@@ -6552,6 +6558,7 @@
               },
               "yref": "paper",
               "xref": "paper",
+              "layer": "below",
               "x0": 0.52988792029887921,
               "x1": 1,
               "y0": 0.5243531202435312,
@@ -6567,6 +6574,7 @@
               },
               "yref": "paper",
               "xref": "paper",
+              "layer": "below",
               "x0": 0.52988792029887921,
               "x1": 1,
               "y0": 0,
@@ -6584,6 +6592,7 @@
               },
               "yref": "paper",
               "xref": "paper",
+              "layer": "below",
               "x0": 0,
               "x1": 0.47011207970112079,
               "y0": 0.2743531202435312,
@@ -6599,6 +6608,7 @@
               },
               "yref": "paper",
               "xref": "paper",
+              "layer": "below",
               "x0": 0,
               "x1": 0.47011207970112079,
               "y0": 0,
@@ -6616,6 +6626,7 @@
               },
               "yref": "paper",
               "xref": "paper",
+              "layer": "below",
               "x0": 0.52988792029887921,
               "x1": 1,
               "y0": 0.2743531202435312,
@@ -6631,6 +6642,7 @@
               },
               "yref": "paper",
               "xref": "paper",
+              "layer": "below",
               "x0": 0.52988792029887921,
               "x1": 1,
               "y0": 0,
@@ -6648,6 +6660,7 @@
               },
               "yref": "paper",
               "xref": "paper",
+              "layer": "below",
               "x0": 0,
               "x1": 0.47011207970112079,
               "y0": 0,
@@ -6663,6 +6676,7 @@
               },
               "yref": "paper",
               "xref": "paper",
+              "layer": "below",
               "x0": 0,
               "x1": 0.47011207970112079,
               "y0": 0,
@@ -6680,6 +6694,7 @@
               },
               "yref": "paper",
               "xref": "paper",
+              "layer": "below",
               "x0": 0.52988792029887921,
               "x1": 1,
               "y0": 0,
@@ -6695,6 +6710,7 @@
               },
               "yref": "paper",
               "xref": "paper",
+              "layer": "below",
               "x0": 0.52988792029887921,
               "x1": 1,
               "y0": 0,

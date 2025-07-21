@@ -652,9 +652,9 @@
         },
         {
           "name": "bs3compat",
-          "version": "0.8.0",
+          "version": "0.9.0",
           "src": {
-            "href": "bs3compat-0.8.0"
+            "href": "bs3compat-0.9.0"
           },
           "meta": null,
           "script": [
@@ -887,9 +887,9 @@
         },
         {
           "name": "bs3compat",
-          "version": "0.8.0",
+          "version": "0.9.0",
           "src": {
-            "href": "bs3compat-0.8.0"
+            "href": "bs3compat-0.9.0"
           },
           "meta": null,
           "script": [
@@ -991,9 +991,9 @@
       "deps": [
         {
           "name": "font-awesome",
-          "version": "6.4.2",
+          "version": "6.5.2",
           "src": {
-            "href": "font-awesome-6.4.2"
+            "href": "font-awesome-6.5.2"
           },
           "meta": null,
           "script": null,
@@ -1020,9 +1020,9 @@
         },
         {
           "name": "bslib-component-js",
-          "version": "0.8.0",
+          "version": "0.9.0",
           "src": {
-            "href": "bslib-component-js-0.8.0"
+            "href": "bslib-component-js-0.9.0"
           },
           "meta": null,
           "script": [
@@ -1041,9 +1041,9 @@
         },
         {
           "name": "bslib-component-css",
-          "version": "0.8.0",
+          "version": "0.9.0",
           "src": {
-            "href": "bslib-component-css-0.8.0"
+            "href": "bslib-component-css-0.9.0"
           },
           "meta": null,
           "script": null,
@@ -1055,9 +1055,9 @@
         },
         {
           "name": "bslib-tag-require",
-          "version": "0.8.0",
+          "version": "0.9.0",
           "src": {
-            "href": "bslib-tag-require-0.8.0"
+            "href": "bslib-tag-require-0.9.0"
           },
           "meta": null,
           "script": "tag-require.js",
@@ -1100,9 +1100,9 @@
       "deps": [
         {
           "name": "font-awesome",
-          "version": "6.4.2",
+          "version": "6.5.2",
           "src": {
-            "href": "font-awesome-6.4.2"
+            "href": "font-awesome-6.5.2"
           },
           "meta": null,
           "script": null,
@@ -1129,9 +1129,9 @@
         },
         {
           "name": "bslib-component-js",
-          "version": "0.8.0",
+          "version": "0.9.0",
           "src": {
-            "href": "bslib-component-js-0.8.0"
+            "href": "bslib-component-js-0.9.0"
           },
           "meta": null,
           "script": [
@@ -1150,9 +1150,9 @@
         },
         {
           "name": "bslib-component-css",
-          "version": "0.8.0",
+          "version": "0.9.0",
           "src": {
-            "href": "bslib-component-css-0.8.0"
+            "href": "bslib-component-css-0.9.0"
           },
           "meta": null,
           "script": null,
@@ -1164,9 +1164,9 @@
         },
         {
           "name": "bslib-tag-require",
-          "version": "0.8.0",
+          "version": "0.9.0",
           "src": {
-            "href": "bslib-tag-require-0.8.0"
+            "href": "bslib-tag-require-0.9.0"
           },
           "meta": null,
           "script": "tag-require.js",
