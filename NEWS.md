@@ -1,8 +1,8 @@
-# clinsight (development version)
+# clinsight 0.3.0
 
 ## Developer notes
 
-- Added unit tests to cover more edge cases, improve code coverage (#219, #234).
+- Added unit tests to cover more edge cases, improve code coverage (#219, #234, #236).
 - It is now easier to adjust the status label of each participant (#217). If a column named subject_status is found in the General metadata tab, this one will be directly used for displaying the subjects status in the study and thus the subject status will not be calculated anymore (#217).
 
 This way, you could also create your own study_status labels by adjusting the study_data with a custom script after merging data with metadata, but before using the data with clinsight. See below for an example script:
@@ -26,6 +26,7 @@ study_data <- study_data |>
 Here is `calculate_subject_status` a function with custom logic that calculates the needed status category per patient, based on other variables in the data. 
 
 - Re-assessed export of several package functions (#144).
+- Updated snapshot to a more recent version since updated versions of some packages were needed (in particular the `chromote` package that is needed for development) (#231).
 
 ## Changed 
 
