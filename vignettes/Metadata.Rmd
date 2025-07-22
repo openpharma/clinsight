@@ -91,6 +91,28 @@ This tab contains information about variables that are needed in ClinSight, but 
 
 ![](images/metadata-general.png)
 
+##### Subject status
+
+By default, a subject's study status is derived from variables in the general tab (`Eligible`, `DiscontinuationReason`, `DiscontinuationDate`). To override this, add a subject_status column to the study data—if present, it will be used directly and no calculation will occur. See below for example code to implement this.
+
+```
+status_items <- c("Eligible", "StudyCompleted", "DiscontinuationDate",
+                  "DiscontinuationReason", "RandomizationDate")
+status_data <- study_data |> 
+  dplyr::select(subject_id, item_group, edit_date_time, item_name, item_value) |> 
+  subset(item_group == "General" & item_name %in% status_items) |> 
+  create_table(
+    keep_vars = c("subject_id", "item_group", "edit_date_time"), 
+    expected_columns = status_items
+  ) |> 
+  calculate_subject_status()
+
+study_data <- study_data |> 
+  dplyr::bind_rows(status_data)
+```
+
+In the section above the function `calculate_subject_status` contains some custom logic that calculates the needed status category per patient, based on other variables in the data. 
+
 #### form_level_data {#form_level_data}
 
 This is an optional tab. If provided, the column `item_group` is mandatory. In this tab, settings can be adjusted on form level rather than setting them within the `common_forms` or `study_forms` tab.
