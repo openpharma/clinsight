@@ -21,7 +21,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">clinsight</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.0.9010</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.3.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -249,6 +249,33 @@ here are also a view mandatory names that are still needed for ClinSight
 to function. It is not advised to delete these names. If they are
 missing in your own data, just leave them in the metadata as is.</p>
 <p><img src="images/metadata-general.png"></p>
+<div class="section level5">
+<h5 id="subject-status">Subject status<a class="anchor" aria-label="anchor" href="#subject-status"></a>
+</h5>
+<p>By default, a subject’s study status is derived from variables in the
+general tab (<code>Eligible</code>, <code>DiscontinuationReason</code>,
+<code>DiscontinuationDate</code>). To override this, add a
+subject_status column to the study data—if present, it will be used
+directly and no calculation will occur. See below for example code to
+implement this.</p>
+<pre><code><span><span class="va">status_items</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Eligible"</span>, <span class="st">"StudyCompleted"</span>, <span class="st">"DiscontinuationDate"</span>,</span>
+<span>                  <span class="st">"DiscontinuationReason"</span>, <span class="st">"RandomizationDate"</span><span class="op">)</span></span>
+<span><span class="va">status_data</span> <span class="op">&lt;-</span> <span class="va">study_data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">subject_id</span>, <span class="va">item_group</span>, <span class="va">edit_date_time</span>, <span class="va">item_name</span>, <span class="va">item_value</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">item_group</span> <span class="op">==</span> <span class="st">"General"</span> <span class="op">&amp;</span> <span class="va">item_name</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">status_items</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/create_table.html">create_table</a></span><span class="op">(</span></span>
+<span>    keep_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"subject_id"</span>, <span class="st">"item_group"</span>, <span class="st">"edit_date_time"</span><span class="op">)</span>, </span>
+<span>    expected_columns <span class="op">=</span> <span class="va">status_items</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">calculate_subject_status</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">study_data</span> <span class="op">&lt;-</span> <span class="va">study_data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="va">status_data</span><span class="op">)</span></span></code></pre>
+<p>In the section above the function
+<code>calculate_subject_status</code> contains some custom logic that
+calculates the needed status category per patient, based on other
+variables in the data.</p>
+</div>
 </div>
 <div class="section level4">
 <h4 id="form_level_data">form_level_data<a class="anchor" aria-label="anchor" href="#form_level_data"></a>

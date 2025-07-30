@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">clinsight</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.0.9010</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.3.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,9 +47,12 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="clinsight-development-version">clinsight (development version)<a class="anchor" aria-label="anchor" href="#clinsight-development-version"></a></h2>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.3.0" id="clinsight-030">clinsight 0.3.0<a class="anchor" aria-label="anchor" href="#clinsight-030"></a></h2>
 <div class="section level3">
-<h3 id="developer-notes-development-version">Developer notes<a class="anchor" aria-label="anchor" href="#developer-notes-development-version"></a></h3>
-<ul><li>Added unit tests to cover more edge cases, improve code coverage (<a href="https://github.com/openpharma/clinsight/issues/219" class="external-link">#219</a>, <a href="https://github.com/openpharma/clinsight/issues/234" class="external-link">#234</a>).</li>
+<h3 id="developer-notes-0-3-0">Developer notes<a class="anchor" aria-label="anchor" href="#developer-notes-0-3-0"></a></h3>
+<ul><li>Added unit tests to cover more edge cases, improve code coverage (<a href="https://github.com/openpharma/clinsight/issues/219" class="external-link">#219</a>, <a href="https://github.com/openpharma/clinsight/issues/234" class="external-link">#234</a>, <a href="https://github.com/openpharma/clinsight/issues/236" class="external-link">#236</a>).</li>
 <li>It is now easier to adjust the status label of each participant (<a href="https://github.com/openpharma/clinsight/issues/217" class="external-link">#217</a>). If a column named subject_status is found in the General metadata tab, this one will be directly used for displaying the subjects status in the study and thus the subject status will not be calculated anymore (<a href="https://github.com/openpharma/clinsight/issues/217" class="external-link">#217</a>).</li>
 </ul><p>This way, you could also create your own study_status labels by adjusting the study_data with a custom script after merging data with metadata, but before using the data with clinsight. See below for an example script:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -68,9 +71,10 @@
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="va">status_data</span><span class="op">)</span></span></code></pre></div>
 <p>Here is <code>calculate_subject_status</code> a function with custom logic that calculates the needed status category per patient, based on other variables in the data.</p>
 <ul><li>Re-assessed export of several package functions (<a href="https://github.com/openpharma/clinsight/issues/144" class="external-link">#144</a>).</li>
+<li>Updated snapshot to a more recent version since updated versions of some packages were needed (in particular the <code>chromote</code> package that is needed for development) (<a href="https://github.com/openpharma/clinsight/issues/231" class="external-link">#231</a>).</li>
 </ul></div>
 <div class="section level3">
-<h3 id="changed-development-version">Changed<a class="anchor" aria-label="anchor" href="#changed-development-version"></a></h3>
+<h3 id="changed-0-3-0">Changed<a class="anchor" aria-label="anchor" href="#changed-0-3-0"></a></h3>
 <ul><li>A double click on a row in the start page now shows a modal with all data that needs review instead of directly going to the first page of the patient even if there is no new data on that page (<a href="https://github.com/openpharma/clinsight/issues/216" class="external-link">#216</a>).</li>
 <li>Removed the requirement for common_forms to have a ‘Name’ column. In addition, a ‘Name’ column can be provided in study data tabs, indicating a common name per row, which will improve the query selector items (<a href="https://github.com/openpharma/clinsight/issues/207" class="external-link">#207</a>).</li>
 <li>Improved branding with new ClinSight Logo, added favicon, and allowed for study logos, when available (<a href="https://github.com/openpharma/clinsight/issues/214" class="external-link">#214</a>).</li>
@@ -78,7 +82,7 @@
 <li>Adjusted the label of ‘Review Status’ in the ClinSight tables to ‘Reviewed’ for consistency, and added event date to the <code>create_table.continuous</code> S3 class (<a href="https://github.com/openpharma/clinsight/issues/228" class="external-link">#228</a>).</li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<h3 id="bug-fixes-0-3-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-3-0"></a></h3>
 <ul><li>The event label order calculation is now calculated as intended in the rare cases where it needs to be estimated (for example when the order of occurrence of the events differs per patient) (<a href="https://github.com/openpharma/clinsight/issues/225" class="external-link">#225</a>).</li>
 <li>Exported ClinSight’s <code>key_columns</code> object within the R folder to prevent name spacing errors (<a href="https://github.com/openpharma/clinsight/issues/232" class="external-link">#232</a>).</li>
 </ul></div>
