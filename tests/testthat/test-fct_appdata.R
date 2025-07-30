@@ -5,6 +5,17 @@ describe("get_raw_csv_data works", {
     expect_snapshot(df)
     expect_equal(attr(df, "synch_time"),  "2024-01-01 00:00:00")
   })
+  it("errors if no csv files can be found in the folder", {
+    expect_error(get_raw_csv_data("non-existent-folder"), "No files found")
+  })
+  it("warns if an empty synch time is provided", {
+    data_path <- test_path("fixtures", "csvtestdata")
+    expect_warning(
+      df <- get_raw_csv_data(data_path, synch_time = NULL), 
+      "No synch time provided"
+    )
+    expect_equal(attr(df, "synch_time"), "")
+  })
 })
 
 describe(
@@ -55,6 +66,15 @@ describe(
   {
     it("produces the expected output", {
       expect_snapshot(get_appdata(clinsightful_data, metadata))  
+    })
+    it("errors if multiple form types for one item group are found", {
+      meta_adjusted <- metadata$items_expanded
+      meta_adjusted[1:10, "form_type"] <- "incorrect_form"
+      meta <- list(items_expanded = meta_adjusted)
+      expect_error(
+        get_appdata(clinsightful_data, meta = meta),
+        "form_type consists of multipe elements which is not allowed: incorrect_form, common_forms"
+      )
     })
   }
 )

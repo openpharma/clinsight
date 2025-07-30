@@ -44,25 +44,64 @@ describe(
          
          app$run_js('$("#start_page_1-overview_table td").filter(function() {return $(this).text() == "BEL_04_772"}).closest("tr").trigger("dblclick")')
          app$wait_for_idle()
+         # review details modal should now show up:
+         expect_true(app$get_js("$('#shiny-modal').hasClass('show');"))
+         expect_true(inherits(app$get_value(output = "navigate_review_1-review_df"), "json"))
+         expect_equal(
+           app$get_value(input = "navigate_review_1-review_df_rows_all"), 
+           1:8
+         )
+         expect_equal(
+           # modal header text:
+           app$get_value(output = "navigate_review_1-header_text"), 
+           "<b>BEL_04_772</b>"
+         )
+         app$run_js('$("#navigate_review_1-review_df td").filter(function() {return $(this).text() == "Adverse events"}).closest("tr").trigger("dblclick")')
+         app$wait_for_idle()
          expect_equal(app$get_value(input = "main_tabs"), "Common events")
-         output_names <- names(app$get_values(output = TRUE)$output)
-         app$expect_values(output = vector_select(output_names, exclude = "visit_figure"))
+         output_names <- names(app$get_values(output = TRUE)$output) |> 
+           vector_select(exclude = c("visit_figure", "navigate_review_1-header_text", "navigate_review_1-review_df"))
+         app$expect_values(output = output_names)
          
          app$set_inputs(main_tabs = "Start")
          app$run_js('$("#start_page_1-overview_table th").filter(function() {return $(this).text() == "Status"}).closest("th").trigger("click")')
          app$run_js('$("#start_page_1-overview_table td").filter(function() {return $(this).text() == "BEL_04_772"}).closest("tr").trigger("dblclick")')
+         app$wait_for_idle()
+         expect_true(app$get_js("$('#shiny-modal').hasClass('show');"))
+         expect_equal(
+           # modal header text:
+           app$get_value(output = "navigate_review_1-header_text"), 
+           "<b>BEL_04_772</b>"
+         )
+         
+         app$run_js('$("#navigate_review_1-review_df td").filter(function() {return $(this).text() == "Adverse events"}).closest("tr").trigger("dblclick")')
          app$wait_for_idle()
          expect_equal(app$get_value(input = "main_tabs"), "Common events")
          expect_equal(app$get_text("#navigate_participants_1-subject_info .value-box-title"), "BEL_04_772")
          
          app$set_inputs(main_tabs = "Study data")
          app$wait_for_idle()
-         output_names <- names(app$get_values(output = TRUE)$output)
-         app$expect_values(output = vector_select(output_names, exclude = "visit_figure"))
+         output_to_exclude <- c(
+           "visit_figure", 
+           "navigate_review_1-header_text", 
+           "navigate_review_1-review_df", 
+           "start_page_1-overview_table"
+         )
+         output_names <- names(app$get_values(output = TRUE)$output) |> 
+           vector_select(exclude = output_to_exclude)
+         # replace snap for something more focused??
+         # app$expect_values(
+         #   input = c("cf_adverse_events-review_form_tbl-table_rows_all", "common_data_tabs", "main_tabs"),
+         #   output = c("cf_adverse_events-review_form_SAE_tbl-table", "cf_adverse_events-review_form_tbl-table", 
+         #              "cf_adverse_events-timeline_fig-timeline"),
+         #   export = c("active_form", "active_participant")
+         # )
+         app$expect_values(output = output_names)
          
          app$set_inputs("sf_vital_signs-switch_view" = "table")
-         output_names <- names(app$get_values(output = TRUE)$output)
-         app$expect_values(output = vector_select(output_names, exclude = "visit_figure"))
+         output_names <- names(app$get_values(output = TRUE)$output) |> 
+           vector_select(exclude = output_to_exclude)
+         app$expect_values(output = output_names)
          
          app$run_js("$('#navigate_participants_1-subject_info').click()")
          app$wait_for_idle(1500)
@@ -70,8 +109,9 @@ describe(
          app$wait_for_idle(1000)
          app$click("navigate_participants_1-subj_apply")
          app$wait_for_idle()
-         output_names <- names(app$get_values(output = TRUE)$output)
-         app$expect_values(output = vector_select(output_names, exclude = "visit_figure"))
+         output_names <- names(app$get_values(output = TRUE)$output) |> 
+           vector_select(exclude = output_to_exclude)
+         app$expect_values(output = output_names)
          
          ## Note (LSA): after clicking on 'graph' view again at this moment, an 
          ## error will be shown instead of the expected figures. 

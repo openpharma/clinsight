@@ -73,6 +73,7 @@ describe(
         and that the figure outputcontains a valid JSON object", {
           testServer(mod_study_forms_server, args = testargs, {
             ns <- session$ns
+            session$userData$review_type <- reactiveVal("subject")
             session$setInputs(filter = c("pulse", "bmi"))
             expect_true(is.data.frame(fig_data()))
             expect_equal(as.character(unique(fig_data()$item_name)), c("BMI", "Pulse"))
@@ -88,6 +89,7 @@ describe(
       {
         testServer(mod_study_forms_server, args = testargs, {
           ns <- session$ns
+          session$userData$review_type <- reactiveVal("subject")
           session$setInputs(
             filter = c("pulse", "BMI"),
             show_all = FALSE
@@ -101,6 +103,7 @@ describe(
           I expect that a valid JSON output table will be created", {
             testServer(mod_study_forms_server, args = testargs, {
               ns <- session$ns
+              session$userData$review_type <- reactiveVal("subject")
               session$setInputs(
                 filter = c("pulse", "BMI"),
                 show_all = TRUE
@@ -144,6 +147,7 @@ describe(
       {
         testServer(mod_study_forms_server, args = testargs, {
           ns <- session$ns
+          session$userData$review_type <- reactiveVal("subject")
           session$setInputs(filter = c("pulse", "BMI"))
           expect_true(is.data.frame(fig_data()))
           expect_true("reviewed" %in% names(fig_data()))
@@ -184,6 +188,7 @@ describe(
         }
         
         test_server <- function(input, output, session){
+          session$userData$review_type <- reactiveVal()
           mod_study_forms_server(
             id = "test",
             form = "Vital signs",
@@ -206,13 +211,17 @@ describe(
         withr::defer(app$stop())
         app$set_inputs("test-filter" = "temperature")
         app$wait_for_idle(1100)
-        app$expect_values(output = TRUE, export = TRUE)
+        export_names <- c(
+          "test-fig_data", 
+          "test-review_form_tbl-table_data"
+        )
+        app$expect_values(output = TRUE, export = export_names)
         df <- app$get_value(export = "test-fig_data")
         expect_equal(as.character(unique(df$item_name)), "Temperature")
         expect_equal(with(df, reviewed[subject_id == "NLD_06_755"]), c("Yes", "Yes", "No"))
         app$set_inputs("test-switch_view" = "table")
         app$wait_for_idle()
-        app$expect_values(output = TRUE, export = TRUE)
+        app$expect_values(output = TRUE, export = export_names)
       }
     )
     

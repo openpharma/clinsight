@@ -12,7 +12,8 @@
 #'   reviewed), and indeterminate (=partially reviewed).
 #' @param is_SAE A logical, indicating whether the form is a SAE form. If TRUE,
 #'   will make some adjustments to the columns to display.
-#' @param id_cols Columns that identify a unique row in the data.
+#' @param key_cols Columns that identify a unique row in the data. Defaults to
+#'   `ClinSight` [key_columns()].
 #'
 #' @keywords internal
 #' 
@@ -24,7 +25,7 @@ get_form_table <- function(
     active_subject,
     pending_form_review_status = NULL,
     is_SAE = NULL,
-    id_cols = idx_cols
+    key_cols = key_columns
 ){
   stopifnot(is.data.frame(form_data), is.data.frame(form_review_data))
   stopifnot(is.character(form), is.character(form_items))
@@ -34,10 +35,7 @@ get_form_table <- function(
   )
   is_SAE <- isTRUE(is_SAE)
   stopifnot(is.character(active_subject %||% ""))
-  if(is.null(active_subject)){
-    warning("No active subject selected")
-  }
-  required_cols <- c(id_cols, "edit_date_time", "event_date", "item_value")
+  required_cols <- c(key_cols, "edit_date_time", "event_date", "item_value")
   missing_cols <- required_cols[!required_cols %in% names(form_data)]
   if(length(missing_cols) != 0){
     stop("the following columns are missing: ", paste0(missing_cols, collapse = ", "))
@@ -46,14 +44,14 @@ get_form_table <- function(
     form_data,
     form_review_data |> 
       dplyr::select(-dplyr::all_of(c("edit_date_time", "event_date"))), 
-    by = id_cols
+    by = key_cols
   ) |> 
     dplyr::mutate(
       not_reviewed_but_missing = (reviewed == "No" & is.na(item_value)), 
       item_value = dplyr::case_when(
         is.na(reviewed) ~ htmltools::htmlEscape(item_value),
         (reviewed == "No" & !is.na(item_value)) ~
-        paste0("<b>", htmltools::htmlEscape(item_value), "*</b>"), 
+          paste0("<b>", htmltools::htmlEscape(item_value), "*</b>"), 
         .default = htmltools::htmlEscape(item_value)
       )
     ) |> 

@@ -81,6 +81,7 @@ describe(
             
             session$userData$pending_review_records <- reactiveValues()
             session$userData$pending_form_review_status <- reactiveValues()
+            session$userData$review_type <- reactiveVal()
             
             ## patient has two rows: AF and Cystitis. AF is already reviewed by someone else: 
             expect_equal(
@@ -96,8 +97,7 @@ describe(
                 )
               })
             )
-            
-            session$setInputs(form_reviewed = FALSE) # Needs to be initialized to work
+            session$setInputs(form_reviewed = FALSE, review_type = "subject") # Needs to be initialized to work
             session$setInputs(form_reviewed = TRUE, save_review = 1)
             db_reviewdata <- split_review_data(db_path)
             db_reviewlogdata <- db_get_table(db_path, "all_review_data_log")
@@ -193,6 +193,7 @@ describe(
         test_server <- function(input, output, session){
           session$userData$pending_review_records <- reactiveValues()
           session$userData$pending_form_review_status <- reactiveValues()
+          session$userData$review_type <- reactiveVal()
           
           mod_review_forms_server(
             id = "test",
@@ -291,7 +292,8 @@ describe(
         
         testServer(mod_review_forms_server, args = testargs, {
           ns <- session$ns
-          session$setInputs(form_reviewed = FALSE)
+          session$userData$review_type <- reactiveVal()
+          session$setInputs(form_reviewed = FALSE, review_type = "subject")
           expect_equal(
             review_data_active(),
             subset(r$review_data[["Adverse events"]], subject_id == "885")
@@ -332,7 +334,8 @@ describe(
         
         testServer(mod_review_forms_server, args = testargs, {
           ns <- session$ns
-          session$setInputs(form_reviewed = FALSE, add_comment = "test comment")
+          session$userData$review_type <- reactiveVal()
+          session$setInputs(form_reviewed = FALSE, review_type = "subject", add_comment = "test comment")
           expect_false(enable_save_review())
           session$setInputs(save_review = 1)
           new_review_table <- db_temp_connect(db_path, {
@@ -413,6 +416,10 @@ describe(
           )
         }
         test_server <- function(input, output, session){
+          session$userData$pending_review_records <- reactiveValues()
+          session$userData$pending_form_review_status <- reactiveValues()
+          session$userData$review_type <- reactiveVal()
+          
           mod_review_forms_server(
             id = "test", 
             r = reactiveValues(
@@ -448,7 +455,6 @@ describe(
         app$wait_for_idle()
         app$expect_values()
         
-        # review status and reviewer is saved as expected
         db_after_saving <- db_get_table(temp_path)
         expect_equal(db_after_saving, db_before_saving)
       }
@@ -504,8 +510,9 @@ describe(
             
             session$userData$pending_review_records <- reactiveValues()
             session$userData$pending_form_review_status <- reactiveValues()
+            session$userData$review_type <- reactiveVal()
             
-            session$setInputs(form_reviewed = NULL)
+            session$setInputs(form_reviewed = NULL, review_type = "subject")
             db_before_saving <- db_get_table(db_path)
             session$setInputs(form_reviewed = TRUE, save_review = 1)
             db_after_saving <- db_get_table(db_path)
@@ -546,6 +553,10 @@ describe(
           )
         }
         test_server <- function(input, output, session){
+          session$userData$pending_review_records <- reactiveValues()
+          session$userData$pending_form_review_status <- reactiveValues()
+          session$userData$review_type <- reactiveVal()
+          
           mod_review_forms_server(
             id = "test",
             r = reactiveValues(
@@ -584,6 +595,112 @@ describe(
           app$get_value(output = "test-save_review_error")$message, 
           "Review not allowed for a 'restricted_role'."
         )
+      }
+    )
+  }
+)
+
+describe(
+  "mod_review_forms. Feature 7 | Review on form level. As a user, I want to be 
+    able to save all review data of a form.", 
+  {
+    it(
+      "Scenario 1 - Save a form-level review. 
+        Given a test data set 
+        with data of multiple subjects in the Vital Signs form, 
+        and with [user_name] set to 'test_name' and [user_role] to 'Medical Monitor',
+        and with the active form set to Vital signs and the active user to '885',
+        and clicking on form-level review, 
+        and clicking on form_reviewed and on 'save',
+        I expect that a confirmation will be requested, 
+        and that, after confirmation, 
+        all data from the Vital signs form is now reviewed,
+        and only Vital signs data is newly reviewed,
+        and the reviewer of the newly reviewed rows is set to 
+        'test_name (Medical Monitor)'.
+      ", 
+      {
+        temp_path <- withr::local_tempfile(fileext = ".sqlite")
+        file.copy(test_path("fixtures", "review_testdb.sqlite"), temp_path) 
+        db_temp_connect(temp_path, {
+          additional_review_rows <- data.frame(
+            subject_id = c("760", "760"),
+            event_name = c("Visit 1", "Visit 2"),
+            item_group = c("Vital signs", "Vital signs"),
+            form_repeat = c(1, 2),
+            item_name = c("Heart rate", "Heart rate"),
+            event_date = c("2025-05-01", "2025-05-06"),
+            edit_date_time = c("2025-05-02 01:01:01", "2025-05-07 01:01:01")
+          ) |> 
+            dplyr::mutate(
+              reviewed = c("No", "No"), 
+              comment = c("", ""), 
+              reviewer = c("", ""), 
+              timestamp = c("", ""),
+              status = c("new", "new")
+            )
+          DBI::dbAppendTable(con, "all_review_data", additional_review_rows)
+        })
+        
+        testargs <- list(
+          r = reactiveValues(
+            user_name = "test_name",
+            user_role = "Medical Monitor",
+            subject_id = "885",
+            review_data = do.call(reactiveValues, split_review_data(temp_path))
+          ),
+          active_form = reactiveVal("Vital signs"),
+          active_tab = reactiveVal("Study forms"),
+          review_required_data = data.frame(
+            "item_group" = "Adverse events", 
+            "review_required" = TRUE
+          ),
+          db_path = temp_path
+        )
+        testServer(
+          mod_review_forms_server, args = testargs, {
+            ns <- session$ns
+            session$userData$pending_review_records <- reactiveValues()
+            session$userData$pending_form_review_status <- reactiveValues()
+            session$userData$review_type <- reactiveVal()
+            
+            db_before_review <- db_temp_connect(db_path, {
+              DBI::dbGetQuery(con,"SELECT * FROM all_review_data ")
+            })
+            session$setInputs(form_reviewed = FALSE, review_type = "form")
+            # Split up to invalidate reactives in intended order:
+            session$setInputs(form_reviewed = TRUE)
+            session$setInputs(save_review = 1)
+            ## for review_type == 'form', a confirmation before saving is required:
+            expect_equal(save_review_confirmed(), 0)
+            
+            # No further issues with saving a review detected:
+            expect_true(enable_save_review())
+            
+            # confirm saving of a review and proceed:
+            save_review_confirmed(1)
+            session$flushReact()
+            
+            ## check that all vital signs forms are now reviewed: 
+            db_after_review <- db_temp_connect(db_path, {
+              DBI::dbGetQuery(con,"SELECT * FROM all_review_data ")
+            })
+            vital_signs_review_data <- db_after_review |> 
+              subset(item_group == "Vital signs", select = c("reviewed", "status")) |> 
+              unique()
+            expect_equal(vital_signs_review_data$reviewed, "Yes")
+            expect_equal(vital_signs_review_data$status, "old")
+            
+            ## check that correct number of rows were updated with the provided test name and role:
+            reviewed_records <- dplyr::anti_join(
+              db_after_review, 
+              db_before_review, 
+              by = names(db_before_review)
+            )
+            expect_equal(unique(reviewed_records$item_group), "Vital signs")
+            expect_equal(unique(reviewed_records$subject_id), c("361", "760"))
+            expect_equal(unique(reviewed_records$reviewer), "test_name (Medical Monitor)")
+          })
       }
     )
   }

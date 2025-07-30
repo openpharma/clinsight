@@ -1,6 +1,7 @@
 ## needed for base R function mocking during test:
 file.show <- NULL
 file.edit <- NULL
+dir.create <- NULL
 
 # use script below for development purposes, to load data global environment
 # with eval(global)
@@ -139,7 +140,9 @@ utils::globalVariables(
     "is_baseline_event",
     "order_occurrence",
     "vis_number",
-    "not_reviewed_but_missing"
+    "not_reviewed_but_missing",
+    "status_label",
+    "subject_status"
   )
 )
 

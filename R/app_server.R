@@ -11,6 +11,7 @@
 #'
 #' @param input,output,session Internal parameters for `shiny`.
 #' @seealso [app_ui()], [run_app()]
+#' @keywords internal
 #' 
 app_server <- function(
     input, 
@@ -32,6 +33,7 @@ app_server <- function(
   
   session$userData$pending_review_records <- reactiveValues()
   session$userData$pending_form_review_status <- reactiveValues()
+  session$userData$review_type <- reactiveVal("subject")
   
   res_auth <- authenticate_server(
     all_sites = app_vars$Sites$site_code, 
@@ -200,6 +202,11 @@ app_server <- function(
     bslib::nav_select(id = id_to_change, selected = navinfo$active_form)
   })
   
+  output$form_level_review <- reactive({
+    identical(session$userData$review_type(), "form")
+  })
+  outputOptions(output, "form_level_review", suspendWhenHidden = FALSE)
+
   timeline_data <- reactive({
     get_timeline_data(
       r$filtered_data, 
@@ -336,6 +343,7 @@ app_server <- function(
     user_db = user_db,
     active_participant = r$subject_id,
     active_form = navinfo$active_form,
+    active_user_role = r$user_role,
     user_error = user_error()
   )
 }

@@ -12,7 +12,7 @@ get_form_table(
   active_subject,
   pending_form_review_status = NULL,
   is_SAE = NULL,
-  id_cols = idx_cols
+  key_cols = key_columns
 )
 }
 \arguments{
@@ -34,7 +34,8 @@ reviewed), and indeterminate (=partially reviewed).}
 \item{is_SAE}{A logical, indicating whether the form is a SAE form. If TRUE,
 will make some adjustments to the columns to display.}
 
-\item{id_cols}{Columns that identify a unique row in the data.}
+\item{key_cols}{Columns that identify a unique row in the data. Defaults to
+\code{ClinSight} \code{\link[=key_columns]{key_columns()}}.}
 }
 \description{
 Get form table

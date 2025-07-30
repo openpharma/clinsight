@@ -95,6 +95,20 @@
 #'   system.file("raw_data", package = "clinsight")))`.
 "clinsightful_data"
 
-
-
-
+#' ClinSight key columns
+#'
+#' A character string containing the names of the columns that are needed to
+#' distinguish unique records. All `ClinSight`-compatible data sets need to at
+#' least contain these columns.
+#'
+#' @format A character vector with the following key column names:
+#'   `r key_columns`.
+#'   
+#' @export
+key_columns <- c(
+  "subject_id",
+  "event_name",
+  "item_group",
+  "form_repeat",
+  "item_name"
+)

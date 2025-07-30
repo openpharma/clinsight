@@ -55,7 +55,18 @@ mod_review_forms_ui <- function(id){
             class = "btn-primary m2"
           ),
           textOutput(ns("save_review_error"))
-        )
+        ),
+        HTML("<hr><br>Review Type:"),
+        shinyWidgets::radioGroupButtons(
+          inputId = ns("review_type"),
+          choiceNames = list(paste(icon("user"), "Subject"), paste(icon("file-lines"), "Form")),
+          choiceValues = list("subject", "form"),
+          selected = "subject"
+        ) |> 
+          bslib::tooltip(
+            "Change between subject- or form-level review",
+            placement = "right"
+          )
       )
     )
   )
@@ -113,36 +124,61 @@ mod_review_forms_server <- function(
     ns <- session$ns
     
     review_data_active <- reactive({
-      tryCatch(
-        subset(r$review_data[[active_form()]], subject_id == r$subject_id),
+      tryCatch({
+        r$review_data[[active_form()]] |> 
+          subset(identical(input$review_type, "form") | subject_id == r$subject_id) 
+      }, 
         # Returns expected empty data frame for empty form
         error = \(e) r$review_data[[names(r$review_data)[1]]][0,]
+      )
+    })
+    
+    observeEvent(input$review_type, {
+      req(!identical(input$review_type, session$userData$review_type()))
+      golem::cat_dev(active_form(), " | Update review type to: '", 
+                     input$review_type, "'\n", sep = "")
+      session$userData$review_type(input$review_type)
+      showNotification(
+        paste0("Switching to '", input$review_type, "'-level review"), 
+        duration = 2, 
+        type = "message"
       )
     })
     
     review_indeterminate <- reactiveVal()
     
     observeEvent(review_indeterminate(), {
-      shinyjs::runjs(sprintf("$('#%s').prop('indeterminate', %s)", ns("form_reviewed"), tolower(review_indeterminate())))
+      shinyjs::runjs(sprintf(
+        "$('#%s').prop('indeterminate', %s)", 
+        ns("form_reviewed"), 
+        tolower(review_indeterminate())
+      ))
     })
     
     observe({
       req(session$userData$pending_review_records[[active_form()]])
       review_status <-
         review_data_active()[,c("id", "reviewed")] |> 
-        dplyr::rows_update(session$userData$pending_review_records[[active_form()]][,c("id", "reviewed")], by = "id") |> 
+        dplyr::rows_update(
+          session$userData$pending_review_records[[active_form()]][,c("id", "reviewed")], 
+          by = "id"
+        ) |> 
         dplyr::distinct(reviewed) |> 
         dplyr::pull()
       
-      shinyjs::runjs(sprintf("$('#%s').prop('checked', %s)", ns("form_reviewed"), tolower(identical(review_status, "Yes"))))
+      shinyjs::runjs(sprintf(
+        "$('#%s').prop('checked', %s)", 
+        ns("form_reviewed"), tolower(identical(review_status, "Yes"))))
       review_indeterminate(length(review_status) > 1)
     }) |>
       bindEvent(active_form(), session$userData$pending_review_records[[active_form()]])
     
     observeEvent(r$subject_id, {
+      req(!identical(input$review_type, "form"))
       golem::cat_dev("mod_review_forms | Reset review records\n")
       session$userData$pending_form_review_status[[active_form()]] <- NULL
-      session$userData$pending_review_records[[active_form()]] <- data.frame(id = integer(), reviewed = character())
+      session$userData$pending_review_records[[active_form()]] <- 
+        data.frame(id = integer(), reviewed = character())
     })
     
     observeEvent(input$form_reviewed, {
@@ -153,8 +189,7 @@ mod_review_forms_server <- function(
         dplyr::mutate(reviewed = ifelse(input$form_reviewed, "Yes", "No")) |> 
         dplyr::select(id, reviewed) |> 
         dplyr::anti_join(
-          r$review_data[[active_form()]] |> 
-            dplyr::select("id", "reviewed")
+          r$review_data[[active_form()]][c("id", "reviewed")]
           )  |> 
         dplyr::arrange(id)
     }, ignoreInit = TRUE)    
@@ -169,19 +204,24 @@ mod_review_forms_server <- function(
         review_status <- "No"
         review_comment <- ""
       } else {
-        # in the rare case of multiple rows selected, the unique reviewed label 
-        # will be selected below. if there are multiple labels ("Yes and No"), 
-        # it will give a warning. This would be rare since it would mean a datapoint with the same edit date-time was reviewed but another one was not. 
-        # probably better to use defensive coding here to ensure the app does not crash in that case. However we need to define which review status we need to select
-        # in this case get the reviewed = "No"
         review_status <- unique(review_data_active()[["reviewed"]])
-        review_comment <- with(review_data_active(), comment[edit_date_time == max(as.POSIXct(edit_date_time))]) |> unique() |> paste(collapse = "; ")
-        if(length(review_status) != 1)
-          review_indeterminate(TRUE)
+        review_comment <- review_data_active() |> 
+          with(comment[edit_date_time == max(as.POSIXct(edit_date_time))]) |> 
+          unique() |> 
+          paste(collapse = "; ")
+        if(length(review_status) != 1) review_indeterminate(TRUE)
       }
       
-      shinyjs::runjs(sprintf("$('#%s').prop('checked', %s)", ns("form_reviewed"), tolower(identical(review_status, "Yes"))))
-      shinyjs::runjs(sprintf("$('#%s').prop('indeterminate', %s)", ns("form_reviewed"), tolower(review_indeterminate())))
+      shinyjs::runjs(sprintf(
+        "$('#%s').prop('checked', %s)", 
+        ns("form_reviewed"), 
+        tolower(identical(review_status, "Yes"))
+      ))
+      shinyjs::runjs(sprintf(
+        "$('#%s').prop('indeterminate', %s)", 
+        ns("form_reviewed"), 
+        tolower(review_indeterminate())
+      ))
       
       shinyWidgets::updatePrettySwitch(
         session = session,
@@ -258,11 +298,56 @@ mod_review_forms_server <- function(
     })
     
     review_save_error <- reactiveVal(FALSE)
+    save_review_confirmed <- reactiveVal(0)
+    
+    modal_confirm_saving <- function(form = active_form(), reviewed = input$form_reviewed){
+      review_status_message <- if(isTRUE(reviewed)) "reviewed" else "not reviewed"
+      modalDialog(
+        title = bslib::card_header(icon("triangle-exclamation"), "Warning"),
+        bslib::card_body(
+          id = ns("confirm_save_modal"),
+          fillable = FALSE,
+          "This will change the review status of ALL items in the form ", 
+          tags$i(htmltools::htmlEscape(form)), "to ", 
+          HTML(paste0(tags$b(review_status_message), ".")),
+          tags$br(), tags$br(), 
+          "Do you want to continue?" 
+        ),
+        footer = bslib::layout_columns(
+          fill = FALSE,
+          shiny::actionButton(
+            inputId = ns("confirm_saving"), 
+            label = "Save all",
+            class = "btn-warning m2"
+          ),
+          modalButton("Cancel")
+        ),
+        easyClose = TRUE,
+        fade = FALSE
+      )
+    }
+    
+    observeEvent(input$confirm_saving, {
+      removeModal()
+      save_review_confirmed(save_review_confirmed() + 1)
+    })
+    
     observeEvent(input$save_review, {
-      req(review_data_active())
       req(enable_save_review())
+      req(is.logical(review_indeterminate()))
+      if(
+        isFALSE(review_indeterminate()) && 
+        identical(session$userData$review_type(), "form")
+        ){
+        return(showModal(modal_confirm_saving()))
+      }
+      save_review_confirmed(save_review_confirmed() + 1)
+    })
+    
+    observeEvent(save_review_confirmed(), {
+      req(save_review_confirmed() != 0)
+      req(review_data_active())
       review_save_error(FALSE)
-      # golem::cat_dev("Save review status reviewed:", input$form_reviewed, "\n")
       
       review_records <- session$userData$pending_review_records[[active_form()]][c("id", "reviewed")] |> 
         dplyr::mutate(
@@ -301,7 +386,8 @@ mod_review_forms_server <- function(
       )
       
       session$userData$pending_form_review_status[[active_form()]] <- NULL
-      session$userData$pending_review_records[[active_form()]] <- data.frame(id = integer(), reviewed = character())
+      session$userData$pending_review_records[[active_form()]] <- 
+        data.frame(id = integer(), reviewed = character())
       
       review_save_error(any(
         !isTRUE(all.equal(review_records_db, review_records, check.attributes = FALSE)),

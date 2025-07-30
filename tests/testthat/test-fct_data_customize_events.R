@@ -351,7 +351,8 @@ describe("add_events_to_data() works", {
       "S2",      "UNV",    4, 
       "S2",       "V1",    3, 
       "S2",      "UNV",    7, 
-      "S2",       "V2",    10
+      "S2",       "V2",    10,
+      "S2",       "V10",   11
     )
     events <- data.frame(
       event_id = c("SCR", "START", NA, "FU1", "FU2", "EXIT", NA),
@@ -366,14 +367,14 @@ describe("add_events_to_data() works", {
       "Event order is not unique based on event dates" 
     )
     selected_output <- output[c("event_id", "event_name", "event_label")] |> 
-      dplyr::arrange(event_id, event_name, event_label) |> 
       dplyr::distinct()
+    # only order of event labels matters (used in the compact timeline)
     expected_output <- dplyr::tibble(
-      event_id = c("SCR", "START", "UNV", "UNV", "V1", "V2"),
-      event_name = c("SCR", "START", "UV 1", "UV 2", "Visit 1", "Visit 2"),
-      event_label= factor(
-        c("SCR", NA, NA, NA, "Vis1", "Vis2"), 
-        levels = c("SCR", "Vis1",  "Vis2",  "FU1", "FU2")
+      event_id = c("SCR", "START", "UNV", "V1", "V2", "UNV", "V10"),
+      event_name  = c("SCR", "START", "UV 1", "Visit 1", "Visit 2", "UV 2", "Visit 3"),
+      event_label = factor(
+        c("SCR", NA, NA, "Vis1", "Vis2", NA, "Vis3"), 
+        levels = c("SCR", "Vis1",  "Vis2", "Vis3",  "FU1", "FU2")
       )
     )
     expect_equal(selected_output, expected_output)

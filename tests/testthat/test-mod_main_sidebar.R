@@ -74,6 +74,8 @@ describe(
           bslib::page_navbar(sidebar = mod_main_sidebar_ui("test"))
         }
         test_server <- function(input, output, session){
+          session$userData$review_type <- reactiveVal()
+          
           mod_main_sidebar_server(
             id = "test", 
             r = reactiveValues(
@@ -133,6 +135,7 @@ describe(
           bslib::page_navbar(sidebar = mod_main_sidebar_ui("test"))
         }
         test_server <- function(input, output, session){
+          session$userData$review_type <- reactiveVal()
           mod_main_sidebar_server(
             id = "test", 
             r = reactiveValues(

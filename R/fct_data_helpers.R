@@ -145,14 +145,15 @@ rename_raw_data <- function(
 #' function cleans this specific output so that the variable name remains
 #' consistent.
 #'
-#' @param data A data frame. 
+#' @param data A data frame.
 #' @param expected_vars Character vector containing the expected names of the
 #'   variables.
 #' @param var_column column name in which the variable names are stored
 #' @param value_column column name in which the values of the variables are
 #'   stored
 #' @param suffix Multiple choice suffix. Used to define multiple choice values
-#' @param common_vars variables used for identifying unique rows in the dataset.
+#' @param key_cols Character vector with key columns used for identifying unique
+#'   rows in the data set.
 #' @param collapse_with character value to collapse the multiple choice options
 #'   with. If this value is NULL, the rows will be left as is.
 #'
@@ -164,7 +165,7 @@ rename_raw_data <- function(
 #'   var = c("Age", paste0("MH_TRT", 1:4)),
 #'   item_value = as.character(c(95, 67, 58, 83, 34))
 #'  )
-#'  fix_multiple_choice_vars(df, common_vars = "ID")
+#'  fix_multiple_choice_vars(df, key_cols = "ID")
 #' }
 #' @keywords internal
 #' 
@@ -174,7 +175,7 @@ fix_multiple_choice_vars <- function(
     var_column = "var",
     value_column = "item_value",
     suffix = "[[:digit:]]+$",
-    common_vars = c("subject_id", "event_repeat", "event_date", "form_repeat"),
+    key_cols = c("subject_id", "event_repeat", "event_date", "form_repeat"),
     collapse_with = "; "
 ){
   stopifnot(is.data.frame(data))
@@ -185,7 +186,7 @@ fix_multiple_choice_vars <- function(
   stopifnot("suffix should be a character vector of length 1" = {
     is.character(suffix) & length(suffix) == 1
   })
-  stopifnot(is.character(common_vars))
+  stopifnot(is.character(key_cols))
   if(!is.null(collapse_with)){
     stopifnot("collapse_with should be a character vector of length 1" = {
       is.character(collapse_with) & length(collapse_with) == 1
@@ -215,7 +216,7 @@ fix_multiple_choice_vars <- function(
     data_adjusted <- data_adjusted |>   
       dplyr::mutate(
         item_value = paste0(item_value, collapse = collapse_with),
-        .by = dplyr::all_of(c(var_column, common_vars))
+        .by = dplyr::all_of(c(var_column, key_cols))
       )
   }
   # note: Column edit_date_time can still cause multiple rows after step below.
@@ -308,7 +309,7 @@ get_form_level_data <- function(
     stop(sprintf("'%s' missing in 'form_level_data' table.", form_column))
   }
   
-  missing_forms <- data[!data[[form_column]] %in% all_forms, ][[form_column]]
+  missing_forms <- data[!data[[form_column]] %in% all_forms, , drop = FALSE][[form_column]]
   if(length(missing_forms) != 0){
     warning(
       "Ignoring vars defined in 'form_level_data' but not in metadata:\n",

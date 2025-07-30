@@ -21,11 +21,11 @@ describe(
           )
       )
     it("returns a data frame", {
-      expect_true(is.data.frame(get_review_data(df, common_vars = c("key_col1", "item_group"))))
+      expect_true(is.data.frame(get_review_data(df, key_cols = c("key_col1", "item_group"))))
     })
     it("returns the expected number of columns and rows, and selects the row with latest 
        edit date-time if there is a duplicated row", {
-      outcome <- get_review_data(df, common_vars = c("key_col1", "item_group"))
+      outcome <- get_review_data(df, key_cols = c("key_col1", "item_group"))
       expect_equal(nrow(outcome), 13)
       expect_equal(colnames(outcome), c("key_col1", "item_group",
                                         "event_date", "edit_date_time"))

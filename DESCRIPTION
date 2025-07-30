@@ -1,6 +1,6 @@
 Package: clinsight
 Title: ClinSight
-Version: 0.2.0
+Version: 0.3.0
 Authors@R: c(
     person("Leonard Daniël", "Samson", , "lsamson@gcp-service.com", role = c("cre", "aut"),
            comment = c(ORCID = "0000-0002-6252-7639")),
@@ -21,7 +21,7 @@ BugReports: https://github.com/openpharma/clinsight/issues
 Depends: 
     R (>= 4.1)
 Imports: 
-    bslib (>= 0.6.2),
+    bslib (>= 0.9.0),
     config,
     DBI,
     dbplyr (>= 2.4.0),
@@ -48,6 +48,7 @@ Imports:
     withr
 Suggests: 
     base64enc,
+    chromote,
     kableExtra,
     knitr,
     pkgload,

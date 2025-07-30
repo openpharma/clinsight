@@ -7,7 +7,7 @@
 update_review_data(
   review_df,
   latest_review_data,
-  common_vars = c("subject_id", "event_name", "item_group", "form_repeat", "item_name"),
+  key_cols = key_columns,
   edit_time_var = "edit_date_time",
   update_time = time_stamp()
 )
@@ -18,7 +18,8 @@ updated.}
 
 \item{latest_review_data}{Data frame containing latest review data.}
 
-\item{common_vars}{A character vector containing the common key variables.}
+\item{key_cols}{A character vector containing the common key variables.
+Defaults to \code{ClinSight} \code{\link[=key_columns]{key_columns()}}.}
 
 \item{edit_time_var}{A character vector with the column name of the edit-time
 variable.}
@@ -32,3 +33,4 @@ A data frame containing only the rows with updated review data.
 \description{
 Update review data
 }
+\keyword{internal}

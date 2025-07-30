@@ -9,10 +9,11 @@
 #'   the item names.
 #' @param value_column A character string with the name of the column containing
 #'   the item values.
-#' @param id_cols A character vector with the names of the columns that uniquely
-#'   identify a row. Note that the string with name_column will be removed from
-#'   `id_cols`, since it differs for an item pair (`item_name` and
-#'   `item_name_other`) and thus cannot be used to identify a unique pair.
+#' @param key_cols A character vector with the names of the key columns that
+#'   uniquely identify a row. Defaults to `ClinSight` [key_columns()]. Note that
+#'   the string with `name_column` will be removed from `key_cols`, since it
+#'   differs for an item pair (`item_name` and `item_name_other`) and thus
+#'   cannot be used to identify a unique pair.
 #'
 #' @return A data frame with the merged items.
 #' @keywords internal
@@ -24,7 +25,7 @@ merge_item_pair <- function(
     merge_action = c("combine", "replace"),
     name_column = "item_name", 
     value_column = "item_value",
-    id_cols = idx_cols
+    key_cols = key_columns
 ){
   stopifnot(
     is.data.frame(data),
@@ -33,12 +34,12 @@ merge_item_pair <- function(
     is.character(merge_action), 
     is.character(name_column), 
     is.character(value_column),
-    is.character(id_cols),
+    is.character(key_cols),
     "item_name cannot be missing" = !is.na(item_name),
     "item_name_other cannot be missing" = !is.na(item_name_other),
     name_column %in% names(data),
     value_column %in% names(data),
-    all(id_cols %in% names(data))
+    all(key_cols %in% names(data))
   )
   merge_action <- match.arg(merge_action)
   if (item_name == item_name_other){
@@ -46,10 +47,10 @@ merge_item_pair <- function(
   }
   # The name_column should not be used as unique item identifier here 
   # (gives issues when selecting unique edit_date_time later):
-  id_cols <- id_cols[!id_cols == name_column]
-  if (any(duplicated(data[c(id_cols, name_column)]))){
+  key_cols <- key_cols[!key_cols == name_column]
+  if (any(duplicated(data[c(key_cols, name_column)]))){
     warning(
-      "id_cols (", paste0(id_cols, collapse = ", "), ") and name_column (", 
+      "key_cols (", paste0(key_cols, collapse = ", "), ") and name_column (", 
       name_column, ") do not uniquely identify the rows. ",
       "Cannot merge '", item_name, "' with '", item_name_other, "'."
     )
@@ -69,7 +70,7 @@ merge_item_pair <- function(
       add_missing_columns("edit_date_time") |> 
       dplyr::mutate(
         edit_date_time = max(edit_date_time, na.rm = TRUE), 
-        .by = dplyr::all_of(id_cols)
+        .by = dplyr::all_of(key_cols)
       )
   }
   selected_data <- selected_data |> 
@@ -96,7 +97,7 @@ merge_item_pair <- function(
   # 'other' column not needed anymore and would cause duplicates
   data[!data[[name_column]] == item_name_other, , drop = FALSE] |>
     # also add item_names if only the 'other' column was available:
-    dplyr::rows_upsert(selected_data, by = c(id_cols, name_column))
+    dplyr::rows_upsert(selected_data, by = c(key_cols, name_column))
 }
 
 
