@@ -8,8 +8,8 @@
 <title>Test report • clinsight</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Test report">
 </head>
 <body>
@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">clinsight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -465,12 +465,30 @@ configuration</td>
 <td><a href="#mod_review_forms">mod_review_forms</a></td>
 </tr>
 <tr class="odd">
+<td></td>
+<td></td>
+<td>Save row-level review</td>
+<td><a href="#app_feature_05">app_feature_05</a></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td>Save form-level review</td>
+<td><a href="#app_feature_06">app_feature_06</a></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td>Review on form level</td>
+<td><a href="#mod_review_forms">mod_review_forms</a></td>
+</tr>
+<tr class="even">
 <td>8</td>
 <td>Reporting functionality</td>
 <td>Create PDF report</td>
 <td><a href="#mod_report_fct_helpers">mod_report_fct_helpers</a></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td></td>
 <td></td>
 <td>Create PDF report of review actions</td>
@@ -482,7 +500,7 @@ configuration</td>
 <div class="section level2">
 <h2 id="application-test-report">Application Test report<a class="anchor" aria-label="anchor" href="#application-test-report"></a>
 </h2>
-<p>Created on: 2025-05-19 15:20:34 UTC.</p>
+<p>Created on: 2025-07-22 17:53:29 UTC.</p>
 <div class="section level3">
 <h3 id="test-summary">Test Summary<a class="anchor" aria-label="anchor" href="#test-summary"></a>
 </h3>
@@ -498,8 +516,8 @@ Validation successful.</strong></p>
 <th align="right">Skipped</th>
 </tr></thead>
 <tbody><tr class="odd">
-<td align="right">1045</td>
-<td align="right">1045</td>
+<td align="right">1157</td>
+<td align="right">1157</td>
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">0</td>
@@ -511,13 +529,13 @@ Validation successful.</strong></p>
 <h3 id="test-environment">Test environment<a class="anchor" aria-label="anchor" href="#test-environment"></a>
 </h3>
 <p>Tests were run in the following environment:</p>
-<pre><code><span><span class="co">#&gt; R version 4.4.1 (2024-06-14)</span></span>
+<pre><code><span><span class="co">#&gt; R version 4.5.1 (2025-06-13)</span></span>
 <span><span class="co">#&gt; Platform: x86_64-pc-linux-musl</span></span>
-<span><span class="co">#&gt; Running under: Alpine Linux v3.21</span></span>
+<span><span class="co">#&gt; Running under: Alpine Linux v3.22</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Matrix products: default</span></span>
 <span><span class="co">#&gt; BLAS:   /usr/local/lib/R/lib/libRblas.so </span></span>
-<span><span class="co">#&gt; LAPACK: /usr/local/lib/R/lib/libRlapack.so;  LAPACK version 3.12.0</span></span>
+<span><span class="co">#&gt; LAPACK: /usr/local/lib/R/lib/libRlapack.so;  LAPACK version 3.12.1</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; locale:</span></span>
 <span><span class="co">#&gt; [1] C.UTF-8 C       C       C       C       C      </span></span>
@@ -529,47 +547,46 @@ Validation successful.</strong></p>
 <span><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other attached packages:</span></span>
-<span><span class="co">#&gt; [1] ggplot2_3.5.1    shiny_1.9.1      shinytest2_0.3.2 clinsight_0.2.0 </span></span>
-<span><span class="co">#&gt; [5] testthat_3.2.3  </span></span>
+<span><span class="co">#&gt; [1] shiny_1.11.1     shinytest2_0.4.1 clinsight_0.3.0  testthat_3.2.3  </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
-<span><span class="co">#&gt;   [1] DBI_1.2.3             attempt_0.3.1         readxl_1.4.3         </span></span>
-<span><span class="co">#&gt;   [4] rlang_1.1.4           magrittr_2.0.3        timevis_2.1.0        </span></span>
-<span><span class="co">#&gt;   [7] compiler_4.4.1        RSQLite_2.3.7         systemfonts_1.2.1    </span></span>
+<span><span class="co">#&gt;   [1] DBI_1.2.3             attempt_0.3.1         readxl_1.4.5         </span></span>
+<span><span class="co">#&gt;   [4] rlang_1.1.6           magrittr_2.0.3        timevis_2.1.0        </span></span>
+<span><span class="co">#&gt;   [7] compiler_4.5.1        RSQLite_2.4.1         systemfonts_1.2.3    </span></span>
 <span><span class="co">#&gt;  [10] callr_3.7.6           vctrs_0.6.5           stringr_1.5.1        </span></span>
 <span><span class="co">#&gt;  [13] pkgconfig_2.0.3       crayon_1.5.3          billboarder_0.5.0    </span></span>
 <span><span class="co">#&gt;  [16] fastmap_1.2.0         backports_1.5.0       dbplyr_2.5.0         </span></span>
-<span><span class="co">#&gt;  [19] labeling_0.4.3        fontawesome_0.5.2     utf8_1.2.4           </span></span>
-<span><span class="co">#&gt;  [22] promises_1.3.0        rmarkdown_2.28        tzdb_0.4.0           </span></span>
-<span><span class="co">#&gt;  [25] ps_1.9.0              ragg_1.3.3            tinytex_0.53         </span></span>
-<span><span class="co">#&gt;  [28] purrr_1.0.2           bit_4.0.5             waldo_0.6.1          </span></span>
-<span><span class="co">#&gt;  [31] xfun_0.47             cachem_1.1.0          jsonlite_1.8.8       </span></span>
-<span><span class="co">#&gt;  [34] blob_1.2.4            later_1.3.2           parallel_4.4.1       </span></span>
-<span><span class="co">#&gt;  [37] R6_2.5.1              golem_0.5.1           bslib_0.8.0          </span></span>
-<span><span class="co">#&gt;  [40] stringi_1.8.4         cellranger_1.1.0      brio_1.1.5           </span></span>
-<span><span class="co">#&gt;  [43] jquerylib_0.1.4       Rcpp_1.0.13           knitr_1.48           </span></span>
-<span><span class="co">#&gt;  [46] base64enc_0.1-3       R.utils_2.13.0        readr_2.1.5          </span></span>
-<span><span class="co">#&gt;  [49] httpuv_1.6.15         tidyselect_1.2.1      rstudioapi_0.17.1    </span></span>
-<span><span class="co">#&gt;  [52] yaml_2.3.10           codetools_0.2-20      websocket_1.4.2      </span></span>
-<span><span class="co">#&gt;  [55] curl_6.2.2            processx_3.8.6        tibble_3.2.1         </span></span>
-<span><span class="co">#&gt;  [58] withr_3.0.2           askpass_1.2.0         evaluate_1.0.3       </span></span>
-<span><span class="co">#&gt;  [61] desc_1.4.3            scrypt_0.1.6          pillar_1.9.0         </span></span>
-<span><span class="co">#&gt;  [64] shinycssloaders_1.1.0 checkmate_2.3.2       DT_0.33              </span></span>
-<span><span class="co">#&gt;  [67] shinyjs_2.1.0         pingr_2.0.5           plotly_4.10.4        </span></span>
-<span><span class="co">#&gt;  [70] generics_0.1.3        vroom_1.6.5           chromote_0.5.0       </span></span>
-<span><span class="co">#&gt;  [73] hms_1.1.3             commonmark_1.9.1      munsell_0.5.1        </span></span>
-<span><span class="co">#&gt;  [76] scales_1.3.0          globals_0.16.3        xtable_1.8-4         </span></span>
-<span><span class="co">#&gt;  [79] glue_1.7.0            lazyeval_0.2.2        tools_4.4.1          </span></span>
-<span><span class="co">#&gt;  [82] diffobj_0.3.5         data.table_1.16.0     fs_1.6.4             </span></span>
-<span><span class="co">#&gt;  [85] Cairo_1.6-2           grid_4.4.1            tidyr_1.3.1          </span></span>
-<span><span class="co">#&gt;  [88] crosstalk_1.2.1       colorspace_2.1-1      shinymanager_1.0.410 </span></span>
-<span><span class="co">#&gt;  [91] cli_3.6.3             config_0.3.2          textshaping_1.0.0    </span></span>
-<span><span class="co">#&gt;  [94] fansi_1.0.6           viridisLite_0.4.2     dplyr_1.1.4          </span></span>
-<span><span class="co">#&gt;  [97] gtable_0.3.5          R.methodsS3_1.8.2     sass_0.4.9           </span></span>
-<span><span class="co">#&gt; [100] digest_0.6.37         htmlwidgets_1.6.4     farver_2.1.2         </span></span>
-<span><span class="co">#&gt; [103] memoise_2.0.1         htmltools_0.5.8.1     R.oo_1.27.0          </span></span>
-<span><span class="co">#&gt; [106] lifecycle_1.0.4       httr_1.4.7            shinyWidgets_0.8.6   </span></span>
-<span><span class="co">#&gt; [109] mime_0.12             openssl_2.2.1         bit64_4.0.5</span></span></code></pre>
+<span><span class="co">#&gt;  [19] labeling_0.4.3        fontawesome_0.5.3     utf8_1.2.6           </span></span>
+<span><span class="co">#&gt;  [22] promises_1.3.3        rmarkdown_2.29        tzdb_0.5.0           </span></span>
+<span><span class="co">#&gt;  [25] ps_1.9.1              ragg_1.4.0            tinytex_0.57         </span></span>
+<span><span class="co">#&gt;  [28] purrr_1.1.0           bit_4.6.0             waldo_0.6.2          </span></span>
+<span><span class="co">#&gt;  [31] xfun_0.52             cachem_1.1.0          jsonlite_2.0.0       </span></span>
+<span><span class="co">#&gt;  [34] blob_1.2.4            later_1.4.2           parallel_4.5.1       </span></span>
+<span><span class="co">#&gt;  [37] R6_2.6.1              golem_0.5.1           bslib_0.9.0          </span></span>
+<span><span class="co">#&gt;  [40] stringi_1.8.7         RColorBrewer_1.1-3    cellranger_1.1.0     </span></span>
+<span><span class="co">#&gt;  [43] brio_1.1.5            jquerylib_0.1.4       Rcpp_1.1.0           </span></span>
+<span><span class="co">#&gt;  [46] knitr_1.50            base64enc_0.1-3       R.utils_2.13.0       </span></span>
+<span><span class="co">#&gt;  [49] readr_2.1.5           httpuv_1.6.16         tidyselect_1.2.1     </span></span>
+<span><span class="co">#&gt;  [52] rstudioapi_0.17.1     yaml_2.3.10           codetools_0.2-20     </span></span>
+<span><span class="co">#&gt;  [55] websocket_1.4.4       curl_6.4.0            processx_3.8.6       </span></span>
+<span><span class="co">#&gt;  [58] tibble_3.3.0          withr_3.0.2           askpass_1.2.1        </span></span>
+<span><span class="co">#&gt;  [61] evaluate_1.0.4        desc_1.4.3            scrypt_0.1.6         </span></span>
+<span><span class="co">#&gt;  [64] pillar_1.11.0         shinycssloaders_1.1.0 checkmate_2.3.2      </span></span>
+<span><span class="co">#&gt;  [67] DT_0.33               shinyjs_2.1.0         pingr_2.0.5          </span></span>
+<span><span class="co">#&gt;  [70] plotly_4.11.0         generics_0.1.4        vroom_1.6.5          </span></span>
+<span><span class="co">#&gt;  [73] chromote_0.5.1        hms_1.1.3             ggplot2_3.5.2        </span></span>
+<span><span class="co">#&gt;  [76] commonmark_2.0.0      scales_1.4.0          globals_0.18.0       </span></span>
+<span><span class="co">#&gt;  [79] xtable_1.8-4          glue_1.8.0            lazyeval_0.2.2       </span></span>
+<span><span class="co">#&gt;  [82] tools_4.5.1           diffobj_0.3.6         data.table_1.17.8    </span></span>
+<span><span class="co">#&gt;  [85] fs_1.6.6              Cairo_1.6-2           grid_4.5.1           </span></span>
+<span><span class="co">#&gt;  [88] tidyr_1.3.1           crosstalk_1.2.1       shinymanager_1.0.410 </span></span>
+<span><span class="co">#&gt;  [91] cli_3.6.5             config_0.3.2          textshaping_1.0.1    </span></span>
+<span><span class="co">#&gt;  [94] viridisLite_0.4.2     dplyr_1.1.4           gtable_0.3.6         </span></span>
+<span><span class="co">#&gt;  [97] R.methodsS3_1.8.2     sass_0.4.10           digest_0.6.37        </span></span>
+<span><span class="co">#&gt; [100] htmlwidgets_1.6.4     farver_2.1.2          memoise_2.0.1        </span></span>
+<span><span class="co">#&gt; [103] htmltools_0.5.8.1     R.oo_1.27.1           lifecycle_1.0.4      </span></span>
+<span><span class="co">#&gt; [106] httr_1.4.7            shinyWidgets_0.9.0    mime_0.13            </span></span>
+<span><span class="co">#&gt; [109] openssl_2.3.3         bit64_4.6.0-1</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="end-to-end-tests">End-to-end tests<a class="anchor" aria-label="anchor" href="#end-to-end-tests"></a>
@@ -731,7 +748,7 @@ the header widget with participant info, and setting the patient to
 newly selected patient.
 </td>
 <td style="text-align:right;">
-8
+14
 </td>
 <td style="text-align:left;">
 Passed
@@ -938,6 +955,44 @@ Passed
 </tr></tbody>
 </table>
 </div>
+<div class="section level5">
+<h5 id="feature-4-load-data-from-csv-files-merge-with-custom-metadata-and-start-the-application-as-a-user-i-want-to-be-able-to-load-data-from-the-raw-csv-file-output-from-the-edc-system-and-use-a-different-metadata-file-to-customize-the-application--scenario-2---use-custom-logo-and-custom-config-yml-file--given-the-same-data-as-in-scenario-1and-with-a-custom-logo-study_logo-png-provided-in-the-folder-assets_customand-using-a-custom-config-file-config-custom-yml-with-study_asset_path-set-to-assets_custom-and-user_roles-to-custom-role">Feature 4 | Load data from CSV files, merge with custom metadata,
+and start the application.As a user, I want to be able to load data from
+the raw csv file output from the EDC system and use a different metadata
+file to customize the application. Scenario 2 - Use custom logo and
+custom config.yml file. Given the same data as in Scenario 1,and with a
+custom logo ‘study_logo.png’ provided in the folder ‘assets_custom’and
+using a custom config file config-custom.yml with [study_asset_path] set
+to ’assets_custom’ and [user_roles] to ’Custom Role<a class="anchor" aria-label="anchor" href="#feature-4-load-data-from-csv-files-merge-with-custom-metadata-and-start-the-application-as-a-user-i-want-to-be-able-to-load-data-from-the-raw-csv-file-output-from-the-edc-system-and-use-a-different-metadata-file-to-customize-the-application--scenario-2---use-custom-logo-and-custom-config-yml-file--given-the-same-data-as-in-scenario-1and-with-a-custom-logo-study_logo-png-provided-in-the-folder-assets_customand-using-a-custom-config-file-config-custom-yml-with-study_asset_path-set-to-assets_custom-and-user_roles-to-custom-role"></a>
+</h5>
+<table class="table table" style="margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:left;">
+Test
+</th>
+<th style="text-align:right;">
+N
+</th>
+<th style="text-align:left;">
+Result
+</th>
+</tr></thead>
+<tbody><tr>
+<td style="text-align:left;width: 30em; ">
+custom_role’and allow_to_review set to ‘custom_role’and the envvar
+[CONFIG_PATH] set to ’config-custom.yml’I expect to see a custom study
+logo in the navigation bar,and that the user has the role ’Custom Role’
+assigned.
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:left;">
+Passed
+</td>
+</tr></tbody>
+</table>
+</div>
 </div>
 <div class="section level4">
 <h4 id="app_feature_05">app_feature_05<a class="anchor" aria-label="anchor" href="#app_feature_05"></a>
@@ -1009,7 +1064,7 @@ and the rest is not, and that, after clicking [Show all participants]
 again, the old state is restored.
 </td>
 <td style="text-align:right;">
-5
+7
 </td>
 <td style="text-align:left;">
 Passed
@@ -1026,6 +1081,125 @@ clicking on [Save] to save the review, I expect that, after the first
 click on [Reviewed], all rows in the table are selected as reviewed, and
 after the second click on [Reviewed], all rows are deselected, and after
 clicking [Save], all rows are saved as not yet being reviewed.
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:left;">
+Passed
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section level4">
+<h4 id="app_feature_06">app_feature_06<a class="anchor" aria-label="anchor" href="#app_feature_06"></a>
+</h4>
+<div class="section level5">
+<h5 id="feature-6-review-on-form-level--as-a-user-i-want-to-be-able-to-save-a-review-of-an-entire-form-">Feature 6 | Review on form level. As a user, I want to be able to
+save a review of an entire form.<a class="anchor" aria-label="anchor" href="#feature-6-review-on-form-level--as-a-user-i-want-to-be-able-to-save-a-review-of-an-entire-form-"></a>
+</h5>
+<table class="table table" style="margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:left;">
+Test
+</th>
+<th style="text-align:right;">
+N
+</th>
+<th style="text-align:left;">
+Result
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;width: 30em; ">
+Scenario 1 - Save form-level review. Given a fixed random test data set
+with all data marked as not yet reviewed, and being logged in as test
+user, and browsing to the ‘Adverse events’ tab of subject ‘BEL_04_772’,
+and clicking on [form_review], and clicking on [Save] to save the
+review, I expect that I see a modal asking to confirm the review of all
+data, and that, after confirming to save all, all data in the Adverse
+events tables is saved as being reviewed
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:left;">
+Passed
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 30em; ">
+Scenario 2 - Undo all reviews in a form. Given the state of scenario 1,
+with all data in the ‘Adverse events’ form marked as reviewed, and
+having form-level review active, and unchecking the [form_review]
+checkbox, and clicking on [Save] to save the removal of the review, I
+expect that I see a modal asking to confirm the removal of the review of
+all form data, and that, after confirming to save all, all data in the
+Adverse events tables is saved as not being reviewed
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:left;">
+Passed
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 30em; ">
+Scenario 3 - Revert to subject level review and review a subject. Given
+the state of scenario 2, and reverting to subject-level review, I expect
+that I now only see the data from subject BEL_04_772 again, and that
+when I click on [form_reviewed] and then save, no warning message is
+displayed, and all Adverse Event form data of BEL_04_772 is saved
+correctly as being reviewed.
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:left;">
+Passed
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 30em; ">
+Scenario 4 - Form level review of a study form. Given the state of
+scenario 3, and browsing to Vital signs and reverting to form-level
+review, and clicking on form_review, I expect that I now see all vital
+signs data, and that when I click on [form_reviewed] and then save, and
+confirm the save in a warning message, that all data from the vital
+signs form is saved correctly as being reviewed.
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:left;">
+Passed
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 30em; ">
+Scenario 5 - Review of single rows during form level review. Given the
+state of scenario 4, and deselecting the review status of first row, and
+saving the review actions, I expect that no save confirmation will pop
+up, and that the review status of the first row is indeed undone.
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:left;">
+Passed
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 30em; ">
+Scenario 6 - Revert to subject level review. Given the state of scenario
+5, and that I revert to subject-level review, and that I deselect the
+rows of subject BEL_04_772 from Visit 2 and 3, I expect that after
+clicing <code>save</code>, no save confirmation will pop up, and that
+the review status of the respective two rows is indeed undone.
 </td>
 <td style="text-align:right;">
 9
@@ -3255,6 +3429,63 @@ Passed
 </tbody>
 </table>
 </div>
+<div class="section level5">
+<h5 id="mod_review_form_tbl--feature-2-view-form-tables--as-a-user-i-want-to-be-able-to-view-a-table-belonging-to-a-form-in-the-correct-format-and-with-selected-rows-passed-through-internal-objects-as-as-expected-">mod_review_form_tbl. Feature 2 | View form tables. As a user, I want
+to be able to view a table belonging to a form, in the correct format
+and with selected rows passed through internal objects as as
+expected.<a class="anchor" aria-label="anchor" href="#mod_review_form_tbl--feature-2-view-form-tables--as-a-user-i-want-to-be-able-to-view-a-table-belonging-to-a-form-in-the-correct-format-and-with-selected-rows-passed-through-internal-objects-as-as-expected-"></a>
+</h5>
+<table class="table table" style="margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:left;">
+Test
+</th>
+<th style="text-align:right;">
+N
+</th>
+<th style="text-align:left;">
+Result
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;width: 30em; ">
+Scenario 1 - Mark rows as selected for review. Given a test [Adverse
+events] data set, and the active subject_id set to ID ‘DEU_02_482’, and
+the subject having an adverse event [Allergic Reaction] that has not yet
+been reviewed, and setting the rows of the event [Allergic Reaction] to
+be selected in the form table, I expect that [pending_review_records]
+gets updated with the approriate row numbers, and that the output table
+is a valid JSON object.
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+Passed
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 30em; ">
+Scenario 2 - View table and mark row as review pending. Given a test
+[Adverse events] data set, and the active subject_id set to ID
+‘DEU_02_482’, I expect that the active data set [data_active] is a data
+frame object, and that this data frame contains only data of subject
+DEU_02_482, and that the output table is a valid JSON object with the
+expected number of rows, and that, after clicking the check box
+belonging to the first row, the item ids related to this row are marked
+as having a review pending.
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+Passed
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <div class="section level4">
 <h4 id="mod_review_form_tbl_fct_helpers">mod_review_form_tbl_fct_helpers<a class="anchor" aria-label="anchor" href="#mod_review_form_tbl_fct_helpers"></a>
@@ -3306,7 +3537,7 @@ Passed
 errors with unexpected input
 </td>
 <td style="text-align:right;">
-8
+7
 </td>
 <td style="text-align:left;">
 Passed
@@ -3651,6 +3882,43 @@ active role.
 </td>
 <td style="text-align:right;">
 5
+</td>
+<td style="text-align:left;">
+Passed
+</td>
+</tr></tbody>
+</table>
+</div>
+<div class="section level5">
+<h5 id="mod_review_forms--feature-7-review-on-form-level--as-a-user-i-want-to-be-able-to-save-all-review-data-of-a-form-">mod_review_forms. Feature 7 | Review on form level. As a user, I
+want to be able to save all review data of a form.<a class="anchor" aria-label="anchor" href="#mod_review_forms--feature-7-review-on-form-level--as-a-user-i-want-to-be-able-to-save-all-review-data-of-a-form-"></a>
+</h5>
+<table class="table table" style="margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:left;">
+Test
+</th>
+<th style="text-align:right;">
+N
+</th>
+<th style="text-align:left;">
+Result
+</th>
+</tr></thead>
+<tbody><tr>
+<td style="text-align:left;width: 30em; ">
+Scenario 1 - Save a form-level review. Given a test data set with data
+of multiple subjects in the Vital Signs form, and with [user_name] set
+to ‘test_name’ and [user_role] to ‘Medical Monitor’, and with the active
+form set to Vital signs and the active user to ‘885’, and clicking on
+form-level review, and clicking on form_reviewed and on ‘save’, I expect
+that a confirmation will be requested, and that, after confirmation, all
+data from the Vital signs form is now reviewed, and only Vital signs
+data is newly reviewed, and the reviewer of the newly reviewed rows is
+set to ‘test_name (Medical Monitor)’.
+</td>
+<td style="text-align:right;">
+7
 </td>
 <td style="text-align:left;">
 Passed
@@ -4685,6 +4953,17 @@ query_data
 Passed
 </td>
 </tr>
+<tr>
+<td style="text-align:left;width: 30em; ">
+errors if directory cannot be created if needed
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+Passed
+</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -4761,6 +5040,17 @@ same)
 Passed
 </td>
 </tr>
+<tr>
+<td style="text-align:left;width: 30em; ">
+aborts synching if data is older than the database update time
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+Passed
+</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -4813,6 +5103,17 @@ warns with duplicate records in the review_row object
 Passed
 </td>
 </tr>
+<tr>
+<td style="text-align:left;width: 30em; ">
+warns that database is unaltered when attempting to save zero rows
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+Passed
+</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -4842,6 +5143,58 @@ can save a query
 Passed
 </td>
 </tr></tbody>
+</table>
+</div>
+<div class="section level5">
+<h5 id="db_get_version-works">db_get_version works<a class="anchor" aria-label="anchor" href="#db_get_version-works"></a>
+</h5>
+<table class="table table" style="margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:left;">
+Test
+</th>
+<th style="text-align:right;">
+N
+</th>
+<th style="text-align:left;">
+Result
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;width: 30em; ">
+collects database version correctly
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+Passed
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 30em; ">
+returns an empty string if the version is not available
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+Passed
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 30em; ">
+errors if database is uavailable
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+Passed
+</td>
+</tr>
+</tbody>
 </table>
 </div>
 <div class="section level5">
@@ -5100,7 +5453,8 @@ N
 Result
 </th>
 </tr></thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td style="text-align:left;width: 30em; ">
 Produces the expected output.
 </td>
@@ -5110,7 +5464,30 @@ Produces the expected output.
 <td style="text-align:left;">
 Passed
 </td>
-</tr></tbody>
+</tr>
+<tr>
+<td style="text-align:left;width: 30em; ">
+errors if no csv files can be found in the folder
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+Passed
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 30em; ">
+warns if an empty synch time is provided
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+Passed
+</td>
+</tr>
+</tbody>
 </table>
 </div>
 <div class="section level5">
@@ -5204,7 +5581,8 @@ N
 Result
 </th>
 </tr></thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td style="text-align:left;width: 30em; ">
 produces the expected output
 </td>
@@ -5214,7 +5592,19 @@ produces the expected output
 <td style="text-align:left;">
 Passed
 </td>
-</tr></tbody>
+</tr>
+<tr>
+<td style="text-align:left;width: 30em; ">
+errors if multiple form types for one item group are found
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+Passed
+</td>
+</tr>
+</tbody>
 </table>
 </div>
 </div>
@@ -5950,7 +6340,7 @@ Passed
 <tr>
 <td style="text-align:left;width: 30em; ">
 returns item_name_other if item_name is missing while not changing other
-item_names with the same id_cols
+item_names with the same key_cols
 </td>
 <td style="text-align:right;">
 2
@@ -5983,8 +6373,8 @@ Passed
 </tr>
 <tr>
 <td style="text-align:left;width: 30em; ">
-warns if all id_cols and the item_name column do not uniquely identify a
-row and returns the original dataset
+warns if all key_cols and the item_name column do not uniquely identify
+a row and returns the original dataset
 </td>
 <td style="text-align:right;">
 2
@@ -6008,7 +6398,7 @@ Passed
 <tr>
 <td style="text-align:left;width: 30em; ">
 correctly selects latest edit_date_time, even if item_name is in the
-id_cols vector
+key_cols vector
 </td>
 <td style="text-align:right;">
 1
@@ -6254,10 +6644,45 @@ Passed
 </tr>
 <tr>
 <td style="text-align:left;width: 30em; ">
+creates subject status label based on eligibility and discontinuation
+data
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:left;">
+Passed
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 30em; ">
 does not error with a zero-row data frame input
 </td>
 <td style="text-align:right;">
 2
+</td>
+<td style="text-align:left;">
+Passed
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 30em; ">
+does not create a study status if it already exists
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+Passed
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 30em; ">
+uses a custom status label if it exists together with a study status
+column
+</td>
+<td style="text-align:right;">
+1
 </td>
 <td style="text-align:left;">
 Passed
@@ -7549,11 +7974,23 @@ Passed
 </tr>
 <tr>
 <td style="text-align:left;width: 30em; ">
-returns a list with expected output, and prints a warning if there are
-failures
+returns a list with expected output, prints a warning if there are
+failures, and provides information about each test warning/skip/error.
 </td>
 <td style="text-align:right;">
-4
+5
+</td>
+<td style="text-align:left;">
+Passed
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 30em; ">
+Returns test outcome ‘pass’ with a skipped tests if include_skipped is
+FALSE
+</td>
+<td style="text-align:right;">
+2
 </td>
 <td style="text-align:left;">
 Passed
@@ -8014,12 +8451,13 @@ Passed
 <h4 id="get_available_data">get_available_data<a class="anchor" aria-label="anchor" href="#get_available_data"></a>
 </h4>
 <div class="section level5">
-<h5 id="get_available_data-creates-a-data-frame-with-all-available-data-per-individual--it-summarizes-the-available-data-points-for-each-individual-for-each-time-point--for-study-data-forms-the-data-points-will-be-taken-from-event_name--for-common-forms-the-name-column-of-the-pivot-table-data-will-be-used-for-example-the-specific-adverse-event-or-concomitant-medication">get_available_data() creates a data frame with all available data
+<h5 id="get_available_data-creates-a-data-frame-with-all-available-data-per-individual--it-summarizes-the-available-data-points-for-each-individual-for-each-time-point--for-forms-with-a-name-column-mostly-common_forms-but-can-also-be-study-data-forms-the-name-column-of-the-pivot-table-data-will-be-used-for-example-the-specific-adverse-event-or-concomitant-medication--for-all-other-forms-the-data-points-will-be-taken-from-event_name-">get_available_data() creates a data frame with all available data
 per individual. It summarizes the available data points for each
-individual for each time point. For study data forms, the data points
-will be taken from event_name. For common forms, the Name column of the
+individual for each time point. For forms with a ‘Name’ column (mostly
+common_forms but can also be study data forms) the Name column of the
 pivot table data will be used (for example, the specific adverse event
-or concomitant medication)<a class="anchor" aria-label="anchor" href="#get_available_data-creates-a-data-frame-with-all-available-data-per-individual--it-summarizes-the-available-data-points-for-each-individual-for-each-time-point--for-study-data-forms-the-data-points-will-be-taken-from-event_name--for-common-forms-the-name-column-of-the-pivot-table-data-will-be-used-for-example-the-specific-adverse-event-or-concomitant-medication"></a>
+or concomitant medication). For all other forms, the data points will be
+taken from event_name.<a class="anchor" aria-label="anchor" href="#get_available_data-creates-a-data-frame-with-all-available-data-per-individual--it-summarizes-the-available-data-points-for-each-individual-for-each-time-point--for-forms-with-a-name-column-mostly-common_forms-but-can-also-be-study-data-forms-the-name-column-of-the-pivot-table-data-will-be-used-for-example-the-specific-adverse-event-or-concomitant-medication--for-all-other-forms-the-data-points-will-be-taken-from-event_name-"></a>
 </h5>
 <table class="table table" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -8072,6 +8510,30 @@ Passed
 <td style="text-align:left;width: 30em; ">
 can change the name of the form_repeat number that is written to the
 item_name if duplicates occur
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+Passed
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 30em; ">
+creates a row-based output if a ‘Name’ column exists in the data,
+independent of the form being in common forms or not.
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+Passed
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 30em; ">
+creates a event-based output if a ‘Name’ column does not exist in the
+data, even if the data is in the common_forms tab
 </td>
 <td style="text-align:right;">
 1
@@ -8215,6 +8677,17 @@ warns if any defined forms do not match the expected ones in ‘all_forms’
 Passed
 </td>
 </tr>
+<tr>
+<td style="text-align:left;width: 30em; ">
+warns if no forms with form level data are found, and returns defaults
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+Passed
+</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -8283,7 +8756,8 @@ N
 Result
 </th>
 </tr></thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td style="text-align:left;width: 30em; ">
 Can recreate internal metadata using the metadata.xlsx template
 </td>
@@ -8293,7 +8767,41 @@ Can recreate internal metadata using the metadata.xlsx template
 <td style="text-align:left;">
 Passed
 </td>
-</tr></tbody>
+</tr>
+<tr>
+<td style="text-align:left;width: 30em; ">
+errors if an unsupported format (not xlsx) is provided
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+Passed
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 30em; ">
+errors if expand_tab_items do not exist as an Excel tab
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+Passed
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 30em; ">
+adds required metadata columns if they do not exist
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+Passed
+</td>
+</tr>
+</tbody>
 </table>
 </div>
 </div>
@@ -8823,7 +9331,7 @@ Passed
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer>

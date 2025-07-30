@@ -8,8 +8,8 @@
 <title>Metadata • clinsight</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Metadata">
 </head>
 <body>
@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">clinsight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,7 +86,10 @@ be removed or renamed.</p>
 <p>Within the first tab, the column names of the raw data need to be
 specified. The columns with the names within <code>name_raw</code> will
 be renamed to the new name when merging metadata with raw data later.
-Again, orange fields should not be adjusted.</p>
+Again, orange fields should not be adjusted. These field contain
+<code>ClinSight</code> [key_columns()], defining unique records, and
+other essential variables such as <code>edit_date_time</code>, defining
+the last time a data point was edited.</p>
 <p><img src="images/metadata-column_names.png"></p>
 </div>
 <div class="section level4">
@@ -245,6 +248,33 @@ here are also a view mandatory names that are still needed for ClinSight
 to function. It is not advised to delete these names. If they are
 missing in your own data, just leave them in the metadata as is.</p>
 <p><img src="images/metadata-general.png"></p>
+<div class="section level5">
+<h5 id="subject-status">Subject status<a class="anchor" aria-label="anchor" href="#subject-status"></a>
+</h5>
+<p>By default, a subject’s study status is derived from variables in the
+general tab (<code>Eligible</code>, <code>DiscontinuationReason</code>,
+<code>DiscontinuationDate</code>). To override this, add a
+subject_status column to the study data—if present, it will be used
+directly and no calculation will occur. See below for example code to
+implement this.</p>
+<pre><code><span><span class="va">status_items</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Eligible"</span>, <span class="st">"StudyCompleted"</span>, <span class="st">"DiscontinuationDate"</span>,</span>
+<span>                  <span class="st">"DiscontinuationReason"</span>, <span class="st">"RandomizationDate"</span><span class="op">)</span></span>
+<span><span class="va">status_data</span> <span class="op">&lt;-</span> <span class="va">study_data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">subject_id</span>, <span class="va">item_group</span>, <span class="va">edit_date_time</span>, <span class="va">item_name</span>, <span class="va">item_value</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">item_group</span> <span class="op">==</span> <span class="st">"General"</span> <span class="op">&amp;</span> <span class="va">item_name</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">status_items</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/create_table.html">create_table</a></span><span class="op">(</span></span>
+<span>    keep_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"subject_id"</span>, <span class="st">"item_group"</span>, <span class="st">"edit_date_time"</span><span class="op">)</span>, </span>
+<span>    expected_columns <span class="op">=</span> <span class="va">status_items</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">calculate_subject_status</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">study_data</span> <span class="op">&lt;-</span> <span class="va">study_data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="va">status_data</span><span class="op">)</span></span></code></pre>
+<p>In the section above the function
+<code>calculate_subject_status</code> contains some custom logic that
+calculates the needed status category per patient, based on other
+variables in the data.</p>
+</div>
 </div>
 <div class="section level4">
 <h4 id="form_level_data">form_level_data<a class="anchor" aria-label="anchor" href="#form_level_data"></a>
@@ -330,7 +360,7 @@ the interactive timeline. Defaults to “💊 Tₓ”.</li>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer>
