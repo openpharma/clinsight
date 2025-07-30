@@ -1,3 +1,5 @@
+# clinsight (development version)
+
 # clinsight 0.3.0
 
 ## Developer notes
