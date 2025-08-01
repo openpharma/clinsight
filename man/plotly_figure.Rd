@@ -21,3 +21,4 @@ Makes a ggplot2 figure interactive using plotly
 \seealso{
 \code{\link[=fig_timeseries]{fig_timeseries()}}, \code{\link[=fig_boxplots]{fig_boxplots()}}
 }
+\keyword{internal}

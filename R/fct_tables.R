@@ -52,8 +52,8 @@ create_table.default <- function(
   stopifnot(is.character(name_column))
   stopifnot(is.character(value_column))
   if ("reviewed" %in% names(data)) {
-    data <- add_o_reviewed(data, keep_vars)
-    keep_vars <- c("o_reviewed", keep_vars)
+    data <- add_row_review_status(data, keep_vars)
+    keep_vars <- c("row_review_status", keep_vars)
   }
   df <- data[c(keep_vars, name_column, value_column)] |> 
     tidyr::pivot_wider(
@@ -85,10 +85,10 @@ create_table.default <- function(
 #' of the IDs associated with the unique observation defined by `id_cols`.
 #' 
 #' @noRd
-add_o_reviewed <- function(data, id_cols) {
+add_row_review_status <- function(data, id_cols) {
   dplyr::mutate(
     data,
-    o_reviewed = dplyr::case_when(
+    row_review_status = dplyr::case_when(
       any(reviewed == "No") & any(reviewed == "Yes") ~ list(list(reviewed = NA, ids = id)),
       any(reviewed == "Yes") ~ list(list(reviewed = TRUE, ids = id)),
       .default = list(list(reviewed = FALSE, ids = id))
@@ -111,7 +111,7 @@ create_table.continuous <- function(
     value_column = "item_value", 
     unit_column = "item_unit",
     explanation_column = "reason_notdone",
-    keep_vars = c("subject_id", "event_name"),
+    keep_vars = c("subject_id", "event_name", "event_date"),
     expected_columns = NULL,
     ...
     ){
@@ -177,46 +177,44 @@ create_table.general <- function(
     expected_columns = NULL,
     ...
     ){
-  expected_columns <- na.omit(expected_columns) %||% character(0)
+  expected_columns <- na.omit(expected_columns) %||% character(0) |> 
+    c(intersect(c("subject_status", "status_label"), data[[name_column]])) |> 
+    unique()
   df_names <- c(keep_vars, name_column, value_column, expected_columns)
   if(is.null(data)) {
     data <-  data.frame(matrix(ncol = length(df_names))) |> 
       setNames(df_names)
   }
-
-  df <- data |> 
-    dplyr::filter(!item_name %in% c("DrugAdminDate", "DrugAdminDose")) |>
+  df <- data[!data[[name_column]] %in% c("DrugAdminDate", "DrugAdminDose"),] |>
     create_table.default(name_column, value_column, keep_vars, expected_columns)
-  
   df |> 
     dplyr::mutate(
-      status = ifelse(
-        is.na(Eligible), 
-        "Unknown",
-        ifelse(
-          Eligible == "No", 
-          "Screen failure", 
-          ifelse(
-            Eligible == "Yes",
-            "Enrolled",
-            Eligible
-          )
-        )
-      ),
-      status = ifelse(
+        subject_status = subject_status %|_|% ifelse(
         !is.na(DiscontinuationDate),
         ifelse(
           is.na(DiscontinuationReason), 
           "Discontinued", 
           DiscontinuationReason
-          ),
-        status
         ),
-      status_label = paste0(
+        ifelse(
+          is.na(Eligible), 
+          "Unknown",
+          ifelse(
+            Eligible == "No", 
+            "Screen failure", 
+            ifelse(
+              Eligible == "Yes",
+              "Enrolled",
+              Eligible
+            )
+          )
+        )
+      ),
+      status_label = status_label %|_|% paste0(
         "<b>", subject_id, "</b><br>",
         "<b>Sex:</b> ",    Sex, "<br>",
         "<b>Age:</b> ",    Age, "yrs.", "<br>",
-        "<b>Status:</b> ", status, "<br>",
+        "<b>Status:</b> ", subject_status, "<br>",
         "<b>ECOG:</b> ",   ECOG, "<br>",
         "<b>Dx:</b> ",     WHO.classification
       ) 
@@ -325,21 +323,16 @@ create_table.medication <- function(
     expected_columns = NULL,
     ...
 ){
+  expected_columns <- expected_columns |> 
+    c("CM Name", "CM Dose", "CM Frequency", "CM Route", "CM Start Date", 
+      "CM End Date", "CM Unit") |> 
+    unique()
   df <-  data |> 
     create_table.default(name_column, value_column, keep_vars, expected_columns) |> 
     adjust_colnames("^CM ") 
   df[["Number"]] <- NULL
-  df <- df |> 
-    dplyr::mutate(
-      `Unit`      = ifelse(!is.na(`Unit Other`), `Unit Other`, `Unit`),
-      `Frequency` = ifelse(!is.na(`Frequency Other`), `Frequency Other`, `Frequency`),
-      `Route`     = ifelse(!is.na(`Route Other`), `Route Other`, `Route`)
-    ) |> 
-    dplyr::select(-dplyr::ends_with("Other"))
-  
   df |> 
     dplyr::mutate(
-      Name = paste0(.data[["Active Ingredient"]], " (", .data[["Trade Name"]], ")"),
       Dose = paste0(.data[["Dose"]], " ", .data[["Unit"]], " ", 
                     .data[["Frequency"]], "; ", .data[["Route"]]),
       in_use = (is.na(.data[["End Date"]])) 
@@ -349,11 +342,10 @@ create_table.medication <- function(
       dplyr::desc(gsub("\\**<\\/*b>", "", .data[["Start Date"]]))
       ) |> 
     dplyr::select(
-      dplyr::any_of("o_reviewed"),
+      dplyr::any_of("row_review_status"),
       dplyr::all_of(c(keep_vars, "Name")), 
       dplyr::everything(),
-      -dplyr::all_of(c("in_use", "Active Ingredient", "Trade Name", 
-                       "Unit", "Frequency", "Route"))
+      -dplyr::all_of(c("in_use", "Unit", "Frequency", "Route"))
     )
 }
 
@@ -420,13 +412,3 @@ create_table.bm_cytology <- function(
     )
 }
 
-# TODO: create a function like the one below. Not yet done due to time restrictions.
-# merge_other_category <- function(
-#     data, 
-#     name_column = "item_name",
-#     value_column = "item_value", 
-#     var_name = c(""), 
-#     var_name_other
-# ){
-#   
-# }

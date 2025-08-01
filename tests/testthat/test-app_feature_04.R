@@ -4,12 +4,14 @@ describe(
   paste0("Feature 4 | Load data from CSV files, merge with custom metadata, and start the application.", 
          "As a user, I want to be able ", 
          "to load data from the raw csv file output from the EDC system and use a ", 
-         "different metadata file to customize the application."), {
+         "different metadata file to customize the application."), 
+  {
     it(
       paste0("Scenario 1 - Load raw data with custom metadata. ", 
       "Given raw CSV data exported from the EDC system from subject [9600-002], ", 
       "and with metadata in which total visits is restricted to V0-V10, ",
-      "and with only the study_forms 'Response' and 'Vitals adjusted' in the metadata",
+      "and with only the study_forms 'Response' and 'Vitals adjusted' in the metadata ",
+      "and with the study name in the metadata settings set to 'Test Study Name'",
       "and with, at both Screening and Visit 2 the [Systolic blood pressure] being 99, ", 
       "[Diastolic Blood Pressure] 77, [Pulse] 77, [Resp] 9, and [Temperature] 37.5, ", 
       "and (only at screening) [Weight] 70kg, ", 
@@ -17,7 +19,8 @@ describe(
       "I expect that I see the timeline of subject [9600-002] with study visits in it",
       "and when I browser to the 'Study data' tab",
       "I expect that I see the Vital signs page of subject [9600-002]', ", 
-      "and that the compact header timeline shows visits V0-V10 ",
+      "and that the compact header timeline shows visits all visits available in the data",
+      "and that the study name 'Test Study Name' is displayed in the main bar as a header ",
       "and that I see a figure with the data displayed, ",
       "and that I see a table with the data displayed after clicking on the table view, ", 
       "and that the data for the figure and table in the app is the same as ", 
@@ -39,16 +42,16 @@ describe(
         expect_true(grepl('"subject_id":"9600-002"', timeline_json))
         expect_true(grepl("Screening", timeline_json))
         expect_true(grepl("Visit 1", timeline_json))
-        expect_true(grepl("Visit 2", timeline_json))
+        expect_true(grepl("Ext. visit 1", timeline_json))
         
         app$set_inputs(main_tabs = "Study data")
         app$wait_for_idle(1100)
 
-        # Expect labels V0-V10 in compact header visit timeline (as defined in custom metadata file):
+        # Expect labels SCR< V1, V2, and EoT in compact header visit timeline (as defined in custom metadata file):
         fig_vals <- app$get_value(output = "header_widgets_1-visit_figure")
         expect_equal(
           fig_vals$coordmap$panels[[1]]$domain$discrete_limits$x,
-          paste0("V", 0:10)
+          c("SCR", "V1", "EoT", "FU")
         )
         
         # Snapshot JSON table output and verify that vital signs are shown:
@@ -67,16 +70,61 @@ describe(
                      "main_sidebar_1-navigate_forms_1-form_name")
           )
         
+        app_study_name <- app$get_value(output = "study_name")
+        expect_equal(app_study_name, "Test Study Name")
         # Get a snapshot of the raw data of the figure:
         fig_data <- app$get_value(export = "sf_vitals_adjusted-fig_data") |> 
           dplyr::select(subject_id, event_name, event_date, item_group, item_name, item_value,  
                         item_unit, lower_lim, upper_lim) |> 
           dplyr::arrange(item_name)
-        expect_snapshot(fig_data)
+        expect_snapshot(print(fig_data, width = Inf))
         # Get a snapshot of the raw data in the table:
         table_data  <- app$get_value(export = "sf_vitals_adjusted-review_form_tbl-table_data")
         expect_snapshot(print(table_data, width = Inf))
       }
     )
+    it(
+      paste0(
+      "Scenario 2 - Use custom logo and custom config.yml file. Given the same data as in Scenario 1,",
+        "and with a custom logo 'study_logo.png' provided in the folder 'assets_custom'",
+        "and using a custom config file config-custom.yml with ",
+        "[study_asset_path] set to 'assets_custom' and [user_roles] to 'Custom Role: custom_role'",
+        "and allow_to_review set to 'custom_role'",
+        "and the envvar [CONFIG_PATH] set to 'config-custom.yml'",
+        "I expect to see a custom study logo in the navigation bar,",
+        "and that the user has the role 'Custom Role' assigned."
+      ), 
+      {
+        withr::local_envvar(c("CONFIG_PATH" = "config-custom.yml"))
+        app <- AppDriver$new(
+          app_dir = testthat::test_path("fixtures", "testapp-raw"),
+          name = "app-feature-4_2",
+          timeout = 20000,
+          width = 1619,
+          height = 955
+        )
+        withr::defer(app$stop()) 
+        
+        ## Test logo availability:
+        expect_equal(
+          app$get_js("document.getElementById('study_logo').tagName"), 
+          "IMG"
+        )
+        logo_path <- app$get_js("document.getElementById('study_logo').src")
+        expect_equal(basename(logo_path), "study_logo.png")
+        downloaded_logo <- file.path(withr::local_tempdir(), "downloaded_logo.png")
+        download.file(logo_path, destfile = downloaded_logo, mode = "wb", quiet = TRUE)
+        expect_snapshot_file(downloaded_logo)
+        
+        ## Verify custom user role:
+        expect_equal(app$get_value(export = c("active_user_role")), "Custom Role")
+        
+        # ensure other files in assets folder cannot be accessed:
+        hidden_file_path <- paste0(app$get_url(), "assets/hidden_file.txt")
+        expect_error(
+          suppressWarnings(readLines(hidden_file_path, warn = FALSE))
+        )
+      }
+    )       
   }
 )

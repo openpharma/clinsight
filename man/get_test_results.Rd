@@ -6,22 +6,26 @@
 \usage{
 get_test_results(
   package = "clinsight",
-  reporter = testthat::ListReporter,
   outfile = NULL,
-  run_as_not_cran = TRUE
+  include_skipped = TRUE,
+  run_as_not_cran = TRUE,
+  reporter = testthat::ListReporter
 )
 }
 \arguments{
-\item{package}{Character vector with the poackage name.}
-
-\item{reporter}{a \code{testthat} file reporter. defaults to
-\code{testthat::ListReporter}.}
+\item{package}{Character vector with the package name.}
 
 \item{outfile}{If provided, the results will be saved in a .rds file on the}
+
+\item{include_skipped}{Boolean. Whether to include skipped tests in the
+decision whether the tests were all successful.}
 
 \item{run_as_not_cran}{Logical. If TRUE, will provide a temporary
 environmental variable NOT_CRAN='true' to ensure that tests are not
 skipped.}
+
+\item{reporter}{a \code{testthat} file reporter. defaults to
+\code{testthat::ListReporter}.}
 }
 \value{
 A list with the outcome. If \code{outfile} is provided, the result will

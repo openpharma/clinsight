@@ -15,7 +15,7 @@
 #' should be included. Will be ignored if report_type is not "session".
 #'
 #' @return A data frame with the required report data.
-#' @export
+#' @keywords internal
 #'
 select_report_data <- function(
     data, 
@@ -83,7 +83,7 @@ select_report_data <- function(
 #' @param query_df Data frame with query data to be used in the report.
 #'
 #' @return A PDF report will be created.
-#' @export 
+#' @keywords internal 
 #'
 create_report <- function(
     fileinput, 

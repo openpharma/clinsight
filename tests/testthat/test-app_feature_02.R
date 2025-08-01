@@ -14,7 +14,7 @@ describe(
     withr::defer(app$stop())
     it(
       "Scenario 1 - Save review. 
-            Given a fixed fixed random test data set with all data marked as not yet reviewed, 
+            Given a fixed random test data set with all data marked as not yet reviewed, 
             and being logged in as test user, 
             and patient 45 selected as active patient,
             and the 'Vital signs' tab selected as the first tab in the [Study data] tabs,
@@ -36,8 +36,9 @@ describe(
         )
         app$click("main_sidebar_1-review_forms_1-save_review")
         app$wait_for_idle(800)
-        output_names <- names(app$get_values(output = TRUE)$output)
-        app$expect_values(output = vector_select(output_names, exclude = "visit_figure"))
+        output_names <- names(app$get_values(output = TRUE)$output) |> 
+          vector_select(exclude = c("visit_figure", "start_page_1-overview_table"))
+        app$expect_values(output = output_names)
         
         user_db <- app$get_value(export = "user_db")
         

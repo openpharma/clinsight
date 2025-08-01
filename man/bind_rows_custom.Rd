@@ -21,6 +21,7 @@ Converts first a custom amount of variables in a list of data frames to
 character, and then combines the list of data frames into one data frame.
 }
 \examples{
+\dontrun{
  data_list <- list(
    data.frame(
       "ID" = c("subj_1", "subj_5", "subj_8"),
@@ -33,3 +34,5 @@ character, and then combines the list of data frames into one data frame.
  )
 bind_rows_custom(data_list, "values")
 }
+}
+\keyword{internal}

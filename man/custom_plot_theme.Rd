@@ -13,8 +13,11 @@ A list with ggplot2 theme layers
 A custom \code{ggplot2} theme to be used in the application.
 }
 \examples{
+\dontrun{
 library(ggplot2)
 ggplot(mtcars, aes(mpg, cyl)) + 
   geom_point() + 
   custom_plot_theme()
 }
+}
+\keyword{internal}

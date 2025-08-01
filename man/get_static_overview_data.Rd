@@ -22,3 +22,4 @@ A data frame with the overview data. Columns are:
 Creates overview data of each patient in the study. Used to create the start
 page of the application.
 }
+\keyword{internal}

@@ -10,7 +10,7 @@ fix_multiple_choice_vars(
   var_column = "var",
   value_column = "item_value",
   suffix = "[[:digit:]]+$",
-  common_vars = c("subject_id", "event_repeat", "event_date", "form_repeat"),
+  key_cols = c("subject_id", "event_repeat", "event_date", "form_repeat"),
   collapse_with = "; "
 )
 }
@@ -27,7 +27,8 @@ stored}
 
 \item{suffix}{Multiple choice suffix. Used to define multiple choice values}
 
-\item{common_vars}{variables used for identifying unique rows in the dataset.}
+\item{key_cols}{Character vector with key columns used for identifying unique
+rows in the data set.}
 
 \item{collapse_with}{character value to collapse the multiple choice options
 with. If this value is NULL, the rows will be left as is.}
@@ -43,10 +44,13 @@ function cleans this specific output so that the variable name remains
 consistent.
 }
 \examples{
+\dontrun{
  df <- data.frame(
   ID = "Subj1",
   var = c("Age", paste0("MH_TRT", 1:4)),
   item_value = as.character(c(95, 67, 58, 83, 34))
  )
- fix_multiple_choice_vars(df, common_vars = "ID")
+ fix_multiple_choice_vars(df, key_cols = "ID")
 }
+}
+\keyword{internal}

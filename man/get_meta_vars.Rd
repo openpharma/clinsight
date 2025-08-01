@@ -19,3 +19,4 @@ Prepares and extracts consistent variable names based on both metadata
 and the provided data. To be used in both the UI and server functions
 of a Shiny app.
 }
+\keyword{internal}

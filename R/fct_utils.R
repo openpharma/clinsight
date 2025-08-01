@@ -8,10 +8,12 @@
 #' @param timezone Timezone to use.
 #'
 #' @return A character string with time stamp in it.
-#' @export
+#' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' time_stamp()
+#' }
 time_stamp <- function(
     form = "%Y-%m-%d %H:%M:%S %Z", 
     timezone = "UTC"
@@ -40,14 +42,16 @@ time_stamp <- function(
 #' to search for the date object. 
 #'
 #' @return A date-time object of length 1.
-#' @export
+#' @keywords internal
 #'
 #' @examples 
+#' \dontrun{
 #' # example data:
 #' dfs <- lapply(1:10, \(x){data.frame(
 #'   "edit_date_time" = sample(seq(as.Date('1999/01/01'), as.Date('2000/01/01'), by="day"), 12)
 #'   )})
 #' get_max_time(dfs, "edit_date_time")
+#' }
 #'  
 get_max_time <- function(
     data, 
@@ -88,9 +92,10 @@ get_max_time <- function(
 #' to ensure that the information in `columns` is not lost. Can be a vector of logicals if multiple `columns` are used for expansion. 
 #'
 #' @return A data frame that usually will be longer than the original one.
-#' @export
+#' @keywords internal
 #' 
 #' @examples
+#' \dontrun{
 #'  df <- head(iris, n = 6) |> 
 #'   dplyr::mutate(
 #'     expansion_1 = list("feature.1, feature.2"), 
@@ -104,6 +109,7 @@ get_max_time <- function(
 #' # and remove column "expansion_1" but keep column "expansion_2" afterwards:
 #' expand_columns(df, c("expansion_1", "expansion_2"),  
 #'   unite_with = "Species", remove_cols = c(TRUE, FALSE))
+#' }
 #' 
 expand_columns <- function(
     data, 
@@ -159,11 +165,13 @@ expand_columns <- function(
 #' @param x Character string.
 #'
 #' @return A character string.
-#' @export
+#' @keywords internal
 #'
 #' @examples 
+#' \dontrun{
 #' title_case("this will be converted to upper case")
 #' # [1] "This Will Be Converted To Upper Case"
+#' }
 #' 
 title_case <- function(x) {
   stopifnot(is.character(x))
@@ -190,10 +198,12 @@ title_case <- function(x) {
 #' @param bytes An integer. Controls the size of the unique id.
 #'
 #' @return A unique character vector.
-#' @export
+#' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' create_unique_id(5)
+#' }
 create_unique_id <- function (
     bytes = 5
 ) {
@@ -215,9 +225,12 @@ create_unique_id <- function (
 #' to character strings.
 #'
 #' @return character vector of the same length as the input vector.
-#' @export
+#' @keywords internal
 #'
-#' @examples simplify_string(c(" Dirty_name. to Clean.#$", "#$another   complicated. Name"))
+#' @examples 
+#' \dontrun{
+#' simplify_string(c(" Dirty_name. to Clean.#$", "#$another   complicated. Name"))
+#' }
 simplify_string <- function(x){
   if(is.factor(x)) x <- as.character(x)
   stopifnot(is.vector(x))
@@ -236,10 +249,12 @@ simplify_string <- function(x){
 #' @param string Character string to be used. 
 #'
 #' @return An ordered string.
-#' @export
+#' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' order_string(rownames(mtcars))
+#' }
 #' 
 order_string <- function(
     string = appdata$`CBC regular`$subject_id
@@ -267,9 +282,10 @@ order_string <- function(
 #' @param var Column names to extract the unique variables from
 #'
 #' @return A data frame with unique values.
-#' @export
+#' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #'  list_with_data <- list(
 #'   data.frame(
 #'     "Sites" = c("site_1", "site_3", "site_4"),
@@ -282,6 +298,7 @@ order_string <- function(
 #'  )
 #'
 #'  get_unique_vars(list_with_data, c("Sites", "ID"))
+#' }
 #' 
 get_unique_vars <- function(data, var
 ){
@@ -310,9 +327,10 @@ get_unique_vars <- function(data, var
 #' that need to be converted.
 #'
 #' @return A data frame object.
-#' @export
+#' @keywords internal
 #' 
 #' @examples
+#' \dontrun{
 #'  data_list <- list(
 #'    data.frame(
 #'       "ID" = c("subj_1", "subj_5", "subj_8"),
@@ -324,6 +342,7 @@ get_unique_vars <- function(data, var
 #'    )
 #'  )
 #' bind_rows_custom(data_list, "values")
+#' }
 bind_rows_custom <- function(
     data, 
     convert = "item_value"
@@ -352,13 +371,15 @@ bind_rows_custom <- function(
 #'   if levels are not existent.
 #'
 #' @return a factor with newly calculated levels
-#' @export
+#' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' collapse_fct_levels(
 #' x = LETTERS,
 #' new_levels = list("A-C" = c("A", "B", "C"))
 #' )
+#' }
 collapse_fct_levels <- function(
     x = appdata$ECG$status,
     new_levels = list("old" = "old", "new" = c("new", "updated")),
@@ -403,9 +424,12 @@ collapse_fct_levels <- function(
 #' @param x An atomic object (a vector).
 #'
 #' @return a logical of length one.
-#' @export
+#' @keywords internal
 #'
-#' @examples is_date(as.Date("2023-09-03"))
+#' @examples 
+#' \dontrun{
+#' is_date(as.Date("2023-09-03"))
+#' }
 is_date <- function(x) {
   stopifnot(is.atomic(x))
   inherits(x, c("Date", "POSIXt"))
@@ -416,11 +440,13 @@ is_date <- function(x) {
 #' @param data A data frame with columns that need to be converted.
 #'
 #' @return A data frame with all non-numeric columns converted to character.
-#' @export
+#' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' df <- cols_to_char(iris)
 #' class(df$Species)
+#' }
 cols_to_char <- function(data){
   stopifnot(is.data.frame(data))
   lapply(data, \(x){ 
@@ -439,14 +465,16 @@ cols_to_char <- function(data){
 #'
 #' @return A data frame with all columns with the class `Date` or `POSIXct` 
 #' converted to character.
-#' @export
+#' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' df <- iris
 #' df$dates <- Sys.Date() + sample(1:1000, size = nrow(iris))
 #' converted_df <- date_cols_to_char(df)
 #' # the date variable is now converted, while all other columns are unchanged:
 #' sapply(converted_df, class)
+#' }
 #' 
 date_cols_to_char <- function(data){
   stopifnot(is.data.frame(data))
@@ -473,10 +501,12 @@ date_cols_to_char <- function(data){
 #'   (first day/month).
 #'
 #' @return A `date`-class vector.
-#' @export
+#' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' clean_dates(c("2023-08-NK", "2023-NK-NK", "NK-08-01"))
+#' }
 clean_dates <- function(
     x,
     unknown_pattern = "NK",
@@ -504,10 +534,12 @@ clean_dates <- function(
 #'   this regular expression.
 #'
 #' @return A character vector.
-#' @export
+#' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' vector_select(names(iris), include = "Sepal", exclude = "Width")
+#' }
 #' 
 vector_select <- function(
     x,
@@ -533,22 +565,25 @@ vector_select <- function(
 #' Creates package results and wraps it in a list, together with a timestamp at
 #' which the results were created and the current sessionInfo.
 #'
-#' @param package Character vector with the poackage name.
-#' @param reporter a `testthat` file reporter. defaults to
-#'   `testthat::ListReporter`.
+#' @param package Character vector with the package name.
 #' @param outfile If provided, the results will be saved in a .rds file on the
+#' @param include_skipped Boolean. Whether to include skipped tests in the
+#'   decision whether the tests were all successful.
 #' @param run_as_not_cran Logical. If TRUE, will provide a temporary
 #'   environmental variable NOT_CRAN='true' to ensure that tests are not
 #'   skipped.
+#' @param reporter a `testthat` file reporter. defaults to
+#'   `testthat::ListReporter`.
 #' @return A list with the outcome. If `outfile` is provided, the result will
 #'   also be saved in the location of `outfile`.
 #' @export
 #' 
 get_test_results <- function(
     package = "clinsight", 
-    reporter = testthat::ListReporter,
     outfile = NULL,
-    run_as_not_cran = TRUE
+    include_skipped = TRUE,
+    run_as_not_cran = TRUE,
+    reporter = testthat::ListReporter
 ){
   stopifnot(is.null(outfile) || tools::file_ext(outfile) == "rds")
   if(!is.null(outfile)){
@@ -573,7 +608,10 @@ get_test_results <- function(
     stop_on_warning = FALSE
   )
   cat("\n\n----------------------------\n\nFinished unit testing. Results: \n")
-  test_results <- format_test_results(test_results_raw)
+  test_results <- format_test_results(
+    test_results_raw, 
+    include_skipped = include_skipped
+  )
   
   if(is.null(outfile)) return(test_results)
   saveRDS(test_results, outfile)
@@ -591,6 +629,7 @@ get_test_results <- function(
 #'
 #' @param results An object of class `testthat_results`, created with one of the
 #'   `testthat::test_*` functions.
+#' @inheritParams get_test_results
 #'
 #' @return A list with test results and metadata containing information such as
 #'   a summary of the tests and their outcome, a timestamp, and the results of
@@ -598,7 +637,8 @@ get_test_results <- function(
 #' @noRd
 #' 
 format_test_results <- function(
-    results
+    results,
+    include_skipped = TRUE
 ){
   if(isFALSE(inherits(results, "testthat_results"))){
     stop("Expecting an object of class 'testthat_results'")
@@ -617,29 +657,71 @@ format_test_results <- function(
     sum_results <- sapply(test_df[c("failed", "skipped", "error", "warning", "passed")], sum)
     print(sum_results)
     test_results[["sum_results"]] <- sum_results
-    test_outcome <- ifelse(isTRUE(all_tests_passed(test_results)), "pass", "fail")
+    test_outcome <- ifelse(
+      isTRUE(all_tests_passed(test_results, include_skipped = include_skipped)), 
+      "pass", 
+      "fail"
+    )
     test_results[["test_outcome"]] <-  test_outcome
   },
   error = function(x) "Could not summarize results. Verify results manually"
   )
   tryCatch({
+    skipped_tests <- unique(with(test_df, file[skipped]))
+    if(length(skipped_tests) != 0){
+      cat(
+        "\nTest files with skipped tests:\n", 
+        paste0(skipped_tests, collapse = "\n"), "\n", 
+        sep = ""
+      )
+      res <- unlist(with(test_df, result[file %in% skipped_tests]), recursive = FALSE) 
+      res <- res[sapply(res, expectation_type, "skip")]
+      names(res) <- sapply(res, \(x) x$test)
+      print(res)
+    }
     if(identical(test_outcome, "pass")) {
       cat("All tests passed successfully\n")
     } else{
       warning("Not all tests passed successfully. Verify the outcome.")
-      failed_tests <- with(test_df, file[failed != 0])
+      error_tests <- unique(with(test_df, file[error]))
+      if(length(error_tests) != 0){
+        cat(
+          "Test files with errors:\n", 
+          paste0(error_tests, collapse = "\n"), "\n\n",
+          sep = ""
+        )
+      cat("Tests in which error occurred:\n")
+      print(with(test_df, test[file %in% error_tests]))
+      cat("\n")
+      ## Note: not printing error messages because it is hard to retrieve them 
+      ## robustly from the current test format
+      }
+      failed_tests <- unique(with(test_df, file[failed != 0]))
       if(length(failed_tests) != 0){
         cat(
-          "There was a failure in the following tests: \n", 
-          paste0(failed_tests, collapse = "\n"), 
-          "\n",
+          "Test files with failures:\n", 
+          paste0(failed_tests, collapse = "\n"), "\n",
           sep = ""
         )
         cat("Failure messages: \n\n")
         res <- unlist(with(test_df, result[file %in% failed_tests]), recursive = FALSE) 
-        lapply(res, \(x){if(expectation_type(x, "failure")) x[]}) |> 
-          unlist() |> 
-          cat(sep = "\n\n") 
+        res <- res[sapply(res, expectation_type, "failure")]
+        names(res) <- sapply(res, \(x) x$test)
+        print(res)
+      }
+      warning_tests <- unique(with(test_df, file[warning != 0]))
+      if(length(warning_tests) != 0){
+        cat(
+          "Test files with warnings:\n", 
+          paste0(warning_tests, collapse = "\n"), 
+          "\n",
+          sep = ""
+        )
+        cat("Warning messages: \n\n")
+        res <- unlist(with(test_df, result[file %in% warning_tests]), recursive = FALSE)
+        res <- res[sapply(res, expectation_type, "warning")]
+        names(res) <- sapply(res, \(x) x$test)
+        print(res)
       }
     }
   },
@@ -656,12 +738,16 @@ format_test_results <- function(
 #' @param results A list with test results. Should contain `var`
 #' @param var A character vector with the name of the list element that contains
 #'   the summary results.
-#' @param include_skipped Boolean. Whether to check if no tests were skipped.
+#' @inheritParams get_test_results
 #'
 #' @return A boolean.
 #' @noRd
 #' 
-all_tests_passed <- function(results, var = "sum_results", include_skipped = TRUE){
+all_tests_passed <- function(
+    results, 
+    var = "sum_results", 
+    include_skipped = TRUE
+){
   stopifnot("results needs to be a list" = inherits(results, "list"))
   if(!var %in% names(results)){
     warning(paste0(var, " is missing from the results. Cannot determine if all tests passed"))
@@ -707,14 +793,15 @@ custom_config_path <- function(
   Sys.getenv("CONFIG_PATH", app_sys("golem-config.yml")) 
 }
 
-dblclick_to_form <- function(bttn_ns) {
+dblclick_to_form <- function(bttn_ns, button_id = "go_to_form") {
+  stopifnot(is.character(bttn_ns), is.character(button_id %||% ""))
   DT::JS(
     "table.on('dblclick', 'tbody tr', function(t) {",
     # This processing assumes `server = TRUE`
     "var current_index = table.row(this).index();",
     "var current_rows = table.ajax.json().DT_rows_current;",
     "table.shinyMethods.selectRows(current_rows[current_index]);",
-    "document.getElementById(", deparse(NS(bttn_ns, "go_to_form")), ").click();",
+    "document.getElementById(", deparse(NS(bttn_ns, button_id)), ").click();",
     "})"
   )}
 

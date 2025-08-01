@@ -9,3 +9,4 @@ authenticate_ui()
 \description{
 Authentication implementation in the UI, using \code{shinymanager}.
 }
+\keyword{internal}

@@ -24,6 +24,7 @@ A ggplot2 object.
 Creates a small bar chart.
 }
 \examples{
+\dontrun{
  df <- mtcars |>
  dplyr::mutate(
   fill_color = sample(c(TRUE, FALSE), 1),
@@ -31,3 +32,5 @@ Creates a small bar chart.
   )
 fig_barplot(df, cyl, fill_color)
 }
+}
+\keyword{internal}

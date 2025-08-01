@@ -20,6 +20,7 @@ This is needed since boxplot outliers will cannot be removed in interactive
 \code{plotly} figures due to a bug. See also
 }
 \examples{
+\dontrun{
 library(ggplot2)
 library(plotly)
 set.seed(2023) # for reproducible jitter
@@ -33,5 +34,7 @@ fig
 
 #The function `remove_boxplot_outliers()` corrects for this:
 remove_boxplot_outliers(ggplotly(fig))
+}
 
 }
+\keyword{internal}

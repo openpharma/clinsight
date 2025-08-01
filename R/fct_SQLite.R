@@ -30,11 +30,13 @@ get_db_connection <- function(
 #' @param drv The DB driver to use. Standard the SQLite driver.
 #'
 #' @return Nothing will be returned by default.
-#' @export
+#' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #'  library(DBI)
 #'  db_temp_connect(tempfile(), DBI::dbWriteTable(con, "test_table", mtcars))
+#' }
 #'  
 db_temp_connect <- function(db_path, code, drv = RSQLite::SQLite()){
   withr::with_db_connection(
@@ -96,7 +98,7 @@ db_create <- function(
     "query_data"      = query_data_skeleton
   )
   idx_pk_cols <- list(
-    all_review_data = idx_cols
+    all_review_data = key_columns
   )
   other_data <- list(
     "db_synch_time"   = data.frame(synch_time = data_synch_time),
@@ -160,15 +162,15 @@ db_add_primary_key <- function(con, name, value, keys = NULL) {
 #' all_review_data.
 #'
 #' @param con A DBI Connection to the SQLite DB
-#' @param keys A character vector specifying which columns should not be updated
-#'   in a table. Defaults to 'id' and the package-defined index columns
-#'   (`idx_cols`).
+#' @param key_cols An optional character vector specifying which columns should
+#'   not be updated in a table. If unset, defaults to 'id' and the
+#'   package-defined [key_columns()].
 #'
 #' @keywords internal
-db_add_log <- function(con, keys = c("id", idx_cols)) {
-  stopifnot(is.character(keys))
-  all_keys <- paste(keys, collapse = ", ")
-  stopifnot("'keys' parameter cannot be empty" = nchar(all_keys) > 0)
+db_add_log <- function(con, key_cols = c("id", key_columns)) {
+  stopifnot(is.character(key_cols))
+  all_keys <- paste(key_cols, collapse = ", ")
+  stopifnot("'key_cols' parameter cannot be empty" = nchar(all_keys) > 0)
   
   DBI::dbCreateTable(
     con, 
@@ -225,7 +227,8 @@ db_add_log <- function(con, keys = c("id", idx_cols)) {
 #'
 #' @param data An updated data frame with review data.
 #' @param db_path Character vector. Path to the database.
-#' @param common_vars A character vector containing the common key variables.
+#' @param key_cols A character vector containing the common key variables.
+#'   Defaults to `ClinSight` [key_columns()].
 #' @param edit_time_var A character vector with the column name of the edit-time
 #'   variable.
 #'
@@ -235,8 +238,7 @@ db_add_log <- function(con, keys = c("id", idx_cols)) {
 db_update <- function(
     data, 
     db_path,
-    common_vars = c("subject_id", "event_name", "item_group", 
-                    "form_repeat", "item_name"), 
+    key_cols = key_columns,
     edit_time_var = "edit_date_time"
 ){
   stopifnot(file.exists(db_path))
@@ -262,12 +264,12 @@ db_update <- function(
   updated_review_data <- update_review_data(
     review_df = review_data,
     latest_review_data = data,
-    common_vars = common_vars,
+    key_cols = key_cols,
     edit_time_var = edit_time_var,
     update_time = data_synch_time
   )
   cat("writing updated review data to database...\n")
-  db_upsert(con, updated_review_data, common_vars)
+  db_upsert(con, updated_review_data, key_cols)
   DBI::dbWriteTable(
     con, 
     "db_synch_time", 
@@ -278,26 +280,26 @@ db_update <- function(
 }
 
 #' UPSERT to all_review_data
-#' 
+#'
 #' Performs an UPSERT on all_review_data. New records will be appended to the
 #' table. Changed/updated records will be applied to the table based on the
 #' index column constraint.
-#' 
+#'
 #' @param con A DBI Connection to the SQLite DB
 #' @param data A data frame containing the data to UPSERT into all_review_data
-#' @param idx_cols A character vector specifying which columns define a
-#'   unique index for a row
-#'   
+#' @param key_cols A character vector specifying which columns define a unique
+#'   index for a row. Defaults to `ClinSight` [key_columns()].
+#'
 #' @return invisibly returns TRUE. Is run for it's side effects on the DB.
-#' 
+#'
 #' @keywords internal
-db_upsert <- function(con, data, idx_cols) {
+db_upsert <- function(con, data, key_cols = key_columns) {
   if ("id" %in% names(data))
     data$id <- NULL
-  cols_to_update <- names(data)[!names(data) %in% idx_cols]
+  cols_to_update <- names(data)[!names(data) %in% key_cols]
   cols_to_insert <- names(data) |> 
     paste(collapse = ", ")
-  constraint_cols <- paste(idx_cols, collapse = ", ")
+  constraint_cols <- paste(key_cols, collapse = ", ")
   dplyr::copy_to(con, data, "row_updates")
   rs <- DBI::dbSendStatement(con, paste(
     "INSERT INTO",
@@ -327,7 +329,7 @@ db_upsert <- function(con, data, idx_cols) {
 #'
 #' @return Review information will be written in the database. No local objects
 #'   will be returned.
-#' @export
+#' @keywords internal
 #' 
 db_save_review <- function(
     rv_records,
@@ -375,10 +377,12 @@ db_save_review <- function(
 #' needs to be appended.
 #'
 #' @return A table in a database will be appended. No values will be returned. 
-#' @export 
+#' @keywords internal 
 #'
 #' @examples 
+#' \dontrun{
 #' db_save(mtcars, ":memory:", "mtcars_db")
+#' }
 #' 
 db_save <- function(data, db_path, db_table = "query_data"){
   stopifnot(is.data.frame(data), is.character(db_table))
@@ -512,73 +516,4 @@ db_get_version <- function(db_path) {
   },
   error = \(e) {""}
   )
-}
-
-update_db_version <- function(db_path, version = "1.1") {
-  stopifnot(file.exists(db_path))
-  version <- match.arg(version)
-  temp_path <- withr::local_tempfile(fileext = ".sqlite")
-  file.copy(db_path, temp_path)
-  con <- get_db_connection(temp_path)
-  
-  current_version <- tryCatch({
-    DBI::dbGetQuery(con, "SELECT version FROM db_version") |> 
-      unlist(use.names = FALSE)}, error = \(e){""})
-  if(identical(current_version, db_version)) return("Database up to date. No update needed")
-  
-  review_skeleton <- DBI::dbGetQuery(con, "SELECT * FROM all_review_data LIMIT 0")
-  rs <- DBI::dbSendQuery(con, "ALTER TABLE all_review_data RENAME TO all_review_data_old")
-  DBI::dbClearResult(rs)
-  rs <- DBI::dbSendQuery(con, "ALTER TABLE query_data RENAME TO query_data_old")
-  DBI::dbClearResult(rs)
-  
-  new_pk_data <- list(
-    "all_review_data" = review_skeleton,
-    "query_data"      = query_data_skeleton
-  )
-  idx_pk_cols <- list(
-    all_review_data = idx_cols
-  )
-  other_data <- list(
-    "db_version" = data.frame(version = db_version)
-  )
-  db_add_tables(con, new_pk_data, idx_pk_cols, other_data)
-  
-  query_cols <- paste(names(query_data_skeleton), collapse = ", ")
-  cat("\nInserting old query records into new table.\n")
-  rs <- DBI::dbSendStatement(con, sprintf("INSERT INTO query_data (%1$s) SELECT %1$s FROM query_data_old", query_cols))
-  DBI::dbClearResult(rs)
-  
-  stopifnot(DBI::dbGetQuery(con, "SELECT COUNT(*) FROM query_data") == 
-              DBI::dbGetQuery(con, "SELECT COUNT(*) FROM query_data_old"))
-  
-  rs <- DBI::dbSendStatement(con, "DROP TABLE query_data_old")
-  DBI::dbClearResult(rs)
-  
-  cat("\nInserting old review records into new tables.\n")
-  cols_to_update <- names(review_skeleton)[!names(review_skeleton) %in% idx_pk_cols$all_review_data]
-  cols_to_insert <- names(review_skeleton) |> 
-    paste(collapse = ", ")
-  upsert_statement <- paste(
-    "INSERT INTO",
-    "all_review_data",
-    sprintf("(%s)", cols_to_insert),
-    sprintf("SELECT %s FROM all_review_data_old WHERE true", cols_to_insert),
-    "ON CONFLICT",
-    sprintf("(%s)", paste(idx_pk_cols$all_review_data, collapse = ", ")),
-    "DO UPDATE SET",
-    sprintf("%1$s = excluded.%1$s", cols_to_update) |> paste(collapse = ", ")
-  )
-  rs <- DBI::dbSendStatement(con, upsert_statement)
-  DBI::dbClearResult(rs)
-  
-  stopifnot(DBI::dbGetQuery(con, "SELECT COUNT(*) FROM all_review_data") +
-              DBI::dbGetQuery(con, "SELECT COUNT(*) FROM all_review_data_log") == 
-              DBI::dbGetQuery(con, "SELECT COUNT(*) FROM all_review_data_old"))
-  
-  rs <- DBI::dbSendStatement(con, "DROP TABLE all_review_data_old")
-  DBI::dbClearResult(rs)
-  
-  file.copy(temp_path, db_path, overwrite = TRUE)
-  cat("Finished updating to new database standard\n\n")
 }

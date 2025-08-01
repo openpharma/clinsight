@@ -4,14 +4,14 @@
 \alias{db_add_log}
 \title{Add Logging Table}
 \usage{
-db_add_log(con, keys = c("id", idx_cols))
+db_add_log(con, key_cols = c("id", key_columns))
 }
 \arguments{
 \item{con}{A DBI Connection to the SQLite DB}
 
-\item{keys}{A character vector specifying which columns should not be updated
-in a table. Defaults to 'id' and the package-defined index columns
-(\code{idx_cols}).}
+\item{key_cols}{An optional character vector specifying which columns should
+not be updated in a table. If unset, defaults to 'id' and the
+package-defined \code{\link[=key_columns]{key_columns()}}.}
 }
 \description{
 Both creates the logging table and the trigger to update it for

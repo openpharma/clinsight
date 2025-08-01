@@ -48,8 +48,14 @@ mod_review_form_tbl_server <- function(
     table_names = NULL,
     title = NULL
 ){
+  stopifnot(is.character(form))
   stopifnot(is.reactive(form_data))
+  stopifnot(is.reactive(form_review_data))
+  stopifnot(is.character(form_items))
+  stopifnot(is.reactive(active_subject))
   stopifnot(is.reactive(show_all))
+  stopifnot(is.character(table_names %||% ""))
+  stopifnot(is.character(title %||% ""))
 
   moduleServer(id, function(input, output, session){
     ns <- session$ns
@@ -69,40 +75,40 @@ mod_review_form_tbl_server <- function(
         form_review_data(), 
         form = form, 
         form_items = form_items,
-        active_subject = active_subject(),
-        is_reviewed = NULL,
+        active_subject = if(identical(session$userData$review_type(), "form")) NULL else active_subject(),
+        pending_form_review_status = NULL,
         is_SAE = identical(title, "Serious Adverse Events")
       )
     }) |> 
-      bindEvent(form_data(), form_review_data(), active_subject())
+      bindEvent(form_data(), form_review_data(), active_subject(), session$userData$review_type())
     
     ############################### Observers: #################################
-    
     
     observe({
       golem::cat_dev(form, "| Resetting userData\n")
       reload_data(reload_data() + 1)
       datatable_rendered(NULL)
-      session$userData$update_checkboxes[[form]] <- NULL
-      session$userData$review_records[[form]] <- data.frame(id = integer(), reviewed = character())
-    }) |> 
-      bindEvent(active_subject(), form_review_data(), form_data())
+      session$userData$pending_form_review_status[[form]] <- NULL
+      session$userData$pending_review_records[[form]] <- data.frame(id = integer(), reviewed = character())
+    }, priority = 100) |> 
+      bindEvent(active_subject(), form_review_data(), form_data(), session$userData$review_type())
     
     observeEvent(datatable_rendered(), {
+      golem::cat_dev(form, "| renewing table_data using merged_form_data()\n\n")
       table_data(merged_form_data())
     }, ignoreInit = TRUE)
     
-    observeEvent(session$userData$update_checkboxes[[form]], {
+    observeEvent(session$userData$pending_form_review_status[[form]], {
       req(datatable_rendered())
       golem::cat_dev(form, "| Updating checkboxes\n")
       reload_data(reload_data() + 1)
-      checked <- session$userData$update_checkboxes[[form]]
+      checked <- session$userData$pending_form_review_status[[form]]
       df <- table_data() |> 
         dplyr::mutate(
-          o_reviewed = dplyr::if_else(
-            subject_id == active_subject(), 
-            lapply(o_reviewed, modifyList, list(updated = checked)),
-            o_reviewed
+          row_review_status = dplyr::if_else(
+            identical(session$userData$review_type(), "form") | subject_id == active_subject(),
+            lapply(row_review_status, modifyList, list(updated = checked)),
+            row_review_status
           )
         )
       table_data(df)
@@ -112,17 +118,16 @@ mod_review_form_tbl_server <- function(
       golem::cat_dev(form, "| table review selection changed to:\n")
       golem::print_dev(input$table_review_selection[c("id", "reviewed")])
       # Update review values for session's user data
-      session$userData$update_checkboxes[[form]] <- NULL
-      session$userData$review_records[[form]] <-
-        update_review_records(
-          session$userData$review_records[[form]],
+      session$userData$pending_form_review_status[[form]] <- NULL
+      session$userData$pending_review_records[[form]] <-
+        update_pending_review_records(
+          session$userData$pending_review_records[[form]],
           input$table_review_selection[, c("id", "reviewed")],
-          subset(form_review_data(), subject_id == active_subject(),
-                 c("id", "reviewed"))
+          form_review_data()
         )
       
       # Update the table's data reactive
-      df <- update_tbl_data_from_datatable(
+      df <- update_row_review_status(
         table_data(), 
         input$table_review_selection
       )
@@ -160,6 +165,20 @@ mod_review_form_tbl_server <- function(
         form, "| show_all() trigger changed. Incrementing reload_data()",
         "and toggle showing subject_id column \n"
       )
+        
+      row_disabled <- rep_len(FALSE, nrow(table_data()))
+      if(identical(session$userData$review_type(), "subject")) {
+        row_disabled <- table_data()$subject_id != active_subject()
+      }
+      df <- table_data()
+      df[["row_review_status"]] <- lapply(
+        seq_along(table_data()$row_review_status), \(x){
+          modifyList(
+            table_data()$row_review_status[[x]], list(disabled = row_disabled[x])
+          )
+        }
+      )
+      table_data(df)
       reload_data(reload_data() + 1)
       index <- match("subject_id", colnames(table_data())) - 1
       if (show_all()) {
@@ -173,9 +192,10 @@ mod_review_form_tbl_server <- function(
     
     output[["table"]] <- DT::renderDT({
       datatable_rendered(TRUE)
+      golem::cat_dev(form, "| Rendering table output in renderDT\n")
       datatable_custom(
         subset(merged_form_data(), isolate(show_all() | subject_id == active_subject())), 
-        rename_vars = c("Review Status" = "o_reviewed", table_names), 
+        rename_vars = c("Reviewed" = "row_review_status", table_names), 
         rownames= FALSE,
         title = title,
         export_label = paste(
@@ -189,7 +209,7 @@ mod_review_form_tbl_server <- function(
         options = list(
           columnDefs = list(
             list(
-              targets = "o_reviewed",
+              targets = "row_review_status",
               orderable = FALSE,
               render = checkbox_render
             ),
@@ -209,7 +229,14 @@ mod_review_form_tbl_server <- function(
           error = function(e) e
         )
       )
-    } 
+    }
+    
+    shiny::exportTestValues(
+      pending_review_records = tryCatch(
+        session$userData$pending_review_records[[form]],
+        error = function(e) e
+      )
+    )
   })
 }
     

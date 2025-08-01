@@ -6,7 +6,7 @@
 \usage{
 summarize_review_data(
   data,
-  common_vars = c("subject_id", "item_group"),
+  key_cols = c("subject_id", "item_group"),
   event_var = "event_name",
   date_time_vars = "edit_date_time",
   status_var = "status",
@@ -16,7 +16,7 @@ summarize_review_data(
 \arguments{
 \item{data}{Data frame with review data.}
 
-\item{common_vars}{A character vector containing the common key variables.}
+\item{key_cols}{A character vector containing the common key variables.}
 
 \item{event_var}{A character string containing the name of the column with
 the event names.}
@@ -41,3 +41,4 @@ will be collapsed into one column separated with a comma, using
 which is then passed to the modules \code{\link[=mod_header_widgets_server]{mod_header_widgets_server()}},
 \code{\link[=mod_navigate_review_server]{mod_navigate_review_server()}}, and \code{\link[=mod_report_server]{mod_report_server()}}.
 }
+\keyword{internal}

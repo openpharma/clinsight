@@ -8,7 +8,7 @@ check_appdata(
   data = appdata,
   meta = metadata,
   required_cols = c("site_code", "subject_id", "event_date", "event_name", "item_group",
-    "form_repeat", "item_name", "vis_num", "edit_date_time", "day")
+    "form_repeat", "item_name", "edit_date_time", "day")
 )
 }
 \arguments{
@@ -22,3 +22,4 @@ required for the application to run appropriately.}
 \description{
 Checks data for compatibility with metadata.
 }
+\keyword{internal}

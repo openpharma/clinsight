@@ -38,3 +38,4 @@ login methods alternative to \code{shinymanager} are used.}
 \description{
 Function to authenticate the main server.
 }
+\keyword{internal}

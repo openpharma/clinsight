@@ -19,6 +19,7 @@ Get all unique values from variables that are available within a data frame
 or a list of dataframes.
 }
 \examples{
+\dontrun{
  list_with_data <- list(
   data.frame(
     "Sites" = c("site_1", "site_3", "site_4"),
@@ -31,5 +32,7 @@ or a list of dataframes.
  )
 
  get_unique_vars(list_with_data, c("Sites", "ID"))
+}
 
 }
+\keyword{internal}

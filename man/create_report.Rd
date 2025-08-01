@@ -23,3 +23,4 @@ A PDF report will be created.
 \description{
 Creates a PDF markdown report.
 }
+\keyword{internal}

@@ -12,7 +12,7 @@
 #'   treatment item in the timeline.
 #'
 #' @return A data frame with timeline data.
-#' @export
+#' @keywords internal
 #' 
 get_timeline_data <- function(
     data, 
@@ -166,7 +166,7 @@ get_timeline_data <- function(
 #'   duplicate names exist for each participant.
 #'
 #' @return A data frame with available data points per form.
-#' @export
+#' @keywords internal
 #' 
 get_available_data <- function(
     data, 
@@ -179,7 +179,7 @@ get_available_data <- function(
   study_event_selectors <- lapply(
     all_forms$form, 
     \(x){
-      if(with(all_forms, main_tab[form == x]) == "Study data"){
+      if(isFALSE("Name" %in% names(tables[[x]]))){
         if(is.null(data[[x]])) return(NULL)
         df_x <- data[[x]] |> 
           dplyr::select(
@@ -231,7 +231,8 @@ get_available_data <- function(
 #'
 #' @return A data frame with the overview data. Columns are: 
 #' `subject_id`, `status`, `WHO.classification`, `Age`, `Sex`, `event_name`. 
-#' @export
+#' 
+#' @keywords internal
 #'
 get_static_overview_data <- function(
     data, 
@@ -240,7 +241,6 @@ get_static_overview_data <- function(
   stopifnot(is.list(data))
   expected_general_columns <- expected_general_columns %||% character(0)
   stopifnot(is.character(expected_general_columns))
-  
   visits <- data |> 
     bind_rows_custom("item_value") |> 
     dplyr::filter(
@@ -248,8 +248,8 @@ get_static_overview_data <- function(
       !event_name %in% c("Any visit", "Exit"),
       !is.na(subject_id)
     ) |> 
+    dplyr::arrange(subject_id, day) |> 
     dplyr::distinct(subject_id, event_name) |> 
-    dplyr::arrange(subject_id, factor(event_name, levels = order_string(event_name))) |> 
     collapse_column_vals(group_by = "subject_id") |> 
     dplyr::distinct()
   
@@ -257,6 +257,6 @@ get_static_overview_data <- function(
     data[["General"]], 
     expected_columns = expected_general_columns
   ) |>
-    dplyr::select(tidyr::all_of("subject_id"), tidyr::any_of(c("status", "WHO.classification", "Age", "Sex"))) |>
+    dplyr::select(tidyr::all_of("subject_id"), tidyr::any_of(c("subject_status", "WHO.classification", "Age", "Sex"))) |>
     dplyr::left_join(visits, by = "subject_id")
 }

@@ -18,6 +18,9 @@ arrange the sites/individuals properly within the application.
 Arranges first on all string letters, and then on the numbers.
 }
 \examples{
+\dontrun{
 order_string(rownames(mtcars))
+}
 
 }
+\keyword{internal}

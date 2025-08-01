@@ -11,6 +11,7 @@
 #'
 #' @param input,output,session Internal parameters for `shiny`.
 #' @seealso [app_ui()], [run_app()]
+#' @keywords internal
 #' 
 app_server <- function(
     input, 
@@ -30,8 +31,9 @@ app_server <- function(
     })
   check_appdata(app_data, meta)
   
-  session$userData$review_records <- reactiveValues()
-  session$userData$update_checkboxes <- reactiveValues()
+  session$userData$pending_review_records <- reactiveValues()
+  session$userData$pending_form_review_status <- reactiveValues()
+  session$userData$review_type <- reactiveVal("subject")
   
   res_auth <- authenticate_server(
     all_sites = app_vars$Sites$site_code, 
@@ -200,6 +202,11 @@ app_server <- function(
     bslib::nav_select(id = id_to_change, selected = navinfo$active_form)
   })
   
+  output$form_level_review <- reactive({
+    identical(session$userData$review_type(), "form")
+  })
+  outputOptions(output, "form_level_review", suspendWhenHidden = FALSE)
+
   timeline_data <- reactive({
     get_timeline_data(
       r$filtered_data, 
@@ -261,8 +268,7 @@ app_server <- function(
     id = "header_widgets_1", 
     r = r, 
     rev_data = rev_data, 
-    navinfo = navinfo, 
-    events = meta$events
+    navinfo = navinfo
   )
   
   
@@ -278,6 +284,15 @@ app_server <- function(
       )
       req(with(pwd_mngt, must_change[user == res_auth[["user"]]]) == "FALSE") 
     }
+    
+    output[["study_name"]] <-  renderText({
+      study_name <- meta$settings$study_name %||% ""
+      if (nchar(study_name) > 40){
+        paste0(trimws(substr(study_name, 1, 37)), "...")
+      } else {
+        study_name
+      }
+    })
     
     mod_main_sidebar_server(
       id = "main_sidebar_1",
@@ -328,6 +343,7 @@ app_server <- function(
     user_db = user_db,
     active_participant = r$subject_id,
     active_form = navinfo$active_form,
+    active_user_role = r$user_role,
     user_error = user_error()
   )
 }

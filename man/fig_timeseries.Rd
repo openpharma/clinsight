@@ -50,6 +50,7 @@ Creates a ggplot2 faceted time series line plot. Can be called within
 \code{\link[=plotly_figure]{plotly_figure()}} to create an interactive figure.
 }
 \examples{
+\dontrun{
 set.seed(2025)
 mock_data <- lapply(paste0("Subject", 1:10) , \(x){
   data.frame(
@@ -70,6 +71,8 @@ mock_data <- lapply(paste0("Subject", 1:10) , \(x){
   dplyr::bind_rows()
 fig_timeseries(mock_data, id_to_highlight = "Subject10")
 }
+}
 \seealso{
 \code{\link[=plotly_figure]{plotly_figure()}}
 }
+\keyword{internal}

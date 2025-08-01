@@ -19,5 +19,8 @@ to ensure that the crosstalk widgets stay connected (see also
 \href{https://github.com/rstudio/crosstalk/issues/132#issue-1393291183}{here}).
 }
 \examples{
+\dontrun{
 create_unique_id(5)
 }
+}
+\keyword{internal}

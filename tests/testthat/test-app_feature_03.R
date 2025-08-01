@@ -48,7 +48,7 @@ describe(
           input = vector_select(input_names, exclude = "plotly_relayout"), 
           output = vector_select(
             output_names, 
-            exclude = c("visit_figure", "sf_vital_signs-figure")
+            exclude = c("visit_figure", "sf_vital_signs-figure", "start_page_1-overview_table")
           )
         )
         app$set_inputs(
@@ -127,7 +127,7 @@ describe(
             # this test is not about these figures. 
             # Also, these are already captured in app-feature_01
             exclude = c("visit_figure", "sf_vital_signs-figure",
-                        "timeline_fig-timeline")
+                        "timeline_fig-timeline", "start_page_1-overview_table")
             )
         )
         app$click("main_sidebar_1-write_query-query_add_input")

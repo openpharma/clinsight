@@ -16,8 +16,11 @@ A character vector with all the layer names of the ggplot object.
 Helper function to extract ggplot layer names from a ggplot object
 }
 \examples{
+\dontrun{
 library(ggplot2)
 fig <- ggplot(mtcars, aes(x = cyl, y = mpg, group = cyl)) + geom_boxplot() + geom_point()
 get_ggplot_layer_names(fig)
+}
 
 }
+\keyword{internal}

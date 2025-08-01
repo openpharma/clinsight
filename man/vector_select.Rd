@@ -23,6 +23,9 @@ Small helper function to select values from a character vector, based on
 regular expressions.
 }
 \examples{
+\dontrun{
 vector_select(names(iris), include = "Sepal", exclude = "Width")
+}
 
 }
+\keyword{internal}
