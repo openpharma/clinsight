@@ -565,8 +565,7 @@ datatable_custom <- function(
     fixed_opts[["buttons"]] <- list(list(
       extend = 'excel',
       text = '<i class="fa-solid fa-download"></i>',
-      filename = paste("clinsight", export_label, sep = "."),
-      title = paste0(export_label, " | extracted from ClinSight")
+      action = DT::JS('hiddenDownloadHandlerTrigger')
     ))
     fixed_opts[["dom"]] <- paste0('B', fixed_opts[["dom"]])
   }
@@ -574,7 +573,7 @@ datatable_custom <- function(
   opts <- default_opts |>
     modifyList(options) |>
     modifyList(fixed_opts)
-  
+
   DT::datatable(
     data, 
     selection = selection,
