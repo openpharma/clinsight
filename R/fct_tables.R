@@ -88,10 +88,12 @@ create_table.default <- function(
 add_row_review_status <- function(data, id_cols) {
   dplyr::mutate(
     data,
-    row_review_status = dplyr::case_when(
-      any(reviewed == "No") & any(reviewed == "Yes") ~ list(list(reviewed = NA, ids = id)),
-      any(reviewed == "Yes") ~ list(list(reviewed = TRUE, ids = id)),
-      .default = list(list(reviewed = FALSE, ids = id))
+    row_review_status = ifelse(
+      any(reviewed == "No") & any(reviewed == "Yes"), list(list(reviewed = NA, ids = id)),
+      ifelse(
+        any(reviewed == "Yes"), list(list(reviewed = TRUE, ids = id)),
+        list(list(reviewed = FALSE, ids = id))
+      )
     ),
     .by = dplyr::all_of(id_cols))
 }
