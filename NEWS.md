@@ -1,5 +1,9 @@
 # clinsight (development version)
 
+## Changed
+
+- Replaced `dplyr::case_when()` with `ifelse()` in the row review status calculation for efficiency
+
 # clinsight 0.3.0
 
 ## Developer notes
