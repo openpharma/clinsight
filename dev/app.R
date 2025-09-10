@@ -15,11 +15,49 @@ merged_data <- merge_meta_with_data(
   data = my_raw_data,
   meta = metadata
   )
+
+# Build a version of `app_data` & app_vars
+app_data <- get_appdata(data = merged_data, meta = metadata) 
+app_vars <- get_meta_vars(data = app_data, meta = metadata) 
+
+# Build a 'app_tables'
+app_tables <- lapply(
+  setNames(names(app_data), names(app_data)), \(x){
+    create_table(app_data[[x]], expected_columns = names(app_vars$items[[x]]))
+  })
+
+# Build a 'available_data'
+available_data <- get_available_data(
+  data = app_data,
+  tables = app_tables,
+  all_forms = app_vars$all_forms,
+  form_repeat_name = with(
+    meta[["table_names"]],
+    table_name[raw_name == "form_repeat"]
+  ) |>
+    tryCatch(error = \(e) "N")
+)
 # tempdir not useful for production mode
 data_folder <- "."
-data_path <- file.path(data_folder, 
-                       "merged_data.rds")
-saveRDS(merged_data, data_path)
+# data_path <- file.path(data_folder, 
+#                        "merged_data.rds")
+# saveRDS(merged_data, data_path)
+# Current saves both RDS and Parquet for data frames for continuity purposes
+save_objs <- c(
+  "metadata",
+  "app_data",
+  "app_vars",
+  "app_tables",
+  "available_data")
+purrr::walk(save_objs, function(x){
+  rds_file <- file.path(data_folder, paste0(x, ".rds"))
+  saveRDS(get(x), rds_file)
+  if(inherits(get(x), "data.frame")) {
+    pq_file <- file.path(data_folder, paste0(x, ".parquet"))
+    arrow::write_parquet(get(x), pq_file)
+  }
+})
+
 db_path <- file.path(data_folder, "user_db.sqlite")
 
 # if test_mode == FALSE, you'll need to setup...

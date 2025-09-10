@@ -18,18 +18,24 @@ app_server <- function(
     output, 
     session
 ){
+  
+  # Read in pre-processed R objects
   meta <- golem::get_golem_options("meta")
-  merged_data <- golem::get_golem_options("data")
+  app_data <- golem::get_golem_options("app_data")
+  app_vars <- golem::get_golem_options("app_vars")
+  app_tables <- golem::get_golem_options("app_tables")
+  available_data <- golem::get_golem_options("available_data")
+  # merged_data <- golem::get_golem_options("data")
   user_db <- golem::get_golem_options("user_db")
   credentials_db <- golem::get_golem_options("credentials_db")
   
-  app_data <- get_appdata(merged_data, meta = meta)
-  app_vars <- get_meta_vars(data = app_data, meta = meta)
-  app_tables <- lapply(
-    setNames(names(app_data), names(app_data)), \(x){
-      create_table(app_data[[x]], expected_columns = names(app_vars$items[[x]]))
-    })
-  check_appdata(app_data, meta)
+  # app_data <- get_appdata(merged_data, meta = meta)
+  # app_vars <- get_meta_vars(data = app_data, meta = meta)
+  # app_tables <- lapply(
+  #   setNames(names(app_data), names(app_data)), \(x){
+  #     create_table(app_data[[x]], expected_columns = names(app_vars$items[[x]]))
+  #   })
+  # check_appdata(app_data, meta)
   
   session$userData$pending_review_records <- reactiveValues()
   session$userData$pending_form_review_status <- reactiveValues()
@@ -43,16 +49,16 @@ app_server <- function(
   )
   
   # For query item selector drop-down menus:
-  available_data <- get_available_data(
-    data = app_data,
-    tables = app_tables,
-    all_forms = app_vars$all_forms,
-    form_repeat_name = with(
-      meta[["table_names"]], 
-      table_name[raw_name == "form_repeat"]
-      ) |> 
-      tryCatch(error = \(e) "N")
-  )
+  # available_data <- get_available_data(
+  #   data = app_data,
+  #   tables = app_tables,
+  #   all_forms = app_vars$all_forms,
+  #   form_repeat_name = with(
+  #     meta[["table_names"]],
+  #     table_name[raw_name == "form_repeat"]
+  #     ) |>
+  #     tryCatch(error = \(e) "N")
+  # )
   
   # For summary review data:
   static_overview_data <- get_static_overview_data(

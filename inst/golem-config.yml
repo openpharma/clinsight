@@ -5,6 +5,10 @@ default:
   user_identification: test_user
   study_data: !expr clinsight::clinsightful_data
   meta_data: !expr clinsight::metadata
+  app_data: !expr clinsight::cs_app_data
+  app_vars: !expr clinsight::cs_app_vars
+  app_tables: !expr clinsight::cs_app_tables
+  available_data: !expr clinsight::cs_available_data
   user_db: user_db.sqlite
   user_roles:
     Administrator: admin
@@ -17,8 +21,12 @@ default:
 dev:
   golem_wd: !expr golem::pkg_path()
 test:
-  study_data: study_data.rds
-  meta_data: metadata.rds
+  study_data: clinsight_data.rds
+  meta_data: meta_data.rds
+  app_data: app_data.rds
+  app_vars: app_vars.rds
+  app_tables: app_tables.rds
+  available_data: available_data.rds
 shinymanager:
   app_prod: yes
   user_identification: shinymanager

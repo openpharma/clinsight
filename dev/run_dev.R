@@ -20,12 +20,19 @@ load_and_run_app <- function(){
   old_golem_config <- Sys.getenv("GOLEM_CONFIG_ACTIVE")
   Sys.setenv("GOLEM_CONFIG_ACTIVE" = "dev")
   
+  # create db
+  db_path <- file.path(temp_folder, "user_db.sqlite")
+  if(file.exists(db_path)) file.remove(db_path)
+  db_create(get_review_data(clinsightful_data),
+            db_path = db_path
+  )
+  
   run_app(
     data_folder = temp_folder,
     onStart = \(){onStop(\(){
       unlink(temp_folder, recursive = TRUE); 
       Sys.setenv("GOLEM_CONFIG_ACTIVE" = old_golem_config)
-    })}
+      })}
   )
 } 
 

@@ -24,8 +24,12 @@ run_app <- function(
     ...
 ) {
   
-  data <- get_golem_config("study_data")
+  # data <- get_golem_config("study_data")
   meta <- get_golem_config("meta_data")
+  app_data <- get_golem_config("app_data")
+  app_vars <- get_golem_config("app_vars")
+  app_tables <- get_golem_config("app_tables")
+  available_data <- get_golem_config("available_data")
   user_db <- get_golem_config("user_db")
   use_shinymanager <- isTRUE(get_golem_config("user_identification") == "shinymanager")
   credentials_db <- get_golem_config("credentials_db")
@@ -39,23 +43,50 @@ run_app <- function(
       "Custom folder path provided in the 'data_folder' argument.",
       "File paths specified in the config.yml will be ignored."
     )
-    if(is.character(data)) data <- file.path(data_folder, basename(data))
+    # if(is.character(data)) data <- file.path(data_folder, basename(data))
     if(is.character(meta)) meta <- file.path(data_folder, basename(meta))
+    if(is.character(app_data)) app_data <- file.path(data_folder, basename(app_data))
+    if(is.character(app_vars)) app_vars <- file.path(data_folder, basename(app_vars))
+    if(is.character(app_tables)) app_tables <- file.path(data_folder, basename(app_tables))
+    if(is.character(available_data)) available_data <- file.path(data_folder, basename(available_data))
     user_db <-  file.path(data_folder, basename(user_db))
     if(!is.null(credentials_db)){
       credentials_db <- file.path(data_folder, basename(credentials_db)) 
     }
   }
   
-  ## Verify study data
-  if(is.character(data)){
-    if(!file.exists(data)) stop(paste0("Cannot find '", data, "'."))
-    if(tolower(tools::file_ext(data)) != "rds"){
-      stop("Invalid data format. Expecting a file .rds format")
+  # ## Verify study data
+  # if(is.character(data)){
+  #   if(!file.exists(data)) stop(paste0("Cannot find '", data, "'."))
+  #   if(tolower(tools::file_ext(data)) != "rds"){
+  #     stop("Invalid data format. Expecting a file .rds format")
+  #   }
+  #   data <- readRDS(data)
+  # } 
+  # stopifnot("Expecting study data to be in data frame format." = is.data.frame(data))
+  
+  
+  ## Verify app_data list
+  if(is.character(app_data)){
+    if(!file.exists(app_data)) stop(paste0("Cannot find '", app_data, "'."))
+    if(tolower(tools::file_ext(app_data)) != "rds"){
+      stop("Invalid 'app_data' format. Expecting a file .rds format")
     }
-    data <- readRDS(data)
+    app_data <- readRDS(app_data)
   } 
-  stopifnot("Expecting study data to be in data frame format." = is.data.frame(data))
+  stopifnot("Expecting 'app_data' to be in list format." = inherits(app_data, "list"))
+  
+  
+  ## Verify app_vars list
+  if(is.character(app_vars)){
+    if(!file.exists(app_vars)) stop(paste0("Cannot find '", app_vars, "'."))
+    if(tolower(tools::file_ext(app_vars)) != "rds"){
+      stop("Invalid 'app_vars' format. Expecting a file .rds format")
+    }
+    app_vars <- readRDS(app_vars)
+  } 
+  stopifnot("Expecting 'app_vars' to be in list format." = inherits(app_vars, "list"))
+  
   
   ## Verify metadata
   if(is.character(meta)){
@@ -65,7 +96,33 @@ run_app <- function(
     }
     meta <- readRDS(meta)
   }
-  stopifnot("Expecting metadata to be in a list format" = inherits(meta, "list"))
+  stopifnot("Expecting 'metadata' to be in a list format" = inherits(meta, "list"))
+  
+  
+  ## Verify app_tables list
+  if(is.character(app_tables)){
+    if(!file.exists(app_tables)) stop(paste0("Cannot find '", app_tables, "'."))
+    if(tolower(tools::file_ext(app_tables)) != "rds"){
+      stop("Invalid 'app_tables' format. Expecting a file .rds format")
+    }
+    app_tables <- readRDS(app_tables)
+  } 
+  stopifnot("Expecting 'app_tables' to be in list format." = inherits(app_tables, "list"))
+  
+  
+  ## Verify available_data
+  if(is.character(available_data)){
+    if(!file.exists(available_data)) stop(paste0("Cannot find '", available_data, "'."))
+    available_data <-
+      switch(
+        tolower(tools::file_ext(available_data)),
+        "rds" = readRDS(available_data),
+        "parquet" = arrow::read_parquet(available_data),
+        stop("Invalid 'available_data' format. Expecting an RDS or Parquet file.")
+      )
+  } 
+  stopifnot("Expecting 'available_data' to be in data frame format." = is.data.frame(available_data))
+  
   
   ## Verify user database
   stopifnot("user_db should be a character vector with a file path" = 
@@ -125,6 +182,10 @@ run_app <- function(
     ),
     golem_opts = list(
       meta = meta,
+      app_data = app_data,
+      app_vars = app_vars,
+      app_tables = app_tables,
+      available_data = available_data,
       data = data,
       user_db = user_db,
       credentials_db = credentials_db,
