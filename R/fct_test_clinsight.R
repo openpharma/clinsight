@@ -30,18 +30,10 @@ test_clinsight <- function(
   stopifnot(is.character(clinsight_config))
   study_data_path <- get_golem_config("study_data", config = clinsight_config)
   meta_data_path <- get_golem_config("meta_data", config = clinsight_config)
-  # app_data_path <- get_golem_config("app_data", config = clinsight_config)
-  # app_vars_path <- get_golem_config("app_vars", config = clinsight_config)
-  # app_tables_path <- get_golem_config("app_tables", config = clinsight_config)
-  # available_data_path <- get_golem_config("available_data", config = clinsight_config)
   if (
     clinsight_config %in% c("default", "dev") | 
     !is.character(study_data_path) |
     !is.character(meta_data_path) #|
-    # !is.character(app_data_path) |
-    # !is.character(app_vars_path) |
-    # !is.character(app_tables_path) |
-    # !is.character(available_data_path)
   ){
     stop("The 'default' or 'dev' config cannot be used with custom data, ", 
          "and meta_data, app_data, app_vars, app_tables, & available_data ", 
