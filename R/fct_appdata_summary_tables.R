@@ -166,7 +166,7 @@ get_timeline_data <- function(
 #'   duplicate names exist for each participant.
 #'
 #' @return A data frame with available data points per form.
-#' @keywords internal
+#' @export
 #' 
 get_available_data <- function(
     data, 
