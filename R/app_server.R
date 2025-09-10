@@ -20,12 +20,12 @@ app_server <- function(
 ){
   
   # Read in pre-processed R objects
+  # merged_data <- golem::get_golem_options("data")
   meta <- golem::get_golem_options("meta")
   app_data <- golem::get_golem_options("app_data")
   app_vars <- golem::get_golem_options("app_vars")
   app_tables <- golem::get_golem_options("app_tables")
   available_data <- golem::get_golem_options("available_data")
-  # merged_data <- golem::get_golem_options("data")
   user_db <- golem::get_golem_options("user_db")
   credentials_db <- golem::get_golem_options("credentials_db")
   
