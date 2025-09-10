@@ -1,5 +1,8 @@
 # clinsight (development version)
 
+- Moved `app_data`, `app_vars`, `app_tables`, & `available_data` to pre-processing step so that doesn't need to compute every session.
+- Started using parquet read / writes for `merged_data` & `available_data` to speed startup time.
+
 # clinsight 0.3.0
 
 ## Developer notes
