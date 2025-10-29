@@ -8,6 +8,10 @@
 
 - [fix_multiple_choice_vars()] now also fixes long-format multiple choice variables that end with a number (#247).
 
+## Developer notes
+
+- Updated role of long-term contributors to co-authors in Description field (#246).
+
 # clinsight 0.3.0
 
 ## Developer notes
