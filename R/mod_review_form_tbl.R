@@ -239,7 +239,11 @@ mod_review_form_tbl_server <- function(
           table_data() |> 
             subset(show_all() | subject_id == active_subject()) |> 
             dplyr::select(-row_review_status) |> 
-            dplyr::rename(dplyr::any_of(table_names)), 
+            dplyr::rename(dplyr::any_of(table_names)) |> 
+            dplyr::mutate(dplyr::across(
+              dplyr::where(is.character),
+              \(x) gsub("<b>|</b>", "", x)
+            )), 
           file,
           na = ""
         )
