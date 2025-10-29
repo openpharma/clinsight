@@ -225,7 +225,7 @@ mod_review_form_tbl_server <- function(
     })
     table_proxy <- DT::dataTableProxy("table")
 
-    output$table_download <- downloadHandler(
+    output[["table_download"]] <- downloadHandler(
       filename = function() {
         export_label = paste(
           ifelse(identical(title, "Serious Adverse Events"), "SAEs", simplify_string(form)), 
@@ -235,12 +235,13 @@ mod_review_form_tbl_server <- function(
         paste("clinsight", export_label, "csv", sep = ".")
       },
       content = function(file) {
-        write.csv(
+        readr::write_csv(
           table_data() |> 
             subset(show_all() | subject_id == active_subject()) |> 
-            dplyr::select(-row_review_status), 
+            dplyr::select(-row_review_status) |> 
+            dplyr::rename(dplyr::any_of(table_names)), 
           file,
-          row.names = FALSE
+          na = ""
         )
       }
     )
