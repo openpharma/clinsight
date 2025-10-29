@@ -28,8 +28,7 @@
             {
               "extend": "excel",
               "text": "<i class=\"fa-solid fa-download\"><\/i>",
-              "filename": "clinsight.open.queries",
-              "title": "open.queries | extracted from ClinSight"
+              "action": "hiddenDownloadHandlerTrigger"
             }
           ],
           "columnDefs": [
@@ -88,6 +87,7 @@
       },
       "evals": [
         "options.initComplete",
+        "options.buttons.0.action",
         "options.ajax.data",
         "callback"
       ],

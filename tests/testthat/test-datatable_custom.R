@@ -47,8 +47,7 @@ describe("datatable_custom() works", {
       expected_settings <- list(
         extend = "excel", 
         text = "<i class=\"fa-solid fa-download\"></i>", 
-        filename = "clinsight.test_label", 
-        title = "test_label | extracted from ClinSight"
+        action = DT::JS("hiddenDownloadHandlerTrigger")
       )
       expect_equal(outcome$x$options$buttons[[1]], expected_settings)
       expect_true("Buttons" %in% unlist(outcome$x$extensions))
@@ -62,8 +61,7 @@ describe("datatable_custom() works", {
       expected_settings <- list(
         extend = "excel", 
         text = "<i class=\"fa-solid fa-download\"></i>", 
-        filename = "clinsight._label.missing_", 
-        title = "_label.missing_ | extracted from ClinSight"
+        action = DT::JS("hiddenDownloadHandlerTrigger")
       )
       expect_equal(outcome$x$options$buttons[[1]], expected_settings)
       expect_true("Buttons" %in% unlist(outcome$x$extensions))
