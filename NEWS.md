@@ -1,5 +1,13 @@
 # clinsight (development version)
 
+## Changed
+
+- Replaced `dplyr::case_when()` with `ifelse()` in the row review status calculation for efficiency
+
+## Developer notes
+
+- Updated role of long-term contributors to co-authors in Description field.
+
 # clinsight 0.3.0
 
 ## Developer notes
