@@ -25,6 +25,16 @@ mod_common_forms_ui <- function(id, form){
           status = "primary",
           right = TRUE
         ),
+        shinyWidgets::materialSwitch(
+          inputId = ns("enable_line_breaks"),
+          label = "Enable line breaks", 
+          status = "primary",
+          right = TRUE,
+          value = FALSE
+        ) |> bslib::tooltip(
+         "Note that enabling this will be slow for big tables, 
+         since the table needs to be fully loaded in the browser."
+        ),
         bslib::card_body(
           HTML("<b>Bold*:</b> New/updated data"), 
           fillable = FALSE
@@ -135,6 +145,7 @@ mod_common_forms_server <- function(
       form_items = form_items,
       active_subject = active_subject,
       show_all = reactive(isTRUE(input$show_all_data) | identical(session$userData$review_type(), "form") ),
+      enable_line_breaks = reactive(isTRUE(input$enable_line_breaks)),
       table_names = table_names, 
       title = form
     )
@@ -148,6 +159,7 @@ mod_common_forms_server <- function(
         form_items = form_items,
         active_subject = active_subject,
         show_all = reactive(isTRUE(input$show_all_data) | identical(session$userData$review_type(), "form") ),
+        enable_line_breaks = reactive(isTRUE(input$enable_line_breaks)),
         table_names = table_names, 
         title = "Serious Adverse Events"
       )
