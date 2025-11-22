@@ -52,6 +52,13 @@ mod_study_forms_ui <- function(id, form, form_items){
             bslib::popover(
               tags$a("Legend", tags$sup(icon("circle-info")), class =  "link"),
               bslib::card_body(img(src="www/figure_legend.png"))
+            ),
+            shinyWidgets::materialSwitch(
+              inputId = ns("show_background_patterns"),
+              label = "Show background patterns", 
+              status = "primary",
+              value = FALSE,
+              right = TRUE
             )
           ),
           conditionalPanel(
@@ -205,6 +212,7 @@ mod_study_forms_server <- function(
         id_to_highlight = active_subject(), 
         point_size = "reviewed",
         height = ceiling(0.5*length(unique(fig_data()$item_name))*125+175),
+        show_background_patterns = input$show_background_patterns,
         scale = scale_yval,
         use_unscaled_limits = scaling_data()$use_unscaled_limits
       )
