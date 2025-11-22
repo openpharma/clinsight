@@ -344,10 +344,13 @@ get_appdata <-  function(
           " ",
           item_unit, 
           "\n",
-          ifelse(
-            significance == "limits unknown", 
-            "limits unknown",
-            paste0("Limits: ", lower_lim, "-", upper_lim, "\n", significance)
+          paste0(
+            "Limits: ", 
+            ifelse(is.na(lower_lim), "?", lower_lim), 
+            "-", 
+            ifelse(is.na(upper_lim), "?", upper_lim), 
+            "\n", 
+            ifelse(is.na(significance), "Significance unknown", as.character(significance))
           )
         )
       ) |> 
