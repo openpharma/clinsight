@@ -49,17 +49,28 @@ mod_study_forms_ui <- function(id, form, form_items){
               ),
               multiple = TRUE
             ), 
-            bslib::popover(
-              tags$a("Legend", tags$sup(icon("circle-info")), class =  "link"),
-              bslib::card_body(img(src="www/figure_legend.png"))
-            ),
             shinyWidgets::materialSwitch(
-              inputId = ns("show_background_patterns"),
-              label = "Show background patterns", 
+              inputId = ns("background_patterns"),
+              label = "Background patterns", 
               status = "primary",
               value = FALSE,
               right = TRUE
+            ),
+            conditionalPanel(
+              condition = "input.background_patterns === true",
+              ns = NS(id),
+              shinyWidgets::materialSwitch(
+                inputId = ns("all_hover_labels"),
+                label = "All hover labels", 
+                status = "primary",
+                value = FALSE,
+                right = TRUE
+              )
             )
+          ),
+          bslib::popover(
+            tags$a("Legend", tags$sup(icon("circle-info")), class =  "link"),
+            bslib::card_body(img(src="www/figure_legend.png"))
           ),
           conditionalPanel(
             condition = "input.switch_view === 'table'",
@@ -136,6 +147,15 @@ mod_study_forms_server <- function(
       )
       shinyjs::disable("switch_view")
     }
+    observeEvent(input$background_patterns, {
+      if(isFALSE(input$background_patterns)){
+        shinyWidgets::updateMaterialSwitch(
+          session = session,
+          inputId = "all_hover_labels",
+          value = FALSE
+        )
+      }
+    })
     
     observeEvent(session$userData$review_type(), {
       golem::cat_dev(form, "| Updating tables to show '", 
@@ -212,7 +232,8 @@ mod_study_forms_server <- function(
         id_to_highlight = active_subject(), 
         point_size = "reviewed",
         height = ceiling(0.5*length(unique(fig_data()$item_name))*125+175),
-        show_background_patterns = input$show_background_patterns,
+        background_patterns = input$background_patterns,
+        all_hover_labels = input$all_hover_labels,
         scale = scale_yval,
         use_unscaled_limits = scaling_data()$use_unscaled_limits
       )
