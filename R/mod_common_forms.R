@@ -27,13 +27,12 @@ mod_common_forms_ui <- function(id, form){
         ),
         shinyWidgets::materialSwitch(
           inputId = ns("enable_line_breaks"),
-          label = "Enable line breaks", 
+          label = "Enable text wrapping", 
           status = "primary",
           right = TRUE,
           value = FALSE
         ) |> bslib::tooltip(
-         "Note that enabling this will be slow for big tables, 
-         since the table needs to be fully loaded in the browser."
+         "Caution: enabling this is not recommended for big tables since it will be slow."
         ),
         bslib::card_body(
           HTML("<b>Bold*:</b> New/updated data"), 
