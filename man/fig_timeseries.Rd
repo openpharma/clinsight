@@ -12,6 +12,7 @@ fig_timeseries(
   color_fill = "significance",
   point_size = "reviewed",
   label = "text_label",
+  show_background_patterns = TRUE,
   scale = FALSE,
   use_unscaled_limits = FALSE
 )
