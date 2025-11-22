@@ -3,6 +3,9 @@
 ## Changed
 
 - Replaced `dplyr::case_when()` with `ifelse()` in the row review status calculation for efficiency
+- Added toggle to enable/disable background patterns in figures.
+- Added a toggle to enable hover labels of all patterns in the figures, also the ones in the background.
+- Improved the time-series on-hover label so that limits and significance are also shown.
 
 ## Developer notes
 
