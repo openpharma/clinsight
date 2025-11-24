@@ -232,7 +232,7 @@ mod_study_forms_server <- function(
         id_to_highlight = active_subject(), 
         point_size = "reviewed",
         height = ceiling(0.5*length(unique(fig_data()$item_name))*125+175),
-        background_patterns = input$background_patterns,
+        background_patterns = isTRUE(input$background_patterns),
         all_hover_labels = input$all_hover_labels,
         scale = scale_yval,
         use_unscaled_limits = scaling_data()$use_unscaled_limits
