@@ -217,7 +217,10 @@ fix_multiple_choice_vars <- function(
     return(data)
   }
   data_adjusted <- data |> 
-    dplyr::filter(.data[[var_column]] %in% names(vars_to_adjust)) |> 
+    dplyr::filter(
+      .data[[var_column]] %in% names(vars_to_adjust), 
+      !is.na(.data[[value_column]])
+    ) |> 
     dplyr::summarize(
       item_value = paste0(item_value, collapse = collapse_with),
       .by = dplyr::all_of(c(key_cols, var_column))
