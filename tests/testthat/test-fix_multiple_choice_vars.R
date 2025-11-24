@@ -32,6 +32,26 @@ describe(
       )
       expect_equal(fix_multiple_choice_vars(df, key_cols = "ID"), df)
     })
+    it("also works if expected vars end with a number", {
+      df <- data.frame(
+        ID = "Subj1",
+        var = c("Age", paste0("MH_TRT1", 1:4)),
+        item_value = as.character(c(95, 67, 58, 83, 34))
+      )
+      expect_no_error({
+        outcome <- fix_multiple_choice_vars(
+          df, 
+          expected_vars = c("Age", "MH_TRT1"), 
+          key_cols = "ID"
+        )
+      })
+      expected <- data.frame(
+        ID = "Subj1",
+        var = c("Age", "MH_TRT1"),
+        item_value = c("95", "67; 58; 83; 34")
+      )
+      expect_equal(outcome, expected)
+    })
     
   }
 )
