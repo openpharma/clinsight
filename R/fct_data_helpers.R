@@ -218,16 +218,19 @@ fix_multiple_choice_vars <- function(
   }
   data_adjusted <- data |> 
     dplyr::filter(
-      .data[[var_column]] %in% names(vars_to_adjust), 
-      !is.na(.data[[value_column]])
+      .data[[var_column]] %in% names(vars_to_adjust)
     ) |> 
     dplyr::summarize(
-      item_value = paste0(item_value, collapse = collapse_with),
+      item_value = ifelse(
+        all(is.na(item_value)), 
+        NA, 
+        paste0(na.omit(item_value), collapse = collapse_with)
+      ),
       .by = dplyr::all_of(c(key_cols, var_column))
     )
   data |> 
-    dplyr::filter(!.data[[var_column]] %in% names(vars_to_adjust)) |> 
-    dplyr::bind_rows(data_adjusted)
+    dplyr::rows_update(data_adjusted, by = c(key_cols, var_column)) |> 
+    unique()
 }
 
 
