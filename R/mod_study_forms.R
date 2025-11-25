@@ -51,7 +51,7 @@ mod_study_forms_ui <- function(id, form, form_items){
             ), 
             shinyWidgets::materialSwitch(
               inputId = ns("background_patterns"),
-              label = "Background patterns", 
+              label = "All subjects", 
               status = "primary",
               value = FALSE,
               right = TRUE
