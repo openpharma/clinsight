@@ -235,7 +235,7 @@ mod_review_form_tbl_server <- function(
         paste("clinsight", export_label, "csv", sep = ".")
       },
       content = function(file) {
-        readr::write_delim(
+        readr::write_csv(
           table_data() |> 
             subset(show_all() | subject_id == active_subject()) |> 
             dplyr::select(-row_review_status) |> 
@@ -245,7 +245,6 @@ mod_review_form_tbl_server <- function(
               \(x) gsub("<b>|</b>", "", x)
             )), 
           file,
-          delim = ";",
           na = ""
         )
       }

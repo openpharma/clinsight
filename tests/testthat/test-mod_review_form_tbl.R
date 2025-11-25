@@ -209,9 +209,8 @@ describe(
             basename(download_link_name),
             "clinsight.medication.DEU_02_482.csv"
           )
-          table_one_subject <- readr::read_delim(
+          table_one_subject <- readr::read_csv(
             download_link_name, 
-            delim = ";", 
             show_col_types = FALSE
           )
           expected_table_all <- merged_form_data() |> 
@@ -233,9 +232,8 @@ describe(
             "clinsight.medication.all_patients.csv"
           )
           
-          table_all_subjects <- readr::read_delim(
+          table_all_subjects <- readr::read_csv(
             output$table_download, 
-            delim = ";", 
             show_col_types = FALSE
           )
           expect_equal(table_all_subjects, expected_table_all)
