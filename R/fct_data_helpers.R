@@ -230,7 +230,7 @@ fix_multiple_choice_vars <- function(
     )
   data |> 
     dplyr::rows_update(data_adjusted, by = c(key_cols, var_column)) |> 
-    unique()
+    dplyr::distinct()
 }
 
 
