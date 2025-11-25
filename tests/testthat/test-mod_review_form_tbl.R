@@ -163,3 +163,88 @@ describe(
     )
   }
 )
+
+
+describe(
+  "mod_review_form_tbl. Feature 3 | Download table. As a user, I want to 
+  be able to download a table belonging to a form.", 
+  {
+    it(
+      "Scenario 1 - Download a table. 
+      Given a test [Medications] data set,
+        and the active subject_id set to ID 'DEU_02_482',
+        and ['show_all'] is set to FALSE,
+        I expect that I can download the table with data of the selected subject,
+        with the filename being 'clinsight.medication.DEU_02_482.csv',
+        and that, after [show_all] is set to TRUE,
+        I can download the data of all subjects of the respective form,
+        with the file name being 'clinsight.medication.all_patients.csv'",
+      {
+        app_data <- get_appdata(clinsightful_data)
+        med_data <- app_data[["Medication"]]
+        med_rev_data <- get_review_data(med_data) |> 
+          dplyr::mutate(id = dplyr::row_number(), reviewed = "No", status = "new")
+        
+        testargs <- list(
+          form = "Medication",
+          form_data = reactiveVal(med_data),
+          form_review_data = reactiveVal(med_rev_data),
+          form_items = "",
+          active_subject = reactiveVal("DEU_02_482"),
+          show_all = reactiveVal(FALSE),
+          table_names = NULL,
+          title = NULL
+        ) 
+        
+        testServer(mod_review_form_tbl_server, args = testargs, {
+          ns <- session$ns
+          
+          session$userData$pending_form_review_status <- reactiveValues()
+          session$userData$pending_review_records <- reactiveValues()
+          session$userData$review_type <- reactiveVal("subject")
+          session$flushReact()
+          
+          download_link_name <- output$table_download
+          expect_equal(
+            basename(download_link_name),
+            "clinsight.medication.DEU_02_482.csv"
+          )
+          table_one_subject <- readr::read_delim(
+            download_link_name, 
+            delim = ";", 
+            show_col_types = FALSE
+          )
+          expected_table_all <- merged_form_data() |> 
+            dplyr::select(-row_review_status) |> 
+            dplyr::mutate(dplyr::across(
+              dplyr::where(is.character),
+              \(x) gsub("<b>|</b>", "", x)
+            )) 
+          expected_table_one_subject <- expected_table_all |> 
+            subset(subject_id == active_subject())
+          expect_equal(table_one_subject, expected_table_one_subject)
+          
+          show_all(TRUE)
+          session$flushReact()
+          
+          download_link_name <- output$table_download
+          expect_equal(
+            basename(download_link_name),
+            "clinsight.medication.all_patients.csv"
+          )
+          
+          table_all_subjects <- readr::read_delim(
+            output$table_download, 
+            delim = ";", 
+            show_col_types = FALSE
+          )
+          expect_equal(table_all_subjects, expected_table_all)
+        }
+        )
+      }
+    )
+  }
+)
+
+
+
