@@ -5,9 +5,13 @@
 - Replaced `dplyr::case_when()` with `ifelse()` in the row review status calculation for efficiency
 - Switched to server-side table downloads
 
+## Bug fixes 
+
+- [fix_multiple_choice_vars()] now also fixes long-format multiple choice variables that end with a number (#247).
+
 ## Developer notes
 
-- Updated role of long-term contributors to co-authors in Description field.
+- Updated role of long-term contributors to co-authors in Description field (#246).
 
 # clinsight 0.3.0
 
