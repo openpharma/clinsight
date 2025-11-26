@@ -642,8 +642,7 @@
             {
               "extend": "excel",
               "text": "<i class=\"fa-solid fa-download\"><\/i>",
-              "filename": "clinsight.medication.BEL_08_45",
-              "title": "medication.BEL_08_45 | extracted from ClinSight"
+              "action": "hiddenDownloadHandlerTrigger"
             }
           ],
           "order": [
@@ -670,6 +669,7 @@
         "options.columnDefs.0.render",
         "options.rowCallback",
         "options.initComplete",
+        "options.buttons.0.action",
         "options.ajax.data",
         "callback"
       ],

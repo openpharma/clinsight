@@ -326,8 +326,7 @@
             {
               "extend": "excel",
               "text": "<i class=\"fa-solid fa-download\"><\/i>",
-              "filename": "clinsight.adverse_events.BEL_04_772",
-              "title": "adverse_events.BEL_04_772 | extracted from ClinSight"
+              "action": "hiddenDownloadHandlerTrigger"
             }
           ],
           "order": [
@@ -354,6 +353,7 @@
         "options.columnDefs.0.render",
         "options.rowCallback",
         "options.initComplete",
+        "options.buttons.0.action",
         "options.ajax.data",
         "callback"
       ],
@@ -7021,8 +7021,7 @@
             {
               "extend": "excel",
               "text": "<i class=\"fa-solid fa-download\"><\/i>",
-              "filename": "clinsight.vital_signs.BEL_04_772",
-              "title": "vital_signs.BEL_04_772 | extracted from ClinSight"
+              "action": "hiddenDownloadHandlerTrigger"
             }
           ],
           "order": [
@@ -7049,6 +7048,7 @@
         "options.columnDefs.0.render",
         "options.rowCallback",
         "options.initComplete",
+        "options.buttons.0.action",
         "options.ajax.data",
         "callback"
       ],
