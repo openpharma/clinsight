@@ -51,7 +51,7 @@ mod_study_forms_ui <- function(id, form, form_items){
             ), 
             shinyWidgets::materialSwitch(
               inputId = ns("background_patterns"),
-              label = "All subjects", 
+              label = "Show all participants", 
               status = "primary",
               value = FALSE,
               right = TRUE
@@ -61,7 +61,7 @@ mod_study_forms_ui <- function(id, form, form_items){
               ns = NS(id),
               shinyWidgets::materialSwitch(
                 inputId = ns("all_hover_labels"),
-                label = "All hover labels", 
+                label = "Show all hover labels", 
                 status = "primary",
                 value = FALSE,
                 right = TRUE
