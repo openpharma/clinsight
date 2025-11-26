@@ -169,8 +169,8 @@ fig_timeline <- function(
 #'   used. This parameter will be ignored if scaled is set to `TRUE`.
 #' @param point_size character vector. Column in the data frame that controls
 #'   the point size in the figure.
-#' @param background_patterns Logical to toggle background patterns.
-#' @param all_hover_labels Logical to toggle hover labels.
+#' @param show_all_participants Logical to toggle background patterns.
+#' @param show_all_hover_labels Logical to toggle hover labels.
 #'
 #' @return A faceted ggplot2 time series figure.
 #' @keywords internal
@@ -206,8 +206,8 @@ fig_timeseries <- function(
     color_fill = "significance",
     point_size = "reviewed",
     label = "text_label",
-    background_patterns = TRUE,
-    all_hover_labels = FALSE,
+    show_all_participants = TRUE,
+    show_all_hover_labels = FALSE,
     scale = FALSE,
     use_unscaled_limits = FALSE
 ){
@@ -247,11 +247,11 @@ fig_timeseries <- function(
         list(ggplot2::geom_hline(ggplot2::aes(yintercept = .data[["upper_lim"]]),lty = 3, linewidth = 0.5, col = "grey50"),
              ggplot2::geom_hline(ggplot2::aes(yintercept = .data[["lower_lim"]]),lty = 3, linewidth = 0.5, col = "grey50"))
       },
-      if(isTRUE(background_patterns) && isTRUE(all_hover_labels)) {
+      if(isTRUE(show_all_participants) && isTRUE(show_all_hover_labels)) {
         suppressWarnings(
           ggplot2::geom_line(alpha = 0.2, mapping = ggplot2::aes(text = .data[[label]])) 
         )
-      } else if(background_patterns){
+      } else if(show_all_participants){
         ggplot2::geom_line(alpha = 0.2)
       },
       ggplot2::scale_size_manual(values = setNames(c(2,4), c("Yes", "No")))

@@ -50,17 +50,17 @@ mod_study_forms_ui <- function(id, form, form_items){
               multiple = TRUE
             ), 
             shinyWidgets::materialSwitch(
-              inputId = ns("background_patterns"),
+              inputId = ns("show_all_participants"),
               label = "Show all participants", 
               status = "primary",
               value = FALSE,
               right = TRUE
             ),
             conditionalPanel(
-              condition = "input.background_patterns === true",
+              condition = "input.show_all_participants === true",
               ns = NS(id),
               shinyWidgets::materialSwitch(
-                inputId = ns("all_hover_labels"),
+                inputId = ns("show_all_hover_labels"),
                 label = "Show all hover labels", 
                 status = "primary",
                 value = FALSE,
@@ -147,11 +147,11 @@ mod_study_forms_server <- function(
       )
       shinyjs::disable("switch_view")
     }
-    observeEvent(input$background_patterns, {
-      if(isFALSE(input$background_patterns)){
+    observeEvent(input$show_all_participants, {
+      if(isFALSE(input$show_all_participants)){
         shinyWidgets::updateMaterialSwitch(
           session = session,
-          inputId = "all_hover_labels",
+          inputId = "show_all_hover_labels",
           value = FALSE
         )
       }
@@ -232,8 +232,8 @@ mod_study_forms_server <- function(
         id_to_highlight = active_subject(), 
         point_size = "reviewed",
         height = ceiling(0.5*length(unique(fig_data()$item_name))*125+175),
-        background_patterns = isTRUE(input$background_patterns),
-        all_hover_labels = input$all_hover_labels,
+        show_all_participants = isTRUE(input$show_all_participants),
+        show_all_hover_labels = input$show_all_hover_labels,
         scale = scale_yval,
         use_unscaled_limits = scaling_data()$use_unscaled_limits
       )
