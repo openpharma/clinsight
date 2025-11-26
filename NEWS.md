@@ -3,6 +3,7 @@
 ## Changed
 
 - Replaced `dplyr::case_when()` with `ifelse()` in the row review status calculation for efficiency
+- Switched to server-side table downloads
 
 ## Bug fixes 
 
