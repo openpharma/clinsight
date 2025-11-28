@@ -45,8 +45,6 @@ app_server <- function(
   # For query item selector drop-down menus:
   available_data <- get_available_data(
     data = app_data,
-    tables = app_tables,
-    all_forms = app_vars$all_forms,
     form_repeat_name = with(
       meta[["table_names"]], 
       table_name[raw_name == "form_repeat"]
