@@ -307,15 +307,6 @@ app_server <- function(
     )
   })
   
-  mod_review_config_server(
-    "review_config_1",
-    r = r,
-    app_data = app_data,
-    app_tables = app_tables,
-    sites = app_vars$Sites,
-    subject_ids = app_vars$subject_id
-  )
-  
   mod_queries_server(
     "queries_1",
     r = r,
