@@ -156,11 +156,6 @@ get_timeline_data <- function(
 #'
 #' @param data list of data frames to be used. Will be used for extracting the
 #'   variables of interest from the study-specific forms.
-#' @param tables list of tables to be used. Will be used for extracting the
-#'   variables of interest from the common forms.
-#' @param all_forms A data frame containing all forms. Mandatory columns are
-#'   "form" (containing the form names), and "main_tab" (containing the tab name
-#'   where the form should be located).
 #' @param form_repeat_name A character string with the name of the `form_repeat`
 #'   variable. This variable (with this name) will be added to the item name if
 #'   duplicate names exist for each participant.
@@ -170,39 +165,29 @@ get_timeline_data <- function(
 #' 
 get_available_data <- function(
     data, 
-    tables, 
-    all_forms,
     form_repeat_name = "N"
 ){
-  stopifnot(is.list(data), is.list(tables), is.character(form_repeat_name))
+  stopifnot(is.list(data), is.character(form_repeat_name))
   if(identical(form_repeat_name, character(0))){form_repeat_name <- "N"}
+  selector_cols <- c("subject_id", "item_name", "form_repeat", "item_group", 
+                     "event_name", "event_label")
+  if(length(data) == 0) {
+    warning("Empty list of data provided")
+    return(add_missing_columns(data.frame(), c(selector_cols, "n")))
+  }
   study_event_selectors <- lapply(
-    all_forms$form, 
+    data, 
     \(x){
       name_vars <- c("Name", "AE Name", "CP Name", "MH Name", "CM Name")
-      if(is.null(data[[x]])) return(NULL)
-      if(
-        !any(unique(data[[x]]$item_name) %in% name_vars)
-      ){
-        df_x <- data[[x]][
-          c("subject_id", "event_name", "event_label", "item_group", 
-            "item_name", "form_repeat")
-        ]
-      } else {
-        if(is.null(tables[[x]])) return(NULL)
-        df_x <- data[[x]][
-          data[[x]]$item_name %in% name_vars, 
-          c("subject_id", "item_value", "form_repeat"), 
-          drop = FALSE
-        ] |> 
-          dplyr::rename("item_name" = item_value) |> 
+      if ( any(unique(x$item_name) %in% name_vars)){
+        x <- x[x$item_name %in% name_vars, ] |> 
           dplyr::mutate(
-            item_group = x, 
+            item_name = item_value,
             event_name = "Any visit", 
             event_label = "Any visit"
           )
       }
-      df_x |> 
+      x[c(selector_cols)] |> 
         dplyr::distinct() |> 
         dplyr::arrange(
           subject_id, 
