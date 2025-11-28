@@ -179,19 +179,28 @@ get_available_data <- function(
   study_event_selectors <- lapply(
     all_forms$form, 
     \(x){
-      if(isFALSE("Name" %in% names(tables[[x]]))){
-        if(is.null(data[[x]])) return(NULL)
-        df_x <- data[[x]] |> 
-          dplyr::select(
-            dplyr::all_of(c("subject_id", "event_name", "event_label",  
-                            "item_group", "item_name", "form_repeat"))
-          )
+      name_vars <- c("Name", "AE Name", "CP Name", "MH Name", "CM Name")
+      if(is.null(data[[x]])) return(NULL)
+      if(
+        !any(unique(data[[x]]$item_name) %in% name_vars)
+      ){
+        df_x <- data[[x]][
+          c("subject_id", "event_name", "event_label", "item_group", 
+            "item_name", "form_repeat")
+        ]
       } else {
         if(is.null(tables[[x]])) return(NULL)
-        df_x <- tables[[x]] |> 
-          dplyr::select(subject_id, "item_name" = Name, form_repeat) |>
-          dplyr::mutate(item_group = x, event_name = "Any visit", 
-                        event_label = "Any visit") 
+        df_x <- data[[x]][
+          data[[x]]$item_name %in% name_vars, 
+          c("subject_id", "item_value", "form_repeat"), 
+          drop = FALSE
+        ] |> 
+          dplyr::rename("item_name" = item_value) |> 
+          dplyr::mutate(
+            item_group = x, 
+            event_name = "Any visit", 
+            event_label = "Any visit"
+          )
       }
       df_x |> 
         dplyr::distinct() |> 

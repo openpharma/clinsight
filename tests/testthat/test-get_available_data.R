@@ -34,8 +34,8 @@ describe(
     it("Adds a form_repeat number to item_name if duplicates occur within an 
        individual, to ensure item names can be uniquely identified", {
       df <- get_available_data(
-        data = list(),
-        tables = apptables["Adverse events"],
+        data = appdata['Adverse events'],
+        tables = list(),
         all_forms = all_forms
         )
       # ID BEL_08_885 has two adverse events named 'Seizure'; these should show 
