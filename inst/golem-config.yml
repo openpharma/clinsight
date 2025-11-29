@@ -10,9 +10,10 @@ default:
     Administrator: admin
     Medical Monitor: medical_monitor
     Data Manager: data_manager
-    Data Viewer: data_viewer
-  allow_to_review: [admin, medical_monitor]
-  allow_to_query: [data_manager, medical_monitor]
+    Project Manager: project_manager
+    Data Explorer: data_explorer
+  allow_to_review: [medical_monitor]
+  allow_to_query: [admin, data_manager, medical_monitor, data_explorer]
   allow_listing_download: TRUE
   allow_query_inputs: TRUE
   study_logo: assets/study_logo.png
