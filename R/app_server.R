@@ -91,7 +91,7 @@ app_server <- function(
         paste0(
           user_error(), 
           "Functionality is limited. ",
-          "Please contact the administrator to resolve this issue."
+          "If this is unexpected, please contact the administrator."
         )
       )
     }
@@ -103,8 +103,8 @@ app_server <- function(
     showNotification(
       user_error(), 
       id = "user_error", 
-      type = "error",  
-      duration = NULL
+      type = "warning",  
+      duration = 5
     )
   })
   
