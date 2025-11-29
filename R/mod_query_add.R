@@ -134,9 +134,17 @@ mod_query_add_server <- function(
       )
     }
     
+    role_allowed_to_query <- reactive({
+      get_roles_from_config()[r$user_role] %in% get_golem_config("allow_to_query")
+    })
+    
+    observeEvent(role_allowed_to_query(), {
+      shinyjs::toggleElement("create_query", condition = role_allowed_to_query())
+    })
+    
     selected_data <- reactiveVal()
     observeEvent(input$create_query, {
-      req(available_data, r$subject_id, active_form())
+      req(available_data, r$subject_id, active_form(), role_allowed_to_query())
       df <- with(available_data, available_data[
         subject_id == r$subject_id & item_group == active_form(), 
       ])
