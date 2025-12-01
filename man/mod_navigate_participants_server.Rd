@@ -4,7 +4,7 @@
 \alias{mod_navigate_participants_server}
 \title{Navigate participants - Shiny module Server}
 \usage{
-mod_navigate_participants_server(id, r)
+mod_navigate_participants_server(id, r, static_overview_data = NULL)
 }
 \arguments{
 \item{id}{Character string, used to connect the module UI with the module Server.}

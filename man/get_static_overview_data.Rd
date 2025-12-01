@@ -4,7 +4,7 @@
 \alias{get_static_overview_data}
 \title{Create static overview data}
 \usage{
-get_static_overview_data(data, expected_general_columns = NULL)
+get_static_overview_data(data, available_data, expected_general_columns = NULL)
 }
 \arguments{
 \item{data}{List of data frames.}

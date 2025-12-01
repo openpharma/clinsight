@@ -7,8 +7,6 @@
 #'   correct order of subject IDs.
 #' @param appdata Application data in long format, stored in a list. List
 #'   contains data frames named per form.
-#' @param apptables Application data tables in wide format, stored in a list.
-#'   List contains data frames named per form.
 #'
 #' @return A `reactivevalues` object.
 #' 
@@ -16,8 +14,7 @@ filter_data <- function(
     data, 
     sites, 
     subject_ids, 
-    appdata, 
-    apptables
+    appdata
     ){
   stopifnot(is.reactivevalues(data))
   
@@ -28,9 +25,6 @@ filter_data <- function(
   # To ensure the right order of IDs:
   data$filtered_subjects <- subject_ids[subject_ids %in% filtered_ids]
   cat("selected subjects: ", data$filtered_subjects, "\n\n")
-  data$filtered_tables <- lapply(apptables, \(x){
-    with(x, x[subject_id %in% data$filtered_subjects, ] )
-  })
   data$subject_id <- data$filtered_subjects[1]
   golem::cat_dev("Finished applying review configuration\n\n")
   data

@@ -181,11 +181,7 @@ get_available_data <- function(
       name_vars <- c("Name", "AE Name", "CP Name", "MH Name", "CM Name")
       if ( any(unique(x$item_name) %in% name_vars)){
         x <- x[x$item_name %in% name_vars, ] |> 
-          dplyr::mutate(
-            item_name = item_value,
-            event_name = "Any visit", 
-            event_label = "Any visit"
-          )
+          dplyr::mutate(item_name = item_value)
       }
       x[c(selector_cols)] |> 
         dplyr::distinct() |> 

@@ -4,7 +4,7 @@
 \alias{mod_header_widgets_server}
 \title{Header widgets - Shiny module Server}
 \usage{
-mod_header_widgets_server(id, r, rev_data, navinfo)
+mod_header_widgets_server(id, r, rev_data, navinfo, available_data)
 }
 \arguments{
 \item{id}{Character string, used to connect the module UI with the module

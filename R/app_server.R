@@ -25,10 +25,6 @@ app_server <- function(
   
   app_data <- get_appdata(merged_data, meta = meta)
   app_vars <- get_meta_vars(data = app_data, meta = meta)
-  app_tables <- lapply(
-    setNames(names(app_data), names(app_data)), \(x){
-      create_table(app_data[[x]], expected_columns = names(app_vars$items[[x]]))
-    })
   check_appdata(app_data, meta)
   
   session$userData$pending_review_records <- reactiveValues()
@@ -55,6 +51,7 @@ app_server <- function(
   # For summary review data:
   static_overview_data <- get_static_overview_data(
     data = app_data,
+    available_data = available_data,
     expected_general_columns = unique(
       with(meta$items_expanded, item_name[item_group == "General"])
     )
@@ -65,7 +62,6 @@ app_server <- function(
     query_data        = collect_query_data(user_db),
     filtered_subjects = app_vars$subject_id,
     filtered_data     = app_data,
-    filtered_tables   = app_tables,
     subject_id        = app_vars$subject_id[1]
   )
   
@@ -114,7 +110,7 @@ app_server <- function(
   observeEvent(rev_sites(), {
     req(!all(rev_sites() %in% app_vars$Sites$site_code))
     r <- filter_data(r, rev_sites(), subject_ids = app_vars$subject_id,
-                     appdata = app_data, apptables = app_tables)
+                     appdata = app_data)
   })
   
   navinfo <- reactiveValues(
@@ -123,6 +119,7 @@ app_server <- function(
     trigger_page_change = 1
   )
   
+  start_page_summary_vars <- c("subject_status", "WHO.classification", "Age", "Sex", "event_name")
   rev_data <- reactiveValues(
     summary = reactive({
       req(forms_to_review_data)
@@ -140,8 +137,8 @@ app_server <- function(
                       "Edit date" = edit_date_time, status, reviewed)
     }),
     overview = reactive({
-      static_overview_data |>
-        dplyr::filter(subject_id %in% r$filtered_subjects) |>
+      with(static_overview_data, static_overview_data[subject_id %in% r$filtered_subjects, ]) |>
+        dplyr::select(tidyr::all_of("subject_id"), tidyr::any_of(start_page_summary_vars)) |> 
         dplyr::mutate(
           needs_review = subject_id %in% unique(rev_data$summary()$subject_id)
         ) |> 
@@ -270,7 +267,8 @@ app_server <- function(
     id = "header_widgets_1", 
     r = r, 
     rev_data = rev_data, 
-    navinfo = navinfo
+    navinfo = navinfo,
+    available_data = available_data
   )
   
   
@@ -300,7 +298,6 @@ app_server <- function(
       id = "main_sidebar_1",
       r = r,
       app_data = app_data,
-      app_tables = app_tables,
       app_vars = app_vars,
       navinfo,
       forms_to_review = reactive({
