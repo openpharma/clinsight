@@ -318,7 +318,11 @@ app_server <- function(
   mod_report_server("report_1", r = r, rev_data, db_path = user_db,
                     table_names = app_vars$table_names)
   
-  mod_navigate_participants_server("navigate_participants_1", r)
+  mod_navigate_participants_server(
+    "navigate_participants_1", 
+    r,
+    static_overview_data
+  )
   
   mod_navigate_review_server(
     "navigate_review_1",
