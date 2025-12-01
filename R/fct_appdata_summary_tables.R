@@ -21,7 +21,7 @@ get_timeline_data <- function(
                        "start", "group", "end", "title", "className", "id", "order"),
     treatment_label = "\U1F48A T\U2093"
 ){
-  stopifnot(is.list(data), is.list(table_data))
+  stopifnot(is.list(data), is.data.frame(table_data))
   stopifnot(is.character(timeline_cols), is.character(treatment_label))
   
   if(all(unlist(lapply(data, is.null)))) return({
@@ -49,10 +49,10 @@ get_timeline_data <- function(
       )
   }
   
-  if(is.null(table_data$`Adverse events`)){
+  if(nrow(table_data) == 0){
     AE_timedata <- SAE_data <- data.frame()
   } else{
-    AE_timedata <- table_data$`Adverse events` |> 
+    AE_timedata <- table_data |> 
       dplyr::filter(!(`Serious Adverse Event` == "Yes" & 
                         .data[["start date"]] == .data[["SAE Start date"]])) |> 
       dplyr::mutate(
@@ -74,7 +74,7 @@ get_timeline_data <- function(
         )
       )  
     
-    SAE_data <- table_data$`Adverse events` |> 
+    SAE_data <- table_data |> 
       dplyr::filter(`Serious Adverse Event` == "Yes") |> 
       dplyr::mutate(
         event_name = `Name`,

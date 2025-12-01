@@ -208,7 +208,11 @@ app_server <- function(
   timeline_data <- reactive({
     get_timeline_data(
       r$filtered_data, 
-      r$filtered_tables, 
+      if (!is.null(r$filtered_data[["Adverse events"]])) {
+        create_table(r$filtered_data[["Adverse events"]])
+      } else {
+        data.frame()
+      }, 
       treatment_label = meta$settings$treatment_label %||% "\U1F48A T\U2093"
     )
   })
