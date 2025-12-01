@@ -1,6 +1,7 @@
 describe(
   "fig_timeseries works", 
   {
+    set.seed(2025)
     subjects <- paste0("Subject", 1:10)
     mock_data <- lapply(subjects, \(x){
       data.frame(
