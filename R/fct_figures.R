@@ -211,6 +211,9 @@ fig_timeseries <- function(
     scale = FALSE,
     use_unscaled_limits = FALSE
 ){
+  if(isTRUE(is.na(id_to_highlight))){
+    id_to_highlight <- NULL
+  }
   df_id <- data[data[[id]] == id_to_highlight, ]
   yval <- ifelse(scale, "value_scaled", "item_value")
   fig <- ggplot2::ggplot(
