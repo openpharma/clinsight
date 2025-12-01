@@ -230,19 +230,16 @@ get_available_data <- function(
 #'
 get_static_overview_data <- function(
     data, 
+    available_data,
     expected_general_columns = NULL
 ){
   stopifnot(is.list(data))
   expected_general_columns <- expected_general_columns %||% character(0)
   stopifnot(is.character(expected_general_columns))
-  visits <- data |> 
-    bind_rows_custom("item_value") |> 
-    dplyr::filter(
-      !is.na(event_name), 
-      !event_name %in% c("Any visit", "Exit"),
-      !is.na(subject_id)
-    ) |> 
-    dplyr::arrange(subject_id, day) |> 
+  visits <- with(available_data, available_data[
+    !is.na(event_name) & !event_name %in% c("Any visit", "Exit") &!is.na(subject_id),
+  ]) |> 
+    dplyr::arrange(subject_id, event_label) |> 
     dplyr::distinct(subject_id, event_name) |> 
     collapse_column_vals(group_by = "subject_id") |> 
     dplyr::distinct()
@@ -251,6 +248,5 @@ get_static_overview_data <- function(
     data[["General"]], 
     expected_columns = expected_general_columns
   ) |>
-    dplyr::select(tidyr::all_of("subject_id"), tidyr::any_of(c("subject_status", "WHO.classification", "Age", "Sex"))) |>
     dplyr::left_join(visits, by = "subject_id")
 }
