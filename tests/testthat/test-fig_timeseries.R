@@ -45,8 +45,40 @@ describe(
       expect_equal(length(plotlayers[plotlayers == "geom_hline"]), 2)
     })
     
-    it("returns a plot without highlight if the id to hightlight has no data for the figure.", {
-      fig_timeseries(mock_data, id_to_highlight = "Subject15")
+    it("returns a spaghetti plot without highlight if the id to hightlight has no data for the figure.", {
+      fig <- fig_timeseries(mock_data, id_to_highlight = "Subject15")
+      plotlayers <- get_ggplot_layer_names(fig)
+      expect_equal(plotlayers, "geom_line")
+      expect_equal(mock_data, fig$data)
+    })
+    
+    it("returns a spaghetti plot without highlight if the id to hightlight is NA", {
+      fig <- fig_timeseries(mock_data, id_to_highlight = NA)
+      plotlayers <- get_ggplot_layer_names(fig)
+      expect_equal(plotlayers, "geom_line")
+      expect_equal(mock_data, fig$data)
+    })
+    
+    it("returns a spaghetti plot without highlight if the id to hightlight is NULL", {
+      fig <- fig_timeseries(mock_data, id_to_highlight = NULL)
+      plotlayers <- get_ggplot_layer_names(fig)
+      expect_equal(plotlayers, "geom_line")
+      expect_equal(mock_data, fig$data)
+    })
+    
+    it("includes time points that are negative days (days before baseline)", {
+      # set minimum day to -10:
+      negative_day_data <- mock_data |> 
+        dplyr::mutate(
+          day = ifelse(day == min(day), - 10, day),
+          .by = c(subject_id, item_name)
+        )
+      fig <- fig_timeseries(negative_day_data, id_to_highlight = "Subject1")
+      fig_built <- ggplot2::ggplot_build(fig)
+      expect_equal(
+        min(fig_built[["layout"]]$panel_scales_x[[1]]$range$range),
+        -10
+      )
     })
     
   }
