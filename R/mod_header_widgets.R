@@ -91,7 +91,7 @@ mod_header_widgets_server <- function(
     output[["ae_box"]] <- renderUI({
       req(inherits(all_AEs_reviewed(), "logical"), r$subject_id)
       bslib::value_box(
-        title = paste0("SAEs: ", with(all_aes(), AEs[subject_id == r$subject_id]) ), 
+        title = paste0("SAEs: ", with(all_aes(), SAEs[subject_id == r$subject_id]) ), 
         value = paste0("AEs: ", with(all_aes(), AEs[subject_id == r$subject_id])),
         showcase = icon("house-medical", class = 'fa-2x'),
         theme = if(all_AEs_reviewed()) "primary" else "warning" 
