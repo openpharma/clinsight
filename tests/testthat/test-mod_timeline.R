@@ -41,11 +41,8 @@ describe(
         status = sample(c("new", "old", "updated"), dplyr::n(), replace = TRUE)
       )
     appvars <- get_meta_vars(appdata)
-    apptables <- lapply(setNames(names(appdata), names(appdata)), \(x){
-      create_table(appdata[[x]], expected_columns = names(appvars$items[[x]]))
-    })
-    timeline_data <- get_timeline_data(appdata, apptables)
-    
+    AE_table <- create_table(appdata[["Adverse events"]])
+    timeline_data <- get_timeline_data(appdata, table_data = AE_table)
     testargs <- list(
       form_review_data = reactiveVal(rev_data),
       timeline_data = reactiveVal(timeline_data),
@@ -78,10 +75,8 @@ describe(
         status = sample(c("new", "old", "updated"), dplyr::n(), replace = TRUE)
       )
     appvars <- get_meta_vars(appdata)
-    apptables <- lapply(setNames(names(appdata), names(appdata)), \(x){
-      create_table(appdata[[x]], expected_columns = names(appvars$items[[x]]))
-    })
-    timeline_data <- get_timeline_data(appdata, apptables)
+    AE_table <- create_table(appdata[["Adverse events"]])
+    timeline_data <- get_timeline_data(appdata, table_data = AE_table)
     
     testargs <- list(
       form_review_data = reactiveVal(rev_data),
@@ -102,12 +97,13 @@ describe(
       and the treatment_label set to 'custom_treatment_label',
       I expect the  [custom_treatment_label] in the timeline JSON output.", 
       {
+        AE_table <- create_table(appdata[["Adverse events"]])
         timeline_data <- get_timeline_data(
           appdata, 
-          apptables, 
+          table_data = AE_table, 
           treatment_label = "custom_treatment_label"
-        )
-        
+          )
+
         testargs <- list(
           form_review_data = reactiveVal(rev_data),
           timeline_data = reactiveVal(timeline_data),
