@@ -15,8 +15,8 @@ get_timeline_data(
 \arguments{
 \item{data}{A list of data frames, with compatible clinical trial data.}
 
-\item{table_data}{A list of data frames containing clinical trial data in
-wide format. Created with \code{\link[=create_table]{create_table()}}.}
+\item{table_data}{A data frame with table data needed for the timeline.
+Created with \code{\link[=create_table]{create_table()}}. Expected to have Adverse event data.}
 
 \item{timeline_cols}{Character vector with the name of the columns of the
 output data frame.}
