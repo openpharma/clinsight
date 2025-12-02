@@ -47,6 +47,8 @@ mod_header_widgets_ui <- function(id){
 #' @param navinfo Reactive values created with [shiny::reactiveValues()]. Used
 #'   to send back information about the page change to the server, when clicking
 #'   on the adverse event box.
+#' @param available_data A data frame containing all available data, usually
+#'   created with the function [get_available_data()].
 #'
 #' @seealso [mod_header_widgets_ui()]
 mod_header_widgets_server <- function(

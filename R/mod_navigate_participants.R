@@ -11,21 +11,23 @@ mod_navigate_participants_ui <- function(id){
 }
     
 #' Navigate participants - Shiny module Server
-#' 
-#' A `shiny` module. Used to show participant information in a 
-#' [bslib::value_box()]. By clicking on the [bslib::value_box()], additional 
-#' participant information will be shown, as well as a selection menu to select 
-#' a different subject. Once the subject is changed, the active `subject_id` will 
-#' be changed in the application. 
 #'
-#' @param id Character string, used to connect the module UI with the module Server. 
-#' @param r Common `reactiveValues`. Used to access `filtered_tables$General`, 
-#' containing a data frame with general data to be displayed in the participant 
-#' selection modal. 
-#' In addition, it will be used to access the list of `filtered_subjects` 
-#' (character vector), and the currently active `subject_id` (character string). 
-#' The only parameter that the module will change, if requested by the user, 
-#' is `subject_id`. 
+#' A `shiny` module. Used to show participant information in a
+#' [bslib::value_box()]. By clicking on the [bslib::value_box()], additional
+#' participant information will be shown, as well as a selection menu to select
+#' a different subject. Once the subject is changed, the active `subject_id`
+#' will be changed in the application.
+#'
+#' @param id Character string, used to connect the module UI with the module
+#'   Server.
+#' @param r Common `reactiveValues`. Used to access `filtered_tables$General`,
+#'   containing a data frame with general data to be displayed in the
+#'   participant selection modal. In addition, it will be used to access the
+#'   list of `filtered_subjects` (character vector), and the currently active
+#'   `subject_id` (character string). The only parameter that the module will
+#'   change, if requested by the user, is `subject_id`.
+#' @param static_overview_data Data frame created with
+#'   [get_static_overview_data()].
 #'
 #' @seealso [mod_navigate_participants_ui()] for the UI function
 #' 

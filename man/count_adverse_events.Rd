@@ -11,7 +11,8 @@ count_adverse_events(
 )
 }
 \arguments{
-\item{data}{A data frame with Adverse Event data}
+\item{data}{A data frame with Adverse Event data. Required columns are the
+clinsight \code{key_cols} and the column \code{item_value}.}
 }
 \value{
 A data frame with the columns \code{subject_id}, \code{AEs} (number of AEs per
