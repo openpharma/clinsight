@@ -7,10 +7,12 @@ describe("get_timeline_data works", {
       ) |> 
       get_appdata()
     appvars <- get_meta_vars(appdata)
-    apptables <- lapply(setNames(names(appdata), names(appdata)), \(x){
-      create_table(appdata[[x]], expected_columns = names(appvars$items[[x]]))
-    })
-    output <- get_timeline_data(appdata, apptables)
+    
+    ae_tables <- create_table(
+      appdata[["Adverse events"]], 
+      expected_columns = names(appvars$items[["Adverse events"]])
+    )
+    output <- get_timeline_data(appdata, ae_tables)
     expect_true(is.data.frame(output))
     expect_equal(
       names(output), 
@@ -26,29 +28,30 @@ describe("get_timeline_data works", {
       ) |> 
       get_appdata()
     appvars <- get_meta_vars(appdata)
-    apptables <- lapply(setNames(names(appdata), names(appdata)), \(x){
-      create_table(appdata[[x]], expected_columns = names(appvars$items[[x]]))
-    })
+    ae_tables <- create_table(
+      appdata[["Adverse events"]], 
+      expected_columns = names(appvars$items[["Adverse events"]])
+    )
     expected_columns <- c("subject_id", "content", "form_repeat", "item_group", 
                           "start", "group", "end", "title", "className", "id", "order")
     
-    output <- get_timeline_data(appdata["Adverse events"], apptables["Adverse events"])
+    output <- get_timeline_data(appdata["Adverse events"], ae_tables)
     expect_true(is.data.frame(output))
     expect_equal(names(output), expected_columns)
     
-    output <- get_timeline_data(appdata["Vital signs"], apptables["Vital signs"])
+    output <- get_timeline_data(appdata["Vital signs"], ae_tables)
     expect_true(is.data.frame(output))
     expect_equal(names(output), expected_columns)
     
-    output <- get_timeline_data(appdata["General"], apptables["General"])
+    output <- get_timeline_data(appdata["General"], ae_tables)
     expect_true(is.data.frame(output))
     expect_equal(names(output), expected_columns)
     
     expect_warning(
-      get_timeline_data(appdata["Gener"], apptables["Gener"]),
+      get_timeline_data(appdata["Gener"], ae_tables),
       "No data found"
     )
-    output <- get_timeline_data(appdata["Gener"], apptables["Gener"]) |> 
+    output <- get_timeline_data(appdata["Gener"], ae_tables) |> 
       suppressWarnings() 
     expect_true(is.data.frame(output))
     expect_equal(names(output), expected_columns)
