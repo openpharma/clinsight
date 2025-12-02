@@ -12,6 +12,7 @@
 ## Developer notes
 
 - Updated role of long-term contributors to co-authors in Description field (#246).
+- Refactored some functions so that it is no longer needed to create an `apptables` object when starting the applcation, improving start up efficiency (#251).
 
 # clinsight 0.3.0
 
