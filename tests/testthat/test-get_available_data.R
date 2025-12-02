@@ -15,9 +15,7 @@ describe(
                                       "item_group", "event_name", "event_label"))
     })
     it("Creates the expected data frame with given random appdata input", {
-      expect_snapshot(
-        get_available_data(data = appdata)
-      )
+      expect_snapshot(get_available_data(data = appdata))
     })
     it("Adds a form_repeat number to item_name if duplicates occur within an 
        individual, to ensure item names can be uniquely identified", {
