@@ -206,7 +206,10 @@ app_server <- function(
     get_timeline_data(
       r$filtered_data, 
       if (!is.null(r$filtered_data[["Adverse events"]])) {
-        create_table(r$filtered_data[["Adverse events"]])
+        create_table(
+          r$filtered_data[["Adverse events"]], 
+          expected_columns = names(app_vars$items[["Adverse event"]])
+        ) 
       } else {
         data.frame()
       }, 
