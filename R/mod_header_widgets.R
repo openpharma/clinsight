@@ -63,10 +63,6 @@ mod_header_widgets_server <- function(
   
   moduleServer( id, function(input, output, session){
     ns <- session$ns
-    # for use in valueboxes for individuals:
-    AEvalue.individual  <- reactiveVal("...") 
-    SAEvalue.individual <- reactiveVal("...") 
-    visit.number <- reactiveVal(".. (..%)")
     
     all_aes <- reactive({ 
       validate(need(r$filtered_data[["Adverse events"]], "AE data missing"))
