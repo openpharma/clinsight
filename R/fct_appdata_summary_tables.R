@@ -167,7 +167,7 @@ get_available_data <- function(
     data, 
     form_repeat_name = "N"
 ){
-  stopifnot(is.list(data), is.character(form_repeat_name))
+  stopifnot(inherits(data, "list"), is.character(form_repeat_name))
   if(identical(form_repeat_name, character(0))){form_repeat_name <- "N"}
   selector_cols <- c("subject_id", "item_name", "form_repeat", "item_group", 
                      "event_name", "event_label")
@@ -233,7 +233,7 @@ get_static_overview_data <- function(
     available_data,
     expected_general_columns = NULL
 ){
-  stopifnot(is.list(data))
+  stopifnot(inherits(data, "list"))
   expected_general_columns <- expected_general_columns %||% character(0)
   stopifnot(is.character(expected_general_columns))
   visits <- with(available_data, available_data[
