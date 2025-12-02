@@ -209,21 +209,25 @@ get_available_data <- function(
 
 
 #' Create static overview data
-#' 
-#' Creates overview data of each patient in the study. Used to create the start 
-#' page of the application. 
-#' 
-#' @param data List of data frames. 
-#' @param expected_general_columns Character vector with the expected columns. 
-#' If columns are completely missing, they will be made explicitly missing in 
-#' the data frame (that is, a column will be created with only missing character 
-#' values). 
 #'
-#' @return A data frame with the overview data. Columns are: 
-#' `subject_id`, `status`, `WHO.classification`, `Age`, `Sex`, `event_name`. 
-#' 
+#' Creates overview data of each patient in the study. Used to create the start
+#' page of the application.
+#'
+#' @param data List of data frames.
+#' @param available_data A data frame with available data. Visits will be
+#'   extracted from here. Required columns are `subject_id`, `event_name`,
+#'   `event_label`. The `event_label` variable should be a factor in order to
+#'   work well with the function [fig_timeline()].
+#' @param expected_general_columns Character vector with the expected columns.
+#'   If columns are completely missing, they will be made explicitly missing in
+#'   the data frame (that is, a column will be created with only missing
+#'   character values).
+#'
+#' @return A data frame with the overview data. Columns are: `subject_id`,
+#'   `status`, `WHO.classification`, `Age`, `Sex`, `event_name`.
+#'
 #' @keywords internal
-#'
+#' 
 get_static_overview_data <- function(
     data, 
     available_data,
