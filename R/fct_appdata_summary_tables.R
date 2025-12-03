@@ -4,8 +4,12 @@
 #' object.
 #'
 #' @param data A list of data frames, with compatible clinical trial data.
-#' @param table_data A data frame with table data needed for the timeline.
-#'   Created with [create_table()]. Expected to have Adverse event data.
+#' @param available_data Optional, data frame with all available data gathered.
+#'   Used to extract visit information. If not provided, this data frame will be
+#'   created internally by running [get_available_data()] on the provided `data`
+#'   list.
+#' @param expected_ae_cols Character vector with expected columns for the
+#'   adverse event table within the `data` list.
 #' @param timeline_cols Character vector with the name of the columns of the
 #'   output data frame.
 #' @param treatment_label Character vector with the label to use for the
