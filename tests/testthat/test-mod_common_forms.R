@@ -46,7 +46,6 @@ describe(
       ) |> 
       get_appdata()
     appvars <- get_meta_vars(appdata)
-    AE_table <- create_table(appdata[["Adverse events"]])
     rev_data <- get_review_data(appdata[["Adverse events"]]) |> 
       dplyr::mutate(
         id = dplyr::row_number(),
@@ -54,7 +53,7 @@ describe(
         status = sample(c("new", "old", "updated"), dplyr::n(), replace = TRUE)
       )
     form_items <- appvars$items[["Adverse events"]]
-    timeline_data <- get_timeline_data(appdata, table_data = AE_table)
+    timeline_data <- get_timeline_data(appdata)
     testargs <- list(
       form = "Adverse events",
       form_data = reactiveVal(appdata[["Adverse events"]]),

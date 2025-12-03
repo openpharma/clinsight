@@ -12,7 +12,8 @@ describe(
       testdata <- get_available_data(data = appdata)
       expect_true(is.data.frame(testdata))
       expect_equal(names(testdata), c("subject_id", "item_name", "form_repeat", 
-                                      "item_group", "event_name", "event_label"))
+                                      "item_group", "event_name", "event_label", 
+                                      "event_date"))
     })
     it("Creates the expected data frame with given random appdata input", {
       expect_snapshot(get_available_data(data = appdata))

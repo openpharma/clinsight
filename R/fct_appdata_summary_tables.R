@@ -16,14 +16,23 @@
 #' 
 get_timeline_data <- function(
     data, 
-    table_data, 
+    available_data = NULL,
+    expected_ae_cols = c(
+      "AE Name",
+      "Serious Adverse Event",
+      "AE start date",
+      "AE end date",
+      "SAE Start date",
+      "SAE End date",
+      "AE date of worsening",
+      "CTCAE severity worsening"
+    ),
     timeline_cols =  c("subject_id", "event_name", "form_repeat", "item_group", 
                        "start", "group", "end", "title", "className", "id", "order"),
     treatment_label = "\U1F48A T\U2093"
 ){
-  stopifnot(is.list(data), is.data.frame(table_data))
+  stopifnot(is.list(data))
   stopifnot(is.character(timeline_cols), is.character(treatment_label))
-  
   if(all(unlist(lapply(data, is.null)))) return({
     warning("No data found. Returning empty data frame")
     setNames(
@@ -32,26 +41,35 @@ get_timeline_data <- function(
     ) |>
       dplyr::rename("content" = "event_name")
   })
+  if(is.null(available_data)){
+    available_data <- get_available_data(data)
+  }
+  stopifnot(is.data.frame(available_data))
+  available_data <- available_data |> 
+    add_missing_columns(c("subject_id", "item_name", "form_repeat", 
+                          "item_group", "event_name", "event_label", "event_date"))
+  
   study_event_data <- if(is.null(data) ){
     data.frame()
   } else{
-    data |> 
-      bind_rows_custom("item_value") |> 
-      dplyr::filter(
-        !is.na(event_name), 
-        !is.na(event_date),
-        event_name != "Any visit"
-      ) |> 
+    with(available_data, available_data[
+      !is.na(event_name) & !event_name %in% c("Any visit") & !is.na(subject_id),
+    ]) |> 
       dplyr::distinct(subject_id, event_name, start = event_date) |> 
       dplyr::mutate(
         group = "Visit",
         title = paste0(start, " | ", event_name)
       )
   }
-  
-  if(nrow(table_data) == 0){
+  ## Get AE data
+  if(is.null(data[["Adverse events"]]) || nrow(data[["Adverse events"]]) == 0){
     AE_timedata <- SAE_data <- data.frame()
   } else{
+    table_data <- create_table(
+      data[["Adverse events"]], 
+      expected_columns = expected_ae_cols
+    )
+    
     AE_timedata <- table_data |> 
       dplyr::filter(!(`Serious Adverse Event` == "Yes" & 
                         .data[["start date"]] == .data[["SAE Start date"]])) |> 
@@ -170,10 +188,10 @@ get_available_data <- function(
   stopifnot(inherits(data, "list"), is.character(form_repeat_name))
   if(identical(form_repeat_name, character(0))){form_repeat_name <- "N"}
   selector_cols <- c("subject_id", "item_name", "form_repeat", "item_group", 
-                     "event_name", "event_label")
+                     "event_name", "event_label", "event_date")
   if(length(data) == 0) {
     warning("Empty list of data provided")
-    return(add_missing_columns(data.frame(), c(selector_cols, "n")))
+    return(add_missing_columns(data.frame(), selector_cols))
   }
   study_event_selectors <- lapply(
     data, 

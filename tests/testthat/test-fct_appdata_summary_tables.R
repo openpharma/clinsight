@@ -7,12 +7,8 @@ describe("get_timeline_data works", {
       ) |> 
       get_appdata()
     appvars <- get_meta_vars(appdata)
-    
-    ae_tables <- create_table(
-      appdata[["Adverse events"]], 
-      expected_columns = names(appvars$items[["Adverse events"]])
-    )
-    output <- get_timeline_data(appdata, ae_tables)
+    available_data <- get_available_data(appdata)
+    output <- get_timeline_data(appdata, available_data)
     expect_true(is.data.frame(output))
     expect_equal(
       names(output), 
@@ -28,33 +24,49 @@ describe("get_timeline_data works", {
       ) |> 
       get_appdata()
     appvars <- get_meta_vars(appdata)
-    ae_tables <- create_table(
-      appdata[["Adverse events"]], 
-      expected_columns = names(appvars$items[["Adverse events"]])
-    )
+    available_data <- get_available_data(appdata)
     expected_columns <- c("subject_id", "content", "form_repeat", "item_group", 
                           "start", "group", "end", "title", "className", "id", "order")
-    
-    output <- get_timeline_data(appdata["Adverse events"], ae_tables)
+    output <- get_timeline_data(appdata["Adverse events"], available_data)
     expect_true(is.data.frame(output))
     expect_equal(names(output), expected_columns)
     
-    output <- get_timeline_data(appdata["Vital signs"], ae_tables)
+    output <- get_timeline_data(appdata["Vital signs"], available_data)
     expect_true(is.data.frame(output))
     expect_equal(names(output), expected_columns)
     
-    output <- get_timeline_data(appdata["General"], ae_tables)
+    output <- get_timeline_data(appdata["General"], available_data)
     expect_true(is.data.frame(output))
     expect_equal(names(output), expected_columns)
     
     expect_warning(
-      get_timeline_data(appdata["Gener"], ae_tables),
+      output <- get_timeline_data(appdata["Gener"], available_data),
       "No data found"
     )
-    output <- get_timeline_data(appdata["Gener"], ae_tables) |> 
-      suppressWarnings() 
     expect_true(is.data.frame(output))
     expect_equal(names(output), expected_columns)
+    
+    expect_warning(
+      output <- get_timeline_data(appdata["Gener"]),
+      "No data found"
+    )
+    expect_true(is.data.frame(output))
+    expect_equal(names(output), expected_columns)
+    
+  })
+  it("gathers visit data from data frame if data frame available_data is not provided", {
+    appdata <- clinsightful_data |> 
+      dplyr::filter(
+        subject_id %in% c("BEL_08_885"),
+        item_group %in% c("Adverse events",  "Vital signs", "General")
+      ) |> 
+      get_appdata()
+    expected_columns <- c("subject_id", "content", "form_repeat", "item_group", 
+                          "start", "group", "end", "title", "className", "id", "order")
+    output <- get_timeline_data(appdata["Vital signs"])
+    expect_true(is.data.frame(output))
+    expect_equal(names(output), expected_columns)
+    expect_equal(output$content, c("Screening", "Visit 1"))
   })
   
 })
