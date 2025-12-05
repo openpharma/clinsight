@@ -8,7 +8,7 @@ describe(
       form_items = "",
       active_subject = reactiveVal("DEU_02_482"),
       table_names = NULL,
-      timeline_data = reactiveVal()
+      timeline_data = data.frame()
     ) 
     
     it("Can load the module UI, with functioning internal parameters.", {
@@ -61,7 +61,7 @@ describe(
       form_items = form_items,
       active_subject = reactiveVal("DEU_02_482"),
       table_names = NULL,
-      timeline_data = reactiveVal(timeline_data)
+      timeline_data = timeline_data
     ) 
     it(
       "Scenario 1 - View Adverse events and SAE tables. Given the form [Adverse events],
@@ -115,7 +115,7 @@ describe(
           form_items = form_items,
           active_subject = reactiveVal("DEU_02_482"),
           table_names = NULL,
-          timeline_data = reactiveVal(timeline_data)
+          timeline_data = timeline_data
         )  
         
         testServer(mod_common_forms_server, args = testargs, {

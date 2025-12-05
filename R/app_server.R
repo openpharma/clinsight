@@ -57,6 +57,13 @@ app_server <- function(
     )
   )
   
+  # For timeline data
+  timeline_data <-get_timeline_data(
+    app_data,
+    available_data = available_data,
+    treatment_label = meta$settings$treatment_label %||% "\U1F48A T\U2093"
+  )
+  
   # think of using the pool package, but functions such as row_update are not yet supported.
   r <- reactiveValues(
     review_data       = do.call(reactiveValues, split_review_data(user_db, forms = app_vars$all_forms$form)),
@@ -202,15 +209,6 @@ app_server <- function(
     identical(session$userData$review_type(), "form")
   })
   outputOptions(output, "form_level_review", suspendWhenHidden = FALSE)
-  
-  # For timeline data
-  timeline_data <- reactive({
-    get_timeline_data(
-      r$filtered_data, 
-      available_data = available_data,
-      treatment_label = meta$settings$treatment_label %||% "\U1F48A T\U2093"
-    )
-  })
   
   ###### Load common form tabs in UI and server:
   common_forms <- with(app_vars$all_forms, form[main_tab == "Common events"])
