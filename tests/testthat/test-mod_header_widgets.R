@@ -77,7 +77,6 @@ describe(
           event_name = "",
           event_label = factor("SCR")
         )
-        #a <- get_available_data(list("AEs" = AE_figure_data))
         testargs <- list(
           r = reactiveValues(
             filtered_data = list("Adverse events" = AE_figure_data)
