@@ -21,8 +21,8 @@ count_adverse_events <- function(
     })
   }
   stopifnot("One or more required columns are missing" = all(c(key_columns, "item_value") %in% names(data)))
-  stopifnot(is.character(all_ids %||% ""))
-  all_ids <- c(all_ids, unique(data[["subject_id"]]))
+  all_ids <- unique(c(all_ids, unique(data[["subject_id"]])))
+  stopifnot(is.character(all_ids))
   if (!SAE_column_name %in% data$item_name) {
     warning("item '", SAE_column_name, "' not found. Unable to determine (S)AE numbers.")
     return(
@@ -38,7 +38,7 @@ count_adverse_events <- function(
     dplyr::mutate(
       item_value = ifelse(is.na(item_value), "No", item_value)
     )
-  all_aes <- data.frame(subject_id = unique(all_ids)) |> 
+  all_aes <- data.frame(subject_id = all_ids) |> 
     dplyr::left_join(
       ae_data, 
       by = "subject_id"
