@@ -201,7 +201,7 @@ get_available_data <- function(
     data, 
     \(x){
       name_vars <- c("Name", "AE Name", "CP Name", "MH Name", "CM Name")
-      if (any(!selector_cols %in% names(x))) {
+      if (!all(selector_cols %in% names(x))) {
         x <- add_missing_columns(x, selector_cols) |>
           dplyr::mutate(
             event_date = as.Date(event_date),
