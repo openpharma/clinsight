@@ -1,7 +1,7 @@
 # get_available_data() creates a data frame with all available data per individual. It summarizes the available data points for each individual for each time point. For forms with a 'Name' column (mostly common_forms but can also be study data forms) the Name column of the pivot table data will be used (for example, the specific adverse event or concomitant medication). For all other forms, the data points will be taken from event_name.: Creates the expected data frame with given random appdata input
 
     Code
-      get_available_data(data = appdata)
+      dplyr::as_tibble(get_available_data(data = appdata))
     Output
       # A tibble: 2,235 x 7
          subject_id item_name form_repeat item_group event_name event_label event_date

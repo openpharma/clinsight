@@ -30,7 +30,7 @@ describe(
                                       "event_date"))
     })
     it("Creates the expected data frame with given random appdata input", {
-      expect_snapshot(get_available_data(data = appdata))
+      expect_snapshot(dplyr::as_tibble(get_available_data(data = appdata)))
     })
     it("Adds a form_repeat number to item_name if duplicates occur within an 
        individual, to ensure item names can be uniquely identified", {
@@ -75,6 +75,14 @@ describe(
          common_form_outcome <- get_available_data(appdata['Electrolytes'])
          expect_equal(common_form_outcome, study_form_outcome)
        })
+    it("does not error if required columns are missing", {
+      appdata[['test-data']] <- data.frame()
+      expect_no_error(
+        outcome_1 <-  get_available_data(appdata[c('test-data', 'Electrolytes')])
+      )
+      outcome_2 <-  get_available_data(appdata[c('Electrolytes')]) 
+      expect_equal(outcome_1, outcome_2)
+    })
     it("Scenario 3 - Given ... and some forms defined in the metadata but 
     completely missing in the data or tables,
        I expect that I still get a table with available data", {

@@ -201,17 +201,27 @@ get_available_data <- function(
     data, 
     \(x){
       name_vars <- c("Name", "AE Name", "CP Name", "MH Name", "CM Name")
+      if (any(!selector_cols %in% names(x))) {
+        x <- add_missing_columns(x, selector_cols) |>
+          dplyr::mutate(
+            event_date = as.Date(event_date),
+            form_repeat = as.integer(form_repeat),
+            event_label = factor(event_label)
+          )
+      }
       if ( any(unique(x$item_name) %in% name_vars)){
         x <- x[x$item_name %in% name_vars, ] |> 
           dplyr::mutate(item_name = item_value)
       }
-      x[c(selector_cols)] |> 
+      x[!is.na(x$item_name), c(selector_cols)] |> 
         dplyr::distinct() |> 
         dplyr::arrange(subject_id, event_name) |> 
         # Because the factor levels differ per table:
         dplyr::mutate(item_name = as.character(item_name))
     }) |> 
-    dplyr::bind_rows()
+    dplyr::bind_rows() |> 
+    # to ensure classes created in get_appdata() are dropped, even in edge cases:
+    as.data.frame()
   # To uniquely identify events with the same name (mostly in common_forms):
   study_event_selectors |> 
     dplyr::mutate(
