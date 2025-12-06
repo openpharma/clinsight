@@ -207,10 +207,9 @@ get_available_data <- function(
       }
       x[c(selector_cols)] |> 
         dplyr::distinct() |> 
-        dplyr::arrange(
-          subject_id, 
-          factor(event_name, levels = order_string(event_name))
-        )
+        dplyr::arrange(subject_id, event_name) |> 
+        # Because the factor levels differ per table:
+        dplyr::mutate(item_name = as.character(item_name))
     }) |> 
     dplyr::bind_rows()
   # To uniquely identify events with the same name (mostly in common_forms):

@@ -11,8 +11,22 @@ describe(
     it("Creates a data frame with the correct columns per individual. ", {
       testdata <- get_available_data(data = appdata)
       expect_true(is.data.frame(testdata))
-      expect_equal(names(testdata), c("subject_id", "item_name", "form_repeat", 
-                                      "item_group", "event_name", "event_label", 
+      expect_equal(names(testdata), c("subject_id", "item_name", "form_repeat",
+                                      "item_group", "event_name", "event_label",
+                                      "event_date"))
+    })
+    it("summarizes study_fom data correctly", {
+      testdata <- get_available_data(data = appdata['Electrolytes'])
+      expect_equal(
+        unique(testdata$item_name),
+        levels(appdata$Electrolytes$item_name)
+      )
+      expect_equal(
+        unique(testdata$subject_id),
+        unique(appdata$Electrolytes$subject_id)
+      )
+      expect_equal(names(testdata), c("subject_id", "item_name", "form_repeat",
+                                      "item_group", "event_name", "event_label",
                                       "event_date"))
     })
     it("Creates the expected data frame with given random appdata input", {
