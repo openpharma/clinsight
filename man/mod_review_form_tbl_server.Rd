@@ -12,7 +12,7 @@ mod_review_form_tbl_server(
   form_items,
   active_subject,
   show_all,
-  enable_line_breaks = reactive(FALSE),
+  enable_text_wrap = reactive(FALSE),
   table_names = NULL,
   title = NULL
 )
@@ -36,7 +36,7 @@ the form.}
 \item{show_all}{Common reactive value, a logical indicating whether all
 records should be displayed.}
 
-\item{enable_line_breaks}{A reactive value, to enable/disable multi-line
+\item{enable_text_wrap}{A reactive value, to enable/disable multi-line
 table rows. Usually disabled so that deferred rendering is possible, but
 can be enabled for better viewing experience.}
 

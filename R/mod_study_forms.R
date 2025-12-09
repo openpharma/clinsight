@@ -64,7 +64,7 @@ mod_study_forms_ui <- function(id, form, form_items){
               right = TRUE
             ),
             shinyWidgets::materialSwitch(
-              inputId = ns("enable_line_breaks"),
+              inputId = ns("enable_text_wrap"),
               label = "Enable text wrapping", 
               status = "primary",
               right = TRUE,
@@ -189,7 +189,7 @@ mod_study_forms_server <- function(
       active_subject = active_subject,
       form_items = form_items,
       show_all = reactive(isTRUE(input$show_all) | identical(session$userData$review_type(), "form")), 
-      enable_line_breaks = reactive(isTRUE(input$enable_line_breaks)),
+      enable_text_wrap = reactive(isTRUE(input$enable_text_wrap)),
       table_names = table_names,
       title = form
     )

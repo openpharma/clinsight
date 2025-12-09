@@ -35,7 +35,7 @@ mod_review_form_tbl_ui <- function(id) {
 #'   interactive tables.
 #' @param title An optional character vector. If provided, will be used within
 #'   [datatable_custom()], as the title for the table.
-#' @param enable_line_breaks A reactive value, to enable/disable multi-line
+#' @param enable_text_wrap A reactive value, to enable/disable multi-line
 #'   table rows. Usually disabled so that deferred rendering is possible, but
 #'   can be enabled for better viewing experience.
 #'
@@ -51,7 +51,7 @@ mod_review_form_tbl_server <- function(
     form_items,
     active_subject, 
     show_all,
-    enable_line_breaks = reactive(FALSE),
+    enable_text_wrap = reactive(FALSE),
     table_names = NULL,
     title = NULL
 ){
@@ -61,7 +61,7 @@ mod_review_form_tbl_server <- function(
   stopifnot(is.character(form_items))
   stopifnot(is.reactive(active_subject))
   stopifnot(is.reactive(show_all))
-  stopifnot(is.reactive(enable_line_breaks))
+  stopifnot(is.reactive(enable_text_wrap))
   stopifnot(is.character(table_names %||% ""))
   stopifnot(is.character(title %||% ""))
 
@@ -226,9 +226,9 @@ mod_review_form_tbl_server <- function(
               visible = isolate(show_all())
             )),
           rowCallback = row_callback,
-          scroller = isFALSE(enable_line_breaks()),
-          deferRender = isFALSE(enable_line_breaks()),
-          scrollCollapse = isFALSE(enable_line_breaks())
+          scroller = isFALSE(enable_text_wrap()),
+          deferRender = isFALSE(enable_text_wrap()),
+          scrollCollapse = isFALSE(enable_text_wrap())
         )
         )
     })
