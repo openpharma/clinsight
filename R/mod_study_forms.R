@@ -62,6 +62,19 @@ mod_study_forms_ui <- function(id, form, form_items){
               label = "Show all participants", 
               status = "primary",
               right = TRUE
+            ),
+            shinyWidgets::materialSwitch(
+              inputId = ns("enable_line_breaks"),
+              label = "Enable text wrapping", 
+              status = "primary",
+              right = TRUE,
+              value = FALSE
+            ) |> bslib::tooltip(
+              "Caution: enabling this is not recommended for big tables since it will be slow."
+            ),
+            bslib::card_body(
+              HTML("<b>Bold*:</b> New/updated data"), 
+              fillable = FALSE
             )
           )
         )
@@ -176,6 +189,7 @@ mod_study_forms_server <- function(
       active_subject = active_subject,
       form_items = form_items,
       show_all = reactive(isTRUE(input$show_all) | identical(session$userData$review_type(), "form")), 
+      enable_line_breaks = reactive(isTRUE(input$enable_line_breaks)),
       table_names = table_names,
       title = form
     )
