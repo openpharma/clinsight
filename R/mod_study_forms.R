@@ -155,6 +155,17 @@ mod_study_forms_server <- function(
         id = "show_all",
         condition = identical(session$userData$review_type(), "subject")
       )
+      if(identical(session$userData$review_type(), "form")){
+        shinyWidgets::updateMaterialSwitch(
+          session = session,
+          inputId = "enable_text_wrap",
+          value = FALSE
+        )
+      }
+      shinyjs::toggleElement(
+        id = "enable_text_wrap",
+        condition = identical(session$userData$review_type(), "subject")
+      )
       shinyWidgets::updateRadioGroupButtons(
         inputId = "switch_view",
         selected = if(

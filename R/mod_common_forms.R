@@ -128,6 +128,17 @@ mod_common_forms_server <- function(
         id = "show_all_data",
         condition = identical(session$userData$review_type(), "subject")
         )
+      if(identical(session$userData$review_type(), "form")){
+        shinyWidgets::updateMaterialSwitch(
+          session = session,
+          inputId = "enable_text_wrap",
+          value = FALSE
+        )
+      }
+      shinyjs::toggleElement(
+        id = "enable_text_wrap",
+        condition = identical(session$userData$review_type(), "subject")
+      )
       if(form == "Adverse events"){
         shinyjs::toggleElement(
           id = "timeline_card", 
