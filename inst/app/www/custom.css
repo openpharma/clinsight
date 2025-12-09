@@ -155,3 +155,11 @@ div.cs-progress-container>.cs-progress-bar>.cs-progress.marking {
 .bslib-sidebar-layout .sidebar .sidebar-content{
   height: 100%;
 }
+
+span.cs-span-overflow {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+}

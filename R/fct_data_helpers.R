@@ -529,6 +529,16 @@ datatable_custom <- function(
     stopifnot(is.character(rename_vars))
     colnames <- dplyr::rename(data[0,], dplyr::any_of(rename_vars)) |> 
       names()
+  }  
+  if ("escape" %in% ...names()) {
+    if (isFALSE(...elt(match("escape", ...names()))))
+      colnames <- purrr::map_chr(
+        colnames, 
+        \(cn) as.character(tags$span(
+          cn, 
+          class = "cs-span-overflow",
+          title = cn
+          )))
   }
   stopifnot(is.null(title) | is.character(title))
   stopifnot(grepl("t", dom, fixed = TRUE))
