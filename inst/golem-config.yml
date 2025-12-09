@@ -13,7 +13,7 @@ default:
     Project Manager: project_manager
     Data Explorer: data_explorer
   allow_to_review: [medical_monitor]
-  allow_to_query: [admin, data_manager, medical_monitor, data_explorer]
+  allow_to_query: [data_manager, medical_monitor, data_explorer]
   allow_listing_download: TRUE
   allow_query_inputs: TRUE
   study_logo: assets/study_logo.png
