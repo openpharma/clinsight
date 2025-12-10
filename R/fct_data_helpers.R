@@ -532,13 +532,14 @@ datatable_custom <- function(
   }  
   if ("escape" %in% ...names()) {
     if (isFALSE(...elt(match("escape", ...names()))))
-      colnames <- purrr::map_chr(
+      colnames <- lapply(
         colnames, 
         \(cn) as.character(tags$span(
-          cn, 
+          htmlEscape(cn), 
           class = "cs-span-overflow",
-          title = cn
-          )))
+          title = htmlEscape(cn)
+          ))) |> 
+        as.character()
   }
   stopifnot(is.null(title) | is.character(title))
   stopifnot(grepl("t", dom, fixed = TRUE))
