@@ -186,10 +186,7 @@
         "baseScrollTop": 0,
         "baseRowTop": 0,
         "scrollTop": 0
-      },
-      "childRows": [
-
-      ]
+      }
     },
     "cf_adverse_events-review_form_tbl-table_cell_clicked": {
 
@@ -387,6 +384,8 @@
     "cf_medical_history-show_all_data": false,
     "cf_medication-show_all_data": false,
     "common_data_tabs": "Adverse events",
+    "go_to_common_events": 0,
+    "go_to_study_data": 0,
     "main_sidebar_1-navigate_forms_1-form_next": 0,
     "main_sidebar_1-navigate_forms_1-form_previous": 0,
     "main_sidebar_1-review_config_1-config_review": 0,
