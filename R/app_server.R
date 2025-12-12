@@ -271,7 +271,6 @@ app_server <- function(
     navinfo = navinfo
   )
   
-  
   # Only initiate the sidebar after successful login, because it contains a
   # modal that pops up if data is out of synch. Modals interfere with shinymanager.
   observeEvent(r$user_name, {
@@ -346,4 +345,11 @@ app_server <- function(
     active_user_role = r$user_role,
     user_error = user_error()
   )
+  
+  mod_timeline_server(
+    "timeline_fig", 
+    form_review_data = reactive(r$review_data[["Adverse events"]]),
+    timeline_data = timeline_data,
+    active_subject = reactive(r$subject_id)
+  ) 
 }

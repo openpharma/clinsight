@@ -7,9 +7,6 @@ mod_common_forms_ui <- function(id, form){
   ns <- NS(id)
   bslib::nav_panel(
     title = form, 
-    if (form == "Adverse events") {
-      bslib::card_body(id = ns("timeline_card"), mod_timeline_ui(ns("timeline_fig")))
-      },
     bslib::layout_sidebar(
       fillable = FALSE,
       if(form == "Adverse events"){
@@ -151,12 +148,6 @@ mod_common_forms_server <- function(
         table_names = table_names, 
         title = "Serious Adverse Events"
       )
-      mod_timeline_server(
-        "timeline_fig", 
-        form_review_data = form_review_data,
-        timeline_data = timeline_data,
-        active_subject = active_subject
-      ) 
     }
     
   })

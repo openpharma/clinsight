@@ -31,13 +31,17 @@ app_ui <- function(request){
         condition = "!['Start', 'Queries', 'Create Report'].includes(input.main_tabs) && !output.form_level_review",
         mod_header_widgets_ui("header_widgets_1")
       ),
+      conditionalPanel(
+        condition = "!['Start', 'Study data', 'Queries', 'Create Report'].includes(input.main_tabs) && !output.form_level_review",
+          mod_timeline_ui("timeline_fig") 
+      ),
       bslib::nav_panel(
         title = "Start",
         mod_start_page_ui("start_page_1")
       ),
       bslib::nav_panel(
         title = "Common events",
-        bslib::navset_tab(id = "common_data_tabs") 
+        bslib::navset_tab(id = "common_data_tabs")
       ),
       bslib::nav_panel(
         "Study data", 
