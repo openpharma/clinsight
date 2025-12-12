@@ -1,4 +1,7 @@
 {
+  "input": {
+    "sf_vital_signs-enable_text_wrap": true
+  },
   "output": {
     "cf_adverse_events-review_form_SAE_tbl-table": {
       "x": {
@@ -8394,9 +8397,9 @@
         "options": {
           "scrollY": 400,
           "scrollX": true,
-          "scroller": true,
-          "deferRender": true,
-          "scrollCollapse": true,
+          "scroller": false,
+          "deferRender": false,
+          "scrollCollapse": false,
           "colReorder": {
             "enable": true,
             "realtime": false,
