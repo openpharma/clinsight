@@ -5,6 +5,7 @@
 - Replaced `dplyr::case_when()` with `ifelse()` in the row review status calculation for efficiency
 - Switched to server-side table downloads
 - Implemented a `line-clamp` on table column names that wrap to more than 6 lines
+- Add toggle to enable text wrapping in tables
 
 ## Bug fixes 
 
