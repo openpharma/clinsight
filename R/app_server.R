@@ -224,6 +224,10 @@ app_server <- function(
       select = (i == common_forms[1])
     )
   })
+  bslib::nav_insert(
+    id = "common_data_tabs", 
+    nav = bslib::nav_item(actionLink("go_to_study_data", ">", class="nav-link px-3"))
+  )
   lapply(common_forms, \(x){
     mod_common_forms_server(
       id = paste0("cf_", simplify_string(x)), 
@@ -240,6 +244,10 @@ app_server <- function(
   
   ###### Load study form tabs in UI and server:
   study_forms <- with(app_vars$all_forms, form[main_tab == "Study data"])
+  bslib::nav_insert(
+    id = "study_data_tabs", 
+    nav = bslib::nav_item(actionLink("go_to_common_events", "<", class="nav-link px-3"))
+  )
   lapply(study_forms, \(i){
     bslib::nav_insert(
       id = "study_data_tabs",
@@ -261,6 +269,13 @@ app_server <- function(
     ) 
   }) |>
     unlist(recursive = FALSE)
+  
+  observeEvent(input$go_to_study_data, {
+    bslib::nav_select(id = "main_tabs", selected = "Study data")
+  })
+  observeEvent(input$go_to_common_events, {
+    bslib::nav_select(id = "main_tabs", selected = "Common events")
+  })
   
   mod_start_page_server("start_page_1", r, rev_data, navinfo, app_vars$all_forms,
                         app_vars$table_names)
