@@ -502,6 +502,7 @@ add_missing_columns <- function(
 #'   needed.
 #' @param export_label Character string with the table export label. Only used
 #'   for downloadable tables (if `allow_listing_download` is `TRUE`).
+#' @param escape Whether to escape HTML entities in the table. See [DT::datatable()].
 #' @param ... Other optional arguments that will be passed to [DT::datatable()].
 #'
 #' @return A `DT::datatable` object.
@@ -521,6 +522,7 @@ datatable_custom <- function(
     options = list(),
     allow_listing_download = NULL,
     export_label = NULL,
+    escape = TRUE,
     ...
     ){
   stopifnot(is.data.frame(data))
@@ -529,6 +531,17 @@ datatable_custom <- function(
     stopifnot(is.character(rename_vars))
     colnames <- dplyr::rename(data[0,], dplyr::any_of(rename_vars)) |> 
       names()
+  }  
+  if (isFALSE(escape)) {
+    colnames <- lapply(
+      colnames, 
+      \(cn) as.character(tags$span(
+        htmlEscape(cn), 
+        class = "cs-span-overflow",
+        title = htmlEscape(cn)
+        ))
+      ) |> 
+      as.character()
   }
   stopifnot(is.null(title) | is.character(title))
   stopifnot(grepl("t", dom, fixed = TRUE))
@@ -585,6 +598,7 @@ datatable_custom <- function(
     options = opts,
     extensions = extensions,
     colnames = colnames,
+    escape = escape,
     ...
   ) 
 }
