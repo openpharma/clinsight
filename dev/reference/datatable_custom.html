@@ -9,7 +9,7 @@ consistent style."><meta property="og:image" content="https://openpharma.github.
 
     <a class="navbar-brand me-2" href="../index.html">clinsight</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.3.0.9004</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.3.0.9005</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,6 +65,7 @@ consistent style.</p>
 <span>  options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  allow_listing_download <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  export_label <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  escape <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -125,6 +126,10 @@ needed.</p></dd>
 <dt id="arg-export-label">export_label<a class="anchor" aria-label="anchor" href="#arg-export-label"></a></dt>
 <dd><p>Character string with the table export label. Only used
 for downloadable tables (if <code>allow_listing_download</code> is <code>TRUE</code>).</p></dd>
+
+
+<dt id="arg-escape">escape<a class="anchor" aria-label="anchor" href="#arg-escape"></a></dt>
+<dd><p>Whether to escape HTML entities in the table. See <code><a href="https://rdrr.io/pkg/DT/man/datatable.html" class="external-link">DT::datatable()</a></code>.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
