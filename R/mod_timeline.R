@@ -5,21 +5,7 @@
 #' 
 mod_timeline_ui <- function(id){
   ns <- NS(id)
-  tagList(
-    bslib::layout_sidebar(
-      sidebar = bslib::sidebar(
-        shinyWidgets::materialSwitch(
-          inputId = ns("minimize_timeline"),
-          label = "Maximize all output", 
-          status = "primary",
-          right = TRUE
-        ),
-        position = "right"
-      ),
-    timevis::timevisOutput(ns("timeline")),
-    border = FALSE
-    )
-  )
+  timevis::timevisOutput(ns("timeline"))
 }
 
 #' Interactive timeline - Shiny module Server
