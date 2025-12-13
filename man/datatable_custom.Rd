@@ -14,6 +14,7 @@ datatable_custom(
   options = list(),
   allow_listing_download = NULL,
   export_label = NULL,
+  escape = TRUE,
   ...
 )
 }
@@ -59,6 +60,8 @@ needed.}
 
 \item{export_label}{Character string with the table export label. Only used
 for downloadable tables (if \code{allow_listing_download} is \code{TRUE}).}
+
+\item{escape}{Whether to escape HTML entities in the table. See \code{\link[DT:datatable]{DT::datatable()}}.}
 
 \item{...}{Other optional arguments that will be passed to \code{\link[DT:datatable]{DT::datatable()}}.}
 }
