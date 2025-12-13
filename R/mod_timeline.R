@@ -5,7 +5,9 @@
 #' 
 mod_timeline_ui <- function(id){
   ns <- NS(id)
-  timevis::timevisOutput(ns("timeline"))
+  tagList(
+    timevis::timevisOutput(ns("timeline"))
+  )
 }
 
 #' Interactive timeline - Shiny module Server
