@@ -228,26 +228,31 @@ app_server <- function(
     id = "common_data_tabs",
     bslib::nav_item(
       class = "ms-auto d-flex align-items-center",
-      shinyWidgets::checkboxGroupButtons(
+      shinyWidgets::switchInput(
         inputId = "cf_widgets",
-        choiceNames = list(icon("user-gear"), icon("timeline")),
-        choiceValues = list("subject_overview", "timeline"),
-        justified = TRUE, 
-        selected = c("subject_overview", "timeline")
+        label = icon("timeline"),
+        value = TRUE,
+        inline = TRUE,
       )
     )
   )
-  observeEvent(input$cf_widgets, {
-    req(input$main_tabs == "Common events")
-    golem::cat_dev("cf_widgets switch input is ", input$cf_widgets)
-    browser()
-    shinyjs::toggleElement(
-      id = "header_widgets_1-top_widgets", 
-      condition =  "subject_overview" %in% input$cf_widgets
-      )
+  
+  
+  observeEvent(c(input$cf_widgets, input$main_tabs), {
+    req(identical(input$main_tabs, "Common events"))
+    golem::cat_dev("cf_widgets switch input is ", input$cf_widgets, "\n", sep = "")
     shinyjs::toggleElement(
       id = "timeline_fig-timeline", 
-      condition =  "timeline" %in% input$cf_widgets
+      condition =  input$cf_widgets
+    )
+  })
+  
+  observeEvent(c(input$sf_widgets, input$main_tabs), {
+    req(identical(input$main_tabs, "Study data"))
+    golem::cat_dev("sf_widgets switch input is ", input$sf_widgets, "\n", sep = "")
+    shinyjs::toggleElement(
+      id = "timeline_fig-timeline", 
+      condition =  input$sf_widgets
     )
   })
   
@@ -279,12 +284,11 @@ app_server <- function(
     id = "study_data_tabs",
     bslib::nav_item(
       class = "ms-auto d-flex align-items-center",
-      shinyWidgets::checkboxGroupButtons(
+      shinyWidgets::switchInput(
         inputId = "sf_widgets",
-        choiceNames = list(icon("user-gear"), icon("timeline")),
-        choiceValues = list("subject_overview", "timeline"),
-        justified = TRUE, 
-        selected = "subject_overview"
+        label = icon("timeline"),
+        value = FALSE,
+        inline = TRUE, #onLabel = "", offLabel = ""
       )
     )
   )

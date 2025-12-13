@@ -32,7 +32,7 @@ app_ui <- function(request){
         mod_header_widgets_ui("header_widgets_1")
       ),
       conditionalPanel(
-        condition = "!['Start', 'Study data', 'Queries', 'Create Report'].includes(input.main_tabs) && !output.form_level_review",
+        condition = "!['Start', 'Queries', 'Create Report'].includes(input.main_tabs) && !output.form_level_review",
           mod_timeline_ui("timeline_fig") 
       ),
       bslib::nav_panel(
