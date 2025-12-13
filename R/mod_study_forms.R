@@ -66,6 +66,15 @@ mod_study_forms_ui <- function(id, form, form_items){
                 value = FALSE,
                 right = TRUE
               )
+            ),
+            selectInput(
+              ns("data_type"), 
+              label = "Data type", 
+              choices = c(
+                "Raw" = "raw", 
+                "Scaled" = "scaled", 
+                "Standardized" = "standardized"
+              )
             )
           ),
           bslib::popover(
@@ -206,17 +215,21 @@ mod_study_forms_server <- function(
       table_names = table_names,
       title = form
     )
-
-    scaling_data <- reactive({
-      cols <- c("item_scale", "use_unscaled_limits")
-      # Ensure no errors even if cols are missing, with FALSE as default:
-      lapply(add_missing_columns(item_info, cols)[1, cols], isTRUE)
-    })
+    
+    cols <- c("item_scale", "use_unscaled_limits")
+    # Ensure no errors even if cols are missing, with FALSE as default:
+    scaling_data <- lapply(add_missing_columns(item_info, cols)[1, cols], isTRUE)
+    
+    updateSelectInput(
+      session = session,
+      inputId = "data_type", 
+      selected = if(isTRUE(scaling_data$item_scale)) "scaled" else "raw"
+    )
     
     ############################### Outputs: ###################################
     dynamic_figure <- reactive({
-      req(nrow(fig_data()) > 0, scaling_data())
-      scale_yval <- scaling_data()$item_scale
+      req(nrow(fig_data()) > 0, scaling_data)
+      scale_yval <- scaling_data$item_scale
       yval <- ifelse(scale_yval, "value_scaled", "item_value")
       validate(need(
         fig_data()[[yval]], 
@@ -235,7 +248,7 @@ mod_study_forms_server <- function(
         show_all_participants = isTRUE(input$show_all_participants),
         show_all_hover_labels = input$show_all_hover_labels,
         scale = scale_yval,
-        use_unscaled_limits = scaling_data()$use_unscaled_limits
+        use_unscaled_limits = scaling_data$use_unscaled_limits
       )
     })
     
