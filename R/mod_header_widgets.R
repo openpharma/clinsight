@@ -20,7 +20,8 @@ mod_header_widgets_ui <- function(id){
           class = "timeline-fig-basic"
         ),
         class = "top-widgets-custom"
-    )
+    ),
+    mod_timeline_ui("timeline_fig")
   )
 }
 
