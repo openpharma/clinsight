@@ -308,6 +308,12 @@ app_server <- function(
     )
   })
   
+  observeEvent(session$userData$review_type(), {
+    subject_level_review <- identical(session$userData$review_type(), "subject")
+    shinyjs::toggleElement("cf_toggle_timeline", subject_level_review)
+    shinyjs::toggleElement("sf_toggle_timeline", subject_level_review)
+  })
+  
   
   mod_start_page_server("start_page_1", r, rev_data, navinfo, app_vars$all_forms,
                         app_vars$table_names)
