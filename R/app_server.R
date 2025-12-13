@@ -224,37 +224,6 @@ app_server <- function(
       select = (i == common_forms[1])
     )
   })
-  bslib::nav_insert(
-    id = "common_data_tabs",
-    bslib::nav_item(
-      class = "ms-auto d-flex align-items-center",
-      shinyWidgets::switchInput(
-        inputId = "cf_toggle_timeline",
-        label = icon("timeline"),
-        value = TRUE,
-        inline = TRUE
-      )
-    )
-  )
-  
-  
-  observeEvent(c(input$cf_toggle_timeline, input$main_tabs), {
-    req(identical(input$main_tabs, "Common events"))
-    golem::cat_dev("cf_toggle_timeline switch input is ", input$cf_toggle_timeline, "\n", sep = "")
-    shinyjs::toggleElement(
-      id = "timeline_fig-timeline", 
-      condition =  input$cf_toggle_timeline
-    )
-  })
-  
-  observeEvent(c(input$sf_toggle_timeline, input$main_tabs), {
-    req(identical(input$main_tabs, "Study data"))
-    golem::cat_dev("sf_toggle_timeline switch input is ", input$sf_toggle_timeline, "\n", sep = "")
-    shinyjs::toggleElement(
-      id = "timeline_fig-timeline", 
-      condition =  input$sf_toggle_timeline
-    )
-  })
   
   lapply(common_forms, \(x){
     mod_common_forms_server(
@@ -280,18 +249,7 @@ app_server <- function(
       select = (i == study_forms[1])
     )
   })
-  bslib::nav_insert(
-    id = "study_data_tabs",
-    bslib::nav_item(
-      class = "ms-auto d-flex align-items-center",
-      shinyWidgets::switchInput(
-        inputId = "sf_toggle_timeline",
-        label = icon("timeline"),
-        value = FALSE,
-        inline = TRUE
-      )
-    )
-  )
+  
   lapply(study_forms, \(x){
     mod_study_forms_server(
       id = paste0("sf_", simplify_string(x)), 
@@ -305,6 +263,51 @@ app_server <- function(
     ) 
   }) |>
     unlist(recursive = FALSE)
+  
+  
+  bslib::nav_insert(
+    id = "common_data_tabs",
+    bslib::nav_item(
+      class = "ms-auto d-flex align-items-center",
+      shinyWidgets::switchInput(
+        inputId = "cf_toggle_timeline",
+        label = icon("timeline"),
+        value = TRUE,
+        inline = TRUE
+      )
+    )
+  )
+  
+  observeEvent(c(input$cf_toggle_timeline, input$main_tabs), {
+    req(identical(input$main_tabs, "Common events"))
+    golem::cat_dev("cf_toggle_timeline switch input is ", input$cf_toggle_timeline, "\n", sep = "")
+    shinyjs::toggleElement(
+      id = "timeline_fig-timeline", 
+      condition =  input$cf_toggle_timeline
+    )
+  })
+  
+  bslib::nav_insert(
+    id = "study_data_tabs",
+    bslib::nav_item(
+      class = "ms-auto d-flex align-items-center",
+      shinyWidgets::switchInput(
+        inputId = "sf_toggle_timeline",
+        label = icon("timeline"),
+        value = FALSE,
+        inline = TRUE
+      )
+    )
+  )
+  observeEvent(c(input$sf_toggle_timeline, input$main_tabs), {
+    req(identical(input$main_tabs, "Study data"))
+    golem::cat_dev("sf_toggle_timeline switch input is ", input$sf_toggle_timeline, "\n", sep = "")
+    shinyjs::toggleElement(
+      id = "timeline_fig-timeline", 
+      condition =  input$sf_toggle_timeline
+    )
+  })
+  
   
   mod_start_page_server("start_page_1", r, rev_data, navinfo, app_vars$all_forms,
                         app_vars$table_names)
