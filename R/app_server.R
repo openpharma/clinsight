@@ -229,30 +229,30 @@ app_server <- function(
     bslib::nav_item(
       class = "ms-auto d-flex align-items-center",
       shinyWidgets::switchInput(
-        inputId = "cf_widgets",
+        inputId = "cf_toggle_timeline",
         label = icon("timeline"),
         value = TRUE,
-        inline = TRUE,
+        inline = TRUE
       )
     )
   )
   
   
-  observeEvent(c(input$cf_widgets, input$main_tabs), {
+  observeEvent(c(input$cf_toggle_timeline, input$main_tabs), {
     req(identical(input$main_tabs, "Common events"))
-    golem::cat_dev("cf_widgets switch input is ", input$cf_widgets, "\n", sep = "")
+    golem::cat_dev("cf_toggle_timeline switch input is ", input$cf_toggle_timeline, "\n", sep = "")
     shinyjs::toggleElement(
       id = "timeline_fig-timeline", 
-      condition =  input$cf_widgets
+      condition =  input$cf_toggle_timeline
     )
   })
   
-  observeEvent(c(input$sf_widgets, input$main_tabs), {
+  observeEvent(c(input$sf_toggle_timeline, input$main_tabs), {
     req(identical(input$main_tabs, "Study data"))
-    golem::cat_dev("sf_widgets switch input is ", input$sf_widgets, "\n", sep = "")
+    golem::cat_dev("sf_toggle_timeline switch input is ", input$sf_toggle_timeline, "\n", sep = "")
     shinyjs::toggleElement(
       id = "timeline_fig-timeline", 
-      condition =  input$sf_widgets
+      condition =  input$sf_toggle_timeline
     )
   })
   
@@ -285,10 +285,10 @@ app_server <- function(
     bslib::nav_item(
       class = "ms-auto d-flex align-items-center",
       shinyWidgets::switchInput(
-        inputId = "sf_widgets",
+        inputId = "sf_toggle_timeline",
         label = icon("timeline"),
         value = FALSE,
-        inline = TRUE, #onLabel = "", offLabel = ""
+        inline = TRUE
       )
     )
   )
