@@ -6,21 +6,23 @@
 mod_header_widgets_ui <- function(id){
   ns <- NS(id)
   tagList(
-        bslib::layout_column_wrap(
-          width = NULL,
-          fixed_width = FALSE, 
-          style = bslib::css(grid_template_columns = "1fr 1fr 1fr 3fr"),
-          mod_navigate_participants_ui("navigate_participants_1"),
-          shiny::uiOutput(ns("ae_box"), class = "top-widgets-ui"), 
-          mod_navigate_review_ui("navigate_review_1"),
-          bslib::card(
-          max_height = "75px",
-          plotOutput(ns("visit_figure"), height = "auto"),
-          # to change the padding with css:
-          class = "timeline-fig-basic"
-        ),
-        class = "top-widgets-custom"
+    bslib::layout_column_wrap(
+      id = ns("top_widgets"),
+      width = NULL,
+      fixed_width = FALSE, 
+      style = bslib::css(grid_template_columns = "1fr 1fr 1fr 3fr"),
+      mod_navigate_participants_ui("navigate_participants_1"),
+      shiny::uiOutput(ns("ae_box"), class = "top-widgets-ui"), 
+      mod_navigate_review_ui("navigate_review_1"),
+      bslib::card(
+        max_height = "75px",
+        plotOutput(ns("visit_figure"), height = "auto"),
+        # to change the padding with css:
+        class = "timeline-fig-basic"
+      ),
+      class = "top-widgets-custom"
     )
+    
   )
 }
 

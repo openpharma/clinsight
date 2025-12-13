@@ -224,6 +224,33 @@ app_server <- function(
       select = (i == common_forms[1])
     )
   })
+  bslib::nav_insert(
+    id = "common_data_tabs",
+    bslib::nav_item(
+      class = "ms-auto d-flex align-items-center",
+      shinyWidgets::checkboxGroupButtons(
+        inputId = "cf_widgets",
+        choiceNames = list(icon("user-gear"), icon("timeline")),
+        choiceValues = list("subject_overview", "timeline"),
+        justified = TRUE, 
+        selected = c("subject_overview", "timeline")
+      )
+    )
+  )
+  observeEvent(input$cf_widgets, {
+    req(input$main_tabs == "Common events")
+    golem::cat_dev("cf_widgets switch input is ", input$cf_widgets)
+    browser()
+    shinyjs::toggleElement(
+      id = "header_widgets_1-top_widgets", 
+      condition =  "subject_overview" %in% input$cf_widgets
+      )
+    shinyjs::toggleElement(
+      id = "timeline_fig-timeline", 
+      condition =  "timeline" %in% input$cf_widgets
+    )
+  })
+  
   lapply(common_forms, \(x){
     mod_common_forms_server(
       id = paste0("cf_", simplify_string(x)), 
@@ -248,6 +275,19 @@ app_server <- function(
       select = (i == study_forms[1])
     )
   })
+  bslib::nav_insert(
+    id = "study_data_tabs",
+    bslib::nav_item(
+      class = "ms-auto d-flex align-items-center",
+      shinyWidgets::checkboxGroupButtons(
+        inputId = "sf_widgets",
+        choiceNames = list(icon("user-gear"), icon("timeline")),
+        choiceValues = list("subject_overview", "timeline"),
+        justified = TRUE, 
+        selected = "subject_overview"
+      )
+    )
+  )
   lapply(study_forms, \(x){
     mod_study_forms_server(
       id = paste0("sf_", simplify_string(x)), 
