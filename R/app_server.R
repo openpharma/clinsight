@@ -84,7 +84,7 @@ app_server <- function(
       user_error("No valid user name provided. ")
     } 
     if(r$user_role == ""){
-      user_error(paste0(user_error(), "No valid user role provided. "))
+      user_error(paste0(user_error(), "No user role assigned. "))
     }
     if(!is.null(user_error())){
       user_error(

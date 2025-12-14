@@ -94,7 +94,7 @@ describe(
         session$flushReact()
         expect_equal(
           user_error(),
-          paste0("No valid user role provided. Functionality is limited. ",
+          paste0("No valid user role assigned. Functionality is limited. ",
                  "Please contact the administrator to resolve this issue.")
         )
       }, 
