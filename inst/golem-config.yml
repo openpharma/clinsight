@@ -10,7 +10,6 @@ default:
     Administrator: admin
     Medical Monitor: medical_monitor
     Data Manager: data_manager
-    Project Manager: project_manager
   allow_to_review: [admin, medical_monitor]
   allow_to_query: [admin, medical_monitor]
   allow_listing_download: TRUE
