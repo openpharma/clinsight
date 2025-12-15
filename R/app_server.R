@@ -233,8 +233,7 @@ app_server <- function(
       form_review_data = reactive(r$review_data[[x]]), 
       form_items = app_vars$items[[x]], 
       active_subject = reactive(r$subject_id),
-      table_names = app_vars$table_names, 
-      timeline_data = timeline_data
+      table_names = app_vars$table_names
     ) 
   }) |>
     unlist(recursive = FALSE)

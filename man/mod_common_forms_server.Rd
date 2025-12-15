@@ -12,8 +12,7 @@ mod_common_forms_server(
   form_items,
   active_subject,
   id_item = c("subject_id", "event_name", "item_group", "form_repeat", "item_name"),
-  table_names = NULL,
-  timeline_data
+  table_names = NULL
 )
 }
 \arguments{
@@ -46,10 +45,6 @@ that can uniquely identify one item/row.}
 \item{table_names}{An optional character vector. If provided, will be used
 within \code{\link[=datatable_custom]{datatable_custom()}}, to improve the column names in the final
 interactive tables.}
-
-\item{timeline_data}{A reactive with a data frame containing the timeline
-data. Used to create the timeline figure. Created with
-\code{\link[=get_timeline_data]{get_timeline_data()}}.}
 }
 \description{
 Shiny module. Used to display common form data in the dedicated tab.
