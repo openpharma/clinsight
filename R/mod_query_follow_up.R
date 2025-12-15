@@ -67,19 +67,17 @@ mod_query_follow_up_server <- function(id, r, selected_query, db_path){
       }
     })
     
-    allowed_to_query <- reactive({
-      get_roles_from_config()[r$user_role] %in% get_golem_config("allow_to_query")
-    })
-    
-    observeEvent(allowed_to_query(), {
-      shinyjs::toggleElement("resolved", condition = allowed_to_query())
+    observeEvent(r$user_role, {
+      shinyjs::toggleElement(
+        "resolved", 
+        condition = get_roles_from_config()[r$user_role] %in% get_golem_config("allow_to_query")
+        )
     })
     
     query_save_error <- reactiveVal(FALSE)
     observeEvent(input$query_add_follow_up, {
       req(input$query_follow_up_text, r$user_name, r$user_role, selected_query())
       req(selected_query() %in% r$query_data$query_id)
-      req(!(isFALSE(allowed_to_query()) && isTRUE(input$resolved)))
       query_save_error(FALSE)
       golem::cat_dev("Query FU text to add: ", input$query_follow_up_text, "\n")
       ts <- time_stamp()
@@ -153,7 +151,6 @@ mod_query_follow_up_server <- function(id, r, selected_query, db_path){
       validate(
         need(r$user_name, "User name missing. Cannot save query anonymously."),
         need(r$user_role, "User role missing. Cannot save query without user role."),
-        need(!(isFALSE(allowed_to_query()) && isTRUE(input$resolved)), "User role not allowed to close a query"),
         need(selected_query(), "Select a query to follow-up"),
         need(selected_query() %in% r$query_data$query_id, 
              "Query ID unknown. Verify the database"),
