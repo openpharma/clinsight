@@ -33,12 +33,8 @@ shinyproxy:
   study_data: study_data/study_data.rds
   meta_data: study_data/metadata.rds
   user_db: study_data/user_db.sqlite
-  user_roles:
-    Medical Monitor: medical_monitor
-    Data Manager: data_manager
-    Data Explorer: data_explorer
   allow_to_review: [medical_monitor]
-  allow_to_query: [data_manager, medical_monitor]
+  allow_to_query: [medical_monitor]
 posit_connect:
   app_prod: yes
   user_identification: shiny_session
