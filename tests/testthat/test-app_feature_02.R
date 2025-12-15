@@ -52,5 +52,32 @@ describe(
         expect_equal(unique(active_form_data$comment), "test comment")
       }
     )
+    it(
+      "Scenario 2 - Attempt to save review without a role that allows to review.
+       Given a fixed random test data set with all data marked as not yet reviewed, 
+            and being logged in as test user, 
+            and changing my role to 'Data Manager',
+            I expect to see a message in the sidebar that I am not allowed to review,
+            and that the save review button and form_reviewed chek box are disabled.
+      ",
+      {
+        app$click("main_sidebar_1-review_config_1-config_review")
+        app$wait_for_idle()
+        app$set_inputs("main_sidebar_1-review_config_1-active_role" = "Data Manager")
+        app$click("main_sidebar_1-review_config_1-save_review_config")
+        # Hide the modal showing confirmation of changing config:
+        app$run_js("$('#shiny-modal').modal('hide');")
+        
+        review_error <- app$get_value(output = "main_sidebar_1-review_forms_1-save_review_error")$message
+        
+        expect_equal(
+          review_error,
+          "With your current role ('Data Manager') you cannot save a review."
+        )
+        
+        expect_true(app$get_js("document.getElementById('main_sidebar_1-review_forms_1-save_review').disabled;"))
+        expect_true(app$get_js("document.getElementById('main_sidebar_1-review_forms_1-form_reviewed').disabled;"))
+      }
+    )
   }
 )

@@ -71,7 +71,7 @@ mod_query_follow_up_server <- function(id, r, selected_query, db_path){
       shinyjs::toggleElement(
         "resolved", 
         condition = get_roles_from_config()[r$user_role] %in% get_golem_config("allow_to_query")
-        )
+      )
     })
     
     query_save_error <- reactiveVal(FALSE)

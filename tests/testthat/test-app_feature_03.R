@@ -239,6 +239,56 @@ describe(
         )
       }
     )
+    it(
+      "Scenario 5 - Respond to query without role to query.
+      Given two queries being created as in the previous scenarios,
+        and viewing the queries tab,
+        and changing my role to 'Data Manager',
+        I expect that the 'resolved' checkbox will now be invisible,
+        but that a response can still be added with the 'Data Manager' role,
+        and that, after browsing to the 'Common events' tabs,
+        the query button in the sidebar remains hidden.
+      ", 
+      {
+        app$click("main_sidebar_1-review_config_1-config_review")
+        app$set_inputs("main_sidebar_1-review_config_1-active_role" = "Data Manager")
+        app$wait_for_idle()
+        app$click("main_sidebar_1-review_config_1-save_review_config")
+        # Hide the modal showing confirmation of changing config:
+        app$run_js("$('#shiny-modal').modal('hide');")
+        
+        #### 'Resolved' button is hidden and cannot be used:
+        expect_false(app$get_js("document.getElementById('queries_1-query_follow_up_1-resolved').checkVisibility();"))
+        
+        #### FU message is still possible:
+        app$set_inputs(
+          "queries_1-queries_rows_selected" = 1, 
+          allow_no_input_binding_ = TRUE
+        )
+        app$set_inputs("queries_1-query_follow_up_1-query_follow_up_text" = 
+                         "New FU message with different role")
+        app$click("queries_1-query_follow_up_1-query_add_follow_up")
+        app$set_inputs(
+          "queries_1-queries_rows_selected" = 1, 
+          allow_no_input_binding_ = TRUE
+        )
+        user_db <- app$get_value(export = "user_db")
+        query_database_data <- collect_query_data(user_db)
+        expect_equal(
+          with(query_database_data, query[subject_id == "BEL_04_772"])[3],
+          "New FU message with different role"
+        )
+        expect_equal(
+          with(query_database_data, reviewer[subject_id == "BEL_04_772"])[3],
+          "test user (Data Manager)"
+        )
+        app$set_inputs(main_tabs = "Common events")
+        app$wait_for_idle()
+        
+        ## Query button should be hidden
+        expect_false(app$get_js("document.getElementById('main_sidebar_1-write_query-create_query').checkVisibility();"))
+      }
+    )
   }
 )
 
