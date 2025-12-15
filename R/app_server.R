@@ -278,14 +278,8 @@ app_server <- function(
     )
   )
   
-  observeEvent(c(input$cf_toggle_timeline, input$main_tabs), {
-    req(identical(input$main_tabs, "Common events"))
-    golem::cat_dev("cf_toggle_timeline switch input is ", input$cf_toggle_timeline, "\n", sep = "")
-    shinyjs::toggleElement(
-      id = "timeline_fig-timeline", 
-      condition =  input$cf_toggle_timeline
-    )
-  })
+  navinfo$cf_toggle_timeline <- reactive({input$cf_toggle_timeline})
+  navinfo$sf_toggle_timeline <- reactive({input$sf_toggle_timeline})
   
   bslib::nav_insert(
     id = "study_data_tabs",
@@ -299,14 +293,6 @@ app_server <- function(
       )
     )
   )
-  observeEvent(c(input$sf_toggle_timeline, input$main_tabs), {
-    req(identical(input$main_tabs, "Study data"))
-    golem::cat_dev("sf_toggle_timeline switch input is ", input$sf_toggle_timeline, "\n", sep = "")
-    shinyjs::toggleElement(
-      id = "timeline_fig-timeline", 
-      condition =  input$sf_toggle_timeline
-    )
-  })
   
   observeEvent(session$userData$review_type(), {
     subject_level_review <- identical(session$userData$review_type(), "subject")
@@ -321,7 +307,8 @@ app_server <- function(
     id = "header_widgets_1", 
     r = r, 
     rev_data = rev_data, 
-    navinfo = navinfo
+    navinfo = navinfo,
+    timeline_data = timeline_data
   )
   
   # Only initiate the sidebar after successful login, because it contains a
@@ -398,11 +385,4 @@ app_server <- function(
     active_user_role = r$user_role,
     user_error = user_error()
   )
-  
-  mod_timeline_server(
-    "timeline_fig", 
-    form_review_data = reactive(r$review_data[["Adverse events"]]),
-    timeline_data = timeline_data,
-    active_subject = reactive(r$subject_id)
-  ) 
 }

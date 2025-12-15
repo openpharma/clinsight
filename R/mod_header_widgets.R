@@ -21,7 +21,7 @@ mod_header_widgets_ui <- function(id){
         ),
         class = "top-widgets-custom"
     ),
-    mod_timeline_ui("timeline_fig")
+    mod_timeline_ui(ns("timeline_fig"))
   )
 }
 
@@ -48,9 +48,12 @@ mod_header_widgets_ui <- function(id){
 #' @param navinfo Reactive values created with [shiny::reactiveValues()]. Used
 #'   to send back information about the page change to the server, when clicking
 #'   on the adverse event box.
+#' @param timeline_data A reactive with a data frame containing the timeline
+#'   data. Used to create the timeline figure. Created with
+#'   [get_timeline_data()].
 #'
 #' @seealso [mod_header_widgets_ui()]
-mod_header_widgets_server <- function(id, r, rev_data, navinfo){
+mod_header_widgets_server <- function(id, r, rev_data, navinfo, timeline_data){
   stopifnot(is.reactivevalues(r))
   stopifnot(is.reactivevalues(navinfo))
   stopifnot(is.reactivevalues(rev_data))
@@ -110,8 +113,26 @@ mod_header_widgets_server <- function(id, r, rev_data, navinfo){
       !("No" %in% revs)
     })
     
+    observeEvent(c(navinfo$sf_toggle_timeline(), navinfo$active_tab), {
+      req(identical(navinfo$active_tab, "Study data"))
+      golem::cat_dev("sf_toggle_timeline switch input is ", navinfo$sf_toggle_timeline(), "\n", sep = "")
+      shinyjs::toggleElement(
+        id = "timeline_fig-timeline", 
+        condition =  navinfo$sf_toggle_timeline()
+      )
+    })
+    
+    observeEvent(c(navinfo$cf_toggle_timeline(), navinfo$active_tab), {
+      req(identical(navinfo$active_tab, "Common events"))
+      golem::cat_dev("cf_toggle_timeline switch input is ", navinfo$cf_toggle_timeline(), "\n", sep = "")
+      shinyjs::toggleElement(
+        id = "timeline_fig-timeline", 
+        condition =  navinfo$cf_toggle_timeline()
+      )
+    })
+    
     ### Outputs: 
-
+    
     output[["ae_box"]] <- renderUI({
       req(inherits(all_AEs_reviewed(), "logical"), SAEvalue.individual(), 
           AEvalue.individual(), r$subject_id)
@@ -129,6 +150,12 @@ mod_header_widgets_server <- function(id, r, rev_data, navinfo){
       }, 
       height = 60
     )
+    mod_timeline_server(
+      "timeline_fig", 
+      form_review_data = reactive(r$review_data[["Adverse events"]]),
+      timeline_data = timeline_data,
+      active_subject = reactive(r$subject_id)
+    ) 
   })
 }
 
