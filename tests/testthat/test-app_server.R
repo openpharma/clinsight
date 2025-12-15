@@ -94,8 +94,8 @@ describe(
         session$flushReact()
         expect_equal(
           user_error(),
-          paste0("No valid user role assigned. Functionality is limited. ",
-                 "Please contact the administrator to resolve this issue.")
+          paste0("No user role assigned. Functionality is limited. ",
+                 "If this is unexpected, please contact the administrator.")
         )
       }, 
       session = app_session) |> 
@@ -127,8 +127,8 @@ describe(
         session$flushReact()
         expect_equal(
           user_error(),
-          paste0("No valid user name provided. Functionality is limited. ",
-                 "Please contact the administrator to resolve this issue.")
+          paste0("No user name provided. Functionality is limited. ",
+                 "If this is unexpected, please contact the administrator. ")
         )
       }, 
       session = app_session) |> 
