@@ -39,12 +39,16 @@ mod_timeline_server <- function(
     ns <- session$ns
     
     timeline_data_active <- reactive({
-      review_active <- form_review_data()[form_review_data()$subject_id == active_subject(), ] |> 
-        dplyr::mutate(
-          needs_review = any(reviewed == "No"),
-          .by = c(form_repeat, item_group)
-        ) |> 
-        dplyr::distinct(subject_id, form_repeat, item_group, needs_review)
+      review_active <- if (is.null(form_review_data())) {
+        data.frame(subject_id = character(), form_repeat = integer(), item_group = character(), needs_review = character())
+      } else {
+        form_review_data()[form_review_data()$subject_id == active_subject(), ] |> 
+          dplyr::mutate(
+            needs_review = any(reviewed == "No"),
+            .by = c(form_repeat, item_group)
+          ) |> 
+          dplyr::distinct(subject_id, form_repeat, item_group, needs_review)
+      }
       
       df <- with(timeline_data(), timeline_data()[subject_id == active_subject(), ]) |> 
         dplyr::left_join(review_active, by = c("subject_id", "form_repeat", "item_group")) |> 
