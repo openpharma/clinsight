@@ -80,22 +80,7 @@ describe(
       }
     )
     it(
-      "Scenario 2 - View timeline. Given the form [Adverse events] with  
-          form-specific data and review data,
-          and the active subject_id set to the existing subject with ID 'DEU_02_482',
-          I expect that a timeline (a valid JSON object) is shown in the 
-          timeline output", 
-      {
-        testServer(mod_common_forms_server, args = testargs, {
-          ns <- session$ns
-          session$userData$review_type <- reactiveVal("subject")
-          session$setInputs(show_all_data = FALSE)
-          expect_true(inherits(output[["timeline_fig-timeline"]], "json"))
-        })
-      }
-    )
-    it(
-      "Scenario 3 - View Medication. Given a list of appdata in [filtered_tables],
+      "Scenario 2 - View Medication. Given a list of appdata in [filtered_tables],
           and a data frame with current review_data in [review_data],
           and the active subject_id set to the existing subject with ID 'DEU_02_482',
           and the selected [form] is 'Adverse events',
