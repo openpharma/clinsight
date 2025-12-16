@@ -73,6 +73,17 @@ mod_header_widgets_server <- function(id, r, rev_data, navinfo, timeline_data){
         dplyr::distinct(subject_id, form_repeat, `Serious Adverse Event`)
       })
     
+    observe({
+      if (is.null(navinfo$cf_toggle_timeline)) {
+        navinfo$cf_toggle_timeline <- reactiveVal(TRUE)
+      }
+      if (is.null(navinfo$sf_toggle_timeline)) {
+        navinfo$sf_toggle_timeline <- reactiveVal(FALSE)
+      }
+    }, 
+    autoDestroy = TRUE
+    )
+    
     observeEvent(r$subject_id, {
       req(r$subject_id != "")
       golem::cat_dev("Update individual valueboxes\n")
