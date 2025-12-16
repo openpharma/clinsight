@@ -124,14 +124,25 @@ describe(
           "subject_id" = "Subj01", 
           "form_repeat" = 1, 
           "Serious Adverse Event" = "No", 
+          "event_name" = "Screening",
+          "event_label" = factor("V0"), 
+          "event_date" = as.Date("2025-12-16"),
+          "start date" = "2025-12-16",
+          "end date"   = "",
+          "SAE Start date" = "",
+          "SAE End date"  = "",
+          "Name" = "Epistaxis",
           check.names = FALSE
         )
         AE_figure_data <- data.frame(
           "subject_id" = "Subj01", 
           "event_name" = "Screening",
           "event_label" = factor("V0"), 
+          "event_date" = as.Date("2025-12-16"),
           "item_name" = "Other"
         )
+        timeline_data <- get_timeline_data(list("Adverse events" = AE_figure_data), list("Adverse events" = AE_table))
+        
         testargs <- list(
           r = reactiveValues(
             filtered_data = list("Adverse events" = AE_figure_data),
@@ -154,12 +165,13 @@ describe(
           ns <- session$ns
           r$subject_id = "Subj02"
           session$flushReact()
-          expect_equal(AEvals_active(), AE_table[0,])
+          expect_equal(AEvals_active(), AE_table[0,c("subject_id", "form_repeat", "Serious Adverse Event")])
           expect_equal(SAEvalue.individual(), 0)
           expect_equal(AEvalue.individual(), 0)
           expect_true(all_AEs_reviewed())
           expect_true(inherits(output$ae_box$html, "html"))
           expect_equal(output[["visit_figure"]]$alt, "Plot object")
+          expect_true(inherits(output[["timeline_fig-timeline"]], "json"))
         })
         
       }
@@ -167,5 +179,107 @@ describe(
   }
 )
 
+# describe(
+#   "Feature 3 | View and toggle timeline.
+#       As a user, I want to be able to view the interactive timeline and toggle it on and off.",
+#   {
+#     it(
+#       "Scenario 1 - View and toggle timeline. Given test data,
+#           I want to  be able to by default see the interactive timeline for
+#           common forms, and not see it in study forms, but I want to be able
+#           to toggle it on or off.",
+#       {
+#         AE_table <- data.frame(
+#           "subject_id" = "Subj01", 
+#           "form_repeat" = 1, 
+#           "Serious Adverse Event" = "No", 
+#           "event_name" = "Screening",
+#           "event_label" = factor("V0"), 
+#           "event_date" = as.Date("2025-12-16"),
+#           "start date" = "2025-12-16",
+#           "end date"   = "",
+#           "SAE Start date" = "",
+#           "SAE End date"  = "",
+#           "Name" = "Epistaxis",
+#           check.names = FALSE
+#         )
+#         AE_figure_data <- data.frame(
+#           "subject_id" = "Subj01", 
+#           "event_name" = "Screening",
+#           "event_label" = factor("V0"), 
+#           "event_date" = as.Date("2025-12-16"),
+#           "item_name" = "Other"
+#         )
+#         timeline_data <- get_timeline_data(list("Adverse events" = AE_figure_data), list("Adverse events" = AE_table))
+#         
+#         test_ui <- function(request){
+#           tagList(
+#             golem_add_external_resources(),
+#             shinyjs::useShinyjs(),
+#             bslib::page_navbar(
+#               header = mod_header_widgets_ui("header_widgets_1"),
+#               bslib::nav_panel(
+#                 title = "Common forms",
+#                 bslib::card(
+#                   shinyWidgets::switchInput(
+#                     inputId = "sf_toggle_timeline",
+#                     label = icon("timeline"),
+#                     value = FALSE,
+#                     inline = TRUE
+#                   )
+#                 )
+#               ), 
+#               bslib::nav_panel(
+#                 title = "Study forms",
+#                 bslib::card(
+#                   shinyWidgets::switchInput(
+#                     inputId = "sf_toggle_timeline",
+#                     label = icon("timeline"),
+#                     value = FALSE,
+#                     inline = TRUE
+#                   )
+#                 )
+#               )
+#             )
+#           )
+#         }
+# 
+#         test_server <- function(input, output, session){
+#           session$userData$review_type <- reactiveVal()
+#           observeEvent(input$sf_toggle_timeline, {
+#           })
+#           mod_header_widgets_server(
+#             id = "header_widgets_1",
+#             r = reactiveValues(
+#               filtered_data = list("Adverse events" = AE_figure_data),
+#               filtered_tables = list("Adverse events" = AE_table)
+#             ), 
+#             rev_data = reactiveValues(
+#               summary = reactive({
+#                 data.frame(
+#                   "subject_id" = "Subj01",
+#                   "Form" = "Adverse events",
+#                   reviewed = c("No", "Yes")
+#                 )
+#               })
+#             ), 
+#             navinfo = reactiveValues(),
+#             timeline_data = reactive(timeline_data)
+#           ) 
+#         }
+#         test_app <- shinyApp(test_ui, test_server)
+#         browser()
+#         app <- shinytest2::AppDriver$new(
+#           app_dir = test_app,
+#           name = "study_forms",
+#           width = 1619,
+#           height = 955
+#         )
+#         withr::defer(app$stop())
+# 
+#       }
+#     )
+#   }
+# )
 
 

@@ -7,8 +7,7 @@ describe(
       form_review_data = reactiveVal(),
       form_items = "",
       active_subject = reactiveVal("DEU_02_482"),
-      table_names = NULL,
-      timeline_data = reactiveVal()
+      table_names = NULL
     ) 
     
     it("Can load the module UI, with functioning internal parameters.", {
@@ -36,7 +35,7 @@ describe(
   "mod_common_forms. Feature 2 | View common forms. As a user, I want to be able 
       to view common forms in the application such as adverse events and medical 
       history, which which can include a flexible JSON table (created with 
-      mod_review_form_tbl) and a timeline (created with mod_timeline).", 
+      mod_review_form_tbl).", 
   {
     set.seed(2023)
     appdata <- clinsightful_data |> 
@@ -56,15 +55,13 @@ describe(
         status = sample(c("new", "old", "updated"), dplyr::n(), replace = TRUE)
       )
     form_items <- appvars$items[["Adverse events"]]
-    timeline_data <- get_timeline_data(appdata, apptables)
     testargs <- list(
       form = "Adverse events",
       form_data = reactiveVal(appdata[["Adverse events"]]),
       form_review_data = reactiveVal(rev_data),
       form_items = form_items,
       active_subject = reactiveVal("DEU_02_482"),
-      table_names = NULL,
-      timeline_data = reactiveVal(timeline_data)
+      table_names = NULL
     ) 
     it(
       "Scenario 1 - View Adverse events and SAE tables. Given the form [Adverse events],
@@ -110,22 +107,19 @@ describe(
         rev_data <- get_review_data(appdata[["Medication"]]) |> 
           dplyr::mutate(id = dplyr::row_number(), reviewed = "No", status = "new")
         form_items <- get_meta_vars(appdata)$items[["Medication"]]
-        timeline_data <- timeline_data[0,]
         testargs <- list(
           form = "Medication",
           form_data = reactiveVal(appdata[["Medication"]]),
           form_review_data = reactiveVal(rev_data),
           form_items = form_items,
           active_subject = reactiveVal("DEU_02_482"),
-          table_names = NULL,
-          timeline_data = reactiveVal(timeline_data)
+          table_names = NULL
         )  
         
         testServer(mod_common_forms_server, args = testargs, {
           ns <- session$ns
           session$userData$review_type <- reactiveVal("subject")
           session$setInputs(show_all_data = FALSE)
-          expect_error(output[["timeline_fig-timeline"]])
           expect_error(output[["review_form_SAE_tbl-table"]])
           expect_true(inherits(output[["review_form_tbl-table"]], "json"))
         })
