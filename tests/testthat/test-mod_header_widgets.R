@@ -23,7 +23,8 @@ describe(
           )
         ), 
         rev_data = reactiveValues(), 
-        navinfo = reactiveValues()
+        navinfo = reactiveValues(),
+        timeline_data = reactive(data.frame())
       ) 
       testServer(mod_header_widgets_server, args = testargs, {
         ns <- session$ns
@@ -72,6 +73,8 @@ describe(
           "item_name" = "Other"
         )
         
+        timeline_data <- data.frame()
+        
         testargs <- list(
           r = reactiveValues(
             filtered_data = list("Adverse events" = AE_figure_data),
@@ -86,7 +89,8 @@ describe(
               )
             })
           ), 
-          navinfo = reactiveValues()
+          navinfo = reactiveValues(),
+          timeline_data = reactive(timeline_data)
         ) 
         
         testServer(mod_header_widgets_server, args = testargs, {
@@ -142,7 +146,8 @@ describe(
               )
             })
           ), 
-          navinfo = reactiveValues()
+          navinfo = reactiveValues(),
+          timeline_data = reactive(timeline_data)
         ) 
         
         testServer(mod_header_widgets_server, args = testargs, {

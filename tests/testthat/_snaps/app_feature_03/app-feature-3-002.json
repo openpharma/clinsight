@@ -186,10 +186,7 @@
         "baseScrollTop": 0,
         "baseRowTop": 0,
         "scrollTop": 0
-      },
-      "childRows": [
-
-      ]
+      }
     },
     "cf_adverse_events-review_form_tbl-table_cell_clicked": {
 
@@ -348,45 +345,46 @@
       }
     },
     "cf_adverse_events-show_all_data": false,
-    "cf_adverse_events-timeline_fig-timeline_ids": [
-      "8",
-      "9",
-      "10",
-      "11",
-      "12",
-      "13",
-      "14",
-      "90",
-      "102",
-      "108",
-      "116",
-      "117",
-      "176",
-      "177",
-      "178"
-    ],
-    "cf_adverse_events-timeline_fig-timeline_selected": null,
-    "cf_adverse_events-timeline_fig-timeline_visible": [
-      "11",
-      "10",
-      "9",
-      "8",
-      "12",
-      "13",
-      "14",
-      "116",
-      "108",
-      "102",
-      "90",
-      "117",
-      "177",
-      "176",
-      "178"
-    ],
     "cf_conc_procedures-show_all_data": false,
     "cf_medical_history-show_all_data": false,
     "cf_medication-show_all_data": false,
+    "cf_toggle_timeline": true,
     "common_data_tabs": "Adverse events",
+    "header_widgets_1-timeline_fig-timeline_ids": [
+      "8",
+      "9",
+      "10",
+      "11",
+      "12",
+      "13",
+      "14",
+      "90",
+      "102",
+      "108",
+      "116",
+      "117",
+      "176",
+      "177",
+      "178"
+    ],
+    "header_widgets_1-timeline_fig-timeline_selected": null,
+    "header_widgets_1-timeline_fig-timeline_visible": [
+      "11",
+      "10",
+      "9",
+      "8",
+      "12",
+      "13",
+      "14",
+      "116",
+      "108",
+      "102",
+      "90",
+      "117",
+      "177",
+      "176",
+      "178"
+    ],
     "main_sidebar_1-navigate_forms_1-form_next": 0,
     "main_sidebar_1-navigate_forms_1-form_previous": 0,
     "main_sidebar_1-review_config_1-config_review": 0,
@@ -461,6 +459,7 @@
     ],
     "sf_response-show_all": false,
     "sf_response-switch_view": "table",
+    "sf_toggle_timeline": false,
     "sf_vital_signs-filter": [
       "systolic_blood_pressure",
       "diastolic_blood_pressure",
