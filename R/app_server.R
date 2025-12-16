@@ -122,7 +122,9 @@ app_server <- function(
   navinfo <- reactiveValues(
     active_form       = app_vars$all_forms$form[1],
     active_tab        = "Start",
-    trigger_page_change = 1
+    trigger_page_change = 1,
+    cf_toggle_timeline = reactive({input$cf_toggle_timeline}),
+    sf_toggle_timeline = reactive({input$sf_toggle_timeline})
   )
   
   rev_data <- reactiveValues(
@@ -276,9 +278,6 @@ app_server <- function(
       )
     )
   )
-  
-  navinfo$cf_toggle_timeline <- reactive({input$cf_toggle_timeline})
-  navinfo$sf_toggle_timeline <- reactive({input$sf_toggle_timeline})
   
   bslib::nav_insert(
     id = "study_data_tabs",
