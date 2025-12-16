@@ -66,15 +66,6 @@ mod_study_forms_ui <- function(id, form, form_items){
                 value = FALSE,
                 right = TRUE
               )
-            ),
-            selectInput(
-              ns("data_type"), 
-              label = "Data type", 
-              choices = c(
-                "Raw" = "raw", 
-                "Scaled" = "scaled", 
-                "Standardized" = "standardized"
-              )
             )
           ),
           bslib::popover(
@@ -89,6 +80,15 @@ mod_study_forms_ui <- function(id, form, form_items){
               label = "Show all participants", 
               status = "primary",
               right = TRUE
+            )
+          ),
+          selectInput(
+            ns("data_type"), 
+            label = "Data type", 
+            choices = c(
+              "Raw" = "raw", 
+              "Scaled" = "scaled", 
+              "Standardized" = "standardized"
             )
           )
         )
@@ -220,17 +220,32 @@ mod_study_forms_server <- function(
     # Ensure no errors even if cols are missing, with FALSE as default:
     scaling_data <- lapply(add_missing_columns(item_info, cols)[1, cols], isTRUE)
     
-    updateSelectInput(
-      session = session,
-      inputId = "data_type", 
-      selected = if(isTRUE(scaling_data$item_scale)) "scaled" else "raw"
-    )
+    observeEvent(form_data(), {
+      data_types <- c("Raw" = "raw", "Scaled" = "scaled")
+      
+      if ("value_standardized" %in% names(form_data())) {
+        data_types <- c(data_types, "Standardized" = "standardized")
+      }
+      updateSelectInput(
+        session = session,
+        inputId = "data_type", 
+        choices = data_types,
+        selected = if(isTRUE(scaling_data$item_scale)) "scaled" else "raw"
+      )
+    })
     
     ############################### Outputs: ###################################
     dynamic_figure <- reactive({
       req(nrow(fig_data()) > 0, scaling_data)
-      scale_yval <- scaling_data$item_scale
-      yval <- ifelse(scale_yval, "value_scaled", "item_value")
+      scale_yval <- identical(input$data_type, "scaled")
+      #yval <- ifelse(scale_yval, "value_scaled", "item_value")
+      yval <- switch(
+        input$data_type, 
+        "scaled" = "value_scaled", 
+        "raw" = "item_value", 
+        "standardized" = "value_standardized"
+      )
+      
       validate(need(
         fig_data()[[yval]], 
         ifelse(scale_yval, 
