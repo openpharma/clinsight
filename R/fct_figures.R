@@ -247,13 +247,19 @@ fig_timeseries <- function(
           ggplot2::labs(y = "Scaled value (>1 or <0 is out of range)")
         )
       } else if (nrow(df_id) != 0) {
-        upper_lim <- switch(yval, "item_value" = "upper_lim", "value_standardized" = "upper_lim_standardized", "")
         lower_lim <- switch(yval, "item_value" = "lower_lim", "value_standardized" = "lower_lim_standardized", "")
-        df_ranges <- dplyr::distinct(na.omit(df_id[c(id, "item_name", upper_lim, lower_lim)]))
-        list(
-          ggplot2::geom_hline(data = df_ranges, ggplot2::aes(yintercept = .data[[upper_lim]]),lty = 3, linewidth = 0.5, col = "grey50"),
-          ggplot2::geom_hline(data = df_ranges, ggplot2::aes(yintercept = .data[[lower_lim]]),lty = 3, linewidth = 0.5, col = "grey50")
-        )
+        upper_lim <- switch(yval, "item_value" = "upper_lim", "value_standardized" = "upper_lim_standardized", "")
+        
+        lapply(c(lower_lim, upper_lim), \(x){
+          if (!x %in% names(df_id)) {
+            return(NULL)
+          }
+          df_ranges <- dplyr::distinct(na.omit(df_id[c(id, "item_name", x)]))
+          if (nrow(df_ranges) == 0) {
+            return(NULL)
+          }
+          ggplot2::geom_hline(data = df_ranges, ggplot2::aes(yintercept = .data[[x]]),lty = 3, linewidth = 0.5, col = "grey50")
+        })
       },
       if(isTRUE(show_all_participants) && isTRUE(show_all_hover_labels)) {
         suppressWarnings(

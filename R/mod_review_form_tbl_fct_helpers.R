@@ -22,7 +22,7 @@ get_form_table <- function(
     form_review_data,
     form,
     form_items,
-    data_type = "raw",
+    transformation = "none",
     value_column = "item_value",
     unit_column = "item_unit",
     active_subject,
@@ -43,8 +43,8 @@ get_form_table <- function(
   if(length(missing_cols) != 0){
     stop("the following columns are missing: ", paste0(missing_cols, collapse = ", "))
   }
-  value_column <- if (identical(data_type, "raw")) "item_value" else "value_standardized"
-  unit_column <- if (identical(data_type, "raw")) "item_unit" else "unit_standardized"
+  value_column <- if (identical(transformation, "none")) "item_value" else "value_standardized"
+  unit_column <- if (identical(transformation, "none")) "item_unit" else "unit_standardized"
   
   df <- dplyr::left_join(
     form_data,

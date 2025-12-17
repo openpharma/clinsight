@@ -66,11 +66,17 @@ mod_study_forms_ui <- function(id, form, form_items){
                 value = FALSE,
                 right = TRUE
               )
+            ),
+            shinyWidgets::radioGroupButtons(
+              inputId = ns("transformation_graph"),
+              label = "Transformation", 
+              choices = c("None" = "none"),
+              size = "sm"
+            ),
+            bslib::popover(
+              tags$a("Legend", tags$sup(icon("circle-info")), class =  "link"),
+              bslib::card_body(img(src="www/figure_legend.png"))
             )
-          ),
-          bslib::popover(
-            tags$a("Legend", tags$sup(icon("circle-info")), class =  "link"),
-            bslib::card_body(img(src="www/figure_legend.png"))
           ),
           conditionalPanel(
             condition = "input.switch_view === 'table'",
@@ -80,17 +86,14 @@ mod_study_forms_ui <- function(id, form, form_items){
               label = "Show all participants", 
               status = "primary",
               right = TRUE
-            )
+            ),
+            shinyWidgets::radioGroupButtons(
+              inputId = ns("transformation_table"),
+              label = "Transformation", 
+              choices = c("None" = "none"),
+              size = "sm"
+            ),
           ),
-          shinyWidgets::radioGroupButtons(
-            inputId = ns("data_type"),
-            label = "Data type", 
-            choices = c(
-              "Raw" = "raw", 
-              "Scaled" = "scaled", 
-              "Standard" = "standardized"
-            )
-          )
           # selectInput(
           #   ns("data_type"), 
           #   label = "Data type", 
@@ -213,10 +216,39 @@ mod_study_forms_server <- function(
     }) |> 
       debounce(1000)
     
-    data_type_active <- reactiveVal()
-    observeEvent(input$data_type, {
-      req(input$data_type, !input$data_type == "scaled")
-      data_type_active(input$data_type)
+    cols <- c("item_scale", "use_unscaled_limits")
+    # Ensure no errors even if cols are missing, with FALSE as default:
+    scaling_data <- lapply(add_missing_columns(item_info, cols)[1, cols], isTRUE)
+    
+    observeEvent(form_data(), {
+      data_types_table <- c(
+        "None" = "none",
+        if (
+          "value_standardized" %in% names(form_data()) && 
+          !all(is.na(form_data()[["value_standardized"]])) 
+        ) {
+          c("Standardized" = "standardized")
+        }
+      )
+      shinyWidgets::updateRadioGroupButtons(
+        session = session,
+        inputId = "transformation_table", 
+        choices = data_types_table
+      )
+      
+      data_types_graph <- c(
+        data_types_table,
+        if (!all(is.na(form_data()[["value_scaled"]]))) {
+          c("Scaled" = "scaled")
+        }
+      )
+      
+      shinyWidgets::updateRadioGroupButtons(
+        session = session,
+        inputId = "transformation_graph", 
+        choices = data_types_graph,
+        selected = if (isTRUE(scaling_data$item_scale)) "scaled" else "none" 
+      )
     })
     
     mod_review_form_tbl_server(
@@ -226,71 +258,24 @@ mod_study_forms_server <- function(
       form_review_data = form_review_data, 
       active_subject = active_subject,
       form_items = form_items,
-      data_type = data_type_active,
+      transformation = reactive(input$transformation_table),
       show_all = reactive(isTRUE(input$show_all) | identical(session$userData$review_type(), "form")), 
       table_names = table_names,
       title = form
     )
     
-    cols <- c("item_scale", "use_unscaled_limits")
-    # Ensure no errors even if cols are missing, with FALSE as default:
-    scaling_data <- lapply(add_missing_columns(item_info, cols)[1, cols], isTRUE)
-    
-    table_data_type <- reactiveVal("raw")
-    figure_data_type <- reactiveVal(
-      if (isTRUE(scaling_data$item_scale) ){
-        "scaled"
-      } else {
-        "raw" 
-      }
-      )
-    observeEvent(input$data_type, {
-      if (identical(input$switch_view, "table")) {
-        table_data_type(input$data_type) 
-      }
-      if (identical(input$switch_view, "graph")) {
-        figure_data_type(input$data_type) 
-      }
-    })
-    observeEvent(c(form_data(),input$switch_view), {
-      data_types <- c("Raw" = "raw")
-      if (
-        !all(is.na(form_data()[["value_scaled"]])) && 
-        !identical(input$switch_view, "table")
-        ) {
-        data_types <- c(data_types, "Scaled" = "scaled")
-      }
-      
-      if (
-        "value_standardized" %in% names(form_data()) && 
-        !all(is.na(form_data()[["value_standardized"]])) 
-      ) {
-        data_types <- c(data_types, "Standard" = "standardized")
-      }
-      shinyWidgets::updateRadioGroupButtons(
-        session = session,
-        inputId = "data_type", 
-        choices = data_types,
-        selected = if (identical(input$switch_view, "table")) {
-          table_data_type()
-        } else {
-          figure_data_type()
-        }
-      )
-    })
-    
     ############################### Outputs: ###################################
     dynamic_figure <- reactive({
       req(nrow(fig_data()) > 0, scaling_data)
       yval <- switch(
-        input$data_type, 
+        input$transformation_graph, 
         "scaled" = "value_scaled", 
-        "raw" = "item_value", 
+        "none" = "item_value", 
         "standardized" = "value_standardized"
       )
       validate(need(
         fig_data()[[yval]], 
-        "No non-missing data available. Check table view or raw data."
+        "No non-missing data available. Check table view or non-transformed data."
       ))
       plotly_figure(
         data = fig_data(),

@@ -46,7 +46,7 @@ mod_review_form_tbl_server <- function(
     form_data,
     form_review_data,
     form_items,
-    data_type = NULL,
+    transformation = NULL,
     active_subject, 
     show_all,
     table_names = NULL,
@@ -60,7 +60,7 @@ mod_review_form_tbl_server <- function(
   stopifnot(is.reactive(show_all))
   stopifnot(is.character(table_names %||% ""))
   stopifnot(is.character(title %||% ""))
-  data_type <- data_type %||% reactiveVal("raw")
+  transformation <- transformation %||% reactiveVal("raw")
 
   moduleServer(id, function(input, output, session){
     ns <- session$ns
@@ -80,13 +80,13 @@ mod_review_form_tbl_server <- function(
         form_review_data(), 
         form = form, 
         form_items = form_items,
-        data_type = data_type(),
+        transformation = transformation(),
         active_subject = if(identical(session$userData$review_type(), "form")) NULL else active_subject(),
         pending_form_review_status = NULL,
         is_SAE = identical(title, "Serious Adverse Events")
       )
     }) |> 
-      bindEvent(form_data(), form_review_data(), active_subject(), session$userData$review_type(), data_type())
+      bindEvent(form_data(), form_review_data(), active_subject(), session$userData$review_type(), transformation())
     
     ############################### Observers: #################################
     
