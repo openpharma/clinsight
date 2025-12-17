@@ -7,7 +7,9 @@
 - Added a toggle to enable hover labels of all patterns in the figures, also the ones in the background.
 - Improved the time-series on-hover label so that limits and significance are also shown.
 - Switched to server-side table downloads.
-- Implemented a `line-clamp` on table column names that wrap to more than 6 lines
+- Implemented a `line-clamp` on table column names that wrap to more than 6 lines.
+- Added a toggle to switch data transformation. In addition, added a way to show data transformed to standard values so that all are shown in the same unit.
+- Figures now also show patient-specific lab limits in the figures when data is not transformed (if available).
 
 ## Bug fixes 
 
