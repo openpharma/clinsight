@@ -208,14 +208,14 @@ fig_timeseries <- function(
     label = "text_label",
     show_all_participants = TRUE,
     show_all_hover_labels = FALSE,
-    scale = FALSE,
+    yval = "item_value",
     use_unscaled_limits = FALSE
 ){
   if(isTRUE(is.na(id_to_highlight))){
     id_to_highlight <- NULL
   }
   df_id <- data[data[[id]] == id_to_highlight, ]
-  yval <- ifelse(scale, "value_scaled", "item_value")
+  #yval <- ifelse(scale, "value_scaled", "item_value")
   fig <- ggplot2::ggplot(
     data, 
     ggplot2::aes(
@@ -239,16 +239,21 @@ fig_timeseries <- function(
       y = "value"
     ) + 
     list(
-      if(scale){
+      if(identical(yval, "value_scaled")){
         list(
           lapply(c(0,1), \(x){
             ggplot2::geom_hline(yintercept = x,lty = 3, linewidth = 0.5, col = "grey50")
           }),
           ggplot2::labs(y = "Scaled value (>1 or <0 is out of range)")
         )
-      } else if(use_unscaled_limits){
-        list(ggplot2::geom_hline(ggplot2::aes(yintercept = .data[["upper_lim"]]),lty = 3, linewidth = 0.5, col = "grey50"),
-             ggplot2::geom_hline(ggplot2::aes(yintercept = .data[["lower_lim"]]),lty = 3, linewidth = 0.5, col = "grey50"))
+      } else if (nrow(df_id) != 0) {
+        upper_lim <- switch(yval, "item_value" = "upper_lim", "value_standardized" = "upper_lim_standardized", "")
+        lower_lim <- switch(yval, "item_value" = "lower_lim", "value_standardized" = "lower_lim_standardized", "")
+        df_ranges <- dplyr::distinct(na.omit(df_id[c(id, "item_name", upper_lim, lower_lim)]))
+        list(
+          ggplot2::geom_hline(data = df_ranges, ggplot2::aes(yintercept = .data[[upper_lim]]),lty = 3, linewidth = 0.5, col = "grey50"),
+          ggplot2::geom_hline(data = df_ranges, ggplot2::aes(yintercept = .data[[lower_lim]]),lty = 3, linewidth = 0.5, col = "grey50")
+        )
       },
       if(isTRUE(show_all_participants) && isTRUE(show_all_hover_labels)) {
         suppressWarnings(
@@ -267,7 +272,7 @@ fig_timeseries <- function(
   # at the moment it is only implemented when figure uses scaled figures since 
   # it sets the limits for all facets, which is undesirable if the units differ per facet.
   # note that this still skews all figures
-  if(!scale){ 
+  if (!identical(yval, "value_scaled")) { 
     y_range <- NULL
     } else{
     y_range <- range(c(0, 1, df_id[[yval]]), na.rm = TRUE)

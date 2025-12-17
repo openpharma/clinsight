@@ -362,3 +362,49 @@ get_appdata <-  function(
 }
 
 
+#' Add text label
+#' 
+#' Helper function for [get_appdata()].
+#'
+#' @param data 
+#' @keywords internal
+add_text_label <- function(
+    data, 
+    label_name = "text_label",
+    value = "item_value",
+    item_unit = "item_unit",
+    lower_lim = "lower_lim",
+    upper_lim = "upper_lim",
+    subject_id = "subject_id",
+    event_date = "event_date", 
+    event_name = "event_name",
+    day = "day",
+    significance = "significance"
+    ) {
+  stopifnot(is.data.frame(data))
+  data |> 
+    dplyr::mutate(
+       {label_naem} := paste0(
+         "<b>", .data[[subject_id]], "</b>",
+         "\n",
+         .data[[event_date]],
+         "\n",
+         .data[[event_name]], " (day ",
+         .data[[day]], ")",
+         "\nValue: ",
+         round(.data[[value]], 2),
+         " ",
+         .data[[item_unit]], 
+         "\n",
+         paste0(
+           "Limits: ", 
+           ifelse(is.na(.data[[lower_lim]]), "?", .data[[lower_lim]]), 
+           "-", 
+           ifelse(is.na(.data[[upper_lim]]), "?", .data[[upper_lim]]), 
+           "\n", 
+           ifelse(is.na(.data[[significance]]), "Significance unknown", as.character(.data[[significance]]))
+         )
+       )
+    )
+}
+

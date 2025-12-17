@@ -82,15 +82,24 @@ mod_study_forms_ui <- function(id, form, form_items){
               right = TRUE
             )
           ),
-          selectInput(
-            ns("data_type"), 
+          shinyWidgets::radioGroupButtons(
+            inputId = ns("data_type"),
             label = "Data type", 
             choices = c(
               "Raw" = "raw", 
               "Scaled" = "scaled", 
-              "Standardized" = "standardized"
+              "Standard" = "standardized"
             )
           )
+          # selectInput(
+          #   ns("data_type"), 
+          #   label = "Data type", 
+          #   choices = c(
+          #     "Raw" = "raw", 
+          #     "Scaled" = "scaled", 
+          #     "Standardized" = "standardized"
+          #   )
+          # )
         )
       )
     )
@@ -204,6 +213,12 @@ mod_study_forms_server <- function(
     }) |> 
       debounce(1000)
     
+    data_type_active <- reactiveVal()
+    observeEvent(input$data_type, {
+      req(input$data_type, !input$data_type == "scaled")
+      data_type_active(input$data_type)
+    })
+    
     mod_review_form_tbl_server(
       "review_form_tbl", 
       form = form,
@@ -211,6 +226,7 @@ mod_study_forms_server <- function(
       form_review_data = form_review_data, 
       active_subject = active_subject,
       form_items = form_items,
+      data_type = data_type_active,
       show_all = reactive(isTRUE(input$show_all) | identical(session$userData$review_type(), "form")), 
       table_names = table_names,
       title = form
@@ -220,37 +236,61 @@ mod_study_forms_server <- function(
     # Ensure no errors even if cols are missing, with FALSE as default:
     scaling_data <- lapply(add_missing_columns(item_info, cols)[1, cols], isTRUE)
     
-    observeEvent(form_data(), {
-      data_types <- c("Raw" = "raw", "Scaled" = "scaled")
-      
-      if ("value_standardized" %in% names(form_data())) {
-        data_types <- c(data_types, "Standardized" = "standardized")
+    table_data_type <- reactiveVal("raw")
+    figure_data_type <- reactiveVal(
+      if (isTRUE(scaling_data$item_scale) ){
+        "scaled"
+      } else {
+        "raw" 
       }
-      updateSelectInput(
+      )
+    observeEvent(input$data_type, {
+      if (identical(input$switch_view, "table")) {
+        table_data_type(input$data_type) 
+      }
+      if (identical(input$switch_view, "graph")) {
+        figure_data_type(input$data_type) 
+      }
+    })
+    observeEvent(c(form_data(),input$switch_view), {
+      data_types <- c("Raw" = "raw")
+      if (
+        !all(is.na(form_data()[["value_scaled"]])) && 
+        !identical(input$switch_view, "table")
+        ) {
+        data_types <- c(data_types, "Scaled" = "scaled")
+      }
+      
+      if (
+        "value_standardized" %in% names(form_data()) && 
+        !all(is.na(form_data()[["value_standardized"]])) 
+      ) {
+        data_types <- c(data_types, "Standard" = "standardized")
+      }
+      shinyWidgets::updateRadioGroupButtons(
         session = session,
         inputId = "data_type", 
         choices = data_types,
-        selected = if(isTRUE(scaling_data$item_scale)) "scaled" else "raw"
+        selected = if (identical(input$switch_view, "table")) {
+          table_data_type()
+        } else {
+          figure_data_type()
+        }
       )
     })
     
     ############################### Outputs: ###################################
     dynamic_figure <- reactive({
       req(nrow(fig_data()) > 0, scaling_data)
-      scale_yval <- identical(input$data_type, "scaled")
-      #yval <- ifelse(scale_yval, "value_scaled", "item_value")
       yval <- switch(
         input$data_type, 
         "scaled" = "value_scaled", 
         "raw" = "item_value", 
         "standardized" = "value_standardized"
       )
-      
       validate(need(
         fig_data()[[yval]], 
-        ifelse(scale_yval, 
-               "No non-missing scaled data available. Check table view.", 
-               "No non-missing data available.")
+        "No non-missing data available. Check table view or raw data."
       ))
       plotly_figure(
         data = fig_data(),
@@ -262,7 +302,7 @@ mod_study_forms_server <- function(
         height = ceiling(0.5*length(unique(fig_data()$item_name))*125+175),
         show_all_participants = isTRUE(input$show_all_participants),
         show_all_hover_labels = input$show_all_hover_labels,
-        scale = scale_yval,
+        yval = yval,
         use_unscaled_limits = scaling_data$use_unscaled_limits
       )
     })

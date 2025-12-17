@@ -22,6 +22,9 @@ get_form_table <- function(
     form_review_data,
     form,
     form_items,
+    data_type = "raw",
+    value_column = "item_value",
+    unit_column = "item_unit",
     active_subject,
     pending_form_review_status = NULL,
     is_SAE = NULL,
@@ -40,6 +43,9 @@ get_form_table <- function(
   if(length(missing_cols) != 0){
     stop("the following columns are missing: ", paste0(missing_cols, collapse = ", "))
   }
+  value_column <- if (identical(data_type, "raw")) "item_value" else "value_standardized"
+  unit_column <- if (identical(data_type, "raw")) "item_unit" else "unit_standardized"
+  
   df <- dplyr::left_join(
     form_data,
     form_review_data |> 
@@ -48,14 +54,21 @@ get_form_table <- function(
   ) |> 
     dplyr::mutate(
       not_reviewed_but_missing = (reviewed == "No" & is.na(item_value)), 
-      item_value = dplyr::case_when(
-        is.na(reviewed) ~ htmltools::htmlEscape(item_value),
-        (reviewed == "No" & !is.na(item_value)) ~
-          paste0("<b>", htmltools::htmlEscape(item_value), "*</b>"), 
-        .default = htmltools::htmlEscape(item_value)
+      "{value_column}" := ifelse(
+        is.na(reviewed), 
+        htmltools::htmlEscape(.data[[value_column]]),
+        ifelse(
+          (reviewed == "No" & !is.na(.data[[value_column]])),
+          paste0("<b>", htmltools::htmlEscape(.data[[value_column]]), "*</b>"), 
+          htmltools::htmlEscape(.data[[value_column]])
+        )
       )
     ) |> 
-    create_table(expected_columns = names(form_items)) |> 
+    create_table(
+      expected_columns = names(form_items),
+      value_column = value_column, 
+      unit_column = unit_column
+      ) |> 
     dplyr::mutate(
       row_review_status = Map(
         \(x, y, z) append(x, list(
@@ -69,6 +82,7 @@ get_form_table <- function(
         if (is.null(active_subject)) FALSE else subject_id != active_subject
       )
     )
+  
   if(!is.null(active_subject)){
     df <- df[order(df$subject_id != active_subject), ]
   }
