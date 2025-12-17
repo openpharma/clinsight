@@ -2,8 +2,11 @@
 
 ## Changed
 
-- Replaced `dplyr::case_when()` with `ifelse()` in the row review status calculation for efficiency
-- Switched to server-side table downloads
+- Replaced `dplyr::case_when()` with `ifelse()` in the row review status calculation for efficiency.
+- Added toggle to enable/disable background patterns in figures.
+- Added a toggle to enable hover labels of all patterns in the figures, also the ones in the background.
+- Improved the time-series on-hover label so that limits and significance are also shown.
+- Switched to server-side table downloads.
 - Implemented a `line-clamp` on table column names that wrap to more than 6 lines
 
 ## Bug fixes 
