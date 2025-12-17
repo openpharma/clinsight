@@ -215,7 +215,11 @@ fig_timeseries <- function(
     id_to_highlight <- NULL
   }
   df_id <- data[data[[id]] == id_to_highlight, ]
-  #yval <- ifelse(scale, "value_scaled", "item_value")
+  if(is.element("character", class(data[[yval]]))) {
+    warning(paste0("converting yval ", yval, " to numeric"))
+    data[[yval]] <- as.numeric(data[[yval]])
+  }
+  
   fig <- ggplot2::ggplot(
     data, 
     ggplot2::aes(
