@@ -5,6 +5,9 @@
 #' @param form_review_data A data frame with he review data of the form.
 #' @param form A character string with the name of the form.
 #' @param form_items Named character vector with all form_items to display.
+#' @param transformation A character value. If this is 'none' then the columns
+#'   `item_value` and `item_unit` will be used in the table. Otherwise,
+#'   `value_standardized` and `unit_standardized` will be used.
 #' @param active_subject A character string with the active subject id.
 #' @param pending_form_review_status A logical, indicating whether all items of
 #'   the entire form for the active subject id are reviewed. Note that the
@@ -23,8 +26,6 @@ get_form_table <- function(
     form,
     form_items,
     transformation = "none",
-    value_column = "item_value",
-    unit_column = "item_unit",
     active_subject,
     pending_form_review_status = NULL,
     is_SAE = NULL,

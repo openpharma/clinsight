@@ -10,8 +10,6 @@ get_form_table(
   form,
   form_items,
   transformation = "none",
-  value_column = "item_value",
-  unit_column = "item_unit",
   active_subject,
   pending_form_review_status = NULL,
   is_SAE = NULL,
@@ -26,6 +24,10 @@ get_form_table(
 \item{form}{A character string with the name of the form.}
 
 \item{form_items}{Named character vector with all form_items to display.}
+
+\item{transformation}{A character value. If this is 'none' then the columns
+\code{item_value} and \code{item_unit} will be used in the table. Otherwise,
+\code{value_standardized} and \code{unit_standardized} will be used.}
 
 \item{active_subject}{A character string with the active subject id.}
 

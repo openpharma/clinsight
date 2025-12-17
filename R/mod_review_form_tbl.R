@@ -27,6 +27,9 @@ mod_review_form_tbl_ui <- function(id) {
 #' @param form_review_data Common reactive value containing the review data of
 #'   the form.
 #' @param form_items Named character vector with all form_items to display.
+#' @param transformation A reactive value. If this is 'none' then the columns
+#'   `item_value` and `item_unit` will be used in the table. Otherwise,
+#'   `value_standardized` and `unit_standardized` will be used.
 #' @param active_subject Reactive value containing the active subject id.
 #' @param show_all Common reactive value, a logical indicating whether all
 #'   records should be displayed.
@@ -35,7 +38,7 @@ mod_review_form_tbl_ui <- function(id) {
 #'   interactive tables.
 #' @param title An optional character vector. If provided, will be used within
 #'   [datatable_custom()], as the title for the table.
-#'   
+#'
 #' @seealso [mod_review_form_tbl_ui()], [mod_common_forms_ui()],
 #'   [mod_common_forms_server()], [mod_study_forms_ui()],
 #'   [mod_study_forms_server()]

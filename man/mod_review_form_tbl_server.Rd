@@ -31,6 +31,10 @@ the form.}
 
 \item{form_items}{Named character vector with all form_items to display.}
 
+\item{transformation}{A reactive value. If this is 'none' then the columns
+\code{item_value} and \code{item_unit} will be used in the table. Otherwise,
+\code{value_standardized} and \code{unit_standardized} will be used.}
+
 \item{active_subject}{Reactive value containing the active subject id.}
 
 \item{show_all}{Common reactive value, a logical indicating whether all
