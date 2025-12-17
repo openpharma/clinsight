@@ -9,7 +9,7 @@ get_form_table(
   form_review_data,
   form,
   form_items,
-  data_type = "raw",
+  transformation = "none",
   value_column = "item_value",
   unit_column = "item_unit",
   active_subject,
