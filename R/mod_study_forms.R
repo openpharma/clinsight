@@ -168,15 +168,6 @@ mod_study_forms_server <- function(
       )
       shinyjs::disable("switch_view")
     }
-    observeEvent(input$show_all_participants, {
-      if(isFALSE(input$show_all_participants)){
-        shinyWidgets::updateMaterialSwitch(
-          session = session,
-          inputId = "show_all_hover_labels",
-          value = FALSE
-        )
-      }
-    })
     
     observeEvent(session$userData$review_type(), {
       golem::cat_dev(form, "| Updating tables to show '", 
