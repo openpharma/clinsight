@@ -302,6 +302,8 @@ describe(
           "test-show_all_participants" = TRUE
           )
         app$wait_for_idle(1100)
+        
+        ## Snap 001
         app$expect_values(
           input = c("test-show_all_participants", "test-show_all_hover_labels"), 
           output = TRUE
@@ -309,9 +311,22 @@ describe(
         
         app$set_inputs("test-show_all_hover_labels" = TRUE)
         app$wait_for_idle()
+        
+        ## Snap 002
         app$expect_values(
           input = c("test-show_all_participants", "test-show_all_hover_labels"), 
           output = TRUE
+        )
+        #############
+        ####### Verify transformation button:
+        ###############
+        app$view()
+        app$set_inputs("test-transformation_graph" = "scaled")
+        
+        ## Snap 003
+        app$expect_values(
+          input = c("test-show_all_participants", "test-show_all_hover_labels", "test-transformation_graph"), 
+          output = "test-figure"
         )
       }
     )

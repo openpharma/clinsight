@@ -60,6 +60,8 @@
     "sf_cbc_regular-show_all_hover_labels": false,
     "sf_cbc_regular-show_all_participants": false,
     "sf_cbc_regular-switch_view": "graph",
+    "sf_cbc_regular-transformation_graph": "scaled",
+    "sf_cbc_regular-transformation_table": "none",
     "sf_electrolytes-filter": [
       "sodium",
       "potassium",
@@ -72,6 +74,8 @@
     "sf_electrolytes-show_all_hover_labels": false,
     "sf_electrolytes-show_all_participants": false,
     "sf_electrolytes-switch_view": "graph",
+    "sf_electrolytes-transformation_graph": "scaled",
+    "sf_electrolytes-transformation_table": "none",
     "sf_liver_function-filter": [
       "bilirubin",
       "ast",
@@ -82,6 +86,8 @@
     "sf_liver_function-show_all_hover_labels": false,
     "sf_liver_function-show_all_participants": false,
     "sf_liver_function-switch_view": "graph",
+    "sf_liver_function-transformation_graph": "scaled",
+    "sf_liver_function-transformation_table": "none",
     "sf_renal_function-filter": [
       "creatinine",
       "egfr",
@@ -91,6 +97,8 @@
     "sf_renal_function-show_all_hover_labels": false,
     "sf_renal_function-show_all_participants": false,
     "sf_renal_function-switch_view": "graph",
+    "sf_renal_function-transformation_graph": "scaled",
+    "sf_renal_function-transformation_table": "none",
     "sf_response-filter": [
       "response",
       "responder"
@@ -99,6 +107,8 @@
     "sf_response-show_all_hover_labels": false,
     "sf_response-show_all_participants": false,
     "sf_response-switch_view": "table",
+    "sf_response-transformation_graph": "none",
+    "sf_response-transformation_table": "none",
     "sf_vital_signs-filter": [
       "systolic_blood_pressure",
       "diastolic_blood_pressure",
@@ -113,6 +123,8 @@
     "sf_vital_signs-show_all_hover_labels": false,
     "sf_vital_signs-show_all_participants": false,
     "sf_vital_signs-switch_view": "graph",
+    "sf_vital_signs-transformation_graph": "none",
+    "sf_vital_signs-transformation_table": "none",
     "start_page_1-go_to_nav_review": 0,
     "start_page_1-go_to_patient-go_to_form": 0,
     "study_data_tabs": "Vital signs"
