@@ -63,7 +63,6 @@ mod_review_form_tbl_server <- function(
   stopifnot(is.reactive(show_all))
   stopifnot(is.character(table_names %||% ""))
   stopifnot(is.character(title %||% ""))
-  transformation <- transformation %||% reactiveVal("none")
 
   moduleServer(id, function(input, output, session){
     ns <- session$ns
@@ -83,7 +82,7 @@ mod_review_form_tbl_server <- function(
         form_review_data(), 
         form = form, 
         form_items = form_items,
-        transformation = transformation(),
+        transformation = transformation() %||% "none",
         active_subject = if(identical(session$userData$review_type(), "form")) NULL else active_subject(),
         pending_form_review_status = NULL,
         is_SAE = identical(title, "Serious Adverse Events")

@@ -259,10 +259,11 @@ mod_study_forms_server <- function(
     dynamic_figure <- reactive({
       req(nrow(fig_data()) > 0, scaling_data)
       yval <- switch(
-        input$transformation_graph, 
+        input$transformation_graph %||% "", 
         "scaled" = "value_scaled", 
         "none" = "item_value", 
-        "standardized" = "value_standardized"
+        "standardized" = "value_standardized",
+        "item_value"
       )
       validate(need(
         fig_data()[[yval]], 
