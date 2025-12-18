@@ -2,8 +2,11 @@
 
 ## Changed
 
-- Replaced `dplyr::case_when()` with `ifelse()` in the row review status calculation for efficiency
-- Switched to server-side table downloads
+- Replaced `dplyr::case_when()` with `ifelse()` in the row review status calculation for efficiency.
+- Added toggle to enable/disable background patterns in figures.
+- Added a toggle to enable hover labels of all patterns in the figures, also the ones in the background.
+- Improved the time-series on-hover label so that limits and significance are also shown.
+- Switched to server-side table downloads.
 - Implemented a `line-clamp` on table column names that wrap to more than 6 lines
 - Added better control of which role privileges - `allowed_to_review` and `allowed_to_query` can now be set per role in the `config.yml` file.
 - `ClinSight` now also looks for a `clinsight-config.yml` file in the current working directory and uses it as custom configuration.
