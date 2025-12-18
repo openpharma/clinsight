@@ -63,6 +63,7 @@ mod_review_form_tbl_server <- function(
   stopifnot(is.reactive(show_all))
   stopifnot(is.character(table_names %||% ""))
   stopifnot(is.character(title %||% ""))
+  transformation <- transformation %||% reactiveVal("none")
 
   moduleServer(id, function(input, output, session){
     ns <- session$ns
