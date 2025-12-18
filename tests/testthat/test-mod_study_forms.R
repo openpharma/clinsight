@@ -320,7 +320,6 @@ describe(
         #############
         ####### Verify transformation button:
         ###############
-        app$view()
         app$set_inputs("test-transformation_graph" = "scaled")
         
         ## Snap 003
