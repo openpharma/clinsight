@@ -26,6 +26,7 @@ get_form_table <- function(
     form,
     form_items,
     transformation = "none",
+    show_limits = FALSE,
     active_subject,
     pending_form_review_status = NULL,
     is_SAE = NULL,
@@ -46,6 +47,8 @@ get_form_table <- function(
   }
   value_column <- if (identical(transformation, "none")) "item_value" else "value_standardized"
   unit_column <- if (identical(transformation, "none")) "item_unit" else "unit_standardized"
+  lower_lim_column <- if (identical(transformation, "none")) "lower_lim" else "lower_lim_standardized"
+  upper_lim_column <- if (identical(transformation, "none")) "upper_lim" else "upper_lim_standardized"
   
   df <- dplyr::left_join(
     form_data,
@@ -64,6 +67,13 @@ get_form_table <- function(
           htmltools::htmlEscape(.data[[value_column]])
         )
       )
+    ) |> 
+    add_limits_to_table(
+      add_limits = isTRUE(show_limits),
+      value_column = value_column, 
+      unit_column = unit_column, 
+      lower_lim_column = lower_lim_column, 
+      upper_lim_column = upper_lim_column
     ) |> 
     create_table(
       expected_columns = names(form_items),
@@ -91,6 +101,33 @@ get_form_table <- function(
     df <- adjust_ae_form_table(df, is_SAE = is_SAE)
   }
   df
+}
+
+add_limits_to_table <- function(
+    data,
+    add_limits = FALSE,
+    value_column = "item_value", 
+    unit_column = "item_unit", 
+    lower_lim_column = "lower_lim", 
+    upper_lim_column = "upper_lim"
+    ) {
+  stopifnot(is.data.frame(data))
+  if (isFALSE(add_limits)) {
+    return(data)
+  }
+  #browser()
+  data |> 
+    dplyr::mutate(
+      "{value_column}" := paste0(
+        .data[[value_column]], " (",
+        ifelse(is.na(.data[[lower_lim_column]]), "?", .data[[lower_lim_column]]), 
+        "-", 
+        ifelse(is.na(.data[[upper_lim_column]]), "?", .data[[upper_lim_column]]), 
+        ")"
+        # "\n", 
+        # ifelse(is.na(.data[[significance]]), "Significance unknown", as.character(.data[[significance]]))
+      )
+    )
 }
 
 #' Adjust (Serious) Adverse Event form tables

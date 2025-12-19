@@ -10,6 +10,7 @@ get_form_table(
   form,
   form_items,
   transformation = "none",
+  show_limits = FALSE,
   active_subject,
   pending_form_review_status = NULL,
   is_SAE = NULL,

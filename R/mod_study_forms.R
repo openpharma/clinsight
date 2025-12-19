@@ -87,22 +87,20 @@ mod_study_forms_ui <- function(id, form, form_items){
               status = "primary",
               right = TRUE
             ),
+            shinyWidgets::materialSwitch(
+              inputId = ns("show_limits"),
+              label = "Show limits", 
+              status = "primary",
+              right = TRUE,
+              value = FALSE
+            ),
             shinyWidgets::radioGroupButtons(
               inputId = ns("transformation_table"),
               label = "Transformation", 
               choices = c("None" = "none"),
               size = "sm"
-            ),
-          ),
-          # selectInput(
-          #   ns("data_type"), 
-          #   label = "Data type", 
-          #   choices = c(
-          #     "Raw" = "raw", 
-          #     "Scaled" = "scaled", 
-          #     "Standardized" = "standardized"
-          #   )
-          # )
+            )
+          )
         )
       )
     )
@@ -167,6 +165,7 @@ mod_study_forms_server <- function(
         selected = "table"
       )
       shinyjs::disable("switch_view")
+      shinyjs::hide("show_limits")
     }
     
     observeEvent(session$userData$review_type(), {
@@ -251,6 +250,7 @@ mod_study_forms_server <- function(
       form_items = form_items,
       transformation = reactive(input$transformation_table),
       show_all = reactive(isTRUE(input$show_all) | identical(session$userData$review_type(), "form")), 
+      show_limits = reactive(isTRUE(input$show_limits)),
       table_names = table_names,
       title = form
     )
