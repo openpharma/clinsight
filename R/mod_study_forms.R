@@ -159,14 +159,20 @@ mod_study_forms_server <- function(
     
     data_types <- isolate(unique(form_data()$item_type))
     all_continuous <- (!is.null(data_types) && all(data_types == "continuous") )
-    if(!all_continuous){
-      shinyWidgets::updateRadioGroupButtons(
-        inputId = "switch_view",
-        selected = "table"
-      )
-      shinyjs::disable("switch_view")
-      shinyjs::hide("show_limits")
-    }
+    
+    observeEvent(input$switch_view, {
+      if (!all_continuous) {
+        shinyWidgets::updateRadioGroupButtons(inputId = "switch_view", selected = "table")
+        shinyjs::disable("switch_view")
+      }
+    }, 
+    once = TRUE
+    )
+    observeEvent(input$show_limits, {
+      if (!all_continuous) shinyjs::hide("show_limits")
+    }, 
+    once = TRUE
+    )
     
     observeEvent(session$userData$review_type(), {
       golem::cat_dev(form, "| Updating tables to show '", 
