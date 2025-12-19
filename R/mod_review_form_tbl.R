@@ -50,7 +50,7 @@ mod_review_form_tbl_server <- function(
     form_review_data,
     form_items,
     transformation = NULL,
-    show_limits = FALSE,
+    show_limits = NULL,
     active_subject, 
     show_all,
     table_names = NULL,
