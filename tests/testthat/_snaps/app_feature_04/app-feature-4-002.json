@@ -631,8 +631,8 @@
               99
             ],
             "text": [
-              "<b>9600-002<\/b><br />2022-01-01<br />Screening (day 0)<br />Value: 99 mmHg",
-              "<b>9600-002<\/b><br />2022-09-11<br />Ext. visit 1 (day 253)<br />Value: 99 mmHg"
+              "<b>9600-002<\/b><br />2022-01-01<br />Screening (day 0)<br />Value: 99 mmHg<br />Limits: 90-160<br />within limits",
+              "<b>9600-002<\/b><br />2022-09-11<br />Ext. visit 1 (day 253)<br />Value: 99 mmHg<br />Limits: 90-160<br />within limits"
             ],
             "type": "scatter",
             "mode": "markers",
@@ -666,8 +666,8 @@
               77
             ],
             "text": [
-              "<b>9600-002<\/b><br />2022-01-01<br />Screening (day 0)<br />Value: 77 mmHg",
-              "<b>9600-002<\/b><br />2022-09-11<br />Ext. visit 1 (day 253)<br />Value: 77 mmHg"
+              "<b>9600-002<\/b><br />2022-01-01<br />Screening (day 0)<br />Value: 77 mmHg<br />Limits: 55-90<br />within limits",
+              "<b>9600-002<\/b><br />2022-09-11<br />Ext. visit 1 (day 253)<br />Value: 77 mmHg<br />Limits: 55-90<br />within limits"
             ],
             "type": "scatter",
             "mode": "markers",
@@ -701,8 +701,8 @@
               77
             ],
             "text": [
-              "<b>9600-002<\/b><br />2022-01-01<br />Screening (day 0)<br />Value: 77 beats/min",
-              "<b>9600-002<\/b><br />2022-09-11<br />Ext. visit 1 (day 253)<br />Value: 77 beats/min"
+              "<b>9600-002<\/b><br />2022-01-01<br />Screening (day 0)<br />Value: 77 beats/min<br />Limits: 60-100<br />within limits",
+              "<b>9600-002<\/b><br />2022-09-11<br />Ext. visit 1 (day 253)<br />Value: 77 beats/min<br />Limits: 60-100<br />within limits"
             ],
             "type": "scatter",
             "mode": "markers",
@@ -736,8 +736,8 @@
               37.5
             ],
             "text": [
-              "<b>9600-002<\/b><br />2022-01-01<br />Screening (day 0)<br />Value: 37.5 °C",
-              "<b>9600-002<\/b><br />2022-09-11<br />Ext. visit 1 (day 253)<br />Value: 37.5 °C"
+              "<b>9600-002<\/b><br />2022-01-01<br />Screening (day 0)<br />Value: 37.5 °C<br />Limits: 35-38.5<br />within limits",
+              "<b>9600-002<\/b><br />2022-09-11<br />Ext. visit 1 (day 253)<br />Value: 37.5 °C<br />Limits: 35-38.5<br />within limits"
             ],
             "type": "scatter",
             "mode": "markers",
@@ -764,7 +764,7 @@
           {
             "x": 0,
             "y": 22.09,
-            "text": "<b>9600-002<\/b><br />2022-01-01<br />Screening (day 0)<br />Value: 22.09 kg/m2",
+            "text": "<b>9600-002<\/b><br />2022-01-01<br />Screening (day 0)<br />Value: 22.09 kg/m2<br />Limits: 18.5-30<br />within limits",
             "type": "scatter",
             "mode": "markers",
             "marker": {
@@ -790,7 +790,7 @@
           {
             "x": 0,
             "y": 70,
-            "text": "<b>9600-002<\/b><br />2022-01-01<br />Screening (day 0)<br />Value: 70 kg",
+            "text": "<b>9600-002<\/b><br />2022-01-01<br />Screening (day 0)<br />Value: 70 kg<br />Limits: 45-200<br />within limits",
             "type": "scatter",
             "mode": "markers",
             "marker": {
@@ -823,8 +823,8 @@
               9
             ],
             "text": [
-              "<b>9600-002<\/b><br />2022-01-01<br />Screening (day 0)<br />Value: 9 breaths/min",
-              "<b>9600-002<\/b><br />2022-09-11<br />Ext. visit 1 (day 253)<br />Value: 9 breaths/min"
+              "<b>9600-002<\/b><br />2022-01-01<br />Screening (day 0)<br />Value: 9 breaths/min<br />Limits: 12-20<br />out of limits, significance pending",
+              "<b>9600-002<\/b><br />2022-09-11<br />Ext. visit 1 (day 253)<br />Value: 9 breaths/min<br />Limits: 12-20<br />out of limits, significance pending"
             ],
             "type": "scatter",
             "mode": "markers",
