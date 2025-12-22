@@ -156,6 +156,7 @@ mod_header_widgets_server <- function(id, r, rev_data, navinfo, timeline_data){
     })
     output[["visit_figure"]] <- renderPlot(
       {
+        req(selected_individual_data())
         golem::cat_dev("plot datapoints figure\n")
         fig_timeline(data = selected_individual_data())
       }, 
