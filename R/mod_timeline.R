@@ -19,10 +19,11 @@ mod_timeline_ui <- function(id){
 #'
 #' @param id Character string, used to connect the module UI with the module
 #'   Server.
+#' @inheritParams mod_header_widgets_server 
 #' @inheritParams mod_common_forms_server
 #'
-#' @seealso [mod_timeline_ui()], [mod_common_forms_ui()],
-#'   [mod_common_forms_server()]
+#' @seealso [mod_timeline_ui()], [mod_header_widgets_ui()],
+#'   [mod_header_widgets_server()]
 mod_timeline_server <- function(
     id, 
     form_review_data, 
