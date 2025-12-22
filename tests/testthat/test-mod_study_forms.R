@@ -283,7 +283,7 @@ describe(
             form_items = form_items,
             item_info = data.frame(
               item_group = "Vital signs",
-              item_scale = FALSE,
+              item_scale = TRUE,
               use_unscaled_limits = TRUE,
               review_required = TRUE
             )
@@ -298,6 +298,7 @@ describe(
         )
         withr::defer(app$stop())
         app$set_inputs(
+          "test-transformation_graph" = "none",
           "test-filter" = "temperature",
           "test-show_all_participants" = TRUE
           )
@@ -313,15 +314,23 @@ describe(
         app$wait_for_idle()
         
         ## Snap 002
+        
+        hover_labels <- unlist(jsonlite::fromJSON(app$get_value(output = "test-figure"))$x$data$text)
+        hover_labels <- hover_labels[!is.na(hover_labels) & hover_labels != ""]
+        expect_false(all(grepl("BEL_04_133", hover_labels)))
+        expect_true(all(grepl("DEU_02_866|NLD_06_893|BEL_04_133", hover_labels)))
+        
         app$expect_values(
-          input = c("test-show_all_participants", "test-show_all_hover_labels"), 
-          output = TRUE
+          input = c("test-show_all_participants", "test-show_all_hover_labels")
         )
         #############
         ####### Verify transformation button:
         ###############
-        app$set_inputs("test-transformation_graph" = "scaled")
-        
+        app$set_inputs(
+          "test-show_all_hover_labels" = FALSE,
+          "test-show_all_participants" = FALSE,
+          "test-transformation_graph" = "scaled"
+        )
         ## Snap 003
         app$expect_values(
           input = c("test-show_all_participants", "test-show_all_hover_labels", "test-transformation_graph"), 

@@ -1,7 +1,7 @@
 {
   "input": {
-    "test-show_all_hover_labels": true,
-    "test-show_all_participants": true,
+    "test-show_all_hover_labels": false,
+    "test-show_all_participants": false,
     "test-transformation_graph": "scaled"
   },
   "output": {
@@ -48,69 +48,6 @@
               "width": 1.8897637795275593,
               "color": "rgba(127,127,127,1)",
               "dash": "dot"
-            },
-            "hoveron": "points",
-            "showlegend": false,
-            "xaxis": "x",
-            "yaxis": "y",
-            "hoverinfo": "text",
-            "frame": null
-          },
-          {
-            "x": [
-              0,
-              30,
-              44,
-              58,
-              72,
-              86,
-              100,
-              null,
-              0,
-              73,
-              86,
-              null,
-              0,
-              85
-            ],
-            "y": [
-              0.48571428571428654,
-              0.42857142857142855,
-              0.34285714285714369,
-              0.48571428571428654,
-              0.37142857142857061,
-              0.2857142857142857,
-              0.51428571428571346,
-              null,
-              0.39999999999999958,
-              0.42857142857142855,
-              0.62857142857142934,
-              null,
-              0.5714285714285714,
-              0.45714285714285757
-            ],
-            "text": [
-              "<b>BEL_04_133<\/b><br />2023-06-05<br />Screening (day 0)<br />Value: 36.7 °C<br />Limits: 35-38.5<br />within limits",
-              "<b>BEL_04_133<\/b><br />2023-07-05<br />Visit 1 (day 30)<br />Value: 36.5 °C<br />Limits: 35-38.5<br />within limits",
-              "<b>BEL_04_133<\/b><br />2023-07-19<br />Visit 2 (day 44)<br />Value: 36.2 °C<br />Limits: 35-38.5<br />within limits",
-              "<b>BEL_04_133<\/b><br />2023-08-02<br />Visit 3 (day 58)<br />Value: 36.7 °C<br />Limits: 35-38.5<br />within limits",
-              "<b>BEL_04_133<\/b><br />2023-08-16<br />Visit 4 (day 72)<br />Value: 36.3 °C<br />Limits: 35-38.5<br />within limits",
-              "<b>BEL_04_133<\/b><br />2023-08-30<br />Visit 5 (day 86)<br />Value: 36 °C<br />Limits: 35-38.5<br />within limits",
-              "<b>BEL_04_133<\/b><br />2023-09-13<br />Visit 6 (day 100)<br />Value: 36.8 °C<br />Limits: 35-38.5<br />within limits",
-              null,
-              "<b>DEU_02_866<\/b><br />2023-06-05<br />Screening (day 0)<br />Value: 36.4 °C<br />Limits: 35-38.5<br />within limits",
-              "<b>DEU_02_866<\/b><br />2023-08-17<br />Visit 1 (day 73)<br />Value: 36.5 °C<br />Limits: 35-38.5<br />within limits",
-              "<b>DEU_02_866<\/b><br />2023-08-30<br />Visit 2 (day 86)<br />Value: 37.2 °C<br />Limits: 35-38.5<br />within limits",
-              null,
-              "<b>NLD_06_893<\/b><br />2023-06-05<br />Screening (day 0)<br />Value: 37 °C<br />Limits: 35-38.5<br />within limits",
-              "<b>NLD_06_893<\/b><br />2023-08-29<br />Visit 1 (day 85)<br />Value: 36.6 °C<br />Limits: 35-38.5<br />within limits"
-            ],
-            "type": "scatter",
-            "mode": "lines",
-            "line": {
-              "width": 1.8897637795275593,
-              "color": "rgba(0,0,0,0.2)",
-              "dash": "solid"
             },
             "hoveron": "points",
             "showlegend": false,
