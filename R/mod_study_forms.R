@@ -49,10 +49,28 @@ mod_study_forms_ui <- function(id, form, form_items){
               ),
               multiple = TRUE
             ), 
-            bslib::popover(
-              tags$a("Legend", tags$sup(icon("circle-info")), class =  "link"),
-              bslib::card_body(img(src="www/figure_legend.png"))
+            shinyWidgets::materialSwitch(
+              inputId = ns("show_all_participants"),
+              label = "Show all participants", 
+              status = "primary",
+              value = FALSE,
+              right = TRUE
+            ),
+            conditionalPanel(
+              condition = "input.show_all_participants === true",
+              ns = NS(id),
+              shinyWidgets::materialSwitch(
+                inputId = ns("show_all_hover_labels"),
+                label = "Show all hover labels", 
+                status = "primary",
+                value = FALSE,
+                right = TRUE
+              )
             )
+          ),
+          bslib::popover(
+            tags$a("Legend", tags$sup(icon("circle-info")), class =  "link"),
+            bslib::card_body(img(src="www/figure_legend.png"))
           ),
           conditionalPanel(
             condition = "input.switch_view === 'table'",
@@ -205,6 +223,8 @@ mod_study_forms_server <- function(
         id_to_highlight = active_subject(), 
         point_size = "reviewed",
         height = ceiling(0.5*length(unique(fig_data()$item_name))*125+175),
+        show_all_participants = isTRUE(input$show_all_participants),
+        show_all_hover_labels = input$show_all_hover_labels,
         scale = scale_yval,
         use_unscaled_limits = scaling_data()$use_unscaled_limits
       )

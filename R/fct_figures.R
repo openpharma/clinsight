@@ -169,6 +169,8 @@ fig_timeline <- function(
 #'   used. This parameter will be ignored if scaled is set to `TRUE`.
 #' @param point_size character vector. Column in the data frame that controls
 #'   the point size in the figure.
+#' @param show_all_participants Logical to toggle background patterns.
+#' @param show_all_hover_labels Logical to toggle hover labels.
 #'
 #' @return A faceted ggplot2 time series figure.
 #' @keywords internal
@@ -204,19 +206,31 @@ fig_timeseries <- function(
     color_fill = "significance",
     point_size = "reviewed",
     label = "text_label",
+    show_all_participants = TRUE,
+    show_all_hover_labels = FALSE,
     scale = FALSE,
     use_unscaled_limits = FALSE
 ){
+  if(isTRUE(is.na(id_to_highlight))){
+    id_to_highlight <- NULL
+  }
   df_id <- data[data[[id]] == id_to_highlight, ]
   yval <- ifelse(scale, "value_scaled", "item_value")
-  fig <- ggplot2::ggplot(data, ggplot2::aes(x = .data[[xval]], 
-                                            y = .data[[yval]],  
-                                            group = .data[[id]]
-                                            )) + 
+  fig <- ggplot2::ggplot(
+    data, 
+    ggplot2::aes(
+      x = .data[[xval]], 
+      y = .data[[yval]],  
+      group = .data[[id]]
+      )
+    ) + 
     ggplot2::facet_wrap(~item_name, ncol = 2, scales = "free_y") +
     ggplot2::scale_fill_manual(values = col_palette) +
     ggplot2::scale_x_continuous(limits = \(x){
-      c(0, pmax(x[2], 3)) # keeps minimum scale of 3 days if not much data is available
+      c(
+        pmin(x[1], 0), # Always include day zero. 
+        pmax(x[2], 3) # keeps minimum scale of 3 days if not much data is available
+      )
     }) + 
     ggplot2::scale_y_continuous(expand = ggplot2::expansion(c(0.15, 0.1))) +
     custom_plot_theme() +
@@ -236,7 +250,13 @@ fig_timeseries <- function(
         list(ggplot2::geom_hline(ggplot2::aes(yintercept = .data[["upper_lim"]]),lty = 3, linewidth = 0.5, col = "grey50"),
              ggplot2::geom_hline(ggplot2::aes(yintercept = .data[["lower_lim"]]),lty = 3, linewidth = 0.5, col = "grey50"))
       },
-      ggplot2::geom_line(alpha = 0.2),
+      if(isTRUE(show_all_participants) && isTRUE(show_all_hover_labels)) {
+        suppressWarnings(
+          ggplot2::geom_line(alpha = 0.2, mapping = ggplot2::aes(text = .data[[label]])) 
+        )
+      } else if(show_all_participants){
+        ggplot2::geom_line(alpha = 0.2)
+      },
       ggplot2::scale_size_manual(values = setNames(c(2,4), c("Yes", "No")))
     )
   
