@@ -67,11 +67,14 @@ mod_study_forms_ui <- function(id, form, form_items){
                 right = TRUE
               )
             ),
-            shinyWidgets::radioGroupButtons(
-              inputId = ns("transformation_graph"),
-              label = "Transformation", 
-              choices = c("None" = "none"),
-              size = "sm"
+            div(
+              id = ns("transformation_graph_container"),
+              shinyWidgets::radioGroupButtons(
+                inputId = ns("transformation_graph"),
+                label = "Transformation", 
+                choices = c("None" = "none"),
+                size = "sm"
+              )
             ),
             bslib::popover(
               tags$a("Legend", tags$sup(icon("circle-info")), class =  "link"),
@@ -94,11 +97,14 @@ mod_study_forms_ui <- function(id, form, form_items){
               right = TRUE,
               value = FALSE
             ),
-            shinyWidgets::radioGroupButtons(
-              inputId = ns("transformation_table"),
-              label = "Transformation", 
-              choices = c("None" = "none"),
-              size = "sm"
+            div(
+              id = ns("transformation_table_container"),
+              shinyWidgets::radioGroupButtons(
+                inputId = ns("transformation_table"),
+                label = "Transformation", 
+                choices = c("None" = "none"),
+                size = "sm"
+              )
             )
           )
         )
@@ -217,35 +223,35 @@ mod_study_forms_server <- function(
     scaling_data <- lapply(add_missing_columns(item_info, cols)[1, cols], isTRUE)
     
     observeEvent(form_data(), {
-      data_types_table <- c(
-        "None" = "none",
-        if (
-          "value_standardized" %in% names(form_data()) && 
-          !all(is.na(form_data()[["value_standardized"]])) 
-        ) {
-          c("Standardized" = "standardized")
-        }
-      )
-      shinyWidgets::updateRadioGroupButtons(
-        session = session,
-        inputId = "transformation_table", 
-        choices = data_types_table
-      )
+      has_standardized <- any(!is.na(form_data()[["value_standardized"]]))
+      has_scaled <- isTRUE(scaling_data$item_scale) && any(!is.na(form_data()[["value_scaled"]]))
       
-      data_types_graph <- c(
-        data_types_table,
-        if (!all(is.na(form_data()[["value_scaled"]]))) {
-          c("Scaled" = "scaled")
-        }
-      )
+      data_types_table <- c("None" = "none", if (has_standardized) c("Standardized" = "standardized"))
+      data_types_graph <- c(data_types_table, if (has_scaled) c("Scaled" = "scaled"))
       
-      shinyWidgets::updateRadioGroupButtons(
-        session = session,
-        inputId = "transformation_graph", 
-        choices = data_types_graph,
-        selected = if (isTRUE(scaling_data$item_scale)) "scaled" else "none" 
-      )
-    })
+      if (length(data_types_table) == 1L) {
+        removeUI(selector = paste0("#", ns("transformation_table_container")))
+      } else {
+        shinyWidgets::updateRadioGroupButtons(
+          session = session,
+          inputId = "transformation_table",
+          choices = data_types_table
+        )
+      }
+      
+      if (length(data_types_graph) == 1L) {
+        removeUI(selector = paste0("#", ns("transformation_graph_container")))
+      } else {
+        shinyWidgets::updateRadioGroupButtons(
+          session = session,
+          inputId = "transformation_graph",
+          choices = data_types_graph,
+          selected = if (has_scaled) "scaled" else "none"
+        )
+      }
+    },
+    once = TRUE
+    )
     
     mod_review_form_tbl_server(
       "review_form_tbl", 
@@ -254,7 +260,7 @@ mod_study_forms_server <- function(
       form_review_data = form_review_data, 
       active_subject = active_subject,
       form_items = form_items,
-      transformation = reactive(input$transformation_table),
+      transformation = reactive(input$transformation_table %||% "none"),
       show_all = reactive(isTRUE(input$show_all) | identical(session$userData$review_type(), "form")), 
       show_limits = reactive(isTRUE(input$show_limits)),
       table_names = table_names,
@@ -265,7 +271,7 @@ mod_study_forms_server <- function(
     dynamic_figure <- reactive({
       req(nrow(fig_data()) > 0, scaling_data)
       yval <- switch(
-        input$transformation_graph %||% "", 
+        input$transformation_graph %||% "none", 
         "scaled" = "value_scaled", 
         "none" = "item_value", 
         "standardized" = "value_standardized",
@@ -285,6 +291,7 @@ mod_study_forms_server <- function(
         height = ceiling(0.5*length(unique(fig_data()$item_name))*125+175),
         show_all_participants = isTRUE(input$show_all_participants),
         show_all_hover_labels = input$show_all_hover_labels,
+        label = if (yval == "value_standardized") "label_standardized" else "text_label",
         yval = yval,
         use_unscaled_limits = scaling_data$use_unscaled_limits
       )
@@ -302,8 +309,3 @@ mod_study_forms_server <- function(
   })
 }
 
-## To be copied in the UI
-# mod_study_forms_ui("study_form_element_1")
-
-## To be copied in the server
-# mod_study_forms_server("study_form_element_1")
