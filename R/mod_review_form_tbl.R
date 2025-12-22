@@ -106,7 +106,7 @@ mod_review_form_tbl_server <- function(
       session$userData$pending_form_review_status[[form]] <- NULL
       session$userData$pending_review_records[[form]] <- data.frame(id = integer(), reviewed = character())
     }, priority = 100) |> 
-      bindEvent(active_subject(), form_review_data(), form_data(), session$userData$review_type())
+      bindEvent(active_subject(), form_review_data(), form_data(), session$userData$review_type(), transformation(), show_limits())
     
     observeEvent(datatable_rendered(), {
       golem::cat_dev(form, "| renewing table_data using merged_form_data()\n\n")
