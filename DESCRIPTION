@@ -49,6 +49,7 @@ Imports:
 Suggests: 
     base64enc,
     chromote,
+    jsonlite,
     kableExtra,
     knitr,
     pkgload,
