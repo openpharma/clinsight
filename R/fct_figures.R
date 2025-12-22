@@ -215,7 +215,7 @@ fig_timeseries <- function(
     id_to_highlight <- NULL
   }
   df_id <- data[data[[id]] == id_to_highlight, ]
-  if(is.element("character", class(data[[yval]]))) {
+  if ("character" %in% class(data[[yval]])) {
     warning(paste0("converting yval ", yval, " to numeric"))
     data[[yval]] <- as.numeric(data[[yval]])
   }
