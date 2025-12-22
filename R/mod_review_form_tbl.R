@@ -30,6 +30,9 @@ mod_review_form_tbl_ui <- function(id) {
 #' @param transformation A reactive value. If this is 'none' then the columns
 #'   `item_value` and `item_unit` will be used in the table. Otherwise,
 #'   `value_standardized` and `unit_standardized` will be used.
+#' @param show_limits Optional reactive value containing a logical. If the
+#'   logical inside is `TRUE`, laboratory limits will be added to the table
+#'   shown in the module.
 #' @param active_subject Reactive value containing the active subject id.
 #' @param show_all Common reactive value, a logical indicating whether all
 #'   records should be displayed.

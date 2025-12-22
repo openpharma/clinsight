@@ -30,6 +30,9 @@ get_form_table(
 \code{item_value} and \code{item_unit} will be used in the table. Otherwise,
 \code{value_standardized} and \code{unit_standardized} will be used.}
 
+\item{show_limits}{Logical, indicating whether laboratory limits will be
+added to the table.}
+
 \item{active_subject}{A character string with the active subject id.}
 
 \item{pending_form_review_status}{A logical, indicating whether all items of

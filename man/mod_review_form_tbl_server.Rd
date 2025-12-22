@@ -11,7 +11,7 @@ mod_review_form_tbl_server(
   form_review_data,
   form_items,
   transformation = NULL,
-  show_limits = FALSE,
+  show_limits = NULL,
   active_subject,
   show_all,
   table_names = NULL,
@@ -35,6 +35,10 @@ the form.}
 \item{transformation}{A reactive value. If this is 'none' then the columns
 \code{item_value} and \code{item_unit} will be used in the table. Otherwise,
 \code{value_standardized} and \code{unit_standardized} will be used.}
+
+\item{show_limits}{Optional reactive value containing a logical. If the
+logical inside is \code{TRUE}, laboratory limits will be added to the table
+shown in the module.}
 
 \item{active_subject}{Reactive value containing the active subject id.}
 

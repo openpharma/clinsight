@@ -8,6 +8,8 @@
 #' @param transformation A character value. If this is 'none' then the columns
 #'   `item_value` and `item_unit` will be used in the table. Otherwise,
 #'   `value_standardized` and `unit_standardized` will be used.
+#' @param show_limits Logical, indicating whether laboratory limits will be
+#'   added to the table.
 #' @param active_subject A character string with the active subject id.
 #' @param pending_form_review_status A logical, indicating whether all items of
 #'   the entire form for the active subject id are reviewed. Note that the
