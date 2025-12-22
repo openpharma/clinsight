@@ -219,6 +219,9 @@ fig_timeseries <- function(
     warning(paste0("converting yval ", yval, " to numeric"))
     data[[yval]] <- as.numeric(data[[yval]])
   }
+  if (is.null(data[[label]])) {
+    label <- "text_label"
+  }
   
   fig <- ggplot2::ggplot(
     data, 
