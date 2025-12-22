@@ -342,7 +342,16 @@ get_appdata <-  function(
           "\nValue: ",
           round(item_value, 2),
           " ",
-          item_unit
+          item_unit, 
+          "\n",
+          paste0(
+            "Limits: ", 
+            ifelse(is.na(lower_lim), "?", lower_lim), 
+            "-", 
+            ifelse(is.na(upper_lim), "?", upper_lim), 
+            "\n", 
+            ifelse(is.na(significance), "Significance unknown", as.character(significance))
+          )
         )
       ) |> 
       dplyr::ungroup() 

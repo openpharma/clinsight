@@ -105,6 +105,8 @@
       "monocytes"
     ],
     "sf_cbc_regular-show_all": false,
+    "sf_cbc_regular-show_all_hover_labels": false,
+    "sf_cbc_regular-show_all_participants": false,
     "sf_cbc_regular-switch_view": "graph",
     "sf_electrolytes-filter": [
       "sodium",
@@ -115,6 +117,8 @@
       "magnesium"
     ],
     "sf_electrolytes-show_all": false,
+    "sf_electrolytes-show_all_hover_labels": false,
+    "sf_electrolytes-show_all_participants": false,
     "sf_electrolytes-switch_view": "graph",
     "sf_liver_function-filter": [
       "bilirubin",
@@ -123,6 +127,8 @@
       "ggt"
     ],
     "sf_liver_function-show_all": false,
+    "sf_liver_function-show_all_hover_labels": false,
+    "sf_liver_function-show_all_participants": false,
     "sf_liver_function-switch_view": "graph",
     "sf_renal_function-filter": [
       "creatinine",
@@ -130,12 +136,16 @@
       "urate"
     ],
     "sf_renal_function-show_all": false,
+    "sf_renal_function-show_all_hover_labels": false,
+    "sf_renal_function-show_all_participants": false,
     "sf_renal_function-switch_view": "graph",
     "sf_response-filter": [
       "response",
       "responder"
     ],
     "sf_response-show_all": false,
+    "sf_response-show_all_hover_labels": false,
+    "sf_response-show_all_participants": false,
     "sf_response-switch_view": "table",
     "sf_toggle_timeline": false,
     "sf_vital_signs-filter": [
@@ -149,6 +159,8 @@
       "weight"
     ],
     "sf_vital_signs-show_all": false,
+    "sf_vital_signs-show_all_hover_labels": false,
+    "sf_vital_signs-show_all_participants": false,
     "sf_vital_signs-switch_view": "graph",
     "start_page_1-go_to_nav_review": 0,
     "start_page_1-go_to_patient-go_to_form": 0,
