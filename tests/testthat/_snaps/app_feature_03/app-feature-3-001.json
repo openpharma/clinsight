@@ -1,82 +1,5 @@
 {
   "input": {
-    ".clientValue-default-plotlyCrosstalkOpts": {
-      "on": "plotly_click",
-      "persistent": false,
-      "dynamic": false,
-      "selectize": false,
-      "opacityDim": 0.2,
-      "selected": {
-        "opacity": 1
-      },
-      "debounce": 0,
-      "color": [
-
-      ]
-    },
-    "cf_adverse_events-show_all_data": false,
-    "cf_conc_procedures-show_all_data": false,
-    "cf_medical_history-show_all_data": false,
-    "cf_medication-show_all_data": false,
-    "cf_toggle_timeline": true,
-    "common_data_tabs": "Adverse events",
-    "header_widgets_1-timeline_fig-timeline_data": {
-      "subject_id": [
-        "BEL_08_45",
-        "BEL_08_45"
-      ],
-      "content": [
-        "Screening",
-        "Exit"
-      ],
-      "start": [
-        "2023-06-04T22:00:00.000Z",
-        "2023-09-10T22:00:00.000Z"
-      ],
-      "group": [
-        "Visit",
-        "Visit"
-      ],
-      "title": [
-        "2023-06-05 | Screening",
-        "2023-09-11 | Exit"
-      ],
-      "className": [
-        "bg-light",
-        "bg-light"
-      ],
-      "id": [
-        "18",
-        "69"
-      ],
-      "order": [
-        "4",
-        "4"
-      ]
-    },
-    "header_widgets_1-timeline_fig-timeline_ids": [
-      "18",
-      "69"
-    ],
-    "header_widgets_1-timeline_fig-timeline_selected": null,
-    "header_widgets_1-timeline_fig-timeline_visible": [
-      "18",
-      "69"
-    ],
-    "header_widgets_1-timeline_fig-timeline_window": [
-      "2023-05-31T19:45:57.995Z",
-      "2023-09-13T05:11:53.126Z"
-    ],
-    "main_sidebar_1-navigate_forms_1-form_next": 0,
-    "main_sidebar_1-navigate_forms_1-form_previous": 0,
-    "main_sidebar_1-review_config_1-config_review": 0,
-    "main_sidebar_1-review_forms_1-add_comment": false,
-    "main_sidebar_1-review_forms_1-confirm_review_tabs": "show_checkbox",
-    "main_sidebar_1-review_forms_1-form_reviewed": false,
-    "main_sidebar_1-review_forms_1-review_comment": "",
-    "main_sidebar_1-review_forms_1-review_type": "subject",
-    "main_sidebar_1-review_forms_1-save_review": 0,
-    "main_sidebar_1-show_review_controls": "panel_controls",
     "main_sidebar_1-write_query-create_query": 1,
     "main_sidebar_1-write_query-query_add_input": 0,
     "main_sidebar_1-write_query-query_major": false,
@@ -86,85 +9,13 @@
     "main_sidebar_1-write_query-query_sidebar": true,
     "main_sidebar_1-write_query-query_text": "",
     "main_tabs": "Study data",
-    "navigate_review_1-review_value_box_full_screen": false,
-    "plotly_afterplot-click_individuals": "\"sf_vital_signs-figure\"",
     "queries_1-details_panel_full_screen": false,
     "queries_1-go_to_form-go_to_form": 0,
     "queries_1-query_follow_up_1-query_add_follow_up": 0,
     "queries_1-query_follow_up_1-query_follow_up_full_screen": false,
     "queries_1-query_follow_up_1-query_follow_up_text": "",
     "queries_1-query_follow_up_1-resolved": false,
-    "queries_1-show_resolved": false,
-    "report_1-create_report": 0,
-    "sf_cbc_regular-filter": [
-      "haemoglobin",
-      "haematocrit",
-      "platelets",
-      "neutrophils",
-      "lymphocytes",
-      "monocytes"
-    ],
-    "sf_cbc_regular-show_all": false,
-    "sf_cbc_regular-show_all_hover_labels": false,
-    "sf_cbc_regular-show_all_participants": false,
-    "sf_cbc_regular-switch_view": "graph",
-    "sf_electrolytes-filter": [
-      "sodium",
-      "potassium",
-      "chloride",
-      "bicarbonate",
-      "calcium",
-      "magnesium"
-    ],
-    "sf_electrolytes-show_all": false,
-    "sf_electrolytes-show_all_hover_labels": false,
-    "sf_electrolytes-show_all_participants": false,
-    "sf_electrolytes-switch_view": "graph",
-    "sf_liver_function-filter": [
-      "bilirubin",
-      "ast",
-      "alt",
-      "ggt"
-    ],
-    "sf_liver_function-show_all": false,
-    "sf_liver_function-show_all_hover_labels": false,
-    "sf_liver_function-show_all_participants": false,
-    "sf_liver_function-switch_view": "graph",
-    "sf_renal_function-filter": [
-      "creatinine",
-      "egfr",
-      "urate"
-    ],
-    "sf_renal_function-show_all": false,
-    "sf_renal_function-show_all_hover_labels": false,
-    "sf_renal_function-show_all_participants": false,
-    "sf_renal_function-switch_view": "graph",
-    "sf_response-filter": [
-      "response",
-      "responder"
-    ],
-    "sf_response-show_all": false,
-    "sf_response-show_all_hover_labels": false,
-    "sf_response-show_all_participants": false,
-    "sf_response-switch_view": "table",
-    "sf_toggle_timeline": false,
-    "sf_vital_signs-filter": [
-      "systolic_blood_pressure",
-      "diastolic_blood_pressure",
-      "pulse",
-      "resp",
-      "temperature",
-      "weight_change_since_screening",
-      "bmi",
-      "weight"
-    ],
-    "sf_vital_signs-show_all": false,
-    "sf_vital_signs-show_all_hover_labels": false,
-    "sf_vital_signs-show_all_participants": false,
-    "sf_vital_signs-switch_view": "graph",
-    "start_page_1-go_to_nav_review": 0,
-    "start_page_1-go_to_patient-go_to_form": 0,
-    "study_data_tabs": "Vital signs"
+    "queries_1-show_resolved": false
   },
   "output": {
     "form_level_review": false,
