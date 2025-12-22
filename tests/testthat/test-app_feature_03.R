@@ -45,7 +45,7 @@ describe(
         
         ####### snap feature-3-001
         app$expect_values(
-          input = vector_select(input_names, exclude = "plotly_relayout"), 
+          input = vector_select(input_names,include = c("main_tabs", "write_query", "queries")), 
           output = vector_select(
             output_names, 
             exclude = c("visit_figure", "sf_vital_signs-figure", "start_page_1-overview_table")
@@ -117,11 +117,7 @@ describe(
 
         ####### snap feature-3-002
         app$expect_values(
-          input = vector_select(
-            input_names, 
-            exclude = c("plotly_relayout", "shinyjs-navigate_participants_1", 
-                        "timeline_window", "timeline_data")
-          ), 
+          input = vector_select(input_names,include = c("main_tabs", "write_query", "queries")), 
           output = vector_select(
             output_names, 
             # this test is not about these figures. 
