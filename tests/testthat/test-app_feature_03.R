@@ -95,7 +95,7 @@ describe(
       {
         # scenario 2 is not fully isolated from scenario 1; however, this setup 
         # is faster since only one shinytest2 app needs to be started. 
-        app$set_inputs(main_tabs = "Common events")
+        app$click("go_to_common_events")
         app$set_inputs(common_data_tabs = "Adverse events")
         app$wait_for_js("$('#navigate_participants_1-subject_info').click()")
         app$wait_for_idle()
