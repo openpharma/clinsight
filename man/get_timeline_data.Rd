@@ -6,7 +6,10 @@
 \usage{
 get_timeline_data(
   data,
-  table_data,
+  available_data = NULL,
+  expected_ae_cols = c("AE Name", "Serious Adverse Event", "AE start date",
+    "AE end date", "SAE Start date", "SAE End date", "AE date of worsening",
+    "CTCAE severity worsening"),
   timeline_cols = c("subject_id", "event_name", "form_repeat", "item_group", "start",
     "group", "end", "title", "className", "id", "order"),
   treatment_label = "💊 Tₓ"
@@ -15,8 +18,13 @@ get_timeline_data(
 \arguments{
 \item{data}{A list of data frames, with compatible clinical trial data.}
 
-\item{table_data}{A list of data frames containing clinical trial data in
-wide format. Created with \code{\link[=create_table]{create_table()}}.}
+\item{available_data}{Optional, data frame with all available data gathered.
+Used to extract visit information. If not provided, this data frame will be
+created internally by running \code{\link[=get_available_data]{get_available_data()}} on the provided \code{data}
+list.}
+
+\item{expected_ae_cols}{Character vector with expected columns for the
+adverse event table within the \code{data} list.}
 
 \item{timeline_cols}{Character vector with the name of the columns of the
 output data frame.}

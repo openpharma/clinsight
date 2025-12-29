@@ -47,53 +47,32 @@ mod_header_widgets_ui <- function(id){
 #' @param navinfo Reactive values created with [shiny::reactiveValues()]. Used
 #'   to send back information about the page change to the server, when clicking
 #'   on the adverse event box.
+#' @param available_data A data frame containing all available data, usually
+#'   created with the function [get_available_data()].
 #'
 #' @seealso [mod_header_widgets_ui()]
-mod_header_widgets_server <- function(id, r, rev_data, navinfo){
+mod_header_widgets_server <- function(
+    id, 
+    r, 
+    rev_data, 
+    navinfo,
+    available_data
+    ){
   stopifnot(is.reactivevalues(r))
   stopifnot(is.reactivevalues(navinfo))
   stopifnot(is.reactivevalues(rev_data))
+  stopifnot(is.data.frame(available_data))
   
   moduleServer( id, function(input, output, session){
     ns <- session$ns
-    # for use in valueboxes for individuals:
-    AEvalue.individual  <- reactiveVal("...") 
-    SAEvalue.individual <- reactiveVal("...") 
-    visit.number <- reactiveVal(".. (..%)")
     
-    AEvals_active <- reactive({ 
-      req(r$subject_id)
-      validate(need(r$filtered_tables$`Adverse events`, "AE data missing for selected patient"))
-      r$filtered_tables$`Adverse events` |> 
-        dplyr::filter(subject_id == as.character(r$subject_id)) |> 
-        dplyr::distinct(subject_id, form_repeat, `Serious Adverse Event`)
-      })
-    
-    observeEvent(r$subject_id, {
-      req(r$subject_id != "")
-      golem::cat_dev("Update individual valueboxes\n")
-      
-      AEvalue.individual(
-        sum(AEvals_active()[["Serious Adverse Event"]] != "Yes", na.rm = T)
+    all_aes <- reactive({ 
+      validate(need(r$filtered_data[["Adverse events"]], "AE data missing"))
+      count_adverse_events(
+        data = r$filtered_data[["Adverse events"]], 
+        all_ids = unique(available_data$subject_id)
         )
-      SAEvalue.individual(
-        sum(AEvals_active()[["Serious Adverse Event"]] == "Yes", na.rm = T)
-      ) 
-    })
-    simple_timeline_data <- reactive({
-      bind_rows_custom(r$filtered_data, "item_value") |> 
-      dplyr::select(dplyr::all_of(c("subject_id", "event_name", 
-                                    "event_label", "item_name"))) |> 
-      dplyr::distinct()
-    })
-    
-    selected_individual_data <- reactiveVal()
-    observeEvent(r$subject_id, {
-      selected_individual_data(
-        with(simple_timeline_data(), 
-             simple_timeline_data()[subject_id %in% r$subject_id, ])
-      )  
-    })
+      })
     
     shinyjs::onclick("ae_box", {
       navinfo$active_tab = "Common events"
@@ -112,11 +91,10 @@ mod_header_widgets_server <- function(id, r, rev_data, navinfo){
     ### Outputs: 
 
     output[["ae_box"]] <- renderUI({
-      req(inherits(all_AEs_reviewed(), "logical"), SAEvalue.individual(), 
-          AEvalue.individual(), r$subject_id)
+      req(inherits(all_AEs_reviewed(), "logical"), r$subject_id)
       bslib::value_box(
-        title = paste0("SAEs: ", SAEvalue.individual()), 
-        value = paste0("AEs: ", AEvalue.individual()),
+        title = paste0("SAEs: ", with(all_aes(), SAEs[subject_id == r$subject_id]) ), 
+        value = paste0("AEs: ", with(all_aes(), AEs[subject_id == r$subject_id])),
         showcase = icon("house-medical", class = 'fa-2x'),
         theme = if(all_AEs_reviewed()) "primary" else "warning" 
       )
@@ -124,7 +102,9 @@ mod_header_widgets_server <- function(id, r, rev_data, navinfo){
     output[["visit_figure"]] <- renderPlot(
       {
         golem::cat_dev("plot datapoints figure\n")
-        fig_timeline(data = selected_individual_data())
+        fig_timeline(
+          data =  available_data[available_data$subject_id %in% r$subject_id, ]
+        )
       }, 
       height = 60
     )

@@ -4,7 +4,7 @@
 \alias{filter_data}
 \title{Filter app data}
 \usage{
-filter_data(data, sites, subject_ids, appdata, apptables)
+filter_data(data, sites, subject_ids, appdata)
 }
 \arguments{
 \item{data}{A \code{Reactivevalues} object. filtered data will be written into
@@ -17,9 +17,6 @@ correct order of subject IDs.}
 
 \item{appdata}{Application data in long format, stored in a list. List
 contains data frames named per form.}
-
-\item{apptables}{Application data tables in wide format, stored in a list.
-List contains data frames named per form.}
 }
 \value{
 A \code{reactivevalues} object.

@@ -101,8 +101,8 @@ fig_timeline <- function(
   
   completed_events <- all_events[
     all_events$event_label %in% labels_in_data, , drop = FALSE]
-  uneven_events   <- all_events[1:length(all_events$event_label) %% 2 == 0, , drop = FALSE]
-  even_events     <- all_events[1:length(all_events$event_label) %% 2 != 0, , drop = FALSE]
+  uneven_events   <- all_events[seq_len(length(all_events$event_label)) %% 2 == 0, , drop = FALSE]
+  even_events     <- all_events[seq_len(length(all_events$event_label)) %% 2 != 0, , drop = FALSE]
  fig <- ggplot2::ggplot(
     mapping = ggplot2::aes(x = event_label, y = factor(1))
     ) +
