@@ -8,7 +8,7 @@ describe(
       form_items = "",
       active_subject = reactiveVal("DEU_02_482"),
       table_names = NULL,
-      timeline_data = reactiveVal()
+      timeline_data = data.frame()
     ) 
     
     it("Can load the module UI, with functioning internal parameters.", {
@@ -46,9 +46,6 @@ describe(
       ) |> 
       get_appdata()
     appvars <- get_meta_vars(appdata)
-    apptables <- lapply(setNames(names(appdata), names(appdata)), \(x){
-      create_table(appdata[[x]], expected_columns = names(appvars$items[[x]]))
-    })
     rev_data <- get_review_data(appdata[["Adverse events"]]) |> 
       dplyr::mutate(
         id = dplyr::row_number(),
@@ -56,7 +53,7 @@ describe(
         status = sample(c("new", "old", "updated"), dplyr::n(), replace = TRUE)
       )
     form_items <- appvars$items[["Adverse events"]]
-    timeline_data <- get_timeline_data(appdata, apptables)
+    timeline_data <- get_timeline_data(appdata)
     testargs <- list(
       form = "Adverse events",
       form_data = reactiveVal(appdata[["Adverse events"]]),
@@ -64,7 +61,7 @@ describe(
       form_items = form_items,
       active_subject = reactiveVal("DEU_02_482"),
       table_names = NULL,
-      timeline_data = reactiveVal(timeline_data)
+      timeline_data = timeline_data
     ) 
     it(
       "Scenario 1 - View Adverse events and SAE tables. Given the form [Adverse events],
@@ -118,7 +115,7 @@ describe(
           form_items = form_items,
           active_subject = reactiveVal("DEU_02_482"),
           table_names = NULL,
-          timeline_data = reactiveVal(timeline_data)
+          timeline_data = timeline_data
         )  
         
         testServer(mod_common_forms_server, args = testargs, {

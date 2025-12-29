@@ -11,25 +11,31 @@ mod_navigate_participants_ui <- function(id){
 }
     
 #' Navigate participants - Shiny module Server
-#' 
-#' A `shiny` module. Used to show participant information in a 
-#' [bslib::value_box()]. By clicking on the [bslib::value_box()], additional 
-#' participant information will be shown, as well as a selection menu to select 
-#' a different subject. Once the subject is changed, the active `subject_id` will 
-#' be changed in the application. 
 #'
-#' @param id Character string, used to connect the module UI with the module Server. 
-#' @param r Common `reactiveValues`. Used to access `filtered_tables$General`, 
-#' containing a data frame with general data to be displayed in the participant 
-#' selection modal. 
-#' In addition, it will be used to access the list of `filtered_subjects` 
-#' (character vector), and the currently active `subject_id` (character string). 
-#' The only parameter that the module will change, if requested by the user, 
-#' is `subject_id`. 
+#' A `shiny` module. Used to show participant information in a
+#' [bslib::value_box()]. By clicking on the [bslib::value_box()], additional
+#' participant information will be shown, as well as a selection menu to select
+#' a different subject. Once the subject is changed, the active `subject_id`
+#' will be changed in the application.
+#'
+#' @param id Character string, used to connect the module UI with the module
+#'   Server.
+#' @param r Common `reactiveValues`. Used to access `filtered_tables$General`,
+#'   containing a data frame with general data to be displayed in the
+#'   participant selection modal. In addition, it will be used to access the
+#'   list of `filtered_subjects` (character vector), and the currently active
+#'   `subject_id` (character string). The only parameter that the module will
+#'   change, if requested by the user, is `subject_id`.
+#' @param static_overview_data Data frame created with
+#'   [get_static_overview_data()].
 #'
 #' @seealso [mod_navigate_participants_ui()] for the UI function
 #' 
-mod_navigate_participants_server <- function(id, r){
+mod_navigate_participants_server <- function(
+    id, 
+    r,
+    static_overview_data = NULL
+    ){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     
@@ -111,10 +117,10 @@ mod_navigate_participants_server <- function(id, r){
     })
     
     general_info_missing_error <- reactive({
-      if(is.null(r$filtered_tables$General)) {
+      if(is.null(static_overview_data)) {
         return("Warning: No general information found in the database.")
       }
-      if(!r$subject_id %in% with(r$filtered_tables$General, subject_id) ) {
+      if(!r$subject_id %in% with(static_overview_data, subject_id) ) {
         return(
           paste0("Warning: no general information found for subject ", r$subject_id)
         )
@@ -124,9 +130,7 @@ mod_navigate_participants_server <- function(id, r){
     output[["status"]] <- renderText({
       req(input$participant_selection)
       if(!is.null(general_info_missing_error())) return(HTML(general_info_missing_error()))
-      df <- r$filtered_tables$General |> 
-        dplyr::filter(subject_id == input$participant_selection)
-      df$status_label
+      with(static_overview_data, status_label[subject_id == input$participant_selection])
     })
     
     subject_info <- reactive({
@@ -136,8 +140,7 @@ mod_navigate_participants_server <- function(id, r){
           status_icon = icon("circle-question", class = 'fa-2x')
         )
       } else{
-        active_pt_info <- r$filtered_tables$General |> 
-          subset(subject_id == r$subject_id) |> 
+        active_pt_info <- static_overview_data[static_overview_data$subject_id == r$subject_id, ] |> 
           add_missing_columns("subject_status")
         list(
           pt_info = paste0(active_pt_info$Sex, ", ", active_pt_info$Age, "yrs."),

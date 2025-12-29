@@ -25,10 +25,6 @@ app_server <- function(
   
   app_data <- get_appdata(merged_data, meta = meta)
   app_vars <- get_meta_vars(data = app_data, meta = meta)
-  app_tables <- lapply(
-    setNames(names(app_data), names(app_data)), \(x){
-      create_table(app_data[[x]], expected_columns = names(app_vars$items[[x]]))
-    })
   check_appdata(app_data, meta)
   
   session$userData$pending_review_records <- reactiveValues()
@@ -45,8 +41,6 @@ app_server <- function(
   # For query item selector drop-down menus:
   available_data <- get_available_data(
     data = app_data,
-    tables = app_tables,
-    all_forms = app_vars$all_forms,
     form_repeat_name = with(
       meta[["table_names"]], 
       table_name[raw_name == "form_repeat"]
@@ -57,17 +51,25 @@ app_server <- function(
   # For summary review data:
   static_overview_data <- get_static_overview_data(
     data = app_data,
+    available_data = available_data,
     expected_general_columns = unique(
       with(meta$items_expanded, item_name[item_group == "General"])
     )
   )
+  
+  # For timeline data
+  timeline_data <-get_timeline_data(
+    app_data,
+    available_data = available_data,
+    treatment_label = meta$settings$treatment_label %||% "\U1F48A T\U2093"
+  )
+  
   # think of using the pool package, but functions such as row_update are not yet supported.
   r <- reactiveValues(
     review_data       = do.call(reactiveValues, split_review_data(user_db, forms = app_vars$all_forms$form)),
     query_data        = collect_query_data(user_db),
     filtered_subjects = app_vars$subject_id,
     filtered_data     = app_data,
-    filtered_tables   = app_tables,
     subject_id        = app_vars$subject_id[1]
   )
   
@@ -116,7 +118,7 @@ app_server <- function(
   observeEvent(rev_sites(), {
     req(!all(rev_sites() %in% app_vars$Sites$site_code))
     r <- filter_data(r, rev_sites(), subject_ids = app_vars$subject_id,
-                     appdata = app_data, apptables = app_tables)
+                     appdata = app_data)
   })
   
   navinfo <- reactiveValues(
@@ -125,6 +127,7 @@ app_server <- function(
     trigger_page_change = 1
   )
   
+  start_page_summary_vars <- c("subject_status", "WHO.classification", "Age", "Sex", "event_name")
   rev_data <- reactiveValues(
     summary = reactive({
       req(forms_to_review_data)
@@ -142,8 +145,8 @@ app_server <- function(
                       "Edit date" = edit_date_time, status, reviewed)
     }),
     overview = reactive({
-      static_overview_data |>
-        dplyr::filter(subject_id %in% r$filtered_subjects) |>
+      with(static_overview_data, static_overview_data[subject_id %in% r$filtered_subjects, ]) |>
+        dplyr::select(tidyr::all_of("subject_id"), tidyr::any_of(start_page_summary_vars)) |> 
         dplyr::mutate(
           needs_review = subject_id %in% unique(rev_data$summary()$subject_id)
         ) |> 
@@ -206,14 +209,6 @@ app_server <- function(
     identical(session$userData$review_type(), "form")
   })
   outputOptions(output, "form_level_review", suspendWhenHidden = FALSE)
-
-  timeline_data <- reactive({
-    get_timeline_data(
-      r$filtered_data, 
-      r$filtered_tables, 
-      treatment_label = meta$settings$treatment_label %||% "\U1F48A T\U2093"
-    )
-  })
   
   ###### Load common form tabs in UI and server:
   common_forms <- with(app_vars$all_forms, form[main_tab == "Common events"])
@@ -224,6 +219,10 @@ app_server <- function(
       select = (i == common_forms[1])
     )
   })
+  bslib::nav_insert(
+    id = "common_data_tabs", 
+    nav = bslib::nav_item(actionLink("go_to_study_data", ">", class="nav-link px-3"))
+  )
   lapply(common_forms, \(x){
     mod_common_forms_server(
       id = paste0("cf_", simplify_string(x)), 
@@ -240,6 +239,10 @@ app_server <- function(
   
   ###### Load study form tabs in UI and server:
   study_forms <- with(app_vars$all_forms, form[main_tab == "Study data"])
+  bslib::nav_insert(
+    id = "study_data_tabs", 
+    nav = bslib::nav_item(actionLink("go_to_common_events", "<", class="nav-link px-3"))
+  )
   lapply(study_forms, \(i){
     bslib::nav_insert(
       id = "study_data_tabs",
@@ -262,13 +265,21 @@ app_server <- function(
   }) |>
     unlist(recursive = FALSE)
   
+  observeEvent(input$go_to_study_data, {
+    bslib::nav_select(id = "main_tabs", selected = "Study data")
+  })
+  observeEvent(input$go_to_common_events, {
+    bslib::nav_select(id = "main_tabs", selected = "Common events")
+  })
+  
   mod_start_page_server("start_page_1", r, rev_data, navinfo, app_vars$all_forms,
                         app_vars$table_names)
   mod_header_widgets_server(
     id = "header_widgets_1", 
     r = r, 
     rev_data = rev_data, 
-    navinfo = navinfo
+    navinfo = navinfo,
+    available_data = available_data
   )
   
   
@@ -298,7 +309,6 @@ app_server <- function(
       id = "main_sidebar_1",
       r = r,
       app_data = app_data,
-      app_tables = app_tables,
       app_vars = app_vars,
       navinfo,
       forms_to_review = reactive({
@@ -308,15 +318,6 @@ app_server <- function(
       available_data = available_data
     )
   })
-  
-  mod_review_config_server(
-    "review_config_1",
-    r = r,
-    app_data = app_data,
-    app_tables = app_tables,
-    sites = app_vars$Sites,
-    subject_ids = app_vars$subject_id
-  )
   
   mod_queries_server(
     "queries_1",
@@ -329,7 +330,11 @@ app_server <- function(
   mod_report_server("report_1", r = r, rev_data, db_path = user_db,
                     table_names = app_vars$table_names)
   
-  mod_navigate_participants_server("navigate_participants_1", r)
+  mod_navigate_participants_server(
+    "navigate_participants_1", 
+    r,
+    static_overview_data
+  )
   
   mod_navigate_review_server(
     "navigate_review_1",

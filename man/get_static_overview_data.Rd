@@ -4,19 +4,24 @@
 \alias{get_static_overview_data}
 \title{Create static overview data}
 \usage{
-get_static_overview_data(data, expected_general_columns = NULL)
+get_static_overview_data(data, available_data, expected_general_columns = NULL)
 }
 \arguments{
 \item{data}{List of data frames.}
 
+\item{available_data}{A data frame with available data. Visits will be
+extracted from here. Required columns are \code{subject_id}, \code{event_name},
+\code{event_label}. The \code{event_label} variable should be a factor in order to
+work well with the function \code{\link[=fig_timeline]{fig_timeline()}}.}
+
 \item{expected_general_columns}{Character vector with the expected columns.
 If columns are completely missing, they will be made explicitly missing in
-the data frame (that is, a column will be created with only missing character
-values).}
+the data frame (that is, a column will be created with only missing
+character values).}
 }
 \value{
-A data frame with the overview data. Columns are:
-\code{subject_id}, \code{status}, \code{WHO.classification}, \code{Age}, \code{Sex}, \code{event_name}.
+A data frame with the overview data. Columns are: \code{subject_id},
+\code{status}, \code{WHO.classification}, \code{Age}, \code{Sex}, \code{event_name}.
 }
 \description{
 Creates overview data of each patient in the study. Used to create the start

@@ -14,7 +14,7 @@ describe(
     it("Can load the module server, with functioning internal parameters.", {
       testargs <- list(
         form_review_data = reactiveVal(),
-        timeline_data = reactiveVal(),
+        timeline_data = data.frame(),
         active_subject = reactiveVal("BEL_04_133")
       ) 
       testServer(mod_timeline_server, args = testargs , {
@@ -41,14 +41,10 @@ describe(
         status = sample(c("new", "old", "updated"), dplyr::n(), replace = TRUE)
       )
     appvars <- get_meta_vars(appdata)
-    apptables <- lapply(setNames(names(appdata), names(appdata)), \(x){
-      create_table(appdata[[x]], expected_columns = names(appvars$items[[x]]))
-    })
-    timeline_data <- get_timeline_data(appdata, apptables)
-    
+    timeline_data <- get_timeline_data(appdata)
     testargs <- list(
       form_review_data = reactiveVal(rev_data),
-      timeline_data = reactiveVal(timeline_data),
+      timeline_data = timeline_data,
       active_subject = reactiveVal("BEL_04_133")
     ) 
     it("Scenario 1 - Given a Form 'Adverse events', I expect 
@@ -58,8 +54,8 @@ describe(
            ns <- session$ns
            expect_true(is.data.frame(timeline_data_active()))
            expect_equal(nrow(timeline_data_active()), 10)
-           expect_true(is.data.frame(timeline_data()))
-           expect_equal(nrow(timeline_data()), 203)
+           expect_true(is.data.frame(timeline_data))
+           expect_equal(nrow(timeline_data), 203)
            expect_true(inherits(output$timeline, "json"))
          })
        })
@@ -78,14 +74,11 @@ describe(
         status = sample(c("new", "old", "updated"), dplyr::n(), replace = TRUE)
       )
     appvars <- get_meta_vars(appdata)
-    apptables <- lapply(setNames(names(appdata), names(appdata)), \(x){
-      create_table(appdata[[x]], expected_columns = names(appvars$items[[x]]))
-    })
-    timeline_data <- get_timeline_data(appdata, apptables)
+    timeline_data <- get_timeline_data(appdata)
     
     testargs <- list(
       form_review_data = reactiveVal(rev_data),
-      timeline_data = reactiveVal(timeline_data),
+      timeline_data = timeline_data,
       active_subject = reactiveVal("BEL_04_133")
     ) 
     it("Scenario 1 - Standard label. Given a Form 'Adverse events', 
@@ -104,13 +97,12 @@ describe(
       {
         timeline_data <- get_timeline_data(
           appdata, 
-          apptables, 
           treatment_label = "custom_treatment_label"
-        )
-        
+          )
+
         testargs <- list(
           form_review_data = reactiveVal(rev_data),
-          timeline_data = reactiveVal(timeline_data),
+          timeline_data = timeline_data,
           active_subject = reactiveVal("BEL_04_133")
         ) 
         testServer(mod_timeline_server, args = testargs, {

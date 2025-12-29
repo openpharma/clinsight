@@ -47,9 +47,8 @@ that can uniquely identify one item/row.}
 within \code{\link[=datatable_custom]{datatable_custom()}}, to improve the column names in the final
 interactive tables.}
 
-\item{timeline_data}{A reactive with a data frame containing the timeline
-data. Used to create the timeline figure. Created with
-\code{\link[=get_timeline_data]{get_timeline_data()}}.}
+\item{timeline_data}{A data frame containing the timeline data. Used to
+create the timeline figure. Created with \code{\link[=get_timeline_data]{get_timeline_data()}}.}
 }
 \description{
 Shiny module. Used to display common form data in the dedicated tab.
