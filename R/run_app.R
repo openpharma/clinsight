@@ -50,7 +50,7 @@ run_app <- function(
     if(is.character(app_vars)) app_vars <- file.path(data_folder, basename(app_vars))
     # if(is.character(app_tables)) app_tables <- file.path(data_folder, basename(app_tables))
     if(is.character(available_data)) available_data <- file.path(data_folder, basename(available_data))
-    if(is.character(available_data)) timeline_data <- file.path(data_folder, basename(timeline_data))
+    if(is.character(timeline_data)) timeline_data <- file.path(data_folder, basename(timeline_data))
     user_db <-  file.path(data_folder, basename(user_db))
     if(!is.null(credentials_db)){
       credentials_db <- file.path(data_folder, basename(credentials_db)) 
