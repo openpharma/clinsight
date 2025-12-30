@@ -55,7 +55,7 @@ test_clinsight <- function(
     # tables = app_tables,            # outdated arg
     # all_forms = app_vars$all_forms, # outdated arg
     form_repeat_name = with(
-      meta[["table_names"]],
+      meta_data[["table_names"]],
       table_name[raw_name == "form_repeat"]
     ) |>
       tryCatch(error = \(e) "N")
