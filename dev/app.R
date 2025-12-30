@@ -21,22 +21,30 @@ app_data <- get_appdata(data = merged_data, meta = metadata)
 app_vars <- get_meta_vars(data = app_data, meta = metadata) 
 
 # Build a 'app_tables'
-app_tables <- lapply(
-  setNames(names(app_data), names(app_data)), \(x){
-    create_table(app_data[[x]], expected_columns = names(app_vars$items[[x]]))
-  })
+# app_tables <- lapply(
+#   setNames(names(app_data), names(app_data)), \(x){
+#     create_table(app_data[[x]], expected_columns = names(app_vars$items[[x]]))
+#   })
 
 # Build a 'available_data'
 available_data <- get_available_data(
   data = app_data,
-  tables = app_tables,
-  all_forms = app_vars$all_forms,
+  # tables = app_tables,            # outdated arg
+  # all_forms = app_vars$all_forms, # outdated arg
   form_repeat_name = with(
     meta[["table_names"]],
     table_name[raw_name == "form_repeat"]
   ) |>
     tryCatch(error = \(e) "N")
 )
+
+# For timeline data
+timeline_data <- get_timeline_data(
+  app_data,
+  available_data = available_data,
+  treatment_label = metadata$settings$treatment_label %||% "\U1F48A T\U2093"
+)
+
 # tempdir not useful for production mode
 data_folder <- "."
 # data_path <- file.path(data_folder, 
@@ -47,8 +55,9 @@ save_objs <- c(
   "metadata",
   "app_data",
   "app_vars",
-  "app_tables",
-  "available_data")
+  # "app_tables",
+  "available_data",
+  "timeline_data")
 purrr::walk(save_objs, function(x){
   rds_file <- file.path(data_folder, paste0(x, ".rds"))
   saveRDS(get(x), rds_file)
@@ -71,7 +80,7 @@ db_create(get_review_data(merged_data),
           )
 
 run_app(
-  data = data_path, #merged_data, # or db_path works too
+  data = data_folder, # merged_data, # or db_path works too
   # user_db = db_path, # defaults to "user_db.sqlite"
   # onStart = \(){onStop(\(){unlink(data_folder, recursive = TRUE)})} # be careful here
 )

@@ -28,8 +28,9 @@ run_app <- function(
   meta <- get_golem_config("meta_data")
   app_data <- get_golem_config("app_data")
   app_vars <- get_golem_config("app_vars")
-  app_tables <- get_golem_config("app_tables")
+  # app_tables <- get_golem_config("app_tables")
   available_data <- get_golem_config("available_data")
+  timeline_data <- get_golem_config("timeline_data")
   user_db <- get_golem_config("user_db")
   use_shinymanager <- isTRUE(get_golem_config("user_identification") == "shinymanager")
   credentials_db <- get_golem_config("credentials_db")
@@ -47,8 +48,9 @@ run_app <- function(
     if(is.character(meta)) meta <- file.path(data_folder, basename(meta))
     if(is.character(app_data)) app_data <- file.path(data_folder, basename(app_data))
     if(is.character(app_vars)) app_vars <- file.path(data_folder, basename(app_vars))
-    if(is.character(app_tables)) app_tables <- file.path(data_folder, basename(app_tables))
+    # if(is.character(app_tables)) app_tables <- file.path(data_folder, basename(app_tables))
     if(is.character(available_data)) available_data <- file.path(data_folder, basename(available_data))
+    if(is.character(available_data)) timeline_data <- file.path(data_folder, basename(timeline_data))
     user_db <-  file.path(data_folder, basename(user_db))
     if(!is.null(credentials_db)){
       credentials_db <- file.path(data_folder, basename(credentials_db)) 
@@ -100,14 +102,14 @@ run_app <- function(
   
   
   ## Verify app_tables list
-  if(is.character(app_tables)){
-    if(!file.exists(app_tables)) stop(paste0("Cannot find '", app_tables, "'."))
-    if(tolower(tools::file_ext(app_tables)) != "rds"){
-      stop("Invalid 'app_tables' format. Expecting a file .rds format")
-    }
-    app_tables <- readRDS(app_tables)
-  } 
-  stopifnot("Expecting 'app_tables' to be in list format." = inherits(app_tables, "list"))
+  # if(is.character(app_tables)){
+  #   if(!file.exists(app_tables)) stop(paste0("Cannot find '", app_tables, "'."))
+  #   if(tolower(tools::file_ext(app_tables)) != "rds"){
+  #     stop("Invalid 'app_tables' format. Expecting a file .rds format")
+  #   }
+  #   app_tables <- readRDS(app_tables)
+  # } 
+  # stopifnot("Expecting 'app_tables' to be in list format." = inherits(app_tables, "list"))
   
   
   ## Verify available_data
@@ -122,6 +124,20 @@ run_app <- function(
       )
   } 
   stopifnot("Expecting 'available_data' to be in data frame format." = is.data.frame(available_data))
+  
+  
+  ## Verify timeline_data
+  if(is.character(timeline_data)){
+    if(!file.exists(timeline_data)) stop(paste0("Cannot find '", timeline_data, "'."))
+    timeline_data <-
+      switch(
+        tolower(tools::file_ext(timeline_data)),
+        "rds" = readRDS(timeline_data),
+        "parquet" = arrow::read_parquet(timeline_data),
+        stop("Invalid 'timeline_data' format. Expecting an RDS or Parquet file.")
+      )
+  } 
+  stopifnot("Expecting 'timeline_data' to be in data frame format." = is.data.frame(timeline_data))
   
   
   ## Verify user database
@@ -184,8 +200,9 @@ run_app <- function(
       meta = meta,
       app_data = app_data,
       app_vars = app_vars,
-      app_tables = app_tables,
+      # app_tables = app_tables,
       available_data = available_data,
+      timeline_data = timeline_data,
       data = data,
       user_db = user_db,
       credentials_db = credentials_db,

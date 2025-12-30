@@ -157,19 +157,20 @@
 "cs_app_vars"
 
 
-#' Application Tables
+#' Application Timeline Data
 #'
-#' A list of data frames containing all application tables.
+#' A data.frame containing timeline data.
 #'
-#' @format ## `cs_app_tables`: A list with `r length(cs_app_tables)` objects.
+#' @format ## `cs_timeline_data`: data.frame formatted for comsumption by
+#'   `timevis` package.
 #' 
 #' ```{r }
-#' str(cs_app_tables)
+#' str(cs_timeline_data)
 #' ```
 #'
 #' @source See `raw-data/clinsightful_data.R` for details.
 #' 
-"cs_app_tables"
+"cs_timeline_data"
 
 
 #' Application 'Available Data'

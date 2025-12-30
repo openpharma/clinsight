@@ -24,7 +24,8 @@ app_server <- function(
   meta <- golem::get_golem_options("meta")
   app_data <- golem::get_golem_options("app_data")
   app_vars <- golem::get_golem_options("app_vars")
-  app_tables <- golem::get_golem_options("app_tables")
+  # app_tables <- golem::get_golem_options("app_tables")
+  timeline_data <- golem::get_golem_options("timeline_data")
   available_data <- golem::get_golem_options("available_data")
   user_db <- golem::get_golem_options("user_db")
   credentials_db <- golem::get_golem_options("credentials_db")
@@ -51,8 +52,8 @@ app_server <- function(
   # For query item selector drop-down menus:
   # available_data <- get_available_data(
   #   data = app_data,
-  #   tables = app_tables,
-  #   all_forms = app_vars$all_forms,
+  #   tables = app_tables,            # outdated arg
+  #   all_forms = app_vars$all_forms, # outdated arg
   #   form_repeat_name = with(
   #     meta[["table_names"]],
   #     table_name[raw_name == "form_repeat"]
@@ -70,11 +71,11 @@ app_server <- function(
   )
   
   # For timeline data
-  timeline_data <-get_timeline_data(
-    app_data,
-    available_data = available_data,
-    treatment_label = meta$settings$treatment_label %||% "\U1F48A T\U2093"
-  )
+  # timeline_data <- get_timeline_data(
+  #   app_data,
+  #   available_data = available_data,
+  #   treatment_label = meta$settings$treatment_label %||% "\U1F48A T\U2093"
+  # )
   
   # think of using the pool package, but functions such as row_update are not yet supported.
   r <- reactiveValues(

@@ -36,7 +36,7 @@ test_clinsight <- function(
     !is.character(meta_data_path) #|
   ){
     stop("The 'default' or 'dev' config cannot be used with custom data, ", 
-         "and meta_data, app_data, app_vars, app_tables, & available_data ", 
+         "and meta_data, app_data, app_vars, timeline_data, & available_data ", 
          "in the config file should be character vectors.")
   }
   # Build a version of `app_data` & app_vars
@@ -44,21 +44,28 @@ test_clinsight <- function(
   app_vars <- get_meta_vars(data = app_data, meta = meta_data)
 
   # Build a 'app_tables'
-  app_tables <- lapply(
-    setNames(names(app_data), names(app_data)), \(x){
-      create_table(app_data[[x]], expected_columns = names(app_vars$items[[x]]))
-    })
+  # app_tables <- lapply(
+  #   setNames(names(app_data), names(app_data)), \(x){
+  #     create_table(app_data[[x]], expected_columns = names(app_vars$items[[x]]))
+  #   })
 
   # Build a 'available_data'
   available_data <- get_available_data(
     data = app_data,
-    tables = app_tables,
-    all_forms = app_vars$all_forms,
+    # tables = app_tables,            # outdated arg
+    # all_forms = app_vars$all_forms, # outdated arg
     form_repeat_name = with(
       meta[["table_names"]],
       table_name[raw_name == "form_repeat"]
     ) |>
       tryCatch(error = \(e) "N")
+  )
+  
+  # For timeline data
+  timeline_data <- get_timeline_data(
+    app_data,
+    available_data = available_data,
+    treatment_label = meta_data$settings$treatment_label %||% "\U1F48A T\U2093"
   )
   
   temp_folder <- tempfile(tmpdir = tempdir())
@@ -75,7 +82,8 @@ test_clinsight <- function(
     "meta_data",
     "app_data",
     "app_vars",
-    "app_tables",
+    # "app_tables",
+    "timeline_data",
     "available_data")
   purrr::walk(save_objs, function(x){
     rds_file <- file.path(temp_folder, paste0(x, ".rds"))
