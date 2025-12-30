@@ -107,10 +107,6 @@
 #' in-depth information.
 #'
 #' @format ## `metadata`: A list with `r length(metadata)` objects.
-#' 
-#' ```{r }
-#' str(metadata)
-#' ```
 #'
 #' @source Can be created with an Excel file. The Excel file format is chosen so
 #'   that the metadata can be changed easily per study. See
