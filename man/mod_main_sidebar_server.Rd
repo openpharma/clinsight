@@ -9,7 +9,6 @@ mod_main_sidebar_server(
   r,
   navinfo,
   app_data,
-  app_tables,
   app_vars,
   db_path,
   forms_to_review,
@@ -38,9 +37,6 @@ example, \code{Start} (start page), or \code{Queries}.}
 \item{app_data}{List of data frames. Contains the application data, with data
 of each form stored in a data frame. Required to set the review
 configuration in \code{\link[=mod_review_config_server]{mod_review_config_server()}}.}
-
-\item{app_tables}{List of data frames with the app data in wide table format.
-Required to set the review configuration in \code{\link[=mod_review_config_server]{mod_review_config_server()}}}
 
 \item{app_vars}{A list with common variables found in the data and metadata.
 Required to set the review configuration in \code{\link[=mod_review_config_server]{mod_review_config_server()}}.}

@@ -4,18 +4,11 @@
 \alias{get_available_data}
 \title{Get available data}
 \usage{
-get_available_data(data, tables, all_forms, form_repeat_name = "N")
+get_available_data(data, form_repeat_name = "N")
 }
 \arguments{
 \item{data}{list of data frames to be used. Will be used for extracting the
 variables of interest from the study-specific forms.}
-
-\item{tables}{list of tables to be used. Will be used for extracting the
-variables of interest from the common forms.}
-
-\item{all_forms}{A data frame containing all forms. Mandatory columns are
-"form" (containing the form names), and "main_tab" (containing the tab name
-where the form should be located).}
 
 \item{form_repeat_name}{A character string with the name of the \code{form_repeat}
 variable. This variable (with this name) will be added to the item name if

@@ -1,8 +1,27 @@
 # clinsight (development version)
 
-- Moved `app_data`, `app_vars`, `app_tables`, & `available_data` to pre-processing step so that doesn't need to compute every session.
+## Changed
+
+- Switched to server-side table downloads
+- Implemented a `line-clamp` on table column names that wrap to more than 6 lines\
+- Replaced `dplyr::case_when()` with `ifelse()` in the row review status calculation for efficiency.
+- Added toggle to enable/disable background patterns in figures.
+- Added a toggle to enable hover labels of all patterns in the figures, also the ones in the background.
+- Improved the time-series on-hover label so that limits and significance are also shown.
+- Added additional navigation buttons next to the tabs to easier navigate between common forms and study forms (#255).
+- Moved `app_data`, `app_vars`, `timeline_data` & `available_data` to pre-processing step so that doesn't need to compute every session.
 - Export functions used to create the data objects above ^^^.
-- Started using parquet read / writes for `merged_data` & `available_data` to speed startup time.
+- Started using parquet read / writes for `merged_data`, `timeline_data` & `available_data` to speed startup time.
+
+
+## Bug fixes 
+
+- [fix_multiple_choice_vars()] now also fixes long-format multiple choice variables that end with a number (#247).
+
+## Developer notes
+
+- Updated role of long-term contributors to co-authors in Description field (#246).
+- Refactored some functions so that it is no longer needed to create an `apptables` object when starting the applcation, improving start up efficiency (#251).
 
 # clinsight 0.3.0
 

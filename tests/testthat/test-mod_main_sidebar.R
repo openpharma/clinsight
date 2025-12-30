@@ -5,7 +5,7 @@ describe("mod_main_sidebar. Feature 1 | Load application module in isolation.", 
       r = reactiveValues(create_query = 0, review_data = reactiveValues()),
       navinfo = reactiveValues(),
       app_data = list("Form1" = data.frame("site_code" = "", "edit_date_time" = "2023-01-01")), # used by mod_review_config()
-      app_tables = list(),
+      #app_tables = list(),
       app_vars = list(
         all_forms = data.frame(),
         Sites = data.frame(),
@@ -60,15 +60,12 @@ describe(
           ) |> 
           {\(x) split(x, x$item_group)}()
         vars <- get_meta_vars(appdata, metadata)
-        apptables <- lapply(
-          setNames(names(appdata), names(appdata)), \(x){
-            create_table(appdata[[x]], expected_columns = names(vars$items[[x]]))
-          })
+
         all_forms <- data.frame(
           main_tab = c("Common events", "Study data"), 
           form = c("Adverse events", "Vital signs")
         )
-        available_data <- get_available_data(appdata, apptables, all_forms = all_forms)
+        available_data <- get_available_data(appdata)
         
         test_ui <- function(request){
           bslib::page_navbar(sidebar = mod_main_sidebar_ui("test"))
@@ -87,7 +84,6 @@ describe(
             ),
             navinfo = reactiveValues(active_form = "Adverse events", active_tab = "Common events"),
             app_data = list("Form1" = data.frame("site_code" = "")), # used by mod_review_config()
-            app_tables = list(),
             app_vars = list(
               all_forms = data.frame(),
               Sites = data.frame(),
@@ -147,7 +143,6 @@ describe(
             ),
             navinfo = reactiveValues(active_form = "Adverse events", active_tab = "Start"),
             app_data = list("Form1" = data.frame("site_code" = "")), # used by mod_review_config()
-            app_tables = list(),
             app_vars = list(
               all_forms = data.frame(),
               Sites = data.frame(),
@@ -188,7 +183,6 @@ describe(
           r = reactiveValues(create_query = 0, review_data = reactiveValues()),
           navinfo = reactiveValues(),
           app_data = list("Form1" = data.frame("site_code" = "", "edit_date_time" = "2023-01-01")), # used by mod_review_config()
-          app_tables = list(),
           app_vars = list(
             all_forms = data.frame(),
             Sites = data.frame(),
@@ -223,7 +217,6 @@ describe(
           r = reactiveValues(create_query = 0, review_data = reactiveValues()),
           navinfo = reactiveValues(),
           app_data = list("Form1" = data.frame("site_code" = "", "edit_date_time" = "2023-01-01")), # used by mod_review_config()
-          app_tables = list(),
           app_vars = list(
             all_forms = data.frame(),
             Sites = data.frame(),
