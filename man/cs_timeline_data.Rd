@@ -5,7 +5,7 @@
 \alias{cs_timeline_data}
 \title{Application Timeline Data}
 \format{
-\subsection{\code{cs_timeline_data}: data.frame formatted for comsumption by}{
+\subsection{\code{cs_timeline_data}: data.frame formatted for consumption by}{
 
 \code{timevis} package.
 

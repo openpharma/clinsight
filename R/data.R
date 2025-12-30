@@ -157,7 +157,7 @@
 #'
 #' A data.frame containing timeline data.
 #'
-#' @format ## `cs_timeline_data`: data.frame formatted for comsumption by
+#' @format ## `cs_timeline_data`: data.frame formatted for consumption by
 #'   `timevis` package.
 #' 
 #' ```{r }
