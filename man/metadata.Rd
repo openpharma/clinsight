@@ -65,8 +65,7 @@
 }\if{html}{\out{</div>}}
 }
 
-\subsection{\code{metadata}: A list with 9 objects.}{
-}
+\code{metadata}: A list with 9 objects.
 }
 \source{
 Can be created with an Excel file. The Excel file format is chosen so
@@ -92,11 +91,11 @@ application largely unaltered between studies.See \code{vignette("Metadata")} fo
 in-depth information.
 
 A list of data frames and settings containing metadata that will be used for
-the application. The metadata will be merged with with raw data. It controls
+the application. The metadata will be merged with raw data. It controls
 the variables that will be used in the application, and in which tab the
 variables will be shown. The goal is that most, if not all, study-specific
 data will be captured in the metadata, leaving the scripts to run the
-application largely unaltered between studies.See \code{vignette("Metadata")} for
+application largely unaltered between studies. See \code{vignette("Metadata")} for
 in-depth information.
 }
 \keyword{datasets}

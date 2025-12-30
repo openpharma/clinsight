@@ -99,19 +99,18 @@
 #' Application Metadata
 #'
 #' A list of data frames and settings containing metadata that will be used for
-#' the application. The metadata will be merged with with raw data. It controls
+#' the application. The metadata will be merged with raw data. It controls
 #' the variables that will be used in the application, and in which tab the
 #' variables will be shown. The goal is that most, if not all, study-specific
 #' data will be captured in the metadata, leaving the scripts to run the
-#' application largely unaltered between studies.See `vignette("Metadata")` for
+#' application largely unaltered between studies. See `vignette("Metadata")` for
 #' in-depth information.
 #'
-#' @format ## `metadata`: A list with `r length(metadata)` objects.
+#' @format `metadata`: A list with `r length(metadata)` objects.
 #'
 #' @source Can be created with an Excel file. The Excel file format is chosen so
 #'   that the metadata can be changed easily per study. See
 #'   `raw-data/metadata.R` for details.
-#' 
 "metadata"
 
 

@@ -32,7 +32,7 @@ available_data <- get_available_data(
   # tables = app_tables,            # outdated arg
   # all_forms = app_vars$all_forms, # outdated arg
   form_repeat_name = with(
-    meta[["table_names"]],
+    metadata[["table_names"]],
     table_name[raw_name == "form_repeat"]
   ) |>
     tryCatch(error = \(e) "N")

@@ -39,4 +39,3 @@ A data frame with timeline data.
 Function to create timeline data, to be used in a \code{timevis::timeline()}
 object.
 }
-\keyword{internal}

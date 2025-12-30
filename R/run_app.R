@@ -203,7 +203,7 @@ run_app <- function(
       # app_tables = app_tables,
       available_data = available_data,
       timeline_data = timeline_data,
-      data = data,
+      # data = data,
       user_db = user_db,
       credentials_db = credentials_db,
       credentials_pwd = credentials_pwd,
