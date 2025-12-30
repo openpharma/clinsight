@@ -50,7 +50,7 @@
           "Scroller",
           "ColReorder"
         ],
-        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th>Reviewed<\/th>\n      <th>Subject<\/th>\n      <th>N<\/th>\n      <th>Name<\/th>\n      <th>Indication<\/th>\n      <th>Dose<\/th>\n      <th>Start Date<\/th>\n      <th>Ongoing<\/th>\n      <th>End Date<\/th>\n      <th>Related Medical History<\/th>\n      <th>Related AE<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
+        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th><span class=\"cs-span-overflow\" title=\"Reviewed\">Reviewed<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Subject\">Subject<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"N\">N<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Name\">Name<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Indication\">Indication<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Dose\">Dose<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Start Date\">Start Date<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Ongoing\">Ongoing<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"End Date\">End Date<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Related Medical History\">Related Medical History<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Related AE\">Related AE<\/span><\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
         "options": {
           "scrollY": 400,
           "scrollX": true,
@@ -128,8 +128,7 @@
             {
               "extend": "excel",
               "text": "<i class=\"fa-solid fa-download\"><\/i>",
-              "filename": "clinsight.medication.BEL_08_45",
-              "title": "medication.BEL_08_45 | extracted from ClinSight"
+              "action": "hiddenDownloadHandlerTrigger"
             }
           ],
           "order": [
@@ -156,6 +155,7 @@
         "options.columnDefs.0.render",
         "options.rowCallback",
         "options.initComplete",
+        "options.buttons.0.action",
         "options.ajax.data",
         "callback"
       ],

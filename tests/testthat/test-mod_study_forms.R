@@ -228,3 +228,92 @@ describe(
   }
 )
 
+describe(
+  "Feature 5 | Toggle background patterns. As a user, I want be able to turn 
+  on the patterns of all participants in the background of the time series figures.", 
+  {
+    it(
+      "Scenario 1 - Toggle background patterns. Given subject id is set to 'BEL_04_133',
+        and the form set to 'Vital signs',
+        and the filter set to 'temperature',
+        and I switch [show_all_participants]' to TRUE,
+        I expect that I see a time series figure of Temperature of all subjects,
+        with the pattern of subject BEL_04_133 highlighted, 
+        and that, after switching [show_all_hover_labels] to TRUE,
+        I can see the hover labels of all subjects' data points, including the 
+        ones that are not highlighted.
+        ",
+      {
+        set.seed(2025)
+        vs_data <- get_appdata(clinsightful_data)[["Vital signs"]] |> 
+          # for smalled snapshot later:
+          subset(subject_id %in% c("BEL_04_133", "NLD_06_893", "DEU_02_866"))
+        rev_data <- get_review_data(vs_data) |> 
+          dplyr::mutate(
+            id = dplyr::row_number(),
+            reviewed = sample(c("Yes", "No"), dplyr::n(), replace = TRUE),
+            status = sample(c("new", "old", "updated"), dplyr::n(), replace = TRUE)
+          )
+        form_items <- with(metadata$study_forms, item_name[item_group == "Vital signs"])
+        form_items <- setNames(simplify_string(form_items), form_items)
+        test_ui <- function(request){
+          tagList(
+            golem_add_external_resources(),
+            shinyjs::useShinyjs(),
+            bslib::page_navbar(
+              mod_study_forms_ui(
+                "test", 
+                form = "Vital signs", 
+                form_items = form_items
+              )
+            ),
+          )
+        }
+        
+        test_server <- function(input, output, session){
+          session$userData$review_type <- reactiveVal()
+          mod_study_forms_server(
+            id = "test",
+            form = "Vital signs",
+            form_data = reactiveVal(vs_data),
+            form_review_data = reactiveVal(rev_data),
+            active_subject = reactiveVal("BEL_04_133"),
+            id_item = c("subject_id", "event_name", "item_group", 
+                        "form_repeat", "item_name"),
+            form_items = form_items,
+            item_info = data.frame(
+              item_group = "Vital signs",
+              item_scale = FALSE,
+              use_unscaled_limits = TRUE,
+              review_required = TRUE
+            )
+          )
+        }
+        test_app <- shinyApp(test_ui, test_server)
+        app <- shinytest2::AppDriver$new(
+          app_dir = test_app, 
+          name = "study_forms_figs",
+          width = 1619, 
+          height = 955
+        )
+        withr::defer(app$stop())
+        app$set_inputs(
+          "test-filter" = "temperature",
+          "test-show_all_participants" = TRUE
+          )
+        app$wait_for_idle(1100)
+        app$expect_values(
+          input = c("test-show_all_participants", "test-show_all_hover_labels"), 
+          output = TRUE
+        )
+        
+        app$set_inputs("test-show_all_hover_labels" = TRUE)
+        app$wait_for_idle()
+        app$expect_values(
+          input = c("test-show_all_participants", "test-show_all_hover_labels"), 
+          output = TRUE
+        )
+      }
+    )
+  }
+)

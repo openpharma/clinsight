@@ -23,7 +23,8 @@ describe(
           )
         ), 
         rev_data = reactiveValues(), 
-        navinfo = reactiveValues()
+        navinfo = reactiveValues(),
+        available_data = data.frame()
       ) 
       testServer(mod_header_widgets_server, args = testargs, {
         ns <- session$ns
@@ -59,23 +60,26 @@ describe(
         and the output [ae_box] to contain a html element,
         and the ouput [visit_figure] to contain a plot object.", 
       {
-        AE_table <- data.frame(
-          "subject_id" = "Subj01", 
-          "form_repeat" = 1:3, 
-          `Serious Adverse Event` = c("No", "Yes", "No"), 
-          check.names = FALSE
-        )
         AE_figure_data <- data.frame(
           "subject_id" = "Subj01", 
           "event_name" = "Screening",
-          "event_label" = factor("V0"), 
-          "item_name" = "Other"
+          "event_label" = "SCR",
+          "item_group" = "Adverse events",
+          "form_repeat" = 1:3,
+          "item_name" = "Serious Adverse Event",
+          "item_value" = c("Yes", "No", "No")
         )
-        
+        available_data <- data.frame(
+          subject_id = "Subj01",
+          item_name = "Serious Adverse Event",
+          form_repeat = 1:3,
+          item_group = "SAEs",
+          event_name = "",
+          event_label = factor("SCR")
+        )
         testargs <- list(
           r = reactiveValues(
-            filtered_data = list("Adverse events" = AE_figure_data),
-            filtered_tables = list("Adverse events" = AE_table)
+            filtered_data = list("Adverse events" = AE_figure_data)
           ), 
           rev_data = reactiveValues(
             summary = reactive({
@@ -86,16 +90,18 @@ describe(
               )
             })
           ), 
-          navinfo = reactiveValues()
+          navinfo = reactiveValues(),
+          available_data = available_data
         ) 
         
         testServer(mod_header_widgets_server, args = testargs, {
           ns <- session$ns
           r$subject_id = "Subj01"
           session$flushReact()
-          expect_equal(AEvals_active(), AE_table)
-          expect_equal(SAEvalue.individual(), 1)
-          expect_equal(AEvalue.individual(), 2)
+          expect_equal(
+            all_aes(), 
+            data.frame("subject_id" = "Subj01", AEs = 2, SAEs = 1)
+          )
           expect_false(all_AEs_reviewed())
           expect_true(inherits(output$ae_box$html, "html"))
           expect_equal(output[["visit_figure"]]$alt, "Plot object")
@@ -109,9 +115,7 @@ describe(
         and the active subject ID [r$subject_id] set to ['Subj02'], 
         and the active subject having no adverse event data available, 
         and the data frame [rev_data$summary()] containing no data of ['Subj02'],
-        I expect SAEvalue.individual() to be zero,
-        and AEvalue.individual() to be zero,
-        and the AEvals_active() table to be a data frame with zero rows,
+        I expect that zero AEs and zero SAEs are found for Subj02 in [all_aes()],
         and all_AEs_reviewed() to being set to 'TRUE',
         and output$ae_box to contain a html element,
         and ouput$visit_figure to contain a plot object.", 
@@ -122,16 +126,28 @@ describe(
           "Serious Adverse Event" = "No", 
           check.names = FALSE
         )
+        
         AE_figure_data <- data.frame(
           "subject_id" = "Subj01", 
           "event_name" = "Screening",
-          "event_label" = factor("V0"), 
-          "item_name" = "Other"
+          "event_label" = "SCR",
+          "item_group" = "Adverse events",
+          "form_repeat" = 1:3,
+          "item_name" = "Serious Adverse Event",
+          "item_value" = c("Yes", "No", "No")
+        )
+        
+        available_data <- data.frame(
+          subject_id = c("Subj01", "Subj02"),
+          item_name = c("Serious Adverse Event", "other_event"),
+          form_repeat = 1,
+          item_group = c("Adverse events", "vital_signs"),
+          event_name = "",
+          event_label = factor("V0")
         )
         testargs <- list(
           r = reactiveValues(
-            filtered_data = list("Adverse events" = AE_figure_data),
-            filtered_tables = list("Adverse events" = AE_table)
+            filtered_data = list("Adverse events" = AE_figure_data)
           ), 
           rev_data = reactiveValues(
             summary = reactive({
@@ -142,16 +158,18 @@ describe(
               )
             })
           ), 
-          navinfo = reactiveValues()
+          navinfo = reactiveValues(),
+          available_data = available_data
         ) 
         
         testServer(mod_header_widgets_server, args = testargs, {
           ns <- session$ns
           r$subject_id = "Subj02"
           session$flushReact()
-          expect_equal(AEvals_active(), AE_table[0,])
-          expect_equal(SAEvalue.individual(), 0)
-          expect_equal(AEvalue.individual(), 0)
+          expect_equal(
+            dplyr::filter(all_aes(), subject_id == "Subj02"), 
+            data.frame("subject_id" = "Subj02", AEs = 0, SAEs = 0)
+          )
           expect_true(all_AEs_reviewed())
           expect_true(inherits(output$ae_box$html, "html"))
           expect_equal(output[["visit_figure"]]$alt, "Plot object")

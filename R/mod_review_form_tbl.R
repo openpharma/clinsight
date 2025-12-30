@@ -5,7 +5,10 @@
 #'
 mod_review_form_tbl_ui <- function(id) {
   ns <- NS(id)
-  DT::dataTableOutput(ns("table"))
+  tagList(
+    downloadLink(ns("table_download"), character()),
+    DT::dataTableOutput(ns("table"))
+  )
 }
 
 #' Review forms table - Shiny module Server
@@ -221,6 +224,31 @@ mod_review_form_tbl_server <- function(
         ))
     })
     table_proxy <- DT::dataTableProxy("table")
+
+    output[["table_download"]] <- downloadHandler(
+      filename = function() {
+        export_label = paste(
+          ifelse(identical(title, "Serious Adverse Events"), "SAEs", simplify_string(form)), 
+          ifelse(show_all(), "all_patients", active_subject()), 
+          sep = "."
+        )
+        paste("clinsight", export_label, "csv", sep = ".")
+      },
+      content = function(file) {
+        readr::write_csv(
+          table_data() |> 
+            subset(show_all() | subject_id == active_subject()) |> 
+            dplyr::select(-row_review_status) |> 
+            dplyr::rename(dplyr::any_of(table_names)) |> 
+            dplyr::mutate(dplyr::across(
+              dplyr::where(is.character),
+              \(x) gsub("<b>|</b>", "", x)
+            )), 
+          file,
+          na = ""
+        )
+      }
+    )
     
     if(form %in% c("Vital signs", "Vitals adjusted")){
       shiny::exportTestValues(
