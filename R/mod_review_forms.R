@@ -123,6 +123,7 @@ mod_review_forms_server <- function(
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     
+    r$review_data_updated <- if (is.null(isolate(r$review_data_updated))) 0 else r$review_data_updated
     review_data_active <- reactive({
       tryCatch({
         r$review_data[[active_form()]] |> 
@@ -394,6 +395,7 @@ mod_review_forms_server <- function(
         !isTRUE(all.equal(updated_records_memory, review_records_db, check.attributes = FALSE))
       ))
       
+      r$review_data_updated <- r$review_data_updated + 1
       if(review_save_error()){
         return({
           showNotification(
@@ -409,7 +411,7 @@ mod_review_forms_server <- function(
             split_review_data(db_path)[[active_form()]]
         })
       }
-      showNotification("Input saved successfully", duration = 1, type = "message") 
+      showNotification("Input saved successfully", duration = 1, type = "message")
     })
     
     output[["progress_bar"]] <- render_progress_bar({

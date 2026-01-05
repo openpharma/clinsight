@@ -131,19 +131,15 @@ app_server <- function(
   rev_data <- reactiveValues(
     summary = reactive({
       req(forms_to_review_data)
-      r$review_data |>
-        reactiveValuesToList() |> 
-        do.call(what = rbind) |> 
-        dplyr::left_join(forms_to_review_data, by = "item_group") |> 
-        dplyr::filter(
-          reviewed != "Yes",
-          review_required,
-          subject_id %in% r$filtered_subjects
-        ) |>
-        summarize_review_data() |>
+      db_get_summary_data(
+        user_db, 
+        forms_to_review = with(forms_to_review_data, item_group[review_required]), 
+        filtered_subjects = r$filtered_subjects
+      ) |> 
+        summarize_review_data() |> 
         dplyr::select(subject_id, "Form" = item_group, "Event" = event_name,
                       "Edit date" = edit_date_time, status, reviewed)
-    }),
+    }) |> bindEvent(r$review_data_updated, r$filtered_subjects),
     overview = reactive({
       with(static_overview_data, static_overview_data[subject_id %in% r$filtered_subjects, ]) |>
         dplyr::select(tidyr::all_of("subject_id"), tidyr::any_of(start_page_summary_vars)) |> 

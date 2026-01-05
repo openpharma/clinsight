@@ -517,3 +517,57 @@ db_get_version <- function(db_path) {
   error = \(e) {""}
   )
 }
+
+#' Get summary data
+#'
+#' @param db_path Character vector. Needs to be a valid path to a database.
+#' @param forms_to_review A character vector with all forms that need to be
+#'   reviewed.
+#'
+#' @returns A data frame with summary data
+#'
+#' @keywords internal
+#' 
+db_get_summary_data <- function(
+    db_path,
+    forms_to_review,
+    filtered_subjects
+){
+  stopifnot(is.character(db_path))
+  stopifnot(file.exists(db_path))
+  stopifnot(is.character(forms_to_review))
+  stopifnot(is.character(filtered_subjects))
+  
+  con <- get_db_connection(db_path)
+  
+  DBI::dbWriteTable(
+    con,
+    name = "temp_subjects",
+    value = data.frame(subject_id = filtered_subjects),
+    overwrite = TRUE,
+    temporary = TRUE
+  )
+  
+  DBI::dbExecute(con, "CREATE INDEX IF NOT EXISTS idx_temp_subjects_subject_id ON temp_subjects(subject_id)")
+  DBI::dbExecute(con, "CREATE INDEX IF NOT EXISTS idx_ard_reviewed_item_group ON all_review_data(reviewed, item_group)")
+  DBI::dbExecute(con, "CREATE INDEX IF NOT EXISTS idx_ard_subject_id ON all_review_data(subject_id)")
+  
+  forms_sql <- paste(DBI::dbQuoteString(con, forms_to_review), collapse = ", ")
+  
+  sql <- sprintf("
+  SELECT 
+    all_review_data.subject_id,
+    all_review_data.item_group,
+    all_review_data.event_name,
+    all_review_data.edit_date_time,
+    all_review_data.status,
+    all_review_data.reviewed
+  FROM all_review_data
+  INNER JOIN temp_subjects ON temp_subjects.subject_id = all_review_data.subject_id
+  WHERE all_review_data.reviewed = 'No'
+    AND all_review_data.item_group IN (%s)
+", forms_sql)
+  
+  DBI::dbGetQuery(con, sql)
+}
+
