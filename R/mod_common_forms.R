@@ -41,11 +41,7 @@ mod_common_forms_ui <- function(id, form){
 #' changed in the metadata. The tables shown are overview tables in wide format,
 #' similar to the ones in [mod_study_forms_server()]. When the common form
 #' `Adverse events` is selected, the module will show an additional table with
-#' Severe Adverse Events above the table with Adverse Events. In addition, it
-#' will show a timeline by calling module
-#' [mod_timeline_ui()]/[mod_timeline_server()]. The timeline shows study events
-#' (such as drug administrations) and study visits together with Adverse Events,
-#' so that temporal relationships between these events can be quickly revealed.
+#' Severe Adverse Events above the table with Adverse Events. 
 #' The `common forms` module is used in the main server to create all applicable
 #' common form pages.
 #'
@@ -71,7 +67,6 @@ mod_common_forms_ui <- function(id, form){
 #' @param table_names An optional character vector. If provided, will be used
 #'   within [datatable_custom()], to improve the column names in the final
 #'   interactive tables.
-#'
 #'
 #' @seealso [mod_common_forms_ui()], [mod_timeline_ui()],
 #'   [mod_timeline_server()], [mod_review_form_tbl_ui()],

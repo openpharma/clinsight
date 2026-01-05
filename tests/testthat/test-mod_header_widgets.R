@@ -24,7 +24,8 @@ describe(
         ), 
         rev_data = reactiveValues(), 
         navinfo = reactiveValues(),
-        timeline_data = reactive(data.frame())
+        timeline_data = data.frame(),
+        available_data = data.frame()
       ) 
       testServer(mod_header_widgets_server, args = testargs, {
         ns <- session$ns
@@ -60,25 +61,22 @@ describe(
         and the output [ae_box] to contain a html element,
         and the ouput [visit_figure] to contain a plot object.", 
       {
-        AE_table <- data.frame(
-          "subject_id" = "Subj01", 
-          "form_repeat" = 1:3, 
-          `Serious Adverse Event` = c("No", "Yes", "No"), 
-          check.names = FALSE
-        )
         AE_figure_data <- data.frame(
           "subject_id" = "Subj01", 
           "event_name" = "Screening",
-          "event_label" = factor("V0"), 
-          "item_name" = "Other"
+          "event_label" = "SCR",
+          "item_group" = "Adverse events",
+          "form_repeat" = 1:3,
+          "item_name" = c(rep("Serious Adverse Event", times = 3), rep("Name", times = 3)), 
+          "item_value" = c("Yes", "No", "No", "Sepsis", "Epistaxis", "UTI")
         )
-        
+        available_data <- get_available_data(list("Adverse events" = AE_figure_data))
+
         timeline_data <- data.frame()
         
         testargs <- list(
           r = reactiveValues(
-            filtered_data = list("Adverse events" = AE_figure_data),
-            filtered_tables = list("Adverse events" = AE_table)
+            filtered_data = list("Adverse events" = AE_figure_data)
           ), 
           rev_data = reactiveValues(
             summary = reactive({
@@ -90,16 +88,18 @@ describe(
             })
           ), 
           navinfo = reactiveValues(),
-          timeline_data = reactive(timeline_data)
+          timeline_data = timeline_data,
+          available_data = available_data
         ) 
         
         testServer(mod_header_widgets_server, args = testargs, {
           ns <- session$ns
           r$subject_id = "Subj01"
           session$flushReact()
-          expect_equal(AEvals_active(), AE_table)
-          expect_equal(SAEvalue.individual(), 1)
-          expect_equal(AEvalue.individual(), 2)
+          expect_equal(
+            all_aes(), 
+            data.frame("subject_id" = "Subj01", AEs = 2, SAEs = 1)
+          )
           expect_false(all_AEs_reviewed())
           expect_true(inherits(output$ae_box$html, "html"))
           expect_equal(output[["visit_figure"]]$alt, "Plot object")
@@ -113,40 +113,42 @@ describe(
         and the active subject ID [r$subject_id] set to ['Subj02'], 
         and the active subject having no adverse event data available, 
         and the data frame [rev_data$summary()] containing no data of ['Subj02'],
-        I expect SAEvalue.individual() to be zero,
-        and AEvalue.individual() to be zero,
-        and the AEvals_active() table to be a data frame with zero rows,
+        I expect that zero AEs and zero SAEs are found for Subj02 in [all_aes()],
         and all_AEs_reviewed() to being set to 'TRUE',
         and output$ae_box to contain a html element,
         and ouput$visit_figure to contain a plot object.", 
       {
-        AE_table <- data.frame(
-          "subject_id" = "Subj01", 
-          "form_repeat" = 1, 
-          "Serious Adverse Event" = "No", 
-          "event_name" = "Screening",
-          "event_label" = factor("V0"), 
-          "event_date" = as.Date("2025-12-16"),
-          "start date" = "2025-12-16",
-          "end date"   = "",
-          "SAE Start date" = "",
-          "SAE End date"  = "",
-          "Name" = "Epistaxis",
-          check.names = FALSE
-        )
         AE_figure_data <- data.frame(
           "subject_id" = "Subj01", 
           "event_name" = "Screening",
           "event_label" = factor("V0"), 
           "event_date" = as.Date("2025-12-16"),
-          "item_name" = "Other"
+          "item_group" = "Adverse events",
+          "form_repeat" = 1:3,
+          "item_name" = c(rep("Serious Adverse Event", times = 3), rep("Name", times = 3)), 
+          "item_value" = c("Yes", "No", "No", "Sepsis", "Epistaxis", "UTI")
         )
-        timeline_data <- get_timeline_data(list("Adverse events" = AE_figure_data), list("Adverse events" = AE_table))
         
+       vs_data <- data.frame(
+          subject_id = c("Subj02"),
+          item_name = c("other_event"),
+          form_repeat = 1,
+          item_group = c("vital_signs"),
+          event_name = "",
+          event_label = factor("V0")
+        )
+       
+        # Class must be added since AE table is now created in get_timeline_data().
+        class(AE_figure_data) <- c("adverse_events", class(AE_figure_data))
+        available_data <- get_available_data(list("Adverse events" = AE_figure_data, "vs_data" = vs_data))
+        
+        timeline_data <- get_timeline_data(
+          list("Adverse events" = AE_figure_data), 
+          available_data = available_data
+        )
         testargs <- list(
           r = reactiveValues(
-            filtered_data = list("Adverse events" = AE_figure_data),
-            filtered_tables = list("Adverse events" = AE_table)
+            filtered_data = list("Adverse events" = AE_figure_data)
           ), 
           rev_data = reactiveValues(
             summary = reactive({
@@ -158,16 +160,18 @@ describe(
             })
           ), 
           navinfo = reactiveValues(),
-          timeline_data = reactive(timeline_data)
+          timeline_data = timeline_data,
+          available_data = available_data
         ) 
         
         testServer(mod_header_widgets_server, args = testargs, {
           ns <- session$ns
           r$subject_id = "Subj02"
           session$flushReact()
-          expect_equal(AEvals_active(), AE_table[0,c("subject_id", "form_repeat", "Serious Adverse Event")])
-          expect_equal(SAEvalue.individual(), 0)
-          expect_equal(AEvalue.individual(), 0)
+          expect_equal(
+            dplyr::filter(all_aes(), subject_id == "Subj02"), 
+            data.frame("subject_id" = "Subj02", AEs = 0, SAEs = 0)
+          )
           expect_true(all_AEs_reviewed())
           expect_true(inherits(output$ae_box$html, "html"))
           expect_equal(output[["visit_figure"]]$alt, "Plot object")
@@ -189,29 +193,36 @@ describe(
           and by default not shown in study forms, 
           and that it can be toggled on of off in both study forms and common forms.",
       {
-        AE_table <- data.frame(
-          "subject_id" = "Subj01",
-          "form_repeat" = 1,
-          "Serious Adverse Event" = "No",
-          "event_name" = "Screening",
-          "event_label" = factor("V0"),
-          "event_date" = as.Date("2025-12-16"),
-          "start date" = "2025-12-16",
-          "end date"   = "",
-          "SAE Start date" = "",
-          "SAE End date"  = "",
-          "Name" = "Epistaxis",
-          check.names = FALSE
-        )
         AE_figure_data <- data.frame(
-          "subject_id" = "Subj01",
+          "subject_id" = "Subj01", 
           "event_name" = "Screening",
-          "event_label" = factor("V0"),
+          "event_label" = factor("V0"), 
           "event_date" = as.Date("2025-12-16"),
-          "item_name" = "Other"
+          "item_group" = "Adverse events",
+          "form_repeat" = 1:3,
+          "item_name" = c(rep("Serious Adverse Event", times = 3), rep("Name", times = 3)), 
+          "item_value" = c("Yes", "No", "No", "Sepsis", "Epistaxis", "UTI")
         )
-        timeline_data <- get_timeline_data(list("Adverse events" = AE_figure_data), list("Adverse events" = AE_table))
-
+        
+        vs_data <- data.frame(
+          subject_id = c("Subj02"),
+          item_name = c("other_event"),
+          form_repeat = 1,
+          item_group = c("vital_signs"),
+          event_name = "",
+          event_label = factor("V0")
+        )
+        
+        # Class must be added since AE table is now created in get_timeline_data().
+        class(AE_figure_data) <- c("adverse_events", class(AE_figure_data))
+        
+        appdata <- list("Adverse events" = AE_figure_data, "vs_data" = vs_data)
+        available_data <- get_available_data(appdata)
+        
+        timeline_data <- get_timeline_data(
+          list("Adverse events" = AE_figure_data), 
+          available_data = available_data
+        )
         test_ui <- function(request){
           tagList(
             golem_add_external_resources(),
@@ -254,9 +265,9 @@ describe(
           mod_header_widgets_server(
             id = "header_widgets_1",
             r = reactiveValues(
-              filtered_data = list("Adverse events" = AE_figure_data),
-              filtered_tables = list("Adverse events" = AE_table),
-              subject_id = "Subj01"
+              filtered_data = appdata,
+              subject_id = "Subj01",
+              filtered_subjects = c("Subj01", "Subj02")
             ),
             rev_data = reactiveValues(
               summary = reactive({
@@ -268,7 +279,8 @@ describe(
               })
             ),
             navinfo = navinfo,
-            timeline_data = reactive(timeline_data)
+            timeline_data = timeline_data,
+            available_data = available_data
           )
         }
         test_app <- shinyApp(test_ui, test_server)

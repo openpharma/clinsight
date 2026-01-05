@@ -32,7 +32,7 @@ mod_timeline_server <- function(
     ){
   stopifnot(
     is.reactive(form_review_data), 
-    is.reactive(timeline_data),
+    is.data.frame(timeline_data),
     is.reactive(active_subject)
     )
   
@@ -51,7 +51,7 @@ mod_timeline_server <- function(
           dplyr::distinct(subject_id, form_repeat, item_group, needs_review)
       }
       
-      df <- with(timeline_data(), timeline_data()[subject_id == active_subject(), ]) |> 
+      df <- with(timeline_data, timeline_data[subject_id == active_subject(), ]) |> 
         dplyr::left_join(review_active, by = c("subject_id", "form_repeat", "item_group")) |> 
         dplyr::mutate(
           className = ifelse(
@@ -62,7 +62,7 @@ mod_timeline_server <- function(
         )
       df
     }) |> 
-      bindEvent(form_review_data(), timeline_data(), active_subject())
+      bindEvent(form_review_data(), timeline_data, active_subject())
     
     observeEvent(input$timeline_selected, {
       timevis::centerItem("timeline", input$timeline_selected)

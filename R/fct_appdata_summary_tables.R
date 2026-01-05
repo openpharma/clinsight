@@ -4,8 +4,12 @@
 #' object.
 #'
 #' @param data A list of data frames, with compatible clinical trial data.
-#' @param table_data A list of data frames containing clinical trial data in
-#'   wide format. Created with [create_table()].
+#' @param available_data Optional, data frame with all available data gathered.
+#'   Used to extract visit information. If not provided, this data frame will be
+#'   created internally by running [get_available_data()] on the provided `data`
+#'   list.
+#' @param expected_ae_cols Character vector with expected columns for the
+#'   adverse event table within the `data` list.
 #' @param timeline_cols Character vector with the name of the columns of the
 #'   output data frame.
 #' @param treatment_label Character vector with the label to use for the
@@ -16,14 +20,23 @@
 #' 
 get_timeline_data <- function(
     data, 
-    table_data, 
+    available_data = NULL,
+    expected_ae_cols = c(
+      "AE Name",
+      "Serious Adverse Event",
+      "AE start date",
+      "AE end date",
+      "SAE Start date",
+      "SAE End date",
+      "AE date of worsening",
+      "CTCAE severity worsening"
+    ),
     timeline_cols =  c("subject_id", "event_name", "form_repeat", "item_group", 
                        "start", "group", "end", "title", "className", "id", "order"),
     treatment_label = "\U1F48A T\U2093"
 ){
-  stopifnot(is.list(data), is.list(table_data))
+  stopifnot(is.list(data))
   stopifnot(is.character(timeline_cols), is.character(treatment_label))
-  
   if(all(unlist(lapply(data, is.null)))) return({
     warning("No data found. Returning empty data frame")
     setNames(
@@ -32,27 +45,35 @@ get_timeline_data <- function(
     ) |>
       dplyr::rename("content" = "event_name")
   })
+  if(is.null(available_data)){
+    available_data <- get_available_data(data)
+  }
+  stopifnot(is.data.frame(available_data))
+  available_data <- available_data |> 
+    add_missing_columns(c("subject_id", "item_name", "form_repeat", 
+                          "item_group", "event_name", "event_label", "event_date"))
   study_event_data <- if(is.null(data) ){
     data.frame()
   } else{
-    data |> 
-      bind_rows_custom("item_value") |> 
-      dplyr::filter(
-        !is.na(event_name), 
-        !is.na(event_date),
-        event_name != "Any visit"
-      ) |> 
+    with(available_data, available_data[
+      !is.na(event_name) & !event_name %in% c("Any visit") & !is.na(subject_id),
+    ]) |> 
       dplyr::distinct(subject_id, event_name, start = event_date) |> 
       dplyr::mutate(
         group = "Visit",
         title = paste0(start, " | ", event_name)
       )
   }
-  
-  if(is.null(table_data$`Adverse events`)){
+  ## Get AE data
+  if(is.null(data[["Adverse events"]]) || nrow(data[["Adverse events"]]) == 0){
     AE_timedata <- SAE_data <- data.frame()
   } else{
-    AE_timedata <- table_data$`Adverse events` |> 
+    table_data <- create_table(
+      data[["Adverse events"]], 
+      expected_columns = expected_ae_cols
+    )
+    
+    AE_timedata <- table_data |> 
       dplyr::filter(!(`Serious Adverse Event` == "Yes" & 
                         .data[["start date"]] == .data[["SAE Start date"]])) |> 
       dplyr::mutate(
@@ -74,7 +95,7 @@ get_timeline_data <- function(
         )
       )  
     
-    SAE_data <- table_data$`Adverse events` |> 
+    SAE_data <- table_data |> 
       dplyr::filter(`Serious Adverse Event` == "Yes") |> 
       dplyr::mutate(
         event_name = `Name`,
@@ -156,11 +177,6 @@ get_timeline_data <- function(
 #'
 #' @param data list of data frames to be used. Will be used for extracting the
 #'   variables of interest from the study-specific forms.
-#' @param tables list of tables to be used. Will be used for extracting the
-#'   variables of interest from the common forms.
-#' @param all_forms A data frame containing all forms. Mandatory columns are
-#'   "form" (containing the form names), and "main_tab" (containing the tab name
-#'   where the form should be located).
 #' @param form_repeat_name A character string with the name of the `form_repeat`
 #'   variable. This variable (with this name) will be added to the item name if
 #'   duplicate names exist for each participant.
@@ -170,37 +186,41 @@ get_timeline_data <- function(
 #' 
 get_available_data <- function(
     data, 
-    tables, 
-    all_forms,
     form_repeat_name = "N"
 ){
-  stopifnot(is.list(data), is.list(tables), is.character(form_repeat_name))
+  stopifnot(inherits(data, "list"), is.character(form_repeat_name))
   if(identical(form_repeat_name, character(0))){form_repeat_name <- "N"}
+  selector_cols <- c("subject_id", "item_name", "form_repeat", "item_group", 
+                     "event_name", "event_label", "event_date")
+  if(length(data) == 0) {
+    warning("Empty list of data provided")
+    return(add_missing_columns(data.frame(), selector_cols))
+  }
   study_event_selectors <- lapply(
-    all_forms$form, 
+    data, 
     \(x){
-      if(isFALSE("Name" %in% names(tables[[x]]))){
-        if(is.null(data[[x]])) return(NULL)
-        df_x <- data[[x]] |> 
-          dplyr::select(
-            dplyr::all_of(c("subject_id", "event_name", "event_label",  
-                            "item_group", "item_name", "form_repeat"))
+      name_vars <- c("Name", "AE Name", "CP Name", "MH Name", "CM Name")
+      if (!all(selector_cols %in% names(x))) {
+        x <- add_missing_columns(x, selector_cols) |>
+          dplyr::mutate(
+            event_date = as.Date(event_date),
+            form_repeat = as.integer(form_repeat),
+            event_label = factor(event_label)
           )
-      } else {
-        if(is.null(tables[[x]])) return(NULL)
-        df_x <- tables[[x]] |> 
-          dplyr::select(subject_id, "item_name" = Name, form_repeat) |>
-          dplyr::mutate(item_group = x, event_name = "Any visit", 
-                        event_label = "Any visit") 
       }
-      df_x |> 
+      if ( any(unique(x$item_name) %in% name_vars)){
+        x <- x[x$item_name %in% name_vars, ] |> 
+          dplyr::mutate(item_name = item_value)
+      }
+      x[!is.na(x$item_name), c(selector_cols)] |> 
         dplyr::distinct() |> 
-        dplyr::arrange(
-          subject_id, 
-          factor(event_name, levels = order_string(event_name))
-        )
+        dplyr::arrange(subject_id, event_name) |> 
+        # Because the factor levels differ per table:
+        dplyr::mutate(item_name = as.character(item_name))
     }) |> 
-    dplyr::bind_rows()
+    dplyr::bind_rows() |> 
+    # to ensure classes created in get_appdata() are dropped, even in edge cases:
+    as.data.frame()
   # To uniquely identify events with the same name (mostly in common_forms):
   study_event_selectors |> 
     dplyr::mutate(
@@ -219,36 +239,37 @@ get_available_data <- function(
 
 
 #' Create static overview data
-#' 
-#' Creates overview data of each patient in the study. Used to create the start 
-#' page of the application. 
-#' 
-#' @param data List of data frames. 
-#' @param expected_general_columns Character vector with the expected columns. 
-#' If columns are completely missing, they will be made explicitly missing in 
-#' the data frame (that is, a column will be created with only missing character 
-#' values). 
 #'
-#' @return A data frame with the overview data. Columns are: 
-#' `subject_id`, `status`, `WHO.classification`, `Age`, `Sex`, `event_name`. 
-#' 
+#' Creates overview data of each patient in the study. Used to create the start
+#' page of the application.
+#'
+#' @param data List of data frames.
+#' @param available_data A data frame with available data. Visits will be
+#'   extracted from here. Required columns are `subject_id`, `event_name`,
+#'   `event_label`. The `event_label` variable should be a factor in order to
+#'   work well with the function [fig_timeline()].
+#' @param expected_general_columns Character vector with the expected columns.
+#'   If columns are completely missing, they will be made explicitly missing in
+#'   the data frame (that is, a column will be created with only missing
+#'   character values).
+#'
+#' @return A data frame with the overview data. Columns are: `subject_id`,
+#'   `status`, `WHO.classification`, `Age`, `Sex`, `event_name`.
+#'
 #' @keywords internal
-#'
+#' 
 get_static_overview_data <- function(
     data, 
+    available_data,
     expected_general_columns = NULL
 ){
-  stopifnot(is.list(data))
+  stopifnot(inherits(data, "list"))
   expected_general_columns <- expected_general_columns %||% character(0)
   stopifnot(is.character(expected_general_columns))
-  visits <- data |> 
-    bind_rows_custom("item_value") |> 
-    dplyr::filter(
-      !is.na(event_name), 
-      !event_name %in% c("Any visit", "Exit"),
-      !is.na(subject_id)
-    ) |> 
-    dplyr::arrange(subject_id, day) |> 
+  visits <- with(available_data, available_data[
+    !is.na(event_name) & !event_name %in% c("Any visit", "Exit") &!is.na(subject_id),
+  ]) |> 
+    dplyr::arrange(subject_id, event_label) |> 
     dplyr::distinct(subject_id, event_name) |> 
     collapse_column_vals(group_by = "subject_id") |> 
     dplyr::distinct()
@@ -257,6 +278,5 @@ get_static_overview_data <- function(
     data[["General"]], 
     expected_columns = expected_general_columns
   ) |>
-    dplyr::select(tidyr::all_of("subject_id"), tidyr::any_of(c("subject_status", "WHO.classification", "Age", "Sex"))) |>
     dplyr::left_join(visits, by = "subject_id")
 }

@@ -39,7 +39,7 @@ mod_header_widgets_ui <- function(id){
 #' form. Furthermore, clicking on the box with forms to review will trigger
 #' [mod_navigate_review_server()], opening a modal that shows the forms that
 #' need review and the queries that are open of the active participant, to which
-#' you can directly navigate to.
+#' you can directly navigate to. 
 #'
 #' @param id Character string, used to connect the module UI with the module
 #'   Server.
@@ -51,27 +51,26 @@ mod_header_widgets_ui <- function(id){
 #' @param timeline_data A reactive with a data frame containing the timeline
 #'   data. Used to create the timeline figure. Created with
 #'   [get_timeline_data()].
+#' @param available_data A data frame containing all available data, usually
+#'   created with the function [get_available_data()].
 #'
 #' @seealso [mod_header_widgets_ui()]
-mod_header_widgets_server <- function(id, r, rev_data, navinfo, timeline_data){
+mod_header_widgets_server <- function(
+    id, 
+    r, 
+    rev_data, 
+    navinfo,
+    timeline_data,
+    available_data
+    ){
   stopifnot(is.reactivevalues(r))
   stopifnot(is.reactivevalues(navinfo))
   stopifnot(is.reactivevalues(rev_data))
+  stopifnot(is.data.frame(available_data))
+  stopifnot(is.data.frame(timeline_data))
   
   moduleServer( id, function(input, output, session){
     ns <- session$ns
-    # for use in valueboxes for individuals:
-    AEvalue.individual  <- reactiveVal("...") 
-    SAEvalue.individual <- reactiveVal("...") 
-    visit.number <- reactiveVal(".. (..%)")
-    
-    AEvals_active <- reactive({ 
-      req(r$subject_id)
-      validate(need(r$filtered_tables$`Adverse events`, "AE data missing for selected patient"))
-      r$filtered_tables$`Adverse events` |> 
-        dplyr::filter(subject_id == as.character(r$subject_id)) |> 
-        dplyr::distinct(subject_id, form_repeat, `Serious Adverse Event`)
-      })
     
     observe({
       if (is.null(navinfo$cf_toggle_timeline)) {
@@ -84,31 +83,13 @@ mod_header_widgets_server <- function(id, r, rev_data, navinfo, timeline_data){
     autoDestroy = TRUE
     )
     
-    observeEvent(r$subject_id, {
-      req(r$subject_id != "")
-      golem::cat_dev("Update individual valueboxes\n")
-      
-      AEvalue.individual(
-        sum(AEvals_active()[["Serious Adverse Event"]] != "Yes", na.rm = T)
+    all_aes <- reactive({ 
+      validate(need(r$filtered_data[["Adverse events"]], "AE data missing"))
+      count_adverse_events(
+        data = r$filtered_data[["Adverse events"]], 
+        all_ids = unique(available_data$subject_id)
         )
-      SAEvalue.individual(
-        sum(AEvals_active()[["Serious Adverse Event"]] == "Yes", na.rm = T)
-      ) 
-    })
-    simple_timeline_data <- reactive({
-      bind_rows_custom(r$filtered_data, "item_value") |> 
-      dplyr::select(dplyr::all_of(c("subject_id", "event_name", 
-                                    "event_label", "item_name"))) |> 
-      dplyr::distinct()
-    })
-    
-    selected_individual_data <- reactiveVal()
-    observeEvent(r$subject_id, {
-      selected_individual_data(
-        with(simple_timeline_data(), 
-             simple_timeline_data()[subject_id %in% r$subject_id, ])
-      )  
-    })
+      })
     
     shinyjs::onclick("ae_box", {
       navinfo$active_tab = "Common events"
@@ -145,20 +126,20 @@ mod_header_widgets_server <- function(id, r, rev_data, navinfo, timeline_data){
     ### Outputs: 
     
     output[["ae_box"]] <- renderUI({
-      req(inherits(all_AEs_reviewed(), "logical"), SAEvalue.individual(), 
-          AEvalue.individual(), r$subject_id)
+      req(inherits(all_AEs_reviewed(), "logical"), r$subject_id)
       bslib::value_box(
-        title = paste0("SAEs: ", SAEvalue.individual()), 
-        value = paste0("AEs: ", AEvalue.individual()),
+        title = paste0("SAEs: ", with(all_aes(), SAEs[subject_id == r$subject_id]) ), 
+        value = paste0("AEs: ", with(all_aes(), AEs[subject_id == r$subject_id])),
         showcase = icon("house-medical", class = 'fa-2x'),
         theme = if(all_AEs_reviewed()) "primary" else "warning" 
       )
     })
     output[["visit_figure"]] <- renderPlot(
       {
-        req(selected_individual_data())
         golem::cat_dev("plot datapoints figure\n")
-        fig_timeline(data = selected_individual_data())
+        fig_timeline(
+          data =  available_data[available_data$subject_id %in% r$subject_id, ]
+        )
       }, 
       height = 60
     )

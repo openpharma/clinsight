@@ -45,9 +45,6 @@ describe(
       ) |> 
       get_appdata()
     appvars <- get_meta_vars(appdata)
-    apptables <- lapply(setNames(names(appdata), names(appdata)), \(x){
-      create_table(appdata[[x]], expected_columns = names(appvars$items[[x]]))
-    })
     rev_data <- get_review_data(appdata[["Adverse events"]]) |> 
       dplyr::mutate(
         id = dplyr::row_number(),

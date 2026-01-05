@@ -56,11 +56,7 @@ common forms are currently: \verb{Adverse events}, \verb{Medical History},
 changed in the metadata. The tables shown are overview tables in wide format,
 similar to the ones in \code{\link[=mod_study_forms_server]{mod_study_forms_server()}}. When the common form
 \verb{Adverse events} is selected, the module will show an additional table with
-Severe Adverse Events above the table with Adverse Events. In addition, it
-will show a timeline by calling module
-\code{\link[=mod_timeline_ui]{mod_timeline_ui()}}/\code{\link[=mod_timeline_server]{mod_timeline_server()}}. The timeline shows study events
-(such as drug administrations) and study visits together with Adverse Events,
-so that temporal relationships between these events can be quickly revealed.
+Severe Adverse Events above the table with Adverse Events.
 The \verb{common forms} module is used in the main server to create all applicable
 common form pages.
 }
