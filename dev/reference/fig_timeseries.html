@@ -9,7 +9,7 @@ plotly_figure() to create an interactive figure."><meta property="og:image" cont
 
     <a class="navbar-brand me-2" href="../index.html">clinsight</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.3.0.9007</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.3.0.9008</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,7 +65,7 @@ plotly_figure() to create an interactive figure."><meta property="og:image" cont
 <span>  label <span class="op">=</span> <span class="st">"text_label"</span>,</span>
 <span>  show_all_participants <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  show_all_hover_labels <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  scale <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  yval <span class="op">=</span> <span class="st">"item_value"</span>,</span>
 <span>  use_unscaled_limits <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -115,9 +115,9 @@ using <code><a href="https://rdrr.io/pkg/plotly/man/ggplotly.html" class="extern
 <dd><p>Logical to toggle hover labels.</p></dd>
 
 
-<dt id="arg-scale">scale<a class="anchor" aria-label="anchor" href="#arg-scale"></a></dt>
-<dd><p>A logical. Whether to us a scaled value (value_scaled) or the
-raw variable (item_value).</p></dd>
+<dt id="arg-yval">yval<a class="anchor" aria-label="anchor" href="#arg-yval"></a></dt>
+<dd><p>Character vector with the column name with the values. Must be
+numeric.</p></dd>
 
 
 <dt id="arg-use-unscaled-limits">use_unscaled_limits<a class="anchor" aria-label="anchor" href="#arg-use-unscaled-limits"></a></dt>
@@ -145,9 +145,9 @@ used. This parameter will be ignored if scaled is set to <code>TRUE</code>.</p><
 <span class="r-in"><span>    item_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"item1"</span>, <span class="st">"item2"</span><span class="op">)</span>, <span class="fl">10</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    item_value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">0</span> , <span class="fl">50</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    significance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>      <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"limits unknown"</span>, <span class="st">"out of limits, clinically significant"</span>, </span></span>
-<span class="r-in"><span>        <span class="st">"out of limits, clinically insignificant"</span><span class="op">)</span>, </span></span>
-<span class="r-in"><span>      <span class="fl">10</span>, </span></span>
+<span class="r-in"><span>      <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"limits unknown"</span>, <span class="st">"out of limits, clinically significant"</span>,</span></span>
+<span class="r-in"><span>        <span class="st">"out of limits, clinically insignificant"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>      <span class="fl">10</span>,</span></span>
 <span class="r-in"><span>      replace <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span>,</span></span>
 <span class="r-in"><span>    text_label <span class="op">=</span> <span class="st">"test text"</span>,</span></span>
