@@ -5,6 +5,11 @@
 #' @param form_review_data A data frame with he review data of the form.
 #' @param form A character string with the name of the form.
 #' @param form_items Named character vector with all form_items to display.
+#' @param transformation A character value. If this is 'none' then the columns
+#'   `item_value` and `item_unit` will be used in the table. Otherwise,
+#'   `value_standardized` and `unit_standardized` will be used.
+#' @param show_limits Logical, indicating whether laboratory limits will be
+#'   added to the table.
 #' @param active_subject A character string with the active subject id.
 #' @param pending_form_review_status A logical, indicating whether all items of
 #'   the entire form for the active subject id are reviewed. Note that the
@@ -22,6 +27,8 @@ get_form_table <- function(
     form_review_data,
     form,
     form_items,
+    transformation = "none",
+    show_limits = FALSE,
     active_subject,
     pending_form_review_status = NULL,
     is_SAE = NULL,
@@ -40,6 +47,11 @@ get_form_table <- function(
   if(length(missing_cols) != 0){
     stop("the following columns are missing: ", paste0(missing_cols, collapse = ", "))
   }
+  value_column <- if (identical(transformation, "none")) "item_value" else "value_standardized"
+  unit_column <- if (identical(transformation, "none")) "item_unit" else "unit_standardized"
+  lower_lim_column <- if (identical(transformation, "none")) "lower_lim" else "lower_lim_standardized"
+  upper_lim_column <- if (identical(transformation, "none")) "upper_lim" else "upper_lim_standardized"
+  
   df <- dplyr::left_join(
     form_data,
     form_review_data |> 
@@ -48,14 +60,28 @@ get_form_table <- function(
   ) |> 
     dplyr::mutate(
       not_reviewed_but_missing = (reviewed == "No" & is.na(item_value)), 
-      item_value = dplyr::case_when(
-        is.na(reviewed) ~ htmltools::htmlEscape(item_value),
-        (reviewed == "No" & !is.na(item_value)) ~
-          paste0("<b>", htmltools::htmlEscape(item_value), "*</b>"), 
-        .default = htmltools::htmlEscape(item_value)
+      "{value_column}" := ifelse(
+        is.na(reviewed), 
+        htmltools::htmlEscape(.data[[value_column]]),
+        ifelse(
+          (reviewed == "No" & !is.na(.data[[value_column]])),
+          paste0("<b>", htmltools::htmlEscape(.data[[value_column]]), "*</b>"), 
+          htmltools::htmlEscape(.data[[value_column]])
+        )
       )
     ) |> 
-    create_table(expected_columns = names(form_items)) |> 
+    add_limits_to_table(
+      add_limits = isTRUE(show_limits),
+      value_column = value_column, 
+      unit_column = unit_column, 
+      lower_lim_column = lower_lim_column, 
+      upper_lim_column = upper_lim_column
+    ) |> 
+    create_table(
+      expected_columns = names(form_items),
+      value_column = value_column, 
+      unit_column = unit_column
+      ) |> 
     dplyr::mutate(
       row_review_status = Map(
         \(x, y, z) append(x, list(
@@ -69,6 +95,7 @@ get_form_table <- function(
         if (is.null(active_subject)) FALSE else subject_id != active_subject
       )
     )
+  
   if(!is.null(active_subject)){
     df <- df[order(df$subject_id != active_subject), ]
   }
@@ -76,6 +103,30 @@ get_form_table <- function(
     df <- adjust_ae_form_table(df, is_SAE = is_SAE)
   }
   df
+}
+
+add_limits_to_table <- function(
+    data,
+    add_limits = FALSE,
+    value_column = "item_value", 
+    unit_column = "item_unit", 
+    lower_lim_column = "lower_lim", 
+    upper_lim_column = "upper_lim"
+    ) {
+  stopifnot(is.data.frame(data))
+  if (isFALSE(add_limits)) {
+    return(data)
+  }
+  data |> 
+    dplyr::mutate(
+      "{value_column}" := paste0(
+        .data[[value_column]], " (",
+        ifelse(is.na(.data[[lower_lim_column]]), "?", .data[[lower_lim_column]]), 
+        "-", 
+        ifelse(is.na(.data[[upper_lim_column]]), "?", .data[[upper_lim_column]]), 
+        ")"
+      )
+    )
 }
 
 #' Adjust (Serious) Adverse Event form tables

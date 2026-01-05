@@ -9,6 +9,8 @@ get_form_table(
   form_review_data,
   form,
   form_items,
+  transformation = "none",
+  show_limits = FALSE,
   active_subject,
   pending_form_review_status = NULL,
   is_SAE = NULL,
@@ -23,6 +25,13 @@ get_form_table(
 \item{form}{A character string with the name of the form.}
 
 \item{form_items}{Named character vector with all form_items to display.}
+
+\item{transformation}{A character value. If this is 'none' then the columns
+\code{item_value} and \code{item_unit} will be used in the table. Otherwise,
+\code{value_standardized} and \code{unit_standardized} will be used.}
+
+\item{show_limits}{Logical, indicating whether laboratory limits will be
+added to the table.}
 
 \item{active_subject}{A character string with the active subject id.}
 

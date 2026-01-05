@@ -163,14 +163,14 @@ fig_timeline <- function(
 #' @param label Character vector. Label to be used for each data point. Will
 #'   only be visible if the ggplot object is converted to an interactive plot
 #'   using `plotly::ggplotly()`. See [plotly_figure()]
-#' @param scale A logical. Whether to us a scaled value (value_scaled) or the
-#'   raw variable (item_value).
 #' @param use_unscaled_limits If TRUE, limits provided in the data frame will be
 #'   used. This parameter will be ignored if scaled is set to `TRUE`.
 #' @param point_size character vector. Column in the data frame that controls
 #'   the point size in the figure.
 #' @param show_all_participants Logical to toggle background patterns.
 #' @param show_all_hover_labels Logical to toggle hover labels.
+#' @param yval Character vector with the column name with the values. Must be
+#'   numeric.
 #'
 #' @return A faceted ggplot2 time series figure.
 #' @keywords internal
@@ -185,9 +185,9 @@ fig_timeline <- function(
 #'     item_name = sample(c("item1", "item2"), 10, replace = TRUE),
 #'     item_value = runif(10, 0 , 50),
 #'     significance = sample(
-#'       c("limits unknown", "out of limits, clinically significant", 
-#'         "out of limits, clinically insignificant"), 
-#'       10, 
+#'       c("limits unknown", "out of limits, clinically significant",
+#'         "out of limits, clinically insignificant"),
+#'       10,
 #'       replace = TRUE
 #'     ),
 #'     text_label = "test text",
@@ -208,14 +208,21 @@ fig_timeseries <- function(
     label = "text_label",
     show_all_participants = TRUE,
     show_all_hover_labels = FALSE,
-    scale = FALSE,
+    yval = "item_value",
     use_unscaled_limits = FALSE
 ){
   if(isTRUE(is.na(id_to_highlight))){
     id_to_highlight <- NULL
   }
   df_id <- data[data[[id]] == id_to_highlight, ]
-  yval <- ifelse(scale, "value_scaled", "item_value")
+  if ("character" %in% class(data[[yval]])) {
+    warning(paste0("converting yval ", yval, " to numeric"))
+    data[[yval]] <- as.numeric(data[[yval]])
+  }
+  if (is.null(data[[label]])) {
+    label <- "text_label"
+  }
+  
   fig <- ggplot2::ggplot(
     data, 
     ggplot2::aes(
@@ -239,16 +246,27 @@ fig_timeseries <- function(
       y = "value"
     ) + 
     list(
-      if(scale){
+      if(identical(yval, "value_scaled")){
         list(
           lapply(c(0,1), \(x){
             ggplot2::geom_hline(yintercept = x,lty = 3, linewidth = 0.5, col = "grey50")
           }),
           ggplot2::labs(y = "Scaled value (>1 or <0 is out of range)")
         )
-      } else if(use_unscaled_limits){
-        list(ggplot2::geom_hline(ggplot2::aes(yintercept = .data[["upper_lim"]]),lty = 3, linewidth = 0.5, col = "grey50"),
-             ggplot2::geom_hline(ggplot2::aes(yintercept = .data[["lower_lim"]]),lty = 3, linewidth = 0.5, col = "grey50"))
+      } else if (nrow(df_id) != 0) {
+        lower_lim <- switch(yval, "item_value" = "lower_lim", "value_standardized" = "lower_lim_standardized", "")
+        upper_lim <- switch(yval, "item_value" = "upper_lim", "value_standardized" = "upper_lim_standardized", "")
+        
+        lapply(c(lower_lim, upper_lim), \(x){
+          if (!x %in% names(df_id)) {
+            return(NULL)
+          }
+          df_ranges <- dplyr::distinct(na.omit(df_id[c(id, "item_name", x)]))
+          if (nrow(df_ranges) == 0) {
+            return(NULL)
+          }
+          ggplot2::geom_hline(data = df_ranges, ggplot2::aes(yintercept = .data[[x]]),lty = 3, linewidth = 0.5, col = "grey50")
+        })
       },
       if(isTRUE(show_all_participants) && isTRUE(show_all_hover_labels)) {
         suppressWarnings(
@@ -267,7 +285,7 @@ fig_timeseries <- function(
   # at the moment it is only implemented when figure uses scaled figures since 
   # it sets the limits for all facets, which is undesirable if the units differ per facet.
   # note that this still skews all figures
-  if(!scale){ 
+  if (!identical(yval, "value_scaled")) { 
     y_range <- NULL
     } else{
     y_range <- range(c(0, 1, df_id[[yval]]), na.rm = TRUE)
