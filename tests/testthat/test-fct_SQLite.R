@@ -532,3 +532,56 @@ describe("db_get_review can collect latest review data from a database", {
   })
 
 })
+
+describe("db_get_summary_data works", {
+  temp_path <- withr::local_tempfile(fileext = ".sqlite") 
+  con <- get_db_connection(temp_path)
+  
+  review_data <- data.frame(
+    subject_id = c("Test_name", "Test_name_2"),
+    event_name = "Visit 1",
+    item_group = "Test_group",
+    form_repeat = 1,
+    item_name = "Test_item",
+    edit_date_time = "2023-11-05 01:26:00",
+    timestamp = "2024-02-05 01:01:01",
+    reviewed = "No",
+    status = "new"
+  )
+  db_add_primary_key(con, "all_review_data", review_data)
+  db_add_log(con, "id")
+  
+  it("returns a summary database with the selected forms and subjects", {
+    summary_data <- review_data |> 
+      dplyr::select(c(subject_id, item_group, event_name, edit_date_time, status, reviewed))
+    
+    expect_equal(
+      db_get_summary_data(temp_path, forms_to_review = "Test_group", subjects_to_review = c("Test_name", "Test_name_2")),
+      summary_data
+    )
+    
+    expect_equal(
+      db_get_summary_data(temp_path, forms_to_review = "Test_group", subjects_to_review = "Test_name"),
+      subset(summary_data, subject_id == "Test_name")
+    )
+    
+    ## returns empty data frame if group is not existent
+    expect_equal(
+      db_get_summary_data(temp_path, forms_to_review = "Non-existing group", subjects_to_review = "Test_name"),
+      summary_data[0, ]
+    )
+    
+    ## return empty data frame if specified subjects are not found
+    expect_equal(
+      db_get_summary_data(temp_path, forms_to_review = "Test_group", subjects_to_review = "Non-existent subject"),
+      summary_data[0, ]
+    )
+    
+  })
+  it("errors with incorrect input", {
+    expect_error(db_get_summary_data(mtcars), "is\\.character")
+    expect_error(db_get_summary_data("non-existing-path"), "file\\.exists")
+    expect_error(db_get_summary_data(temp_path, forms_to_review = mtcars), "is\\.character")
+    expect_error(db_get_summary_data(temp_path, forms_to_review = "Test_item", subjects_to_review = mtcars), "is\\.character")
+  })
+})
