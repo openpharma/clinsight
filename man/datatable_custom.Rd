@@ -15,6 +15,7 @@ datatable_custom(
   allow_listing_download = NULL,
   export_label = NULL,
   escape = TRUE,
+  enable_text_wrap = FALSE,
   ...
 )
 }
@@ -61,7 +62,11 @@ needed.}
 \item{export_label}{Character string with the table export label. Only used
 for downloadable tables (if \code{allow_listing_download} is \code{TRUE}).}
 
-\item{escape}{Whether to escape HTML entities in the table. See \code{\link[DT:datatable]{DT::datatable()}}.}
+\item{escape}{Whether to escape HTML entities in the table. See
+\code{\link[DT:datatable]{DT::datatable()}}.}
+
+\item{enable_text_wrap}{Logical, whether to enable text wrapping in the
+table. If TRUE, pagination will be used and \code{deferRender} disabled.}
 
 \item{...}{Other optional arguments that will be passed to \code{\link[DT:datatable]{DT::datatable()}}.}
 }

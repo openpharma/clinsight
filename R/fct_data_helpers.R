@@ -502,13 +502,16 @@ add_missing_columns <- function(
 #'   needed.
 #' @param export_label Character string with the table export label. Only used
 #'   for downloadable tables (if `allow_listing_download` is `TRUE`).
-#' @param escape Whether to escape HTML entities in the table. See [DT::datatable()].
+#' @param escape Whether to escape HTML entities in the table. See
+#'   [DT::datatable()].
+#' @param enable_text_wrap Logical, whether to enable text wrapping in the
+#'   table. If TRUE, pagination will be used and `deferRender` disabled.
 #' @param ... Other optional arguments that will be passed to [DT::datatable()].
 #'
 #' @return A `DT::datatable` object.
 #' @keywords internal
 #'
-#' @examples 
+#' @examples
 #' \dontrun{
 #' datatable_custom(mtcars)
 #' }
@@ -523,6 +526,7 @@ datatable_custom <- function(
     allow_listing_download = NULL,
     export_label = NULL,
     escape = TRUE,
+    enable_text_wrap = FALSE,
     ...
     ){
   stopifnot(is.data.frame(data))
@@ -552,17 +556,20 @@ datatable_custom <- function(
   stopifnot(is.null(export_label) | is.character(export_label))
   
   default_opts <- list(
-    scrollY = 400,
+    scrollY = if (isFALSE(enable_text_wrap)) 400 else NULL,
     scrollX = TRUE,
-    scroller = TRUE,
-    deferRender = TRUE,
-    scrollCollapse = TRUE,
+    scroller = isFALSE(enable_text_wrap),
+    deferRender = isFALSE(enable_text_wrap),
+    scrollCollapse = isFALSE(enable_text_wrap),
     colReorder = list(
       enable = TRUE,
       realtime = FALSE,
       fixedColumnsLeft = 1
     )
   )
+  if (isTRUE(enable_text_wrap)) {
+    dom <- paste0(dom, "p")
+  }
   fixed_opts <- list(
     initComplete = DT::JS(
       "function() {",

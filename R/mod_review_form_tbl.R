@@ -237,11 +237,9 @@ mod_review_form_tbl_server <- function(
               targets = "subject_id",
               visible = isolate(show_all())
             )),
-          rowCallback = row_callback,
-          scroller = isFALSE(enable_text_wrap()),
-          deferRender = isFALSE(enable_text_wrap()),
-          scrollCollapse = isFALSE(enable_text_wrap())
-        )
+          rowCallback = row_callback
+        ),
+        enable_text_wrap = !isFALSE(enable_text_wrap())
         )
     })
     table_proxy <- DT::dataTableProxy("table")
