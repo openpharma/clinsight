@@ -1,36 +1,5 @@
 {
   "input": {
-    ".clientValue-default-plotlyCrosstalkOpts": {
-      "on": "plotly_click",
-      "persistent": false,
-      "dynamic": false,
-      "selectize": false,
-      "opacityDim": 0.2,
-      "selected": {
-        "opacity": 1
-      },
-      "debounce": 0,
-      "color": [
-
-      ]
-    },
-    "cf_adverse_events-show_all_data": false,
-    "cf_conc_procedures-show_all_data": false,
-    "cf_medical_history-show_all_data": false,
-    "cf_medication-show_all_data": false,
-    "common_data_tabs": "Adverse events",
-    "go_to_common_events": 0,
-    "go_to_study_data": 0,
-    "main_sidebar_1-navigate_forms_1-form_next": 0,
-    "main_sidebar_1-navigate_forms_1-form_previous": 0,
-    "main_sidebar_1-review_config_1-config_review": 0,
-    "main_sidebar_1-review_forms_1-add_comment": false,
-    "main_sidebar_1-review_forms_1-confirm_review_tabs": "show_checkbox",
-    "main_sidebar_1-review_forms_1-form_reviewed": false,
-    "main_sidebar_1-review_forms_1-review_comment": "",
-    "main_sidebar_1-review_forms_1-review_type": "subject",
-    "main_sidebar_1-review_forms_1-save_review": 0,
-    "main_sidebar_1-show_review_controls": "panel_controls",
     "main_sidebar_1-write_query-create_query": 1,
     "main_sidebar_1-write_query-query_add_input": 0,
     "main_sidebar_1-write_query-query_major": false,
