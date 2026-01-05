@@ -117,7 +117,6 @@ add_limits_to_table <- function(
   if (isFALSE(add_limits)) {
     return(data)
   }
-  #browser()
   data |> 
     dplyr::mutate(
       "{value_column}" := paste0(
@@ -126,8 +125,6 @@ add_limits_to_table <- function(
         "-", 
         ifelse(is.na(.data[[upper_lim_column]]), "?", .data[[upper_lim_column]]), 
         ")"
-        # "\n", 
-        # ifelse(is.na(.data[[significance]]), "Significance unknown", as.character(.data[[significance]]))
       )
     )
 }
