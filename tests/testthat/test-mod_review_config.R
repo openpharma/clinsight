@@ -10,7 +10,6 @@ describe(
         user_role = "Medical Monitor"
       ),
       app_data = appdata,
-      app_tables = list("tab1" = data.frame(subject_id = vars$subject_id)),
       sites = vars$Sites,
       subject_ids = "DEU_02_866"
     )
@@ -45,7 +44,6 @@ describe(
   {
     appdata <- get_appdata(clinsightful_data)
     vars <- get_meta_vars(appdata, metadata)
-    apptables <- list("tab1" = data.frame(subject_id = vars$subject_id))
     
     testargs <- list(
       r = reactiveValues(subject_id = "DEU_02_866",
@@ -53,10 +51,8 @@ describe(
                          user_roles = "Medical Monitor",
                          user_role = "Medical Monitor",
                          filtered_data = appdata, 
-                         filtered_tables = apptables, 
                          filtered_subjects = vars$subject_id),
       app_data = appdata,
-      app_tables = apptables,
       sites = vars$Sites,
       subject_ids = vars$subject_id
     )
@@ -163,13 +159,12 @@ describe(
             user_roles = "Medical Monitor",
             user_role = "Medical Monitor",
             filtered_data = appdata, 
-            filtered_tables = apptables, 
             filtered_subjects = vars$subject_id
           )
           
           mod_review_config_server(
             "test", r, app_data = appdata, 
-            app_tables = apptables, sites = vars$Sites, subject_ids = vars$subject_id
+            sites = vars$Sites, subject_ids = vars$subject_id
           )
           exportTestValues(filtered_data = r$filtered_data)
         }
@@ -234,7 +229,6 @@ describe(
           I expect that the user role is changed to 'Medical Monitor'.", {
             appdata <- get_appdata(clinsightful_data)
             vars <- get_meta_vars(appdata, metadata)
-            apptables <- list("tab1" = data.frame(subject_id = vars$subject_id))
             
             testargs <- list(
               r = reactiveValues(subject_id = "DEU_02_866",
@@ -243,10 +237,8 @@ describe(
                                                 "Medical Monitor"),
                                  user_role = "Administrator",
                                  filtered_data = appdata, 
-                                 filtered_tables = apptables, 
                                  filtered_subjects = vars$subject_id),
               app_data = appdata,
-              app_tables = apptables,
               sites = vars$Sites,
               subject_ids = vars$subject_id
             )

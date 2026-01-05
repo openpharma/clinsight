@@ -66,11 +66,20 @@ mod_study_forms_ui <- function(id, form, form_items){
                 value = FALSE,
                 right = TRUE
               )
+            ),
+            div(
+              id = ns("transformation_graph_container"),
+              shinyWidgets::radioGroupButtons(
+                inputId = ns("transformation_graph"),
+                label = "Transformation", 
+                choices = c("None" = "none"),
+                size = "sm"
+              )
+            ),
+            bslib::popover(
+              tags$a("Legend", tags$sup(icon("circle-info")), class =  "link"),
+              bslib::card_body(img(src="www/figure_legend.png"))
             )
-          ),
-          bslib::popover(
-            tags$a("Legend", tags$sup(icon("circle-info")), class =  "link"),
-            bslib::card_body(img(src="www/figure_legend.png"))
           ),
           conditionalPanel(
             condition = "input.switch_view === 'table'",
@@ -80,6 +89,22 @@ mod_study_forms_ui <- function(id, form, form_items){
               label = "Show all participants", 
               status = "primary",
               right = TRUE
+            ),
+            shinyWidgets::materialSwitch(
+              inputId = ns("show_limits"),
+              label = "Show limits", 
+              status = "primary",
+              right = TRUE,
+              value = FALSE
+            ),
+            div(
+              id = ns("transformation_table_container"),
+              shinyWidgets::radioGroupButtons(
+                inputId = ns("transformation_table"),
+                label = "Transformation", 
+                choices = c("None" = "none"),
+                size = "sm"
+              )
             ),
             shinyWidgets::materialSwitch(
               inputId = ns("enable_text_wrap"),
@@ -153,13 +178,20 @@ mod_study_forms_server <- function(
     
     data_types <- isolate(unique(form_data()$item_type))
     all_continuous <- (!is.null(data_types) && all(data_types == "continuous") )
-    if(!all_continuous){
-      shinyWidgets::updateRadioGroupButtons(
-        inputId = "switch_view",
-        selected = "table"
-      )
-      shinyjs::disable("switch_view")
-    }
+    
+    observeEvent(input$switch_view, {
+      if (!all_continuous) {
+        shinyWidgets::updateRadioGroupButtons(inputId = "switch_view", selected = "table")
+        shinyjs::disable("switch_view")
+      }
+    }, 
+    once = TRUE
+    )
+    observeEvent(input$show_limits, {
+      if (!all_continuous) shinyjs::hide("show_limits")
+    }, 
+    once = TRUE
+    )
     
     observeEvent(session$userData$review_type(), {
       golem::cat_dev(form, "| Updating tables to show '", 
@@ -210,6 +242,41 @@ mod_study_forms_server <- function(
     }) |> 
       debounce(1000)
     
+    cols <- c("item_scale", "use_unscaled_limits")
+    # Ensure no errors even if cols are missing, with FALSE as default:
+    scaling_data <- lapply(add_missing_columns(item_info, cols)[1, cols], isTRUE)
+    
+    observeEvent(form_data(), {
+      has_standardized <- any(!is.na(form_data()[["value_standardized"]]))
+      has_scaled <- isTRUE(scaling_data$item_scale) && any(!is.na(form_data()[["value_scaled"]]))
+      
+      data_types_table <- c("None" = "none", if (has_standardized) c("Standardized" = "standardized"))
+      data_types_graph <- c(data_types_table, if (has_scaled) c("Scaled" = "scaled"))
+      
+      if (length(data_types_table) == 1L) {
+        removeUI(selector = paste0("#", ns("transformation_table_container")))
+      } else {
+        shinyWidgets::updateRadioGroupButtons(
+          session = session,
+          inputId = "transformation_table",
+          choices = data_types_table
+        )
+      }
+      
+      if (length(data_types_graph) == 1L) {
+        removeUI(selector = paste0("#", ns("transformation_graph_container")))
+      } else {
+        shinyWidgets::updateRadioGroupButtons(
+          session = session,
+          inputId = "transformation_graph",
+          choices = data_types_graph,
+          selected = if (has_scaled) "scaled" else "none"
+        )
+      }
+    },
+    once = TRUE
+    )
+    
     mod_review_form_tbl_server(
       "review_form_tbl", 
       form = form,
@@ -217,28 +284,27 @@ mod_study_forms_server <- function(
       form_review_data = form_review_data, 
       active_subject = active_subject,
       form_items = form_items,
+      transformation = reactive(input$transformation_table %||% "none"),
       show_all = reactive(isTRUE(input$show_all) | identical(session$userData$review_type(), "form")), 
       enable_text_wrap = reactive(isTRUE(input$enable_text_wrap) & identical(session$userData$review_type(), "subject")),
+      show_limits = reactive(isTRUE(input$show_limits)),
       table_names = table_names,
       title = form
     )
-
-    scaling_data <- reactive({
-      cols <- c("item_scale", "use_unscaled_limits")
-      # Ensure no errors even if cols are missing, with FALSE as default:
-      lapply(add_missing_columns(item_info, cols)[1, cols], isTRUE)
-    })
     
     ############################### Outputs: ###################################
     dynamic_figure <- reactive({
-      req(nrow(fig_data()) > 0, scaling_data())
-      scale_yval <- scaling_data()$item_scale
-      yval <- ifelse(scale_yval, "value_scaled", "item_value")
+      req(nrow(fig_data()) > 0, scaling_data)
+      yval <- switch(
+        input$transformation_graph %||% "none", 
+        "scaled" = "value_scaled", 
+        "none" = "item_value", 
+        "standardized" = "value_standardized",
+        "item_value"
+      )
       validate(need(
         fig_data()[[yval]], 
-        ifelse(scale_yval, 
-               "No non-missing scaled data available. Check table view.", 
-               "No non-missing data available.")
+        "No non-missing data available. Check table view or non-transformed data."
       ))
       plotly_figure(
         data = fig_data(),
@@ -250,8 +316,9 @@ mod_study_forms_server <- function(
         height = ceiling(0.5*length(unique(fig_data()$item_name))*125+175),
         show_all_participants = isTRUE(input$show_all_participants),
         show_all_hover_labels = input$show_all_hover_labels,
-        scale = scale_yval,
-        use_unscaled_limits = scaling_data()$use_unscaled_limits
+        label = if (yval == "value_standardized") "label_standardized" else "text_label",
+        yval = yval,
+        use_unscaled_limits = scaling_data$use_unscaled_limits
       )
     })
     
@@ -267,8 +334,3 @@ mod_study_forms_server <- function(
   })
 }
 
-## To be copied in the UI
-# mod_study_forms_ui("study_form_element_1")
-
-## To be copied in the server
-# mod_study_forms_server("study_form_element_1")

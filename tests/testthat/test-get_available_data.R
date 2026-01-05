@@ -7,37 +7,34 @@ describe(
   "concomitant medication). For all other forms, the data points ", 
   "will be taken from event_name."), 
   {
-    appdata <- get_appdata(clinsightful_data)
-    vars <- get_meta_vars(appdata)
-    all_forms <- data.frame(
-      main_tab = c(rep("Common events", times = 4), rep("Study data", times = 5)),
-      form = c("Adverse events", "Conc. Procedures", "Medical History", "Medication", 
-               "CBC regular",  "Electrolytes", "Liver function", 
-               "Renal function", "Vital signs")
-    )
-    apptables <- lapply(
-      setNames(names(appdata), names(appdata)), \(x){
-        create_table(appdata[[x]], expected_columns = names(vars$items[[x]]))
-      })
+    appdata <- get_appdata(clinsightful_data, metadata)
     it("Creates a data frame with the correct columns per individual. ", {
-      testdata <- get_available_data(data = appdata, tables = apptables, 
-                                     all_forms = all_forms)
+      testdata <- get_available_data(data = appdata)
       expect_true(is.data.frame(testdata))
-      expect_equal(names(testdata), c("subject_id", "item_name", "form_repeat", 
-                                      "item_group", "event_name", "event_label"))
+      expect_equal(names(testdata), c("subject_id", "item_name", "form_repeat",
+                                      "item_group", "event_name", "event_label",
+                                      "event_date"))
+    })
+    it("summarizes study_fom data correctly", {
+      testdata <- get_available_data(data = appdata['Electrolytes'])
+      expect_equal(
+        unique(testdata$item_name),
+        levels(appdata$Electrolytes$item_name)
+      )
+      expect_equal(
+        unique(testdata$subject_id),
+        unique(appdata$Electrolytes$subject_id)
+      )
+      expect_equal(names(testdata), c("subject_id", "item_name", "form_repeat",
+                                      "item_group", "event_name", "event_label",
+                                      "event_date"))
     })
     it("Creates the expected data frame with given random appdata input", {
-      expect_snapshot(
-        get_available_data(data = appdata, tables = apptables, all_forms = all_forms)
-      )
+      expect_snapshot(dplyr::as_tibble(get_available_data(data = appdata)))
     })
     it("Adds a form_repeat number to item_name if duplicates occur within an 
        individual, to ensure item names can be uniquely identified", {
-      df <- get_available_data(
-        data = list(),
-        tables = apptables["Adverse events"],
-        all_forms = all_forms
-        )
+      df <- get_available_data(data = appdata['Adverse events'])
       # ID BEL_08_885 has two adverse events named 'Seizure'; these should show 
       # up with the correct form_repeat number in the item_name
       expect_equal(
@@ -48,9 +45,7 @@ describe(
     it("can change the name of the form_repeat number that is written to the item_name 
        if duplicates occur", {
          df <- get_available_data(
-           data = list(),
-           tables = apptables["Adverse events"],
-           all_forms = all_forms,
+           data = appdata['Adverse events'],
            form_repeat_name = "custom_name"
          )
          expect_equal(
@@ -62,36 +57,32 @@ describe(
        independent of the form being in common forms or not.", 
        {
          common_form_outcome <- get_available_data(
-           data = appdata['Adverse events'],
-           tables = apptables["Adverse events"],
-           all_forms = all_forms
+           data = appdata['Adverse events']
          )
          
          move_form <- data.frame("main_tab" = "Study data", "form" = "Adverse events")
          study_form_outcome <- get_available_data(
-           data = appdata['Adverse events'],
-           tables = apptables["Adverse events"],
-           all_forms = move_form
+           data = appdata['Adverse events']
          )
         expect_equal(common_form_outcome, study_form_outcome)
        }
     )
     it("creates a event-based output if a 'Name' column does not exist in the data, 
        even if the data is in the common_forms tab", {
-         study_form_outcome <-  get_available_data(
-           data = appdata['Electrolytes'],
-           tables = apptables["Electrolytes"],
-           all_forms = all_forms
-         )
+         study_form_outcome <-  get_available_data(appdata['Electrolytes'])
          
          move_form <- data.frame("main_tab" = "Common forms", "form" = "Electrolytes")
-         common_form_outcome <- get_available_data(
-           data = appdata['Electrolytes'],
-           tables = apptables["Electrolytes"],
-           all_forms = move_form
-         )
+         common_form_outcome <- get_available_data(appdata['Electrolytes'])
          expect_equal(common_form_outcome, study_form_outcome)
        })
+    it("does not error if required columns are missing", {
+      appdata[['test-data']] <- data.frame()
+      expect_no_error(
+        outcome_1 <-  get_available_data(appdata[c('test-data', 'Electrolytes')])
+      )
+      outcome_2 <-  get_available_data(appdata[c('Electrolytes')]) 
+      expect_equal(outcome_1, outcome_2)
+    })
     it("Scenario 3 - Given ... and some forms defined in the metadata but 
     completely missing in the data or tables,
        I expect that I still get a table with available data", {

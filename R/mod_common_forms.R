@@ -83,9 +83,8 @@ mod_common_forms_ui <- function(id, form){
 #' @param table_names An optional character vector. If provided, will be used
 #'   within [datatable_custom()], to improve the column names in the final
 #'   interactive tables.
-#' @param timeline_data A reactive with a data frame containing the timeline
-#'   data. Used to create the timeline figure. Created with
-#'   [get_timeline_data()].
+#' @param timeline_data A data frame containing the timeline data. Used to
+#'   create the timeline figure. Created with [get_timeline_data()].
 #'
 #'
 #' @seealso [mod_common_forms_ui()], [mod_timeline_ui()],
@@ -110,7 +109,7 @@ mod_common_forms_server <- function(
   stopifnot(is.reactive(active_subject))
   stopifnot(is.character(id_item))
   stopifnot(is.null(table_names) || is.character(table_names))
-  stopifnot(is.reactive(timeline_data))
+  stopifnot(is.data.frame(timeline_data))
   names(form_items) <- names(form_items) %||% form_items
   
   moduleServer( id, function(input, output, session){

@@ -331,34 +331,73 @@ get_appdata <-  function(
           TRUE   ~ significance
         ),
         out_of_lim = factor(out_of_lim), # for vital signs figures
-        significance = factor(significance, levels = names(col_palette)),
-        text_label = paste0(
-          "<b>", subject_id, "</b>",
-          "\n",
-          event_date,
-          "\n",
-          event_name, " (day ",
-          day, ")",
-          "\nValue: ",
-          round(item_value, 2),
-          " ",
-          item_unit, 
-          "\n",
-          paste0(
-            "Limits: ", 
-            ifelse(is.na(lower_lim), "?", lower_lim), 
-            "-", 
-            ifelse(is.na(upper_lim), "?", upper_lim), 
-            "\n", 
-            ifelse(is.na(significance), "Significance unknown", as.character(significance))
-          )
-        )
+        significance = factor(significance, levels = names(col_palette))
       ) |> 
-      dplyr::ungroup() 
+      dplyr::ungroup() |> 
+      add_text_label()
+    if ("value_standardized" %in% names(df) && !all(is.na(df[["value_standardized"]]))) {
+      df <- df |> 
+        add_text_label(
+          label_name = "label_standardized",
+          value = "value_standardized", 
+          item_unit = "unit_standardized", 
+          lower_lim = "lower_lim_standardized",
+          upper_lim = "upper_lim_standardized"
+        )
+    }
     class(df) <- unique(c("continuous", class(x)))
     df
   }) 
   appdata
 }
 
+
+#' Add text label
+#' 
+#' Helper function for [get_appdata()].
+#'
+#' @param data 
+#' @keywords internal
+add_text_label <- function(
+    data, 
+    label_name = "text_label",
+    value = "item_value",
+    item_unit = "item_unit",
+    lower_lim = "lower_lim",
+    upper_lim = "upper_lim",
+    subject_id = "subject_id",
+    event_date = "event_date", 
+    event_name = "event_name",
+    day = "day",
+    significance = "significance"
+    ) {
+  stopifnot(is.data.frame(data))
+  data |> 
+    add_missing_columns(
+      c(value, item_unit, lower_lim, upper_lim, event_date, event_name, day, significance)
+    ) |> 
+    dplyr::mutate(
+       "{label_name}" := paste0(
+         "<b>", .data[[subject_id]], "</b>",
+         "\n",
+         .data[[event_date]],
+         "\n",
+         .data[[event_name]], " (day ",
+         .data[[day]], ")",
+         "\nValue: ",
+         round(.data[[value]], 2),
+         " ",
+         .data[[item_unit]], 
+         "\n",
+         paste0(
+           "Limits: ", 
+           ifelse(is.na(.data[[lower_lim]]), "?", .data[[lower_lim]]), 
+           "-", 
+           ifelse(is.na(.data[[upper_lim]]), "?", .data[[upper_lim]]), 
+           "\n", 
+           ifelse(is.na(.data[[significance]]), "Significance unknown", as.character(.data[[significance]]))
+         )
+       )
+    )
+}
 
