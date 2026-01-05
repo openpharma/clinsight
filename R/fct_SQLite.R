@@ -523,6 +523,8 @@ db_get_version <- function(db_path) {
 #' @param db_path Character vector. Needs to be a valid path to a database.
 #' @param forms_to_review A character vector with all forms that need to be
 #'   reviewed.
+#' @param subjects_to_review A character vector with the subject ids that should
+#'   be selected.
 #'
 #' @returns A data frame with summary data
 #'
@@ -531,19 +533,19 @@ db_get_version <- function(db_path) {
 db_get_summary_data <- function(
     db_path,
     forms_to_review,
-    filtered_subjects
+    subjects_to_review
 ){
   stopifnot(is.character(db_path))
   stopifnot(file.exists(db_path))
   stopifnot(is.character(forms_to_review))
-  stopifnot(is.character(filtered_subjects))
+  stopifnot(is.character(subjects_to_review))
   
   con <- get_db_connection(db_path)
   
   DBI::dbWriteTable(
     con,
     name = "temp_subjects",
-    value = data.frame(subject_id = filtered_subjects),
+    value = data.frame(subject_id = subjects_to_review),
     overwrite = TRUE,
     temporary = TRUE
   )

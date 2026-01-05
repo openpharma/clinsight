@@ -134,7 +134,7 @@ app_server <- function(
       db_get_summary_data(
         user_db, 
         forms_to_review = with(forms_to_review_data, item_group[review_required]), 
-        filtered_subjects = r$filtered_subjects
+        subjects_to_review = r$filtered_subjects
       ) |> 
         summarize_review_data() |> 
         dplyr::select(subject_id, "Form" = item_group, "Event" = event_name,
