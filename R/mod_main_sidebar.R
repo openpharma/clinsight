@@ -63,8 +63,6 @@ mod_main_sidebar_ui <- function(id){
 #' @param app_data List of data frames. Contains the application data, with data
 #'   of each form stored in a data frame. Required to set the review
 #'   configuration in [mod_review_config_server()].
-#' @param app_tables List of data frames with the app data in wide table format.
-#'   Required to set the review configuration in [mod_review_config_server()]
 #' @param app_vars A list with common variables found in the data and metadata.
 #'   Required to set the review configuration in [mod_review_config_server()].
 #' @param forms_to_review A reactive value containing a character vector with
@@ -83,7 +81,6 @@ mod_main_sidebar_server <- function(
     r, 
     navinfo,
     app_data,
-    app_tables,
     app_vars,
     db_path, 
     forms_to_review,
@@ -139,7 +136,6 @@ mod_main_sidebar_server <- function(
       "review_config_1", 
       r = r, 
       app_data = app_data,
-      app_tables = app_tables, 
       sites = app_vars$Sites, 
       subject_ids = app_vars$subject_id
     )

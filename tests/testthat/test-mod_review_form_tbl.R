@@ -56,6 +56,7 @@ describe(
           form_items = "",
           active_subject = reactiveVal("DEU_02_482"),
           show_all = reactiveVal(FALSE),
+          show_limits = reactiveVal(FALSE),
           table_names = NULL,
           title = NULL
         ) 
@@ -161,6 +162,50 @@ describe(
         )
       }
     )
+    it(
+      "Scenario 3 - TOggle units in table. Given a test [CBC regular] data set,
+        and the active subject_id set to ID 'DEU_02_482',
+        and [ show_limits] set to TRUE,
+        I expect that I can see the limits of the variables in the table,
+        and that the output table is a valid JSON object.",
+      {
+        app_data <- get_appdata(clinsightful_data)
+        cbc_data <- app_data[["CBC regular"]]
+        cbc_rev_data <- get_review_data(cbc_data) |> 
+          dplyr::mutate(id = dplyr::row_number(), reviewed = "No", status = "new")
+        testargs <- list(
+          form = "CBC regular",
+          form_data = reactiveVal(cbc_data),
+          form_review_data = reactiveVal(cbc_rev_data),
+          form_items = "",
+          active_subject = reactiveVal("DEU_02_482"),
+          show_all = reactiveVal(FALSE),
+          show_limits = reactiveVal(FALSE),
+          table_names = NULL,
+          title = NULL
+        ) 
+        
+        testServer(mod_review_form_tbl_server, args = testargs, {
+          ns <- session$ns
+          
+          session$userData$pending_form_review_status <- reactiveValues()
+          session$userData$pending_review_records <- reactiveValues()
+          session$userData$review_type <- reactiveVal("subject")
+          session$flushReact()
+          
+          expect_true(inherits(output[["table"]], "json"))
+          expect_equal(merged_form_data()[["Neutrophils"]][1], "<b>1.18*</b> 10^9/L")
+          expect_equal(merged_form_data()[["Lymphocytes"]][1], "<b>0.8*</b> G/L")
+          
+          show_limits(TRUE)
+          session$flushReact()
+          expect_equal(merged_form_data()[["Neutrophils"]][1], "<b>1.18*</b> (2-7.5) 10^9/L")
+          expect_equal(merged_form_data()[["Lymphocytes"]][1], "<b>0.8*</b> (1.5-4) G/L")
+        }
+        )
+      }
+    )
+    
   }
 )
 

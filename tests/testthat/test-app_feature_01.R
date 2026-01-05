@@ -79,7 +79,7 @@ describe(
          expect_equal(app$get_value(input = "main_tabs"), "Common events")
          expect_equal(app$get_text("#navigate_participants_1-subject_info .value-box-title"), "BEL_04_772")
          
-         app$set_inputs(main_tabs = "Study data")
+         app$click("go_to_study_data")
          app$wait_for_idle()
          output_to_exclude <- c(
            "visit_figure", 

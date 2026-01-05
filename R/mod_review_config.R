@@ -31,12 +31,11 @@ mod_review_config_ui <- function(id){
 #' @param id Character string, used to connect the module UI with the module Server. 
 #' @param r Common reactiveValues. Used to pass on filtered data and filtered subjects 
 #' (based on selected sites/regions) to the main server. Expects to contain 
-#' `r$filtered_data`, `r$filtered_tables`, `r$filtered_subjects` and `r$subject_id` (the '
+#' `r$filtered_data`, `r$filtered_subjects` and `r$subject_id` (the '
 #' active/current subject id'). The latter is needed because the `r$subject_id` 
 #' needs to be set to the first ID in the filtered selection to prevent a 
 #' non-selected subject_id to be active. 
 #' @param app_data List of data frames with the app data.
-#' @param app_tables List of data frames with the app data in wide table format.
 #' @param sites A data frame with columns "site_code", with all unique site 
 #' identifiers, and "region", the region of the study site.
 #' @param subject_ids Character vector containing all subject ids. Used for 
@@ -49,7 +48,6 @@ mod_review_config_server <- function(
     id, 
     r, 
     app_data,
-    app_tables,
     sites,
     subject_ids
 ){
@@ -156,7 +154,7 @@ mod_review_config_server <- function(
       
       golem::cat_dev("Selected sites:", modvars$site_selection, "\n")
       r <- filter_data(r, sites = input$site_selection, subject_ids = subject_ids, 
-                       appdata = app_data, apptables = app_tables)
+                       appdata = app_data)
       r$user_role <- input$active_role
       
       shiny::showModal(

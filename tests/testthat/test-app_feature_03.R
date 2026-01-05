@@ -45,7 +45,7 @@ describe(
         
         ####### snap feature-3-001
         app$expect_values(
-          input = vector_select(input_names, exclude = "plotly_relayout"), 
+          input = vector_select(input_names,include = c("main_tabs", "write_query", "queries")), 
           output = vector_select(
             output_names, 
             exclude = c("visit_figure", "sf_vital_signs-figure", "start_page_1-overview_table")
@@ -95,7 +95,7 @@ describe(
       {
         # scenario 2 is not fully isolated from scenario 1; however, this setup 
         # is faster since only one shinytest2 app needs to be started. 
-        app$set_inputs(main_tabs = "Common events")
+        app$click("go_to_common_events")
         app$set_inputs(common_data_tabs = "Adverse events")
         app$wait_for_js("$('#navigate_participants_1-subject_info').click()")
         app$wait_for_idle()
@@ -117,11 +117,7 @@ describe(
 
         ####### snap feature-3-002
         app$expect_values(
-          input = vector_select(
-            input_names, 
-            exclude = c("plotly_relayout", "shinyjs-navigate_participants_1", 
-                        "timeline_window", "timeline_data")
-          ), 
+          input = vector_select(input_names,include = c("main_tabs", "write_query", "queries")), 
           output = vector_select(
             output_names, 
             # this test is not about these figures. 

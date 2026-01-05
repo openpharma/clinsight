@@ -10,6 +10,9 @@
 - Implemented a `line-clamp` on table column names that wrap to more than 6 lines
 - Added better control of which role privileges - `allowed_to_review` and `allowed_to_query` can now be set per role in the `config.yml` file.
 - `ClinSight` now also looks for a `clinsight-config.yml` file in the current working directory and uses it as custom configuration.
+- Added a toggle to switch data transformation. In addition, added a way to show data transformed to standard values so that all are shown in the same unit (#110, #261).
+- Figures now also show patient-specific lab limits in the figures when data is not transformed (if available).
+- Added additional navigation buttons next to the tabs to easier navigate between common forms and study forms (#255).
 
 ## Bug fixes 
 
@@ -18,6 +21,7 @@
 ## Developer notes
 
 - Updated role of long-term contributors to co-authors in Description field (#246).
+- Refactored some functions so that it is no longer needed to create an `apptables` object when starting the applcation, improving start up efficiency (#251).
 
 # clinsight 0.3.0
 

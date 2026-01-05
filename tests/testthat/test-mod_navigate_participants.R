@@ -1,16 +1,10 @@
 describe("mod_navigate_participants. Feature 1 | Load application module in isolation.", {
     testargs <- list(
       r = reactiveValues(
-        filtered_tables = list(
-          General = data.frame(
-            subject_id = c("Subj1", "Subj2", "Subj3"),
-            subject_status = "",
-            status_label = c("lab1", "lab2", "lab3")
-          )
-        ),
         subject_id = "",
         filtered_subjects = c("Subj1", "Subj2", "Subj3")
-      )
+      ),
+      static_overview_data = data.frame()
     ) 
     it("Can load the module UI, with functioning internal parameters.", {
       ui <- mod_navigate_participants_ui(id = "test")
@@ -40,18 +34,17 @@ describe(
     selected patient. After pressing save, the patient should be selected as 
     active patient in the app.", 
   {
+    static_overview_data <- data.frame(
+      subject_id = c("Subj1", "Subj2", "Subj3"),
+      subject_status = "",
+      status_label = c("lab1", "lab2", "lab3")
+    )
     testargs <- list(
       r = reactiveValues(
-        filtered_tables = list(
-          General = data.frame(
-            subject_id = c("Subj1", "Subj2", "Subj3"),
-            subject_status = "",
-            status_label = c("lab1", "lab2", "lab3")
-          )
-        ),
         subject_id = "",
         filtered_subjects = c("Subj1", "Subj2", "Subj3")
-      )
+      ),
+      static_overview_data = static_overview_data
     ) 
     it(
       "Scenario 1 - Given a table with general information in reactiveValues [r], 
@@ -157,17 +150,15 @@ describe(
           mod_navigate_participants_server(
             id = "test", 
             r = reactiveValues(
-              filtered_tables = list(
-                General = data.frame(
-                  subject_id = c("Subj1", "Subj2", "Subj3"),
-                  subject_status = "",
-                  status_label = c("lab1", "lab2", "lab3"), 
-                  Sex = c("Male", "Female", "Female"),
-                  Age = c(70, 16, 29)
-                )
-              ),
               subject_id = "Subj1",
               filtered_subjects = c("Subj1", "Subj2", "Subj3")
+            ),
+            static_overview_data = data.frame(
+              subject_id = c("Subj1", "Subj2", "Subj3"),
+              subject_status = "",
+              status_label = c("lab1", "lab2", "lab3"),
+              Sex = c("Male", "Female", "Female"),
+              Age = c(70, 16, 29)
             )
           )
         }
@@ -179,7 +170,6 @@ describe(
           height = 670
         )
         withr::defer(app$stop())
-        
         app$expect_values()
         
         app$wait_for_js("$('#test-subject_info').click()")
