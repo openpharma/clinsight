@@ -267,30 +267,31 @@ app_server <- function(
   }) |>
     unlist(recursive = FALSE)
   
-  
   bslib::nav_insert(
     id = "common_data_tabs",
     bslib::nav_item(
-      class = "ms-auto d-flex align-items-center",
+      class = "ms-auto",
       shinyWidgets::switchInput(
         inputId = "cf_toggle_timeline",
         label = icon("timeline"),
         value = TRUE,
         inline = TRUE
-      )
+      ) |> 
+        htmltools::tagAppendAttributes(class = "mb-0")
     )
   )
   
   bslib::nav_insert(
     id = "study_data_tabs",
     bslib::nav_item(
-      class = "ms-auto d-flex align-items-center",
+      class = "ms-auto",
       shinyWidgets::switchInput(
         inputId = "sf_toggle_timeline",
         label = icon("timeline"),
         value = FALSE,
         inline = TRUE
-      )
+      ) |> 
+        htmltools::tagAppendAttributes(class = "mb-0")
     )
   )
   
