@@ -67,12 +67,10 @@ mod_query_follow_up_server <- function(id, r, selected_query, db_path){
       }
     })
     
-    observeEvent(r$user_role, {
-      shinyjs::toggleElement(
-        "resolved", 
-        condition = get_roles_from_config()[r$user_role] %in% get_golem_config("allow_to_query")
-      )
+    allowed_to_resolve <- reactive({
+      get_roles_from_config()[r$user_role] %in% get_golem_config("allow_to_query")
     })
+    observe(shinyjs::toggleElement("resolved", condition = allowed_to_resolve()))
     
     query_save_error <- reactiveVal(FALSE)
     observeEvent(input$query_add_follow_up, {
@@ -91,8 +89,8 @@ mod_query_follow_up_server <- function(id, r, selected_query, db_path){
           "n"             = n + 1,
           "reviewer"      = paste0(r$user_name," (", r$user_role, ")"),
           "query"         = input$query_follow_up_text,
-          "resolved"      = ifelse(input$resolved, "Yes", "No"),
-          `resolved_date` = if(input$resolved) ts else NA_character_,
+          "resolved"      = if (input$resolved && isTRUE(allowed_to_resolve())) "Yes" else "No",
+          `resolved_date` = if (input$resolved && isTRUE(allowed_to_resolve())) ts else NA_character_,
           "edit_reason"   = NA_character_
         )
       golem::print_dev(updated_query)
