@@ -76,6 +76,7 @@ reference:
 - contents:
   - get_db_connection
   - db_create
+  - db_upgrade
   - db_update
   - db_get_review
   - db_get_query
