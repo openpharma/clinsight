@@ -39,6 +39,26 @@ get_review_data <- function(
   all_review_data
 }
 
+delete_review_data <- function(
+    review_df,
+    latest_review_data,
+    key_cols = key_columns
+){
+  stopifnot(is.data.frame(latest_review_data), nrow(latest_review_data) > 0 )
+  stopifnot(is.data.frame(review_df), nrow(review_df) > 0 )
+  stopifnot(is.character(key_cols))
+
+  deleted_data <- dplyr::anti_join(review_df, latest_review_data, by = key_cols)
+  n_deleted <- nrow(deleted_data)
+  if(n_deleted != 0){
+    warning(n_deleted, " items were not found in the updated dataset")
+    cat("Missing items in the dataset:\n")
+    print(deleted_data)
+  }
+
+  deleted_data
+}
+
 #' Update review data
 #'
 #'
@@ -66,20 +86,6 @@ update_review_data <- function(
   stopifnot(is.data.frame(review_df), nrow(review_df) > 0 )
   stopifnot(is.character(key_cols))
   stopifnot(is.character(edit_time_var))
-  
-  deleted_data <- dplyr::anti_join(review_df, latest_review_data, by = key_cols)
-  n_deleted <- nrow(deleted_data)
-  if(n_deleted != 0){
-    warning(n_deleted, " items were not found in the updated dataset")
-    cat("Missing items in the dataset:\n")
-    print(deleted_data)
-  }
-  
-  # If data is reviewed and later in an update deleted, then it is okay if the 
-  # deletion does not show up in the updated data set, and the deleted data point shows 
-  # up as reviewed. One reason why this is okay is because missing data is checked 
-  # by the data managers. 
-  # a more practical reason is that missing data does not show up in the application.
   
   # when do we have the same edit_date_time but different timestamps? 
   # For example:

@@ -262,20 +262,6 @@ db_upgrade <- function(db_path){
   db_upgrade(db_path)
 }
 
-db_delete <- function(con, data, key_cols = "id") {
-  dplyr::copy_to(con, data, "row_deletes")
-  rs <- DBI::dbSendStatement(con, paste(
-    "DELETE FROM",
-    "all_review_data",
-    "WHERE EXISTS (",
-    "SELECT 1",
-    "FROM row_deletes",
-    "WHERE", paste(sprintf("row_deletes.%1$s = all_review_data.%1$s", key_cols), collapse = " AND "),
-    ")"
-  ))
-  DBI::dbClearResult(rs)
-}
-
 #' Update app database
 #'
 #' Compares the latest edit date-times in the review database and in the data
@@ -298,6 +284,7 @@ db_update <- function(
     edit_time_var = "edit_date_time"
 ){
   stopifnot(file.exists(db_path))
+  stopifnot(identical(db_version, db_get_version(db_path)))
   con <- get_db_connection(db_path)
   data_synch_time <- attr(data, "synch_time") %||% ""
   
@@ -316,6 +303,14 @@ db_update <- function(
   # Continue in the case data_synch_time is missing and if data_synch_time is 
   # more recent than db_synch_time
   review_data <- DBI::dbGetQuery(con, "SELECT * FROM all_review_data")
+  cat("Check for deleted rows\n")
+  deleted_review_data <- delete_review_data(
+    review_df = review_data,
+    latest_review_data = data,
+    key_cols = key_cols
+  )
+  cat("logging deleted review data to database...\n")
+  db_delete(con, deleted_review_data)
   cat("Start adding new rows to database\n")
   updated_review_data <- update_review_data(
     review_df = review_data,
@@ -333,6 +328,20 @@ db_update <- function(
     overwrite = TRUE
   )
   cat("Finished updating review data\n")
+}
+
+db_delete <- function(con, data, key_cols = "id") {
+  dplyr::copy_to(con, data, "row_deletes")
+  rs <- DBI::dbSendStatement(con, paste(
+    "DELETE FROM",
+    "all_review_data",
+    "WHERE EXISTS (",
+    "SELECT 1",
+    "FROM row_deletes",
+    "WHERE", paste(sprintf("row_deletes.%1$s = all_review_data.%1$s", key_cols), collapse = " AND "),
+    ")"
+  ))
+  DBI::dbClearResult(rs)
 }
 
 #' UPSERT to all_review_data
