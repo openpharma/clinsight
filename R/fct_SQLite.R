@@ -158,7 +158,7 @@ db_add_primary_key <- function(con, name, value, keys = NULL) {
 
 #' Add Logging Table
 #'
-#' Both creates the logging table and the trigger to update it for
+#' Creates the logging table and the triggers on updates and deletions for
 #' all_review_data.
 #'
 #' @param con A DBI Connection to the SQLite DB
@@ -221,6 +221,13 @@ db_add_log <- function(con, key_cols = c("id", key_columns)) {
   create_delete_log_trigger(con)
 }
 
+#' Create Delete Logging Trigger
+#' 
+#' Logs record deletions on all_review_data into all_review_data_log.
+#' 
+#' @param con A DBI Connection to the SQLite DB
+#' 
+#' @keywords internal
 create_delete_log_trigger <- function(con) {
   rs <- DBI::dbSendStatement(con, paste(
     "CREATE TRIGGER all_review_data_delete_log_trigger",
@@ -244,6 +251,17 @@ create_delete_log_trigger <- function(con) {
   DBI::dbClearResult(rs)
 }
 
+#' Upgrade app database
+#' 
+#' Helper function to upgrade the database when migrating to a newer version of
+#' ClinSight that impacts the database.
+#' 
+#' @param db_path Character vector. Path to the database
+#' 
+#' @return A character vector indicating the version the DB was upgraded to. Run
+#'   for side effects on the database.
+#' 
+#' @export
 db_upgrade <- function(db_path){
   stopifnot(file.exists(db_path))
 
@@ -330,6 +348,20 @@ db_update <- function(
   cat("Finished updating review data\n")
 }
 
+#' DELETE FROM all_review_data
+#' 
+#' Performs a DELETE FROM on all_review_data based on a data set containing the
+#' records to delete.
+#' 
+#' @param con A DBI Connection to the SQLite DB
+#' @param data A data frame containing the records to DELETE FROM
+#'   all_review_data
+#' @param key_cols A character vectory specifying which columns define a unique
+#'   index for a row. Defaults to "id"
+#' 
+#' @return invisible returns TRUE. Is run for its side effects on the DB.
+#' 
+#' @keywords internal
 db_delete <- function(con, data, key_cols = "id") {
   dplyr::copy_to(con, data, "row_deletes")
   rs <- DBI::dbSendStatement(con, paste(
@@ -355,7 +387,7 @@ db_delete <- function(con, data, key_cols = "id") {
 #' @param key_cols A character vector specifying which columns define a unique
 #'   index for a row. Defaults to `ClinSight` [key_columns()].
 #'
-#' @return invisibly returns TRUE. Is run for it's side effects on the DB.
+#' @return invisibly returns TRUE. Is run for its side effects on the DB.
 #'
 #' @keywords internal
 db_upsert <- function(con, data, key_cols = key_columns) {

@@ -15,7 +15,7 @@ db_upsert(con, data, key_cols = key_columns)
 index for a row. Defaults to \code{ClinSight} \code{\link[=key_columns]{key_columns()}}.}
 }
 \value{
-invisibly returns TRUE. Is run for it's side effects on the DB.
+invisibly returns TRUE. Is run for its side effects on the DB.
 }
 \description{
 Performs an UPSERT on all_review_data. New records will be appended to the

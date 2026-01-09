@@ -39,6 +39,20 @@ get_review_data <- function(
   all_review_data
 }
 
+#' Delete review data
+#' 
+#' Identifies the records no longer in the dataset to be removed from
+#' all_review_data.
+#' 
+#' @param review_df Data frame containing old review data that need to be
+#'   updated.
+#' @param latest_review_data Data frame containing latest review data.
+#' @param key_cols A character vector containing the common key variables.
+#'   Defaults to `ClinSight` [key_columns()].
+#'
+#' @return A data frame containing only the rows to remove from the review data.
+#' 
+#' @keywords internal
 delete_review_data <- function(
     review_df,
     latest_review_data,

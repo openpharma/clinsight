@@ -14,7 +14,7 @@ not be updated in a table. If unset, defaults to 'id' and the
 package-defined \code{\link[=key_columns]{key_columns()}}.}
 }
 \description{
-Both creates the logging table and the trigger to update it for
+Creates the logging table and the triggers on updates and deletions for
 all_review_data.
 }
 \keyword{internal}
