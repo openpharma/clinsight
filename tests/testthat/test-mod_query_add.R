@@ -68,6 +68,7 @@ describe(
           r = reactiveValues(
             query_data = query_df,
             user_name = "Admin test",
+            user_role = "Medical Monitor",
             subject_id = "ID1"
           ),
           active_form = reactiveVal(),

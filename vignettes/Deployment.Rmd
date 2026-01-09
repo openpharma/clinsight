@@ -211,8 +211,9 @@ This manifest includes packages not included in the `minimal` profile needed for
 
 ### Customizing configuration
 
-If the profiles above are insufficient, you can also provide your own configuration file with fully customized settings with the steps described below.
+If the profiles above are insufficient, you can also provide your own configuration file with fully customized settings.
+`ClinSight` will check the working directory for a file named `clinsight-config.yml` and will use this if it exists as configuration file instead of the default configuration.
+The function `create_clinsight_config()` can be used to create such a customizable config file, containing a copy of the `clinsight` default configuration.
 
-To do so, first create a configuration template.
-The function `create_clinsight_config()` can be used to create a copy of the current `clinsight` configuration file in the current working directory.
-To use this configuration file with `clinsight`, the environment variable named "CONFIG_PATH" needs to be set by using a command similar to the following: `Sys.setenv("CONFIG_PATH" = "PATH_TO_CONFIG/clinsight_config.yml")`, where `PATH_TO_CONFIG` is the path to the folder in which the configuration file is located.
+If you want to change the name of this file, or place it somewhere else, you must provide the path to the custom config file in the environment variable "CONFIG_PATH".
+For example: `Sys.setenv("CONFIG_PATH" = "PATH_TO_CONFIG/clinsight-config.yml")`, where `PATH_TO_CONFIG` is the path to the folder in which the configuration file is located.

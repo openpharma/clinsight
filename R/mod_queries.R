@@ -150,9 +150,6 @@ mod_queries_server <- function(id, r, navinfo, all_forms, db_path, table_names){
         table_title <- "All queries"
       }
       
-      # determine DT dom / exts / opts
-      
-              
       datatable_custom(
         initial_queries()[query_cols], 
         table_names, 
