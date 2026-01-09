@@ -262,6 +262,20 @@ db_upgrade <- function(db_path){
   db_upgrade(db_path)
 }
 
+db_delete <- function(con, data, key_cols = "id") {
+  dplyr::copy_to(con, data, "row_deletes")
+  rs <- DBI::dbSendStatement(con, paste(
+    "DELETE FROM",
+    "all_review_data",
+    "WHERE EXISTS (",
+    "SELECT 1",
+    "FROM row_deletes",
+    "WHERE", paste(sprintf("row_deletes.%1$s = all_review_data.%1$s", key_cols), collapse = " AND "),
+    ")"
+  ))
+  DBI::dbClearResult(rs)
+}
+
 #' Update app database
 #'
 #' Compares the latest edit date-times in the review database and in the data
