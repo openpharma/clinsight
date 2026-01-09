@@ -220,6 +220,29 @@ db_add_log <- function(con, key_cols = c("id", key_columns)) {
   DBI::dbClearResult(rs)
 }
 
+create_delete_log_trigger <- function(con) {
+  rs <- DBI::dbSendStatement(con, paste(
+    "CREATE TRIGGER all_review_data_delete_log_trigger",
+    "AFTER DELETE ON all_review_data FOR EACH ROW",
+    "BEGIN",
+      "INSERT INTO all_review_data_log (",
+        "review_id, edit_date_time, reviewed, comment, reviewer, timestamp, status, dml_type",
+      ")",
+      "VALUES(",
+        "OLD.id,",
+        "OLD.edit_date_time,",
+        "OLD.reviewed,",
+        "OLD.comment,",
+        "OLD.reviewer,",
+        "OLD.timestamp,",
+        "OLD.status,",
+        "'DELETE'",
+      ");",
+    "END"
+  ))
+  DBI::dbClearResult(rs)
+}
+
 #' Update app database
 #'
 #' Compares the latest edit date-times in the review database and in the data
