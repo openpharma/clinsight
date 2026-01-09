@@ -85,7 +85,7 @@ describe(
             summary = reactive({
               data.frame(
                 "subject_id" = "Subj01",
-                "Form" = "Adverse events",
+                "item_group" = "Adverse events",
                 reviewed = c("No", "Yes")
               )
             })
@@ -153,7 +153,7 @@ describe(
             summary = reactive({
               data.frame(
                 "subject_id" = "Subj01",
-                "Form" = "Adverse events",
+                "item_group" = "Adverse events",
                 reviewed = c("No", "Yes")
               )
             })
