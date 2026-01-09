@@ -542,20 +542,7 @@ db_get_summary_data <- function(
   
   con <- get_db_connection(db_path)
   
-  DBI::dbWriteTable(
-    con,
-    name = "temp_subjects",
-    value = data.frame(subject_id = subjects_to_review),
-    overwrite = TRUE,
-    temporary = TRUE
-  )
-  
-  DBI::dbExecute(con, "CREATE INDEX IF NOT EXISTS idx_temp_subjects_subject_id ON temp_subjects(subject_id)")
-  DBI::dbExecute(con, "CREATE INDEX IF NOT EXISTS idx_ard_reviewed_item_group ON all_review_data(reviewed, item_group)")
-  DBI::dbExecute(con, "CREATE INDEX IF NOT EXISTS idx_ard_subject_id ON all_review_data(subject_id)")
-  
   forms_sql <- paste(DBI::dbQuoteString(con, forms_to_review), collapse = ", ")
-  
   sql <- sprintf("
   SELECT 
     all_review_data.subject_id,
@@ -565,7 +552,6 @@ db_get_summary_data <- function(
     all_review_data.status,
     all_review_data.reviewed
   FROM all_review_data
-  INNER JOIN temp_subjects ON temp_subjects.subject_id = all_review_data.subject_id
   WHERE all_review_data.reviewed = 'No'
     AND all_review_data.item_group IN (%s)
 ", forms_sql)
