@@ -218,6 +218,7 @@ db_add_log <- function(con, key_cols = c("id", key_columns)) {
     "END"
   ))
   DBI::dbClearResult(rs)
+  create_delete_log_trigger(con)
 }
 
 create_delete_log_trigger <- function(con) {

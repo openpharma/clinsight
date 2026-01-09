@@ -58,7 +58,7 @@ required_meta_cols <- c(
   "item_type"
   )
 
-db_version <- "1.1"
+db_version <- "1.2"
 
 # Used in get_form_level_data(). Set a default if ClinSight needs the columns 
 # to function properly. 
