@@ -517,4 +517,3 @@ db_get_version <- function(db_path) {
   error = \(e) {""}
   )
 }
-
