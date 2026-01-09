@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">clinsight</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.3.0.9008</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.3.0.9009</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,7 +54,10 @@
 <li>Added a toggle to enable hover labels of all patterns in the figures, also the ones in the background.</li>
 <li>Improved the time-series on-hover label so that limits and significance are also shown.</li>
 <li>Switched to server-side table downloads.</li>
-<li>Implemented a <code>line-clamp</code> on table column names that wrap to more than 6 lines.</li>
+<li>Implemented a <code>line-clamp</code> on table column names that wrap to more than 6 lines</li>
+<li>Added better control of which role privileges - <code>allowed_to_review</code> and <code>allowed_to_query</code> can now be set per role in the <code>config.yml</code> file.</li>
+<li>
+<code>ClinSight</code> now also looks for a <code>clinsight-config.yml</code> file in the current working directory and uses it as custom configuration.</li>
 <li>Added a toggle to switch data transformation. In addition, added a way to show data transformed to standard values so that all are shown in the same unit (<a href="https://github.com/openpharma/clinsight/issues/110" class="external-link">#110</a>, <a href="https://github.com/openpharma/clinsight/issues/261" class="external-link">#261</a>).</li>
 <li>Figures now also show patient-specific lab limits in the figures when data is not transformed (if available).</li>
 <li>Added additional navigation buttons next to the tabs to easier navigate between common forms and study forms (<a href="https://github.com/openpharma/clinsight/issues/255" class="external-link">#255</a>).</li>

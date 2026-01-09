@@ -21,7 +21,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">clinsight</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.3.0.9008</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.3.0.9009</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,7 +91,7 @@ such as organization-specific deployment options. A configuration file
 will be discussed in detail.</p>
 <pre><code>default:
   golem_name: clinsight
-  golem_version: 0.3.0.9008
+  golem_version: 0.3.0.9009
   app_prod: no
   user_identification: test_user
   study_data: !expr clinsight::clinsightful_data
@@ -102,6 +102,7 @@ will be discussed in detail.</p>
     Medical Monitor: medical_monitor
     Data Manager: data_manager
   allow_to_review: [admin, medical_monitor]
+  allow_to_query: [admin, medical_monitor]
   allow_listing_download: TRUE
   allow_query_inputs: TRUE
   study_logo: assets/study_logo.png
@@ -122,6 +123,9 @@ shinyproxy:
   study_data: study_data/study_data.rds
   meta_data: study_data/metadata.rds
   user_db: study_data/user_db.sqlite
+  study_logo: study_data/assets/study_logo.png
+  allow_to_review: [medical_monitor]
+  allow_to_query: [medical_monitor]
 posit_connect:
   app_prod: yes
   user_identification: shiny_session
@@ -384,15 +388,17 @@ the <code>app.R</code> file.</p>
 <h3 id="customizing-configuration">Customizing configuration<a class="anchor" aria-label="anchor" href="#customizing-configuration"></a>
 </h3>
 <p>If the profiles above are insufficient, you can also provide your own
-configuration file with fully customized settings with the steps
-described below.</p>
-<p>To do so, first create a configuration template. The function
-<code><a href="../reference/create_clinsight_config.html">create_clinsight_config()</a></code> can be used to create a copy of
-the current <code>clinsight</code> configuration file in the current
-working directory. To use this configuration file with
-<code>clinsight</code>, the environment variable named “CONFIG_PATH”
-needs to be set by using a command similar to the following:
-<code>Sys.setenv("CONFIG_PATH" = "PATH_TO_CONFIG/clinsight_config.yml")</code>,
+configuration file with fully customized settings.
+<code>ClinSight</code> will check the working directory for a file named
+<code>clinsight-config.yml</code> and will use this if it exists as
+configuration file instead of the default configuration. The function
+<code><a href="../reference/create_clinsight_config.html">create_clinsight_config()</a></code> can be used to create such a
+customizable config file, containing a copy of the
+<code>clinsight</code> default configuration.</p>
+<p>If you want to change the name of this file, or place it somewhere
+else, you must provide the path to the custom config file in the
+environment variable “CONFIG_PATH”. For example:
+<code>Sys.setenv("CONFIG_PATH" = "PATH_TO_CONFIG/clinsight-config.yml")</code>,
 where <code>PATH_TO_CONFIG</code> is the path to the folder in which the
 configuration file is located.</p>
 </div>
