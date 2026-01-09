@@ -84,7 +84,7 @@ mod_header_widgets_server <- function(
       req(rev_data$summary())
       req(r$subject_id)
       revs <- with(rev_data$summary(), reviewed[
-             subject_id == r$subject_id & Form == "Adverse events"])
+             subject_id == r$subject_id & item_group == "Adverse events"])
       !("No" %in% revs)
     })
     
