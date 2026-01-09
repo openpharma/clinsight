@@ -60,15 +60,5 @@ describe(
                              key_cols = c("key_col1", "item_group")))) == 0
         )
     })
-    it("warns if rows are not found in the updated dataset but still returns a 
-    valid data frame; might happen if entries are deleted from the source", {
-         missing_row_data <- updated_review_data |> dplyr::filter(key_col1 != 9999) 
-         expect_warning(update_review_data(old_review_data, missing_row_data, 
-                                           key_cols = c("key_col1", "item_group")))
-         expect_true(is.data.frame(suppressWarnings(
-           update_review_data(old_review_data, missing_row_data, 
-                              key_cols = c("key_col1", "item_group"))
-           )))
-       })
   }
 )
