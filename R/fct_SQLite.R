@@ -244,6 +244,24 @@ create_delete_log_trigger <- function(con) {
   DBI::dbClearResult(rs)
 }
 
+db_upgrade <- function(db_path){
+  stopifnot(file.exists(db_path))
+
+  current_db_version <- db_get_version(db_path)
+  if (identical(current_db_version, db_version))
+    return(paste("Upgraded to version", db_version))
+
+  switch(
+    current_db_version,
+    "1.1" = db_temp_connect(db_path, {
+      create_delete_log_trigger(con)
+      DBI::dbWriteTable(con, "db_version", data.frame(version = "1.2"), overwrite = TRUE)
+    }),
+    stop("No upgrade available for version ", current_db_version)
+  )
+  db_upgrade(db_path)
+}
+
 #' Update app database
 #'
 #' Compares the latest edit date-times in the review database and in the data
