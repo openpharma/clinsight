@@ -53,7 +53,7 @@ describe(
       )
       expect_equal(
         dplyr::collect(dplyr::tbl(con, "db_version")), 
-        dplyr::tibble(version = "1.1")
+        dplyr::tibble(version = "1.2")
       )
       expect_equal(
         dplyr::collect(dplyr::tbl(con, "query_data")), 
@@ -128,6 +128,7 @@ describe(
       db_add_primary_key(con, "all_review_data", cbind(old_data, review_cols), comvars)
       db_add_log(con, c("id", comvars))
       DBI::dbWriteTable(con, "db_synch_time", data.frame("synch_time" = "2024-01-01 01:01:01 UTC"))
+      DBI::dbWriteTable(con, "db_version", data.frame(version = db_version))
       
       df_old <- cbind(id = 1, old_data, review_cols)
       log_old <- DBI::dbGetQuery(con, "SELECT * FROM all_review_data_log")
@@ -155,6 +156,7 @@ describe(
       db_add_primary_key(con, "all_review_data", cbind(old_data, review_cols), comvars)
       db_add_log(con, c("id", comvars))
       DBI::dbWriteTable(con, "db_synch_time", data.frame("synch_time" = "2024-01-01 01:01:01 UTC"))
+      DBI::dbWriteTable(con, "db_version", data.frame(version = db_version))
       
       log_old <- DBI::dbGetQuery(con, "SELECT * FROM all_review_data_log")
       
@@ -175,6 +177,7 @@ describe(
       temp_path <- withr::local_tempfile(fileext = ".sqlite") 
       con <- get_db_connection(temp_path)
       db_add_primary_key(con, "all_review_data", cbind(old_data, review_cols), comvars)
+      DBI::dbWriteTable(con, "db_version", data.frame(version = db_version))
       
       rev_data <- rbind(old_data, new_data) # no synch_time attribute added
       db_update(rev_data, db_path = temp_path, key_cols = comvars)
@@ -193,6 +196,7 @@ describe(
       db_add_primary_key(con, "all_review_data", cbind(old_data, review_cols), comvars)
       db_add_log(con, c("id", comvars))
       DBI::dbWriteTable(con, "db_synch_time", data.frame("synch_time" = "2024-01-01 01:01:01 UTC"))
+      DBI::dbWriteTable(con, "db_version", data.frame(version = db_version))
       
       rev_data <- old_data |> 
         dplyr::mutate(edit_date_time = "2023-11-13 01:01:01")
@@ -214,6 +218,7 @@ describe(
       db_add_primary_key(con, "all_review_data", rev_data, comvars)
       db_add_log(con, c("id", comvars))
       DBI::dbWriteTable(con, "db_synch_time", data.frame("synch_time" = synch_time))
+      DBI::dbWriteTable(con, "db_version", data.frame(version = db_version))
       
       log_old <- DBI::dbGetQuery(con, "SELECT * FROM all_review_data_log")
       
@@ -241,6 +246,7 @@ describe(
       db_add_primary_key(con, "all_review_data", rev_data, comvars)
       db_add_log(con, c("id", comvars))
       DBI::dbWriteTable(con, "db_synch_time", data.frame("synch_time" = synch_time))
+      DBI::dbWriteTable(con, "db_version", data.frame(version = db_version))
       expect_warning(
         db_update(rev_data, db_path = temp_path, key_cols = comvars),
         "DB synch time is more recent than data synch time. Aborting synchronization"
