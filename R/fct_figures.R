@@ -234,7 +234,7 @@ fig_timeseries <- function(
     ggplot2::facet_wrap(~item_name, ncol = 2, scales = "free_y") +
     ggplot2::scale_fill_manual(values = col_palette) +
     ggplot2::scale_x_continuous(limits = \(x){
-      if(length(x) == 0) return(c(0,1))
+      if(length(x) == 0) return(c(0,3))
       c(
         pmin(x[1], 0), # Always include day zero. 
         pmax(x[2], 3) # keeps minimum scale of 3 days if not much data is available
