@@ -13,7 +13,10 @@ mod_common_forms_ui <- function(id, form){
     bslib::layout_sidebar(
       fillable = FALSE,
       if(form == "Adverse events"){
-        mod_review_form_tbl_ui(ns("review_form_SAE_tbl"))
+        div(
+          mod_review_form_tbl_ui(ns("review_form_SAE_tbl")),
+          class = "sae_table_custom"
+        )
       },
       mod_review_form_tbl_ui(ns("review_form_tbl")),
       sidebar = bslib::sidebar(
