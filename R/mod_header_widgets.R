@@ -109,7 +109,8 @@ mod_header_widgets_server <- function(
       req(identical(navinfo$active_tab, "Study data"))
       golem::cat_dev("sf_toggle_timeline switch input is ", navinfo$sf_toggle_timeline(), "\n", sep = "")
       shinyjs::toggleElement(
-        id = "timeline_fig-timeline", anim = TRUE,
+        id = "timeline_fig-timeline", 
+        anim = TRUE,
         condition =  navinfo$sf_toggle_timeline()
       )
     })
@@ -118,7 +119,8 @@ mod_header_widgets_server <- function(
       req(identical(navinfo$active_tab, "Common events"))
       golem::cat_dev("cf_toggle_timeline switch input is ", navinfo$cf_toggle_timeline(), "\n", sep = "")
       shinyjs::toggleElement(
-        id = "timeline_fig-timeline", anim = TRUE, 
+        id = "timeline_fig-timeline", 
+        anim = TRUE, 
         condition =  navinfo$cf_toggle_timeline()
       )
     })
