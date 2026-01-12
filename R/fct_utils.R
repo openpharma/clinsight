@@ -790,7 +790,15 @@ expectation_type <- function(
 #' 
 custom_config_path <- function(
 ){
-  Sys.getenv("CONFIG_PATH", app_sys("golem-config.yml")) 
+  config_path <- Sys.getenv("CONFIG_PATH")
+  if (file.exists(config_path)) {
+    return(config_path)
+  }
+  if (file.exists("clinsight-config.yml")) {
+    "clinsight-config.yml"
+  } else {
+    app_sys("golem-config.yml") 
+  }
 }
 
 dblclick_to_form <- function(bttn_ns, button_id = "go_to_form") {

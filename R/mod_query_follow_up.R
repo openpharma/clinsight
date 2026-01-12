@@ -47,29 +47,33 @@ mod_query_follow_up_server <- function(id, r, selected_query, db_path){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     
+    is_resolved <- reactiveVal()
     observeEvent(selected_query(), {
-      is_resolved <- any(
+      is_resolved(any(
         with(r$query_data, resolved[query_id == selected_query()]) == "Yes" 
-      )
-      shiny::updateCheckboxInput(inputId = "resolved", value = is_resolved)
+      ))
+      shiny::updateCheckboxInput(inputId = "resolved", value = is_resolved())
       shiny::updateTextAreaInput(
         inputId = "query_follow_up_text", 
         placeholder = ifelse(
-          is_resolved, 
+          is_resolved(), 
           "query is resolved", 
           "add response here"
         )
       )
-      if(is_resolved){
-        shinyjs::disable("query_follow_up") 
-      } else{
-        shinyjs::enable("query_follow_up") 
-      }
+      shinyjs::toggleState("query_follow_up", condition = isFALSE(is_resolved()))
     })
+    
+    allowed_to_resolve <- reactive({
+      get_roles_from_config()[r$user_role] %in% get_golem_config("allow_to_query")
+    })
+    observe(shinyjs::toggleElement("resolved", condition = allowed_to_resolve()))
+    
     query_save_error <- reactiveVal(FALSE)
     observeEvent(input$query_add_follow_up, {
       req(input$query_follow_up_text, r$user_name, r$user_role, selected_query())
       req(selected_query() %in% r$query_data$query_id)
+      req(isFALSE(is_resolved()))
       query_save_error(FALSE)
       golem::cat_dev("Query FU text to add: ", input$query_follow_up_text, "\n")
       ts <- time_stamp()
@@ -83,8 +87,8 @@ mod_query_follow_up_server <- function(id, r, selected_query, db_path){
           "n"             = n + 1,
           "reviewer"      = paste0(r$user_name," (", r$user_role, ")"),
           "query"         = input$query_follow_up_text,
-          "resolved"      = ifelse(input$resolved, "Yes", "No"),
-          `resolved_date` = if(input$resolved) ts else NA_character_,
+          "resolved"      = if (input$resolved && isTRUE(allowed_to_resolve())) "Yes" else "No",
+          `resolved_date` = if (input$resolved && isTRUE(allowed_to_resolve())) ts else NA_character_,
           "edit_reason"   = NA_character_
         )
       golem::print_dev(updated_query)
