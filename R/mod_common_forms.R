@@ -151,7 +151,7 @@ mod_common_forms_server <- function(
       form_items = form_items,
       active_subject = active_subject,
       show_all = reactive(isTRUE(input$show_all_data) | identical(session$userData$review_type(), "form") ),
-      enable_text_wrap = reactive(isTRUE(input$enable_text_wrap) && identical(session$userData$review_type(), "subject")),
+      enable_text_wrap = reactive(isTRUE(input$enable_text_wrap)),
       table_names = table_names, 
       title = form
     )
@@ -165,7 +165,7 @@ mod_common_forms_server <- function(
         form_items = form_items,
         active_subject = active_subject,
         show_all = reactive(isTRUE(input$show_all_data) | identical(session$userData$review_type(), "form") ),
-        enable_text_wrap = reactive(isTRUE(input$enable_text_wrap) && identical(session$userData$review_type(), "subject")),
+        enable_text_wrap = reactive(isTRUE(input$enable_text_wrap)),
         table_names = table_names, 
         title = "Serious Adverse Events"
       )
