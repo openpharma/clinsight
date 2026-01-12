@@ -81,5 +81,31 @@ describe(
       )
     })
     
+    it("returns empty plot if no data available for id to highlight and show_all_participants is FALSE", {
+      expect_no_error({
+        fig <- fig_timeseries(
+          mock_data, 
+          id_to_highlight = "non-existent", 
+          show_all_participants = FALSE
+        )
+      })
+      plotlayers <- get_ggplot_layer_names(fig)
+      expect_null(plotlayers)
+      expect_equal(mock_data, fig$data)
+      
+      expect_no_error({
+        fig2 <- fig_timeseries(
+          mock_data, 
+          id_to_highlight = "non-existent", 
+          show_all_participants = FALSE, 
+          yval = "value_scaled"
+        )
+      })
+      
+      plotlayers <- get_ggplot_layer_names(fig2)
+      expect_equal(plotlayers, c("geom_hline", "geom_hline"))
+      expect_equal(mock_data, fig2$data)
+    })
+    
   }
 )
