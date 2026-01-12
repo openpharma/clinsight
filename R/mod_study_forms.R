@@ -203,13 +203,6 @@ mod_study_forms_server <- function(
         id = "show_all",
         condition = identical(session$userData$review_type(), "subject")
       )
-      if(identical(session$userData$review_type(), "form")){
-        shinyWidgets::updateMaterialSwitch(
-          session = session,
-          inputId = "enable_text_wrap",
-          value = FALSE
-        )
-      }
       shinyWidgets::updateRadioGroupButtons(
         inputId = "switch_view",
         selected = if(
@@ -219,6 +212,15 @@ mod_study_forms_server <- function(
         } else {
           "graph"
         }
+      )
+    })
+    
+    observeEvent(input$show_all, {
+      req(isTRUE(input$show_all))
+      shinyWidgets::updateMaterialSwitch(
+        session = session,
+        inputId = "enable_text_wrap",
+        value = FALSE
       )
     })
     
