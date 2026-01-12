@@ -132,10 +132,6 @@ mod_common_forms_server <- function(
           value = FALSE
         )
       }
-      shinyjs::toggleElement(
-        id = "enable_text_wrap",
-        condition = identical(session$userData$review_type(), "subject")
-      )
       if(form == "Adverse events"){
         shinyjs::toggleElement(
           id = "timeline_card", 
