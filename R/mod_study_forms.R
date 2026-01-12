@@ -210,10 +210,6 @@ mod_study_forms_server <- function(
           value = FALSE
         )
       }
-      shinyjs::toggleElement(
-        id = "enable_text_wrap",
-        condition = identical(session$userData$review_type(), "subject")
-      )
       shinyWidgets::updateRadioGroupButtons(
         inputId = "switch_view",
         selected = if(
@@ -284,7 +280,7 @@ mod_study_forms_server <- function(
       form_items = form_items,
       transformation = reactive(input$transformation_table %||% "none"),
       show_all = reactive(isTRUE(input$show_all) | identical(session$userData$review_type(), "form")), 
-      enable_text_wrap = reactive(isTRUE(input$enable_text_wrap) && identical(session$userData$review_type(), "subject")),
+      enable_text_wrap = reactive(isTRUE(input$enable_text_wrap)),
       show_limits = reactive(isTRUE(input$show_limits)),
       table_names = table_names,
       title = form
