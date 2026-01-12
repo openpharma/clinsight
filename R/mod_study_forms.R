@@ -99,7 +99,7 @@ mod_study_forms_ui <- function(id, form, form_items){
             ),
             bslib::input_switch(
               id = ns("enable_text_wrap"),
-              label = span(tags$img(src="/www/text-wrap.svg", class = "textwrap-switch-icon"), "Text wrap")
+              label = span(tags$img(src="www/text-wrap.svg", class = "textwrap-switch-icon"), "Text wrap")
             ),
             bslib::card_body(
               HTML("<b>Bold*:</b> New/updated data"), 
