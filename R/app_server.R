@@ -270,12 +270,12 @@ app_server <- function(
   bslib::nav_insert(
     id = "common_data_tabs",
     bslib::nav_item(
-      class = "ms-auto",
-      shinyWidgets::switchInput(
-        inputId = "cf_toggle_timeline",
-        label = icon("timeline"),
+      class = "ms-auto mb-0",
+      bslib::input_switch(
+        id = "cf_toggle_timeline",
+        label = span(icon("timeline"), "Timeline"),
         value = TRUE,
-        inline = TRUE
+        width = "auto"
       ) |> 
         htmltools::tagAppendAttributes(class = "mb-0")
     )
@@ -285,11 +285,11 @@ app_server <- function(
     id = "study_data_tabs",
     bslib::nav_item(
       class = "ms-auto",
-      shinyWidgets::switchInput(
-        inputId = "sf_toggle_timeline",
-        label = icon("timeline"),
+      bslib::input_switch(
+        id = "sf_toggle_timeline",
+        label = span(icon("timeline"), "Timeline"),
         value = FALSE,
-        inline = TRUE
+        width = "auto"
       ) |> 
         htmltools::tagAppendAttributes(class = "mb-0")
     )
