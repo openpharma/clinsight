@@ -31,8 +31,6 @@ mod_common_forms_ui <- function(id, form){
           status = "primary",
           right = TRUE,
           value = FALSE
-        ) |> bslib::tooltip(
-         "Caution: enabling this is not recommended for big tables since it will be slow."
         ),
         bslib::card_body(
           HTML("<b>Bold*:</b> New/updated data"), 
