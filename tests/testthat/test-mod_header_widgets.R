@@ -297,6 +297,7 @@ describe(
         expect_true(app$get_js(timeline_visibile))
         
         app$set_inputs("main_tabs" = "Study data")
+        app$wait_for_idle()
         expect_false(app$get_js(timeline_visibile))
         
         app$run_js('$("#sf_toggle_timeline").click()')
@@ -304,10 +305,11 @@ describe(
         expect_true(app$get_js(timeline_visibile))
         
         app$set_inputs("main_tabs" = "Common events")
+        app$wait_for_idle()
         expect_true(app$get_js(timeline_visibile))
         
         app$run_js('$("#cf_toggle_timeline").click()')
-        app$wait_for_idle()
+        app$wait_for_idle(800)
         expect_false(app$get_js(timeline_visibile))
       }
     )
