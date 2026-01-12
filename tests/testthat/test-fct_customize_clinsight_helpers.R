@@ -38,7 +38,7 @@ describe(
       )
       custom_config <- config::get(
         config = "test", 
-        file = file.path(temp_path, "clinsight_config.yml")
+        file = file.path(temp_path, "clinsight-config.yml")
       )
       attr(custom_config, "file") <- ""
       
@@ -52,7 +52,7 @@ describe(
     it("Errors if the file already exists.", {
       local_mocked_bindings(file.edit = \(...){})
       temp_path  <- withr::local_tempdir()
-      temp_file_path <- file.path(temp_path, "clinsight_config.yml")
+      temp_file_path <- file.path(temp_path, "clinsight-config.yml")
       file.create(temp_file_path)
       expect_error(
         create_clinsight_config(path = temp_path),

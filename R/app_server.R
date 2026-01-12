@@ -86,14 +86,14 @@ app_server <- function(
       user_error("No valid user name provided. ")
     } 
     if(r$user_role == ""){
-      user_error(paste0(user_error(), "No valid user role provided. "))
+      user_error(paste0(user_error(), "No user role assigned. "))
     }
     if(!is.null(user_error())){
       user_error(
         paste0(
           user_error(), 
           "Functionality is limited. ",
-          "Please contact the administrator to resolve this issue."
+          "If this is unexpected, please contact the administrator."
         )
       )
     }
@@ -103,8 +103,8 @@ app_server <- function(
     showNotification(
       user_error(), 
       id = "user_error", 
-      type = "error",  
-      duration = NULL
+      type = "warning",  
+      duration = 5
     )
   })
   

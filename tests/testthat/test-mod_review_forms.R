@@ -593,7 +593,7 @@ describe(
         # correct error message is shown in the output:
         expect_equal(
           app$get_value(output = "test-save_review_error")$message, 
-          "Review not allowed for a 'restricted_role'."
+          "With your current role ('restricted_role') you cannot save a review."
         )
       }
     )

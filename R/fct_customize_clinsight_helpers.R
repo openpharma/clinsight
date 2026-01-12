@@ -44,7 +44,7 @@ create_clinsight_config <- function(
     path = ".",
     template_path = app_sys("golem-config.yml")
 ){
-  config_path <- file.path(path, "clinsight_config.yml")
+  config_path <- file.path(path, "clinsight-config.yml")
   if(file.exists(config_path)){
     stop("The file '", config_path, "' already exists.",
          " Delete or rename this file and try again.")
@@ -53,7 +53,8 @@ create_clinsight_config <- function(
   message(
     "Creating a customizable ClinSight config file in the following location:\n'", 
     config_path, "'.\n\n",
-    "To use it with ClinSight, set the path in the environment variable 'CONFIG_PATH':\n",
+    "To use this file, place it in the working directory when starting ClinSight.\n", 
+    "Alternatively, set the path in the environment variable 'CONFIG_PATH':\n",
     "    'Sys.setenv('CONFIG_PATH' = '", config_path, "')'\n"
   )
   file.edit(config_path)
