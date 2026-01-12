@@ -9,6 +9,18 @@
   float: right;  
 }
 
+.hover-switch-icon {
+  padding-right: 4px;
+}
+
+.limit-switch-icon {
+  padding-right: 10px;
+}
+
+.textwrap-switch-icon {
+  padding-right: 4px;
+}
+
 .sae_table_custom {
   padding-bottom: 2.5rem;
 }

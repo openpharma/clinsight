@@ -109,13 +109,13 @@ mod_navigate_review_server <- function(
     observeEvent(rev_data$open_modal, {
       cat("review details click detected\n")
       r$subject_id <- rev_data$subject
-      shinyWidgets::updateMaterialSwitch(session, "show_all_data", value = rev_data$show_all)
+      bslib::update_switch("show_all_data", value = rev_data$show_all, session = session)
       showModal(modal_nav_review())
     }, ignoreInit = TRUE)
     
     shinyjs::onclick("review_value_box", {
       golem::cat_dev("click on forms to review detected\n")
-      shinyWidgets::updateMaterialSwitch(session, "show_all_data", value = FALSE)
+      bslib::update_switch("show_all_data", value = FALSE, session = session)
       showModal(modal_nav_review())
     })
     

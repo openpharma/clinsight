@@ -49,22 +49,18 @@ mod_study_forms_ui <- function(id, form, form_items){
               ),
               multiple = TRUE
             ), 
-            shinyWidgets::materialSwitch(
-              inputId = ns("show_all_participants"),
-              label = "Show all participants", 
-              status = "primary",
-              value = FALSE,
-              right = TRUE
+            bslib::input_switch(
+              id = ns("show_all_participants"),
+              label = span(icon("people-group"), "All subjects"),
+              value = FALSE
             ),
             conditionalPanel(
               condition = "input.show_all_participants === true",
               ns = NS(id),
-              shinyWidgets::materialSwitch(
-                inputId = ns("show_all_hover_labels"),
-                label = "Show all hover labels", 
-                status = "primary",
-                value = FALSE,
-                right = TRUE
+              bslib::input_switch(
+                id = ns("show_all_hover_labels"),
+                label = span(icon("tags", class = "hover-switch-icon"), "All hover labels"), 
+                value = FALSE
               )
             ),
             div(
@@ -84,18 +80,13 @@ mod_study_forms_ui <- function(id, form, form_items){
           conditionalPanel(
             condition = "input.switch_view === 'table'",
             ns = NS(id),
-            shinyWidgets::materialSwitch(
-              inputId = ns("show_all"),
-              label = "Show all participants", 
-              status = "primary",
-              right = TRUE
+            bslib::input_switch(
+              id = ns("show_all"),
+              label = span(icon("people-group"), "All subjects")
             ),
-            shinyWidgets::materialSwitch(
-              inputId = ns("show_limits"),
-              label = "Show limits", 
-              status = "primary",
-              right = TRUE,
-              value = FALSE
+            bslib::input_switch(
+              id = ns("show_limits"), 
+              label = span(icon("temperature-half", class = "limit-switch-icon"), "Lab limits")
             ),
             div(
               id = ns("transformation_table_container"),
@@ -106,12 +97,9 @@ mod_study_forms_ui <- function(id, form, form_items){
                 size = "sm"
               )
             ),
-            shinyWidgets::materialSwitch(
-              inputId = ns("enable_text_wrap"),
-              label = "Enable text wrapping", 
-              status = "primary",
-              right = TRUE,
-              value = FALSE
+            bslib::input_switch(
+              id = ns("enable_text_wrap"),
+              label = span(tags$img(src="/www/text-wrap.svg", class = "textwrap-switch-icon"), "Text wrap")
             ),
             bslib::card_body(
               HTML("<b>Bold*:</b> New/updated data"), 
@@ -194,9 +182,9 @@ mod_study_forms_server <- function(
     observeEvent(session$userData$review_type(), {
       golem::cat_dev(form, "| Updating tables to show '", 
                      session$userData$review_type(), "' level data\n", sep = "")
-      shinyWidgets::updateMaterialSwitch(
+      bslib::update_switch(
         session = session,
-        inputId = "show_all",
+        id = "show_all",
         value = identical(session$userData$review_type(), "form")
       )
       shinyjs::toggleState(
@@ -217,9 +205,9 @@ mod_study_forms_server <- function(
     
     observeEvent(input$show_all, {
       req(isTRUE(input$show_all))
-      shinyWidgets::updateMaterialSwitch(
+      bslib::update_switch(
         session = session,
-        inputId = "enable_text_wrap",
+        id = "enable_text_wrap",
         value = FALSE
       )
     })
