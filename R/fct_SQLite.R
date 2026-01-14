@@ -272,12 +272,24 @@ db_upgrade <- function(db_path){
   switch(
     current_db_version,
     "1.1" = db_temp_connect(db_path, {
+      if (!identical(db_upgrade_menu("1.2"), 1L)) 
+        return(paste("Abandoning DB upgrading. DB version is", current_db_version))
       create_delete_log_trigger(con)
       DBI::dbWriteTable(con, "db_version", data.frame(version = "1.2"), overwrite = TRUE)
     }),
     stop("No upgrade available for version ", current_db_version)
   )
   db_upgrade(db_path)
+}
+
+db_upgrade_menu <- function(upgrade_version) {
+  utils::menu(
+    c("Yes", "No"),
+    title = sprintf(
+      "Attempting to update to v%s. Do you want to proceed?", 
+      upgrade_version
+    )
+  )
 }
 
 #' Update app database
