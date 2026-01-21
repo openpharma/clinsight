@@ -174,7 +174,7 @@ mod_navigate_review_server <- function(
     )
     
     forms_to_review <- reactive({
-      with(rev_data$summary(), Form[subject_id == r$subject_id])
+      with(rev_data$summary(), item_group[subject_id == r$subject_id])
     })
     
     output[["forms_to_review"]] <- renderText({
