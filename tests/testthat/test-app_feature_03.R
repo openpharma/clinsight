@@ -45,7 +45,7 @@ describe(
         
         ####### snap feature-3-001
         app$expect_values(
-          input = vector_select(input_names,include = c("main_tabs", "write_query", "queries")), 
+          input = vector_select(input_names,include = c("main_tabs", "write_query", "queries")),
           output = vector_select(
             output_names, 
             exclude = c("visit_figure", "sf_vital_signs-figure", "start_page_1-overview_table")
@@ -117,14 +117,14 @@ describe(
 
         ####### snap feature-3-002
         app$expect_values(
-          input = vector_select(input_names,include = c("main_tabs", "write_query", "queries")), 
+          input = vector_select(input_names,include = c("main_tabs", "write_query", "queries")),
           output = vector_select(
             output_names, 
             # this test is not about these figures. 
             # Also, these are already captured in app-feature_01
             exclude = c("visit_figure", "sf_vital_signs-figure",
                         "timeline_fig-timeline", "start_page_1-overview_table")
-            )
+          )
         )
         app$click("main_sidebar_1-write_query-query_add_input")
         app$wait_for_idle()

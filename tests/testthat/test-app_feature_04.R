@@ -37,7 +37,7 @@ describe(
         withr::defer(app$stop())
         
         app$set_inputs(main_tabs = "Common events")
-        timeline_json <- app$get_value(output = "cf_adverse_events-timeline_fig-timeline")
+        timeline_json <- app$get_value(output = "header_widgets_1-timeline_fig-timeline")
         expect_true(inherits(timeline_json, "json"))
         expect_true(grepl('"subject_id":"9600-002"', timeline_json))
         expect_true(grepl("Screening", timeline_json))

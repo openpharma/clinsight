@@ -20,7 +20,8 @@ mod_header_widgets_ui <- function(id){
           class = "timeline-fig-basic"
         ),
         class = "top-widgets-custom"
-    )
+    ),
+    mod_timeline_ui(ns("timeline_fig"))
   )
 }
 
@@ -38,7 +39,7 @@ mod_header_widgets_ui <- function(id){
 #' form. Furthermore, clicking on the box with forms to review will trigger
 #' [mod_navigate_review_server()], opening a modal that shows the forms that
 #' need review and the queries that are open of the active participant, to which
-#' you can directly navigate to.
+#' you can directly navigate to. 
 #'
 #' @param id Character string, used to connect the module UI with the module
 #'   Server.
@@ -47,6 +48,9 @@ mod_header_widgets_ui <- function(id){
 #' @param navinfo Reactive values created with [shiny::reactiveValues()]. Used
 #'   to send back information about the page change to the server, when clicking
 #'   on the adverse event box.
+#' @param timeline_data A reactive with a data frame containing the timeline
+#'   data. Used to create the timeline figure. Created with
+#'   [get_timeline_data()].
 #' @param available_data A data frame containing all available data, usually
 #'   created with the function [get_available_data()].
 #'
@@ -56,15 +60,28 @@ mod_header_widgets_server <- function(
     r, 
     rev_data, 
     navinfo,
+    timeline_data,
     available_data
     ){
   stopifnot(is.reactivevalues(r))
   stopifnot(is.reactivevalues(navinfo))
   stopifnot(is.reactivevalues(rev_data))
   stopifnot(is.data.frame(available_data))
+  stopifnot(is.data.frame(timeline_data))
   
   moduleServer( id, function(input, output, session){
     ns <- session$ns
+    
+    observe({
+      if (is.null(navinfo$cf_toggle_timeline)) {
+        navinfo$cf_toggle_timeline <- reactiveVal(TRUE)
+      }
+      if (is.null(navinfo$sf_toggle_timeline)) {
+        navinfo$sf_toggle_timeline <- reactiveVal(FALSE)
+      }
+    }, 
+    autoDestroy = TRUE
+    )
     
     all_aes <- reactive({ 
       validate(need(r$filtered_data[["Adverse events"]], "AE data missing"))
@@ -88,8 +105,28 @@ mod_header_widgets_server <- function(
       !("No" %in% revs)
     })
     
+    observeEvent(c(navinfo$sf_toggle_timeline(), navinfo$active_tab), {
+      req(identical(navinfo$active_tab, "Study data"))
+      golem::cat_dev("sf_toggle_timeline switch input is ", navinfo$sf_toggle_timeline(), "\n", sep = "")
+      shinyjs::toggleElement(
+        id = "timeline_fig-timeline", 
+        anim = TRUE,
+        condition =  navinfo$sf_toggle_timeline()
+      )
+    })
+    
+    observeEvent(c(navinfo$cf_toggle_timeline(), navinfo$active_tab), {
+      req(identical(navinfo$active_tab, "Common events"))
+      golem::cat_dev("cf_toggle_timeline switch input is ", navinfo$cf_toggle_timeline(), "\n", sep = "")
+      shinyjs::toggleElement(
+        id = "timeline_fig-timeline", 
+        anim = TRUE, 
+        condition =  navinfo$cf_toggle_timeline()
+      )
+    })
+    
     ### Outputs: 
-
+    
     output[["ae_box"]] <- renderUI({
       req(inherits(all_AEs_reviewed(), "logical"), r$subject_id)
       bslib::value_box(
@@ -108,6 +145,12 @@ mod_header_widgets_server <- function(
       }, 
       height = 60
     )
+    mod_timeline_server(
+      "timeline_fig", 
+      form_review_data = reactive(r$review_data[["Adverse events"]]),
+      timeline_data = timeline_data,
+      active_subject = reactive(r$subject_id)
+    ) 
   })
 }
 

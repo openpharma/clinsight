@@ -124,7 +124,9 @@ app_server <- function(
   navinfo <- reactiveValues(
     active_form       = app_vars$all_forms$form[1],
     active_tab        = "Start",
-    trigger_page_change = 1
+    trigger_page_change = 1,
+    cf_toggle_timeline = reactive({input$cf_toggle_timeline}),
+    sf_toggle_timeline = reactive({input$sf_toggle_timeline})
   )
   
   start_page_summary_vars <- c("subject_status", "WHO.classification", "Age", "Sex", "event_name")
@@ -231,8 +233,7 @@ app_server <- function(
       form_review_data = reactive(r$review_data[[x]]), 
       form_items = app_vars$items[[x]], 
       active_subject = reactive(r$subject_id),
-      table_names = app_vars$table_names, 
-      timeline_data = timeline_data
+      table_names = app_vars$table_names
     ) 
   }) |>
     unlist(recursive = FALSE)
@@ -251,6 +252,7 @@ app_server <- function(
       select = (i == study_forms[1])
     )
   })
+  
   lapply(study_forms, \(x){
     mod_study_forms_server(
       id = paste0("sf_", simplify_string(x)), 
@@ -264,6 +266,41 @@ app_server <- function(
     ) 
   }) |>
     unlist(recursive = FALSE)
+  
+  bslib::nav_insert(
+    id = "common_data_tabs",
+    bslib::nav_item(
+      class = "ms-auto mb-0",
+      bslib::input_switch(
+        id = "cf_toggle_timeline",
+        label = span(icon("timeline"), "Timeline"),
+        value = TRUE,
+        width = "auto"
+      ) |> 
+        htmltools::tagAppendAttributes(class = "mb-0")
+    )
+  )
+  
+  bslib::nav_insert(
+    id = "study_data_tabs",
+    bslib::nav_item(
+      class = "ms-auto",
+      bslib::input_switch(
+        id = "sf_toggle_timeline",
+        label = span(icon("timeline"), "Timeline"),
+        value = FALSE,
+        width = "auto"
+      ) |> 
+        htmltools::tagAppendAttributes(class = "mb-0")
+    )
+  )
+  
+  observeEvent(session$userData$review_type(), {
+    subject_level_review <- identical(session$userData$review_type(), "subject")
+    shinyjs::toggleElement("cf_toggle_timeline", subject_level_review)
+    shinyjs::toggleElement("sf_toggle_timeline", subject_level_review)
+  })
+  
   
   observeEvent(input$go_to_study_data, {
     bslib::nav_select(id = "main_tabs", selected = "Study data")
@@ -279,9 +316,9 @@ app_server <- function(
     r = r, 
     rev_data = rev_data, 
     navinfo = navinfo,
+    timeline_data = timeline_data,
     available_data = available_data
   )
-  
   
   # Only initiate the sidebar after successful login, because it contains a
   # modal that pops up if data is out of synch. Modals interfere with shinymanager.
