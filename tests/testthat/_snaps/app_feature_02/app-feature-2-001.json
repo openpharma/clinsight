@@ -83,6 +83,96 @@
         }
       ]
     },
+    "header_widgets_1-timeline_fig-timeline": {
+      "x": {
+        "items": [
+          {
+            "subject_id": "BEL_08_45",
+            "content": "Screening",
+            "start": "2023-06-05",
+            "group": "Visit",
+            "title": "2023-06-05 | Screening",
+            "className": "bg-light",
+            "id": "18",
+            "order": "4"
+          },
+          {
+            "subject_id": "BEL_08_45",
+            "content": "Exit",
+            "start": "2023-09-11",
+            "group": "Visit",
+            "title": "2023-09-11 | Exit",
+            "className": "bg-light",
+            "id": "69",
+            "order": "4"
+          }
+        ],
+        "groups": [
+          {
+            "id": "Visit",
+            "content": "Visit",
+            "order": "4"
+          }
+        ],
+        "showZoom": true,
+        "zoomFactor": 0.5,
+        "fit": true,
+        "options": {
+          "zoomable": false
+        },
+        "height": null,
+        "timezone": null,
+        "api": [
+
+        ]
+      },
+      "evals": [
+
+      ],
+      "jsHooks": {
+        "render": [
+          {
+            "code": "timelineRedrawCustom",
+            "data": null
+          }
+        ]
+      },
+      "deps": [
+        {
+          "name": "jquery",
+          "version": "3.6.0",
+          "src": {
+            "href": "jquery-3.6.0"
+          },
+          "meta": null,
+          "script": "jquery-3.6.0.min.js",
+          "stylesheet": null,
+          "head": null,
+          "attachment": null,
+          "all_files": true
+        },
+        {
+          "name": "bootstrap",
+          "version": "3.3.5",
+          "src": {
+            "href": "bootstrap-3.3.5"
+          },
+          "meta": {
+            "viewport": "width=device-width, initial-scale=1"
+          },
+          "script": [
+            "js/bootstrap.min.js",
+            "shim/html5shiv.min.js",
+            "shim/respond.min.js"
+          ],
+          "stylesheet": "css/bootstrap.min.css",
+          "head": "<style>h1 {font-size: 34px;}\n       h1.title {font-size: 38px;}\n       h2 {font-size: 30px;}\n       h3 {font-size: 24px;}\n       h4 {font-size: 18px;}\n       h5 {font-size: 16px;}\n       h6 {font-size: 12px;}\n       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}\n       pre:not([class]) { background-color: white }<\/style>",
+          "attachment": null,
+          "package": null,
+          "all_files": true
+        }
+      ]
+    },
     "main_sidebar_1-clinsight_version": "_dev_version_",
     "main_sidebar_1-navigate_forms_1-form_name": "<center>Vital signs<\/center>",
     "main_sidebar_1-review_forms_1-progress_bar": {

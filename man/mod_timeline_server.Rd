@@ -13,8 +13,9 @@ Server.}
 \item{form_review_data}{A reactive value containing the review data of the
 respective form.}
 
-\item{timeline_data}{A data frame containing the timeline data. Used to
-create the timeline figure. Created with \code{\link[=get_timeline_data]{get_timeline_data()}}.}
+\item{timeline_data}{A reactive with a data frame containing the timeline
+data. Used to create the timeline figure. Created with
+\code{\link[=get_timeline_data]{get_timeline_data()}}.}
 
 \item{active_subject}{A reactive value containing the active subject ID.}
 }
@@ -25,6 +26,6 @@ as Investigational Product administration. Helpful to judge whether for
 example an event is related to an Investigational Product.
 }
 \seealso{
-\code{\link[=mod_timeline_ui]{mod_timeline_ui()}}, \code{\link[=mod_common_forms_ui]{mod_common_forms_ui()}},
-\code{\link[=mod_common_forms_server]{mod_common_forms_server()}}
+\code{\link[=mod_timeline_ui]{mod_timeline_ui()}}, \code{\link[=mod_header_widgets_ui]{mod_header_widgets_ui()}},
+\code{\link[=mod_header_widgets_server]{mod_header_widgets_server()}}
 }
