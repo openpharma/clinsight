@@ -86,7 +86,7 @@ mod_study_forms_ui <- function(id, form, form_items){
             ),
             bslib::input_switch(
               id = ns("show_limits"), 
-              label = span(icon("temperature-half", class = "limit-switch-icon"), "Lab limits")
+              label = span(icon("arrow-down-up-across-line", class = "limit-switch-icon"), "Lab limits")
             ),
             div(
               id = ns("transformation_table_container"),
