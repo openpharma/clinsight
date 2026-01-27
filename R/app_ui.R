@@ -37,7 +37,7 @@ app_ui <- function(request){
       ),
       bslib::nav_panel(
         title = "Common events",
-        bslib::navset_tab(id = "common_data_tabs") 
+        bslib::navset_tab(id = "common_data_tabs")
       ),
       bslib::nav_panel(
         "Study data", 

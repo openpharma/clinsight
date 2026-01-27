@@ -409,7 +409,7 @@ mod_review_forms_server <- function(
             split_review_data(db_path)[[active_form()]]
         })
       }
-      showNotification("Input saved successfully", duration = 1, type = "message") 
+      showNotification("Input saved successfully", duration = 1, type = "message")
     })
     
     output[["progress_bar"]] <- render_progress_bar({

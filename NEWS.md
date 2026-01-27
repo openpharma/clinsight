@@ -14,6 +14,7 @@
 - Figures now also show patient-specific lab limits in the figures when data is not transformed (if available).
 - Added additional navigation buttons next to the tabs to easier navigate between common forms and study forms (#255).
 - Add toggle to enable text wrapping in tables.
+- The timeline is now available in all forms, and can be toggled on or off (#1007).
 
 ## Bug fixes 
 
@@ -23,6 +24,7 @@
 
 - Updated role of long-term contributors to co-authors in Description field (#246).
 - Refactored some functions so that it is no longer needed to create an `apptables` object when starting the applcation, improving start up efficiency (#251).
+- Refactored function to retrieve summary data to improve efficiency.
 
 # clinsight 0.3.0
 

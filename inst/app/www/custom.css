@@ -53,6 +53,7 @@
    padding-right: 0rem;
    padding-bottom: 0rem;
    padding-left: 0rem;
+   cursor: default;
 }
 
 /* below is needed for good alignment of the top-widgets */
@@ -68,7 +69,8 @@
 .top-widgets-custom {
   display:flex;
   flex-direction: column;
-   padding-bottom: 0rem;
+  padding-bottom: 0rem;
+  cursor: pointer;
 /*  overflow-x: scroll;
    padding-top: 1rem;
    padding-right: 1rem;

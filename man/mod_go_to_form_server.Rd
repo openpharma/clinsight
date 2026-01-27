@@ -11,7 +11,7 @@ mod_go_to_form_server(
   navtable,
   tablerow,
   all_forms,
-  form_name = "Form",
+  form_name = "item_group",
   subject_id = "subject_id"
 )
 }
