@@ -7,9 +7,6 @@ mod_common_forms_ui <- function(id, form){
   ns <- NS(id)
   bslib::nav_panel(
     title = form, 
-    if (form == "Adverse events") {
-      bslib::card_body(id = ns("timeline_card"), mod_timeline_ui(ns("timeline_fig")))
-      },
     bslib::layout_sidebar(
       fillable = FALSE,
       if(form == "Adverse events"){
@@ -54,11 +51,7 @@ mod_common_forms_ui <- function(id, form){
 #' changed in the metadata. The tables shown are overview tables in wide format,
 #' similar to the ones in [mod_study_forms_server()]. When the common form
 #' `Adverse events` is selected, the module will show an additional table with
-#' Severe Adverse Events above the table with Adverse Events. In addition, it
-#' will show a timeline by calling module
-#' [mod_timeline_ui()]/[mod_timeline_server()]. The timeline shows study events
-#' (such as drug administrations) and study visits together with Adverse Events,
-#' so that temporal relationships between these events can be quickly revealed.
+#' Severe Adverse Events above the table with Adverse Events. 
 #' The `common forms` module is used in the main server to create all applicable
 #' common form pages.
 #'
@@ -84,9 +77,6 @@ mod_common_forms_ui <- function(id, form){
 #' @param table_names An optional character vector. If provided, will be used
 #'   within [datatable_custom()], to improve the column names in the final
 #'   interactive tables.
-#' @param timeline_data A data frame containing the timeline data. Used to
-#'   create the timeline figure. Created with [get_timeline_data()].
-#'
 #'
 #' @seealso [mod_common_forms_ui()], [mod_timeline_ui()],
 #'   [mod_timeline_server()], [mod_review_form_tbl_ui()],
@@ -101,8 +91,7 @@ mod_common_forms_server <- function(
     active_subject,
     id_item = c("subject_id", "event_name", "item_group", 
                 "form_repeat", "item_name"),
-    table_names = NULL,
-    timeline_data
+    table_names = NULL
 ){
   stopifnot(is.character(form), length(form) == 1)
   stopifnot(is.reactive(form_data), is.reactive(form_review_data))
@@ -110,7 +99,6 @@ mod_common_forms_server <- function(
   stopifnot(is.reactive(active_subject))
   stopifnot(is.character(id_item))
   stopifnot(is.null(table_names) || is.character(table_names))
-  stopifnot(is.data.frame(timeline_data))
   names(form_items) <- names(form_items) %||% form_items
   
   moduleServer( id, function(input, output, session){
@@ -128,12 +116,6 @@ mod_common_forms_server <- function(
         id = "show_all_data",
         condition = identical(session$userData$review_type(), "subject")
         )
-      if(form == "Adverse events"){
-        shinyjs::toggleElement(
-          id = "timeline_card", 
-          condition = identical(session$userData$review_type(), "subject")
-        )
-      }
     })
     
     observeEvent(input$show_all_data, {
@@ -171,12 +153,6 @@ mod_common_forms_server <- function(
         table_names = table_names, 
         title = "Serious Adverse Events"
       )
-      mod_timeline_server(
-        "timeline_fig", 
-        form_review_data = form_review_data,
-        timeline_data = timeline_data,
-        active_subject = active_subject
-      ) 
     }
     
   })
