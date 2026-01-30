@@ -154,9 +154,9 @@ mod_review_form_tbl_server <- function(
       table_data(df)
     })
     
-    # Any time the data in the form table is updated, "show all" is toggled,
-    # or the subject being viewed is changed, the server data for the datatable
-    # needs to be updated
+    # Triggers when server data needs to be updated. Also triggers for each 
+    # change in pending review records (e.g. a checkbox in column `Reviewed` 
+    # is toggled on or off).
     observe({
       req(!is.null(show_all()))
       req(table_data(), datatable_rendered())
@@ -167,11 +167,11 @@ mod_review_form_tbl_server <- function(
         rownames = FALSE,
         outputId = table_proxy$rawId
       )
-    }) 
+    }) |> 
+      bindEvent(table_data(), show_all(), active_subject(), enable_text_wrap())
     
-    # Any time the review table is updated, "show all" is toggled, or the
-    # subject being viewed is changed, the datatable should be reloaded to show
-    # the new data
+    # For performance reasons, fully reloading table below will not be 
+    # triggered when pending review records are updated (`Reviewed` checkboxes).
     observeEvent(reload_data(), {
       req(!is.null(show_all()))
       req(table_data(), datatable_rendered())
