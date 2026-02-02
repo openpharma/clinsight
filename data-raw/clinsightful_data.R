@@ -1,9 +1,48 @@
 devtools::load_all(".")
 
+metadata <- get_metadata(filepath = app_sys("metadata.xlsx"))
+
 clinsightful_data <- clinsight::get_raw_csv_data(
-  app_sys("raW_data"), 
+  app_sys("raw_data"), 
   synch_time = "2023-09-15 10:10:00 UTC"
 ) |> 
   merge_meta_with_data(metadata)
 
-usethis::use_data(clinsightful_data, overwrite = TRUE)
+# Build a version of `app_data` & app_vars
+cs_app_data <- get_appdata(data = clinsightful_data, meta = metadata) 
+cs_app_vars <- get_meta_vars(data = cs_app_data, meta = metadata) 
+
+# Build a 'app_tables'
+# cs_app_tables <- lapply(
+#   setNames(names(cs_app_data), names(cs_app_data)), \(x){
+#     create_table(cs_app_data[[x]], expected_columns = names(cs_app_vars$items[[x]]))
+#   })
+
+# Build a 'available_data'
+cs_available_data <- get_available_data(
+  data = cs_app_data,
+  # tables = cs_app_tables,            # outdated arg
+  # all_forms = cs_app_vars$all_forms, # outdated arg
+  form_repeat_name = with(
+    metadata[["table_names"]],
+    table_name[raw_name == "form_repeat"]
+  ) |>
+    tryCatch(error = \(e) "N")
+)
+
+# For timeline data
+cs_timeline_data <- get_timeline_data(
+  cs_app_data,
+  available_data = cs_available_data,
+  treatment_label = metadata$settings$treatment_label %||% "\U1F48A T\U2093"
+)
+
+usethis::use_data(
+  metadata,
+  clinsightful_data,
+  cs_app_data,
+  cs_app_vars,
+  # cs_app_tables,
+  cs_available_data,
+  cs_timeline_data,
+  overwrite = TRUE)

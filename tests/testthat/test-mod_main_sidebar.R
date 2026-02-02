@@ -14,7 +14,8 @@ describe("mod_main_sidebar. Feature 1 | Load application module in isolation.", 
       ),
       db_path = "",
       forms_to_review = reactiveVal(),
-      available_data = data.frame()
+      available_data = data.frame(),
+      timeline_data = data.frame()
     )
     
     it("Can load the module UI, with functioning internal parameters.", {

@@ -15,6 +15,10 @@
 - Added additional navigation buttons next to the tabs to easier navigate between common forms and study forms (#255).
 - Add toggle to enable text wrapping in tables.
 - The timeline is now available in all forms, and can be toggled on or off (#1007).
+- - Moved `app_data`, `app_vars`, `timeline_data` & `available_data` to pre-processing step so that doesn't need to compute every session.
+- Export functions used to create the data objects above ^^^.
+- Started using parquet read / writes for `merged_data`, `timeline_data` & `available_data` to speed startup time.
+
 
 ## Bug fixes 
 

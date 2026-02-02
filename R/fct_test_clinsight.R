@@ -32,17 +32,67 @@ test_clinsight <- function(
   meta_data_path <- get_golem_config("meta_data", config = clinsight_config)
   if (
     clinsight_config %in% c("default", "dev") | 
-    !is.character(study_data_path) | !is.character(meta_data_path)
+    !is.character(study_data_path) |
+    !is.character(meta_data_path) #|
   ){
     stop("The 'default' or 'dev' config cannot be used with custom data, ", 
-         "and study_data and meta_data in the config file ", 
-         "should be character vectors.")
+         "and meta_data, app_data, app_vars, timeline_data, & available_data ", 
+         "in the config file should be character vectors.")
   }
+  # Build a version of `app_data` & app_vars
+  app_data <- get_appdata(data = clinsight_data, meta = meta_data)
+  app_vars <- get_meta_vars(data = app_data, meta = meta_data)
+
+  # Build a 'app_tables'
+  # app_tables <- lapply(
+  #   setNames(names(app_data), names(app_data)), \(x){
+  #     create_table(app_data[[x]], expected_columns = names(app_vars$items[[x]]))
+  #   })
+
+  # Build a 'available_data'
+  available_data <- get_available_data(
+    data = app_data,
+    # tables = app_tables,            # outdated arg
+    # all_forms = app_vars$all_forms, # outdated arg
+    form_repeat_name = with(
+      meta_data[["table_names"]],
+      table_name[raw_name == "form_repeat"]
+    ) |>
+      tryCatch(error = \(e) "N")
+  )
+  
+  # For timeline data
+  timeline_data <- get_timeline_data(
+    app_data,
+    available_data = available_data,
+    treatment_label = meta_data$settings$treatment_label %||% "\U1F48A T\U2093"
+  )
   
   temp_folder <- tempfile(tmpdir = tempdir())
   dir.create(temp_folder, recursive = TRUE)
-  saveRDS(clinsight_data, file.path(temp_folder, basename(study_data_path))) 
-  saveRDS(meta_data, file.path(temp_folder, basename(meta_data_path)))
+  # saveRDS(clinsight_data, file.path(temp_folder, basename(study_data_path))) 
+  # saveRDS(meta_data, file.path(temp_folder, basename(meta_data_path)))
+  db_path <- file.path(temp_folder, "user_db.sqlite")
+  if(file.exists(db_path)) file.remove(db_path)
+  db_create(get_review_data(clinsight_data),
+            db_path = db_path
+  )
+  save_objs <- c(
+    "clinsight_data",
+    "meta_data",
+    "app_data",
+    "app_vars",
+    # "app_tables",
+    "timeline_data",
+    "available_data")
+  purrr::walk(save_objs, function(x){
+    rds_file <- file.path(temp_folder, paste0(x, ".rds"))
+    saveRDS(get(x), rds_file)
+    if(inherits(get(x), "data.frame")) {
+      pq_file <- file.path(temp_folder, paste0(x, ".parquet"))
+      arrow::write_parquet(get(x), pq_file)
+    }
+  })
   old_config <- Sys.getenv("GOLEM_CONFIG_ACTIVE")
   Sys.setenv("GOLEM_CONFIG_ACTIVE" = clinsight_config)
   run_app(

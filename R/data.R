@@ -95,6 +95,100 @@
 #'   system.file("raw_data", package = "clinsight")))`.
 "clinsightful_data"
 
+
+#' Application Metadata
+#'
+#' A list of data frames and settings containing metadata that will be used for
+#' the application. The metadata will be merged with raw data. It controls
+#' the variables that will be used in the application, and in which tab the
+#' variables will be shown. The goal is that most, if not all, study-specific
+#' data will be captured in the metadata, leaving the scripts to run the
+#' application largely unaltered between studies. See `vignette("Metadata")` for
+#' in-depth information.
+#'
+#' @format `metadata`: A list with `r length(metadata)` objects.
+#'
+#' @source Can be created with an Excel file. The Excel file format is chosen so
+#'   that the metadata can be changed easily per study. See
+#'   `raw-data/metadata.R` for details.
+"metadata"
+
+
+#' Application Data
+#'
+#' A list of data frames split by `item_group`. It is currently
+#' not needed to provide the application data in this format. However, the
+#' function can be useful for clinsight data customization, especially in
+#' combination with [create_table()]. It creates table classes of the
+#' `item_group` name (in lower case letters, and all punctuation replaced by an
+#' underscore), as long as there is a method available with the corresponding
+#' item_group name for the function [create_table()]. If all data is of type
+#' 'continuous', then laboratory values such as lab limits and units are
+#' cleaned.
+#'
+#' @format ## `cs_app_data`: A list with `r length(cs_app_data)` objects.
+#' 
+#' ```{r }
+#' str(cs_app_data)
+#' ```
+#'
+#' @source See `raw-data/clinsightful_data.R` for details.
+#' 
+"cs_app_data"
+
+
+#' Application Variables
+#'
+#' Named list version of `metadata` object.
+#'
+#' @format ## `cs_app_vars`: A list with `r length(cs_app_vars)` objects.
+#' 
+#' ```{r }
+#' str(cs_app_vars)
+#' ```
+#'
+#' @source See `raw-data/clinsightful_data.R` for details.
+#' 
+"cs_app_vars"
+
+
+#' Application Timeline Data
+#'
+#' A data.frame containing timeline data.
+#'
+#' @format ## `cs_timeline_data`: data.frame formatted for consumption by
+#'   `timevis` package.
+#' 
+#' ```{r }
+#' str(cs_timeline_data)
+#' ```
+#'
+#' @source See `raw-data/clinsightful_data.R` for details.
+#' 
+"cs_timeline_data"
+
+
+#' Application 'Available Data'
+#'
+#' Data frame containing info about available data per individual,
+#' such as visits, adverse events, etc. Will be used in module
+#' [mod_queries_server()], to select available items to create a query for per
+#' individual and per form. Required columns are the ones distinctively
+#' identifying an item. For now that are site_code, event_name, subject_id,
+#' event_label, item_group, item_name.
+#'
+#' @format a data.frame with `r nrow(cs_available_data)` rows and
+#'   `r ncol(cs_available_data)` variables.
+#' 
+#' ```{r }
+#' str(cs_available_data)
+#' ```
+#'
+#' @source See `raw-data/clinsightful_data.R` for details.
+#' 
+"cs_available_data"
+
+
 #' ClinSight key columns
 #'
 #' A character string containing the names of the columns that are needed to
