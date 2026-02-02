@@ -29,9 +29,9 @@ describe(
     })
     it("uses scaled limits and adds limits at y=0  and y=1 if requested", {
       expect_true(
-        ggplot2::is_ggplot(fig_timeseries(mock_data, id_to_highlight = "Subject10", scale = TRUE))
+        ggplot2::is_ggplot(fig_timeseries(mock_data, id_to_highlight = "Subject10", yval = "value_scaled"))
       )
-      fig <- fig_timeseries(mock_data, id_to_highlight = "Subject10", scale = TRUE)
+      fig <- fig_timeseries(mock_data, id_to_highlight = "Subject10", yval = "value_scaled")
       plotlayers <- get_ggplot_layer_names(fig)
       expect_equal(length(plotlayers[plotlayers == "geom_hline"]), 2)
       expect_equal(fig$data, mock_data)
@@ -79,6 +79,32 @@ describe(
         min(fig_built[["layout"]]$panel_scales_x[[1]]$range$range),
         -10
       )
+    })
+    
+    it("returns empty plot if no data available for id to highlight and show_all_participants is FALSE", {
+      expect_no_error({
+        fig <- fig_timeseries(
+          mock_data, 
+          id_to_highlight = "non-existent", 
+          show_all_participants = FALSE
+        )
+      })
+      plotlayers <- get_ggplot_layer_names(fig)
+      expect_null(plotlayers)
+      expect_equal(mock_data, fig$data)
+      
+      expect_no_error({
+        fig2 <- fig_timeseries(
+          mock_data, 
+          id_to_highlight = "non-existent", 
+          show_all_participants = FALSE, 
+          yval = "value_scaled"
+        )
+      })
+      
+      plotlayers <- get_ggplot_layer_names(fig2)
+      expect_equal(plotlayers, c("geom_hline", "geom_hline"))
+      expect_equal(mock_data, fig2$data)
     })
     
   }

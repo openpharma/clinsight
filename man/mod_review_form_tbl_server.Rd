@@ -10,8 +10,11 @@ mod_review_form_tbl_server(
   form_data,
   form_review_data,
   form_items,
+  transformation = NULL,
+  show_limits = NULL,
   active_subject,
   show_all,
+  enable_text_wrap = reactive(FALSE),
   table_names = NULL,
   title = NULL
 )
@@ -30,10 +33,22 @@ the form.}
 
 \item{form_items}{Named character vector with all form_items to display.}
 
+\item{transformation}{A reactive value. If this is 'none' then the columns
+\code{item_value} and \code{item_unit} will be used in the table. Otherwise,
+\code{value_standardized} and \code{unit_standardized} will be used.}
+
+\item{show_limits}{Optional reactive value containing a logical. If the
+logical inside is \code{TRUE}, laboratory limits will be added to the table
+shown in the module.}
+
 \item{active_subject}{Reactive value containing the active subject id.}
 
 \item{show_all}{Common reactive value, a logical indicating whether all
 records should be displayed.}
+
+\item{enable_text_wrap}{A reactive value, to enable/disable multi-line
+table rows. Usually disabled so that deferred rendering is possible, but
+can be enabled for better viewing experience.}
 
 \item{table_names}{An optional character vector. If provided, will be used
 within \code{\link[=datatable_custom]{datatable_custom()}}, to improve the column names in the final

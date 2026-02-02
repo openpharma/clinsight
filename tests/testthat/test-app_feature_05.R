@@ -202,5 +202,24 @@ describe(
         expect_equal(unique(active_form_data$reviewer), c("test user (Administrator)", ""))
       }
     )
+    it(
+      "Scenario 5 - Toggle text wrap during review.
+          Given a fixed random test data set,
+          I expect that I can toggle the table view to text wrap 
+          without affecting selected rows for pending review",
+      {
+        app$run_js('$("#cf_medication-review_form_tbl-table input[type=\'checkbox\']").slice(0, 2).click()')
+        expect_equal(app$get_js(sprintf(count_med_checkboxes, ":checked")), 2)
+        expect_true(app$get_js('$("#cf_medication-review_form_tbl-table input[type=\'checkbox\']").slice(0,1).prop("checked")'))
+        expect_true(app$get_js('$("#cf_medication-review_form_tbl-table input[type=\'checkbox\']").slice(1,2).prop("checked")'))
+        
+        # selection should be unaffected after toggling text wrap:
+        app$click("cf_medication-enable_text_wrap")
+        app$wait_for_idle()
+        expect_equal(app$get_js(sprintf(count_med_checkboxes, ":checked")), 2)
+        expect_true(app$get_js('$("#cf_medication-review_form_tbl-table input[type=\'checkbox\']").slice(0,1).prop("checked")'))
+        expect_true(app$get_js('$("#cf_medication-review_form_tbl-table input[type=\'checkbox\']").slice(1,2).prop("checked")'))
+      }
+    )
   }
 )

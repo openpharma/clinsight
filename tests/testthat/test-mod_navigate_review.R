@@ -163,7 +163,7 @@ describe(
       {
         summary_df <- data.frame(
           subject_id = c("subject01-test", paste0("subject", 2:4)), 
-          Form = "Adverse events", 
+          item_group = "Adverse events", 
           summary_col = paste0("summary_info", 1:4)
         )
         

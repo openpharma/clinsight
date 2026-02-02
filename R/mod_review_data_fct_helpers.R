@@ -159,12 +159,22 @@ summarize_review_data <- function(
       collapse_column_vals(column = event_var, exclude = collapse_exclude, 
                            group_by = key_cols) |> 
       dplyr::mutate(
-        "{status_var}"    := dplyr::case_when(
-          all(.data[[status_var]] == "old")                  ~ "old", 
-          all(.data[[status_var]] %in% c("new", "old"))      ~ "new", 
-          all(.data[[status_var]] %in% c("updated", "old"))  ~ "updated", 
-          all(.data[[status_var]] %in% c("old",  "updated", "new"))  ~ "new/updated",
-          TRUE ~ NA_character_
+        "{status_var}"    := ifelse(
+          all(.data[[status_var]] == "old"), 
+          "old", 
+          ifelse(
+            all(.data[[status_var]] %in% c("new", "old")),
+            "new", 
+            ifelse(
+              all(.data[[status_var]] %in% c("updated", "old")),
+              "updated", 
+              ifelse(
+                all(.data[[status_var]] %in% c("old",  "updated", "new")),
+                "new/updated",
+                NA_character_
+              )
+            )
+          )
         ),
         .by = dplyr::all_of(key_cols)
       ) |> 
@@ -174,7 +184,7 @@ summarize_review_data <- function(
       dplyr::mutate(
         dplyr::across(dplyr::all_of(date_time_vars), ~max(., na.rm = TRUE)),
         .by = dplyr::all_of(key_cols)
-        ) |>
+      ) |>
       dplyr::distinct()
   }
   data 

@@ -52,7 +52,6 @@ get_timeline_data <- function(
   available_data <- available_data |> 
     add_missing_columns(c("subject_id", "item_name", "form_repeat", 
                           "item_group", "event_name", "event_label", "event_date"))
-  
   study_event_data <- if(is.null(data) ){
     data.frame()
   } else{

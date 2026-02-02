@@ -2,14 +2,20 @@
 
 ## Changed
 
-- Switched to server-side table downloads
-- Implemented a `line-clamp` on table column names that wrap to more than 6 lines\
 - Replaced `dplyr::case_when()` with `ifelse()` in the row review status calculation for efficiency.
 - Added toggle to enable/disable background patterns in figures.
 - Added a toggle to enable hover labels of all patterns in the figures, also the ones in the background.
 - Improved the time-series on-hover label so that limits and significance are also shown.
+- Switched to server-side table downloads.
+- Implemented a `line-clamp` on table column names that wrap to more than 6 lines
+- Added better control of which role privileges - `allowed_to_review` and `allowed_to_query` can now be set per role in the `config.yml` file.
+- `ClinSight` now also looks for a `clinsight-config.yml` file in the current working directory and uses it as custom configuration.
+- Added a toggle to switch data transformation. In addition, added a way to show data transformed to standard values so that all are shown in the same unit (#110, #261).
+- Figures now also show patient-specific lab limits in the figures when data is not transformed (if available).
 - Added additional navigation buttons next to the tabs to easier navigate between common forms and study forms (#255).
-- Moved `app_data`, `app_vars`, `timeline_data` & `available_data` to pre-processing step so that doesn't need to compute every session.
+- Add toggle to enable text wrapping in tables.
+- The timeline is now available in all forms, and can be toggled on or off (#1007).
+- - Moved `app_data`, `app_vars`, `timeline_data` & `available_data` to pre-processing step so that doesn't need to compute every session.
 - Export functions used to create the data objects above ^^^.
 - Started using parquet read / writes for `merged_data`, `timeline_data` & `available_data` to speed startup time.
 
@@ -22,6 +28,7 @@
 
 - Updated role of long-term contributors to co-authors in Description field (#246).
 - Refactored some functions so that it is no longer needed to create an `apptables` object when starting the applcation, improving start up efficiency (#251).
+- Refactored function to retrieve summary data to improve efficiency.
 
 # clinsight 0.3.0
 

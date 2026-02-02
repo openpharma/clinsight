@@ -99,27 +99,25 @@ app_server <- function(
       user_error("No valid user name provided. ")
     } 
     if(r$user_role == ""){
-      user_error(paste0(user_error(), "No valid user role provided. "))
+      user_error(paste0(user_error(), "No user role assigned. "))
     }
     if(!is.null(user_error())){
       user_error(
         paste0(
           user_error(), 
           "Functionality is limited. ",
-          "Please contact the administrator to resolve this issue."
+          "If this is unexpected, please contact the administrator."
         )
       )
     }
   })
   
-  forms_to_review_data <- app_vars$form_level_data[c("item_group", "review_required")] 
-  
   observeEvent(user_error(), {
     showNotification(
       user_error(), 
       id = "user_error", 
-      type = "error",  
-      duration = NULL
+      type = "warning",  
+      duration = 5
     )
   })
   
@@ -137,25 +135,20 @@ app_server <- function(
   navinfo <- reactiveValues(
     active_form       = app_vars$all_forms$form[1],
     active_tab        = "Start",
-    trigger_page_change = 1
+    trigger_page_change = 1,
+    cf_toggle_timeline = reactive({input$cf_toggle_timeline}),
+    sf_toggle_timeline = reactive({input$sf_toggle_timeline})
   )
   
   start_page_summary_vars <- c("subject_status", "WHO.classification", "Age", "Sex", "event_name")
+  forms_to_review <- with(app_vars$form_level_data, item_group[review_required])
   rev_data <- reactiveValues(
     summary = reactive({
-      req(forms_to_review_data)
-      r$review_data |>
-        reactiveValuesToList() |> 
-        do.call(what = rbind) |> 
-        dplyr::left_join(forms_to_review_data, by = "item_group") |> 
-        dplyr::filter(
-          reviewed != "Yes",
-          review_required,
-          subject_id %in% r$filtered_subjects
-        ) |>
-        summarize_review_data() |>
-        dplyr::select(subject_id, "Form" = item_group, "Event" = event_name,
-                      "Edit date" = edit_date_time, status, reviewed)
+      req(forms_to_review)
+      reactiveValuesToList(r$review_data)[forms_to_review] |> 
+        dplyr::bind_rows() |> 
+        subset(reviewed != "Yes" & subject_id %in% r$filtered_subjects) |> 
+        summarize_review_data()
     }),
     overview = reactive({
       with(static_overview_data, static_overview_data[subject_id %in% r$filtered_subjects, ]) |>
@@ -244,8 +237,7 @@ app_server <- function(
       form_review_data = reactive(r$review_data[[x]]), 
       form_items = app_vars$items[[x]], 
       active_subject = reactive(r$subject_id),
-      table_names = app_vars$table_names, 
-      timeline_data = timeline_data
+      table_names = app_vars$table_names
     ) 
   }) |>
     unlist(recursive = FALSE)
@@ -264,6 +256,7 @@ app_server <- function(
       select = (i == study_forms[1])
     )
   })
+  
   lapply(study_forms, \(x){
     mod_study_forms_server(
       id = paste0("sf_", simplify_string(x)), 
@@ -277,6 +270,41 @@ app_server <- function(
     ) 
   }) |>
     unlist(recursive = FALSE)
+  
+  bslib::nav_insert(
+    id = "common_data_tabs",
+    bslib::nav_item(
+      class = "ms-auto mb-0",
+      bslib::input_switch(
+        id = "cf_toggle_timeline",
+        label = span(icon("timeline"), "Timeline"),
+        value = TRUE,
+        width = "auto"
+      ) |> 
+        htmltools::tagAppendAttributes(class = "mb-0")
+    )
+  )
+  
+  bslib::nav_insert(
+    id = "study_data_tabs",
+    bslib::nav_item(
+      class = "ms-auto",
+      bslib::input_switch(
+        id = "sf_toggle_timeline",
+        label = span(icon("timeline"), "Timeline"),
+        value = FALSE,
+        width = "auto"
+      ) |> 
+        htmltools::tagAppendAttributes(class = "mb-0")
+    )
+  )
+  
+  observeEvent(session$userData$review_type(), {
+    subject_level_review <- identical(session$userData$review_type(), "subject")
+    shinyjs::toggleElement("cf_toggle_timeline", subject_level_review)
+    shinyjs::toggleElement("sf_toggle_timeline", subject_level_review)
+  })
+  
   
   observeEvent(input$go_to_study_data, {
     bslib::nav_select(id = "main_tabs", selected = "Study data")
@@ -292,9 +320,9 @@ app_server <- function(
     r = r, 
     rev_data = rev_data, 
     navinfo = navinfo,
+    timeline_data = timeline_data,
     available_data = available_data
   )
-  
   
   # Only initiate the sidebar after successful login, because it contains a
   # modal that pops up if data is out of synch. Modals interfere with shinymanager.
@@ -325,7 +353,7 @@ app_server <- function(
       app_vars = app_vars,
       navinfo,
       forms_to_review = reactive({
-        with(rev_data$summary(), Form[subject_id == r$subject_id])
+        with(rev_data$summary(), item_group[subject_id == r$subject_id])
       }),
       db_path = user_db,
       available_data = available_data
