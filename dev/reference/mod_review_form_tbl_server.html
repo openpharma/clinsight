@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">clinsight</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.3.0.9012</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.3.0.9013</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,6 +62,7 @@
 <span>  show_limits <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">active_subject</span>,</span>
 <span>  <span class="va">show_all</span>,</span>
+<span>  enable_text_wrap <span class="op">=</span> <span class="fu">reactive</span><span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span>,</span>
 <span>  table_names <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  title <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -113,6 +114,12 @@ shown in the module.</p></dd>
 <dt id="arg-show-all">show_all<a class="anchor" aria-label="anchor" href="#arg-show-all"></a></dt>
 <dd><p>Common reactive value, a logical indicating whether all
 records should be displayed.</p></dd>
+
+
+<dt id="arg-enable-text-wrap">enable_text_wrap<a class="anchor" aria-label="anchor" href="#arg-enable-text-wrap"></a></dt>
+<dd><p>A reactive value, to enable/disable multi-line
+table rows. Usually disabled so that deferred rendering is possible, but
+can be enabled for better viewing experience.</p></dd>
 
 
 <dt id="arg-table-names">table_names<a class="anchor" aria-label="anchor" href="#arg-table-names"></a></dt>

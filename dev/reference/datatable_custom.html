@@ -9,7 +9,7 @@ consistent style."><meta property="og:image" content="https://openpharma.github.
 
     <a class="navbar-brand me-2" href="../index.html">clinsight</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.3.0.9012</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.3.0.9013</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,6 +66,7 @@ consistent style.</p>
 <span>  allow_listing_download <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  export_label <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  escape <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  enable_text_wrap <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -129,7 +130,13 @@ for downloadable tables (if <code>allow_listing_download</code> is <code>TRUE</c
 
 
 <dt id="arg-escape">escape<a class="anchor" aria-label="anchor" href="#arg-escape"></a></dt>
-<dd><p>Whether to escape HTML entities in the table. See <code><a href="https://rdrr.io/pkg/DT/man/datatable.html" class="external-link">DT::datatable()</a></code>.</p></dd>
+<dd><p>Whether to escape HTML entities in the table. See
+<code><a href="https://rdrr.io/pkg/DT/man/datatable.html" class="external-link">DT::datatable()</a></code>.</p></dd>
+
+
+<dt id="arg-enable-text-wrap">enable_text_wrap<a class="anchor" aria-label="anchor" href="#arg-enable-text-wrap"></a></dt>
+<dd><p>Logical, whether to enable text wrapping in the
+table. If TRUE, pagination will be used and <code>deferRender</code> disabled.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
