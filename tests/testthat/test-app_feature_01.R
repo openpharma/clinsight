@@ -22,7 +22,9 @@ describe(
           with all data in bold (indicating the need for review),
           and that, after clicking on the header widget with participant info,
           and setting the patient to 'NLD_06_893' and clicking 'apply',
-          I can see the vital signs page of the newly selected patient.",
+          and setting 'enable text wrap' to TRUE,
+          I can see the vital signs page of the newly selected patient with text 
+          wrap in the table enabled.",
        {
          app <- AppDriver$new(
            app_dir = test_path("fixtures/testapp"),
@@ -40,6 +42,8 @@ describe(
          # from snaps, since they cannot be serialized to JSON and produce a 
          # flaky hash https://rstudio.github.io/shinytest2/articles/robust.html
          output_names <- names(app$get_values(output = TRUE)$output)
+         
+         ## Snap 001
          app$expect_values(output = vector_select(output_names, exclude = "visit_figure"))
          
          app$run_js('$("#start_page_1-overview_table td").filter(function() {return $(this).text() == "BEL_04_772"}).closest("tr").trigger("dblclick")')
@@ -61,6 +65,8 @@ describe(
          expect_equal(app$get_value(input = "main_tabs"), "Common events")
          output_names <- names(app$get_values(output = TRUE)$output) |> 
            vector_select(exclude = c("visit_figure", "navigate_review_1-header_text", "navigate_review_1-review_df"))
+         
+         ## Snap 002
          app$expect_values(output = output_names)
          
          app$set_inputs(main_tabs = "Start")
@@ -96,11 +102,15 @@ describe(
          #              "cf_adverse_events-timeline_fig-timeline"),
          #   export = c("active_form", "active_participant")
          # )
+         
+         ## Snap 003
          app$expect_values(output = output_names)
          
          app$set_inputs("sf_vital_signs-switch_view" = "table")
          output_names <- names(app$get_values(output = TRUE)$output) |> 
            vector_select(exclude = output_to_exclude)
+         
+         ## Snap 004
          app$expect_values(output = output_names)
          
          app$run_js("$('#navigate_participants_1-subject_info').click()")
@@ -111,8 +121,12 @@ describe(
          app$wait_for_idle()
          output_names <- names(app$get_values(output = TRUE)$output) |> 
            vector_select(exclude = output_to_exclude)
-         app$expect_values(output = output_names)
          
+         app$click("sf_vital_signs-enable_text_wrap")
+         app$wait_for_idle()
+         
+         ## Snap 005
+         app$expect_values(input = "sf_vital_signs-enable_text_wrap", output = output_names)
          ## Note (LSA): after clicking on 'graph' view again at this moment, an 
          ## error will be shown instead of the expected figures. 
          ## ('Error: incorrect height and width'). So far, this error could not 

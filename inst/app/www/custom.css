@@ -9,6 +9,10 @@
   float: right;  
 }
 
+.sae_table_custom {
+  padding-bottom: 2.5rem;
+}
+
 .bslib-value-box .value-box-area {
   padding: 0.1rem 0rem 0.1rem 1rem;
 }

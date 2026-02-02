@@ -105,6 +105,17 @@ mod_study_forms_ui <- function(id, form, form_items){
                 choices = c("None" = "none"),
                 size = "sm"
               )
+            ),
+            shinyWidgets::materialSwitch(
+              inputId = ns("enable_text_wrap"),
+              label = "Enable text wrapping", 
+              status = "primary",
+              right = TRUE,
+              value = FALSE
+            ),
+            bslib::card_body(
+              HTML("<b>Bold*:</b> New/updated data"), 
+              fillable = FALSE
             )
           )
         )
@@ -204,6 +215,15 @@ mod_study_forms_server <- function(
       )
     })
     
+    observeEvent(input$show_all, {
+      req(isTRUE(input$show_all))
+      shinyWidgets::updateMaterialSwitch(
+        session = session,
+        inputId = "enable_text_wrap",
+        value = FALSE
+      )
+    })
+    
     fig_data <- reactive({
       req(isTRUE(all_continuous))
       validate(need(
@@ -262,6 +282,7 @@ mod_study_forms_server <- function(
       form_items = form_items,
       transformation = reactive(input$transformation_table %||% "none"),
       show_all = reactive(isTRUE(input$show_all) | identical(session$userData$review_type(), "form")), 
+      enable_text_wrap = reactive(isTRUE(input$enable_text_wrap)),
       show_limits = reactive(isTRUE(input$show_limits)),
       table_names = table_names,
       title = form

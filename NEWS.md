@@ -13,6 +13,7 @@
 - Added a toggle to switch data transformation. In addition, added a way to show data transformed to standard values so that all are shown in the same unit (#110, #261).
 - Figures now also show patient-specific lab limits in the figures when data is not transformed (if available).
 - Added additional navigation buttons next to the tabs to easier navigate between common forms and study forms (#255).
+- Add toggle to enable text wrapping in tables.
 - The timeline is now available in all forms, and can be toggled on or off (#1007).
 
 ## Bug fixes 

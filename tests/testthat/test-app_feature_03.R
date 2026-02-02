@@ -45,7 +45,7 @@ describe(
         
         ####### snap feature-3-001
         app$expect_values(
-          input = vector_select(input_names,include = c("main_tabs", "write_query", "queries")),
+          input = vector_select(input_names, include = c("main_tabs", "write_query", "queries")), 
           output = vector_select(
             output_names, 
             exclude = c("visit_figure", "sf_vital_signs-figure", "start_page_1-overview_table")

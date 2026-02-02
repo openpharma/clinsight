@@ -14,6 +14,7 @@ mod_review_form_tbl_server(
   show_limits = NULL,
   active_subject,
   show_all,
+  enable_text_wrap = reactive(FALSE),
   table_names = NULL,
   title = NULL
 )
@@ -44,6 +45,10 @@ shown in the module.}
 
 \item{show_all}{Common reactive value, a logical indicating whether all
 records should be displayed.}
+
+\item{enable_text_wrap}{A reactive value, to enable/disable multi-line
+table rows. Usually disabled so that deferred rendering is possible, but
+can be enabled for better viewing experience.}
 
 \item{table_names}{An optional character vector. If provided, will be used
 within \code{\link[=datatable_custom]{datatable_custom()}}, to improve the column names in the final
