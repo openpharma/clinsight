@@ -19,18 +19,13 @@ mod_common_forms_ui <- function(id, form){
       sidebar = bslib::sidebar(
         bg = "white", 
         position = "right",
-        shinyWidgets::materialSwitch(
-          inputId = ns("show_all_data"),
-          label = "Show all participants", 
-          status = "primary",
-          right = TRUE
+        bslib::input_switch(
+          id = ns("show_all_data"),
+          label = span(icon("people-group"), "All subjects")
         ),
-        shinyWidgets::materialSwitch(
-          inputId = ns("enable_text_wrap"),
-          label = "Enable text wrapping", 
-          status = "primary",
-          right = TRUE,
-          value = FALSE
+        bslib::input_switch(
+          id = ns("enable_text_wrap"),
+          label = span(tags$img(src="www/text-wrap.svg", class = "textwrap-switch-icon"), "Text wrap")
         ),
         bslib::card_body(
           HTML("<b>Bold*:</b> New/updated data"), 
@@ -107,9 +102,9 @@ mod_common_forms_server <- function(
     observeEvent(session$userData$review_type(), {
       golem::cat_dev(form, "| Updating tables to show '", 
                      session$userData$review_type(), "' level data\n", sep = "")
-      shinyWidgets::updateMaterialSwitch(
+      bslib::update_switch(
         session = session,
-        inputId = "show_all_data",
+        id = "show_all_data",
         value = identical(session$userData$review_type(), "form")
       )
       shinyjs::toggleState(
@@ -118,11 +113,11 @@ mod_common_forms_server <- function(
         )
     })
     
-    observeEvent(input$show_all_data, {
-      req(isTRUE(input$show_all_data))
-      shinyWidgets::updateMaterialSwitch(
+    observeEvent(input$show_all, {
+      req(isTRUE(input$show_all))
+      bslib::update_switch(
         session = session,
-        inputId = "enable_text_wrap",
+        id = "enable_text_wrap",
         value = FALSE
       )
     })
