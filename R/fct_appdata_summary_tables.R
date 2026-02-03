@@ -109,7 +109,7 @@ get_timeline_data <- function(
         ),
         start = ifelse(is.na(`SAE Start date`), clean_dates(`start date`), 
                        clean_dates(`SAE Start date`)) |> 
-          as.Date(),
+          as.Date(origin = "1970-01-01"),
         end = clean_dates(`SAE End date`),
         className = "bg-danger",
         title = paste0(
