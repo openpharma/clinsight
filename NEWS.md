@@ -15,6 +15,7 @@
 - Added additional navigation buttons next to the tabs to easier navigate between common forms and study forms (#255).
 - Add toggle to enable text wrapping in tables.
 - The timeline is now available in all forms, and can be toggled on or off (#1007).
+- Updated table and figure switches to native `bslib` switches and added icons to them (#268).
 
 ## Bug fixes 
 
