@@ -1,4 +1,7 @@
 {
+  "input": {
+    "sf_vital_signs-enable_text_wrap": true
+  },
   "output": {
     "cf_adverse_events-review_form_SAE_tbl-table": {
       "x": {
@@ -3186,11 +3189,10 @@
         ],
         "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th><span class=\"cs-span-overflow\" title=\"Reviewed\">Reviewed<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Subject\">Subject<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Event\">Event<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Date\">Date<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Systolic blood pressure\">Systolic blood pressure<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Diastolic blood pressure\">Diastolic blood pressure<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Pulse\">Pulse<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Resp\">Resp<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Temperature\">Temperature<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Weight change since screening\">Weight change since screening<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"BMI\">BMI<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Weight\">Weight<\/span><\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
         "options": {
-          "scrollY": 400,
           "scrollX": true,
-          "scroller": true,
-          "deferRender": true,
-          "scrollCollapse": true,
+          "scroller": false,
+          "deferRender": false,
+          "scrollCollapse": false,
           "colReorder": {
             "enable": true,
             "realtime": false,
@@ -3257,7 +3259,7 @@
           ],
           "rowCallback": "rowCallback",
           "initComplete": "function() {\n$(this.api().table().container()).find('.header').html(\"Vital signs\")\n}",
-          "dom": "Bf<\"header h5\">ti",
+          "dom": "Bf<\"header h5\">tip",
           "buttons": [
             {
               "extend": "excel",

@@ -10,7 +10,10 @@ mod_common_forms_ui <- function(id, form){
     bslib::layout_sidebar(
       fillable = FALSE,
       if(form == "Adverse events"){
-        mod_review_form_tbl_ui(ns("review_form_SAE_tbl"))
+        div(
+          mod_review_form_tbl_ui(ns("review_form_SAE_tbl")),
+          class = "sae_table_custom"
+        )
       },
       mod_review_form_tbl_ui(ns("review_form_tbl")),
       sidebar = bslib::sidebar(
@@ -21,6 +24,13 @@ mod_common_forms_ui <- function(id, form){
           label = "Show all participants", 
           status = "primary",
           right = TRUE
+        ),
+        shinyWidgets::materialSwitch(
+          inputId = ns("enable_text_wrap"),
+          label = "Enable text wrapping", 
+          status = "primary",
+          right = TRUE,
+          value = FALSE
         ),
         bslib::card_body(
           HTML("<b>Bold*:</b> New/updated data"), 
@@ -108,6 +118,15 @@ mod_common_forms_server <- function(
         )
     })
     
+    observeEvent(input$show_all_data, {
+      req(isTRUE(input$show_all_data))
+      shinyWidgets::updateMaterialSwitch(
+        session = session,
+        inputId = "enable_text_wrap",
+        value = FALSE
+      )
+    })
+    
     mod_review_form_tbl_server(
       "review_form_tbl", 
       form = form,
@@ -116,6 +135,7 @@ mod_common_forms_server <- function(
       form_items = form_items,
       active_subject = active_subject,
       show_all = reactive(isTRUE(input$show_all_data) | identical(session$userData$review_type(), "form") ),
+      enable_text_wrap = reactive(isTRUE(input$enable_text_wrap)),
       table_names = table_names, 
       title = form
     )
@@ -129,6 +149,7 @@ mod_common_forms_server <- function(
         form_items = form_items,
         active_subject = active_subject,
         show_all = reactive(isTRUE(input$show_all_data) | identical(session$userData$review_type(), "form") ),
+        enable_text_wrap = reactive(isTRUE(input$enable_text_wrap)),
         table_names = table_names, 
         title = "Serious Adverse Events"
       )

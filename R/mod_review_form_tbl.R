@@ -41,6 +41,9 @@ mod_review_form_tbl_ui <- function(id) {
 #'   interactive tables.
 #' @param title An optional character vector. If provided, will be used within
 #'   [datatable_custom()], as the title for the table.
+#' @param enable_text_wrap A reactive value, to enable/disable multi-line
+#'   table rows. Usually disabled so that deferred rendering is possible, but
+#'   can be enabled for better viewing experience.
 #'
 #' @seealso [mod_review_form_tbl_ui()], [mod_common_forms_ui()],
 #'   [mod_common_forms_server()], [mod_study_forms_ui()],
@@ -56,6 +59,7 @@ mod_review_form_tbl_server <- function(
     show_limits = NULL,
     active_subject, 
     show_all,
+    enable_text_wrap = reactive(FALSE),
     table_names = NULL,
     title = NULL
 ){
@@ -65,6 +69,7 @@ mod_review_form_tbl_server <- function(
   stopifnot(is.character(form_items))
   stopifnot(is.reactive(active_subject))
   stopifnot(is.reactive(show_all))
+  stopifnot(is.reactive(enable_text_wrap))
   stopifnot(is.character(table_names %||% ""))
   stopifnot(is.character(title %||% ""))
   transformation <- transformation %||% reactiveVal("none")
@@ -149,9 +154,9 @@ mod_review_form_tbl_server <- function(
       table_data(df)
     })
     
-    # Any time the data in the form table is updated, "show all" is toggled,
-    # or the subject being viewed is changed, the server data for the datatable
-    # needs to be updated
+    # Triggers when server data needs to be updated. Also triggers for each 
+    # change in pending review records (e.g. a checkbox in column `Reviewed` 
+    # is toggled on or off).
     observe({
       req(!is.null(show_all()))
       req(table_data(), datatable_rendered())
@@ -162,11 +167,11 @@ mod_review_form_tbl_server <- function(
         rownames = FALSE,
         outputId = table_proxy$rawId
       )
-    }) 
+    }) |> 
+      bindEvent(table_data(), show_all(), active_subject(), enable_text_wrap())
     
-    # Any time the review table is updated, "show all" is toggled, or the
-    # subject being viewed is changed, the datatable should be reloaded to show
-    # the new data
+    # For performance reasons, fully reloading table below will not be 
+    # triggered when pending review records are updated (`Reviewed` checkboxes).
     observeEvent(reload_data(), {
       req(!is.null(show_all()))
       req(table_data(), datatable_rendered())
@@ -233,7 +238,9 @@ mod_review_form_tbl_server <- function(
               visible = isolate(show_all())
             )),
           rowCallback = row_callback
-        ))
+        ),
+        enable_text_wrap = !isFALSE(enable_text_wrap())
+        )
     })
     table_proxy <- DT::dataTableProxy("table")
 
