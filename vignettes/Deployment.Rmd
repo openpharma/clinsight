@@ -49,7 +49,7 @@ The following are the most important arguments in the `golem-config.yml` file fo
 -   `allow_to_review`: List of role ids (specified above) which are allowed to review data in the application.
 -   `allow_listing_download`: Logical, `TRUE` if users are permitted to download listings from the ClinSight application directly to Excel for sharing (or other uses).
 -   `allow_query_inputs`: Logical, \`TRUE\` to permit users to submit and track queries within the application's database.
--   `allow_to_query`: List of role ids (see `user_roles`) which are allowed to raise a query and close a query. Only effective if `allow_query_inputs` is `TRUE`. Note that every user with a valid name and role can respond to a query, regardless of their group being listed here.
+-   `allow_to_query`: List of role ids (see `user_roles`) which are allowed to raise a query and close a query. Only effective if `allow_query_inputs` is `TRUE`. Note that every user with a valid name and role can respond to a query, regardless of their role being listed here.
 
 ### Setting configurations
 
