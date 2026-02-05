@@ -20,6 +20,7 @@
 ## Bug fixes 
 
 - [fix_multiple_choice_vars()] now also fixes long-format multiple choice variables that end with a number (#247).
+- Added date origin to `as.Date()` in `get_timeline_data()` that Posit Connect couldn't handle without.
 
 ## Developer notes
 
