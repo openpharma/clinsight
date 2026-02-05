@@ -30,6 +30,7 @@
 - Replaced `dplyr::case_when()` with `ifelse()` in the row review status calculation for efficiency (#243).
 - `ClinSight` now also looks for a `clinsight-config.yml` file in the current working directory and uses it as custom configuration (#256).
 - Added better control of role privileges - `allowed_to_review` and `allowed_to_query` can now be set per role in the `config.yml` file (#17, #256).
+- Several test snapshots are now much smaller, with better focus on the feature being tested so that they are easier to maintain (#259). 
 
 # clinsight 0.3.0
 
