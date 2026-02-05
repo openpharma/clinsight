@@ -1,32 +1,35 @@
-# clinsight (development version)
+# clinsight 0.4.0
 
 ## Changed
 
-- Replaced `dplyr::case_when()` with `ifelse()` in the row review status calculation for efficiency.
-- Added toggle to enable/disable background patterns in figures.
-- Added a toggle to enable hover labels of all patterns in the figures, also the ones in the background.
-- Improved the time-series on-hover label so that limits and significance are also shown.
-- Switched to server-side table downloads.
-- Implemented a `line-clamp` on table column names that wrap to more than 6 lines
-- Added better control of which role privileges - `allowed_to_review` and `allowed_to_query` can now be set per role in the `config.yml` file.
-- `ClinSight` now also looks for a `clinsight-config.yml` file in the current working directory and uses it as custom configuration.
-- Added a toggle to switch data transformation. In addition, added a way to show data transformed to standard values so that all are shown in the same unit (#110, #261).
-- Figures now also show patient-specific lab limits in the figures when data is not transformed (if available).
-- Added additional navigation buttons next to the tabs to easier navigate between common forms and study forms (#255).
-- Add toggle to enable text wrapping in tables.
-- The timeline is now available in all forms, and can be toggled on or off (#1007).
-- Updated table and figure switches to native `bslib` switches and added icons to them (#268).
+- Implemented a `line-clamp` on table column names that wrap to more than 6 lines (#253). 
+- Added a toggle to switch data transformation (#110, #261). 
+- Added functionality to show data transformed to standard values so that all are shown in the same unit (#110, #261).
+- Figures now also show patient-specific lab limits in the figures when data is not transformed (if available) (#249).
+- Improved the time-series on-hover label so that limits and significance are also shown (#249).
+- Added a toggle to enable/disable background patterns in figures (#249).
+- Added a toggle to enable hover labels of background patterns in the figures (#249).
+- Added additional navigation buttons next to more easily navigate between between common forms and study forms (#255).
+- Added a toggle to enable text wrapping in tables (#252). 
+- Added a toggle to show laboratory limits in the tables (#110).  
+- The timeline is now available in all forms and can be toggled on or off (#258).
+- Visually updated table and figure switches to native `bslib` switches and added icons to them (#268).
 
 ## Bug fixes 
 
 - [fix_multiple_choice_vars()] now also fixes long-format multiple choice variables that end with a number (#247).
-- Added date origin to `as.Date()` in `get_timeline_data()` that Posit Connect couldn't handle without.
+- Added date origin to `as.Date()` in `get_timeline_data()` that Posit Connect couldn't handle without (#269).
+- Switched to server-side table downloads to ensure that always all data is included in the table (#240, #241, #250).
+- Data from before baseline events (which is counted as day zero) are now also shown in figures. Now the baseline event can for example be set on the first treatment day, and the screening data will show as a negative day in the figures (#242).
 
 ## Developer notes
 
 - Updated role of long-term contributors to co-authors in Description field (#246).
-- Refactored some functions so that it is no longer needed to create an `apptables` object when starting the applcation, improving start up efficiency (#251).
-- Refactored function to retrieve summary data to improve efficiency.
+- Refactored some functions so that it is no longer needed to create an `apptables` object when starting the application, improving start up efficiency (#251).
+- Refactored function to retrieve summary data to improve efficiency (#263).
+- Replaced `dplyr::case_when()` with `ifelse()` in the row review status calculation for efficiency (#243).
+- `ClinSight` now also looks for a `clinsight-config.yml` file in the current working directory and uses it as custom configuration (#256).
+- Added better control of role privileges - `allowed_to_review` and `allowed_to_query` can now be set per role in the `config.yml` file (#17, #256).
 
 # clinsight 0.3.0
 
