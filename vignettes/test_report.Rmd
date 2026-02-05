@@ -42,6 +42,7 @@ editor_options:
 \fancyfoot[R]{\thepage}
 \renewcommand{\headrulewidth}{0pt} 
 ```
+
 ```{r, include = FALSE}
 pkg_name <- "clinsight"
 library(pkg_name, character.only = TRUE)
@@ -96,73 +97,76 @@ tests <- if(file.exists(params$test_results)){
 
 # Traceability matrix {#sec-traceability-matrix}
 
-|     | Requirement                             | Feature                                                                                                                                                                                     | Validation                                              |
-|-----|-----------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| 1   | Secure Authentication and Authorization | Restrict access *(using Shinymanager. Not applicable for internal deployment; for use in production, authentication and authorization is validated in the deployment validation document).* | [app_authentication](#app_authentication)               |
-| 2   | File Integration/loading data           | Create app user database                                                                                                                                                                    | [fct_SQLite](#fct_SQLite)                               |
-|     |                                         | Create credentials database                                                                                                                                                                 | [app_authentication](#app_authentication)               |
-|     |                                         | Display database synchronization information                                                                                                                                                | [mod_db_synch_info](#mod_db_synch_info)                 |
-|     |                                         | Ensure data in memory remains in synch with the database                                                                                                                                    | [mod_review_forms](#mod_review_forms)                   |
-|     |                                         | Explore data                                                                                                                                                                                | [app_feature_01](#app_feature_01)                       |
-|     |                                         | Load application module in isolation                                                                                                                                                        | *tested in all modules*                                 |
-|     |                                         | Load data from CSV files, merge with custom metadata, and start the application                                                                                                             | [app_feature_04](#app_feature_04)                       |
-|     |                                         | Merge raw data with metadata                                                                                                                                                                | [fct_appdata](#fct_appdata)                             |
-|     |                                         | Only allow to add query with valid user name and role                                                                                                                                       | [mod_query_add](#mod_query_add)                         |
-|     |                                         | Save a query                                                                                                                                                                                | [app_feature_03](#app_feature_03)                       |
-|     |                                         | Save review of a form                                                                                                                                                                       | [app_feature_02](#app_feature_02)                       |
-|     |                                         | Select correct data to review                                                                                                                                                               | [get_review_data](#get_review_data)                     |
-|     |                                         | Select rows with latest time stamp                                                                                                                                                          | [db_slice_rows](#db_slice_rows)                         |
-|     |                                         | Start application                                                                                                                                                                           | [app_server](#app_server)                               |
-|     |                                         | Update user data database                                                                                                                                                                   | [fct_SQLite](#fct_SQLite)                               |
-|     |                                         | Warn if database synchronization is outdated                                                                                                                                                | [mod_db_synch_info](#mod_db_synch_info)                 |
-|     |                                         | Warn if no user role or user name is provided                                                                                                                                               | [app_server](#app_server)                               |
-| 3   | Data Visualization Tools                | Explore data                                                                                                                                                                                | [app_feature_01](#app_feature_01)                       |
-|     |                                         | Get overview statistics of selected patient                                                                                                                                                 | [mod_header_widgets](#mod_header_widgets)               |
-|     |                                         | Highlight data that is not yet reviewed                                                                                                                                                     | [mod_study_forms](#mod_study_forms)                     |
-|     |                                         | Save a query                                                                                                                                                                                | [app_feature_3](#app_feature_3)                         |
-|     |                                         | Save review of a form                                                                                                                                                                       | [app_feature_02](#app_feature_02)                       |
-|     |                                         | View common form                                                                                                                                                                            | [mod_common_forms](#mod_common_forms)                   |
-|     |                                         | View forms with study-specific data                                                                                                                                                         | [mod_study_forms](#mod_study_forms)                     |
-|     |                                         | View interactive timeline                                                                                                                                                                   | [mod_timeline](#mod_timeline)                           |
-| 4   | Data highlighting                       | Explore data                                                                                                                                                                                | [app_feature_01](#app_feature_01)                       |
-|     |                                         | Get overview statistics of selected patient                                                                                                                                                 | [mod_header_widgets](#mod_header_widgets)               |
-|     |                                         | Highlight data that is not yet reviewed                                                                                                                                                     | [mod_study_forms](#mod_study_forms)                     |
-|     |                                         | Save a query                                                                                                                                                                                | [app_feature_03](#app_feature_03)                       |
-|     |                                         | Save review of a form                                                                                                                                                                       | [app_feature_02](#app_feature_02)                       |
-|     |                                         | View common form                                                                                                                                                                            | [mod_common_forms](#mod_common_forms)                   |
-|     |                                         | View forms with study-specific data                                                                                                                                                         | [mod_study_forms](#mod_study_forms)                     |
-|     |                                         | View interactive timeline                                                                                                                                                                   | [mod_timeline](#mod_timeline)                           |
-| 5   | Navigation functionality                | Explore data                                                                                                                                                                                | [app_feature_01](#app_feature_01)                       |
-|     |                                         | Navigate through forms with study data                                                                                                                                                      | [mod_navigate_forms](#mod_navigate_forms)               |
-|     |                                         | Navigate through participants                                                                                                                                                               | [mod_navigate_participants](#mod_navigate_participants) |
-|     |                                         | Navigate to patient selected in a table                                                                                                                                                     | [mod_go_to_form](#mod_go_to_form)                       |
-|     |                                         | Save a query                                                                                                                                                                                | [app_feature_03](#app_feature_03)                       |
-|     |                                         | Save review of a form                                                                                                                                                                       | [app_feature_02](#app_feature_02)                       |
-|     |                                         | Select user configuration                                                                                                                                                                   | [mod_review_config](#mod_review_config)                 |
-|     |                                         | Show overview tables of data to review                                                                                                                                                      | [mod_navigate_review](#mod_navigate_review)             |
-|     |                                         | View sidebar containing controls of application                                                                                                                                             | [mod_main_sidebar](#mod_main_sidebar)                   |
-| 6   | Query Management System                 | Add follow-up query, mark query as resolved                                                                                                                                                 | [mod_query_follow_up](#mod_query_follow_up)             |
-|     |                                         | Create and save a query                                                                                                                                                                     | [mod_query_add](#mod_query_add)                         |
-|     |                                         | Create follow-up query                                                                                                                                                                      | [mod_query_follow_up](#mod_query_follow_up)             |
-|     |                                         | Error if query entry in app does not match database                                                                                                                                         | [mod_query_add](#mod_query_add)                         |
-|     |                                         | Only allow to add query with valid user name and role                                                                                                                                       | [mod_query_add](#mod_query_add)                         |
-|     |                                         | Only allow to write follow-up query if query id matches to one in database                                                                                                                  | [mod_query_follow_up](#mod_query_follow_up)             |
-|     |                                         | Only allow to write follow-up query with valid user name and user role                                                                                                                      | [mod_query_follow_up](#mod_query_follow_up)             |
-|     |                                         | Save a query                                                                                                                                                                                | [app_feature_03](#app_feature_03)                       |
-|     |                                         | Verify follow-up query correctly being written in database                                                                                                                                  | [mod_query_follow_up](#mod_query_follow_up)             |
-|     |                                         | View follow-up messages of a query                                                                                                                                                          | [mod_queries](#mod_queries)                             |
-|     |                                         | View queries                                                                                                                                                                                | [mod_queries](#mod_queries)                             |
-|     |                                         | Write multiple query follow-up messages                                                                                                                                                     | [mod_query_follow_up](#mod_query_follow_up)             |
-| 7   | Reviewing functionality                 | Disable review buttons if review not applicable or not allowed, and give feedback why.                                                                                                      | [mod_review_forms](#mod_review_forms)                   |
-|     |                                         | Only allow to save review with valid user name and role                                                                                                                                     | [mod_review_forms](#mod_review_forms)                   |
-|     |                                         | Restrict right to review forms to roles specified in the app configuration                                                                                                                  | [mod_review_forms](#mod_review_forms)                   |
-|     |                                         | Save review of a form                                                                                                                                                                       | [app_feature_02](#app_feature_02)                       |
-|     |                                         | Save review of a form                                                                                                                                                                       | [mod_review_forms](#mod_review_forms)                   |
-|     |                                         | Save row-level review                                                                                                                                                                       | [app_feature_05](#app_feature_05)                       |
-|     |                                         | Save form-level review                                                                                                                                                                      | [app_feature_06](#app_feature_06)                       |
-|     |                                         | Review on form level                                                                                                                                                                        | [mod_review_forms](#mod_review_forms)                   |
-| 8   | Reporting functionality                 | Create PDF report                                                                                                                                                                           | [mod_report_fct_helpers](#mod_report_fct_helpers)       |
-|     |                                         | Create PDF report of review actions                                                                                                                                                         | [mod_report](#mod_report)                               |
+|   | Requirement | Feature | Validation |
+|----|----|----|----|
+| 1 | Secure Authentication and Authorization | Restrict access *(using Shinymanager. Not applicable for internal deployment; for use in production, authentication and authorization is validated in the deployment validation document).* | [app_authentication](#app_authentication) |
+| 2 | File Integration/loading data | Create app user database | [fct_SQLite](#fct_SQLite) |
+|  |  | Create credentials database | [app_authentication](#app_authentication) |
+|  |  | Display database synchronization information | [mod_db_synch_info](#mod_db_synch_info) |
+|  |  | Ensure data in memory remains in synch with the database | [mod_review_forms](#mod_review_forms) |
+|  |  | Explore data | [app_feature_01](#app_feature_01) |
+|  |  | Load application module in isolation | *tested in all modules* |
+|  |  | Load data from CSV files, merge with custom metadata, and start the application | [app_feature_04](#app_feature_04) |
+|  |  | Merge raw data with metadata | [fct_appdata](#fct_appdata) |
+|  |  | Only allow to add query with valid user name and role | [mod_query_add](#mod_query_add) |
+|  |  | Save a query | [app_feature_03](#app_feature_03) |
+|  |  | Save review of a form | [app_feature_02](#app_feature_02) |
+|  |  | Select correct data to review | [get_review_data](#get_review_data) |
+|  |  | Select rows with latest time stamp | [db_slice_rows](#db_slice_rows) |
+|  |  | Start application | [app_server](#app_server) |
+|  |  | Update user data database | [fct_SQLite](#fct_SQLite) |
+|  |  | Warn if database synchronization is outdated | [mod_db_synch_info](#mod_db_synch_info) |
+|  |  | Warn if no user role or user name is provided | [app_server](#app_server) |
+| 3 | Data Visualization Tools | Explore data | [app_feature_01](#app_feature_01) |
+|  |  | Get overview statistics of selected patient | [mod_header_widgets](#mod_header_widgets) |
+|  |  | Highlight data that is not yet reviewed | [mod_study_forms](#mod_study_forms) |
+|  |  | Save a query | [app_feature_3](#app_feature_3) |
+|  |  | Save review of a form | [app_feature_02](#app_feature_02) |
+|  |  | View common form | [mod_common_forms](#mod_common_forms) |
+|  |  | View forms with study-specific data | [mod_study_forms](#mod_study_forms) |
+|  |  | View interactive timeline | [mod_timeline](#mod_timeline) |
+| 4 | Data highlighting | Explore data | [app_feature_01](#app_feature_01) |
+|  |  | Get overview statistics of selected patient | [mod_header_widgets](#mod_header_widgets) |
+|  |  | Highlight data that is not yet reviewed | [mod_study_forms](#mod_study_forms) |
+|  |  | Save a query | [app_feature_03](#app_feature_03) |
+|  |  | Save review of a form | [app_feature_02](#app_feature_02) |
+|  |  | View common form | [mod_common_forms](#mod_common_forms) |
+|  |  | View forms with study-specific data | [mod_study_forms](#mod_study_forms) |
+|  |  | View interactive timeline | [mod_timeline](#mod_timeline) |
+|  |  | Toggle background patterns | [mod_study_forms](#mod_study_forms) |
+|  |  | Toggle transformation | [mod_study_forms](#mod_study_forms) |
+| 5 | Navigation functionality | Explore data | [app_feature_01](#app_feature_01) |
+|  |  | Navigate through forms with study data | [mod_navigate_forms](#mod_navigate_forms) |
+|  |  | Navigate through participants | [mod_navigate_participants](#mod_navigate_participants) |
+|  |  | Navigate to patient selected in a table | [mod_go_to_form](#mod_go_to_form) |
+|  |  | Save a query | [app_feature_03](#app_feature_03) |
+|  |  | Save review of a form | [app_feature_02](#app_feature_02) |
+|  |  | Select user configuration | [mod_review_config](#mod_review_config) |
+|  |  | Show overview tables of data to review | [mod_navigate_review](#mod_navigate_review) |
+|  |  | View sidebar containing controls of application | [mod_main_sidebar](#mod_main_sidebar) |
+| 6 | Query Management System | Add follow-up query, mark query as resolved | [mod_query_follow_up](#mod_query_follow_up) |
+|  |  | Create and save a query | [mod_query_add](#mod_query_add) |
+|  |  | Create follow-up query | [mod_query_follow_up](#mod_query_follow_up) |
+|  |  | Error if query entry in app does not match database | [mod_query_add](#mod_query_add) |
+|  |  | Only allow to add query with valid user name and role | [mod_query_add](#mod_query_add) |
+|  |  | Only allow to write follow-up query if query id matches to one in database | [mod_query_follow_up](#mod_query_follow_up) |
+|  |  | Only allow to write follow-up query with valid user name and user role | [mod_query_follow_up](#mod_query_follow_up) |
+|  |  | Save a query | [app_feature_03](#app_feature_03) |
+|  |  | Verify follow-up query correctly being written in database | [mod_query_follow_up](#mod_query_follow_up) |
+|  |  | View follow-up messages of a query | [mod_queries](#mod_queries) |
+|  |  | View queries | [mod_queries](#mod_queries) |
+|  |  | Write multiple query follow-up messages | [mod_query_follow_up](#mod_query_follow_up) |
+| 7 | Reviewing functionality | Disable review buttons if review not applicable or not allowed, and give feedback why. | [mod_review_forms](#mod_review_forms) |
+|  |  | Only allow to save review with valid user name and role | [mod_review_forms](#mod_review_forms) |
+|  |  | Restrict right to review forms to roles specified in the app configuration | [mod_review_forms](#mod_review_forms) |
+|  |  | Save review of a form | [app_feature_02](#app_feature_02) |
+|  |  | Save review of a form | [mod_review_forms](#mod_review_forms) |
+|  |  | Save row-level review | [app_feature_05](#app_feature_05) |
+|  |  | Save form-level review | [app_feature_06](#app_feature_06) |
+|  |  | Review on form level | [mod_review_forms](#mod_review_forms) |
+|  |  | Download table | [mod_review_form_tbl](#mod_review_form_tbl) |
+| 8 | Reporting functionality | Create PDF report | [mod_report_fct_helpers](#mod_report_fct_helpers) |
+|  |  | Create PDF report of review actions | [mod_report](#mod_report) |
 
 : Traceability matrix {tbl-colwidths="\[5,20,45,30\]"}
 
