@@ -540,11 +540,11 @@ datatable_custom <- function(
     colnames <- lapply(
       colnames, 
       \(cn) as.character(tags$span(
-        htmlEscape(cn), 
+        cn, 
         class = "cs-span-overflow",
-        title = htmlEscape(cn)
-        ))
-      ) |> 
+        title = cn
+      ))
+    ) |> 
       as.character()
   }
   stopifnot(is.null(title) | is.character(title))
