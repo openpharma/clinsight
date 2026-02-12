@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">clinsight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,7 +42,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Review forms table - Shiny module Server</h1>
-      <small class="dont-index">Source: <a href="https://github.com/openpharma/clinsight/blob/v0.3.0/R/mod_review_form_tbl.R" class="external-link"><code>R/mod_review_form_tbl.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/openpharma/clinsight/blob/main/R/mod_review_form_tbl.R" class="external-link"><code>R/mod_review_form_tbl.R</code></a></small>
       <div class="d-none name"><code>mod_review_form_tbl_server.Rd</code></div>
     </div>
 
@@ -58,8 +58,11 @@
 <span>  <span class="va">form_data</span>,</span>
 <span>  <span class="va">form_review_data</span>,</span>
 <span>  <span class="va">form_items</span>,</span>
+<span>  transformation <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  show_limits <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">active_subject</span>,</span>
 <span>  <span class="va">show_all</span>,</span>
+<span>  enable_text_wrap <span class="op">=</span> <span class="fu">reactive</span><span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span>,</span>
 <span>  table_names <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  title <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -92,6 +95,18 @@ the form.</p></dd>
 <dd><p>Named character vector with all form_items to display.</p></dd>
 
 
+<dt id="arg-transformation">transformation<a class="anchor" aria-label="anchor" href="#arg-transformation"></a></dt>
+<dd><p>A reactive value. If this is 'none' then the columns
+<code>item_value</code> and <code>item_unit</code> will be used in the table. Otherwise,
+<code>value_standardized</code> and <code>unit_standardized</code> will be used.</p></dd>
+
+
+<dt id="arg-show-limits">show_limits<a class="anchor" aria-label="anchor" href="#arg-show-limits"></a></dt>
+<dd><p>Optional reactive value containing a logical. If the
+logical inside is <code>TRUE</code>, laboratory limits will be added to the table
+shown in the module.</p></dd>
+
+
 <dt id="arg-active-subject">active_subject<a class="anchor" aria-label="anchor" href="#arg-active-subject"></a></dt>
 <dd><p>Reactive value containing the active subject id.</p></dd>
 
@@ -99,6 +114,12 @@ the form.</p></dd>
 <dt id="arg-show-all">show_all<a class="anchor" aria-label="anchor" href="#arg-show-all"></a></dt>
 <dd><p>Common reactive value, a logical indicating whether all
 records should be displayed.</p></dd>
+
+
+<dt id="arg-enable-text-wrap">enable_text_wrap<a class="anchor" aria-label="anchor" href="#arg-enable-text-wrap"></a></dt>
+<dd><p>A reactive value, to enable/disable multi-line
+table rows. Usually disabled so that deferred rendering is possible, but
+can be enabled for better viewing experience.</p></dd>
 
 
 <dt id="arg-table-names">table_names<a class="anchor" aria-label="anchor" href="#arg-table-names"></a></dt>
@@ -130,7 +151,7 @@ needed to keep the browser table in-synch with the server table.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Leonard Daniël Samson, GCP-Service International Ltd.&amp; Co. KG.</p>
+  <p>Developed by Leonard Daniël Samson, Aaron Clark, Jeff Thompson, GCP-Service International Ltd.&amp; Co. KG.</p>
 </div>
 
 <div class="pkgdown-footer-right">

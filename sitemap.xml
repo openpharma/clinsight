@@ -14,6 +14,7 @@
 <url><loc>https://openpharma.github.io/clinsight/news/index.html</loc></url>
 <url><loc>https://openpharma.github.io/clinsight/reference/add_events_to_data.html</loc></url>
 <url><loc>https://openpharma.github.io/clinsight/reference/add_missing_columns.html</loc></url>
+<url><loc>https://openpharma.github.io/clinsight/reference/add_text_label.html</loc></url>
 <url><loc>https://openpharma.github.io/clinsight/reference/add_timevars_to_data.html</loc></url>
 <url><loc>https://openpharma.github.io/clinsight/reference/adjust_colnames.html</loc></url>
 <url><loc>https://openpharma.github.io/clinsight/reference/app_server.html</loc></url>
@@ -35,6 +36,7 @@
 <url><loc>https://openpharma.github.io/clinsight/reference/collapse_fct_levels.html</loc></url>
 <url><loc>https://openpharma.github.io/clinsight/reference/collect_query_data.html</loc></url>
 <url><loc>https://openpharma.github.io/clinsight/reference/cols_to_char.html</loc></url>
+<url><loc>https://openpharma.github.io/clinsight/reference/count_adverse_events.html</loc></url>
 <url><loc>https://openpharma.github.io/clinsight/reference/create_clinsight_config.html</loc></url>
 <url><loc>https://openpharma.github.io/clinsight/reference/create_clinsight_metadata.html</loc></url>
 <url><loc>https://openpharma.github.io/clinsight/reference/create_report.html</loc></url>

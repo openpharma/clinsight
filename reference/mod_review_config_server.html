@@ -9,7 +9,7 @@ user."><meta property="og:image" content="https://openpharma.github.io/clinsight
 
     <a class="navbar-brand me-2" href="../index.html">clinsight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,7 +44,7 @@ user."><meta property="og:image" content="https://openpharma.github.io/clinsight
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Review configuration - Shiny module Server</h1>
-      <small class="dont-index">Source: <a href="https://github.com/openpharma/clinsight/blob/v0.3.0/R/mod_review_config.R" class="external-link"><code>R/mod_review_config.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/openpharma/clinsight/blob/main/R/mod_review_config.R" class="external-link"><code>R/mod_review_config.R</code></a></small>
       <div class="d-none name"><code>mod_review_config_server.Rd</code></div>
     </div>
 
@@ -55,7 +55,7 @@ user.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mod_review_config_server</span><span class="op">(</span><span class="va">id</span>, <span class="va">r</span>, <span class="va">app_data</span>, <span class="va">app_tables</span>, <span class="va">sites</span>, <span class="va">subject_ids</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mod_review_config_server</span><span class="op">(</span><span class="va">id</span>, <span class="va">r</span>, <span class="va">app_data</span>, <span class="va">sites</span>, <span class="va">subject_ids</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -69,7 +69,7 @@ user.</p>
 <dt id="arg-r">r<a class="anchor" aria-label="anchor" href="#arg-r"></a></dt>
 <dd><p>Common reactiveValues. Used to pass on filtered data and filtered subjects
 (based on selected sites/regions) to the main server. Expects to contain
-<code>r$filtered_data</code>, <code>r$filtered_tables</code>, <code>r$filtered_subjects</code> and <code>r$subject_id</code> (the '
+<code>r$filtered_data</code>, <code>r$filtered_subjects</code> and <code>r$subject_id</code> (the '
 active/current subject id'). The latter is needed because the <code>r$subject_id</code>
 needs to be set to the first ID in the filtered selection to prevent a
 non-selected subject_id to be active.</p></dd>
@@ -77,10 +77,6 @@ non-selected subject_id to be active.</p></dd>
 
 <dt id="arg-app-data">app_data<a class="anchor" aria-label="anchor" href="#arg-app-data"></a></dt>
 <dd><p>List of data frames with the app data.</p></dd>
-
-
-<dt id="arg-app-tables">app_tables<a class="anchor" aria-label="anchor" href="#arg-app-tables"></a></dt>
-<dd><p>List of data frames with the app data in wide table format.</p></dd>
 
 
 <dt id="arg-sites">sites<a class="anchor" aria-label="anchor" href="#arg-sites"></a></dt>
@@ -114,7 +110,7 @@ data will be shown in the application.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Leonard Daniël Samson, GCP-Service International Ltd.&amp; Co. KG.</p>
+  <p>Developed by Leonard Daniël Samson, Aaron Clark, Jeff Thompson, GCP-Service International Ltd.&amp; Co. KG.</p>
 </div>
 
 <div class="pkgdown-footer-right">

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">clinsight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,7 +42,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Common forms - Shiny module Server</h1>
-      <small class="dont-index">Source: <a href="https://github.com/openpharma/clinsight/blob/v0.3.0/R/mod_common_forms.R" class="external-link"><code>R/mod_common_forms.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/openpharma/clinsight/blob/main/R/mod_common_forms.R" class="external-link"><code>R/mod_common_forms.R</code></a></small>
       <div class="d-none name"><code>mod_common_forms_server.Rd</code></div>
     </div>
 
@@ -60,8 +60,7 @@
 <span>  <span class="va">form_items</span>,</span>
 <span>  <span class="va">active_subject</span>,</span>
 <span>  id_item <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"subject_id"</span>, <span class="st">"event_name"</span>, <span class="st">"item_group"</span>, <span class="st">"form_repeat"</span>, <span class="st">"item_name"</span><span class="op">)</span>,</span>
-<span>  table_names <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">timeline_data</span></span>
+<span>  table_names <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -114,12 +113,6 @@ that can uniquely identify one item/row.</p></dd>
 within <code><a href="datatable_custom.html">datatable_custom()</a></code>, to improve the column names in the final
 interactive tables.</p></dd>
 
-
-<dt id="arg-timeline-data">timeline_data<a class="anchor" aria-label="anchor" href="#arg-timeline-data"></a></dt>
-<dd><p>A reactive with a data frame containing the timeline
-data. Used to create the timeline figure. Created with
-<code><a href="get_timeline_data.html">get_timeline_data()</a></code>.</p></dd>
-
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -129,11 +122,7 @@ common forms are currently: <code>Adverse events</code>, <code>Medical History</
 changed in the metadata. The tables shown are overview tables in wide format,
 similar to the ones in <code><a href="mod_study_forms_server.html">mod_study_forms_server()</a></code>. When the common form
 <code>Adverse events</code> is selected, the module will show an additional table with
-Severe Adverse Events above the table with Adverse Events. In addition, it
-will show a timeline by calling module
-<code><a href="mod_timeline_ui.html">mod_timeline_ui()</a></code>/<code><a href="mod_timeline_server.html">mod_timeline_server()</a></code>. The timeline shows study events
-(such as drug administrations) and study visits together with Adverse Events,
-so that temporal relationships between these events can be quickly revealed.
+Severe Adverse Events above the table with Adverse Events.
 The <code>common forms</code> module is used in the main server to create all applicable
 common form pages.</p>
     </div>
@@ -149,7 +138,7 @@ common form pages.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Leonard Daniël Samson, GCP-Service International Ltd.&amp; Co. KG.</p>
+  <p>Developed by Leonard Daniël Samson, Aaron Clark, Jeff Thompson, GCP-Service International Ltd.&amp; Co. KG.</p>
 </div>
 
 <div class="pkgdown-footer-right">

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">clinsight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,7 +42,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>App sidebar - Shiny module Server</h1>
-      <small class="dont-index">Source: <a href="https://github.com/openpharma/clinsight/blob/v0.3.0/R/mod_main_sidebar.R" class="external-link"><code>R/mod_main_sidebar.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/openpharma/clinsight/blob/main/R/mod_main_sidebar.R" class="external-link"><code>R/mod_main_sidebar.R</code></a></small>
       <div class="d-none name"><code>mod_main_sidebar_server.Rd</code></div>
     </div>
 
@@ -57,7 +57,6 @@
 <span>  <span class="va">r</span>,</span>
 <span>  <span class="va">navinfo</span>,</span>
 <span>  <span class="va">app_data</span>,</span>
-<span>  <span class="va">app_tables</span>,</span>
 <span>  <span class="va">app_vars</span>,</span>
 <span>  <span class="va">db_path</span>,</span>
 <span>  <span class="va">forms_to_review</span>,</span>
@@ -97,11 +96,6 @@ example, <code>Start</code> (start page), or <code>Queries</code>.</p></dd>
 <dd><p>List of data frames. Contains the application data, with data
 of each form stored in a data frame. Required to set the review
 configuration in <code><a href="mod_review_config_server.html">mod_review_config_server()</a></code>.</p></dd>
-
-
-<dt id="arg-app-tables">app_tables<a class="anchor" aria-label="anchor" href="#arg-app-tables"></a></dt>
-<dd><p>List of data frames with the app data in wide table format.
-Required to set the review configuration in <code><a href="mod_review_config_server.html">mod_review_config_server()</a></code></p></dd>
 
 
 <dt id="arg-app-vars">app_vars<a class="anchor" aria-label="anchor" href="#arg-app-vars"></a></dt>
@@ -144,7 +138,7 @@ the next/previous forms and to add a query to the active form.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Leonard Daniël Samson, GCP-Service International Ltd.&amp; Co. KG.</p>
+  <p>Developed by Leonard Daniël Samson, Aaron Clark, Jeff Thompson, GCP-Service International Ltd.&amp; Co. KG.</p>
 </div>
 
 <div class="pkgdown-footer-right">

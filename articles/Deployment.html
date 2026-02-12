@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">clinsight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,7 +68,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Deployment</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/openpharma/clinsight/blob/v0.3.0/vignettes/Deployment.Rmd" class="external-link"><code>vignettes/Deployment.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/openpharma/clinsight/blob/main/vignettes/Deployment.Rmd" class="external-link"><code>vignettes/Deployment.Rmd</code></a></small>
       <div class="d-none name"><code>Deployment.Rmd</code></div>
     </div>
 
@@ -90,7 +90,7 @@ such as organization-specific deployment options. A configuration file
 will be discussed in detail.</p>
 <pre><code>default:
   golem_name: clinsight
-  golem_version: 0.3.0
+  golem_version: 0.4.0
   app_prod: no
   user_identification: test_user
   study_data: !expr clinsight::clinsightful_data
@@ -101,6 +101,7 @@ will be discussed in detail.</p>
     Medical Monitor: medical_monitor
     Data Manager: data_manager
   allow_to_review: [admin, medical_monitor]
+  allow_to_query: [admin, medical_monitor]
   allow_listing_download: TRUE
   allow_query_inputs: TRUE
   study_logo: assets/study_logo.png
@@ -121,6 +122,9 @@ shinyproxy:
   study_data: study_data/study_data.rds
   meta_data: study_data/metadata.rds
   user_db: study_data/user_db.sqlite
+  study_logo: study_data/assets/study_logo.png
+  allow_to_review: [medical_monitor]
+  allow_to_query: [medical_monitor]
 posit_connect:
   app_prod: yes
   user_identification: shiny_session
@@ -170,7 +174,7 @@ configuration.</li>
 <code>Role Name: role_id</code>) that are available in the
 application.</li>
 <li>
-<code>allow_to_review</code>: List of role names (specified above)
+<code>allow_to_review</code>: List of role ids (specified above)
 which are allowed to review data in the application.</li>
 <li>
 <code>allow_listing_download</code>: Logical, <code>TRUE</code> if
@@ -179,6 +183,12 @@ directly to Excel for sharing (or other uses).</li>
 <li>
 <code>allow_query_inputs</code>: Logical, `TRUE` to permit users to
 submit and track queries within the application’s database.</li>
+<li>
+<code>allow_to_query</code>: List of role ids (see
+<code>user_roles</code>) which are allowed to raise a query and close a
+query. Only effective if <code>allow_query_inputs</code> is
+<code>TRUE</code>. Note that every user with a valid name and role can
+respond to a query, regardless of their role being listed here.</li>
 </ul>
 </div>
 <div class="section level3">
@@ -383,15 +393,17 @@ the <code>app.R</code> file.</p>
 <h3 id="customizing-configuration">Customizing configuration<a class="anchor" aria-label="anchor" href="#customizing-configuration"></a>
 </h3>
 <p>If the profiles above are insufficient, you can also provide your own
-configuration file with fully customized settings with the steps
-described below.</p>
-<p>To do so, first create a configuration template. The function
-<code><a href="../reference/create_clinsight_config.html">create_clinsight_config()</a></code> can be used to create a copy of
-the current <code>clinsight</code> configuration file in the current
-working directory. To use this configuration file with
-<code>clinsight</code>, the environment variable named “CONFIG_PATH”
-needs to be set by using a command similar to the following:
-<code>Sys.setenv("CONFIG_PATH" = "PATH_TO_CONFIG/clinsight_config.yml")</code>,
+configuration file with fully customized settings.
+<code>ClinSight</code> will check the working directory for a file named
+<code>clinsight-config.yml</code> and will use this if it exists as
+configuration file instead of the default configuration. The function
+<code><a href="../reference/create_clinsight_config.html">create_clinsight_config()</a></code> can be used to create such a
+customizable config file, containing a copy of the
+<code>clinsight</code> default configuration.</p>
+<p>If you want to change the name of this file, or place it somewhere
+else, you must provide the path to the custom config file in the
+environment variable “CONFIG_PATH”. For example:
+<code>Sys.setenv("CONFIG_PATH" = "PATH_TO_CONFIG/clinsight-config.yml")</code>,
 where <code>PATH_TO_CONFIG</code> is the path to the folder in which the
 configuration file is located.</p>
 </div>
@@ -403,7 +415,7 @@ configuration file is located.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Leonard Daniël Samson, GCP-Service International Ltd.&amp; Co. KG.</p>
+  <p>Developed by Leonard Daniël Samson, Aaron Clark, Jeff Thompson, GCP-Service International Ltd.&amp; Co. KG.</p>
 </div>
 
 <div class="pkgdown-footer-right">

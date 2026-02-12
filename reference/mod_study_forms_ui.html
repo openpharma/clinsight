@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">clinsight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,7 +42,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Study forms - Shiny module UI</h1>
-      <small class="dont-index">Source: <a href="https://github.com/openpharma/clinsight/blob/v0.3.0/R/mod_study_forms.R" class="external-link"><code>R/mod_study_forms.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/openpharma/clinsight/blob/main/R/mod_study_forms.R" class="external-link"><code>R/mod_study_forms.R</code></a></small>
       <div class="d-none name"><code>mod_study_forms_ui.Rd</code></div>
     </div>
 
@@ -88,11 +88,7 @@ common forms are currently: <code>Adverse events</code>, <code>Medical History</
 changed in the metadata. The tables shown are overview tables in wide format,
 similar to the ones in <code><a href="mod_study_forms_server.html">mod_study_forms_server()</a></code>. When the common form
 <code>Adverse events</code> is selected, the module will show an additional table with
-Severe Adverse Events above the table with Adverse Events. In addition, it
-will show a timeline by calling module
-<code><a href="mod_timeline_ui.html">mod_timeline_ui()</a></code>/<code><a href="mod_timeline_server.html">mod_timeline_server()</a></code>. The timeline shows study events
-(such as drug administrations) and study visits together with Adverse Events,
-so that temporal relationships between these events can be quickly revealed.
+Severe Adverse Events above the table with Adverse Events.
 The <code>common forms</code> module is used in the main server to create all applicable
 common form pages.</p>
     </div>
@@ -106,7 +102,7 @@ common form pages.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Leonard Daniël Samson, GCP-Service International Ltd.&amp; Co. KG.</p>
+  <p>Developed by Leonard Daniël Samson, Aaron Clark, Jeff Thompson, GCP-Service International Ltd.&amp; Co. KG.</p>
 </div>
 
 <div class="pkgdown-footer-right">

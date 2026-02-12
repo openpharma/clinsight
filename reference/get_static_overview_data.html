@@ -9,7 +9,7 @@ page of the application."><meta property="og:image" content="https://openpharma.
 
     <a class="navbar-brand me-2" href="../index.html">clinsight</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,7 +44,7 @@ page of the application."><meta property="og:image" content="https://openpharma.
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Create static overview data</h1>
-      <small class="dont-index">Source: <a href="https://github.com/openpharma/clinsight/blob/v0.3.0/R/fct_appdata_summary_tables.R" class="external-link"><code>R/fct_appdata_summary_tables.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/openpharma/clinsight/blob/main/R/fct_appdata_summary_tables.R" class="external-link"><code>R/fct_appdata_summary_tables.R</code></a></small>
       <div class="d-none name"><code>get_static_overview_data.Rd</code></div>
     </div>
 
@@ -55,7 +55,7 @@ page of the application.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_static_overview_data</span><span class="op">(</span><span class="va">data</span>, expected_general_columns <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_static_overview_data</span><span class="op">(</span><span class="va">data</span>, <span class="va">available_data</span>, expected_general_columns <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -66,17 +66,24 @@ page of the application.</p>
 <dd><p>List of data frames.</p></dd>
 
 
+<dt id="arg-available-data">available_data<a class="anchor" aria-label="anchor" href="#arg-available-data"></a></dt>
+<dd><p>A data frame with available data. Visits will be
+extracted from here. Required columns are <code>subject_id</code>, <code>event_name</code>,
+<code>event_label</code>. The <code>event_label</code> variable should be a factor in order to
+work well with the function <code><a href="fig_timeline.html">fig_timeline()</a></code>.</p></dd>
+
+
 <dt id="arg-expected-general-columns">expected_general_columns<a class="anchor" aria-label="anchor" href="#arg-expected-general-columns"></a></dt>
 <dd><p>Character vector with the expected columns.
 If columns are completely missing, they will be made explicitly missing in
-the data frame (that is, a column will be created with only missing character
-values).</p></dd>
+the data frame (that is, a column will be created with only missing
+character values).</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data frame with the overview data. Columns are:
-<code>subject_id</code>, <code>status</code>, <code>WHO.classification</code>, <code>Age</code>, <code>Sex</code>, <code>event_name</code>.</p>
+    <p>A data frame with the overview data. Columns are: <code>subject_id</code>,
+<code>status</code>, <code>WHO.classification</code>, <code>Age</code>, <code>Sex</code>, <code>event_name</code>.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -84,7 +91,7 @@ values).</p></dd>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Leonard Daniël Samson, GCP-Service International Ltd.&amp; Co. KG.</p>
+  <p>Developed by Leonard Daniël Samson, Aaron Clark, Jeff Thompson, GCP-Service International Ltd.&amp; Co. KG.</p>
 </div>
 
 <div class="pkgdown-footer-right">
