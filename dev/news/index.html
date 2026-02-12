@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">clinsight</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.3.0.9016</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.4.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,34 +47,41 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="clinsight-development-version">clinsight (development version)<a class="anchor" aria-label="anchor" href="#clinsight-development-version"></a></h2>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.0" id="clinsight-040">clinsight 0.4.0<a class="anchor" aria-label="anchor" href="#clinsight-040"></a></h2>
 <div class="section level3">
-<h3 id="changed-development-version">Changed<a class="anchor" aria-label="anchor" href="#changed-development-version"></a></h3>
-<ul><li>Replaced <code><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">dplyr::case_when()</a></code> with <code><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse()</a></code> in the row review status calculation for efficiency.</li>
-<li>Added toggle to enable/disable background patterns in figures.</li>
-<li>Added a toggle to enable hover labels of all patterns in the figures, also the ones in the background.</li>
-<li>Improved the time-series on-hover label so that limits and significance are also shown.</li>
-<li>Switched to server-side table downloads.</li>
-<li>Implemented a <code>line-clamp</code> on table column names that wrap to more than 6 lines</li>
-<li>Added better control of which role privileges - <code>allowed_to_review</code> and <code>allowed_to_query</code> can now be set per role in the <code>config.yml</code> file.</li>
-<li>
-<code>ClinSight</code> now also looks for a <code>clinsight-config.yml</code> file in the current working directory and uses it as custom configuration.</li>
-<li>Added a toggle to switch data transformation. In addition, added a way to show data transformed to standard values so that all are shown in the same unit (<a href="https://github.com/openpharma/clinsight/issues/110" class="external-link">#110</a>, <a href="https://github.com/openpharma/clinsight/issues/261" class="external-link">#261</a>).</li>
-<li>Figures now also show patient-specific lab limits in the figures when data is not transformed (if available).</li>
-<li>Added additional navigation buttons next to the tabs to easier navigate between common forms and study forms (<a href="https://github.com/openpharma/clinsight/issues/255" class="external-link">#255</a>).</li>
-<li>Add toggle to enable text wrapping in tables.</li>
-<li>The timeline is now available in all forms, and can be toggled on or off (<a href="https://github.com/openpharma/clinsight/issues/1007" class="external-link">#1007</a>).</li>
-<li>Updated table and figure switches to native <code>bslib</code> switches and added icons to them (<a href="https://github.com/openpharma/clinsight/issues/268" class="external-link">#268</a>).</li>
+<h3 id="changed-0-4-0">Changed<a class="anchor" aria-label="anchor" href="#changed-0-4-0"></a></h3>
+<ul><li>Implemented a <code>line-clamp</code> on table column names that wrap to more than 6 lines (<a href="https://github.com/openpharma/clinsight/issues/253" class="external-link">#253</a>).</li>
+<li>Added a toggle to switch data transformation (<a href="https://github.com/openpharma/clinsight/issues/110" class="external-link">#110</a>, <a href="https://github.com/openpharma/clinsight/issues/261" class="external-link">#261</a>).</li>
+<li>Added functionality to show data transformed to standard values so that all are shown in the same unit (<a href="https://github.com/openpharma/clinsight/issues/110" class="external-link">#110</a>, <a href="https://github.com/openpharma/clinsight/issues/261" class="external-link">#261</a>).</li>
+<li>Figures now also show patient-specific lab limits in the figures when data is not transformed (if available) (<a href="https://github.com/openpharma/clinsight/issues/249" class="external-link">#249</a>).</li>
+<li>Improved the time-series on-hover label so that limits and significance are also shown (<a href="https://github.com/openpharma/clinsight/issues/249" class="external-link">#249</a>).</li>
+<li>Added a toggle to enable/disable background patterns in figures (<a href="https://github.com/openpharma/clinsight/issues/249" class="external-link">#249</a>).</li>
+<li>Added a toggle to enable hover labels of background patterns in the figures (<a href="https://github.com/openpharma/clinsight/issues/249" class="external-link">#249</a>).</li>
+<li>Added additional navigation buttons next to more easily navigate between between common forms and study forms (<a href="https://github.com/openpharma/clinsight/issues/255" class="external-link">#255</a>).</li>
+<li>Added a toggle to enable text wrapping in tables (<a href="https://github.com/openpharma/clinsight/issues/252" class="external-link">#252</a>).</li>
+<li>Added a toggle to show laboratory limits in the tables (<a href="https://github.com/openpharma/clinsight/issues/110" class="external-link">#110</a>).<br></li>
+<li>The timeline is now available in all forms and can be toggled on or off (<a href="https://github.com/openpharma/clinsight/issues/258" class="external-link">#258</a>).</li>
+<li>Visually updated table and figure switches to native <code>bslib</code> switches and added icons to them (<a href="https://github.com/openpharma/clinsight/issues/268" class="external-link">#268</a>).</li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<h3 id="bug-fixes-0-4-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-4-0"></a></h3>
 <ul><li>[fix_multiple_choice_vars()] now also fixes long-format multiple choice variables that end with a number (<a href="https://github.com/openpharma/clinsight/issues/247" class="external-link">#247</a>).</li>
-<li>Added date origin to <code><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date()</a></code> in <code><a href="../reference/get_timeline_data.html">get_timeline_data()</a></code> that Posit Connect couldn’t handle without.</li>
+<li>Added date origin to <code><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date()</a></code> in <code><a href="../reference/get_timeline_data.html">get_timeline_data()</a></code> that Posit Connect couldn’t handle without (<a href="https://github.com/openpharma/clinsight/issues/269" class="external-link">#269</a>).</li>
+<li>Switched to server-side table downloads to ensure that always all data is included in the table (<a href="https://github.com/openpharma/clinsight/issues/240" class="external-link">#240</a>, <a href="https://github.com/openpharma/clinsight/issues/241" class="external-link">#241</a>, <a href="https://github.com/openpharma/clinsight/issues/250" class="external-link">#250</a>).</li>
+<li>Data from before baseline events (which is counted as day zero) are now also shown in figures. Now the baseline event can for example be set on the first treatment day, and the screening data will show as a negative day in the figures (<a href="https://github.com/openpharma/clinsight/issues/242" class="external-link">#242</a>).</li>
 </ul></div>
 <div class="section level3">
-<h3 id="developer-notes-development-version">Developer notes<a class="anchor" aria-label="anchor" href="#developer-notes-development-version"></a></h3>
+<h3 id="developer-notes-0-4-0">Developer notes<a class="anchor" aria-label="anchor" href="#developer-notes-0-4-0"></a></h3>
 <ul><li>Updated role of long-term contributors to co-authors in Description field (<a href="https://github.com/openpharma/clinsight/issues/246" class="external-link">#246</a>).</li>
-<li>Refactored some functions so that it is no longer needed to create an <code>apptables</code> object when starting the applcation, improving start up efficiency (<a href="https://github.com/openpharma/clinsight/issues/251" class="external-link">#251</a>).</li>
-<li>Refactored function to retrieve summary data to improve efficiency.</li>
+<li>Refactored some functions so that it is no longer needed to create an <code>apptables</code> object when starting the application, improving start up efficiency (<a href="https://github.com/openpharma/clinsight/issues/251" class="external-link">#251</a>).</li>
+<li>Refactored function to retrieve summary data to improve efficiency (<a href="https://github.com/openpharma/clinsight/issues/263" class="external-link">#263</a>).</li>
+<li>Replaced <code><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">dplyr::case_when()</a></code> with <code><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse()</a></code> in the row review status calculation for efficiency (<a href="https://github.com/openpharma/clinsight/issues/243" class="external-link">#243</a>).</li>
+<li>
+<code>ClinSight</code> now also looks for a <code>clinsight-config.yml</code> file in the current working directory and uses it as custom configuration (<a href="https://github.com/openpharma/clinsight/issues/256" class="external-link">#256</a>).</li>
+<li>Added better control of role privileges - <code>allowed_to_review</code> and <code>allowed_to_query</code> can now be set per role in the <code>config.yml</code> file (<a href="https://github.com/openpharma/clinsight/issues/17" class="external-link">#17</a>, <a href="https://github.com/openpharma/clinsight/issues/256" class="external-link">#256</a>).</li>
+<li>Several test snapshots are now much smaller, with better focus on the feature being tested so that they are easier to maintain (<a href="https://github.com/openpharma/clinsight/issues/259" class="external-link">#259</a>).</li>
 </ul></div>
 </div>
     <div class="section level2">
