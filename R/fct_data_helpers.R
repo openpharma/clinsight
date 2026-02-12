@@ -196,36 +196,41 @@ fix_multiple_choice_vars <- function(
   all_vars <- unique(data[[var_column]])
   
   missing_vars <- expected_vars[!expected_vars %in% all_vars]
-  if(length(missing_vars) == 0) return(data)
+  if (length(missing_vars) == 0) {
+    return(data)
+  }
   
   vars_to_adjust <- lapply(
-    missing_vars, 
+    setNames(nm = missing_vars), 
     \(x){all_vars[grep(paste0("^", x, suffix), all_vars)] }
   )
+  vars_to_adjust <- vars_to_adjust[sapply(vars_to_adjust, length) != 0]
   
-  multiple_choice_vars <- missing_vars[sapply(vars_to_adjust, length) != 0]
-  if(length(multiple_choice_vars) == 0) return(data)
-  cat("multiple choice vars that will be adjusted: ", multiple_choice_vars, sep = "\n")
-  data_adjusted <- data |> 
-    dplyr::filter(.data[[var_column]] %in% unlist(vars_to_adjust), !is.na(.data[[value_column]])) |> 
-    dplyr::arrange(.data[[var_column]]) |> 
-    dplyr::mutate(var = gsub(suffix, "", var)) 
-  if(!is.null(collapse_with)){
-    # Probably redundant since the variables will be collapsed already in the 
-    # functions `create_table.xxx`. 
-    data_adjusted <- data_adjusted |>   
-      dplyr::mutate(
-        item_value = paste0(item_value, collapse = collapse_with),
-        .by = dplyr::all_of(c(var_column, key_cols))
-      )
+  if(length(vars_to_adjust) == 0) return(data)
+  cat("multiple choice vars that will be adjusted: ", names(vars_to_adjust), sep = "\n")
+  
+  for (i in names(vars_to_adjust)) {
+    cat(sprintf("Converting var '%s' to '%s'\n", vars_to_adjust[[i]], i), sep = "")
+    data[[var_column]] <- ifelse(data[[var_column]] %in% vars_to_adjust[[i]], i, data[[var_column]])
   }
-  # note: Column edit_date_time can still cause multiple rows after step below.
-  data_adjusted <- dplyr::distinct(data_adjusted)
-  
-  df <-  data |> 
-    dplyr::filter(!.data[[var_column]] %in% unlist(vars_to_adjust)) |> 
-    dplyr::bind_rows(data_adjusted)
-  df  
+  if (is.null(collapse_with)) {
+    return(data)
+  }
+  data_adjusted <- data |> 
+    dplyr::filter(
+      .data[[var_column]] %in% names(vars_to_adjust)
+    ) |> 
+    dplyr::summarize(
+      item_value = ifelse(
+        all(is.na(item_value)), 
+        NA, 
+        paste0(na.omit(item_value), collapse = collapse_with)
+      ),
+      .by = dplyr::all_of(c(key_cols, var_column))
+    )
+  data |> 
+    dplyr::rows_update(data_adjusted, by = c(key_cols, var_column)) |> 
+    dplyr::distinct()
 }
 
 
@@ -497,12 +502,16 @@ add_missing_columns <- function(
 #'   needed.
 #' @param export_label Character string with the table export label. Only used
 #'   for downloadable tables (if `allow_listing_download` is `TRUE`).
+#' @param escape Whether to escape HTML entities in the table. See
+#'   [DT::datatable()].
+#' @param enable_text_wrap Logical, whether to enable text wrapping in the
+#'   table. If TRUE, pagination will be used and `deferRender` disabled.
 #' @param ... Other optional arguments that will be passed to [DT::datatable()].
 #'
 #' @return A `DT::datatable` object.
 #' @keywords internal
 #'
-#' @examples 
+#' @examples
 #' \dontrun{
 #' datatable_custom(mtcars)
 #' }
@@ -516,6 +525,8 @@ datatable_custom <- function(
     options = list(),
     allow_listing_download = NULL,
     export_label = NULL,
+    escape = TRUE,
+    enable_text_wrap = FALSE,
     ...
     ){
   stopifnot(is.data.frame(data))
@@ -524,6 +535,17 @@ datatable_custom <- function(
     stopifnot(is.character(rename_vars))
     colnames <- dplyr::rename(data[0,], dplyr::any_of(rename_vars)) |> 
       names()
+  }  
+  if (isFALSE(escape)) {
+    colnames <- lapply(
+      colnames, 
+      \(cn) as.character(tags$span(
+        cn, 
+        class = "cs-span-overflow",
+        title = cn
+      ))
+    ) |> 
+      as.character()
   }
   stopifnot(is.null(title) | is.character(title))
   stopifnot(grepl("t", dom, fixed = TRUE))
@@ -534,17 +556,20 @@ datatable_custom <- function(
   stopifnot(is.null(export_label) | is.character(export_label))
   
   default_opts <- list(
-    scrollY = 400,
+    scrollY = if (isFALSE(enable_text_wrap)) 400 else NULL,
     scrollX = TRUE,
-    scroller = TRUE,
-    deferRender = TRUE,
-    scrollCollapse = TRUE,
+    scroller = isFALSE(enable_text_wrap),
+    deferRender = isFALSE(enable_text_wrap),
+    scrollCollapse = isFALSE(enable_text_wrap),
     colReorder = list(
       enable = TRUE,
       realtime = FALSE,
       fixedColumnsLeft = 1
     )
   )
+  if (isTRUE(enable_text_wrap)) {
+    dom <- paste0(dom, "p")
+  }
   fixed_opts <- list(
     initComplete = DT::JS(
       "function() {",
@@ -565,8 +590,7 @@ datatable_custom <- function(
     fixed_opts[["buttons"]] <- list(list(
       extend = 'excel',
       text = '<i class="fa-solid fa-download"></i>',
-      filename = paste("clinsight", export_label, sep = "."),
-      title = paste0(export_label, " | extracted from ClinSight")
+      action = DT::JS('hiddenDownloadHandlerTrigger')
     ))
     fixed_opts[["dom"]] <- paste0('B', fixed_opts[["dom"]])
   }
@@ -574,13 +598,14 @@ datatable_custom <- function(
   opts <- default_opts |>
     modifyList(options) |>
     modifyList(fixed_opts)
-  
+
   DT::datatable(
     data, 
     selection = selection,
     options = opts,
     extensions = extensions,
     colnames = colnames,
+    escape = escape,
     ...
   ) 
 }

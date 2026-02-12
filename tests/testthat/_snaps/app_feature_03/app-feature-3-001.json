@@ -1,34 +1,5 @@
 {
   "input": {
-    ".clientValue-default-plotlyCrosstalkOpts": {
-      "on": "plotly_click",
-      "persistent": false,
-      "dynamic": false,
-      "selectize": false,
-      "opacityDim": 0.2,
-      "selected": {
-        "opacity": 1
-      },
-      "debounce": 0,
-      "color": [
-
-      ]
-    },
-    "cf_adverse_events-show_all_data": false,
-    "cf_conc_procedures-show_all_data": false,
-    "cf_medical_history-show_all_data": false,
-    "cf_medication-show_all_data": false,
-    "common_data_tabs": "Adverse events",
-    "main_sidebar_1-navigate_forms_1-form_next": 0,
-    "main_sidebar_1-navigate_forms_1-form_previous": 0,
-    "main_sidebar_1-review_config_1-config_review": 0,
-    "main_sidebar_1-review_forms_1-add_comment": false,
-    "main_sidebar_1-review_forms_1-confirm_review_tabs": "show_checkbox",
-    "main_sidebar_1-review_forms_1-form_reviewed": false,
-    "main_sidebar_1-review_forms_1-review_comment": "",
-    "main_sidebar_1-review_forms_1-review_type": "subject",
-    "main_sidebar_1-review_forms_1-save_review": 0,
-    "main_sidebar_1-show_review_controls": "panel_controls",
     "main_sidebar_1-write_query-create_query": 1,
     "main_sidebar_1-write_query-query_add_input": 0,
     "main_sidebar_1-write_query-query_major": false,
@@ -38,72 +9,13 @@
     "main_sidebar_1-write_query-query_sidebar": true,
     "main_sidebar_1-write_query-query_text": "",
     "main_tabs": "Study data",
-    "navigate_review_1-review_value_box_full_screen": false,
-    "plotly_afterplot-click_individuals": "\"sf_vital_signs-figure\"",
     "queries_1-details_panel_full_screen": false,
     "queries_1-go_to_form-go_to_form": 0,
     "queries_1-query_follow_up_1-query_add_follow_up": 0,
     "queries_1-query_follow_up_1-query_follow_up_full_screen": false,
     "queries_1-query_follow_up_1-query_follow_up_text": "",
     "queries_1-query_follow_up_1-resolved": false,
-    "queries_1-show_resolved": false,
-    "report_1-create_report": 0,
-    "sf_cbc_regular-filter": [
-      "haemoglobin",
-      "haematocrit",
-      "platelets",
-      "neutrophils",
-      "lymphocytes",
-      "monocytes"
-    ],
-    "sf_cbc_regular-show_all": false,
-    "sf_cbc_regular-switch_view": "graph",
-    "sf_electrolytes-filter": [
-      "sodium",
-      "potassium",
-      "chloride",
-      "bicarbonate",
-      "calcium",
-      "magnesium"
-    ],
-    "sf_electrolytes-show_all": false,
-    "sf_electrolytes-switch_view": "graph",
-    "sf_liver_function-filter": [
-      "bilirubin",
-      "ast",
-      "alt",
-      "ggt"
-    ],
-    "sf_liver_function-show_all": false,
-    "sf_liver_function-switch_view": "graph",
-    "sf_renal_function-filter": [
-      "creatinine",
-      "egfr",
-      "urate"
-    ],
-    "sf_renal_function-show_all": false,
-    "sf_renal_function-switch_view": "graph",
-    "sf_response-filter": [
-      "response",
-      "responder"
-    ],
-    "sf_response-show_all": false,
-    "sf_response-switch_view": "table",
-    "sf_vital_signs-filter": [
-      "systolic_blood_pressure",
-      "diastolic_blood_pressure",
-      "pulse",
-      "resp",
-      "temperature",
-      "weight_change_since_screening",
-      "bmi",
-      "weight"
-    ],
-    "sf_vital_signs-show_all": false,
-    "sf_vital_signs-switch_view": "graph",
-    "start_page_1-go_to_nav_review": 0,
-    "start_page_1-go_to_patient-go_to_form": 0,
-    "study_data_tabs": "Vital signs"
+    "queries_1-show_resolved": false
   },
   "output": {
     "form_level_review": false,
@@ -185,6 +97,96 @@
           "stylesheet": null,
           "head": null,
           "attachment": null,
+          "all_files": true
+        }
+      ]
+    },
+    "header_widgets_1-timeline_fig-timeline": {
+      "x": {
+        "items": [
+          {
+            "subject_id": "BEL_08_45",
+            "content": "Screening",
+            "start": "2023-06-05",
+            "group": "Visit",
+            "title": "2023-06-05 | Screening",
+            "className": "bg-light",
+            "id": "18",
+            "order": "4"
+          },
+          {
+            "subject_id": "BEL_08_45",
+            "content": "Exit",
+            "start": "2023-09-11",
+            "group": "Visit",
+            "title": "2023-09-11 | Exit",
+            "className": "bg-light",
+            "id": "69",
+            "order": "4"
+          }
+        ],
+        "groups": [
+          {
+            "id": "Visit",
+            "content": "Visit",
+            "order": "4"
+          }
+        ],
+        "showZoom": true,
+        "zoomFactor": 0.5,
+        "fit": true,
+        "options": {
+          "zoomable": false
+        },
+        "height": null,
+        "timezone": null,
+        "api": [
+
+        ]
+      },
+      "evals": [
+
+      ],
+      "jsHooks": {
+        "render": [
+          {
+            "code": "timelineRedrawCustom",
+            "data": null
+          }
+        ]
+      },
+      "deps": [
+        {
+          "name": "jquery",
+          "version": "3.6.0",
+          "src": {
+            "href": "jquery-3.6.0"
+          },
+          "meta": null,
+          "script": "jquery-3.6.0.min.js",
+          "stylesheet": null,
+          "head": null,
+          "attachment": null,
+          "all_files": true
+        },
+        {
+          "name": "bootstrap",
+          "version": "3.3.5",
+          "src": {
+            "href": "bootstrap-3.3.5"
+          },
+          "meta": {
+            "viewport": "width=device-width, initial-scale=1"
+          },
+          "script": [
+            "js/bootstrap.min.js",
+            "shim/html5shiv.min.js",
+            "shim/respond.min.js"
+          ],
+          "stylesheet": "css/bootstrap.min.css",
+          "head": "<style>h1 {font-size: 34px;}\n       h1.title {font-size: 38px;}\n       h2 {font-size: 30px;}\n       h3 {font-size: 24px;}\n       h4 {font-size: 18px;}\n       h5 {font-size: 16px;}\n       h6 {font-size: 12px;}\n       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}\n       pre:not([class]) { background-color: white }<\/style>",
+          "attachment": null,
+          "package": null,
           "all_files": true
         }
       ]

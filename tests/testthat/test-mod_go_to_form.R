@@ -7,7 +7,7 @@ describe(
       navtable = reactiveVal({data.frame()}),
       tablerow = reactiveVal(2),
       all_forms = data.frame(),
-      form_name = "Form",
+      form_name = "item_group",
       subject_id = "subject_id"
     )
     
@@ -47,7 +47,7 @@ describe(
       navtable = reactiveVal({
         data.frame(
           "subject_id" = c("Subj1", "Subj2"),
-          Form = c("Adverse events", "ECG")
+          "item_group" = c("Adverse events", "ECG")
         )
       }),
       tablerow = reactiveVal(2),
@@ -55,7 +55,7 @@ describe(
         "main_tab" = c("Common events", "Study data", "Study data"), 
         "form" = c("Adverse events", "Vital signs", "ECG")
       ),
-      form_name = "Form",
+      form_name = "item_group",
       subject_id = "subject_id"
     )
     it("Scenario 1 - Browse to a dedicated patient and form.", {
@@ -108,7 +108,7 @@ describe(
       testargs <- list(
         r = reactiveValues(),
         navinfo = reactiveValues(), 
-        navtable = reactiveVal(data.frame("subject_id" = "", "Form" = "")),
+        navtable = reactiveVal(data.frame("subject_id" = "", "item_group" = "")),
         tablerow = reactiveVal(2),
         all_forms = data.frame("main_tab" = "", "form" = ""),
         form_name = "Unknown_formname_column"
@@ -128,7 +128,7 @@ describe(
       testargs <- list(
         r = reactiveValues(),
         navinfo = reactiveValues(), 
-        navtable = reactiveVal(data.frame("subject_id" = "", "Form" = "")),
+        navtable = reactiveVal(data.frame("subject_id" = "", "item_group" = "")),
         tablerow = reactiveVal(2),
         all_forms = data.frame("main_tab" = "", "form" = ""),
         subject_id = "unknown_subjectname_column"
@@ -151,7 +151,7 @@ describe(
         test_args <- list(
           r = reactiveValues(),
           navinfo = reactiveValues(), 
-          navtable = reactiveVal(data.frame("subject_id" = "", "Form" = "")),
+          navtable = reactiveVal(data.frame("subject_id" = "", "item_group" = "")),
           tablerow = reactiveVal(3),
           all_forms = data.frame()
         )
@@ -176,7 +176,7 @@ describe(
           navtable = reactiveVal({
             data.frame(
               "subject_id" = c("Subj1", "Subj_unknown"),
-              "Form" = c("Adverse events", "ECG")
+              "item_group" = c("Adverse events", "ECG")
             )
           }),
           tablerow = reactiveVal(2),
@@ -207,7 +207,7 @@ describe(
         test_args <- list(
           r = reactiveValues(subject_id = "Subj1", filtered_subjects = "Subj1"),
           navinfo = reactiveValues(), 
-          navtable = reactiveVal(data.frame("subject_id" = "Subj1", "Form" = "")),
+          navtable = reactiveVal(data.frame("subject_id" = "Subj1", "item_group" = "")),
           tablerow = reactiveVal(1),
           all_forms = data.frame("main_tab" = "Common events", "form" = "Adverse events")
         )

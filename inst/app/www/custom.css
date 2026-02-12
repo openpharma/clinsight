@@ -9,6 +9,22 @@
   float: right;  
 }
 
+.hover-switch-icon {
+  padding-right: 4px;
+}
+
+.limit-switch-icon {
+  padding-right: 2px;
+}
+
+.textwrap-switch-icon {
+  padding-right: 4px;
+}
+
+.sae_table_custom {
+  padding-bottom: 2.5rem;
+}
+
 .bslib-value-box .value-box-area {
   padding: 0.1rem 0rem 0.1rem 1rem;
 }
@@ -37,6 +53,7 @@
    padding-right: 0rem;
    padding-bottom: 0rem;
    padding-left: 0rem;
+   cursor: default;
 }
 
 /* below is needed for good alignment of the top-widgets */
@@ -52,7 +69,8 @@
 .top-widgets-custom {
   display:flex;
   flex-direction: column;
-   padding-bottom: 0rem;
+  padding-bottom: 0rem;
+  cursor: pointer;
 /*  overflow-x: scroll;
    padding-top: 1rem;
    padding-right: 1rem;
@@ -154,4 +172,12 @@ div.cs-progress-container>.cs-progress-bar>.cs-progress.marking {
 
 .bslib-sidebar-layout .sidebar .sidebar-content{
   height: 100%;
+}
+
+span.cs-span-overflow {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
 }

@@ -409,7 +409,7 @@ mod_review_forms_server <- function(
             split_review_data(db_path)[[active_form()]]
         })
       }
-      showNotification("Input saved successfully", duration = 1, type = "message") 
+      showNotification("Input saved successfully", duration = 1, type = "message")
     })
     
     output[["progress_bar"]] <- render_progress_bar({
@@ -430,9 +430,14 @@ mod_review_forms_server <- function(
     
     output[["save_review_error"]] <- renderPrint({
       validate(need(
-        role_allowed_to_review(), 
-        paste0("Review not allowed for a '", r$user_role, "'.")
-        ))
+        role_allowed_to_review(), {
+          if (r$user_role == "") {
+            "No user role assigned. You cannot save a review."
+          } else {
+            paste0("With your current role ('", r$user_role, "') you cannot save a review.") 
+          }
+        }
+      ))
       validate(need(
         review_required(), 
         "Review not required"

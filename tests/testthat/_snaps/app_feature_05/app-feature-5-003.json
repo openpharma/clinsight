@@ -9,7 +9,7 @@
           "Scroller",
           "ColReorder"
         ],
-        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th>Reviewed<\/th>\n      <th>Subject<\/th>\n      <th>N<\/th>\n      <th>Name<\/th>\n      <th>AESI<\/th>\n      <th>Start date<\/th>\n      <th>End date<\/th>\n      <th>CTCAE severity<\/th>\n      <th>Treatment related<\/th>\n      <th>Treatment action<\/th>\n      <th>Category<\/th>\n      <th>Awareness date<\/th>\n      <th>Date of death<\/th>\n      <th>Death reason<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
+        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th><span class=\"cs-span-overflow\" title=\"Reviewed\">Reviewed<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Subject\">Subject<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"N\">N<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Name\">Name<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"AESI\">AESI<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Start date\">Start date<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"End date\">End date<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"CTCAE severity\">CTCAE severity<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Treatment related\">Treatment related<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Treatment action\">Treatment action<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Category\">Category<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Awareness date\">Awareness date<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Date of death\">Date of death<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Death reason\">Death reason<\/span><\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
         "options": {
           "scrollY": 400,
           "scrollX": true,
@@ -247,7 +247,7 @@
           "Scroller",
           "ColReorder"
         ],
-        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th>Reviewed<\/th>\n      <th>Subject<\/th>\n      <th>N<\/th>\n      <th>Name<\/th>\n      <th>AESI<\/th>\n      <th>start date<\/th>\n      <th>end date<\/th>\n      <th>CTCAE severity<\/th>\n      <th>Treatment related<\/th>\n      <th>Treatment action<\/th>\n      <th>Serious Adverse Event<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
+        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th><span class=\"cs-span-overflow\" title=\"Reviewed\">Reviewed<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Subject\">Subject<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"N\">N<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Name\">Name<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"AESI\">AESI<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"start date\">start date<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"end date\">end date<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"CTCAE severity\">CTCAE severity<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Treatment related\">Treatment related<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Treatment action\">Treatment action<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Serious Adverse Event\">Serious Adverse Event<\/span><\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
         "options": {
           "scrollY": 400,
           "scrollX": true,
@@ -464,96 +464,6 @@
         }
       ]
     },
-    "cf_adverse_events-timeline_fig-timeline": {
-      "x": {
-        "items": [
-          {
-            "subject_id": "BEL_08_45",
-            "content": "Screening",
-            "start": "2023-06-05",
-            "group": "Visit",
-            "title": "2023-06-05 | Screening",
-            "className": "bg-light",
-            "id": "18",
-            "order": "4"
-          },
-          {
-            "subject_id": "BEL_08_45",
-            "content": "Exit",
-            "start": "2023-09-11",
-            "group": "Visit",
-            "title": "2023-09-11 | Exit",
-            "className": "bg-light",
-            "id": "69",
-            "order": "4"
-          }
-        ],
-        "groups": [
-          {
-            "id": "Visit",
-            "content": "Visit",
-            "order": "4"
-          }
-        ],
-        "showZoom": true,
-        "zoomFactor": 0.5,
-        "fit": true,
-        "options": {
-          "zoomable": false
-        },
-        "height": null,
-        "timezone": null,
-        "api": [
-
-        ]
-      },
-      "evals": [
-
-      ],
-      "jsHooks": {
-        "render": [
-          {
-            "code": "timelineRedrawCustom",
-            "data": null
-          }
-        ]
-      },
-      "deps": [
-        {
-          "name": "jquery",
-          "version": "3.6.0",
-          "src": {
-            "href": "jquery-3.6.0"
-          },
-          "meta": null,
-          "script": "jquery-3.6.0.min.js",
-          "stylesheet": null,
-          "head": null,
-          "attachment": null,
-          "all_files": true
-        },
-        {
-          "name": "bootstrap",
-          "version": "3.3.5",
-          "src": {
-            "href": "bootstrap-3.3.5"
-          },
-          "meta": {
-            "viewport": "width=device-width, initial-scale=1"
-          },
-          "script": [
-            "js/bootstrap.min.js",
-            "shim/html5shiv.min.js",
-            "shim/respond.min.js"
-          ],
-          "stylesheet": "css/bootstrap.min.css",
-          "head": "<style>h1 {font-size: 34px;}\n       h1.title {font-size: 38px;}\n       h2 {font-size: 30px;}\n       h3 {font-size: 24px;}\n       h4 {font-size: 18px;}\n       h5 {font-size: 16px;}\n       h6 {font-size: 12px;}\n       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}\n       pre:not([class]) { background-color: white }<\/style>",
-          "attachment": null,
-          "package": null,
-          "all_files": true
-        }
-      ]
-    },
     "cf_medication-review_form_tbl-table": {
       "x": {
         "style": "bootstrap5",
@@ -564,7 +474,7 @@
           "Scroller",
           "ColReorder"
         ],
-        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th>Reviewed<\/th>\n      <th>Subject<\/th>\n      <th>N<\/th>\n      <th>Name<\/th>\n      <th>Indication<\/th>\n      <th>Dose<\/th>\n      <th>Start Date<\/th>\n      <th>Ongoing<\/th>\n      <th>End Date<\/th>\n      <th>Related Medical History<\/th>\n      <th>Related AE<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
+        "container": "<table class=\"table table-striped table-hover row-border order-column display\">\n  <thead>\n    <tr>\n      <th><span class=\"cs-span-overflow\" title=\"Reviewed\">Reviewed<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Subject\">Subject<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"N\">N<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Name\">Name<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Indication\">Indication<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Dose\">Dose<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Start Date\">Start Date<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Ongoing\">Ongoing<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"End Date\">End Date<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Related Medical History\">Related Medical History<\/span><\/th>\n      <th><span class=\"cs-span-overflow\" title=\"Related AE\">Related AE<\/span><\/th>\n    <\/tr>\n  <\/thead>\n<\/table>",
         "options": {
           "scrollY": 400,
           "scrollX": true,
@@ -642,8 +552,7 @@
             {
               "extend": "excel",
               "text": "<i class=\"fa-solid fa-download\"><\/i>",
-              "filename": "clinsight.medication.all_patients",
-              "title": "medication.all_patients | extracted from ClinSight"
+              "action": "hiddenDownloadHandlerTrigger"
             }
           ],
           "order": [
@@ -670,6 +579,7 @@
         "options.columnDefs.0.render",
         "options.rowCallback",
         "options.initComplete",
+        "options.buttons.0.action",
         "options.ajax.data",
         "callback"
       ],
@@ -902,6 +812,96 @@
           "stylesheet": null,
           "head": null,
           "attachment": null,
+          "all_files": true
+        }
+      ]
+    },
+    "header_widgets_1-timeline_fig-timeline": {
+      "x": {
+        "items": [
+          {
+            "subject_id": "BEL_08_45",
+            "content": "Screening",
+            "start": "2023-06-05",
+            "group": "Visit",
+            "title": "2023-06-05 | Screening",
+            "className": "bg-light",
+            "id": "18",
+            "order": "4"
+          },
+          {
+            "subject_id": "BEL_08_45",
+            "content": "Exit",
+            "start": "2023-09-11",
+            "group": "Visit",
+            "title": "2023-09-11 | Exit",
+            "className": "bg-light",
+            "id": "69",
+            "order": "4"
+          }
+        ],
+        "groups": [
+          {
+            "id": "Visit",
+            "content": "Visit",
+            "order": "4"
+          }
+        ],
+        "showZoom": true,
+        "zoomFactor": 0.5,
+        "fit": true,
+        "options": {
+          "zoomable": false
+        },
+        "height": null,
+        "timezone": null,
+        "api": [
+
+        ]
+      },
+      "evals": [
+
+      ],
+      "jsHooks": {
+        "render": [
+          {
+            "code": "timelineRedrawCustom",
+            "data": null
+          }
+        ]
+      },
+      "deps": [
+        {
+          "name": "jquery",
+          "version": "3.6.0",
+          "src": {
+            "href": "jquery-3.6.0"
+          },
+          "meta": null,
+          "script": "jquery-3.6.0.min.js",
+          "stylesheet": null,
+          "head": null,
+          "attachment": null,
+          "all_files": true
+        },
+        {
+          "name": "bootstrap",
+          "version": "3.3.5",
+          "src": {
+            "href": "bootstrap-3.3.5"
+          },
+          "meta": {
+            "viewport": "width=device-width, initial-scale=1"
+          },
+          "script": [
+            "js/bootstrap.min.js",
+            "shim/html5shiv.min.js",
+            "shim/respond.min.js"
+          ],
+          "stylesheet": "css/bootstrap.min.css",
+          "head": "<style>h1 {font-size: 34px;}\n       h1.title {font-size: 38px;}\n       h2 {font-size: 30px;}\n       h3 {font-size: 24px;}\n       h4 {font-size: 18px;}\n       h5 {font-size: 16px;}\n       h6 {font-size: 12px;}\n       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}\n       pre:not([class]) { background-color: white }<\/style>",
+          "attachment": null,
+          "package": null,
           "all_files": true
         }
       ]

@@ -228,3 +228,223 @@ describe(
   }
 )
 
+describe(
+  "Feature 5 | Toggle background patterns. As a user, I want be able to turn 
+  on the patterns of all participants in the background of the time series figures.", 
+  {
+    it(
+      "Scenario 1 - Toggle background patterns. Given subject id is set to 'BEL_04_133',
+        and the form set to 'Vital signs',
+        and the filter set to 'temperature',
+        and I switch [show_all_participants]' to TRUE,
+        I expect that I see a time series figure of Temperature of all subjects,
+        with the pattern of subject BEL_04_133 highlighted, 
+        and that, after switching [show_all_hover_labels] to TRUE,
+        I can see the hover labels of all subjects' data points, including the 
+        ones that are not highlighted.
+        ",
+      {
+        set.seed(2025)
+        vs_data <- get_appdata(clinsightful_data)[["Vital signs"]] |> 
+          # for smalled snapshot later:
+          subset(subject_id %in% c("BEL_04_133", "NLD_06_893", "DEU_02_866"))
+        rev_data <- get_review_data(vs_data) |> 
+          dplyr::mutate(
+            id = dplyr::row_number(),
+            reviewed = sample(c("Yes", "No"), dplyr::n(), replace = TRUE),
+            status = sample(c("new", "old", "updated"), dplyr::n(), replace = TRUE)
+          )
+        form_items <- with(metadata$study_forms, item_name[item_group == "Vital signs"])
+        form_items <- setNames(simplify_string(form_items), form_items)
+        test_ui <- function(request){
+          tagList(
+            golem_add_external_resources(),
+            shinyjs::useShinyjs(),
+            bslib::page_navbar(
+              mod_study_forms_ui(
+                "test", 
+                form = "Vital signs", 
+                form_items = form_items
+              )
+            ),
+          )
+        }
+        
+        test_server <- function(input, output, session){
+          session$userData$review_type <- reactiveVal()
+          mod_study_forms_server(
+            id = "test",
+            form = "Vital signs",
+            form_data = reactiveVal(vs_data),
+            form_review_data = reactiveVal(rev_data),
+            active_subject = reactiveVal("BEL_04_133"),
+            id_item = c("subject_id", "event_name", "item_group", 
+                        "form_repeat", "item_name"),
+            form_items = form_items,
+            item_info = data.frame(
+              item_group = "Vital signs",
+              item_scale = TRUE,
+              use_unscaled_limits = TRUE,
+              review_required = TRUE
+            )
+          )
+        }
+        test_app <- shinyApp(test_ui, test_server)
+        app <- shinytest2::AppDriver$new(
+          app_dir = test_app, 
+          name = "study_forms_figs",
+          width = 1619, 
+          height = 955
+        )
+        withr::defer(app$stop())
+        app$set_inputs(
+          "test-transformation_graph" = "none",
+          "test-filter" = "temperature",
+          "test-show_all_participants" = TRUE
+          )
+        app$wait_for_idle(1100)
+        
+        ## Snap 001
+        app$expect_values(
+          input = c("test-show_all_participants", "test-show_all_hover_labels"), 
+          output = TRUE
+        )
+        
+        app$set_inputs("test-show_all_hover_labels" = TRUE)
+        app$wait_for_idle()
+        
+        ## Snap 002
+        
+        hover_labels <- unlist(jsonlite::fromJSON(app$get_value(output = "test-figure"))$x$data$text)
+        hover_labels <- hover_labels[!is.na(hover_labels) & hover_labels != ""]
+        expect_false(all(grepl("BEL_04_133", hover_labels)))
+        expect_true(all(grepl("DEU_02_866|NLD_06_893|BEL_04_133", hover_labels)))
+        
+        app$expect_values(
+          input = c("test-show_all_participants", "test-show_all_hover_labels")
+        )
+        #############
+        ####### Verify transformation button:
+        ###############
+        app$set_inputs(
+          "test-show_all_hover_labels" = FALSE,
+          "test-show_all_participants" = FALSE,
+          "test-transformation_graph" = "scaled"
+        )
+        ## Snap 003
+        app$expect_values(
+          input = c("test-show_all_participants", "test-show_all_hover_labels", "test-transformation_graph"), 
+          output = "test-figure"
+        )
+      }
+    )
+  }
+)
+
+describe(
+  "Feature 6 | Toggle transformation. As a user, I want be able to change 
+    transformation type to show in tables and figures if transformed data is available.", 
+  {
+    it(
+      "Scenario 1 - Toggle Transformation. Given subject id is set to 'BEL_04_133',
+        and the form set to 'CBC regular',
+        and the filter set to 'Haemoglobin',
+        and scaled, non-transformed, and standardized data is available,
+        I expect that I can toggle between transformations.",
+      {
+        set.seed(2025)
+        app_data <- clinsightful_data[clinsightful_data$item_group == "CBC regular", ] |> 
+          subset(subject_id %in% c("BEL_04_133", "NLD_06_893", "DEU_02_866")) |> 
+          dplyr::mutate(
+            value_standardized = suppressWarnings(100*as.numeric(item_value)),
+            lower_lim_standardized = 100*lower_lim,
+            upper_lim_standardized = 100*upper_lim,
+            unit_standardized = "ClinSight Units"
+          ) |> 
+          get_appdata()
+          
+        cbc_data <- app_data[["CBC regular"]]
+        
+        rev_data <- get_review_data(cbc_data) |> 
+          dplyr::mutate(
+            id = dplyr::row_number(),
+            reviewed = sample(c("Yes", "No"), dplyr::n(), replace = TRUE),
+            status = sample(c("new", "old", "updated"), dplyr::n(), replace = TRUE)
+          )
+        form_items <- with(metadata$study_forms, item_name[item_group == "CBC regular"])
+        form_items <- setNames(simplify_string(form_items), form_items)
+        test_ui <- function(request){
+          tagList(
+            golem_add_external_resources(),
+            shinyjs::useShinyjs(),
+            bslib::page_navbar(
+              mod_study_forms_ui(
+                "test", 
+                form = "CBC regular", 
+                form_items = form_items
+              )
+            ),
+          )
+        }
+        
+        test_server <- function(input, output, session){
+          session$userData$review_type <- reactiveVal()
+          mod_study_forms_server(
+            id = "test",
+            form = "CBC regular",
+            form_data = reactiveVal(cbc_data),
+            form_review_data = reactiveVal(rev_data),
+            active_subject = reactiveVal("BEL_04_133"),
+            id_item = c("subject_id", "event_name", "item_group", 
+                        "form_repeat", "item_name"),
+            form_items = form_items,
+            item_info = data.frame(
+              item_group = "CBC regular",
+              item_scale = TRUE,
+              use_unscaled_limits = TRUE,
+              review_required = TRUE
+            )
+          )
+        }
+        test_app <- shinyApp(test_ui, test_server)
+        
+        app <- shinytest2::AppDriver$new(
+          app_dir = test_app, 
+          name = "transformations",
+          width = 1619, 
+          height = 955
+        )
+        withr::defer(app$stop())
+        
+        app$set_inputs(
+          "test-transformation_graph" = "none",
+          "test-filter" = "haemoglobin"
+          )
+        app$wait_for_idle(800)
+        y_values <- jsonlite::fromJSON(app$get_value(output = "test-figure"))
+        y_values <- unlist(y_values$x$data$y)
+        
+        selected_data <- cbc_data |> 
+          dplyr::filter(subject_id == "BEL_04_133", item_name == "Haemoglobin")
+        expect_true(all(unique(selected_data$item_value) %in% y_values))
+        
+        app$set_inputs("test-transformation_graph" = "standardized")
+        app$wait_for_idle(800)
+        y_standardized <- jsonlite::fromJSON(app$get_value(output = "test-figure"))
+        y_standardized <- unlist(y_standardized$x$data$y)
+        
+        expect_equal(y_standardized, y_values*100)
+        
+        app$set_inputs("test-transformation_graph" = "scaled")
+        app$wait_for_idle(800)
+        y_scaled <- jsonlite::fromJSON(app$get_value(output = "test-figure"))
+        y_scaled <- unlist(y_scaled$x$data$y)
+        
+        selected_data <- cbc_data |> 
+          dplyr::filter(subject_id == "BEL_04_133", item_name == "Haemoglobin")
+        expect_true(all(c(unique(selected_data$value_scaled), 0, 1) %in% y_scaled))
+      }
+    )
+  }
+)
+

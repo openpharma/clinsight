@@ -12,7 +12,9 @@ fig_timeseries(
   color_fill = "significance",
   point_size = "reviewed",
   label = "text_label",
-  scale = FALSE,
+  show_all_participants = TRUE,
+  show_all_hover_labels = FALSE,
+  yval = "item_value",
   use_unscaled_limits = FALSE
 )
 }
@@ -36,8 +38,12 @@ the point size in the figure.}
 only be visible if the ggplot object is converted to an interactive plot
 using \code{plotly::ggplotly()}. See \code{\link[=plotly_figure]{plotly_figure()}}}
 
-\item{scale}{A logical. Whether to us a scaled value (value_scaled) or the
-raw variable (item_value).}
+\item{show_all_participants}{Logical to toggle background patterns.}
+
+\item{show_all_hover_labels}{Logical to toggle hover labels.}
+
+\item{yval}{Character vector with the column name with the values. Must be
+numeric.}
 
 \item{use_unscaled_limits}{If TRUE, limits provided in the data frame will be
 used. This parameter will be ignored if scaled is set to \code{TRUE}.}
@@ -59,9 +65,9 @@ mock_data <- lapply(paste0("Subject", 1:10) , \(x){
     item_name = sample(c("item1", "item2"), 10, replace = TRUE),
     item_value = runif(10, 0 , 50),
     significance = sample(
-      c("limits unknown", "out of limits, clinically significant", 
-        "out of limits, clinically insignificant"), 
-      10, 
+      c("limits unknown", "out of limits, clinically significant",
+        "out of limits, clinically insignificant"),
+      10,
       replace = TRUE
     ),
     text_label = "test text",

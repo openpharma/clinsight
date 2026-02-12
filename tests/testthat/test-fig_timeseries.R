@@ -1,6 +1,7 @@
 describe(
   "fig_timeseries works", 
   {
+    set.seed(2025)
     subjects <- paste0("Subject", 1:10)
     mock_data <- lapply(subjects, \(x){
       data.frame(
@@ -28,9 +29,9 @@ describe(
     })
     it("uses scaled limits and adds limits at y=0  and y=1 if requested", {
       expect_true(
-        ggplot2::is_ggplot(fig_timeseries(mock_data, id_to_highlight = "Subject10", scale = TRUE))
+        ggplot2::is_ggplot(fig_timeseries(mock_data, id_to_highlight = "Subject10", yval = "value_scaled"))
       )
-      fig <- fig_timeseries(mock_data, id_to_highlight = "Subject10", scale = TRUE)
+      fig <- fig_timeseries(mock_data, id_to_highlight = "Subject10", yval = "value_scaled")
       plotlayers <- get_ggplot_layer_names(fig)
       expect_equal(length(plotlayers[plotlayers == "geom_hline"]), 2)
       expect_equal(fig$data, mock_data)
@@ -44,8 +45,66 @@ describe(
       expect_equal(length(plotlayers[plotlayers == "geom_hline"]), 2)
     })
     
-    it("returns a plot without highlight if the id to hightlight has no data for the figure.", {
-      fig_timeseries(mock_data, id_to_highlight = "Subject15")
+    it("returns a spaghetti plot without highlight if the id to hightlight has no data for the figure.", {
+      fig <- fig_timeseries(mock_data, id_to_highlight = "Subject15")
+      plotlayers <- get_ggplot_layer_names(fig)
+      expect_equal(plotlayers, "geom_line")
+      expect_equal(mock_data, fig$data)
+    })
+    
+    it("returns a spaghetti plot without highlight if the id to hightlight is NA", {
+      fig <- fig_timeseries(mock_data, id_to_highlight = NA)
+      plotlayers <- get_ggplot_layer_names(fig)
+      expect_equal(plotlayers, "geom_line")
+      expect_equal(mock_data, fig$data)
+    })
+    
+    it("returns a spaghetti plot without highlight if the id to hightlight is NULL", {
+      fig <- fig_timeseries(mock_data, id_to_highlight = NULL)
+      plotlayers <- get_ggplot_layer_names(fig)
+      expect_equal(plotlayers, "geom_line")
+      expect_equal(mock_data, fig$data)
+    })
+    
+    it("includes time points that are negative days (days before baseline)", {
+      # set minimum day to -10:
+      negative_day_data <- mock_data |> 
+        dplyr::mutate(
+          day = ifelse(day == min(day), - 10, day),
+          .by = c(subject_id, item_name)
+        )
+      fig <- fig_timeseries(negative_day_data, id_to_highlight = "Subject1")
+      fig_built <- ggplot2::ggplot_build(fig)
+      expect_equal(
+        min(fig_built[["layout"]]$panel_scales_x[[1]]$range$range),
+        -10
+      )
+    })
+    
+    it("returns empty plot if no data available for id to highlight and show_all_participants is FALSE", {
+      expect_no_error({
+        fig <- fig_timeseries(
+          mock_data, 
+          id_to_highlight = "non-existent", 
+          show_all_participants = FALSE
+        )
+      })
+      plotlayers <- get_ggplot_layer_names(fig)
+      expect_null(plotlayers)
+      expect_equal(mock_data, fig$data)
+      
+      expect_no_error({
+        fig2 <- fig_timeseries(
+          mock_data, 
+          id_to_highlight = "non-existent", 
+          show_all_participants = FALSE, 
+          yval = "value_scaled"
+        )
+      })
+      
+      plotlayers <- get_ggplot_layer_names(fig2)
+      expect_equal(plotlayers, c("geom_hline", "geom_hline"))
+      expect_equal(mock_data, fig2$data)
     })
     
   }

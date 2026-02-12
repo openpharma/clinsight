@@ -12,8 +12,7 @@ mod_common_forms_server(
   form_items,
   active_subject,
   id_item = c("subject_id", "event_name", "item_group", "form_repeat", "item_name"),
-  table_names = NULL,
-  timeline_data
+  table_names = NULL
 )
 }
 \arguments{
@@ -46,10 +45,6 @@ that can uniquely identify one item/row.}
 \item{table_names}{An optional character vector. If provided, will be used
 within \code{\link[=datatable_custom]{datatable_custom()}}, to improve the column names in the final
 interactive tables.}
-
-\item{timeline_data}{A reactive with a data frame containing the timeline
-data. Used to create the timeline figure. Created with
-\code{\link[=get_timeline_data]{get_timeline_data()}}.}
 }
 \description{
 Shiny module. Used to display common form data in the dedicated tab.
@@ -61,11 +56,7 @@ common forms are currently: \verb{Adverse events}, \verb{Medical History},
 changed in the metadata. The tables shown are overview tables in wide format,
 similar to the ones in \code{\link[=mod_study_forms_server]{mod_study_forms_server()}}. When the common form
 \verb{Adverse events} is selected, the module will show an additional table with
-Severe Adverse Events above the table with Adverse Events. In addition, it
-will show a timeline by calling module
-\code{\link[=mod_timeline_ui]{mod_timeline_ui()}}/\code{\link[=mod_timeline_server]{mod_timeline_server()}}. The timeline shows study events
-(such as drug administrations) and study visits together with Adverse Events,
-so that temporal relationships between these events can be quickly revealed.
+Severe Adverse Events above the table with Adverse Events.
 The \verb{common forms} module is used in the main server to create all applicable
 common form pages.
 }

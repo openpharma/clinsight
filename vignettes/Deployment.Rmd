@@ -46,9 +46,10 @@ The following are the most important arguments in the `golem-config.yml` file fo
 -   `user_db`: Path to the user database SQLite file. If it doesn't already exist, a new database will be automatically generated in this file location.
 -   `credentials_db`: Path to the credentials database (a .sqlite file). Only applicable in the `shinymanager` configuration.
 -   `user_roles`: List with roles (in this format: `Role Name: role_id`) that are available in the application.
--   `allow_to_review`: List of role names (specified above) which are allowed to review data in the application.
+-   `allow_to_review`: List of role ids (specified above) which are allowed to review data in the application.
 -   `allow_listing_download`: Logical, `TRUE` if users are permitted to download listings from the ClinSight application directly to Excel for sharing (or other uses).
 -   `allow_query_inputs`: Logical, \`TRUE\` to permit users to submit and track queries within the application's database.
+-   `allow_to_query`: List of role ids (see `user_roles`) which are allowed to raise a query and close a query. Only effective if `allow_query_inputs` is `TRUE`. Note that every user with a valid name and role can respond to a query, regardless of their role being listed here.
 
 ### Setting configurations
 
@@ -211,8 +212,9 @@ This manifest includes packages not included in the `minimal` profile needed for
 
 ### Customizing configuration
 
-If the profiles above are insufficient, you can also provide your own configuration file with fully customized settings with the steps described below.
+If the profiles above are insufficient, you can also provide your own configuration file with fully customized settings.
+`ClinSight` will check the working directory for a file named `clinsight-config.yml` and will use this if it exists as configuration file instead of the default configuration.
+The function `create_clinsight_config()` can be used to create such a customizable config file, containing a copy of the `clinsight` default configuration.
 
-To do so, first create a configuration template.
-The function `create_clinsight_config()` can be used to create a copy of the current `clinsight` configuration file in the current working directory.
-To use this configuration file with `clinsight`, the environment variable named "CONFIG_PATH" needs to be set by using a command similar to the following: `Sys.setenv("CONFIG_PATH" = "PATH_TO_CONFIG/clinsight_config.yml")`, where `PATH_TO_CONFIG` is the path to the folder in which the configuration file is located.
+If you want to change the name of this file, or place it somewhere else, you must provide the path to the custom config file in the environment variable "CONFIG_PATH".
+For example: `Sys.setenv("CONFIG_PATH" = "PATH_TO_CONFIG/clinsight-config.yml")`, where `PATH_TO_CONFIG` is the path to the folder in which the configuration file is located.

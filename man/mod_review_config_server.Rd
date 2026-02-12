@@ -4,21 +4,19 @@
 \alias{mod_review_config_server}
 \title{Review configuration - Shiny module Server}
 \usage{
-mod_review_config_server(id, r, app_data, app_tables, sites, subject_ids)
+mod_review_config_server(id, r, app_data, sites, subject_ids)
 }
 \arguments{
 \item{id}{Character string, used to connect the module UI with the module Server.}
 
 \item{r}{Common reactiveValues. Used to pass on filtered data and filtered subjects
 (based on selected sites/regions) to the main server. Expects to contain
-\code{r$filtered_data}, \code{r$filtered_tables}, \code{r$filtered_subjects} and \code{r$subject_id} (the '
+\code{r$filtered_data}, \code{r$filtered_subjects} and \code{r$subject_id} (the '
 active/current subject id'). The latter is needed because the \code{r$subject_id}
 needs to be set to the first ID in the filtered selection to prevent a
 non-selected subject_id to be active.}
 
 \item{app_data}{List of data frames with the app data.}
-
-\item{app_tables}{List of data frames with the app data in wide table format.}
 
 \item{sites}{A data frame with columns "site_code", with all unique site
 identifiers, and "region", the region of the study site.}

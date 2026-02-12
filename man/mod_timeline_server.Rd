@@ -26,6 +26,6 @@ as Investigational Product administration. Helpful to judge whether for
 example an event is related to an Investigational Product.
 }
 \seealso{
-\code{\link[=mod_timeline_ui]{mod_timeline_ui()}}, \code{\link[=mod_common_forms_ui]{mod_common_forms_ui()}},
-\code{\link[=mod_common_forms_server]{mod_common_forms_server()}}
+\code{\link[=mod_timeline_ui]{mod_timeline_ui()}}, \code{\link[=mod_header_widgets_ui]{mod_header_widgets_ui()}},
+\code{\link[=mod_header_widgets_server]{mod_header_widgets_server()}}
 }

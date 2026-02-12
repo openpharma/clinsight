@@ -5,7 +5,10 @@
 #'
 mod_review_form_tbl_ui <- function(id) {
   ns <- NS(id)
-  DT::dataTableOutput(ns("table"))
+  tagList(
+    downloadLink(ns("table_download"), character()),
+    DT::dataTableOutput(ns("table"))
+  )
 }
 
 #' Review forms table - Shiny module Server
@@ -24,6 +27,12 @@ mod_review_form_tbl_ui <- function(id) {
 #' @param form_review_data Common reactive value containing the review data of
 #'   the form.
 #' @param form_items Named character vector with all form_items to display.
+#' @param transformation A reactive value. If this is 'none' then the columns
+#'   `item_value` and `item_unit` will be used in the table. Otherwise,
+#'   `value_standardized` and `unit_standardized` will be used.
+#' @param show_limits Optional reactive value containing a logical. If the
+#'   logical inside is `TRUE`, laboratory limits will be added to the table
+#'   shown in the module.
 #' @param active_subject Reactive value containing the active subject id.
 #' @param show_all Common reactive value, a logical indicating whether all
 #'   records should be displayed.
@@ -32,7 +41,10 @@ mod_review_form_tbl_ui <- function(id) {
 #'   interactive tables.
 #' @param title An optional character vector. If provided, will be used within
 #'   [datatable_custom()], as the title for the table.
-#'   
+#' @param enable_text_wrap A reactive value, to enable/disable multi-line
+#'   table rows. Usually disabled so that deferred rendering is possible, but
+#'   can be enabled for better viewing experience.
+#'
 #' @seealso [mod_review_form_tbl_ui()], [mod_common_forms_ui()],
 #'   [mod_common_forms_server()], [mod_study_forms_ui()],
 #'   [mod_study_forms_server()]
@@ -43,8 +55,11 @@ mod_review_form_tbl_server <- function(
     form_data,
     form_review_data,
     form_items,
+    transformation = NULL,
+    show_limits = NULL,
     active_subject, 
     show_all,
+    enable_text_wrap = reactive(FALSE),
     table_names = NULL,
     title = NULL
 ){
@@ -54,8 +69,11 @@ mod_review_form_tbl_server <- function(
   stopifnot(is.character(form_items))
   stopifnot(is.reactive(active_subject))
   stopifnot(is.reactive(show_all))
+  stopifnot(is.reactive(enable_text_wrap))
   stopifnot(is.character(table_names %||% ""))
   stopifnot(is.character(title %||% ""))
+  transformation <- transformation %||% reactiveVal("none")
+  show_limits <- show_limits %||% reactiveVal(FALSE)
 
   moduleServer(id, function(input, output, session){
     ns <- session$ns
@@ -75,12 +93,14 @@ mod_review_form_tbl_server <- function(
         form_review_data(), 
         form = form, 
         form_items = form_items,
+        transformation = transformation() %||% "none",
+        show_limits = show_limits() %||% FALSE,
         active_subject = if(identical(session$userData$review_type(), "form")) NULL else active_subject(),
         pending_form_review_status = NULL,
         is_SAE = identical(title, "Serious Adverse Events")
       )
     }) |> 
-      bindEvent(form_data(), form_review_data(), active_subject(), session$userData$review_type())
+      bindEvent(form_data(), form_review_data(), active_subject(), session$userData$review_type(), transformation(), show_limits())
     
     ############################### Observers: #################################
     
@@ -91,7 +111,7 @@ mod_review_form_tbl_server <- function(
       session$userData$pending_form_review_status[[form]] <- NULL
       session$userData$pending_review_records[[form]] <- data.frame(id = integer(), reviewed = character())
     }, priority = 100) |> 
-      bindEvent(active_subject(), form_review_data(), form_data(), session$userData$review_type())
+      bindEvent(active_subject(), form_review_data(), form_data(), session$userData$review_type(), transformation(), show_limits())
     
     observeEvent(datatable_rendered(), {
       golem::cat_dev(form, "| renewing table_data using merged_form_data()\n\n")
@@ -134,9 +154,9 @@ mod_review_form_tbl_server <- function(
       table_data(df)
     })
     
-    # Any time the data in the form table is updated, "show all" is toggled,
-    # or the subject being viewed is changed, the server data for the datatable
-    # needs to be updated
+    # Triggers when server data needs to be updated. Also triggers for each 
+    # change in pending review records (e.g. a checkbox in column `Reviewed` 
+    # is toggled on or off).
     observe({
       req(!is.null(show_all()))
       req(table_data(), datatable_rendered())
@@ -147,11 +167,11 @@ mod_review_form_tbl_server <- function(
         rownames = FALSE,
         outputId = table_proxy$rawId
       )
-    }) 
+    }) |> 
+      bindEvent(table_data(), show_all(), active_subject(), enable_text_wrap())
     
-    # Any time the review table is updated, "show all" is toggled, or the
-    # subject being viewed is changed, the datatable should be reloaded to show
-    # the new data
+    # For performance reasons, fully reloading table below will not be 
+    # triggered when pending review records are updated (`Reviewed` checkboxes).
     observeEvent(reload_data(), {
       req(!is.null(show_all()))
       req(table_data(), datatable_rendered())
@@ -218,9 +238,36 @@ mod_review_form_tbl_server <- function(
               visible = isolate(show_all())
             )),
           rowCallback = row_callback
-        ))
+        ),
+        enable_text_wrap = !isFALSE(enable_text_wrap())
+        )
     })
     table_proxy <- DT::dataTableProxy("table")
+
+    output[["table_download"]] <- downloadHandler(
+      filename = function() {
+        export_label = paste(
+          ifelse(identical(title, "Serious Adverse Events"), "SAEs", simplify_string(form)), 
+          ifelse(show_all(), "all_patients", active_subject()), 
+          sep = "."
+        )
+        paste("clinsight", export_label, "csv", sep = ".")
+      },
+      content = function(file) {
+        readr::write_csv(
+          table_data() |> 
+            subset(show_all() | subject_id == active_subject()) |> 
+            dplyr::select(-row_review_status) |> 
+            dplyr::rename(dplyr::any_of(table_names)) |> 
+            dplyr::mutate(dplyr::across(
+              dplyr::where(is.character),
+              \(x) gsub("<b>|</b>", "", x)
+            )), 
+          file,
+          na = ""
+        )
+      }
+    )
     
     if(form %in% c("Vital signs", "Vitals adjusted")){
       shiny::exportTestValues(

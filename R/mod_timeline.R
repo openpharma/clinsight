@@ -19,10 +19,11 @@ mod_timeline_ui <- function(id){
 #'
 #' @param id Character string, used to connect the module UI with the module
 #'   Server.
+#' @inheritParams mod_header_widgets_server 
 #' @inheritParams mod_common_forms_server
 #'
-#' @seealso [mod_timeline_ui()], [mod_common_forms_ui()],
-#'   [mod_common_forms_server()]
+#' @seealso [mod_timeline_ui()], [mod_header_widgets_ui()],
+#'   [mod_header_widgets_server()]
 mod_timeline_server <- function(
     id, 
     form_review_data, 
@@ -31,7 +32,7 @@ mod_timeline_server <- function(
     ){
   stopifnot(
     is.reactive(form_review_data), 
-    is.reactive(timeline_data),
+    is.data.frame(timeline_data),
     is.reactive(active_subject)
     )
   
@@ -39,14 +40,18 @@ mod_timeline_server <- function(
     ns <- session$ns
     
     timeline_data_active <- reactive({
-      review_active <- form_review_data()[form_review_data()$subject_id == active_subject(), ] |> 
-        dplyr::mutate(
-          needs_review = any(reviewed == "No"),
-          .by = c(form_repeat, item_group)
-        ) |> 
-        dplyr::distinct(subject_id, form_repeat, item_group, needs_review)
+      review_active <- if (is.null(form_review_data())) {
+        data.frame(subject_id = character(), form_repeat = integer(), item_group = character(), needs_review = character())
+      } else {
+        form_review_data()[form_review_data()$subject_id == active_subject(), ] |> 
+          dplyr::mutate(
+            needs_review = any(reviewed == "No"),
+            .by = c(form_repeat, item_group)
+          ) |> 
+          dplyr::distinct(subject_id, form_repeat, item_group, needs_review)
+      }
       
-      df <- with(timeline_data(), timeline_data()[subject_id == active_subject(), ]) |> 
+      df <- with(timeline_data, timeline_data[subject_id == active_subject(), ]) |> 
         dplyr::left_join(review_active, by = c("subject_id", "form_repeat", "item_group")) |> 
         dplyr::mutate(
           className = ifelse(
@@ -57,7 +62,7 @@ mod_timeline_server <- function(
         )
       df
     }) |> 
-      bindEvent(form_review_data(), timeline_data(), active_subject())
+      bindEvent(form_review_data(), timeline_data, active_subject())
     
     observeEvent(input$timeline_selected, {
       timevis::centerItem("timeline", input$timeline_selected)

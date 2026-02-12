@@ -171,3 +171,12 @@ $(document).ready(function() {
   Shiny.outputBindings.register(customProgressBar)
 
 });
+
+function hiddenDownloadHandlerTrigger( e, dt, node, config ) {
+  const tblId = dt.tables().nodes().to$().closest('.datatables').attr('id');
+
+  document.getElementById(tblId + '_download').click()
+  
+  return;
+  e;
+}
