@@ -290,6 +290,12 @@ mod_study_forms_server <- function(
         fig_data()[[yval]], 
         "No non-missing data available. Check table view or non-transformed data."
       ))
+      plot_cnt <- length(unique(fig_data()$item_name))
+      plot_height <- if (plot_cnt > 1) {
+        ceiling(0.5 * plot_cnt * 150 + 200)
+      } else {
+        500
+      }
       plotly_figure(
         data = fig_data(),
         fig = "timeseries_fig",
@@ -297,7 +303,7 @@ mod_study_forms_server <- function(
         id = "subject_id",
         id_to_highlight = active_subject(), 
         point_size = "reviewed",
-        height = ceiling(0.5*length(unique(fig_data()$item_name))*125+175),
+        height = plot_height,
         show_all_participants = isTRUE(input$show_all_participants),
         show_all_hover_labels = input$show_all_hover_labels,
         label = if (yval == "value_standardized") "label_standardized" else "text_label",
