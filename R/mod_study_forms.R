@@ -292,7 +292,7 @@ mod_study_forms_server <- function(
       ))
       plot_cnt <- length(unique(fig_data()$item_name))
       plot_height <- if (plot_cnt > 1) {
-        ceiling(0.5 * plot_cnt * 150) + 200
+        ceiling(0.5 * plot_cnt)*150 + 200
       } else {
         425
       }
