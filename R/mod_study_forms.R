@@ -294,7 +294,7 @@ mod_study_forms_server <- function(
       plot_height <- if (plot_cnt > 1) {
         ceiling(0.5 * plot_cnt * 150) + 200
       } else {
-        500
+        425
       }
       plotly_figure(
         data = fig_data(),
